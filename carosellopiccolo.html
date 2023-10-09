@@ -1,0 +1,383 @@
+<html lang="en"><head>
+    <title>ANONYMOUS</title>
+    <style>
+
+      html,
+      body {
+        height: 100%;
+        /* for touch screen */
+        touch-action: none;
+      }
+      body {
+        overflow: hidden;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        background: url("https://xatimg.com/image/0u02LxPSMeDa.gif") no-repeat center center fixed; background-size:100% 100%;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      #drag-container,
+      #spin-container {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin: auto;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-transform: rotateX(-10deg);
+        transform: rotateX(-10deg);
+      }
+
+      #drag-container img,
+      #drag-container video {
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        line-height: 200px;
+        font-size: 50px;
+        text-align: center;
+        -webkit-box-shadow: 0 0 28px #ffcc00;
+        box-shadow: 0 0 28px #fad201;
+        -webkit-box-reflect: below 10px
+          linear-gradient(transparent, transparent, #0005);
+      }
+
+      #drag-container img:hover {
+          width: 200px;
+          -webkit-transition: all 2s ease;
+          -moz-transition: all 2s ease;
+          -ms-transition: all 2s ease;
+          transition: all 2s ease;
+          height: 200px;
+      }
+
+      #drag-container img:hover,
+      #drag-container video:hover {
+        -webkit-box-shadow: 0 0 15px #fffd;
+        box-shadow: 0 0 15px #fffd;
+        -webkit-box-reflect: below 10px
+          linear-gradient(transparent, transparent, #0007);
+      }
+
+      #drag-container p {
+        font-family: 'Anton', sans-serif;
+        position: absolute;
+
+        top: 100%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%) rotateX(90deg);
+        transform: translate(-50%, -50%) rotateX(90deg);
+        color: rgb(255, 145, 0);
+      }
+
+      #ground {
+        width: 900px;
+        height: 900px;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%) rotateX(90deg);
+        transform: translate(-50%, -50%) rotateX(90deg);
+        background: -webkit-radial-gradient(
+          center center,
+          farthest-side,
+          #9993,
+          transparent
+        );
+      }
+
+      #music-container {
+        position: absolute;
+        top: -100px;
+        left: 0;
+      }
+
+      @-webkit-keyframes spin {
+        from {
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+        to {
+          -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
+        }
+      }
+
+      @keyframes spin {
+        from {
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+        to {
+          -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
+        }
+      }
+      @-webkit-keyframes spinRevert {
+        from {
+          -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
+        }
+        to {
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+      }
+      @keyframes spinRevert {
+        from {
+          -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
+        }
+        to {
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+      }
+    </style>
+  </head>
+
+   <div id="drag-container" style="transform: rotateX(-8.78025deg) rotateY(-2.4587deg);">
+      <div id="spin-container" style="width: 120px; height: 170px; animation: 60s linear 0s infinite normal none running spinRevert;">
+        <!-- Add your images (or video) here -->
+        <img src="https://xatimg.com/image/52Nddx4Sjuqc.png" alt="" style="transform: rotateY(0deg) translateZ(240px); transition: transform 1s ease 2s;">
+        <img src="https://xatimg.com/image/f70C5aqZP5JA.png" alt="" style="transform: rotateY(45deg) translateZ(240px); transition: transform 1s ease 1.75s;">
+        <img src="https://xatimg.com/image/D2L146ifu3Io.png" alt="" style="transform: rotateY(90deg) translateZ(240px); transition: transform 1s ease 1.5s;">
+        <img src="https://xatimg.com/image/pj1Zlj4bte4s.png" alt="" style="transform: rotateY(135deg) translateZ(240px); transition: transform 1s ease 1.25s;">
+        <img src="https://xatimg.com/image/fkpVVONq8xIT.png" alt="" style="transform: rotateY(180deg) translateZ(240px); transition: transform 1s ease 1s;">
+        <img src="https://xatimg.com/image/dNqnPVaz94b6.png" alt="" style="transform: rotateY(225deg) translateZ(240px); transition: transform 1s ease 0.75s;">
+        <img src="https://xatimg.com/image/Zprlwd2o7DZo.png" alt="" style="transform: rotateY(270deg) translateZ(240px); transition: transform 1s ease 0.5s;">
+        <img src="https://xatimg.com/image/YqtEiKV6zIRa.png" alt="" style="transform: rotateY(270deg) translateZ(240px); transition: transform 1s ease 0.5s;">
+        <img src="https://xatimg.com/image/1lNBpav2Gtag.png" alt="" style="transform: rotateY(270deg) translateZ(240px); transition: transform 1s ease 0.5s;">
+        <!-- Example image with link -->
+
+          <img src="https://xatimg.com/image/CKdDbDpHxCNe.png" alt="" style="transform: rotateY(315deg) translateZ(240px); transition: transform 1s ease 0.25s;">
+
+
+        <!-- Example add video  -->
+
+
+        <!-- Text at center of ground -->
+
+        <p><marquee behavior="scroll" direction="left" scrollamount="4" scrolldelay="20" width="408" "="" style="width:" 408px"="">
+<font size="4" font="" color="ff0000">♥<font color="aaa9ad">´¨•.¸¸.♫..BENVENUTI´¨•.¸¸.♫..♥..(<font color="ff0000">♥‿♥<font color="ff0000">)</font></font></font></font></marquee>
+<marquee behavior="scroll" direction="right" scrollamount="4" scrolldelay="20" width="408" "="" style="width:" 408px"="">
+<font size="8" font="" color="ff0000">DIABLO_PEPPE_</font></marquee></p>
+      </div>
+      <div id="ground" style="width: 480px; height: 480px;"></div>
+    </div>
+
+    ..
+
+    <a target="_blank" href="https://peppediablo881.wixsite.com/diablo"><img src="https://xatimg.com/image/BZqmOT8sgPyK.gif" width="30" height="30" viewbox="0 0 250 250" style="fill:#ff0000; color:rgb(0, 0, 0);position: absolute; top: 40px; border: 0; right: 1090px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+   </a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://www.facebook.com/?locale=it_IT"><img src="https://xatimg.com/image/vCeia0gXuRy0.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 140px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://xat.com/RADIOFM_2012"><img src="https://xatimg.com/image/lbIXqtQzCLtd.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 195px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://xat.com/TI_RICORDI"><img src="https://xatimg.com/image/lbIXqtQzCLtd.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 250px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://www.youtube.com/@PEPPE3187/videos"><img src="https://xatimg.com/image/Valltp2Edbzx.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 305px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://www.slotjava.it/slot-machine/"><img src="https://xatimg.com/image/bEj4Jmjup6Zc.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 360px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" href="https://altadefinizione.fish/"><img src="https://xatimg.com/image/9GWlMtbcWtiK.png" width="40" height="40" viewbox="0 0 250 250" style="fill:#fff; color:rgb(0, 0, 0);position: absolute; top: 415px; border: 0; right: 0px;" aria-hidden="true"></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+
+
+    <!--Bootstrap css-->
+    <link rel="stylesheet" href="https://peppediablo881.wixsite.com/diablo">
+
+
+    <!--Theme css-->
+    <link rel="stylesheet" href="https://peppediablo881.wixsite.com/diablo">
+
+
+
+
+
+
+
+
+
+<header class="nav-area navbar-fixed-top">
+    <div class="container">
+        <div class="row">
+            <!--main menu pocetak-->
+
+            <div class="col-md-12">
+                <div class="main-menu">
+                    <div class="navbar navbar-cus">
+
+                   <a href="https://xat.com/RADIO_CUORE_CRIK_CROK" class="navbar-brand"><span class="logo" font="" color="aaa9ad">DIABLO<span>PEPPE</span></span></a> <!-- logo name-->
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+<div style="position: absolute;
+vertical-align: top;
+text-align: left;
+bottom: -850px;
+right: 495px;">
+                <p><font size="4" font="" color="aaa9ad">Copyright  <a href="https://xat.me/LUX1" target="_blank"><font size="4" font="" color="aaa9ad">© by ExtraLux</font></a></font></p><font size="4" font="" color="aaa9ad"><font size="4" font="" color="aaa9ad"> <!--edit here-->
+            </font></font></div><font size="4" font="" color="aaa9ad"><font size="4" font="" color="aaa9ad">
+        </font></font></div><font size="4" font="" color="aaa9ad"><font size="4" font="" color="aaa9ad">
+    </font></font></div><font size="4" font="" color="aaa9ad"><font size="4" font="" color="aaa9ad">
+</font></font></div><font size="4" font="" color="aaa9ad"><font size="4" font="" color="aaa9ad">
+
+
+    <script>
+      // Author: ExtrLux (https://www.facebook.com/groups/610131509121086)
+      // Github verson (1 file .html): https://github.com/HoangTran0410/3DCarousel/blob/master/index.html
+
+      // You can change global variables here:
+      var radius = 240; // how big of the radius
+      var autoRotate = true; // auto rotate or not
+      var rotateSpeed = -60; // unit: seconds/360 degrees
+      var imgWidth = 120; // width of images (unit: px)
+      var imgHeight = 170; // height of images (unit: px)
+
+      // Link of background music - set 'null' if you dont want to play background music
+      var bgMusicURL =
+        "https://api.soundcloud.com/tracks/143041228/stream?client_id=587aa2d384f7333a886010d5f52f302a";
+      var bgMusicControls = true; // Show UI music control
+
+      /*
+     NOTE:
+       + imgWidth, imgHeight will work for video
+       + if imgWidth, imgHeight too small, play/pause button in <video> will be hidden
+       + Music link are taken from: https://hoangtran0410.github.io/Visualyze-design-your-own-/?theme=HauMaster&playlist=1&song=1&background=28
+       + Custom from code in tiktok video  https://www.facebook.com/groups/610131509121086/
+*/
+
+      // ===================== start =======================
+      setTimeout(init, 100);
+
+      var odrag = document.getElementById("drag-container");
+      var ospin = document.getElementById("spin-container");
+      var aImg = ospin.getElementsByTagName("img");
+      var aVid = ospin.getElementsByTagName("video");
+      var aEle = [...aImg, ...aVid]; // combine 2 arrays
+
+      // Size of images
+      ospin.style.width = imgWidth + "px";
+      ospin.style.height = imgHeight + "px";
+
+      // Size of ground - depend on radius
+      var ground = document.getElementById("ground");
+      ground.style.width = radius * 2 + "px";
+      ground.style.height = radius * 2 + "px";
+
+      function init(delayTime) {
+        for (var i = 0; i < aEle.length; i++) {
+          aEle[i].style.transform =
+            "rotateY(" +
+            i * (360 / aEle.length) +
+            "deg) translateZ(" +
+            radius +
+            "px)";
+          aEle[i].style.transition = "transform 1s";
+          aEle[i].style.transitionDelay =
+            delayTime || (aEle.length - i) / 4 + "s";
+        }
+      }
+
+      function applyTranform(obj) {
+        // Constrain the angle of camera (between 0 and 180)
+        if (tY > 180) tY = 180;
+        if (tY < 0) tY = 0;
+
+        // Apply the angle
+        obj.style.transform = "rotateX(" + -tY + "deg) rotateY(" + tX + "deg)";
+      }
+
+      function playSpin(yes) {
+        ospin.style.animationPlayState = yes ? "running" : "paused";
+      }
+
+      var sX,
+        sY,
+        nX,
+        nY,
+        desX = 0,
+        desY = 0,
+        tX = 0,
+        tY = 10;
+
+      // auto spin
+      if (autoRotate) {
+        var animationName = rotateSpeed > 0 ? "spin" : "spinRevert";
+        ospin.style.animation = `${animationName} ${Math.abs(
+          rotateSpeed
+        )}s infinite linear`;
+      }
+
+      // add background music
+      if (bgMusicURL) {
+        document.getElementById("music-container").innerHTML += `
+<audio src="${bgMusicURL}" ${
+          bgMusicControls ? "controls" : ""
+        } autoplay loop>
+<p>If you are reading this, it is because your browser does not support the audio element.</p>
+</audio>
+`;
+      }
+
+      // setup events
+      document.onpointerdown = function(e) {
+        clearInterval(odrag.timer);
+        e = e || window.event;
+        var sX = e.clientX,
+          sY = e.clientY;
+
+        this.onpointermove = function(e) {
+          e = e || window.event;
+          var nX = e.clientX,
+            nY = e.clientY;
+          desX = nX - sX;
+          desY = nY - sY;
+          tX += desX * 0.1;
+          tY += desY * 0.1;
+          applyTranform(odrag);
+          sX = nX;
+          sY = nY;
+        };
+
+        this.onpointerup = function(e) {
+          odrag.timer = setInterval(function() {
+            desX *= 0.95;
+            desY *= 0.95;
+            tX += desX * 0.1;
+            tY += desY * 0.1;
+            applyTranform(odrag);
+            playSpin(false);
+            if (Math.abs(desX) < 0.5 && Math.abs(desY) < 0.5) {
+              clearInterval(odrag.timer);
+              playSpin(true);
+            }
+          }, 17);
+          this.onpointermove = this.onpointerup = null;
+        };
+
+        return false;
+      };
+
+      document.onmousewheel = function(e) {
+        e = e || window.event;
+        var d = e.wheelDelta / 20 || -e.detail;
+        radius += d;
+        init(1);
+      };
+    </script>
+
+
+
+
+</font></font></div></header></body></html>
