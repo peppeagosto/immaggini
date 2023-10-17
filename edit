@@ -28,7 +28,7 @@ body {margin:0; padding:0;}
 
 
       <!-- Area Video PEPPE-->
-          <video class="videobg" src="https://diablo70.github.io/immaggini/video.mp4" autoplay loop muted>
+          <video class="videobg" src="https://diablo70.github.io/immaggini/edit.mp4" type="video/mp4" autoplay loop muted>
         <source src="https://diablo70.github.io/immaggini/edit.mp4" type="video/mp4">
       </video>
 
