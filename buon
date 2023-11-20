@@ -56,7 +56,7 @@ body {
 
 
 .dmjserv {
-  background: url('');
+  background: url('https://github.com/diablo70/immaggini/blob/main/buon.gif');
   background-repeat: no-repeat;
   background-position: 0px center;
   position: relative;
