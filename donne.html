@@ -1,34 +1,95 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
-
-
+<!DOCTYPE html>
+<html>
+<head>
 <style>
-
-body {margin:0; padding:0;}
-
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
+body {
+	background-image: linear-gradient( 109.6deg,  rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5% );
+	overflow: hidden;
 }
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
 
+.but {
+    z-index: 1000;
+    position: absolute;
+    background-color: #383838;
+    padding: 20px 8px 8px 8px;
+    border-radius: 6px;
+    border: 1px solid #707070;
+    top: 6%;
+    color: #ffffff;
+    text-decoration: none;
+    right: 1%;
+}
+	
+.but:hover {
+    background-color: #000000;
+}
+
+.but1 {
+    z-index: 1000;
+    position: absolute;
+    background-color: #646464;
+    padding: 50px 8px 50px 8px;
+    border-radius: 6px;
+    border: 1px solid #707070;
+    top: 81%;
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+.info {
+    z-index: 1000;
+    position: absolute;
+    top: 8%;
+	color: #fff;
+}
+  
+.but:hover {
+	opacity: 0.8;
+}
+
+.but1:hover {
+	opacity: 0.8;
+}
 </style>
+</head>
 
+<body>
+<a class="but" href="#" onclick="Bgs()">DIABLO SFONDI MULTIPLI</a>
+</body>
 
-    </head>
-    <body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<script>
+    var count = 0;
+    var n = 10;
 
-      <!-- Area Video Aghetto Server89.com-->
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/donne.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/donne.mp4" type="video/mp4">
-      </video>
+    function Bgs() {
+        if (count === 0) {
+            $('body').css({'background-image': 'linear-gradient( 110.6deg,  rgba(179,157,219,1) 7%, rgba(150,159,222,1) 47.7%, rgba(24,255,255,1) 100.6% )', 'background-repeat': 'repeat'})
+        } else if (count === 1) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/XYAaobPd9RP9.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 2) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/6shfgZbbPLkY.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 3) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/q0MvPpGVNI2x.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 4) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/7id4MEoBTxss.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 5) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/JcMOaGTxW5Lu.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 6) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/gpQCSWYYpMwM.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 7) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/AZD3BhfkKZVe.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 8) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/iCi0J9sTEwdd.gif)', 'background-repeat': 'no-repeat', 'background-size': '100%'});
+        } else if (count === 9) {
+            $('body').css({'background-image': 'linear-gradient( 109.6deg,  rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%', 'background-repeat': 'repeat'});
+        }
 
-
-
-</body></html>
+        count += 1;
+        if (count === n)
+            count = 0;
+    }
+</script>
