@@ -1,0 +1,34 @@
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+    var count = 0;
+    var n = 10;
+
+    function Bgs() {
+        if (count === 0) {
+            $('body').css({'background-image': 'linear-gradient( 10.6deg,  rgba(0,255,255) 47%, rgba(0,255,255) 47.7%, rgba(0,255,255) 1000.6% )', 'background-repeat': 'repeat'})
+        } else if (count === 1) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/1QTlEmBu2qIV.gif)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 2) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/khW1iEm3FAgK.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 3) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/v65TA3gTLdX2.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 4) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/jWnZ53xs74Uw.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 5) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/TKKcvpfgprX8.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 6) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/nV1qhcyscctC.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 7) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/SSahRoIkdyQk.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 8) {
+            $('body').css({'background-image': 'url(https://xatimg.com/image/Om2BtaNLBpwR.png)', 'background-repeat': 'no-repeat', 'background-size': '99%'});
+        } else if (count === 9) {
+                  $('body').css({'background-image': 'linear-gradient( 70.6deg,  rgba(255,255,0) 11.2%, rgba(255,255,0) 92.5%', 'background-repeat': 'repeat'});
+        }
+
+        count += 1;
+        if (count === n)            count = 0;
+    }
+</script>
