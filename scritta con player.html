@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DIABLOS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&amp;display=swap" rel="stylesheet"> <!-- Font Horror -->
+  <style>
+    body {
+      background-color: black; /* Imposta lo sfondo a nero */
+      margin: 0;
+      overflow: hidden; /* Nasconde le barre di scorrimento */
+      position: relative; /* Necessario per il posizionamento assoluto degli elementi */
+    }
+    canvas {
+      display: block; /* Rende il canvas un elemento a blocco */
+    }
+    .sparkle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
+      pointer-events: none;
+      animation: sparkle 1.5s infinite;
+      opacity: 0.3;
+    }
+    @keyframes sparkle {
+      0% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.7;
+      }
+      100% {
+        opacity: 0.3;
+      }
+    }
+    .blinding-light {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 700px; /* Dimensione del fascio di luce */
+      height: 700px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7), rgba(255, 0, 0, 0) 80%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      border-radius: 50%;
+      animation: lightAnimation 3s infinite alternate;
+    }
+    @keyframes lightAnimation {
+      0% {
+        background: radial-gradient(circle, rgba(255, 0, 0, 0.7), rgba(0, 255, 255, 0) 80%);
+      }
+      50% {
+        background: radial-gradient(circle, rgba(0, 255, 0, 0.7), rgba(255, 255, 0, 0) 80%);
+      }
+      100% {
+        background: radial-gradient(circle, rgba(0, 0, 255, 0.7), rgba(255, 0, 255, 0) 80%);
+      }
+    }
+    .corner-gif {
+      position: absolute;
+      width: 208px; /* Dimensione della GIF aumentata del 30% */
+      height: 208px;
+      pointer-events: none;
+    }
+    .top-left-gif {
+      top: 0;
+      left: 0;
+      margin-top: 20px; /* Spazio dal bordo superiore */
+      margin-left: 20px; /* Spazio dal bordo sinistro */
+    }
+    .top-right-gif {
+      top: 0;
+      right: 0;
+      margin-top: 20px; /* Spazio dal bordo superiore */
+      margin-right: 20px; /* Spazio dal bordo destro */
+    }
+    .player-container {
+      position: absolute;
+      bottom: 20px; /* Spazio dal bordo inferiore */
+      right: 20px; /* Spazio dal bordo destro */
+      width: 300px; /* Larghezza del player */
+      height: 150px; /* Altezza del player */
+      background: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente per il player */
+      border-radius: 10px; /* Angoli arrotondati */
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Ombra del player */
+    }
+    .player-container embed {
+      width: 100%;
+      height: 100%;
+    }
+    .text-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      font-family: 'Creepster', sans-serif;
+      font-size: 40px;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body translate="no">
+  <canvas id="canvas" width="1360" height="633"></canvas>
+  <div class="sparkle"></div>
+  <div class="blinding-light"></div>
+
+  <!-- Aggiungi le GIF negli angoli superiori -->
+  <img src="https://xatimg.com/image/4a5Y103orFqJ.gif" class="corner-gif top-left-gif" alt="Top Left Corner GIF">
+  <img src="https://xatimg.com/image/B4pAdn1hSlRm.gif" class="corner-gif top-right-gif" alt="Top Right Corner GIF">
+
+  <div class="text-container">
+    <div id="el-diablo"></div>
+    <!-- Il player verrà inserito qui -->
+  </div>
+
+  <div class="player-container">
+    <embed src="https://radioplayer.link/stream/?autoplay=true&amp;name=&amp;bgcolor=FF0000&amp;textcolor=9ACD32&amp;v=fake&amp;stream=https://stream-171.zeno.fm/ylkruiq5e4fvv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ5bGtydWlxNWU0ZnZ2IiwiaG9zdCI6InN0cmVhbS0xNzEuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImE1aURHVG9tUmVLYlV5OElDYk5aOHciLCJpYXQiOjE3MjUwNDA5NDUsImV4cCI6MTcyNTA0MTAwNX0.vi9aW5xz7DH8ISkufE-aLdEGWgQ1Q1jstepKT6W3jCc" frameborder="0" scrolling="no" allow="autoplay;">
+  </div>
+
+  <script id="rendered-js">
+    var txt = "EL DIABLO"; // Testo aggiornato
+    var txtH = 95;
+    var font = "'Creepster', sans-serif"; // Applica il font horror
+    var rayColors = ["#CD5C5C", "#FFFF00", "#00FA9A", "#00FFFF", "#FF0000"];
+    
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var cw = canvas.width = window.innerWidth;
+    var ch = canvas.height = window.innerHeight;
+    var w2 = cw / 2;
+    var h2 = ch / 2;
+    var pi = Math.PI;
+    var pi2 = pi * 0.5;
+    var txtCanvas = document.createElement("canvas");
+    var txtCtx = txtCanvas.getContext("2d");
+    txtCtx.font = txtH + "px " + font;
+    txtCtx.textBaseline = "middle";
+    var txtW = Math.floor(txtCtx.measureText(txt).width);
+    txtCanvas.width = txtW;
+    txtCanvas.height = txtH * 1.5;
+
+    var gradient = ctx.createRadialGradient(w2, h2, 0, w2, h2, txtW);
+    gradient.addColorStop(0, rayColors[4]);
+    gradient.addColorStop(0.5, rayColors[3]);
+    gradient.addColorStop(1, rayColors[0]);
+    ctx.strokeStyle = gradient;
+    txtCtx.fillStyle = gradient;
+    txtCtx.font = txtH + "px " + font;
+    txtCtx.textBaseline = "middle";
+    txtCtx.fillText(txt, 0, txtH * 0.5);
+    txtH *= 1.5;
+
+    var bufferCanvas = document.createElement("canvas");
+    bufferCanvas.width = txtW;
+    bufferCanvas.height = txtH;
+    var buffer = bufferCanvas.getContext("2d");
+
+    var sx = (cw - txtW) * 0.5;
+    var sy = (ch - txtH) * 0.5;
+
+    var rays = [];
+    var txtData = txtCtx.getImageData(0, 0, txtW, txtH);
+    for (var i = 0; i < txtData.data.length; i += 4) {
+      var ii = i / 4;
+      var row = Math.floor(ii / txtW);
+      var col = ii % txtW;
+      var alpha = txtData.data[i + 3];
+      if (alpha !== 0) {
+        var c = "rgba(";
+        c += [txtData.data[i], txtData.data[i + 1], txtData.data[i + 2], alpha / 255];
+        c += ")";
+        rays.push(new Ray(Math.floor(ii / txtW), ii % txtW, c));
+      }
+    }
+
+    var current = 0;
+    var colorOffset = 0;
+    var gradientSpeed = 0.02;
+    var waveOffset = 0; // Aggiungi un offset per l'onda
+    var waveFrequency = 0.05; // Frequenza dell'onda
+    var waveAmplitude = 30; // Ampiezza dell'onda
+    tick();
+
+    function tick() {
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(bufferCanvas, 0, 0, current, txtH, sx, sy + Math.sin(waveOffset) * waveAmplitude, current, txtH);
+      ctx.save();
+      ctx.globalAlpha = 0.05;
+      ctx.globalCompositeOperation = "lighter";
+      
+      // Cambia il gradiente per animare i colori
+      var gradient = ctx.createRadialGradient(w2, h2, 0, w2, h2, txtW);
+      gradient.addColorStop(0, rayColors[Math.floor(colorOffset) % rayColors.length]);
+      gradient.addColorStop(0.5, rayColors[(Math.floor(colorOffset) + 1) % rayColors.length]);
+      gradient.addColorStop(1, rayColors[(Math.floor(colorOffset) + 2) % rayColors.length]);
+      ctx.strokeStyle = gradient;
+      txtCtx.fillStyle = gradient;
+
+      if (drawRays(current)) {
+        current++;
+        current = Math.min(current, txtW);
+        waveOffset += waveFrequency; // Aggiorna l'offset dell'onda
+        window.requestAnimationFrame(tick);
+      } else {
+        fadeOut();
+      }
+
+      ctx.restore();
+    }
+
+    function fadeOut() {
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.globalAlpha *= 0.95;
+      ctx.drawImage(bufferCanvas, 0, 0, current, txtH, sx, sy + Math.sin(waveOffset) * waveAmplitude, current, txtH);
+      if (ctx.globalAlpha > 0.01) {
+        window.requestAnimationFrame(fadeOut);
+      } else {
+        window.setTimeout(restart, 500);
+      }
+    }
+
+    function restart() {
+      for (var i = 0; i < rays.length; i++) {
+        rays[i].reset();
+      }
+      current = 0;
+      colorOffset += gradientSpeed;
+      if (colorOffset >= rayColors.length) {
+        colorOffset = 0;
+      }
+      tick();
+    }
+
+    function drawRays(c) {
+      var count = 0;
+      ctx.beginPath();
+      for (var i = 0; i < rays.length; i++) {
+        var ray = rays[i];
+        if (ray.col < c) {
+          count += ray.draw();
+        }
+      }
+      ctx.stroke();
+      return count !== rays.length;
+    }
+
+    function Ray(row, col, f) {
+      this.col = col;
+      this.row = row;
+
+      var xp = sx + col;
+      var yp = sy + row;
+      var fill = f;
+
+      var ath = txtH / 1.5;
+
+      var a = pi2 * (this.row - ath * 0.5) / ath;
+      if (a === 0) {
+        a = (Math.random() - 0.5) * pi2;
+      }
+      var da = 0.02 * Math.sign(a);
+
+      var q = 2 * pi * (this.col - txtW * 0.5) / txtW;
+      if (q === 0) {
+        q = (Math.random() - 0.5) * pi;
+      }
+      var dq = 0.02 * Math.sign(q);
+
+      da += (Math.random() - 0.5) * 0.005;
+      var l = 0;
+      var dl = Math.random() * 2 + 2;
+
+      var buffered = false;
+
+      this.reset = function () {
+        q = 2 * pi * (this.col - txtW * 0.5) / txtW;
+        a = pi2 * (this.row - ath * 0.5) / ath;
+        if (a === 0) {
+          a = -pi2 * 0.5;
+        }
+        l = 0;
+        buffered = false;
+      };
+
+      this.draw = function () {
+        if (l < 0) {
+          if (!buffered) {
+            buffer.fillStyle = fill;
+            buffer.fillRect(this.col, this.row, 1, 1);
+            buffered = true;
+          }
+          return 1;
+        } else {
+          ctx.moveTo(xp, yp);
+          ctx.quadraticCurveTo(
+            xp + Math.cos(q) * l * 0.5,
+            yp + Math.sin(q) * l * 0.5,
+            xp + Math.cos(a) * l,
+            yp + Math.sin(a) * l
+          );
+          a += da;
+          q += dq;
+          l += Math.cos(a) * dl;
+          return 0;
+        }
+      };
+    }
+  </script>
+
+  <script>
+    var message = "EL DIABLO NO COPIARE";
+
+    function clickIE4() {
+      if (event.button == 2) {
+        alert(message);
+        return false;
+      }
+    }
+
+    function clickNS4(e) {
+      if (document.layers || document.getElementById && !document.all) {
+        if (e.which == 2 || e.which == 3) {
+          alert(message);
+          return false;
+        }
+      }
+    }
+
+    if (document.layers) {
+      document.captureEvents(Event.MOUSEDOWN);
+      document.onmousedown = clickNS4;
+    } else if (document.all && !document.getElementById) {
+      document.onmousedown = clickIE4;
+    }
+
+    document.oncontextmenu = new Function("alert(message);return false");
+  </script>
+
+  <script>
+    function disableselect(e) {
+      return false;
+    }
+    function reEnable() {
+      return true;
+    }
+    document.onselectstart = new Function("return false");
+    if (window.sidebar) {
+      document.onmousedown = disableselect;
+      document.onclick = reEnable;
+    }
+  </script>
+
+  <script>
+    window.oncontextmenu = function () {
+      console.log("Right Click Disabled");
+      return false;
+    }
+  </script>
+</body>
+</html>
