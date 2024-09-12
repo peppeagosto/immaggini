@@ -1,34 +1,214 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Interattiva con Effetti</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background-color: #111;
+            color: #fff;
+        }
+        .parallax {
+            height: 100vh;
+            background: url('https://xatimg.com/image/IEro0ZOHfNyi.gif') no-repeat center center fixed;
+            background-size: 30%;
+            background-position: center center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 0.5s ease;
+            filter: brightness(0.7);
+        }
+        .parallax .content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        .parallax h1 {
+            font-size: 3em;
+            margin: 0;
+            animation: pulsate 1.5s infinite, typing 4s steps(40, end), blink 0.75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff6b6b, #f7b733, #ff0000, #00ff00, #0000ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        @keyframes pulsate {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        .parallax p, .parallax .link, .parallax .blog-link, .parallax .custom-link {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        .parallax .link:hover, .parallax .blog-link:hover, .parallax .custom-link:hover {
+            text-decoration: underline;
+        }
+        .scrolling-effect {
+            padding: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        .scrolling-effect h2 {
+            margin: 0;
+            font-size: 2em;
+            background: linear-gradient(90deg, #ff0000, #ff7f7f, #ffcc00, #00ff00, #00cccc, #0000ff, #cc00cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbowText 10s linear infinite, rotateText 10s linear infinite;
+        }
+        .scrolling-effect p, .scrolling-effect .subtitle {
+            margin: 0;
+            font-size: 1.5em;
+            background: linear-gradient(90deg, #ff0000, #ff7f7f, #ffcc00, #00ff00, #00cccc, #0000ff, #cc00cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbowText 10s linear infinite, rotateText 10s linear infinite;
+        }
+        .scrolling-effect p.subtitle:hover {
+            transform: scale(1.2);
+            background: linear-gradient(90deg, #ff0000, #ff7f7f, #ffcc00, #00ff00, #00cccc, #0000ff, #cc00cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        @keyframes rainbowText {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        @keyframes rotateText {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .rainbow-text {
+            font-size: 2em;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #ff0000, #ff7f7f, #ffcc00, #00ff00, #00cccc, #0000ff, #cc00cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: pulsate 1.5s infinite, rainbowText 10s linear infinite;
+        }
+        .embed-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
+        .embed-container iframe {
+            border: none;
+            width: 100%;
+            height: 80px; /* Ingrandito */
+        }
+        .volume-control {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            background: transparent;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .volume-control input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #ff0000, #ff7f7f);
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .volume-control input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .volume-control input[type="range"]::-ms-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax">
+        <div class="content">
+            <h1 class="rainbow-text">Benvenuto sulla mia pagina!</h1>
+            <p class="subtitle"></p>
+        </div>
+    </div>
+    <div class="scrolling-effect">
+        <h2 class="rainbow-text">ASCOLTA LA MIA MUSICA</h2>
+        <p class="rainbow-text">SE TI PIACE SALVATELA NEI PREFERITI GRAZIE.</p>
+        <p><strong>Grazie per la visita!</strong></p>
+        <p class="subtitle">CODICI FATTI DA DIABLO PEPPE.</p>
+    </div>
+    <div class="embed-container">
+        <iframe src="https://radioplayer.link/stream/?autoplay=true&amp;name=PositiveConexzionCrew&amp;bgcolor=000000&amp;textcolor=9ACD32&amp;v=fake&amp;stream=https://stream.zeno.fm/ylkruiq5e4fvv" allow="autoplay"></iframe>
+    </div>
+    <div class="volume-control">
+        <input type="range" id="volumeRange" min="0" max="100" step="1" value="50">
+    </div>
+    <script>
+        // Disabilita il tasto destro del mouse
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
-<style>
-
-body {margin:0; padding:0;}
-
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
-
-</style>
-
-
-    </head>
-    <body>
-
-
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/personaleedit.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/personaleedit.mp4" type="video/mp4">
-      </video>
-
-
-
-</body></html>
+        // Volume Control Script
+        document.getElementById('volumeRange').addEventListener('input', function() {
+            const iframe = document.querySelector('.embed-container iframe');
+            const volume = this.value;
+            iframe.contentWindow.postMessage({ volume: volume / 100 }, '*');
+        });
+        
+        // Parallax Effect
+        document.addEventListener('scroll', function() {
+            const scrolled = window.scrollY;
+            document.querySelector('.parallax').style.backgroundPositionY = -(scrolled * 0.5) + 'px';
+        });
+    </script>
+</body>
+</html>
