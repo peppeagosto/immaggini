@@ -1,34 +1,196 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immagini e Testo Animato</title>
+    <style type="text/css">
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Colore di sfondo per migliorare la visibilità del testo */
+        }
 
+        .text-container {
+            text-align: center; /* Centra il testo orizzontalmente */
+            margin-bottom: 20px; /* Distanza dal contenuto sottostante */
+        }
 
-<style>
+        .full-text {
+            font-size: 25.2px; /* Dimensione del testo ridotta del 30% rispetto a 36px */
+            font-family: Tahoma, sans-serif; /* Font del testo */
+            font-weight: bold; /* Grassetto */
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); /* Gradiente arcobaleno */
+            background-clip: text; /* Applica il gradiente al testo */
+            -webkit-background-clip: text; /* Supporto per browser WebKit */
+            color: transparent; /* Rende il testo trasparente per mostrare il gradiente */
+            animation: pulse 2s infinite, move 5s infinite; /* Animazioni di pulsazione e movimento */
+        }
 
-body {margin:0; padding:0;}
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 
+                             0 0 10px rgba(255, 255, 255, 0.4), 
+                             0 0 15px rgba(255, 255, 255, 0.3), 
+                             0 0 20px rgba(255, 255, 255, 0.2);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 
+                             0 0 20px rgba(255, 255, 255, 0.6), 
+                             0 0 30px rgba(255, 255, 255, 0.5), 
+                             0 0 40px rgba(255, 255, 255, 0.4);
+                transform: scale(1.1);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 
+                             0 0 10px rgba(255, 255, 255, 0.4), 
+                             0 0 15px rgba(255, 255, 255, 0.3), 
+                             0 0 20px rgba(255, 255, 255, 0.2);
+                transform: scale(1);
+            }
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        @keyframes move {
+            0% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            100% {
+                transform: translateX(-10px);
+            }
+        }
 
-</style>
+        .zoomin img {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%; /* Rende le immagini rotonde */
+            display: inline-block; /* Allinea le immagini in fila */
+            vertical-align: middle; /* Allinea verticalmente */
+            transition: all 2s ease; /* Transizione per l'hover */
+            animation: bounceIn 2s, rainbowBorder 5s infinite, rotate 10s linear infinite; /* Applicazione delle animazioni */
+        }
 
+        .zoomin img:hover {
+            width: 350px;
+            height: 250px;
+            border-radius: 50%; /* Mantiene la forma rotonda durante l'hover */
+        }
 
-    </head>
-    <body>
+        .img-container {
+            display: inline-block; /* Allinea in fila */
+            overflow: hidden; /* Nasconde tutto fuori dal bordo */
+            position: relative; /* Necessario per il bordo animato */
+            animation: rotate 10s linear infinite; /* Applicazione dell'animazione di rotazione */
+        }
 
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-1000px);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.05) translateY(30px);
+            }
+            80% {
+                transform: scale(0.9) translateY(-10px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
 
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/privato.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/privato.mp4" type="video/mp4">
-      </video>
+        @keyframes rainbowBorder {
+            0% { border-color: red; }
+            14% { border-color: orange; }
+            28% { border-color: yellow; }
+            42% { border-color: green; }
+            57% { border-color: blue; }
+            71% { border-color: indigo; }
+            85% { border-color: violet; }
+            100% { border-color: red; }
+        }
 
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
+        .img-container {
+            border: 9px solid;
+            border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            border-image-slice: 1;
+            animation: rainbowBorder 5s infinite; /* Applicazione dell'animazione del bordo arcobaleno */
+        }
 
-</body></html>
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            width: 100vw;
+            animation: marquee 10s linear infinite;
+        }
+
+        .marquee > div {
+            display: flex;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="text-container">
+        <div class="full-text">CODICE REALIZZATO DA DIABLO</div>
+    </div>
+
+    <div class="marquee">
+        <div class="zoomin">
+            <div class="img-container border-rainbow">
+                <img src="https://xatimg.com/image/rcG1EJO9xg4f.gif" alt="Immagine 2">
+            </div>
+            <div class="img-container border-green">
+                <img src="https://xatimg.com/image/3PXmamsGZpit.png" alt="Immagine 3">
+            </div>
+            <div class="img-container border-yellow">
+                <img src="https://xatimg.com/image/RXQJofMUO5iS.png" alt="Immagine 4">
+            </div>
+            <div class="img-container border-purple">
+                <img src="https://xatimg.com/image/rI0k6q7vHkKp.png" alt="Immagine 5">
+            </div>
+            <div class="img-container border-orange">
+                <img src="https://xatimg.com/image/v2KOBgUmrY3M.png" alt="Immagine 6">
+            </div>
+            <div class="img-container border-pink">
+                <img src="https://xatimg.com/image/bqhuMIMgACHC.png" alt="Immagine 7">
+            </div>
+            <div class="img-container border-teal">
+                <img src="https://xatimg.com/image/OmVJBRYOG2Q9.png" alt="Immagine 8">
+            </div>
+            <div class="img-container border-brown">
+                <img src="https://xatimg.com/image/QSJpXdGNsZec.png" alt="Immagine 9">
+            </div>
+            <div class="img-container border-gray">
+                <img src="https://xatimg.com/image/qz5qty9NYJfZ.png" alt="Immagine 10">
+            </div>
+            <div class="img-container border-custom">
+                <img src="https://xatimg.com/image/m2yLVowmiztQ.png" alt="Immagine 11">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
