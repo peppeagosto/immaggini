@@ -1,34 +1,147 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REALIZZATO DA DIABLOPEPPE</title>
+    <style>
+        /* Stile globale per il body e l'html */
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+        }
 
+        /* Contenitore principale con sfondo sfumato animato */
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* Imposta la disposizione verticale */
+            align-items: center; /* Allinea al centro orizzontalmente */
+            justify-content: flex-start; /* Allinea al centro orizzontalmente */
+            position: relative;
+            background: linear-gradient(45deg, 
+                #ff0000, #ff6600, #ffcc00, #ccff00, #66ff00, #00ff00,
+                #00ff66, #00ffcc, #00cccc, #0099cc, #0066cc, #0033cc,
+                #0000cc, #3300cc, #6600cc, #9900cc, #cc00cc, #cc0099,
+                #cc0066, #cc0033, #cc0000, #993333, #cc6666, #cc9999,
+                #cccccc, #9999cc, #6666cc, #3333cc, #0000cc, #0033cc,
+                #0066cc, #0099cc, #00cccc, #00ffcc, #00ff99, #00ff66,
+                #00ff33, #00ff00, #33ff00, #66ff00, #99ff00, #ccff00
+            );
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite;
+            padding-top: 20px; /* Ridotto per far salire il testo */
+            box-sizing: border-box;
+        }
 
-<style>
+        /* Animazione del gradiente */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
 
-body {margin:0; padding:0;}
+        /* Stile e animazione per il testo */
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            background: linear-gradient(45deg, 
+                #ff0000, #ff6600, #ffcc00, #ccff00, #66ff00, #00ff00,
+                #00ff66, #00ffcc, #00cccc, #0099cc, #0066cc, #0033cc,
+                #0000cc, #3300cc, #6600cc, #9900cc, #cc00cc, #cc0099,
+                #cc0066, #cc0033, #cc0000, #993333, #cc6666, #cc9999,
+                #cccccc, #9999cc, #6666cc, #3333cc, #0000cc, #0033cc,
+                #0066cc, #0099cc, #00cccc, #00ffcc, #00ff99, #00ff66,
+                #00ff33, #00ff00, #33ff00, #66ff00, #99ff00, #ccff00
+            );
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: heartbeat 1.5s ease-in-out infinite, rainbow 5s linear infinite;
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
 
-</style>
+        @keyframes rainbow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
 
+        /* Contenitore per l'immagine */
+        .image-container {
+            width: 30%; /* Ridotto del 40% rispetto alla larghezza precedente */
+            max-width: 500px; /* Imposta una larghezza massima per l'immagine */
+            height: auto;
+            margin-top: 20px; /* Spazio tra il testo e l'immagine */
+        }
 
-    </head>
-    <body>
+        /* Immagine animata con effetto di zoom */
+        .image-container img {
+            width: 100%;
+            height: auto;
+            animation: zoom 10s ease-in-out infinite;
+        }
 
+        /* Animazione di zoom */
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.7); } /* Ridotto del 30% */
+            100% { transform: scale(1.85); } /* Ingrandito dell'85% */
+        }
 
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/mod.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/mod.mp4" type="video/mp4">
-      </video>
+        /* Stile per il player radio */
+        .player {
+            width: 100%;
+            display: flex;
+            justify-content: center; /* Allinea il player al centro orizzontalmente */
+            margin-top: 20px; /* Spazio sopra il player */
+        }
 
+        .player iframe {
+            border: none;
+            border-radius: 8px;
+        }
 
-
-</body></html>
+        /* Stile per il testo di copyright */
+        .footer-text {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.3); /* Colore bianco con opacità per renderlo quasi invisibile */
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ASCOLTA LA MIA MUSICA</h1>
+        <div class="image-container">
+            <img src="https://xatimg.com/image/4WW7MWAcCwL0.png" alt="Foto con Chitarra">
+        </div>
+        <!-- Sezione del player radio aggiunta -->
+        <div class="player">
+            <!-- Radio Player Embed -->
+            <iframe width="120%" height="120" 
+                src="https://radioplayer.link/stream/?autoplay=true&amp;name=&amp;bgcolor=FF0000&amp;textcolor=9ACD32&amp;v=fake&amp;stream=https://stream-171.zeno.fm/ylkruiq5e4fvv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ5bGtydWlxNWU0ZnZ2IiwiaG9zdCI6InN0cmVhbS0xNzEuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImE1aURHVG9tUmVLYlV5OElDYk5aOHciLCJpYXQiOjE3MjUwNDA5NDUsImV4cCI6MTcyNTA0MTAwNX0.vi9aW5xz7DH8ISkufE-aLdEGWgQ1Q1jstepKT6W3jCc" 
+                frameborder="0" scrolling="no" allow="autoplay;"></iframe>
+        </div>
+        <!-- Testo di copyright -->
+        <div class="footer-text">
+            Questo codice realizzato da DiabloPeppe
+        </div>
+    </div>
+</body>
+</html>
