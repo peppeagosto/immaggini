@@ -1,34 +1,140 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Autunnale</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Evita lo scroll */
+        }
+        .background {
+            position: absolute; /* Permette di estendere lo sfondo */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(to bottom, #FFDAA5, #FF8C42);
+            z-index: -1; /* Mette lo sfondo dietro agli altri contenuti */
+            width: 100vw; /* Estendi il background in tutta la larghezza della finestra */
+            height: 100vh; /* Rimane l'altezza della finestra */
+        }
+        .container {
+            display: flex;
+            align-items: center; /* Allinea gli elementi verticalmente */
+            position: relative; /* Necessario per il posizionamento assoluto interno */
+            z-index: 1; /* Assicura che il contenuto venga visualizzato sopra lo sfondo */
+            padding: 20px; /* Aggiunto padding per distanziare dal bordo */
+        }
+        .image-container {
+            position: relative;
+            width: 300px; /* Larghezza del cerchio rotondo ridotta */
+            height: 300px; /* Altezza del cerchio rotondo ridotta */
+            overflow: hidden; /* Nasconde la parte dell'immagine che esce dal contenitore */
+            border-radius: 50%; /* Rende il contenitore rotondo */
+            display: flex; /* Aggiungo per centrare il contenuto */
+            justify-content: center; /* Allinea il contenuto al centro */
+            align-items: center; /* Allinea il contenuto al centro verticalmente */
+            margin-left: 20px; /* Un po' di margine sinistro per distanziare l'immagine dell'albero */
+            box-shadow: 0 20px 60px rgba(255, 105, 0, 0.8), 0 0 80px rgba(255, 105, 0, 0.4); /* Ombra più forte con colore arancione */
+            background: radial-gradient(circle at top, rgba(255, 165, 0, 0.4), transparent 70%); /* Leggera sfumatura arancione */
+        }
+        img {
+            width: 100%; /* Assicura che l'immagine riempia il contenitore */
+            height: 100%; /* Imposta altezza per riempire verticalmente */
+            object-fit: cover; /* Mantiene le proporzioni senza deformare */
+            display: block; /* Rimuove lo spazio sotto l'immagine */
+        }
+        .image-container:hover img {
+            transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+            transition: transform 0.3s ease; /* Animazione fluida */
+        }
+        /* Aggiunta per l'immagine rotante */
+        .rotating-image {
+            width: 80%; /* Ridimensionamento dell'immagine rotante */
+            height: auto;
+            border-radius: 50%; /* Rende l'immagine rotonda */
+            animation: rotate 5s linear infinite; /* Rotazione continua */
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* Luce intensa attorno all'immagine */
+            position: absolute; /* Posiziona l'immagine rotante al centro del contenitore */
+        }
 
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-<style>
+        /* Aggiunta per l'effetto di apparizione/scomparsa */
+        .fade-image {
+            position: absolute;
+            width: 80%; /* Puoi modificare le dimensioni come desideri */
+            height: auto;
+            opacity: 0; /* Inizia invisibile */
+            animation: fade 4s ease-in-out infinite alternate; /* Ripete l'animazione */
+            z-index: 2; /* Mette l'immagine sopra agli altri contenuti */
+        }
 
-body {margin:0; padding:0;}
+        @keyframes fade {
+            0% {
+                opacity: 0; /* Inizia invisibile */
+            }
+            100% {
+                opacity: 1; /* Diventa visibile */
+            }
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        /* Nuova classe per le foglie */
+        .leaf {
+            position: absolute;
+            width: 50px; /* Dimensione delle foglie */
+            animation: fall 4s linear infinite; /* Durata e tipo di animazione */
+            z-index: 1; /* Assicura che le foglie siano sopra allo sfondo */
+        }
 
-</style>
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg); /* Fallisce verso il basso e ruota */
+            }
+        }
+    </style>
+</head>
+<body>
 
+<div class="background"></div> <!-- Aggiunto per lo sfondo -->
+<div class="container">
+    <img src="https://xatimg.com/image/hD0t9XzNhl2P.png" alt="Immagine Albero" style="width: 420px; height: auto; margin-right: -140px;">
+    <div class="image-container">
+        <!-- Sostituisci questa immagine con la tua gif -->
+        <img src="https://xatimg.com/image/3Y6oXfLaX2Cn.gif" alt="Immagine Autunnale">
+        <!-- Aggiunta immagine rotante -->
+        <img class="rotating-image" src="https://xatimg.com/image/Zucz2tKOERy0.png" alt="Immagine Rotante">
+        <!-- Aggiunta immagine fade -->
+        <img class="fade-image" src="https://xatimg.com/image/q3ALOYDx6vEu.png" alt="Immagine Fade">
+    </div>
+    <!-- Aggiunta delle foglie -->
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 20%; left: 10%; animation-delay: 0s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 30%; left: 40%; animation-delay: 1s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 50%; left: 60%; animation-delay: 2s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 70%; left: 20%; animation-delay: 0.5s;">
+</div>
 
-    </head>
-    <body>
-
-
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/farf.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/farf.mp4" type="video/mp4">
-      </video>
-
-
-
-</body></html>
+</div>
+    <!-- Aggiunta delle foglie -->
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 20%; left: 10%; animation-delay: 0s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 30%; left: 40%; animation-delay: 1s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 50%; left: 60%; animation-delay: 2s;">
+    <img class="leaf" src="https://xatimg.com/image/xWnpJT0Wj9uL.gif" alt="Foglia" style="top: 30%; left: 20%; animation-delay: 0.5s;">
+</div>
