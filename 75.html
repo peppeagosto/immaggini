@@ -1,34 +1,86 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background con Scritta Horror</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow: hidden;
+            background-color: black;
+            animation: backgroundAnimation 20s linear infinite;
+            color: white;
+        }
 
-<style>
+        @keyframes backgroundAnimation {
+            0% { background-color: #000000; }
+            5% { background-color: #FF0000; }
+            10% { background-color: #FF7F00; }
+            15% { background-color: #FFFF00; }
+            20% { background-color: #7FFF00; }
+            25% { background-color: #00FF00; }
+            30% { background-color: #00FF7F; }
+            35% { background-color: #00FFFF; }
+            40% { background-color: #007FFF; }
+            45% { background-color: #0000FF; }
+            50% { background-color: #7F00FF; }
+            55% { background-color: #FF00FF; }
+            60% { background-color: #FF007F; }
+            65% { background-color: #A00000; }
+            70% { background-color: #A05F00; }
+            75% { background-color: #A0A000; }
+            80% { background-color: #5FA000; }
+            85% { background-color: #00A000; }
+            90% { background-color: #00A05F; }
+            95% { background-color: #00A0A0; }
+            100% { background-color: #000000; }
+        }
 
-body {margin:0; padding:0;}
+        .horror-text {
+            font-size: 2rem;
+            font-family: 'Creepster', cursive;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 10px;
+            animation: pulsate 1.5s infinite;
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        @keyframes pulsate {
+            0%, 100% { transform: scale(1); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
 
-</style>
+        .player {
+            position: absolute;
+            bottom: 100px; /* Posiziona sopra la sezione RevolverMaps */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            margin: 10px;
+        }
 
-
-    </head>
-    <body>
-
-
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/75.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/75.mp4" type="video/mp4">
-      </video>
-
-
-
-</body></html>
+        .revolvermaps {
+            color: #FFFF00; 
+            font-family: Arial, sans-serif; 
+            font-size: 33px; 
+            position: absolute;
+            bottom: 20px; /* Posiziona nella parte inferiore */
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="horror-text">Regno Della Musica da ANGEL &amp; PATRIZIA</div>
+</body>
+</html>
