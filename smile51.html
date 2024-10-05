@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benvenuti da Diablo</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 300% 100%; /* Aumenta la dimensione per una transizione più fluida */
+            animation: rainbowAnimation 8s linear infinite; /* Animazione dell'arcobaleno */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes rainbowAnimation {
+            0% { background-position: 0%; }
+            100% { background-position: 100%; }
+        }
+
+        .title {
+            font-size: 3em;
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowTextAnimation 5s ease infinite;
+            position: absolute;
+            right: 10px; /* Posizione a destra */
+            top: 50%; /* Centrale verticalmente */
+            transform: translateY(-50%); /* Correzione per centrarlo esattamente */
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            writing-mode: vertical-rl; /* Scrittura verticale */
+            white-space: nowrap; /* Impedisce la rottura delle righe */
+            animation: verticalScroll 5s linear infinite; /* Animazione scorrimento verticale */
+        }
+
+        @keyframes rainbowTextAnimation {
+            0% { background-position: 0%; }
+            100% { background-position: 100%; }
+        }
+
+        @keyframes verticalScroll {
+            0% { transform: translateY(-50%) translateY(0); }
+            100% { transform: translateY(-50%) translateY(-10vh); }
+        }
+
+        @keyframes smileyFall {
+            0% { transform: translateY(-10vh); opacity: 1; }
+            100% { transform: translateY(90vh); opacity: 0.5; }
+        }
+
+        .smile {
+            position: absolute;
+            font-size: 2em;
+            animation: smileyFall 3s ease forwards; /* Animazione di caduta */
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Benvenuti da Diablo</div>
+
+    <script>
+        const container = document.body;
+        const smileys = ['😊', '😄', '😃', '😁', '😆', '😅', '😂', '🤣', '😜', '🤪', 
+                         '😇', '😈', '😋', '😌', '😍', '🥰', '😎', '😏', '😐', '😑', 
+                         '😒', '😔', '😕', '😖', '😓', '😩', '😨', '😱', '😢', '😭', 
+                         '😤', '😠', '😡', '😈', '😺', '😸', '😻', '😼', '😽', '🙀', 
+                         '😿', '😾', '🤗', '🤔', '🤐'];
+
+        function createSmiley(leftPosition) {
+            const smiley = document.createElement('div');
+            smiley.className = 'smile';
+            smiley.textContent = smileys[Math.floor(Math.random() * smileys.length)];
+            smiley.style.left = leftPosition + 'vw';
+            smiley.style.top = '-10vh'; // Inizio sopra lo schermo
+            container.appendChild(smiley);
+
+            // Rimuovo il smiley dopo che è caduto
+            setTimeout(() => {
+                smiley.remove();
+            }, 3000); // Rimuovi il smiley dopo 3 secondi dal suo inizio
+        }
+
+        function generateSmiley() {
+            const position = Math.random() * 100; // Posizione casuale
+            createSmiley(position);
+        }
+
+        // Aggiungi smiley su entrambi i lati
+        for (let i = 0; i < 20; i++) {
+            createSmiley(Math.random() * 10); // Smiley a sinistra (10% della larghezza totale)
+            createSmiley(90 + Math.random() * 10); // Smiley a destra (90% della larghezza totale)
+        }
+
+        // Aggiungi smiley ogni 800 millisecondi
+        setInterval(generateSmiley, 800);
+    </script>
+</body>
+</html>
