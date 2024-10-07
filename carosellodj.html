@@ -1,34 +1,55 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODIFICATO DA DIABLO</title>
+    <style type="text/css"> 
+        .zoomin img { 
+            height: 150px; 
+            width: 150px; 
+            border-radius: 50%; /* Rende le immagini rotonde */
+            transition: transform 2s ease; /* Transizione aggiunta per la rotazione */
+            border: 3px solid; /* Larghezza del bordo */
+            border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1; /* Bordo arcobaleno */
+        }
 
+        .zoomin img:hover { 
+            transform: rotate(360deg); /* Ruota l'immagine di 360 gradi al passaggio del mouse */
+            border-radius: 50%; /* Mantiene l'immagine rotonda */
+        } 
 
-<style>
+        marquee {
+            margin: 10px 0; /* Aggiunge margine al marquee */
+        }
 
-body {margin:0; padding:0;}
+        img {
+            margin: 5px; /* Aggiunge margine tra le immagini */
+        }
+    </style> 
+</head>
+<body>
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+<marquee style="font-size:36px; font-family:Tahoma; color:#0066cc;">
+    <img src="https://xatimg.com/image/OA5GsCvMh6UT.gif" border="0">
+    <img src="https://xatimg.com/image/6K5RcASGPpwW.gif" border="0">
+</marquee> 
 
-</style>
+<marquee behavior="up and down" direction="MAIN LORY" scrolldelay="40"> 
+    <div class="zoomin"> 
+        <img src="https://xatimg.com/image/dx4Al6TE6nTk.gif" title=""> 
+        <img src="https://xatimg.com/image/RXZMP1JEgKWh.jpg" title="MAIN DJ LORY">   
+        <img src="https://xatimg.com/image/ZLsPw0ktkNRm.jpg" title="GABRY SPEAKER"> 
+        <img src="https://xatimg.com/image/a6PUbvlFAKOe.jpg" title="DJ TONINA"> 
+        <img src="https://xatimg.com/image/vBTYfxwyQoT9.jpg" title="DJ DENNY">
+        <img src="https://xatimg.com/image/67Z5Fi27vIJ5.jpg" title="DJ DJ NELLY">
+        <img src="https://xatimg.com/image/POrQcJVWlTWD.jpg" title="DJ FANTASY DJ">
+        <img src="https://xatimg.com/image/KZzuIY3hR5Tj.jpg" title="DJ TERRY DJ">
+        <img src="https://xatimg.com/image/zGsWYhSE8T6P.jpg" title="DJ PERLA">
+        <img src="https://xatimg.com/image/bFUZurcMqo5c.jpg" title="DJ SALVO">
+        <img src="https://xatimg.com/image/QPDmEqIEzY3y.jpg" title="DJ MIKELE"> 
+    </div>
+</marquee>
 
-
-    </head>
-    <body>
-
-
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/carosellodj.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/carosellodj.mp4" type="video/mp4">
-      </video>
-
-
-
-</body></html>
+</body>
+</html>
