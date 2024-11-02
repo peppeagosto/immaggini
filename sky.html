@@ -1,34 +1,118 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mioooo</title>
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* Colore di sfondo */
+        }
 
+        .circle {
+            width: 50px; /* Dimensione del cerchio */
+            height: 50px;
+            background-color: #007bff; /* Colore del cerchio */
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-<style>
+        .circle:hover {
+            background-color: #0056b3; /* Colore del cerchio al passaggio del mouse */
+        }
 
-body {margin:0; padding:0;}
+        #top-left {
+            top: 60px; /* Spostato più giù */
+            left: 10px;
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        #top-right {
+            top: 60px; /* Spostato più giù */
+            right: 10px;
+        }
 
-</style>
+        #bottom-left {
+            bottom: 10px;
+            left: 10px;
+        }
 
+        #bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+        
+        .iframe-container {
+            position: relative;
+            width: 990px; /* Larghezza dell'iframe */
+            height: 990px; /* Altezza dell'iframe */
+            overflow: hidden;
+        }
 
-    </head>
-    <body>
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
 
+<div class="iframe-container">
+    <iframe scrolling="no" src="">Your browser does not support iframes!</iframe>
+</div>
 
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/13.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/13.mp4" type="video/mp4">
-      </video>
+<div class="circle" id="top-left" onclick="toggleLink('https://www.giochidislots.com/it/slot-machines/baron-lord-of-saturday/')">
+    <img src="https://xatimg.com/image/F7sJ3hfksv7L.gif" alt="GIOCO" style="width: 55px; height: 55px;">
+</div>
 
+<div class="circle" id="bottom-right" onclick="toggleLink('https://xatradio.com/player/qtnzsznmlmw.html')">
+    <img src="https://xatimg.com/image/azz91sV59I8v.gif" alt="Player" style="width: 70px; height: 70px;">
+</div>
 
+<div class="circle" id="bottom-left" onclick="toggleLink('https://xat.com/radio_cuore_crik_crok')">
+    <img src="https://xatimg.com/image/m28tiIE1jF0s.gif" alt="XAT" style="width: 70px; height: 70px;">
+</div>
 
-</body></html>
+<div class="circle" id="top-right" onclick="toggleLink('https://www.skype.com')">
+    <img src="https://xatimg.com/image/Q22HsDde3m7J.gif" alt="Skype" style="width: 70px; height: 70px;">
+</div>
+
+<script>
+    let currentSrc = ""; // Keep track of the currently displayed source
+    let iframeVisible = true; // State of the iframe visibility
+
+    function toggleLink(url) {
+        const iframeContainer = document.querySelector('.iframe-container');
+        
+        if (currentSrc === url && iframeVisible) {
+            // If the same link is clicked again, revert to the original
+            iframeContainer.innerHTML = `
+                <iframe scrolling="no" src="https://xatradio.com/player/gl8qdmbyhm.html">Your browser does not support iframes!</iframe>
+            `;
+            currentSrc = "https://xatradio.com/player/gl8qdmbyhm.html"; // Reset to original
+            iframeVisible = true; // Iframe is visible again
+        } else {
+            // Change to new link
+            iframeContainer.innerHTML = `
+                <iframe scrolling="no" src="${url}">Your browser does not support iframes!</iframe>
+            `;
+            currentSrc = url; // Set the current source to the new link
+            iframeVisible = false; // Iframe is hidden
+        }
+    }
+</script>
+
+</body>
+</html>
