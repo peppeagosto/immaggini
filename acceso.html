@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,12 +18,20 @@
         }
 
         .testo {
-            font-size: 48px; /* Dimensione del testo */
-            background: linear-gradient(to right, red, yellow); /* Gradiente da rosso a giallo */
-            -webkit-background-clip: text; /* Clip del background per il testo */
-            -webkit-text-fill-color: transparent; /* Rende il colore del testo trasparente */
-            opacity: 0; /* Inizialmente invisibile */
-            transition: opacity 1s; /* Transizione per rendere l'apparizione e la scomparsa più fluida */
+            font-size: 52px; /* Dimensione del testo aumentata */
+            color: red; /* Colore solido del testo */
+            text-shadow: 8px 8px 8px rgba(0, 0, 0, 0.7); /* Ombra per migliorare il contrasto */
+            opacity: 1; /* Inizialmente visibile */
+            transition: opacity 4s; /* Transizione per rendere l'apparizione e la scomparsa più fluida */
+            animation: shake 0.5s infinite; /* Animazione di scuotimento */
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 0); }
+            25% { transform: translate(-1px, 0); }
+            50% { transform: translate(1px, 0); }
+            75% { transform: translate(-1px, 0); }
+            100% { transform: translate(0, 0); }
         }
 
         .fiocco {
