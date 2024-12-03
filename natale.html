@@ -1,34 +1,177 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buon Natale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet"> <!-- Font horror -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: red; /* Sfondo rosso */
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
 
+        .snowflake {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%; /* Forma rotonda */
+            opacity: 0.9;
+            pointer-events: none;
+            animation: fall linear infinite, drift ease-in-out infinite;
+        }
 
-<style>
+        /* Animazione di caduta verticale */
+        @keyframes fall {
+            0% {
+                top: -10%; /* Inizia sopra lo schermo */
+            }
+            100% {
+                top: 110%; /* Esce dalla parte inferiore dello schermo */
+            }
+        }
 
-body {margin:0; padding:0;}
+        /* Animazione di drift orizzontale per simulare il vento */
+        @keyframes drift {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(20px); /* Movimento orizzontale verso destra */
+            }
+            100% {
+                transform: translateX(-20px); /* Movimento orizzontale verso sinistra */
+            }
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        .text {
+            position: absolute;
+            top: 60%; /* Posizione verticale a circa il centro della pagina */
+            font-size: 42px; /* Dimensione grande per il testo */
+            color: #FFDD00; /* Colore giallo */
+            font-family: 'Creepster', cursive; /* Font horror */
+            font-weight: bold;
+            z-index: 10; /* Assicura che il testo sia sempre visibile sopra i fiocchi */
+            transition: opacity 1s ease-in-out;
+            opacity: 0; /* Inizialmente invisibile */
+        }
 
-</style>
+        .text-left {
+            left: 5%; /* Posizione a sinistra per il testo "Buon Natale" */
+        }
 
+        .text-right {
+            left: 80%; /* Posizione più a destra per il testo "Feste" */
+            transform: translateX(50%); /* Allinea il testo a destra */
+        }
 
-    </head>
-    <body>
+        /* Testo di benvenuto */
+        .welcome-text {
+            position: absolute;
+            top: 10%; /* Posizione in alto */
+            left: 50%;
+            transform: translateX(-50%); /* Centra orizzontalmente */
+            font-size: 30px; /* Dimensione grande per il testo */
+            color: #FFDD00; /* Colore giallo */
+            font-family: 'Creepster', cursive; /* Font horror */
+            font-weight: bold;
+            opacity: 0; /* Inizialmente invisibile */
+            animation: fadeIn 2s forwards; /* Animazione di dissolvenza */
+            z-index: 20; /* Assicura che il testo sia sopra tutto */
+        }
 
+        /* Animazione di dissolvenza */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
 
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/natale.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/natale.mp4" type="video/mp4">
-      </video>
+        /* Stile per la GIF */
+        .gif {
+            position: absolute;
+            top: 50%; /* Posizione verticale al centro della pagina */
+            left: 100%; /* Inizia fuori dalla pagina a destra */
+            transform: translateY(-50%); /* Centra verticalmente */
+            animation: slideLeft 10s linear infinite; /* Durata e tipo di animazione */
+        }
 
+        /* Animazione per far muovere la GIF da destra a sinistra */
+        @keyframes slideLeft {
+            0% {
+                left: 100%; /* Inizia fuori a destra */
+            }
+            100% {
+                left: -10%; /* Esce dalla parte sinistra */
+            }
+        }
+    </style>
+</head>
+<body>
 
+    <!-- Testo di benvenuto in alto -->
+    <div class="welcome-text">BENVENUTI DA DIABLO</div>
 
-</body></html>
+    <!-- Testo "Feste" più a destra -->
+    <div class="text text-right">Feste</div> 
+
+    <!-- Testo "Buon Natale" a sinistra -->
+    <div class="text text-left">Buon</div>
+
+    <!-- Aggiungi qui la tua GIF -->
+    <img src="https://xatimg.com/image/vmb6ZePokOOs.gif" alt="Gif di Natale" class="gif" width="300"> <!-- Regola la larghezza come necessario -->
+
+    <!-- JavaScript per generare i fiocchi di neve e gestire la visibilità dei testi -->
+    <script>
+        function createSnowflakes() {
+            const numberOfSnowflakes = 100; // Numero di fiocchi di neve
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                const snowflake = document.createElement("div");
+                snowflake.classList.add("snowflake");
+
+                // Genera dimensioni casuali (piccoli e medi)
+                const size = Math.random() * 10 + 5; // Dimensioni tra 5px e 15px
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+
+                // Posizione orizzontale casuale
+                snowflake.style.left = `${Math.random() * 100}vw`;
+
+                // Durata di caduta casuale
+                const fallDuration = Math.random() * 5 + 5; // Tra 5s e 10s
+                snowflake.style.animationDuration = `${fallDuration}s`;
+
+                // Ritardo di caduta casuale
+                const delay = Math.random() * 5; // Ritardo casuale
+                snowflake.style.animationDelay = `${delay}s`;
+
+                // Aggiungi il fiocco di neve al corpo del documento
+                document.body.appendChild(snowflake);
+            }
+        }
+
+        // Funzione per alternare la visibilità dei testi
+        function toggleTextVisibility() {
+            const texts = document.querySelectorAll('.text');
+            texts.forEach(text => {
+                text.style.opacity = text.style.opacity === '1' ? '0' : '1';
+            });
+        }
+
+        // Creazione dei fiocchi di neve al caricamento della pagina
+        window.onload = function() {
+            createSnowflakes();
+            // Iniziamo a alternare i testi ogni 5 secondi
+            setInterval(toggleTextVisibility, 5000);
+            // Mostriamo il primo testo all'inizio
+            document.querySelectorAll('.text').forEach(text => text.style.opacity = '1');
+        };
+    </script>
+
+</body>
+</html>
