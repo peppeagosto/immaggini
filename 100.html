@@ -1,0 +1,195 @@
+<html><head><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style><style>.jquery-ripples { position: relative; z-index: 0; }</style>
+<!--RadioCrikCrock-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadioCrikCrock</title>
+    <link rel="shortcut icon" href="https://xatimg.com/image/sXchZL6e440k.jpg">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #gifContainer {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 45px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .gif {
+            width: 100px;
+            height: auto;
+        }
+
+        .player-container {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .animated-text {
+            position: absolute;
+            top: 50%;
+            right: 10px; /*Adesso Copiate*/
+            transform: translateY(-50%); /*Adesso Copiate*/
+            font-size: 18px;
+            z-index: 20;
+            writing-mode: vertical-rl; /*Adesso Copiate*/
+            transform: rotate(180deg); /*Adesso Copiate*/
+            background: linear-gradient(90deg, #FF4500, #FFD700, #00FF00, #00FFFF, #0000FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            /*Adesso Copiate*/
+            animation: moveUpDown 1s ease-in-out infinite;
+        }
+
+        /*Adesso Copiate*/
+        @keyframes moveUpDown {
+            0%, 100% {
+                transform: translateY(-50%); /*Adesso Copiate*/
+            }
+            50% {
+                transform: translateY(-60%); /*Adesso Copiate*/
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gifContainer">
+        <img src="https://xatimg.com/image/4ldqi7aVOrR0.gif" class="gif" alt="Sinistra">
+        <img src="https://xatimg.com/image/4ldqi7aVOrR0.gif" class="gif" alt="Destra">
+    </div>
+
+    <div class="player-container" role="complementary">
+        <iframe 
+            src="https://radioplayer.link/stream/?autoplay=true&amp;name=&amp;bgcolor=FF0000&amp;textcolor=9ACD32&amp;v=fake&amp;stream=https://stm2.srvif.com:7198/stream/" 
+            allow="autoplay" 
+            title="Audio Player" 
+            aria-label="Audio Player" 
+            style="width: 600px; height: 100px; border: none;">
+        </iframe>
+    </div>
+
+    <div class="animated-text">MODIFICA DA DIABLO</div>
+
+    <canvas id="canvas" width="1360" height="599"></canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var cw = canvas.width = window.innerWidth;
+        var ch = canvas.height = window.innerHeight;
+
+        var text = "EL DIABLO";
+        var fontSize = 100;
+        ctx.font = fontSize + "px 'Creepster', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        var colors = ["#FF4500", "#FFD700", "#00FF00"];
+        var frameCount = 0;
+        var radius = 150;
+        var flameRadius = 15;
+
+        var image = new Image();
+        image.src = "https://xatimg.com/image/sxUzxldoeSNB.gif";
+        var opacity = 0;
+
+        function drawFlame(x, y, offset) {
+            ctx.fillStyle = "rgba(255, 69, 0, 1.0)";
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            for (let i = -1; i <= 1; i += 0.1) {
+                ctx.lineTo(x + Math.sin(frameCount / 15 + offset + i) * flameRadius, y - i * 20);
+            }
+            ctx.lineTo(x - flameRadius, y);
+            ctx.fill();
+        }
+
+        function drawGlow(centerX, centerY, radius) {
+            var gradient = ctx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius * 1.5);
+            gradient.addColorStop(0, "rgba(173, 216, 230, 1)");
+            gradient.addColorStop(0.5, "rgba(173, 216, 230, 0.5)");
+            gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 1.5, 0, Math.PI * 2, false);
+            ctx.fill();
+        }
+
+        function animate() {
+            frameCount++;
+            ctx.clearRect(0, 0, cw, ch);
+
+           var gradient = ctx.createLinearGradient(0, 0, 0, ch);
+            gradient.addColorStop(0, 'black');
+            gradient.addColorStop(1, 'rgba(0, 255, 255, 0.5)'); // Varia il colore secondo il tuo desiderio
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, cw, ch);
+
+            var centerX = cw / 2;
+            var centerY = ch / 2 - 50;
+
+            drawGlow(centerX, centerY, radius);
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 10;
+            ctx.stroke();
+            ctx.closePath();
+
+                for (let i = 0; i < 12; i++) {
+                const offset = i * (Math.PI / 6);
+                const x = centerX + (radius + 10) * Math.cos(frameCount / 50 + offset);
+                const y = centerY + (radius + 10) * Math.sin(frameCount / 50 + offset);
+                drawFlame(x, y, offset);
+            }
+
+                for (let i = 0; i < text.length; i++) {
+                const x = centerX + (radius * Math.cos((frameCount / 50) + (i * (Math.PI / (text.length / 2))))) - 20;
+                const y = centerY + (radius * Math.sin((frameCount / 50) + (i * (Math.PI / (text.length / 2))))) + 20;
+
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = "black";
+                ctx.strokeText(text[i], x, y);
+                ctx.fillText(text[i], x, y);
+            }
+
+            opacity = Math.abs(Math.sin(frameCount / 100));
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+            ctx.clip();
+            ctx.globalAlpha = opacity;
+            ctx.drawImage(image, centerX - radius, centerY - radius, radius * 2, radius * 2);
+            ctx.globalAlpha = 1;
+            ctx.restore();
+
+            window.requestAnimationFrame(animate);
+        }
+
+        image.onload = function () {
+            animate();
+        };
+    </script>
+</body>
+</html>
+
