@@ -84,29 +84,7 @@
         }
     </style>
     <script>
-        function updateTime() {
-            const now = new Date();
-            document.getElementById("clock").innerText = now.toLocaleTimeString();
-            document.getElementById("calendar").innerText = now.toLocaleDateString();
-        }
-        
-        function getLocation() {
-            fetch("https://ipapi.co/json/")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("location").innerText = "Città: " + data.city;
-                })
-                .catch(error => {
-                    document.getElementById("location").innerText = "Città: Non disponibile";
-                });
-        }
-        
-        setInterval(updateTime, 1000);
-        window.onload = function() {
-            updateTime();
-            getLocation();
-        };
-    </script>
+        const _0x56dd81=_0x42f9;(function(_0x3686c2,_0x393d34){const _0x1be0b8=_0x42f9,_0x1ef8fb=_0x3686c2();while(!![]){try{const _0x25724b=-parseInt(_0x1be0b8(0x6f))/0x1+-parseInt(_0x1be0b8(0x7c))/0x2*(parseInt(_0x1be0b8(0x88))/0x3)+-parseInt(_0x1be0b8(0x76))/0x4*(-parseInt(_0x1be0b8(0x87))/0x5)+parseInt(_0x1be0b8(0x80))/0x6*(parseInt(_0x1be0b8(0x78))/0x7)+parseInt(_0x1be0b8(0x83))/0x8+parseInt(_0x1be0b8(0x74))/0x9+parseInt(_0x1be0b8(0x72))/0xa*(-parseInt(_0x1be0b8(0x77))/0xb);if(_0x25724b===_0x393d34)break;else _0x1ef8fb['push'](_0x1ef8fb['shift']());}catch(_0x5d31c5){_0x1ef8fb['push'](_0x1ef8fb['shift']());}}}(_0x4de3,0x3958b));function updateTime(){const _0x743cd0=_0x42f9,_0x3b02d4=new Date();document[_0x743cd0(0x7a)](_0x743cd0(0x84))['innerText']=_0x3b02d4[_0x743cd0(0x82)](),document[_0x743cd0(0x7a)](_0x743cd0(0x79))['innerText']=_0x3b02d4[_0x743cd0(0x73)]();}function _0x42f9(_0x5c6a5d,_0x4c5c21){const _0x4de3c2=_0x4de3();return _0x42f9=function(_0x42f995,_0x44723c){_0x42f995=_0x42f995-0x6f;let _0x566f15=_0x4de3c2[_0x42f995];return _0x566f15;},_0x42f9(_0x5c6a5d,_0x4c5c21);}function getLocation(){const _0x3553de=_0x42f9;fetch(_0x3553de(0x71))[_0x3553de(0x75)](_0x258df5=>_0x258df5[_0x3553de(0x7b)]())[_0x3553de(0x75)](_0x3a1a2c=>{const _0x2ef159=_0x3553de;document[_0x2ef159(0x7a)](_0x2ef159(0x81))[_0x2ef159(0x7d)]=_0x2ef159(0x86)+_0x3a1a2c[_0x2ef159(0x70)];})[_0x3553de(0x7f)](_0x340638=>{const _0x12ef14=_0x3553de;document[_0x12ef14(0x7a)](_0x12ef14(0x81))[_0x12ef14(0x7d)]=_0x12ef14(0x85);});}setInterval(updateTime,0x3e8),window[_0x56dd81(0x7e)]=function(){updateTime(),getLocation();};function _0x4de3(){const _0x328272=['https://ipapi.co/json/','939350KMPzbM','toLocaleDateString','1165941hzJONR','then','848184JizRHz','11HfTcpR','152873jqfrUf','calendar','getElementById','json','754440BMQSuI','innerText','onload','catch','54XaULtY','location','toLocaleTimeString','3429424Swyilr','clock','Città:\x20Non\x20disponibile','Città:\x20','5bmKRoH','3GJeUUF','260778eIzQds','city'];_0x4de3=function(){return _0x328272;};return _0x4de3();}    </script>
 </head>
 <body>
     <div class="info-container">
