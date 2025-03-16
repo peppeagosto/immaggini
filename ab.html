@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -65,44 +66,24 @@
             background-color: rgba(0, 255, 98, 1);
         }
 
-        .rectangles-container {
+        .triangles-container {
             position: absolute;
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 15px;
-            align-items: center;
         }
 
-        .rectangle {
-            width: 80px;
-            height: 30px;
-            background-color: white;
-            position: relative;
-            animation: appear 1s ease-out;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .rectangle span {
-            color: black;  /* Colore del testo per contrasto */
-            font-size: 12px;
-            font-weight: bold;
-            text-shadow: 1px 1px 3px white; /* Ombra per migliorare la leggibilità */
-        }
-
-        @keyframes appear {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid white;
         }
     </style>
     <script>
-        let userCount = 0; // Contatore utenti online
-        let userCity = ""; // Variabile per memorizzare la città
-
         function updateTime() {
             const now = new Date();
             document.getElementById("clock").innerText = now.toLocaleTimeString();
@@ -113,45 +94,17 @@
             fetch("https://ipapi.co/json/")
                 .then(response => response.json())
                 .then(data => {
-                    userCity = data.city || "Città sconosciuta"; // Salva la città
-                    document.getElementById("location").innerText = "Città: " + userCity;
+                    document.getElementById("location").innerText = "Città: " + data.city;
                 })
                 .catch(error => {
-                    userCity = "Non disponibile"; // Imposta se non si riesce a ottenere la città
-                    document.getElementById("location").innerText = "Città: " + userCity;
+                    document.getElementById("location").innerText = "Città: Non disponibile";
                 });
         }
-
-        function generateRectangles() {
-            const rectanglesContainer = document.querySelector(".rectangles-container");
-            const rectangle = document.createElement("div");
-            rectangle.classList.add("rectangle");
-
-            // Crea un elemento per il nome della città
-            const cityLabel = document.createElement("span");
-            cityLabel.innerText = userCity; // Mostra la città nell'etichetta
-
-            rectangle.appendChild(cityLabel);
-            rectanglesContainer.appendChild(rectangle);
-        }
-
-        function userEntered() {
-            userCount++;
-            generateRectangles();
-            console.log("Utente entrato, totale utenti: " + userCount);
-        }
-
-        // Funzione per simulare l'ingresso di più utenti
-        function simulateUserEntries() {
-            setInterval(userEntered, 2000);  // Ogni 2 secondi un nuovo utente entra
-        }
-
+        
         setInterval(updateTime, 1000);
-
         window.onload = function() {
             updateTime();
-            getLocation(); // Ottieni la città quando la pagina viene caricata
-            simulateUserEntries(); // Avvia la simulazione dell'ingresso di utenti
+            getLocation();
         };
     </script>
 </head>
@@ -161,9 +114,7 @@
         <div id="calendar" class="info-box"></div>
         <div id="location" class="info-box"></div>
     </div>
-
-    <div class="rectangles-container">
-        <!-- Rettangoli generati dinamicamente -->
-    </div>
+    
+    
 </body>
 </html>
