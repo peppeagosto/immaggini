@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benvenuto alla Chat</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let greeting = prompt("Per entrare in chat, devi prima salutare! Scrivi un saluto:");
+
+            if (!greeting || greeting.trim() === "") {
+                alert("Devi salutare per entrare!");
+                window.location.href = "about:blank"; // Blocca l'accesso
+            } else {
+                alert("Grazie per il saluto! Ora puoi entrare nella chat.");
+                window.location.href = "https://xat.com/RADIO_CUORE_CRIK_CROK"; // Link alla tua chat
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Benvenuto!</h1>
+    <p>Attendi mentre verifichiamo il tuo accesso...</p>
+</body>
+</html>
