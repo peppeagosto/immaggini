@@ -19,7 +19,9 @@
         }
 
         .info-container {
-            text-align: center;
+            display: flex; /* Allineamento orizzontale */
+            justify-content: center; /* Centra gli elementi orizzontalmente */
+            gap: 20px; /* Spazio tra gli elementi */
             color: white;
             font-family: Arial, sans-serif;
         }
@@ -27,7 +29,6 @@
         .info-box {
             padding: 10px 20px;
             border-radius: 10px;
-            margin: 10px 0;
             font-size: 22px;
             font-weight: bold;
             background-color: rgba(0, 0, 0, 0.5);
@@ -38,8 +39,8 @@
         #location { background-color: #00ff62; color: black; }
 
         #map {
-            width: 60%;
-            height: 200px;
+            width: 300px; /* Larghezza della mappa ridotta */
+            height: 300px; /* Altezza della mappa ridotta */
             border-radius: 10px;
             margin-top: 10px;
         }
