@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Musica Stream</title>
+</head>
+<body>
+    <h1>Benvenuto nella nostra radio!</h1>
+    <audio id="musicPlayer" controls>
+        <source src="" type="audio/mp3">
+        Il tuo browser non supporta l'elemento audio.
+    </audio>
+
+    <script>
+        // Richiesta per ottenere l'URL del flusso musicale dal server
+        fetch('/getMusic')
+            .then(response => response.json())
+            .then(data => {
+                const musicPlayer = document.getElementById('musicPlayer');
+                musicPlayer.src = data.musicUrl;
+                musicPlayer.play();
+            })
+            .catch(error => console.log('Errore nel caricamento del flusso musicale:', error));
+    </script>
+</body>
+</html>
