@@ -1,34 +1,300 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title> cartaiofemmina 2</title>
+    <meta name="description" content="Radio Mia">
+    <meta name="keywords" content="Radio Mia">
+    <meta name="robots" content="Radio Mia">
+    <meta name="googlebot" content="Radio Mia">
+    <link rel="shortcut icon" href="">
 
-<style>
+    
 
-body {margin:0; padding:0;}
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .fs-vid-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .fs-vid-background video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            filter: brightness(1.5);
+        }
+        #player-container {
+            position: relative;
+            width: 90%;
+            max-width: px;
+            margin: 59px auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        #album-art {
+            width: 150px;
+            height: 150px;
+            background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
+            background-size: cover;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        .moving {
+            animation: moveCover 8s infinite alternate;
+        }
 
-</style>
+        @keyframes moveCover {
+            0% {
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+            }
+            25% {
+                top: 0;
+                left: 0;
+                transform: translate(0, 0);
+            }
+            50% {
+                top: 0;
+                left: 100%;
+                transform: translate(-100%, 0);
+            }
+            75% {
+                top: 100%;
+                left: 100%;
+                transform: translate(-100%, -100%);
+            }
+            100% {
+                top: 100%;
+                left: 0;
+                transform: translate(0, -100%);
+            }
+        }
 
+        #currentTitle {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            animation: rainbow 5s infinite;
+        }
+        @keyframes rainbow {
+            0% { color: red; }
+            14% { color: orange; }
+            28% { color: yellow; }
+            42% { color: green; }
+            57% { color: blue; }
+            71% { color: indigo; }
+            85% { color: violet; }
+            100% { color: red; }
+        }
+        #controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 80px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .control-btn {
+            width: 70px; /* Aumentato per migliorarne la visibilità */
+            height: 70px; /* Aumentato per migliorarne la visibilità */
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.8); /* Aggiunto sfondo chiaro */
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Più ombra per evidenziarli */
+            transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .control-btn:hover {
+            background-color: rgba(255, 255, 255, 1); /* Cambia il colore dello sfondo al passaggio del mouse */
+            transform: scale(1.15); /* Aumenta la dimensione del pulsante quando hoverato */
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7); /* Aggiunta una nuova ombra per maggiore contrasto */
+        }
+        .control-btn:active {
+            transform: scale(1.05); /* Riduci leggermente la dimensione quando cliccato */
+        }
+        #volume-slider {
+            -webkit-appearance: none;
+            width: 120px;
+            height: 5px;
+            background: #fff;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .15s ease-in-out;
+        }
+        #volume-slider:hover {
+            opacity: 1;
+        }
 
-    </head>
-    <body>
+        #album-art:hover + #info + #controls,
+        #controls:hover {
+            opacity: 1;
+        }
 
+        /* Griglia delle copertine */
+        .cover-grid {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            animation: scrollCovers 20s linear infinite;
+            margin-top: 20px;
+        }
 
-      <!-- Area Video Aghetto Server89.com-->
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/3.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/3.mp4" type="video/mp4">
-      </video>
+        .cover {
+            flex-shrink: 0;
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+        }
 
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
+        @keyframes scrollCovers {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
 
-</body></html>
+    </style>
+</head>
+<body>
+    <div class="fs-vid-background">
+        <video autoplay muted loop>
+            <source src="https://peppeagosto.github.io/immaggini/home3.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div id="player-container">
+        <div id="album-art" class="moving"></div>
+        <div id="info">
+            <marquee id="currentTitle">Titolo non disponibile</marquee>
+        </div>
+        <div id="controls">
+            <img id="play" src="https://xatimg.com/image/KcJO8L5GXRxm.gif" class="control-btn" alt="Play">
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+            <img id="stop" src="https://xatimg.com/image/nhl35Hygk6d4.png" class="control-btn" alt="Stop">
+        </div>
+    </div>
+
+    <audio id="player" autoplay>
+        <source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg">
+    </audio>
+
+    <!-- Griglia delle copertine -->
+    <div class="cover-grid" id="cover-grid"></div>
+
+    <script>
+        const player = document.getElementById('player');
+        const volumeSlider = document.getElementById('volume-slider');
+        const albumArt = document.getElementById('album-art');
+        const coverGrid = document.getElementById('cover-grid');
+        let isPlaying = false;
+
+        document.getElementById('play').addEventListener('click', () => {
+            player.play();
+            isPlaying = true;
+            albumArt.classList.remove('moving');
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            player.pause();
+            player.currentTime = 0;
+            isPlaying = false;
+            albumArt.classList.add('moving');
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            player.volume = e.target.value;
+        });
+
+        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
+        const defaultImage = 'https://xatimg.com/image/HRZgryyOjv6o.jpg';
+        const currentTitle = document.getElementById('currentTitle');
+        let coverImages = [];
+
+        async function fetchNowPlaying() {
+            try {
+                const response = await fetch(nowPlayingUrl);
+                const data = await response.json();
+                const { title, artist } = data;
+                currentTitle.textContent = title || 'Titolo non disponibile';
+                fetchCover(title, artist);
+            } catch (error) {
+                currentTitle.textContent = 'Errore durante il caricamento';
+                resetToDefault();
+            }
+        }
+
+        async function fetchCover(title, artist) {
+            const encodedTitle = encodeURIComponent(title + ' ' + artist);
+            const coverUrl = `https://itunes.apple.com/search?term=${encodedTitle}&limit=5&entity=song`;
+            try {
+                const response = await fetch(coverUrl);
+                const data = await response.json();
+                if (data.results && data.results.length > 0) {
+                    coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
+                    displayCovers();  // Mostra le copertine nella griglia
+                    // Aggiungi l'immagine del cantante nel cerchio centrale
+                    albumArt.style.backgroundImage = `url(${coverImages[0]})`;
+                } else {
+                    resetToDefault();
+                }
+            } catch (error) {
+                resetToDefault();
+            }
+        }
+
+        function displayCovers() {
+            coverGrid.innerHTML = ''; // Pulisce la griglia
+            coverImages.forEach(image => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+                imgElement.alt = 'Cover';
+                const coverDiv = document.createElement('div');
+                coverDiv.classList.add('cover');
+                coverDiv.appendChild(imgElement);
+                coverGrid.appendChild(coverDiv);
+            });
+        }
+
+        function resetToDefault() {
+            albumArt.style.backgroundImage = `url(${defaultImage})`;
+        }
+
+        setInterval(fetchNowPlaying, 20000);
+        fetchNowPlaying();
+    </script>
+</body>
+</html>
