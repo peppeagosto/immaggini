@@ -11,11 +11,8 @@
       background: linear-gradient(-45deg, red, green, yellow, red);
       background-size: 400% 400%;
       animation: gradientAnim 10s ease infinite;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
-      color: white;
+      overflow: hidden;
+      position: relative;
       font-family: 'Arial', sans-serif;
     }
 
@@ -26,25 +23,34 @@
     }
 
     .testo-arcobaleno {
+      position: absolute;
+      right: 0; /* tutto a destra */
+      top: 0;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
       font-size: 3rem;
       font-weight: bold;
       background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
       background-size: 400%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbowText 5s linear infinite;
-      margin-top: 40px;
-      text-align: center;
+      animation: rainbowText 5s linear infinite, saliScendi 3s ease-in-out infinite alternate;
       font-family: 'Iceberg', cursive;
+      padding: 10px;
     }
 
     @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       100% { background-position: 100% 50%; }
     }
+
+    @keyframes saliScendi {
+      0% { top: 0; }
+      100% { top: 50%; }
+    }
   </style>
 </head>
 <body>
-  <div class="testo-arcobaleno">Benvenuti e buon ascolto da Diablo</div>
+  <div class="testo-arcobaleno">DIABLO</div>
 </body>
 </html>
