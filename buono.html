@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>cover</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111; /* Semplice sfondo scuro */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Contenitore principale con video laterali e player al centro */
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      height: 550px;
+      border-radius: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5); /* Leggero sfondo trasparente */
+    }
+
+    /* Contenitore per il player */
+    .player-container {
+      width: 300px;
+      height: 400px;
+      background-color: #111;
+      border: 2px solid white;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Video laterali */
+    .side-video {
+      width: 100px;
+      height: 400px;
+      object-fit: cover;
+      border: 2px solid white;
+      border-radius: 10px;
+    }
+
+    /* Footer */
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+      }
+
+      .side-video {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 10px;
+      }
+
+      .player-container {
+        width: 90%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <!-- Video a sinistra -->
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/buono.mp4" autoplay loop muted></video>
+
+    <!-- Contenitore del player -->
+    <div class="player-container">
+      <iframe scrolling="no" frameborder="0" width="300" height="400" 
+        src="https://xatradio.com/player/s2pomcgfok.html">
+        Il tuo browser non supporta gli iframe!
+      </iframe>
+    </div>
+
+    <!-- Video a destra -->
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/buono.mp4" autoplay loop muted></video>
+  </div>
+
+  <div class="footer">
+    CODICE MODIFICATO DA CARTAIO
+  </div>
+
+</body>
+</html>
