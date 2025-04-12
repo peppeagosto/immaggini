@@ -164,12 +164,12 @@
         }
 
         #intro-video {
-    position: fixed;
-    width: 328px;  /* Impostato sulla larghezza della foto */
-    height: 426px; /* Impostato sull'altezza della foto */
-    top: 20%;      /* Posizionato più in alto per allinearlo correttamente */
-    left: 50%;
-    transform: translateX(-50%);
+    position: absolute; /* Cambiato da fixed per evitare che prenda tutta la schermata */
+    width: 328px; /* Dimensioni esatte */
+    height: 426px; /* Dimensioni esatte */
+    top: 50%; /* Centra il video verticalmente */
+    left: 50%; /* Centra il video orizzontalmente */
+    transform: translate(-50%, -50%); /* Centra esattamente */
     z-index: 9999;
     display: none;
     border-radius: 12px;
