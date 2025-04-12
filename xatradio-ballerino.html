@@ -9,308 +9,57 @@
     <link rel="shortcut icon" href="">
 
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-        .fs-vid-background {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        .fs-vid-background video {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            filter: brightness(1.5);
-        }
-        #player-container {
-            position: relative;
-            width: 90%;
-            max-width: 600px;
-            margin: 59px auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            text-align: center;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-        }
-        #album-art {
-            width: 150px;
-            height: 150px;
-            background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
-            background-size: cover;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-            border: 5px solid transparent;
-        }
-        .moving {
-            animation: moveCover 8s infinite alternate;
-        }
-        @keyframes moveCover {
-            0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-            25% { top: 0; left: 0; transform: translate(0, 0); }
-            50% { top: 0; left: 100%; transform: translate(-100%, 0); }
-            75% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
-            100% { top: 100%; left: 0; transform: translate(0, -100%); }
-        }
-
-        @keyframes borderAnimation {
-            0% { border-color: transparent; }
-            25% { border-color: red; }
-            50% { border-color: orange; }
-            75% { border-color: yellow; }
-            100% { border-color: green; }
-        }
-
-        #album-art.no-cover {
-            animation: borderAnimation 4s infinite alternate;
-            background-image: none;
-        }
-
-        #currentTitle {
-            font-size: 20px;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            animation: rainbow 5s infinite;
-        }
-        @keyframes rainbow {
-            0% { color: red; }
-            14% { color: orange; }
-            28% { color: yellow; }
-            42% { color: green; }
-            57% { color: blue; }
-            71% { color: indigo; }
-            85% { color: violet; }
-            100% { color: red; }
-        }
-
-        #controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 1;
-        }
-
-        .control-btn {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-
-        .control-btn:hover {
-            background-color: rgba(255, 255, 255, 1);
-            transform: scale(1.15);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-        }
-
-        #volume-slider {
-            width: 80px;
-            height: 4px;
-        }
-
-        .cover-grid {
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-            animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
-        }
-
-        .cover {
-            flex-shrink: 0;
-            width: 150px;
-            height: 150px;
-            margin-right: 10px;
-        }
-
-        .cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        @keyframes scrollCovers {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        #intro-video {
-            position: fixed;
-            width: 380px;
-            height: 170px;
-            top: 15%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            display: none;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-        }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: Arial, sans-serif; overflow: hidden; }
+        .fs-vid-background { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+        .fs-vid-background video { object-fit: cover; width: 100%; height: 100%; filter: brightness(1.5); }
+        #player-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; padding: 10px; text-align: center; z-index: 10; background: rgba(0,0,0,0.5); color: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #album-art { width: 120px; height: 120px; background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center; background-size: cover; margin: 0 auto 10px; border-radius: 50%; position: relative; z-index: 10; transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out; }
+        .moving { animation: moveCover 8s infinite alternate; }
+        @keyframes moveCover { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%); } 25% { top: 0; left: 0; } 50% { top: 0; left: 100%; } 75% { top: 100%; left: 100%; } 100% { top: 100%; left: 0; } }
+        #currentTitle { font-size: 16px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: rainbow 5s infinite; }
+        @keyframes rainbow { 0% { color: red; } 14% { color: orange; } 28% { color: yellow; } 42% { color: green; } 57% { color: blue; } 71% { color: indigo; } 85% { color: violet; } 100% { color: red; } }
+        #controls { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; z-index: 10; }
+        .control-btn { width: 40px; height: 40px; cursor: pointer; background-color: rgba(255,255,255,0.8); border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
+        .control-btn:hover { background-color: rgba(255,255,255,1); transform: scale(1.15); box-shadow: 0 0 20px rgba(0,0,0,0.7); }
+        #volume-slider { width: 60px; height: 4px; }
+        .cover-grid { display: flex; overflow: hidden; width: 100%; animation: scrollCovers 20s linear infinite; margin-top: 10px; height: 100px; }
+        .cover { flex-shrink: 0; width: 80px; height: 80px; margin-right: 10px; }
+        .cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        @keyframes scrollCovers { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        #intro-video { position: absolute; width: 328px; height: 426px; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: none; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.7); }
     </style>
 </head>
 <body>
-    <div class="fs-vid-background">
-        <video autoplay muted loop>
-            <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <video id="intro-video">
-        <source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.mp4" type="video/mp4">
-        Il tuo browser non supporta il video.
-    </video>
-
+    <div class="fs-vid-background"><video autoplay muted loop><source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4"></video></div>
+    <video id="intro-video"><source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.mp4" type="video/mp4">Il tuo browser non supporta il video.</video>
     <div id="player-container">
         <div id="album-art" class="moving"></div>
-        <div id="info">
-            <marquee id="currentTitle">Titolo non disponibile</marquee>
-        </div>
+        <div id="info"><marquee id="currentTitle">Titolo non disponibile</marquee></div>
         <div id="controls">
             <img id="play" src="https://xatimg.com/image/KcJO8L5GXRxm.gif" class="control-btn" alt="Play">
             <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
             <img id="stop" src="https://xatimg.com/image/nhl35Hygk6d4.png" class="control-btn" alt="Stop">
         </div>
     </div>
-
-    <audio id="player">
-        <source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg">
-    </audio>
-
+    <audio id="player"><source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg"></audio>
     <div class="cover-grid" id="cover-grid"></div>
-
     <script>
-        const player = document.getElementById('player');
-        const volumeSlider = document.getElementById('volume-slider');
-        const albumArt = document.getElementById('album-art');
-        const coverGrid = document.getElementById('cover-grid');
-        const currentTitle = document.getElementById('currentTitle');
-        const playBtn = document.getElementById('play');
-        const stopBtn = document.getElementById('stop');
-        const introVideo = document.getElementById('intro-video');
-
+        const player = document.getElementById('player'), volumeSlider = document.getElementById('volume-slider'), albumArt = document.getElementById('album-art'), coverGrid = document.getElementById('cover-grid'), currentTitle = document.getElementById('currentTitle'), playBtn = document.getElementById('play'), stopBtn = document.getElementById('stop'), introVideo = document.getElementById('intro-video');
         let introTimeout = null;
-
-        playBtn.addEventListener('click', () => {
-            playBtn.style.pointerEvents = 'none';
-            introVideo.style.display = 'block';
-            introVideo.currentTime = 0;
-            introVideo.play();
-
-            introTimeout = setTimeout(() => {
-                introVideo.pause();
-                introVideo.style.display = 'none';
-                player.play();
-                playBtn.style.pointerEvents = 'auto';
-            }, 29000);
-        });
-
-        stopBtn.addEventListener('click', () => {
-            if (introTimeout) {
-                clearTimeout(introTimeout);
-                introTimeout = null;
-            }
-
-            introVideo.pause();
-            introVideo.style.display = 'none';
-
-            player.pause();
-            player.currentTime = 0;
-
-            albumArt.classList.add('moving');
-            playBtn.style.pointerEvents = 'auto';
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            player.volume = e.target.value;
-        });
-
-        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/4P7tw5xBzXst.png';
+        playBtn.addEventListener('click', () => { playBtn.style.pointerEvents = 'none'; introVideo.style.display = 'block'; introVideo.currentTime = 0; introVideo.play(); introTimeout = setTimeout(() => { introVideo.pause(); introVideo.style.display = 'none'; player.play(); playBtn.style.pointerEvents = 'auto'; }, 15000); });
+        stopBtn.addEventListener('click', () => { if (introTimeout) { clearTimeout(introTimeout); introTimeout = null; } introVideo.pause(); introVideo.style.display = 'none'; player.pause(); player.currentTime = 0; albumArt.classList.add('moving'); playBtn.style.pointerEvents = 'auto'; });
+        volumeSlider.addEventListener('input', (e) => { player.volume = e.target.value; });
+        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv', defaultImage = 'https://xatimg.com/image/4P7tw5xBzXst.png';
         let coverImages = [];
-
-        async function fetchNowPlaying() {
-            try {
-                const response = await fetch(nowPlayingUrl);
-                const data = await response.json();
-                const { title, artist } = data;
-                currentTitle.textContent = title || 'Titolo non disponibile';
-                fetchCover(title, artist);
-            } catch (error) {
-                currentTitle.textContent = 'Errore durante il caricamento';
-                resetToDefault();
-            }
-        }
-
-        async function fetchCover(title, artist) {
-            const encodedTitle = encodeURIComponent(title + ' ' + artist);
-            const coverUrl = `https://itunes.apple.com/search?term=${encodedTitle}&limit=5&entity=song`;
-            try {
-                const response = await fetch(coverUrl);
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
-                    displayCovers();
-                    albumArt.style.backgroundImage = `url(${coverImages[0]})`;
-                    albumArt.classList.remove('no-cover');
-                } else {
-                    resetToDefault();
-                }
-            } catch (error) {
-                resetToDefault();
-            }
-        }
-
-        function displayCovers() {
-            coverGrid.innerHTML = '';
-            coverImages.forEach(image => {
-                const imgElement = document.createElement('img');
-                imgElement.src = image;
-                imgElement.alt = 'Cover';
-                const coverDiv = document.createElement('div');
-                coverDiv.classList.add('cover');
-                coverDiv.appendChild(imgElement);
-                coverGrid.appendChild(coverDiv);
-            });
-        }
-
-        function resetToDefault() {
-            albumArt.style.backgroundImage = `url(${defaultImage})`;
-            albumArt.classList.add('no-cover');
-        }
-
-        setInterval(fetchNowPlaying, 20000);
-        fetchNowPlaying();
+        async function fetchNowPlaying() { try { const response = await fetch(nowPlayingUrl); const data = await response.json(); const { title, artist } = data; currentTitle.textContent = title || 'Titolo non disponibile'; fetchCover(title, artist); } catch (error) { currentTitle.textContent = 'Errore durante il caricamento'; resetToDefault(); } }
+        async function fetchCover(title, artist) { const encodedTitle = encodeURIComponent(title + ' ' + artist); const coverUrl = `https://itunes.apple.com/search?term=${encodedTitle}&limit=5&entity=song`; try { const response = await fetch(coverUrl); const data = await response.json(); if (data.results && data.results.length > 0) { coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600')); displayCovers(); albumArt.style.backgroundImage = `url(${coverImages[0]})`; albumArt.classList.remove('no-cover'); } else { resetToDefault(); } } catch (error) { resetToDefault(); } }
+        function displayCovers() { coverGrid.innerHTML = ''; coverImages.forEach(image => { const imgElement = document.createElement('img'); imgElement.src = image; imgElement.alt = 'Cover'; const coverDiv = document.createElement('div'); coverDiv.classList.add('cover'); coverDiv.appendChild(imgElement); coverGrid.appendChild(coverDiv); }); }
+        function resetToDefault() { albumArt.style.backgroundImage = `url(${defaultImage})`; albumArt.classList.add('no-cover'); }
+        setInterval(fetchNowPlaying, 20000); fetchNowPlaying();
     </script>
 </body>
 </html>
+
 
 
 
