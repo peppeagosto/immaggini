@@ -69,22 +69,53 @@
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
 
+        @keyframes borderAnimation {
+            0% { border-color: transparent; }
+            25% { border-color: red; }
+            50% { border-color: orange; }
+            75% { border-color: yellow; }
+            100% { border-color: green; }
+        }
+
+        #album-art.no-cover {
+            animation: borderAnimation 4s infinite alternate;
+            background-image: none;
+        }
+
+        #currentTitle {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            animation: rainbow 5s infinite;
+        }
+        @keyframes rainbow {
+            0% { color: red; }
+            14% { color: orange; }
+            28% { color: yellow; }
+            42% { color: green; }
+            57% { color: blue; }
+            71% { color: indigo; }
+            85% { color: violet; }
+            100% { color: red; }
+        }
+
         #controls {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: 15px;
             position: absolute;
-            bottom: -40px;
+            bottom: 10px; /* Adjusted to position below album cover */
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
             opacity: 1;
         }
 
         .control-btn {
-            width: 50px;
-            height: 50px;
+            width: 50px;  /* Adjusted button size */
+            height: 50px; /* Adjusted button size */
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
@@ -109,12 +140,13 @@
             width: 100%;
             animation: scrollCovers 20s linear infinite;
             margin-top: 20px;
+            height: 120px;  /* Adjusted height */
         }
 
         .cover {
             flex-shrink: 0;
-            width: 150px;
-            height: 150px;
+            width: 100px;  /* Adjusted size */
+            height: 100px; /* Adjusted size */
             margin-right: 10px;
         }
 
@@ -280,4 +312,5 @@
     </script>
 </body>
 </html>
+
 
