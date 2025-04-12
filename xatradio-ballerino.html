@@ -32,31 +32,30 @@
             filter: brightness(1.5);
         }
         #player-container {
-            position: relative;
-            width: 90%;
+            position: absolute;  /* Cambiato da relative a absolute per spostarlo in basso */
+            bottom: 20px;  /* Posizionato in basso */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;  /* Ridotto in larghezza */
             max-width: 600px;
-            margin: 59px auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);  /* Sfondo scuro trasparente */
             color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 150px;
-            height: 150px;
+            width: 120px;  /* Ridotto per adattarsi meglio */
+            height: 120px; /* Ridotto per adattarsi meglio */
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
-            margin: 0 auto 20px;
+            margin: 0 auto 10px;  /* Spazio ridotto tra l'album e il titolo */
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-            border: 5px solid transparent;
         }
         .moving {
             animation: moveCover 8s infinite alternate;
@@ -69,21 +68,8 @@
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
 
-        @keyframes borderAnimation {
-            0% { border-color: transparent; }
-            25% { border-color: red; }
-            50% { border-color: orange; }
-            75% { border-color: yellow; }
-            100% { border-color: green; }
-        }
-
-        #album-art.no-cover {
-            animation: borderAnimation 4s infinite alternate;
-            background-image: none;
-        }
-
         #currentTitle {
-            font-size: 20px;
+            font-size: 16px;  /* Ridotto per adattarsi meglio */
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -105,17 +91,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 10px; /* Adjusted to position below album cover */
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 1;
+            gap: 10px;  /* Ridotto spazio tra i controlli */
+            position: relative;
+            z-index: 10;
         }
 
         .control-btn {
-            width: 50px;  /* Adjusted button size */
-            height: 50px; /* Adjusted button size */
+            width: 40px;  /* Ridotto per mantenerlo proporzionato */
+            height: 40px; /* Ridotto per mantenerlo proporzionato */
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
@@ -130,7 +113,7 @@
         }
 
         #volume-slider {
-            width: 80px;
+            width: 60px;  /* Ridotto per essere più compatto */
             height: 4px;
         }
 
@@ -139,14 +122,14 @@
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
-            height: 120px;  /* Adjusted height */
+            margin-top: 10px;  /* Ridotto spazio sopra */
+            height: 100px;  /* Ridotto */
         }
 
         .cover {
             flex-shrink: 0;
-            width: 100px;  /* Adjusted size */
-            height: 100px; /* Adjusted size */
+            width: 80px;  /* Ridotto per essere più compatto */
+            height: 80px; /* Ridotto per essere più compatto */
             margin-right: 10px;
         }
 
@@ -164,17 +147,17 @@
         }
 
         #intro-video {
-    position: absolute; /* Cambiato da fixed per evitare che prenda tutta la schermata */
-    width: 328px; /* Dimensioni esatte */
-    height: 426px; /* Dimensioni esatte */
-    top: 50%; /* Centra il video verticalmente */
-    left: 50%; /* Centra il video orizzontalmente */
-    transform: translate(-50%, -50%); /* Centra esattamente */
-    z-index: 9999;
-    display: none;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
+            position: absolute;
+            width: 328px;
+            height: 426px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -312,5 +295,6 @@
     </script>
 </body>
 </html>
+
 
 
