@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mappa Milano - Leaflet</title>
-
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-    }
-    #map {
-      height: 100vh;
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappa Dinamica</title>
+    <style>
+        .mappa-container { width: 100%; max-width: 600px; max-height: 300px; margin: auto; }
+        iframe { width: 100%; height: 100%; border: 0; }
+    </style>
 </head>
 <body>
+    <div class="mappa-container">
+        <iframe id="map" src="" allowfullscreen></iframe>
+    </div>
 
-  <div id="map"></div>
+    <script>
+        // Funzione per ottenere la posizione dell'utente
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showMap);
+            } else {
+                alert("Geolocalizzazione non supportata dal tuo browser.");
+            }
+        }
 
-  <script>
-    // Inizializza la mappa centrata su Milano
-    var map = L.map('map').setView([45.4642, 9.1900], 13);
+        // Funzione per mostrare la mappa basata sulla posizione
+        function showMap(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var mapURL = "https://www.openstreetmap.org/export/embed.html?bbox=" + (lon - 0.05) + "%2C" + (lat - 0.05) + "%2C" + (lon + 0.05) + "%2C" + (lat + 0.05) + "&layer=mapnik";
+            document.getElementById("map").src = mapURL; // Imposta l'iframe con la nuova URL
+        }
 
-    // Aggiunge il layer con le tile di OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Aggiunge un marker su Milano
-    L.marker([45.4642, 9.1900])
-      .addTo(map)
-      .bindPopup('Benvenuto a Milano!')
-      .openPopup();
-  </script>
-
+        // Chiamata alla funzione per ottenere la posizione
+        getLocation();
+    </script>
 </body>
 </html>
+
