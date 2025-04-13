@@ -2,98 +2,31 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>La tua città</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La mia Mappa</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            user-select: none; /* blocca selezione testo */
+        /* Aggiungi un contenitore per la mappa */
+        .mappa-container {
+            width: 100%; /* La mappa si adatterà al 100% della larghezza disponibile */
+            max-width: 600px; /* La larghezza massima è 600px */
+            max-height: 300px; /* Altezza massima di 300px */
+            margin: 0 auto; /* Centra la mappa */
         }
 
-        .city-box {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .rainbow-text {
-            font-size: 26px;
-            font-weight: bold;
-            background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet);
-            background-size: 1000% 1000%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbow 6s linear infinite;
-        }
-
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .city-name {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-top: 10px;
-        }
-
+        /* Imposta le dimensioni della mappa all'interno del contenitore */
         iframe {
-            margin-top: 20px;
-            border: none;
-            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            border: 0; /* Rimuovi il bordo */
         }
     </style>
 </head>
-<body oncontextmenu="return false">
+<body>
 
-    <div class="city-box">
-        <div class="rainbow-text">DIABLO DICE CHE LA TUA CITTÀ È:</div>
-        <div class="city-name" id="city">Caricamento...</div>
-        <iframe id="map" width="500" height="300" allowfullscreen></iframe>
+    <div class="mappa-container">
+        <!-- Inserisci l'iframe della tua mappa qui -->
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.42425537109375%2C51.29069539034884%2C0.4708251953125%2C51.69187430457942&layer=mapnik" allowfullscreen></iframe>
     </div>
-
-    <script>
-        // blocca alcuni tasti (F12, Ctrl+U, Ctrl+Shift+I)
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === "F12" ||
-                (e.ctrlKey && e.shiftKey && e.key === "I") ||
-                (e.ctrlKey && e.key === "U")
-            ) {
-                e.preventDefault();
-            }
-        });
-
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                const city = data.city || "Sconosciuta";
-                const lat = data.latitude;
-                const lon = data.longitude;
-
-                document.getElementById('city').textContent = city;
-
-                const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.05},${lat - 0.03},${lon + 0.05},${lat + 0.03}&layer=mapnik&marker=${lat},${lon}`;
-                document.getElementById('map').src = mapUrl;
-            })
-            .catch(error => {
-                console.error("Errore geolocalizzazione:", error);
-                document.getElementById('city').textContent = "Errore";
-                document.getElementById('map').style.display = "none";
-            });
-    </script>
 
 </body>
 </html>
-
-
-
