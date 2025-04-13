@@ -45,8 +45,8 @@
             color: white;
         }
         #album-art {
-            width: 150px;
-            height: 150px;
+            width: 90px; /* Ridotto a 90px */
+            height: 90px; /* Ridotto a 90px */
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
             margin: 0 auto 20px;
@@ -98,15 +98,15 @@
             100% { color: red; }
         }
         #controls {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            z-index: 9999;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 1;
         }
         .control-btn {
             width: 40px;
@@ -181,13 +181,11 @@
         <div id="info">
             <marquee id="currentTitle">Titolo non disponibile</marquee>
         </div>
-    </div>
-
-    <!-- CONTROLLI POSIZIONATI IN BASSO -->
-    <div id="controls">
-        <img id="play" src="https://xatimg.com/image/8WN9OoGzKIIV.gif" class="control-btn" alt="Play">
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-        <img id="stop" src="https://xatimg.com/image/vLprPcdA64wJ.gif" class="control-btn" alt="Stop">
+        <div id="controls">
+            <img id="play" src="https://xatimg.com/image/8WN9OoGzKIIV.gif" class="control-btn" alt="Play">
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+            <img id="stop" src="https://xatimg.com/image/vLprPcdA64wJ.gif" class="control-btn" alt="Stop">
+        </div>
     </div>
 
     <audio id="player">
