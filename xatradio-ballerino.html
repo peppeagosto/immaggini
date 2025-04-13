@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title> cartaiofemmina 2</title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
     <meta name="robots" content="Radio Mia">
@@ -32,31 +32,30 @@
             filter: brightness(1.5);
         }
         #player-container {
-            position: relative;
-            width: 90%;
+            position: absolute;  /* Cambiato da relative a absolute per spostarlo in basso */
+            bottom: 20px;  /* Posizionato in basso */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;  /* Ridotto in larghezza */
             max-width: 600px;
-            margin: 59px auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);  /* Sfondo scuro trasparente */
             color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 90px; /* Ridotto a 90px */
-            height: 90px; /* Ridotto a 90px */
+            width: 120px;  /* Ridotto per adattarsi meglio */
+            height: 120px; /* Ridotto per adattarsi meglio */
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
-            margin: 0 auto 20px;
+            margin: 0 auto 10px;  /* Spazio ridotto tra l'album e il titolo */
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-            border: 5px solid transparent;
         }
         .moving {
             animation: moveCover 8s infinite alternate;
@@ -68,19 +67,9 @@
             75% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
-        @keyframes borderAnimation {
-            0% { border-color: transparent; }
-            25% { border-color: red; }
-            50% { border-color: orange; }
-            75% { border-color: yellow; }
-            100% { border-color: green; }
-        }
-        #album-art.no-cover {
-            animation: borderAnimation 4s infinite alternate;
-            background-image: none;
-        }
+
         #currentTitle {
-            font-size: 20px;
+            font-size: 16px;  /* Ridotto per adattarsi meglio */
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -97,50 +86,53 @@
             85% { color: violet; }
             100% { color: red; }
         }
+
         #controls {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 1;
+            gap: 10px;  /* Ridotto spazio tra i controlli */
+            position: relative;
+            z-index: 10;
         }
+
         .control-btn {
-            width: 40px;
-            height: 40px;
+            width: 40px;  /* Ridotto per mantenerlo proporzionato */
+            height: 40px; /* Ridotto per mantenerlo proporzionato */
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
+
         .control-btn:hover {
             background-color: rgba(255, 255, 255, 1);
             transform: scale(1.15);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
         #volume-slider {
-            width: 80px;
+            width: 60px;  /* Ridotto per essere più compatto */
             height: 4px;
         }
+
         .cover-grid {
             display: flex;
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            position: absolute;
-            bottom: 5px; /* Spostato in basso vicino alla fine */
-            left: 0;
+            margin-top: 10px;  /* Ridotto spazio sopra */
+            height: 100px;  /* Ridotto */
         }
+
         .cover {
             flex-shrink: 0;
-            width: 150px;
-            height: 150px;
+            width: 80px;  /* Ridotto per essere più compatto */
+            height: 80px; /* Ridotto per essere più compatto */
             margin-right: 10px;
         }
+
         .cover img {
             width: 100%;
             height: 100%;
@@ -148,15 +140,17 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         @keyframes scrollCovers {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
+
         #intro-video {
-            position: fixed;
-            width: 380px;
-            height: 170px;
-            top: 15%;
+            position: absolute;
+            width: 328px;
+            height: 426px;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
@@ -184,9 +178,9 @@
             <marquee id="currentTitle">Titolo non disponibile</marquee>
         </div>
         <div id="controls">
-            <img id="play" src="https://xatimg.com/image/8WN9OoGzKIIV.gif" class="control-btn" alt="Play">
+            <img id="play" src="https://xatimg.com/image/KcJO8L5GXRxm.gif" class="control-btn" alt="Play">
             <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-            <img id="stop" src="https://xatimg.com/image/vLprPcdA64wJ.gif" class="control-btn" alt="Stop">
+            <img id="stop" src="https://xatimg.com/image/nhl35Hygk6d4.png" class="control-btn" alt="Stop">
         </div>
     </div>
 
@@ -207,37 +201,19 @@
         const introVideo = document.getElementById('intro-video');
 
         let introTimeout = null;
-        let isPlaying = false;
 
         playBtn.addEventListener('click', () => {
-            if (!isPlaying) {
-                playBtn.style.pointerEvents = 'none';
-                introVideo.style.display = 'block';
-                introVideo.currentTime = 0;
-                introVideo.play();
+            playBtn.style.pointerEvents = 'none';
+            introVideo.style.display = 'block';
+            introVideo.currentTime = 0;
+            introVideo.play();
 
-                introTimeout = setTimeout(() => {
-                    introVideo.pause();
-                    introVideo.style.display = 'none';
-                    player.play();
-                    isPlaying = true;
-                    playBtn.style.pointerEvents = 'auto';
-                }, 29000);
-            } else {
-                if (introTimeout) {
-                    clearTimeout(introTimeout);
-                    introTimeout = null;
-                }
-
+            introTimeout = setTimeout(() => {
                 introVideo.pause();
                 introVideo.style.display = 'none';
-
-                player.pause();
-                player.currentTime = 0;
-
-                isPlaying = false;
+                player.play();
                 playBtn.style.pointerEvents = 'auto';
-            }
+            }, 15000);
         });
 
         stopBtn.addEventListener('click', () => {
@@ -252,7 +228,7 @@
             player.pause();
             player.currentTime = 0;
 
-            isPlaying = false;
+            albumArt.classList.add('moving');
             playBtn.style.pointerEvents = 'auto';
         });
 
@@ -312,11 +288,10 @@
         function resetToDefault() {
             albumArt.style.backgroundImage = `url(${defaultImage})`;
             albumArt.classList.add('no-cover');
-            coverImages = [];
-            coverGrid.innerHTML = '';
         }
 
-        setInterval(fetchNowPlaying, 10000);
+        setInterval(fetchNowPlaying, 20000);
+        fetchNowPlaying();
     </script>
 </body>
 </html>
