@@ -17,6 +17,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
+
         .fs-vid-background {
             position: fixed;
             width: 100%;
@@ -25,12 +26,14 @@
             left: 0;
             z-index: -1;
         }
+
         .fs-vid-background video {
             object-fit: cover;
             width: 100%;
             height: 100%;
             filter: brightness(1.5);
         }
+
         #player-container {
             position: relative;
             width: 90%;
@@ -44,6 +47,7 @@
             background: rgba(0, 0, 0, 0.3);
             color: white;
         }
+
         #album-art {
             width: 150px;
             height: 150px;
@@ -58,9 +62,11 @@
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
             border: 5px solid transparent;
         }
+
         .moving {
             animation: moveCover 8s infinite alternate;
         }
+
         @keyframes moveCover {
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
             25% { top: 0; left: 0; transform: translate(0, 0); }
@@ -68,6 +74,7 @@
             75% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
+
         @keyframes borderAnimation {
             0% { border-color: transparent; }
             25% { border-color: red; }
@@ -75,10 +82,12 @@
             75% { border-color: yellow; }
             100% { border-color: green; }
         }
+
         #album-art.no-cover {
             animation: borderAnimation 4s infinite alternate;
             background-image: none;
         }
+
         #currentTitle {
             font-size: 20px;
             font-weight: bold;
@@ -87,6 +96,7 @@
             text-overflow: ellipsis;
             animation: rainbow 5s infinite;
         }
+
         @keyframes rainbow {
             0% { color: red; }
             14% { color: orange; }
@@ -97,6 +107,7 @@
             85% { color: violet; }
             100% { color: red; }
         }
+
         #controls {
             display: flex;
             align-items: center;
@@ -108,6 +119,7 @@
             transform: translateX(-50%);
             opacity: 1;
         }
+
         .control-btn {
             width: 40px;
             height: 40px;
@@ -117,28 +129,36 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
+
         .control-btn:hover {
             background-color: rgba(255, 255, 255, 1);
             transform: scale(1.15);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
         #volume-slider {
             width: 80px;
             height: 4px;
         }
+
         .cover-grid {
             display: flex;
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
+            margin-top: 10px;
+            justify-content: center;
+            align-items: center;
+            height: 90px;
         }
+
         .cover {
             flex-shrink: 0;
-            width: 150px;
-            height: 150px;
+            width: 90px;
+            height: 90px;
             margin-right: 10px;
         }
+
         .cover img {
             width: 100%;
             height: 100%;
@@ -146,15 +166,18 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         @keyframes scrollCovers {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
+
+        /* Video ballerino più in basso */
         #intro-video {
             position: fixed;
             width: 380px;
             height: 170px;
-            top: 15%;
+            top: 30%; /* Prima era 15%, ora più in basso ma centrato */
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
@@ -203,7 +226,6 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
-
         let introTimeout = null;
         let isPlaying = false;
 
@@ -218,23 +240,21 @@
                     introVideo.pause();
                     introVideo.style.display = 'none';
                     player.play();
-                    isPlaying = true;
                     playBtn.style.pointerEvents = 'auto';
+                    isPlaying = true;
                 }, 29000);
             } else {
                 if (introTimeout) {
                     clearTimeout(introTimeout);
                     introTimeout = null;
                 }
-
                 introVideo.pause();
                 introVideo.style.display = 'none';
-
                 player.pause();
                 player.currentTime = 0;
-
-                isPlaying = false;
+                albumArt.classList.add('moving');
                 playBtn.style.pointerEvents = 'auto';
+                isPlaying = false;
             }
         });
 
@@ -243,15 +263,13 @@
                 clearTimeout(introTimeout);
                 introTimeout = null;
             }
-
             introVideo.pause();
             introVideo.style.display = 'none';
-
             player.pause();
             player.currentTime = 0;
-
-            isPlaying = false;
+            albumArt.classList.add('moving');
             playBtn.style.pointerEvents = 'auto';
+            isPlaying = false;
         });
 
         volumeSlider.addEventListener('input', (e) => {
@@ -317,4 +335,3 @@
     </script>
 </body>
 </html>
-
