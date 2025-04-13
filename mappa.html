@@ -11,6 +11,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            user-select: none; /* blocca selezione testo */
         }
 
         .city-box {
@@ -52,7 +53,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false">
 
     <div class="city-box">
         <div class="rainbow-text">DIABLO DICE CHE LA TUA CITTÀ È:</div>
@@ -61,6 +62,17 @@
     </div>
 
     <script>
+        // blocca alcuni tasti (F12, Ctrl+U, Ctrl+Shift+I)
+        document.addEventListener('keydown', function (e) {
+            if (
+                e.key === "F12" ||
+                (e.ctrlKey && e.shiftKey && e.key === "I") ||
+                (e.ctrlKey && e.key === "U")
+            ) {
+                e.preventDefault();
+            }
+        });
+
         fetch('https://ipapi.co/json/')
             .then(response => response.json())
             .then(data => {
@@ -70,7 +82,6 @@
 
                 document.getElementById('city').textContent = city;
 
-                // Mostra la mappa centrata sulla città dell'utente
                 const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.05},${lat - 0.03},${lon + 0.05},${lat + 0.03}&layer=mapnik&marker=${lat},${lon}`;
                 document.getElementById('map').src = mapUrl;
             })
@@ -83,5 +94,6 @@
 
 </body>
 </html>
+
 
 
