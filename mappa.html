@@ -2,39 +2,86 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mappa Dinamica</title>
+    <title>La tua città</title>
     <style>
-        .mappa-container { width: 100%; max-width: 600px; max-height: 300px; margin: auto; }
-        iframe { width: 100%; height: 100%; border: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .city-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .rainbow-text {
+            font-size: 26px;
+            font-weight: bold;
+            background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet);
+            background-size: 1000% 1000%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 6s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .city-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        iframe {
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="mappa-container">
-        <iframe id="map" src="" allowfullscreen></iframe>
+
+    <div class="city-box">
+        <div class="rainbow-text">DIABLO DICE CHE LA TUA CITTÀ È:</div>
+        <div class="city-name" id="city">Caricamento...</div>
+        <iframe id="map" width="500" height="300" allowfullscreen></iframe>
     </div>
 
     <script>
-        // Funzione per ottenere la posizione dell'utente
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showMap);
-            } else {
-                alert("Geolocalizzazione non supportata dal tuo browser.");
-            }
-        }
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const city = data.city || "Sconosciuta";
+                const lat = data.latitude;
+                const lon = data.longitude;
 
-        // Funzione per mostrare la mappa basata sulla posizione
-        function showMap(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            var mapURL = "https://www.openstreetmap.org/export/embed.html?bbox=" + (lon - 0.05) + "%2C" + (lat - 0.05) + "%2C" + (lon + 0.05) + "%2C" + (lat + 0.05) + "&layer=mapnik";
-            document.getElementById("map").src = mapURL; // Imposta l'iframe con la nuova URL
-        }
+                document.getElementById('city').textContent = city;
 
-        // Chiamata alla funzione per ottenere la posizione
-        getLocation();
+                // Mostra la mappa centrata sulla città dell'utente
+                const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.05},${lat - 0.03},${lon + 0.05},${lat + 0.03}&layer=mapnik&marker=${lat},${lon}`;
+                document.getElementById('map').src = mapUrl;
+            })
+            .catch(error => {
+                console.error("Errore geolocalizzazione:", error);
+                document.getElementById('city').textContent = "Errore";
+                document.getElementById('map').style.display = "none";
+            });
     </script>
+
 </body>
 </html>
+
 
