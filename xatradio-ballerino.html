@@ -131,7 +131,9 @@
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
+            position: absolute;
+            bottom: 5px; /* Spostato in basso vicino alla fine */
+            left: 0;
         }
         .cover {
             flex-shrink: 0;
@@ -310,10 +312,11 @@
         function resetToDefault() {
             albumArt.style.backgroundImage = `url(${defaultImage})`;
             albumArt.classList.add('no-cover');
+            coverImages = [];
+            coverGrid.innerHTML = '';
         }
 
-        setInterval(fetchNowPlaying, 20000);
-        fetchNowPlaying();
+        setInterval(fetchNowPlaying, 10000);
     </script>
 </body>
 </html>
