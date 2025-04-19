@@ -49,19 +49,17 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 120px;  
-            height: 120px; 
-            background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
+            width: 120px;
+            height: 120px;
+            background: url('https://xatimg.com/image/2BkhzaxtzhPf.gif') no-repeat center center;
             background-size: cover;
             margin: 0 auto 10px;
             border-radius: 50%;
             position: relative;
             z-index: 10;
-            transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-        }
-        .moving {
             animation: moveCover 8s infinite alternate;
         }
+
         @keyframes moveCover {
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
             25% { top: 0; left: 0; transform: translate(0, 0); }
@@ -175,7 +173,7 @@
     </video>
 
     <div id="player-container">
-        <div id="album-art" class="moving"></div>
+        <div id="album-art"></div> <!-- GIF che si muove con l'animazione -->
         <div id="info">
             <marquee id="currentTitle">Titolo non disponibile</marquee>
         </div>
@@ -252,4 +250,3 @@
     </script>
 </body>
 </html>
-
