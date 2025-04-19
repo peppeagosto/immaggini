@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,31 +33,30 @@
             filter: brightness(1.5);
         }
         #player-container {
-            position: relative;
-            width: 90%;
+            position: absolute;  
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
             max-width: 600px;
-            margin: 59px auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
-            margin: 0 auto 20px;
+            margin: 0 auto 10px;
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-            border: 5px solid transparent;
         }
         .moving {
             animation: moveCover 8s infinite alternate;
@@ -69,21 +69,8 @@
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
 
-        @keyframes borderAnimation {
-            0% { border-color: transparent; }
-            25% { border-color: red; }
-            50% { border-color: orange; }
-            75% { border-color: yellow; }
-            100% { border-color: green; }
-        }
-
-        #album-art.no-cover {
-            animation: borderAnimation 4s infinite alternate;
-            background-image: none;
-        }
-
         #currentTitle {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -105,12 +92,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 1;
+            gap: 10px;
+            position: relative;
+            z-index: 10;
         }
 
         .control-btn {
@@ -130,7 +114,7 @@
         }
 
         #volume-slider {
-            width: 80px;
+            width: 60px;
             height: 4px;
         }
 
@@ -139,13 +123,14 @@
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
+            margin-top: 10px;
+            height: 100px;
         }
 
         .cover {
             flex-shrink: 0;
-            width: 150px;
-            height: 150px;
+            width: 80px;
+            height: 80px;
             margin-right: 10px;
         }
 
@@ -163,10 +148,10 @@
         }
 
         #intro-video {
-            position: fixed;
-            width: 380px;
-            height: 170px;
-            top: 15%;
+            position: absolute;
+            width: 328px;
+            height: 426px;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
@@ -216,7 +201,23 @@
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
 
+        const videoUrls = [
+            'https://peppeagosto.github.io/immaggini/38.mp4',
+            'https://peppeagosto.github.io/immaggini/34.mp4',
+            'https://peppeagosto.github.io/immaggini/83.mp4'
+        ];
+
+        let currentVideoIndex = 0;
         let introTimeout = null;
+        let videoTimeout = null;
+
+        function switchVideo() {
+            const videoBackground = document.querySelector('.fs-vid-background video');
+            videoBackground.src = videoUrls[currentVideoIndex];
+            currentVideoIndex = (currentVideoIndex + 1) % videoUrls.length;
+        }
+
+        videoTimeout = setInterval(switchVideo, 15000);
 
         playBtn.addEventListener('click', () => {
             playBtn.style.pointerEvents = 'none';
@@ -229,7 +230,7 @@
                 introVideo.style.display = 'none';
                 player.play();
                 playBtn.style.pointerEvents = 'auto';
-            }, 29000);
+            }, 15000);
         });
 
         stopBtn.addEventListener('click', () => {
@@ -253,7 +254,7 @@
         });
 
         const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/Oz61c2LdCfJW.gif';
+        const defaultImage = 'https://xatimg.com/image/4P7tw5xBzXst.png';
         let coverImages = [];
 
         async function fetchNowPlaying() {
