@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> cartaiofemmina 2</title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
@@ -32,26 +34,26 @@
             filter: brightness(1.5);
         }
         #player-container {
-            position: absolute;  /* Cambiato da relative a absolute per spostarlo in basso */
-            bottom: 20px;  /* Posizionato in basso */
+            position: absolute;  
+            bottom: 20px;  
             left: 50%;
             transform: translateX(-50%);
-            width: 80%;  /* Ridotto in larghezza */
+            width: 80%;
             max-width: 600px;
             padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.5);  /* Sfondo scuro trasparente */
+            background: rgba(0, 0, 0, 0.5);
             color: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 120px;  /* Ridotto per adattarsi meglio */
-            height: 120px; /* Ridotto per adattarsi meglio */
+            width: 120px;  
+            height: 120px; 
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
-            margin: 0 auto 10px;  /* Spazio ridotto tra l'album e il titolo */
+            margin: 0 auto 10px;
             border-radius: 50%;
             position: relative;
             z-index: 10;
@@ -69,7 +71,7 @@
         }
 
         #currentTitle {
-            font-size: 16px;  /* Ridotto per adattarsi meglio */
+            font-size: 16px;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -91,14 +93,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;  /* Ridotto spazio tra i controlli */
+            gap: 10px;  
             position: relative;
             z-index: 10;
         }
 
         .control-btn {
-            width: 40px;  /* Ridotto per mantenerlo proporzionato */
-            height: 40px; /* Ridotto per mantenerlo proporzionato */
+            width: 40px;  
+            height: 40px; 
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
@@ -113,7 +115,7 @@
         }
 
         #volume-slider {
-            width: 60px;  /* Ridotto per essere più compatto */
+            width: 60px; 
             height: 4px;
         }
 
@@ -122,14 +124,14 @@
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 10px;  /* Ridotto spazio sopra */
-            height: 100px;  /* Ridotto */
+            margin-top: 10px;  
+            height: 100px;
         }
 
         .cover {
             flex-shrink: 0;
-            width: 80px;  /* Ridotto per essere più compatto */
-            height: 80px; /* Ridotto per essere più compatto */
+            width: 80px;
+            height: 80px; 
             margin-right: 10px;
         }
 
@@ -162,8 +164,8 @@
 </head>
 <body>
     <div class="fs-vid-background">
-        <video autoplay muted loop>
-            <source src="https://peppeagosto.github.io/immaggini/26.mp4" type="video/mp4">
+        <video autoplay muted loop id="background-video">
+            <source src="https://peppeagosto.github.io/immaggini/38.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -199,8 +201,15 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
+        const backgroundVideo = document.getElementById('background-video');
 
         let introTimeout = null;
+        let videoIndex = 0;
+        const videos = [
+            "https://peppeagosto.github.io/immaggini/38.mp4", 
+            "https://peppeagosto.github.io/immaggini/83.mp4",
+            "https://peppeagosto.github.io/immaggini/34.mp4"  // Terzo video aggiunto
+        ];
 
         playBtn.addEventListener('click', () => {
             playBtn.style.pointerEvents = 'none';
@@ -236,62 +245,10 @@
             player.volume = e.target.value;
         });
 
-        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/etTbBu8ILoGD.gif';
-        let coverImages = [];
-
-        async function fetchNowPlaying() {
-            try {
-                const response = await fetch(nowPlayingUrl);
-                const data = await response.json();
-                const { title, artist } = data;
-                currentTitle.textContent = title || 'Titolo non disponibile';
-                fetchCover(title, artist);
-            } catch (error) {
-                currentTitle.textContent = 'Errore durante il caricamento';
-                resetToDefault();
-            }
-        }
-
-        async function fetchCover(title, artist) {
-            const encodedTitle = encodeURIComponent(title + ' ' + artist);
-            const coverUrl = `https://itunes.apple.com/search?term=${encodedTitle}&limit=5&entity=song`;
-            try {
-                const response = await fetch(coverUrl);
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
-                    displayCovers();
-                    albumArt.style.backgroundImage = `url(${coverImages[0]})`;
-                    albumArt.classList.remove('no-cover');
-                } else {
-                    resetToDefault();
-                }
-            } catch (error) {
-                resetToDefault();
-            }
-        }
-
-        function displayCovers() {
-            coverGrid.innerHTML = '';
-            coverImages.forEach(image => {
-                const imgElement = document.createElement('img');
-                imgElement.src = image;
-                imgElement.alt = 'Cover';
-                const coverDiv = document.createElement('div');
-                coverDiv.classList.add('cover');
-                coverDiv.appendChild(imgElement);
-                coverGrid.appendChild(coverDiv);
-            });
-        }
-
-        function resetToDefault() {
-            albumArt.style.backgroundImage = `url(${defaultImage})`;
-            albumArt.classList.add('no-cover');
-        }
-
-        setInterval(fetchNowPlaying, 20000);
-        fetchNowPlaying();
+        setInterval(() => {
+            videoIndex = (videoIndex + 1) % videos.length;
+            backgroundVideo.src = videos[videoIndex];
+        }, 15000); 
     </script>
 </body>
 </html>
