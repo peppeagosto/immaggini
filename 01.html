@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,6 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-
         .fs-vid-background {
             position: fixed;
             width: 100%;
@@ -26,30 +26,28 @@
             left: 0;
             z-index: -1;
         }
-
         .fs-vid-background video {
             object-fit: cover;
             width: 100%;
             height: 100%;
             filter: brightness(1.5);
         }
-
         #player-container {
-            position: absolute;
-            top: 50%;
+            position: absolute;  
+            bottom: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             width: 80%;
             max-width: 600px;
             padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3); /* Ridotta trasparenza per il contenitore */
+            backdrop-filter: blur(8px); /* Aggiunta sfocatura dietro il contenitore */
             color: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-
         #album-art {
             width: 120px;
             height: 120px;
@@ -61,11 +59,9 @@
             z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
         }
-
         .moving {
             animation: moveCover 8s infinite alternate;
         }
-
         @keyframes moveCover {
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
             25% { top: 0; left: 0; transform: translate(0, 0); }
@@ -82,7 +78,6 @@
             text-overflow: ellipsis;
             animation: rainbow 5s infinite;
         }
-
         @keyframes rainbow {
             0% { color: red; }
             14% { color: orange; }
@@ -165,6 +160,28 @@
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
+        #date-time {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            color: #ff6347;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #text-cartaio {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #32cd32;
+        }
+
     </style>
 </head>
 <body>
@@ -172,6 +189,14 @@
         <video autoplay muted loop id="background-video">
             <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
         </video>
+
+        <script>
+            const video = document.getElementById('background-video');
+            video.onended = function() {
+                console.log('Video finito, lo riavvio');
+                video.play();
+            };
+        </script>
     </div>
 
     <video id="intro-video">
@@ -252,44 +277,55 @@
         }
 
         async function fetchCover(title, artist) {
-            const encodedTitle = encodeURIComponent(title + ' ' + artist);
-            const coverUrl = `https://itunes.apple.com/search?term=${encodedTitle}&limit=5&entity=song`;
+            const encodedTitle = encodeURIComponent(title);
+            const encodedArtist = encodeURIComponent(artist);
+            const url = `https://itunes.apple.com/search?term=${encodedTitle}+${encodedArtist}&media=music&limit=1`;
+
             try {
-                const response = await fetch(coverUrl);
+                const response = await fetch(url);
                 const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
-                    displayCovers();
-                    albumArt.style.backgroundImage = `url(${coverImages[0]})`;
-                    albumArt.classList.remove('no-cover');
-                } else {
-                    resetToDefault();
+                const artworkUrl = data.results[0]?.artworkUrl100 || defaultImage;
+                const artworkImage = new Image();
+                artworkImage.src = artworkUrl;
+                artworkImage.classList.add('cover');
+                coverGrid.appendChild(artworkImage);
+                coverImages.push(artworkImage);
+                if (coverImages.length > 5) {
+                    coverGrid.removeChild(coverImages.shift());
                 }
             } catch (error) {
                 resetToDefault();
             }
         }
 
-        function displayCovers() {
-            coverGrid.innerHTML = '';
-            coverImages.forEach(image => {
-                const imgElement = document.createElement('img');
-                imgElement.src = image;
-                imgElement.alt = 'Cover';
-                const cover = document.createElement('div');
-                cover.classList.add('cover');
-                cover.appendChild(imgElement);
-                coverGrid.appendChild(cover);
-            });
-        }
-
         function resetToDefault() {
-            albumArt.style.backgroundImage = `url(${defaultImage})`;
-            albumArt.classList.add('no-cover');
+            const artworkImage = new Image();
+            artworkImage.src = defaultImage;
+            artworkImage.classList.add('cover');
+            coverGrid.appendChild(artworkImage);
         }
 
-        setInterval(fetchNowPlaying, 60000);
         fetchNowPlaying();
+        setInterval(fetchNowPlaying, 30000);
+
+        // Display date, time and "Il Cartaio" text
+        const dateContainer = document.createElement('div');
+        const textCartaio = document.createElement('div');
+
+        textCartaio.id = 'text-cartaio';
+        textCartaio.textContent = 'Il Cartaio';
+        document.body.appendChild(textCartaio);
+
+        const dateTime = document.createElement('div');
+        dateTime.id = 'date-time';
+        function updateDateTime() {
+            const now = new Date();
+            const dateString = `${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            dateTime.textContent = dateString;
+        }
+        updateDateTime();
+        document.body.appendChild(dateTime);
+        setInterval(updateDateTime, 1000);
     </script>
 </body>
 </html>
