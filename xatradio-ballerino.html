@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -164,16 +163,16 @@
 <body>
     <div class="fs-vid-background">
         <video autoplay muted loop id="background-video">
-    <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
-</video>
+            <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
+        </video>
 
-<script>
-    const video = document.getElementById('background-video');
-    video.onended = function() {
-        console.log('Video finito, lo riavvio');
-        video.play();
-    };
-</script>
+        <script>
+            const video = document.getElementById('background-video');
+            video.onended = function() {
+                console.log('Video finito, lo riavvio');
+                video.play();
+            };
+        </script>
     </div>
 
     <video id="intro-video">
@@ -209,31 +208,13 @@
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
 
-        const videoUrls = [
-            'https://peppeagosto.github.io/immaggini/38.mp4',
-            'https://peppeagosto.github.io/immaggini/34.mp4',
-            'https://peppeagosto.github.io/immaggini/83.mp4'
-        ];
-
-        let currentVideoIndex = 0;
-        let introTimeout = null;
-        let videoTimeout = null;
-
-        function switchVideo() {
-            const videoBackground = document.querySelector('.fs-vid-background video');
-            videoBackground.src = videoUrls[currentVideoIndex];
-            currentVideoIndex = (currentVideoIndex + 1) % videoUrls.length;
-        }
-
-        videoTimeout = setInterval(switchVideo, 15000);
-
         playBtn.addEventListener('click', () => {
             playBtn.style.pointerEvents = 'none';
             introVideo.style.display = 'block';
             introVideo.currentTime = 0;
             introVideo.play();
 
-            introTimeout = setTimeout(() => {
+            setTimeout(() => {
                 introVideo.pause();
                 introVideo.style.display = 'none';
                 player.play();
@@ -242,17 +223,10 @@
         });
 
         stopBtn.addEventListener('click', () => {
-            if (introTimeout) {
-                clearTimeout(introTimeout);
-                introTimeout = null;
-            }
-
             introVideo.pause();
             introVideo.style.display = 'none';
-
             player.pause();
             player.currentTime = 0;
-
             albumArt.classList.add('moving');
             playBtn.style.pointerEvents = 'auto';
         });
