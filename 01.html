@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title> cartaiofemmina 2</title>
+    <title>cartaiofemmina 2</title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
     <meta name="robots" content="Radio Mia">
@@ -32,8 +31,9 @@
             height: 100%;
             filter: brightness(1.5);
         }
+
         #player-container {
-            position: absolute;  
+            position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
@@ -42,12 +42,13 @@
             padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.3); /* Ridotta trasparenza per il contenitore */
-            backdrop-filter: blur(8px); /* Aggiunta sfocatura dietro il contenitore */
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
             color: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+
         #album-art {
             width: 120px;
             height: 120px;
@@ -59,9 +60,11 @@
             z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
         }
+
         .moving {
             animation: moveCover 8s infinite alternate;
         }
+
         @keyframes moveCover {
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
             25% { top: 0; left: 0; transform: translate(0, 0); }
@@ -78,6 +81,7 @@
             text-overflow: ellipsis;
             animation: rainbow 5s infinite;
         }
+
         @keyframes rainbow {
             0% { color: red; }
             14% { color: orange; }
@@ -95,7 +99,7 @@
             justify-content: center;
             gap: 10px;
             position: relative;
-            z-index: 10;
+            z-index: 11;
         }
 
         .control-btn {
@@ -106,6 +110,7 @@
             border-radius: 50%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            pointer-events: auto;
         }
 
         .control-btn:hover {
@@ -117,6 +122,7 @@
         #volume-slider {
             width: 60px;
             height: 4px;
+            pointer-events: auto;
         }
 
         .cover-grid {
@@ -155,10 +161,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 9999;
+            z-index: 5; /* più basso del player */
             display: none;
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
         }
 
         #date-time {
@@ -181,29 +188,19 @@
             text-transform: uppercase;
             color: #32cd32;
         }
-
     </style>
 </head>
 <body>
     <div class="fs-vid-background">
-        <embed id="intro-video">
-    <source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.html" type="video/mp4">
-    .
-</embed>
-
-        <script>
-            const video = document.getElementById('background-video');
-            video.onended = function() {
-                console.log('Video finito, lo riavvio');
-                video.play();
-            };
-        </script>
+        <video autoplay muted loop id="background-video">
+            <source src="https://peppeagosto.github.io/immaggini/01.mp4" type="video/mp4">
+        </video>
     </div>
 
     <video id="intro-video" muted>
-    <source src="https://peppeagosto.github.io/immaggini/38.mp4" type="video/mp4">
-    Il tuo browser non supporta il video.
-</video>
+        <source src="https://peppeagosto.github.io/immaggini/01.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
 
     <div id="player-container">
         <div id="album-art" class="moving"></div>
@@ -309,10 +306,7 @@
         fetchNowPlaying();
         setInterval(fetchNowPlaying, 30000);
 
-        // Display date, time and "Il Cartaio" text
-        const dateContainer = document.createElement('div');
         const textCartaio = document.createElement('div');
-
         textCartaio.id = 'text-cartaio';
         textCartaio.textContent = 'Il Cartaio';
         document.body.appendChild(textCartaio);
@@ -321,7 +315,7 @@
         dateTime.id = 'date-time';
         function updateDateTime() {
             const now = new Date();
-            const dateString = `${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            const dateString = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
             dateTime.textContent = dateString;
         }
         updateDateTime();
