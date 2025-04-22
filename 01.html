@@ -1,326 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>cartaiofemmina 2</title>
-    <meta name="description" content="Radio Mia">
-    <meta name="keywords" content="Radio Mia">
-    <meta name="robots" content="Radio Mia">
-    <meta name="googlebot" content="Radio Mia">
-    <link rel="shortcut icon" href="">
+  <meta charset="UTF-8">
+  <title>buono</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-        .fs-vid-background {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        .fs-vid-background video {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            filter: brightness(1.5);
-        }
+    .main-container {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      height: 550px;
+      border-radius: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
 
-        #player-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            max-width: 600px;
-            padding: 10px;
-            text-align: center;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+    .player-container {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background-color: #111;
+      border: 2px solid white;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      overflow: hidden;
+    }
 
-        #album-art {
-            width: 120px;
-            height: 120px;
-            background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
-            background-size: cover;
-            margin: 0 auto 10px;
-            border-radius: 50%;
-            position: relative;
-            z-index: 10;
-            transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-        }
+    .side-video {
+      width: 100px;
+      height: 400px;
+      object-fit: cover;
+      border: 2px solid white;
+      border-radius: 10px;
+    }
 
-        .moving {
-            animation: moveCover 8s infinite alternate;
-        }
+    .footer {
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet);
+      background-size: 800% 800%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 8s linear infinite;
+    }
 
-        @keyframes moveCover {
-            0% { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-            25% { top: 0; left: 0; transform: translate(0, 0); }
-            50% { top: 0; left: 100%; transform: translate(-100%, 0); }
-            75% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
-            100% { top: 100%; left: 0; transform: translate(0, -100%); }
-        }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        #currentTitle {
-            font-size: 16px;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            animation: rainbow 5s infinite;
-        }
+    .typing-message {
+      position: absolute;
+      top: 10px;
+      right: -100%;
+      white-space: nowrap;
+      font-family: 'Creepster', cursive;
+      font-size: 26px;
+      color: transparent;
+      background: linear-gradient(to right, red, orange, yellow);
+      -webkit-background-clip: text;
+      animation: scrollIn 1s ease-out forwards;
+      z-index: 10;
+    }
 
-        @keyframes rainbow {
-            0% { color: red; }
-            14% { color: orange; }
-            28% { color: yellow; }
-            42% { color: green; }
-            57% { color: blue; }
-            71% { color: indigo; }
-            85% { color: violet; }
-            100% { color: red; }
-        }
+    @keyframes scrollIn {
+      to {
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
 
-        #controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            z-index: 11;
-        }
+    .hidden {
+      display: none;
+    }
 
-        .control-btn {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            pointer-events: auto;
-        }
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        height: auto;
+      }
 
-        .control-btn:hover {
-            background-color: rgba(255, 255, 255, 1);
-            transform: scale(1.15);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-        }
+      .side-video {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 10px;
+      }
 
-        #volume-slider {
-            width: 60px;
-            height: 4px;
-            pointer-events: auto;
-        }
-
-        .cover-grid {
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-            animation: scrollCovers 20s linear infinite;
-            margin-top: 10px;
-            height: 100px;
-        }
-
-        .cover {
-            flex-shrink: 0;
-            width: 80px;
-            height: 80px;
-            margin-right: 10px;
-        }
-
-        .cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        @keyframes scrollCovers {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        #intro-video {
-            position: absolute;
-            width: 328px;
-            height: 426px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5; /* più basso del player */
-            display: none;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-            pointer-events: none;
-        }
-
-        #date-time {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 9999;
-            color: #ff6347;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        #text-cartaio {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 9999;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #32cd32;
-        }
-    </style>
+      .player-container {
+        width: 90%;
+        height: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="fs-vid-background">
-        <video autoplay muted loop id="background-video">
-            <source src="https://peppeagosto.github.io/immaggini/01.mp4" type="video/mp4">
-        </video>
+
+  <div class="main-container">
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay loop muted></video>
+
+    <div class="player-container" id="player-container">
+      <embed scrolling="no" frameborder="0" width="300" height="400"     src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.html">
+              </embed>
     </div>
 
-    <video id="intro-video" muted>
-        <source src="https://peppeagosto.github.io/immaggini/01.mp4" type="video/mp4">
-        Il tuo browser non supporta il video.
-    </video>
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay loop muted></video>
+  </div>
 
-    <div id="player-container">
-        <div id="album-art" class="moving"></div>
-        <div id="info">
-            <marquee id="currentTitle">Titolo non disponibile</marquee>
-        </div>
-        <div id="controls">
-            <img id="play" src="https://xatimg.com/image/KcJO8L5GXRxm.gif" class="control-btn" alt="Play">
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-            <img id="stop" src="https://xatimg.com/image/nhl35Hygk6d4.png" class="control-btn" alt="Stop">
-        </div>
-    </div>
+  <div class="footer">
+    CODICE MODIFICATO DA CARTAIO
+  </div>
 
-    <audio id="player">
-        <source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg">
-    </audio>
+  <script>
+    const container = document.getElementById("player-container");
+    const fullText = "💀 BENVENUTO  DAL  CARTAIO 💀";
 
-    <div class="cover-grid" id="cover-grid"></div>
+    let message;
+    let typingInterval;
+    let charIndex = 0;
 
-    <script>
-        const player = document.getElementById('player');
-        const volumeSlider = document.getElementById('volume-slider');
-        const albumArt = document.getElementById('album-art');
-        const coverGrid = document.getElementById('cover-grid');
-        const currentTitle = document.getElementById('currentTitle');
-        const playBtn = document.getElementById('play');
-        const stopBtn = document.getElementById('stop');
-        const introVideo = document.getElementById('intro-video');
+    function createMessageElement() {
+      message = document.createElement("div");
+      message.className = "typing-message";
+      message.textContent = "";
+      container.appendChild(message);
+    }
 
-        playBtn.addEventListener('click', () => {
-            playBtn.style.pointerEvents = 'none';
-            introVideo.style.display = 'block';
-            introVideo.currentTime = 0;
-            introVideo.play();
+    function startTypingEffect() {
+      charIndex = 0;
+      message.textContent = "";
+      message.classList.remove("hidden");
+      message.style.animation = "scrollIn 1s ease-out forwards";
 
-            setTimeout(() => {
-                introVideo.pause();
-                introVideo.style.display = 'none';
-                player.play();
-                playBtn.style.pointerEvents = 'auto';
-            }, 15000);
-        });
-
-        stopBtn.addEventListener('click', () => {
-            introVideo.pause();
-            introVideo.style.display = 'none';
-            player.pause();
-            player.currentTime = 0;
-            albumArt.classList.add('moving');
-            playBtn.style.pointerEvents = 'auto';
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            player.volume = e.target.value;
-        });
-
-        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
-        let coverImages = [];
-
-        async function fetchNowPlaying() {
-            try {
-                const response = await fetch(nowPlayingUrl);
-                const data = await response.json();
-                const { title, artist } = data;
-                currentTitle.textContent = title || 'Titolo non disponibile';
-                fetchCover(title, artist);
-            } catch (error) {
-                currentTitle.textContent = 'Errore durante il caricamento';
-                resetToDefault();
-            }
+      typingInterval = setInterval(() => {
+        if (charIndex < fullText.length) {
+          message.textContent += fullText.charAt(charIndex);
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
         }
+      }, 80); // macchina da scrivere
+    }
 
-        async function fetchCover(title, artist) {
-            const encodedTitle = encodeURIComponent(title);
-            const encodedArtist = encodeURIComponent(artist);
-            const url = `https://itunes.apple.com/search?term=${encodedTitle}+${encodedArtist}&media=music&limit=1`;
+    function showTypingLoop() {
+      if (!message) {
+        createMessageElement();
+      }
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const artworkUrl = data.results[0]?.artworkUrl100 || defaultImage;
-                const artworkImage = new Image();
-                artworkImage.src = artworkUrl;
-                artworkImage.classList.add('cover');
-                coverGrid.appendChild(artworkImage);
-                coverImages.push(artworkImage);
-                if (coverImages.length > 5) {
-                    coverGrid.removeChild(coverImages.shift());
-                }
-            } catch (error) {
-                resetToDefault();
-            }
-        }
+      startTypingEffect();
 
-        function resetToDefault() {
-            const artworkImage = new Image();
-            artworkImage.src = defaultImage;
-            artworkImage.classList.add('cover');
-            coverGrid.appendChild(artworkImage);
-        }
+      // Nascondi dopo 40 secondi
+      setTimeout(() => {
+        message.classList.add("hidden");
+      }, 40000);
+    }
 
-        fetchNowPlaying();
-        setInterval(fetchNowPlaying, 30000);
+    // Avvia subito
+    showTypingLoop();
 
-        const textCartaio = document.createElement('div');
-        textCartaio.id = 'text-cartaio';
-        textCartaio.textContent = 'Il Cartaio';
-        document.body.appendChild(textCartaio);
+    // Ripeti ogni 50 secondi
+    setInterval(() => {
+      showTypingLoop();
+    }, 50000);
+  </script>
 
-        const dateTime = document.createElement('div');
-        dateTime.id = 'date-time';
-        function updateDateTime() {
-            const now = new Date();
-            const dateString = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-            dateTime.textContent = dateString;
-        }
-        updateDateTime();
-        document.body.appendChild(dateTime);
-        setInterval(updateDateTime, 1000);
-    </script>
 </body>
 </html>
