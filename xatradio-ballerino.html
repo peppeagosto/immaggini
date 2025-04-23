@@ -336,7 +336,7 @@
 
         function updateClock() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             clock.textContent = now.toLocaleTimeString('it-IT');
             calendar.textContent = now.toLocaleDateString('it-IT', options);
         }
