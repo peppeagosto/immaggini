@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title> cartaiofemmina 2</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cartaiofemmina 2</title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
     <meta name="robots" content="Radio Mia">
     <meta name="googlebot" content="Radio Mia">
-    <link rel="shortcut icon" href="">
     <style>
         html, body {
             margin: 0;
@@ -147,6 +148,22 @@
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+        /* Calendar and clock styling */
+        #calendar-clock {
+            position: fixed;
+            top: 50px;
+            left: 20px;
+            z-index: 999;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: opacity 1s ease;
+        }
+        .hidden {
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
@@ -179,6 +196,11 @@
 
     <div class="cover-grid" id="cover-grid"></div>
 
+    <div id="calendar-clock">
+        <div id="calendar"></div>
+        <div id="clock"></div>
+    </div>
+
     <script>
         const player = document.getElementById('player');
         const volumeSlider = document.getElementById('volume-slider');
@@ -188,6 +210,9 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
+        const calendarClock = document.getElementById('calendar-clock');
+        const calendar = document.getElementById('calendar');
+        const clock = document.getElementById('clock');
 
         let alreadyPlayed = false;
 
@@ -263,21 +288,38 @@
             coverImages.forEach(image => {
                 const imgElement = document.createElement('img');
                 imgElement.src = image;
-                imgElement.alt = 'Cover';
-                const coverDiv = document.createElement('div');
-                coverDiv.classList.add('cover');
-                coverDiv.appendChild(imgElement);
-                coverGrid.appendChild(coverDiv);
+                coverGrid.appendChild(imgElement);
             });
         }
 
         function resetToDefault() {
-            albumArt.style.backgroundImage = `url(${defaultImage})`;
+            coverImages = [];
             albumArt.classList.add('no-cover');
+            albumArt.style.backgroundImage = `url(${defaultImage})`;
         }
 
-        setInterval(fetchNowPlaying, 20000);
-        fetchNowPlaying();
+        setInterval(fetchNowPlaying, 30000);
+
+        function updateClock() {
+            const date = new Date();
+            clock.textContent = date.toLocaleTimeString();
+        }
+
+        setInterval(updateClock, 1000);
+
+        function updateDate() {
+            const date = new Date();
+            calendar.textContent = date.toLocaleDateString();
+        }
+
+        setInterval(updateDate, 60000);
+
+        let toggleVisible = true;
+        setInterval(() => {
+            calendarClock.classList.toggle('hidden', toggleVisible);
+            toggleVisible = !toggleVisible;
+        }, 20000);
     </script>
 </body>
 </html>
+
