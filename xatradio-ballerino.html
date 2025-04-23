@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -164,6 +165,20 @@
         .hidden {
             opacity: 0;
         }
+
+        /* Modifiche al video 11 per centrarlo */
+        #video-11 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 328px;
+            height: 426px;
+            z-index: 9998;
+            display: none;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -175,6 +190,12 @@
 
     <video id="intro-video">
         <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
+
+    <!-- Video 11 (centrato) -->
+    <video id="video-11">
+        <source src="https://peppeagosto.github.io/immaggini/11.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -210,6 +231,7 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
+        const video11 = document.getElementById('video-11');
         const calendarClock = document.getElementById('calendar-clock');
         const calendar = document.getElementById('calendar');
         const clock = document.getElementById('clock');
@@ -230,7 +252,18 @@
                 introVideo.style.display = 'none';
                 player.play();
                 playBtn.style.pointerEvents = 'auto';
-            }, 6000);
+                
+                // Show Video 11 after 9 seconds
+                setTimeout(() => {
+                    video11.style.display = 'block';
+                    video11.play();
+
+                    setTimeout(() => {
+                        video11.pause();
+                        video11.style.display = 'none';
+                    }, 11000); // 11 seconds
+                }, 9000); // After 9 seconds
+            }, 6000); // Intro video duration
         });
 
         stopBtn.addEventListener('click', () => {
@@ -285,41 +318,30 @@
 
         function displayCovers() {
             coverGrid.innerHTML = '';
-            coverImages.forEach(image => {
-                const imgElement = document.createElement('img');
-                imgElement.src = image;
-                coverGrid.appendChild(imgElement);
+            coverImages.forEach(imgUrl => {
+                const coverElement = document.createElement('div');
+                coverElement.classList.add('cover');
+                coverElement.innerHTML = `<img src="${imgUrl}" alt="Album Cover">`;
+                coverGrid.appendChild(coverElement);
             });
         }
 
         function resetToDefault() {
-            coverImages = [];
+            albumArt.style.backgroundImage = `url('${defaultImage}')`;
             albumArt.classList.add('no-cover');
-            albumArt.style.backgroundImage = `url(${defaultImage})`;
         }
 
+        fetchNowPlaying();
         setInterval(fetchNowPlaying, 30000);
 
         function updateClock() {
-            const date = new Date();
-            clock.textContent = date.toLocaleTimeString();
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            clock.textContent = now.toLocaleTimeString('it-IT');
+            calendar.textContent = now.toLocaleDateString('it-IT', options);
         }
 
         setInterval(updateClock, 1000);
-
-        function updateDate() {
-            const date = new Date();
-            calendar.textContent = date.toLocaleDateString();
-        }
-
-        setInterval(updateDate, 60000);
-
-        let toggleVisible = true;
-        setInterval(() => {
-            calendarClock.classList.toggle('hidden', toggleVisible);
-            toggleVisible = !toggleVisible;
-        }, 20000);
     </script>
 </body>
 </html>
-
