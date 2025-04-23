@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> </title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="robots" content="">
-    <meta name="googlebot" content="">
+    <title> cartaiofemmina 2</title>
+    <meta name="description" content="Radio Mia">
+    <meta name="keywords" content="Radio Mia">
+    <meta name="robots" content="Radio Mia">
+    <meta name="googlebot" content="Radio Mia">
     <link rel="shortcut icon" href="">
-
     <style>
         html, body {
             margin: 0;
@@ -32,31 +31,30 @@
             filter: brightness(1.5);
         }
         #player-container {
-            position: relative;
-            width: 90%;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
             max-width: 600px;
-            margin: 59px auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         #album-art {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background: url('https://xatimg.com/image/4P7tw5xBzXst.png') no-repeat center center;
             background-size: cover;
-            margin: 0 auto 20px;
+            margin: 0 auto 10px;
             border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            z-index: 10;
             transition: transform 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
-            border: 5px solid transparent;
         }
         .moving {
             animation: moveCover 8s infinite alternate;
@@ -68,22 +66,8 @@
             75% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
             100% { top: 100%; left: 0; transform: translate(0, -100%); }
         }
-
-        @keyframes borderAnimation {
-            0% { border-color: transparent; }
-            25% { border-color: red; }
-            50% { border-color: orange; }
-            75% { border-color: yellow; }
-            100% { border-color: green; }
-        }
-
-        #album-art.no-cover {
-            animation: borderAnimation 4s infinite alternate;
-            background-image: none;
-        }
-
         #currentTitle {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
@@ -100,19 +84,14 @@
             85% { color: violet; }
             100% { color: red; }
         }
-
         #controls {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 1;
+            gap: 10px;
+            position: relative;
+            z-index: 10;
         }
-
         .control-btn {
             width: 40px;
             height: 40px;
@@ -122,33 +101,29 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
-
         .control-btn:hover {
             background-color: rgba(255, 255, 255, 1);
             transform: scale(1.15);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
-
         #volume-slider {
-            width: 80px;
+            width: 60px;
             height: 4px;
         }
-
         .cover-grid {
             display: flex;
             overflow: hidden;
             width: 100%;
             animation: scrollCovers 20s linear infinite;
-            margin-top: 20px;
+            margin-top: 10px;
+            height: 100px;
         }
-
         .cover {
             flex-shrink: 0;
-            width: 150px;
-            height: 150px;
+            width: 80px;
+            height: 80px;
             margin-right: 10px;
         }
-
         .cover img {
             width: 100%;
             height: 100%;
@@ -156,17 +131,15 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         @keyframes scrollCovers {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
-
         #intro-video {
-            position: fixed;
-            width: 380px;
-            height: 170px;
-            top: 15%;
+            position: absolute;
+            width: 328px;
+            height: 426px;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 9999;
@@ -178,13 +151,13 @@
 </head>
 <body>
     <div class="fs-vid-background">
-        <video autoplay muted loop>
-            <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
+        <video autoplay muted loop id="background-video">
+            <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
         </video>
     </div>
 
     <video id="intro-video">
-        <source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -216,36 +189,33 @@
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
 
-        let introTimeout = null;
+        let alreadyPlayed = false;
 
         playBtn.addEventListener('click', () => {
+            if (alreadyPlayed) return;
+            alreadyPlayed = true;
+
             playBtn.style.pointerEvents = 'none';
             introVideo.style.display = 'block';
             introVideo.currentTime = 0;
             introVideo.play();
 
-            introTimeout = setTimeout(() => {
+            setTimeout(() => {
                 introVideo.pause();
                 introVideo.style.display = 'none';
                 player.play();
                 playBtn.style.pointerEvents = 'auto';
-            }, 8000);
+            }, 6000);
         });
 
         stopBtn.addEventListener('click', () => {
-            if (introTimeout) {
-                clearTimeout(introTimeout);
-                introTimeout = null;
-            }
-
             introVideo.pause();
             introVideo.style.display = 'none';
-
             player.pause();
             player.currentTime = 0;
-
             albumArt.classList.add('moving');
             playBtn.style.pointerEvents = 'auto';
+            alreadyPlayed = false;
         });
 
         volumeSlider.addEventListener('input', (e) => {
@@ -253,7 +223,7 @@
         });
 
         const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/4P7tw5xBzXst.png';
+        const defaultImage = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
         let coverImages = [];
 
         async function fetchNowPlaying() {
