@@ -1,0 +1,205 @@
+<html lang="it"><head>
+  <meta charset="UTF-8"><title>cambiato iconexatradio-ballerino&lt;title&gt;cartaiofemmina 2&lt;</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .main-container {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      height: 550px;
+      border-radius: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .player-container {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background-color: #111;
+      border: 2px solid white;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .side-video {
+      width: 100px;
+      height: 400px;
+      object-fit: cover;
+      border: 2px solid white;
+      border-radius: 10px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet);
+      background-size: 800% 800%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 8s linear infinite;
+    }
+
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .typing-message {
+      position: absolute;
+      top: 10px;
+      right: -100%;
+      white-space: nowrap;
+      font-family: 'Creepster', cursive;
+      font-size: 26px;
+      color: transparent;
+      background: linear-gradient(to right, red, orange, yellow);
+      -webkit-background-clip: text;
+      animation: scrollIn 1s ease-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes scrollIn {
+      to {
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* 🔒 Impedisce selezione del testo */
+    * {
+      user-select: none;
+    }
+
+    /* 🔒 Layer invisibile dentro il player */
+    .anti-copy-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .side-video {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 10px;
+      }
+
+      .player-container {
+        width: 90%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay="" loop="" muted=""></video>
+
+    <div class="player-container" id="player-container">
+      <!-- 🔒 Protezione invisibile solo sopra il player -->
+      <div class="anti-copy-layer"></div>
+
+      <embed src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.html" width="300" height="400" type="text/html">
+    <div class="typing-message" style="animation: 1s ease-out 0s 1 normal forwards running scrollIn;">💀 BENVENUTO  DAL  CARTAIO 💀</div></div>
+
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay="" loop="" muted=""></video>
+  </div>
+
+  <div class="footer">
+    CODICE MODIFICATO DA CARTAIO
+  </div>
+
+<!-- 
+ b0dy{background-image:url();background-position:top left;background-attachment:fixed;https://xatimg.com/image/d9wefAP7wPDg.gifbackground-repeat:repeat; } 
+ --> 
+ <img src="https://xatimg.com/image/uM3nBK3cywhm.gif" style="position:absolute; NotAllowed:9; top:0;right:0;" border="0"> 
+ 
+ 
+ <style>
+ <!-- 
+ b0dy{background-image:url();background-position:top left;background-attachment:fixed;background-repeat:repeat; } 
+ --> 
+ </style><img src="https://xatimg.com/image/jk7cId0P6vKR.gif" style="position:absolute; NotAllowed:9; top:0; left:0;" border="0">
+
+<script>
+    const container = document.getElementById("player-container");
+    const chars = ["💀", " ", "B", "E", "N", "V", "E", "N", "U", "T", "O", " ", " ", "D", "A", "L", " ", " ", "C", "A", "R", "T", "A", "I", "O", " ", "💀"];
+    
+    let msgEl;
+    let interval;
+    let idx = 0;
+
+    function createMsg() {
+      msgEl = document.createElement("div");
+      msgEl.className = "typing-message";
+      msgEl.textContent = "";
+      container.appendChild(msgEl);
+    }
+
+    function startType() {
+      idx = 0;
+      msgEl.textContent = "";
+      msgEl.classList.remove("hidden");
+      msgEl.style.animation = "scrollIn 1s ease-out forwards";
+
+      interval = setInterval(() => {
+        if (idx < chars.length) {
+          msgEl.textContent += chars[idx];
+          idx++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 80);
+    }
+
+    function loopTyping() {
+      if (!msgEl) createMsg();
+      startType();
+      setTimeout(() => {
+        msgEl.classList.add("hidden");
+      }, 40000);
+    }
+
+    loopTyping();
+    setInterval(loopTyping, 50000);
+  </script>
+
+
+</body></html>
