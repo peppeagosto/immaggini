@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -149,24 +148,6 @@
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
-        /* Calendar and clock styling */
-        #calendar-clock {
-            position: fixed;
-            top: 50px;
-            left: 20px;
-            z-index: 999;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
-            padding: 10px;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            transition: opacity 1s ease;
-        }
-        .hidden {
-            opacity: 0;
-        }
-
-        /* Modifiche al video 11 per centrarlo */
         #video-11 {
             position: absolute;
             top: 50%;
@@ -188,12 +169,12 @@
         </video>
     </div>
 
+    <!-- Modifica: tolto muted per far sentire la voce -->
     <video id="intro-video">
         <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
-    <!-- Video 11 (centrato) -->
     <video id="video-11">
         <source src="https://peppeagosto.github.io/immaggini/11.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
@@ -217,24 +198,16 @@
 
     <div class="cover-grid" id="cover-grid"></div>
 
-    <div id="calendar-clock">
-        <div id="calendar"></div>
-        <div id="clock"></div>
-    </div>
-
     <script>
         const player = document.getElementById('player');
-        const volumeSlider = document.getElementById('volume-slider');
-        const albumArt = document.getElementById('album-art');
-        const coverGrid = document.getElementById('cover-grid');
-        const currentTitle = document.getElementById('currentTitle');
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
         const video11 = document.getElementById('video-11');
-        const calendarClock = document.getElementById('calendar-clock');
-        const calendar = document.getElementById('calendar');
-        const clock = document.getElementById('clock');
+        const volumeSlider = document.getElementById('volume-slider');
+        const albumArt = document.getElementById('album-art');
+        const currentTitle = document.getElementById('currentTitle');
+        const coverGrid = document.getElementById('cover-grid');
 
         let alreadyPlayed = false;
 
@@ -252,8 +225,7 @@
                 introVideo.style.display = 'none';
                 player.play();
                 playBtn.style.pointerEvents = 'auto';
-                
-                // Show Video 11 after 9 seconds
+
                 setTimeout(() => {
                     video11.style.display = 'block';
                     video11.play();
@@ -261,9 +233,9 @@
                     setTimeout(() => {
                         video11.pause();
                         video11.style.display = 'none';
-                    }, 11000); // 11 seconds
-                }, 9000); // After 9 seconds
-            }, 6000); // Intro video duration
+                    }, 11000);
+                }, 9000);
+            }, 6000);
         });
 
         stopBtn.addEventListener('click', () => {
@@ -271,7 +243,6 @@
             introVideo.style.display = 'none';
             player.pause();
             player.currentTime = 0;
-            albumArt.classList.add('moving');
             playBtn.style.pointerEvents = 'auto';
             alreadyPlayed = false;
         });
@@ -280,20 +251,15 @@
             player.volume = e.target.value;
         });
 
-        const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
-        const defaultImage = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
-        let coverImages = [];
-
         async function fetchNowPlaying() {
             try {
-                const response = await fetch(nowPlayingUrl);
+                const response = await fetch('https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv');
                 const data = await response.json();
                 const { title, artist } = data;
                 currentTitle.textContent = title || 'Titolo non disponibile';
                 fetchCover(title, artist);
-            } catch (error) {
+            } catch {
                 currentTitle.textContent = 'Errore durante il caricamento';
-                resetToDefault();
             }
         }
 
@@ -303,45 +269,19 @@
             try {
                 const response = await fetch(coverUrl);
                 const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
-                    displayCovers();
-                    albumArt.style.backgroundImage = `url(${coverImages[0]})`;
-                    albumArt.classList.remove('no-cover');
-                } else {
-                    resetToDefault();
+                if (data.results.length > 0) {
+                    const covers = data.results.map(r => r.artworkUrl100.replace('100x100', '600x600'));
+                    coverGrid.innerHTML = covers.map(url => `<div class="cover"><img src="${url}"></div>`).join('');
+                    albumArt.style.backgroundImage = `url(${covers[0]})`;
                 }
-            } catch (error) {
-                resetToDefault();
+            } catch {
+                albumArt.style.backgroundImage = `url('https://xatimg.com/image/xmTZE8IRcKFj.gif')`;
             }
-        }
-
-        function displayCovers() {
-            coverGrid.innerHTML = '';
-            coverImages.forEach(imgUrl => {
-                const coverElement = document.createElement('div');
-                coverElement.classList.add('cover');
-                coverElement.innerHTML = `<img src="${imgUrl}" alt="Album Cover">`;
-                coverGrid.appendChild(coverElement);
-            });
-        }
-
-        function resetToDefault() {
-            albumArt.style.backgroundImage = `url('${defaultImage}')`;
-            albumArt.classList.add('no-cover');
         }
 
         fetchNowPlaying();
         setInterval(fetchNowPlaying, 30000);
-
-        function updateClock() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour', minute:};
-            clock.textContent = now.toLocaleTimeString('it-IT');
-            calendar.textContent = now.toLocaleDateString('it-IT', options);
-        }
-
-        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
+
