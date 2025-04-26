@@ -158,6 +158,19 @@
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
+        #lion-video {
+            position: absolute;
+            width: 328px;
+            height: 426px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -165,7 +178,6 @@
         <video autoplay muted loop id="background-video">
             <source src="https://peppeagosto.github.io/immaggini/31.mp4?v=1" type="video/mp4">
         </video>
-
         <script>
             const video = document.getElementById('background-video');
             video.onended = function() {
@@ -177,6 +189,11 @@
 
     <video id="intro-video">
         <source src="https://peppeagosto.github.io/immaggini/40.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
+
+    <video id="lion-video">
+        <source src="https://peppeagosto.github.io/immaggini/lion.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -207,28 +224,64 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
+        const lionVideo = document.getElementById('lion-video');
+
+        let lionTimeout = null; // Variabile per gestire il timeout del video lion
 
         playBtn.addEventListener('click', () => {
             playBtn.style.pointerEvents = 'none';
+
+            // Mostra e avvia il video di introduzione
             introVideo.style.display = 'block';
             introVideo.currentTime = 0;
             introVideo.play();
 
+            // Quando termina il video di introduzione, avvia la musica
             setTimeout(() => {
                 introVideo.pause();
                 introVideo.style.display = 'none';
                 player.play();
                 playBtn.style.pointerEvents = 'auto';
             }, 8000);
+
+            // Dopo 3 secondi dall'inizio, parte il video lion
+            setTimeout(() => {
+                // Mostra e avvia il video lion
+                lionVideo.style.display = 'block';
+                lionVideo.currentTime = 0;
+                lionVideo.play();
+
+                // Imposta un timeout per nascondere il video dopo 8 secondi
+                if (lionTimeout) clearTimeout(lionTimeout);
+                lionTimeout = setTimeout(() => {
+                    lionVideo.style.display = 'none';
+                }, 8000);
+            }, 3000); // ritardo di 3 secondi
         });
 
         stopBtn.addEventListener('click', () => {
+            // Ferma e nasconde i video
             introVideo.pause();
             introVideo.style.display = 'none';
+
+            lionVideo.pause();
+            lionVideo.style.display = 'none';
+
+            // Ferma la musica
             player.pause();
             player.currentTime = 0;
+
+            // Riporta l'album art allo stato iniziale
             albumArt.classList.add('moving');
+
+            // Riabilita il pulsante play
             playBtn.style.pointerEvents = 'auto';
+
+            // Cancella eventuali timeout del lion
+            if (lionTimeout) {
+                clearTimeout(lionTimeout);
+                lionTimeout = null;
+            }
         });
 
         volumeSlider.addEventListener('input', (e) => {
