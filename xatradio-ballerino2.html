@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -158,6 +159,18 @@
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
+        /* Nuovo video lion */
+        #lion-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 640px; /* puoi adattare le dimensioni */
+            height: 360px; /* puoi adattare le dimensioni */
+            z-index: 9998; /* sotto l'intro-video */
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -166,17 +179,24 @@
             <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
         </video>
         <script>
-            const video = document.getElementById('background-video');
-            video.onended = function() {
+            const backgroundVideo = document.getElementById('background-video');
+            backgroundVideo.onended = function() {
                 console.log('Video finito, lo riavvio');
-                video.play();
+                backgroundVideo.play();
             };
         </script>
     </div>
 
+    <!-- Video intro -->
     <video id="intro-video">
         <source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.mp4" type="video/mp4">
         <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
+
+    <!-- Video lion -->
+    <video id="lion-video" controls>
+        <source src="https://peppeagosto.github.io/immaggini/lion.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -207,6 +227,10 @@
         const playBtn = document.getElementById('play');
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
+        const lionVideo = document.getElementById('lion-video');
+
+        // Variabile per controllare lo stato
+        let isPlayingSequence = false;
 
         // Funzione per mostrare i titoli
         function showTitle() {
@@ -220,30 +244,55 @@
 
         // Gestione Play
         playBtn.addEventListener('click', () => {
-            // Mostra i titoli
-            showTitle();
+    if (isPlayingSequence) return;
+    isPlayingSequence = true;
 
-            // Avvia il video introduttivo
-            introVideo.style.display = 'block';
-            introVideo.currentTime = 0;
-            introVideo.play();
+    showTitle();
 
-            // Dopo 8 secondi, avvia la riproduzione audio
-            setTimeout(() => {
-                introVideo.pause();
-                introVideo.style.display = 'none';
-                player.play();
-                // Potresti voler nascondere i titoli se preferisci
-                // hideTitle();
-            }, 8000);
-        });
+    // Mostra il video introduttivo
+    introVideo.style.display = 'block';
+    introVideo.currentTime = 0;
+    introVideo.play();
 
-        // Gestione Stop
+    // Gestisci la sequenza di 7 secondi
+    setTimeout(() => {
+        // Ferma e nascondi il video intro
+        introVideo.pause();
+        introVideo.style.display = 'none';
+
+        // Mostra il video lion
+        lionVideo.style.display = 'block';
+        lionVideo.currentTime = 0;
+        lionVideo.play();
+
+        // Dopo 4 secondi, nascondi il lion e inizia la musica
+        setTimeout(() => {
+            lionVideo.pause();
+            lionVideo.style.display = 'none';
+
+            player.play();
+
+            // Puoi reimpostare lo stato qui se vuoi permettere di rifare la sequenza
+            // isPlayingSequence = false;
+        }, 4000); // durata dell'evento lion in questa sequenza
+    }, 7000); // durata totale della introduzione
+});
+
+
+        // Quando clicchi stop
         stopBtn.addEventListener('click', () => {
+            // Se in sequenza, interrompi tutto
             introVideo.pause();
             introVideo.style.display = 'none';
+
+            lionVideo.pause();
+            lionVideo.style.display = 'none';
+
             player.pause();
             player.currentTime = 0;
+
+            // Resetta lo stato
+            isPlayingSequence = false;
 
             // Riporta i titoli
             showTitle();
