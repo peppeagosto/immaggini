@@ -1,9 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video a Destra e a Sinistra</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
 
+        /* Posizionamento dei video fuori dal contenitore principale */
+        #background-video-left, #background-video-right {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            object-fit: cover;
+        }
+
+        #background-video-left {
+            left: 0; /* Video a sinistra */
+        }
+
+        #background-video-right {
+            right: 0; /* Video a destra */
+        }
+    </style>
+</head>
+<body>
+    <!-- Video a sinistra -->
+    <video autoplay muted loop id="background-video-left">
+        <source src="https://peppeagosto.github.io/immaggini/09.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
+
+    <!-- Video a destra -->
+    <video autoplay muted loop id="background-video-right">
+        <source src="https://peppeagosto.github.io/immaggini/09.mp4" type="video/mp4">
+        Il tuo browser non supporta il video.
+    </video>
+
+    <div>
+        <!-- Qui puoi aggiungere il tuo contenuto principale -->
+        
+        <p>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title> cartaiofemmina 2</title>
+    <title> cartaiofemmina </title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
     <meta name="robots" content="Radio Mia">
@@ -352,5 +400,8 @@ stopBtn.addEventListener('click', () => {
 });
 
    </script>
+</body>
+</html></p>
+    </div>
 </body>
 </html>
