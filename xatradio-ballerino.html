@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title> cartaiofemmina 2</title>
+    <title>cartaiofemmina 2</title>
     <meta name="description" content="Radio Mia">
     <meta name="keywords" content="Radio Mia">
     <meta name="robots" content="Radio Mia">
@@ -163,13 +162,21 @@
 </head>
 <body>
     <div class="fs-vid-background">
-        <video autoplay muted loop>
-            <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+        <video autoplay muted loop id="background-video">
+            <source src="https://peppeagosto.github.io/immaggini/26.mp4?v=1" type="video/mp4">
         </video>
+        <script>
+            const video = document.getElementById('background-video');
+            video.onended = function() {
+                console.log('Video finito, lo riavvio');
+                video.play();
+            };
+        </script>
     </div>
 
     <video id="intro-video">
         <source src="https://peppeagosto.github.io/immaggini/xatradio-ballerino.mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -186,7 +193,7 @@
     </div>
 
     <audio id="player">
-        <source src="https://ssl.kenhost.ro:8050/stream" type="audio/mpeg">
+        <source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg">
     </audio>
 
     <div class="cover-grid" id="cover-grid"></div>
@@ -201,58 +208,56 @@
         const stopBtn = document.getElementById('stop');
         const introVideo = document.getElementById('intro-video');
 
-        const videoUrls = [
-            'https://peppeagosto.github.io/immaggini/38.mp4',
-            'https://peppeagosto.github.io/immaggini/34.mp4',
-            'https://peppeagosto.github.io/immaggini/83.mp4'
-        ];
-
-        let currentVideoIndex = 0;
-        let introTimeout = null;
-        let videoTimeout = null;
-
-        function switchVideo() {
-            const videoBackground = document.querySelector('.fs-vid-background video');
-            videoBackground.src = videoUrls[currentVideoIndex];
-            currentVideoIndex = (currentVideoIndex + 1) % videoUrls.length;
+        // Funzione per mostrare i titoli
+        function showTitle() {
+            document.querySelector('#currentTitle').style.display = 'block';
         }
 
-        videoTimeout = setInterval(switchVideo, 15000);
+        // Funzione per nascondere i titoli
+        function hideTitle() {
+            document.querySelector('#currentTitle').style.display = 'none';
+        }
 
+        // Gestione Play
         playBtn.addEventListener('click', () => {
-            playBtn.style.pointerEvents = 'none';
+            // Mostra i titoli
+            showTitle();
+
+            // Avvia il video introduttivo
             introVideo.style.display = 'block';
             introVideo.currentTime = 0;
             introVideo.play();
 
-            introTimeout = setTimeout(() => {
+            // Dopo 8 secondi, avvia la riproduzione audio
+            setTimeout(() => {
                 introVideo.pause();
                 introVideo.style.display = 'none';
                 player.play();
-                playBtn.style.pointerEvents = 'auto';
-            }, 15000);
+                // Potresti voler nascondere i titoli se preferisci
+                // hideTitle();
+            }, 8000);
         });
 
+        // Gestione Stop
         stopBtn.addEventListener('click', () => {
-            if (introTimeout) {
-                clearTimeout(introTimeout);
-                introTimeout = null;
-            }
-
             introVideo.pause();
             introVideo.style.display = 'none';
-
             player.pause();
             player.currentTime = 0;
 
+            // Riporta i titoli
+            showTitle();
+
+            // Puoi anche resettare l'immagine o altre cose se necessario
             albumArt.classList.add('moving');
-            playBtn.style.pointerEvents = 'auto';
         });
 
+        // Volume
         volumeSlider.addEventListener('input', (e) => {
             player.volume = e.target.value;
         });
 
+        // Funzione per aggiornare i titoli e le copertine
         const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';
         const defaultImage = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
         let coverImages = [];
@@ -263,6 +268,10 @@
                 const data = await response.json();
                 const { title, artist } = data;
                 currentTitle.textContent = title || 'Titolo non disponibile';
+
+                // Mostra di nuovo il titolo
+                showTitle();
+
                 fetchCover(title, artist);
             } catch (error) {
                 currentTitle.textContent = 'Errore durante il caricamento';
@@ -280,7 +289,6 @@
                     coverImages = data.results.map(result => result.artworkUrl100.replace('100x100', '600x600'));
                     displayCovers();
                     albumArt.style.backgroundImage = `url(${coverImages[0]})`;
-                    albumArt.classList.remove('no-cover');
                 } else {
                     resetToDefault();
                 }
@@ -304,9 +312,9 @@
 
         function resetToDefault() {
             albumArt.style.backgroundImage = `url(${defaultImage})`;
-            albumArt.classList.add('no-cover');
         }
 
+        // Aggiornamento ogni 20 secondi
         setInterval(fetchNowPlaying, 20000);
         fetchNowPlaying();
     </script>
