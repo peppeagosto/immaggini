@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -176,7 +178,7 @@
     </div>
 
     <video id="intro-video">
-        <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/05.mp4?v=1" type="video/mp4">
         Il tuo browser non supporta il video.
     </video>
 
@@ -291,6 +293,64 @@
 
         setInterval(fetchNowPlaying, 20000);
         fetchNowPlaying();
-    </script>
+        // CREA il video LION (aggiunto dinamicamente al DOM)
+const lionVideo = document.createElement('video');
+lionVideo.id = 'lion-video';
+lionVideo.src = 'https://peppeagosto.github.io/immaggini/lion.mp4?v=1';
+lionVideo.autoplay = true;
+lionVideo.muted = true;
+lionVideo.style.position = 'absolute';
+lionVideo.style.top = '50%';
+lionVideo.style.left = '50%';
+lionVideo.style.transform = 'translate(-50%, -50%)';
+lionVideo.style.width = '328px';
+lionVideo.style.height = '426px';
+lionVideo.style.zIndex = '9998';
+lionVideo.style.borderRadius = '12px';
+lionVideo.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.7)';
+lionVideo.style.display = 'none';
+document.body.appendChild(lionVideo);
+
+// AGGIORNA evento Play
+playBtn.addEventListener('click', () => {
+    playBtn.style.pointerEvents = 'none';
+    introVideo.style.display = 'block';
+    introVideo.currentTime = 0;
+    introVideo.play();
+
+    setTimeout(() => {
+        introVideo.pause();
+        introVideo.style.display = 'none';
+
+        // ⏱️ Dopo 4 secondi parte il video lion
+        setTimeout(() => {
+            lionVideo.style.display = 'block';
+            lionVideo.currentTime = 0;
+            lionVideo.play();
+
+            // ⏱️ Dopo 8 secondi sparisce e parte l'audio
+            setTimeout(() => {
+                lionVideo.pause();
+                lionVideo.style.display = 'none';
+
+                player.play();
+                playBtn.style.pointerEvents = 'auto';
+            }, 6000); // durata lion
+        }, 0.0); // attesa dopo fine annuncio
+    }, 7000); // durata intro
+});
+
+// STOP button chiude tutto
+stopBtn.addEventListener('click', () => {
+    lionVideo.pause();
+    lionVideo.style.display = 'none';
+    introVideo.pause();
+    introVideo.style.display = 'none';
+    player.pause();
+    player.currentTime = 0;
+    playBtn.style.pointerEvents = 'auto';
+});
+
+   </script>
 </body>
 </html>
