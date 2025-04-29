@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Player con Cerchio e Scroller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet" />
+  <style>
+    body{margin:0;background-color:#111;font-family:Arial,sans-serif;display:flex;flex-direction:column;align-items:center;height:100vh;overflow:hidden}
+    .cover-grid-wrapper{width:100%;overflow:hidden;margin-top:10px}
+    .cover-grid{display:flex;gap:10px;animation:scrollCovers 30s linear infinite;width:max-content}
+    .cover{width:90px;height:90px;border-radius:10px;overflow:hidden}
+    .cover img{width:100%;height:100%;object-fit:cover}
+    @keyframes scrollCovers{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+    .main-container{position:relative;display:flex;justify-content:space-between;align-items:center;width:100%;max-width:600px;height:450px;border-radius:15px;padding:10px;background:rgba(0,0,0,0.5);margin-top:10px}
+    .player-container{position:relative;width:300px;height:400px;background-color:#111;border:2px solid white;border-radius:15px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .side-video{width:100px;height:400px;object-fit:cover;border:2px solid white;border-radius:10px}
+    .footer{margin-top:20px;font-size:16px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;background:linear-gradient(270deg,red,orange,yellow,green,cyan,blue,violet);background-size:800% 800%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 8s linear infinite}
+    @keyframes rainbow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .controls{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;justify-content:space-between;width:80%;z-index:5}
+    .controls img{width:30px;height:30px;cursor:pointer;transition:transform 0.3s}
+    .controls img:hover{transform:scale(1.2)}
+    .volume-slider{width:100px;margin:0 10px;cursor:pointer}
+    .announcement-video,.extra-video,.lion-video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:3;display:none}
+    .moving-circle{position:absolute;width:80px;height:80px;border-radius:50%;overflow:hidden;border:2px solid white;z-index:4;animation:moveCircle 10s linear infinite}
+    .moving-circle img{width:100%;height:100%;object-fit:cover}
+    @keyframes moveCircle{0%{top:0;left:0}25%{top:0;left:calc(100% - 80px)}50%{top:calc(100% - 80px);left:calc(100% - 80px)}75%{top:calc(100% - 80px);left:0}100%{top:0;left:0}}
+    @media(max-width:768px){.main-container{flex-direction:column;height:auto}.side-video{width:100%;height:250px;margin-bottom:10px}.player-container{width:90%;height:auto}}
+    #titolocanzone{z-index:999999;color:#ff0000;font-size:20px;position:absolute;top:0}
+  </style>
+</head>
+<body>
+  <div class="cover-grid-wrapper">
+    <div class="cover-grid" id="cvr"></div>
+  </div>
+  <div class="main-container">
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay loop muted></video>
+    <div class="player-container" id="player-container">
+      <video id="announcement" class="announcement-video" src="https://peppeagosto.github.io/immaggini/05.mp4"></video>
+      <video id="video31" class="extra-video" src="https://peppeagosto.github.io/immaggini/31.mp4"></video>
+      <video id="lion" class="lion-video" src="https://peppeagosto.github.io/immaggini/lion.mp4" muted></video>
+      <div class="moving-circle"><img id="circle-img" src="https://xatimg.com/image/xmTZE8IRcKFj.gif" alt="cover" /></div>
+      <marquee id="titolocanzone">Titolo non disponibile</marquee>
+      <div class="controls">
+        <img src="https://xatimg.com/image/y2EfE4lo2bis.gif" id="play-button" alt="Play" title="Play" />
+        <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.1" value="1" />
+        <img src="https://xatimg.com/image/UOq8qjYg9sNh.gif" id="stop-button" alt="Stop" title="Stop" />
+      </div>
+    </div>
+    <video class="side-video" src="https://peppeagosto.github.io/immaggini/01.mp4" autoplay loop muted></video>
+  </div>
+  <div class="footer">CODICE MODIFICATO DA CARTAIO</div>
+  <audio id="audi">
+    <source src="https://stream-166.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg" />
+  </audio>
+  <script>
+    function _0x1c68(_0x53e544,_0x3e2242){const _0x531e1b=_0x531e();return _0x1c68=function(_0x1c68b7,_0x63d7e9){_0x1c68b7=_0x1c68b7-0xf8;let _0x46cd10=_0x531e1b[_0x1c68b7];return _0x46cd10;},_0x1c68(_0x53e544,_0x3e2242);}const _0x5a017a=_0x1c68;(function(_0x2648fb,_0x123387){const _0xe7211f=_0x1c68,_0x2a5ce9=_0x2648fb();while(!![]){try{const _0x37df59=parseInt(_0xe7211f(0x112))/0x1*(-parseInt(_0xe7211f(0x107))/0x2)+-parseInt(_0xe7211f(0x10f))/0x3+-parseInt(_0xe7211f(0x105))/0x4+-parseInt(_0xe7211f(0x11e))/0x5*(-parseInt(_0xe7211f(0xfd))/0x6)+parseInt(_0xe7211f(0x101))/0x7*(parseInt(_0xe7211f(0x108))/0x8)+parseInt(_0xe7211f(0x109))/0x9*(-parseInt(_0xe7211f(0x10a))/0xa)+parseInt(_0xe7211f(0x104))/0xb;if(_0x37df59===_0x123387)break;else _0x2a5ce9['push'](_0x2a5ce9['shift']());}catch(_0x13978e){_0x2a5ce9['push'](_0x2a5ce9['shift']());}}}(_0x531e,0x98a40));const audio=document[_0x5a017a(0xfe)]('audi'),playBtn=document[_0x5a017a(0xfe)](_0x5a017a(0xff)),stopBtn=document[_0x5a017a(0xfe)](_0x5a017a(0x116)),volumeSlider=document['getElementById'](_0x5a017a(0xfc)),announcement=document[_0x5a017a(0xfe)](_0x5a017a(0x114)),video31=document[_0x5a017a(0xfe)](_0x5a017a(0xf8)),lionVideo=document[_0x5a017a(0xfe)](_0x5a017a(0x10e)),titolocanzone=document['getElementById'](_0x5a017a(0xf9)),nowPlayingUrl='https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv';async function fetchNowPlaying(){const _0x924290=_0x5a017a;try{const _0xeb5903=await fetch(nowPlayingUrl),_0x510593=await _0xeb5903[_0x924290(0x113)](),_0x550bec=_0x510593[_0x924290(0x110)]||_0x510593[_0x924290(0x118)]?.[_0x924290(0x110)]||_0x924290(0xfb),_0x343ad6=_0x510593['artist']||_0x510593[_0x924290(0x118)]?.[_0x924290(0x103)]||_0x924290(0x119);titolocanzone['textContent']='\x20'+_0x550bec;}catch(_0x1708df){titolocanzone[_0x924290(0x11c)]=_0x924290(0x102),resetToDefault();}}let inRiproduzione=![],annuncioInCorso=![];playBtn['onclick']=()=>{const _0x2255de=_0x5a017a;if(annuncioInCorso)return;inRiproduzione=!![],annuncioInCorso=!![],announcement[_0x2255de(0x10c)][_0x2255de(0x115)]=_0x2255de(0x11a),announcement['currentTime']=0x0,announcement['play'](),setTimeout(()=>{const _0x473fc6=_0x2255de;announcement[_0x473fc6(0x10b)](),announcement['style'][_0x473fc6(0x115)]='none',video31[_0x473fc6(0x10c)]['display']=_0x473fc6(0x11a),video31['currentTime']=0x0,video31[_0x473fc6(0x106)](),setTimeout(()=>{const _0x5a7926=_0x473fc6;lionVideo[_0x5a7926(0x10c)][_0x5a7926(0x115)]='block',lionVideo[_0x5a7926(0xfa)]=0x0,lionVideo[_0x5a7926(0x106)](),setTimeout(()=>{const _0x590d9c=_0x5a7926;lionVideo[_0x590d9c(0x10b)](),lionVideo[_0x590d9c(0x10c)][_0x590d9c(0x115)]=_0x590d9c(0x10d);},0x2710);},0x1388),audio[_0x473fc6(0xfa)]=0x0,audio[_0x473fc6(0x106)]();},0x1b58);},stopBtn[_0x5a017a(0x11d)]=()=>{const _0x488358=_0x5a017a;audio['pause'](),announcement['pause'](),announcement[_0x488358(0x10c)][_0x488358(0x115)]=_0x488358(0x10d),video31['pause'](),video31[_0x488358(0x10c)][_0x488358(0x115)]='none',lionVideo[_0x488358(0x10b)](),lionVideo[_0x488358(0x10c)][_0x488358(0x115)]=_0x488358(0x10d),inRiproduzione=![],annuncioInCorso=![];},volumeSlider[_0x5a017a(0x111)]=_0x3f4189=>{const _0x1799f1=_0x5a017a;audio[_0x1799f1(0x11b)]=_0x3f4189[_0x1799f1(0x100)][_0x1799f1(0x117)];},fetchNowPlaying();function _0x531e(){const _0xb379d8=['onclick','19160LhQkoM','video31','titolocanzone','currentTime','Titolo\x20non\x20disponibile','volume-slider','228BNMAvd','getElementById','play-button','target','7PmAtat','Errore\x20durante\x20il\x20caricamento','artist','35941158PyFpod','4047328CsfofN','play','103946vjswNd','1615832kUDTIC','27OYhUdz','2626630UgCrIy','pause','style','none','lion','2946132GIJfng','title','oninput','4ICHBKp','json','announcement','display','stop-button','value','now_playing','Artista\x20non\x20disponibile','block','volume','textContent'];_0x531e=function(){return _0xb379d8;};return _0x531e();}
+  </script>
+</body>
+</html>
