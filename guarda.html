@@ -37,12 +37,12 @@
       animation: scroll 15s linear infinite, rainbow 10s linear infinite;
     }
 
-    @keyframes scroll {
+    @embed scroll {
       0% { left: 100%; }
       100% { left: -100%; }
     }
 
-    @keyframes rainbow {
+    @embed rainbow {
       0% { background-position: 0% center; }
       100% { background-position: 100% center; }
     }
@@ -80,7 +80,7 @@
       transform: scale(1.15);
     }
 
-    @keyframes fadeIn {
+    @embed fadeIn {
       from {
         opacity: 0;
         transform: scale(0.95);
