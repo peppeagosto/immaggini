@@ -5,30 +5,76 @@
   <title>Galleria Interattiva</title>
   <style>
     body {
-      background-color: #000;
-      color: white;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
+    }
+
+    /* Marquee con testo arcobaleno in box trasparente */
+    .marquee-box {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0); /* trasparente */
+      overflow: hidden;
+      height: 50px;
+      position: relative;
+    }
+
+    .marquee-text {
+      position: absolute;
+      white-space: nowrap;
+      font-size: 26px;
+      font-family: 'Creepster', cursive;
+      background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+      background-size: 400% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: scroll 15s linear infinite, rainbow 10s linear infinite;
+    }
+
+    @keyframes scroll {
+      0% { left: 100%; }
+      100% { left: -100%; }
+    }
+
+    @keyframes rainbow {
+      0% { background-position: 0% center; }
+      100% { background-position: 100% center; }
+    }
+
+    #gallery-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      padding-top: 20px;
+      background-color: transparent;
     }
 
     #gallery {
       max-width: 750px;
-      margin: 0 auto;
+      max-height: 750px;
+      background-color: transparent;
     }
 
     .photo {
       display: none;
       width: 100%;
-      max-width: 750px; /* Adatta le foto alla larghezza massima */
       border: 2px solid white;
       border-radius: 10px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition: transform 0.5s ease;
     }
 
     .photo.show {
       display: block;
       animation: fadeIn 0.5s ease-in;
+    }
+
+    .photo:active {
+      transform: scale(1.15);
     }
 
     @keyframes fadeIn {
@@ -42,52 +88,21 @@
       }
     }
 
-    /* Animazione della scritta arcobaleno */
-    .rainbow-text {
-      font-family: 'Creepster', cursive;
-      font-size: 36px;
-      background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent; /* Il testo è trasparente per fare vedere il gradiente */
-      animation: rainbow 3s infinite linear, slide 8s linear infinite;
-      display: inline-block;
-      padding: 10px; /* Aggiungi un po' di padding per separare il testo dai bordi */
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Aggiungi un'ombra bianca per maggiore visibilità */
-    }
-
-    @keyframes rainbow {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 100% 0;
-      }
-    }
-
-    @keyframes slide {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
-    }
-
-    /* Stile per il bottone */
     .button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
+      position: fixed;
+      right: 10px;
+      top: 43%;
+      transform: translateY(-50%);
+      z-index: 10;
     }
 
     button {
-      padding: 10px 20px;
-      font-size: 18px;
+      padding: 6px 12px;
+      font-size: 14px;
       background-color: #e60000;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
@@ -99,24 +114,26 @@
 </head>
 <body>
 
-  <!-- Scritta arcobaleno che scorre -->
-  <h1 class="rainbow-text">Guarda le mie foto</h1>
-
-  <div id="gallery">
-    <!-- Le 10 immagini -->
-    <img class="photo show" src="https://xatimg.com/image/NPI06Hfs9fje.jpg" alt="Foto 0">
-    <img class="photo" src="https://xatimg.com/image/lNidMOVQNdUj.jpg" alt="Foto 1">
-    <img class="photo" src="https://xatimg.com/image/qu9QG94msPhO.jpg" alt="Foto 2">
-    <img class="photo" src="https://xatimg.com/image/PpXaTTpcxV8l.jpg" alt="Foto 3">
-    <img class="photo" src="https://xatimg.com/image/uzE8FJJzU5DR.jpg" alt="Foto 4">
-    <img class="photo" src="https://xatimg.com/image/lXdy9iCs5Zii.jpg" alt="Foto 5">
-    <img class="photo" src="https://xatimg.com/image/FoJ73AgyfdLi.jpg" alt="Foto 6">
-    <img class="photo" src="https://xatimg.com/image/sR7FvajerZSH.jpg" alt="Foto 7">
-    <img class="photo" src="https://via.placeholder.com/300x200?text=Foto+8" alt="Foto 8">
-    <img class="photo" src="https://xatimg.com/image/KI7QJkDW1vAv.jpg" alt="Foto 9">
+  <!-- Marquee con teschi e testo colorato -->
+  <div class="marquee-box">
+    <div class="marquee-text">☠️ Guarda le mie foto ☠️</div>
   </div>
 
-  <!-- Bottone spostato a destra -->
+  <div id="gallery-container">
+    <div id="gallery">
+      <img class="photo show" src="https://xatimg.com/image/NPI06Hfs9fje.jpg" alt="Foto 0">
+      <img class="photo" src="https://xatimg.com/image/lNidMOVQNdUj.jpg" alt="Foto 1">
+      <img class="photo" src="https://xatimg.com/image/qu9QG94msPhO.jpg" alt="Foto 2">
+      <img class="photo" src="https://xatimg.com/image/PpXaTTpcxV8l.jpg" alt="Foto 3">
+      <img class="photo" src="https://xatimg.com/image/uzE8FJJzU5DR.jpg" alt="Foto 4">
+      <img class="photo" src="https://xatimg.com/image/lXdy9iCs5Zii.jpg" alt="Foto 5">
+      <img class="photo" src="https://xatimg.com/image/FoJ73AgyfdLi.jpg" alt="Foto 6">
+      <img class="photo" src="https://xatimg.com/image/sR7FvajerZSH.jpg" alt="Foto 7">
+      <img class="photo" src="https://via.placeholder.com/300x200?text=Foto+8" alt="Foto 8">
+      <img class="photo" src="https://xatimg.com/image/KI7QJkDW1vAv.jpg" alt="Foto 9">
+    </div>
+  </div>
+
   <div class="button-container">
     <button onclick="showNextPhoto()">PLAY</button>
   </div>
@@ -127,18 +144,11 @@
     function showNextPhoto() {
       const photos = document.querySelectorAll('.photo');
 
-      // Nascondi la foto attuale
       photos[currentIndex].classList.remove('show');
-
-      // Incrementa indice
       currentIndex++;
-
-      // Se siamo oltre l'ultima, ricomincia da 0
       if (currentIndex >= photos.length) {
         currentIndex = 0;
       }
-
-      // Mostra la nuova foto
       photos[currentIndex].classList.add('show');
     }
   </script>
