@@ -19,6 +19,7 @@
       overflow: hidden;
       height: 50px;
       position: relative;
+      z-index: 1;
     }
 
     .marquee-text {
@@ -93,7 +94,8 @@
       right: 10px;
       top: 43%;
       transform: translateY(-50%);
-      z-index: 10;
+      z-index: 9999; /* Assicura che il bottone sia in primo piano */
+      pointer-events: auto; /* Garantisce che riceva clic */
     }
 
     button {
@@ -143,12 +145,8 @@
 
     function showNextPhoto() {
       const photos = document.querySelectorAll('.photo');
-
       photos[currentIndex].classList.remove('show');
-      currentIndex++;
-      if (currentIndex >= photos.length) {
-        currentIndex = 0;
-      }
+      currentIndex = (currentIndex + 1) % photos.length;
       photos[currentIndex].classList.add('show');
     }
   </script>
