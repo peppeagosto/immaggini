@@ -68,6 +68,7 @@
       border: 2px solid white;
       border-radius: 10px;
       transition: transform 0.5s ease;
+      pointer-events: none; /* Disattiva click sulle immagini */
     }
 
     .photo.show {
@@ -107,6 +108,7 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      z-index: 10000;
     }
 
     button:hover {
@@ -170,7 +172,10 @@
     let currentIndex = 0;
 
     function showNextPhoto() {
+      console.log("Pulsante cliccato"); // DEBUG
       const photos = document.querySelectorAll('.photo');
+      if (photos.length === 0) return;
+
       photos[currentIndex].classList.remove('show');
       currentIndex = (currentIndex + 1) % photos.length;
       photos[currentIndex].classList.add('show');
@@ -210,3 +215,4 @@
 
 </body>
 </html>
+
