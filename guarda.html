@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Galleria Interattiva</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #gallery {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .photo {
+      display: none;
+      width: 100%;
+      max-width: 750px; /* Adatta le foto alla larghezza massima */
+      border: 2px solid white;
+      border-radius: 10px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .photo.show {
+      display: block;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Animazione della scritta arcobaleno */
+    .rainbow-text {
+      font-family: 'Creepster', cursive;
+      font-size: 36px;
+      background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent; /* Il testo è trasparente per fare vedere il gradiente */
+      animation: rainbow 3s infinite linear, slide 8s linear infinite;
+      display: inline-block;
+      padding: 10px; /* Aggiungi un po' di padding per separare il testo dai bordi */
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Aggiungi un'ombra bianca per maggiore visibilità */
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 100% 0;
+      }
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Stile per il bottone */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #e60000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ff1a1a;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Scritta arcobaleno che scorre -->
+  <h1 class="rainbow-text">Guarda le mie foto</h1>
+
+  <div id="gallery">
+    <!-- Le 10 immagini -->
+    <img class="photo show" src="https://xatimg.com/image/NPI06Hfs9fje.jpg" alt="Foto 0">
+    <img class="photo" src="https://xatimg.com/image/lNidMOVQNdUj.jpg" alt="Foto 1">
+    <img class="photo" src="https://xatimg.com/image/qu9QG94msPhO.jpg" alt="Foto 2">
+    <img class="photo" src="https://xatimg.com/image/PpXaTTpcxV8l.jpg" alt="Foto 3">
+    <img class="photo" src="https://xatimg.com/image/uzE8FJJzU5DR.jpg" alt="Foto 4">
+    <img class="photo" src="https://xatimg.com/image/lXdy9iCs5Zii.jpg" alt="Foto 5">
+    <img class="photo" src="https://xatimg.com/image/FoJ73AgyfdLi.jpg" alt="Foto 6">
+    <img class="photo" src="https://xatimg.com/image/sR7FvajerZSH.jpg" alt="Foto 7">
+    <img class="photo" src="https://via.placeholder.com/300x200?text=Foto+8" alt="Foto 8">
+    <img class="photo" src="https://xatimg.com/image/KI7QJkDW1vAv.jpg" alt="Foto 9">
+  </div>
+
+  <!-- Bottone spostato a destra -->
+  <div class="button-container">
+    <button onclick="showNextPhoto()">PLAY</button>
+  </div>
+
+  <script>
+    let currentIndex = 0;
+
+    function showNextPhoto() {
+      const photos = document.querySelectorAll('.photo');
+
+      // Nascondi la foto attuale
+      photos[currentIndex].classList.remove('show');
+
+      // Incrementa indice
+      currentIndex++;
+
+      // Se siamo oltre l'ultima, ricomincia da 0
+      if (currentIndex >= photos.length) {
+        currentIndex = 0;
+      }
+
+      // Mostra la nuova foto
+      photos[currentIndex].classList.add('show');
+    }
+  </script>
+
+</body>
+</html>
