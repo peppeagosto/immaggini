@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orologio Parlante</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: transparent;
+      color: #eee;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    body > div.wrapper {
+      width: 550px;
+      height: 550px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 5s ease infinite;
+      margin: 20px 0 15px;
+    }
+
+    #output {
+      margin-top: 15px;
+      font-size: 1rem;
+      min-height: 30px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 5s ease infinite;
+      padding: 0 10px;
+      max-width: 100%;
+      word-wrap: break-word;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .sveglia-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 15px #00ffff80;
+      margin: 0 auto;
+    }
+
+    .sveglia-container video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #svegliaBtn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      padding: 8px 16px;
+      background: #00ffff;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00ffff;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    #svegliaBtn:hover {
+      background: #00cccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Orologio Parlante</h1>
+
+    <div class="sveglia-container">
+      <video id="videoParlante" src="https://peppeagosto.github.io/immaggini/orologio2.mp4" playsinline></video>
+      <button id="svegliaBtn">Play</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+<script>
+  function _0x326a(_0x335a9d,_0x5a20d9){const _0x6d53fc=_0x6d53();return _0x326a=function(_0x326a87,_0x1cffcf){_0x326a87=_0x326a87-0x1b6;let _0x1253e6=_0x6d53fc[_0x326a87];return _0x1253e6;},_0x326a(_0x335a9d,_0x5a20d9);}const _0x4e0c4d=_0x326a;function _0x6d53(){const _0x107656=['filter','svegliaBtn','autoplay','\x20e\x20','output','103316CtvHBd','getDate','find','2262BoaXeL','9439020KfOtaK','addEventListener','it-IT','Sono\x20le\x20','\x20minuti.\x20Oggi\x20è\x20il\x20','171280HHCXMB','onvoiceschanged','speak','voice','startsWith','Il\x20cartaio\x20vi\x20dà\x20il\x20benvenuto.','videoParlante','toLocaleString','2641448PvzXNX','play','27894IysbmI','length','273VHzOHq','getVoices','lang','loop','1194925ZIReZH','96XulBEu','textContent','getHours','getMinutes','muted','getElementById'];_0x6d53=function(){return _0x107656;};return _0x6d53();}(function(_0x504366,_0xdf7484){const _0x1fe85a=_0x326a,_0x45eef7=_0x504366();while(!![]){try{const _0x4eb0ce=-parseInt(_0x1fe85a(0x1bd))/0x1+parseInt(_0x1fe85a(0x1d9))/0x2+parseInt(_0x1fe85a(0x1b7))/0x3*(parseInt(_0x1fe85a(0x1ce))/0x4)+-parseInt(_0x1fe85a(0x1cd))/0x5+parseInt(_0x1fe85a(0x1c7))/0x6*(-parseInt(_0x1fe85a(0x1c9))/0x7)+-parseInt(_0x1fe85a(0x1c5))/0x8+parseInt(_0x1fe85a(0x1b8))/0x9;if(_0x4eb0ce===_0xdf7484)break;else _0x45eef7['push'](_0x45eef7['shift']());}catch(_0x1420d0){_0x45eef7['push'](_0x45eef7['shift']());}}}(_0x6d53,0x300a9));const svegliaBtn=document[_0x4e0c4d(0x1d3)](_0x4e0c4d(0x1d5)),output=document[_0x4e0c4d(0x1d3)](_0x4e0c4d(0x1d8)),video=document['getElementById'](_0x4e0c4d(0x1c3));video[_0x4e0c4d(0x1d6)]=![],video[_0x4e0c4d(0x1cc)]=![],video[_0x4e0c4d(0x1d2)]=![];function getFemaleVoice(){const _0x479ea5=_0x4e0c4d,_0x269c69=speechSynthesis[_0x479ea5(0x1ca)](),_0x43f284=_0x269c69[_0x479ea5(0x1d4)](_0x263b6f=>_0x263b6f[_0x479ea5(0x1cb)][_0x479ea5(0x1c1)]('it')&&/female|femmina|woman|girl/i['test'](_0x263b6f['name']));return _0x43f284[_0x479ea5(0x1c8)]>0x0?_0x43f284[0x0]:_0x269c69[_0x479ea5(0x1b6)](_0x4557ca=>_0x4557ca[_0x479ea5(0x1cb)]['startsWith']('it'))||_0x269c69[0x0];}function parlaOraData(){const _0x4c37f8=_0x4e0c4d,_0x3f11c6=new Date(),_0x3a022f=_0x3f11c6[_0x4c37f8(0x1d0)](),_0xe41773=_0x3f11c6[_0x4c37f8(0x1d1)](),_0xf90a60=_0x3f11c6[_0x4c37f8(0x1da)](),_0x53b0e8=_0x3f11c6[_0x4c37f8(0x1c4)](_0x4c37f8(0x1ba),{'month':'long'}),_0x148281=_0x3f11c6['getFullYear'](),_0xc3cfb4=_0x4c37f8(0x1bb)+_0x3a022f+_0x4c37f8(0x1d7)+(_0xe41773<0xa?'zero\x20'+_0xe41773:_0xe41773)+_0x4c37f8(0x1bc)+_0xf90a60+'\x20'+_0x53b0e8+'\x20'+_0x148281+'.';output[_0x4c37f8(0x1cf)]=_0xc3cfb4;const _0x40d37c=getFemaleVoice(),_0x4b942d=new SpeechSynthesisUtterance(_0xc3cfb4);_0x4b942d[_0x4c37f8(0x1cb)]=_0x4c37f8(0x1ba),_0x4b942d[_0x4c37f8(0x1c0)]=_0x40d37c;const _0x3c7492=new SpeechSynthesisUtterance(_0x4c37f8(0x1c2));_0x3c7492[_0x4c37f8(0x1cb)]=_0x4c37f8(0x1ba),_0x3c7492[_0x4c37f8(0x1c0)]=_0x40d37c,_0x4b942d['onend']=()=>{const _0x54ccd5=_0x4c37f8;speechSynthesis[_0x54ccd5(0x1bf)](_0x3c7492),output[_0x54ccd5(0x1cf)]=_0xc3cfb4+'\x20Il\x20cartaio\x20vi\x20dà\x20il\x20benvenuto.';},speechSynthesis[_0x4c37f8(0x1bf)](_0x4b942d);}svegliaBtn[_0x4e0c4d(0x1b9)]('click',()=>{const _0x43e419=_0x4e0c4d;video['currentTime']=0x0,video[_0x43e419(0x1c6)](),setTimeout(()=>{parlaOraData();},0x2ee0);}),speechSynthesis[_0x4e0c4d(0x1be)]=()=>{svegliaBtn['disabled']=![];};
+</script>
+
+</body>
+</html>
