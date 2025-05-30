@@ -6,7 +6,8 @@
 <title>Video STRE a sinistra e destra con immagine trasparente al centro</title>
 <style>
   body, html {
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
     height: 100vh;
     background: transparent;
     display: flex;
@@ -14,27 +15,32 @@
     align-items: center;
     overflow: hidden;
   }
+
   .container {
     position: relative;
-    width: 1048px; /* 190 + 728 + 160 */
+    width: 1118px; /* 195 + 728 + 195 */
     height: 486px;
   }
+
   video.side-video {
     position: absolute;
     top: 0;
-    width: 190px;
+    width: 195px; /* larghezza aumentata */
     height: 486px;
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    z-index: 1; /* sotto immagine */
+    z-index: 1;
   }
+
   video.left-video {
-    left: -50px; /* spostato più a sinistra */
+    left: -60px; /* più a sinistra */
   }
+
   video.right-video {
-    right: -50px; /* spostato più a destra */
+    right: -60px; /* più a destra */
   }
+
   img.center-image {
     position: absolute;
     top: 0;
@@ -44,7 +50,7 @@
     height: 486px;
     pointer-events: none;
     user-select: none;
-    z-index: 10; /* sopra i video */
+    z-index: 10;
   }
 </style>
 </head>
@@ -53,7 +59,7 @@
 <div class="container">
   <!-- Video a sinistra -->
   <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/9.mp4" type="video/mp4" />
+    <source src="https://peppeagosto.github.io/immaggini/10.mp4" type="video/mp4" />
     Il tuo browser non supporta il video.
   </video>
 
