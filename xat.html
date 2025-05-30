@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video STRE a sinistra e destra con immagine trasparente al centro</title>
+<style>
+  body, html {
+    margin: 0; padding: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .container {
+    position: relative;
+    width: 1048px;  /* 728 + 160*2 */
+    height: 486px;
+  }
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 160px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    z-index: 1;
+  }
+  video.left-video {
+    left: 0;
+  }
+  video.right-video {
+    right: 0;
+  }
+  img.center-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    height: 486px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Video a sinistra -->
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/stre.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
+
+  <!-- Immagine trasparente al centro -->
+  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
+
+  <!-- Video a destra -->
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/stre.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
+</div>
+
+</body>
+</html>
