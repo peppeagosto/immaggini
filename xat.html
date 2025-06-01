@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video STRE a sinistra e destra con immagine trasparente al centro</title>
+<title>Video a sinistra e destra con immagine trasparente al centro</title>
 <style>
   body, html {
     margin: 0;
@@ -18,15 +18,15 @@
 
   .container {
     position: relative;
-    width: 1218px; /* 290 + 728 + 290 + qualche margine */
-    height: 496px;
+    width: 1308px; /* aggiustato per nuovi spostamenti */
+    height: 486px;
   }
 
-  /* Video laterali aumentati a 290px */
+  /* Video laterali con dimensioni uguali al contenitore */
   video.side-video {
     position: absolute;
     top: 0;
-    width: 290px; /* larghezza aumentata */
+    width: 290px;
     height: 486px;
     object-fit: cover;
     border-radius: 10px;
@@ -34,17 +34,17 @@
     z-index: 1;
   }
 
-  /* Posizione a sinistra più a sinistra */
+  /* Spostato più a sinistra */
   .left-video {
-    left: -40px; /* più a sinistra rispetto a prima */
+    left: -80px;
   }
 
-  /* Posizione a destra più a destra */
+  /* Spostato più a destra */
   .right-video {
-    right: -30px; /* più a destra rispetto a prima */
+    right: -80px;
   }
 
-  /* Immagine centrale invariata */
+  /* Immagine centrale */
   img.center-image {
     position: absolute;
     top: 0;
@@ -67,7 +67,7 @@
     Il tuo browser non supporta il video.
   </video>
 
-  <!-- Immagine trasparente al centro -->
+  <!-- Immagine centrale -->
   <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
 
   <!-- Video a destra -->
