@@ -4,215 +4,35 @@
   <meta charset="UTF-8">
   <title>COVER TONDA</title>
   <style>
-    body {
-      margin: 0;
-      background: black;
-      overflow: hidden;
-      font-family: 'Arial', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
-
-    .wrapper {
-      width: 600px;
-      height: 450px;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .scrolling-titles {
-      width: 60%;
-      white-space: nowrap;
-      min-height: 25px;
-      max-height: 35px;
-      overflow: hidden;
-      background-color: #111;
-      color: red;
-      box-shadow: 0 2px 10px rgba(255, 0, 0, 0.8);
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .scrolling-titles p {
-      display: inline-block;
-      animation: scroll-left 15s linear infinite;
-    }
-
-    @keyframes scroll-left {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .container {
-      width: 350px;
-      height: 350px;
-      margin: 20px auto;
-      position: relative;
-      background: #111;
-      border: 2px solid red;
-      box-shadow: 0 0 15px red;
-      overflow: hidden;
-      border-radius: 50%;
-    }
-
-    .cover-image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      height: 90%;
-      background-size: cover;
-      background-position: center;
-      border-radius: 50%;
-      z-index: 2;
-      animation: rotate 10s linear infinite;
-      filter: blur(0.5px);
-    }
-
-    .video-player {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 90%;
-      height: 90%;
-      transform: translate(-50%, -50%);
-      overflow: hidden;
-      z-index: 1;
-      border-radius: 50%;
-    }
-
-    .video-player video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .side-video.left,
-    .side-video.right {
-      position: absolute;
-      top: 25px;
-      width: 110px;
-      height: 400px;
-      z-index: 10;
-    }
-
-    .side-video.left {
-      left: -30px;
-    }
-
-    .side-video.right {
-      right: -30px;
-    }
-
-    .side-video video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .controls {
-      position: absolute;
-      bottom: 15px;
-      width: 100%;
-      text-align: center;
-      z-index: 3;
-    }
-
-    .controls button {
-      background-color: #0000;
-      border: none;
-      color: white;
-      padding: 10px;
-      margin: 0 5px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0 0 5px red;
-      width: 45px;
-      height: 45px;
-    }
-
-    .controls button:hover {
-      background-color: #cc0000;
-    }
-
-    .controls input[type="range"] {
-      width: 60px;
-      vertical-align: middle;
-      margin: 0 5px;
-    }
-
-    .brand {
-      font-size: 30px;
-      font-weight: bold;
-      color: red;
-      text-align: center;
-      text-shadow:
-        0px 0px 10px rgba(255, 0, 0, 0.7),
-        0px 0px 20px rgba(255, 0, 0, 0.5),
-        0px 0px 30px rgba(255, 0, 0, 0.3),
-        0px 0px 40px rgba(255, 0, 0, 0.1);
-      margin-top: 20px;
-      animation: glow 2s infinite alternate;
-    }
-
-    @keyframes rotate {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    @keyframes glow {
-      0% {
-        text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5),
-                     0px 0px 20px rgba(255, 0, 0, 0.3);
-      }
-      100% {
-        text-shadow: 0px 0px 30px rgba(255, 0, 0, 1),
-                     0px 0px 50px rgba(255, 0, 0, 0.8),
-                     0px 0px 70px rgba(255, 0, 0, 0.6);
-      }
-    }
-
-
-    /* --- OVERLAY PER PROTEZIONE COPIA --- */
-    #copyOverlay {
-      display: none;
-      position: fixed;
-      z-index: 99999;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.9);
-      color: white;
-      font-size: 3em;
-      font-weight: bold;
-      text-align: center;
-      line-height: 100vh;
-      user-select: none;
-      pointer-events: none;
-      background-image: url('https://i.imgur.com/zQHSMFk.png');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: contain;
-    }
+    /* STILI ORIGINALI */
+    body { margin:0; background:transparent; overflow:hidden; font-family:'Arial',sans-serif; height:100vh; display:flex; justify-content:center; align-items:center; color:white; }
+    .wrapper { width:600px; height:450px; position:relative; display:flex; justify-content:center; align-items:center; flex-direction:column; }
+    .scrolling-titles { width:60%; white-space:nowrap; min-height:25px; max-height:35px; overflow:hidden; background:#111; color:red; box-shadow:0 2px 10px rgba(255,0,0,0.8); margin-bottom:8px; display:flex; justify-content:center; align-items:center; z-index:10; }
+    .scrolling-titles p { display:inline-block; animation:scroll-left 15s linear infinite; }
+    @keyframes scroll-left { 0%{transform:translateX(100%);}100%{transform:translateX(-100%);} }
+    .container { width:350px; height:350px; margin:0 auto; position:relative; background:#222; border:3px solid red; box-shadow:0 0 20px red; overflow:hidden; border-radius:50%; z-index:20; }
+    .cover-image { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90%; height:90%; background-size:cover; background-position:center; border-radius:50%; z-index:30; animation:rotate 10s linear infinite; filter:blur(0.5px); display:none; }
+    .video-player { position:absolute; top:50%; left:50%; width:90%; height:90%; transform:translate(-50%,-50%); overflow:hidden; border-radius:50%; z-index:20; }
+    .video-player video { width:100%; height:100%; object-fit:cover; }
+    .side-video.left, .side-video.right { position:absolute; top:25px; width:110px; height:400px; z-index:20; }
+    .side-video.left { left:-30px; } .side-video.right { right:-30px; }
+    .side-video video { width:100%; height:100%; object-fit:cover; }
+    .controls { position:absolute; bottom:15px; width:100%; text-align:center; z-index:40; }
+    .controls button { background:rgba(0,0,0,0.7); border:2px solid red; color:white; padding:10px; margin:0 5px; border-radius:50%; cursor:pointer; font-size:16px; font-weight:bold; box-shadow:0 0 5px red; width:45px; height:45px; }
+    .controls button:hover { background:#cc0000; }
+    .controls input[type="range"] { width:80px; vertical-align:middle; margin:0 5px; }
+    .brand { font-size:30px; font-weight:bold; color:red; text-align:center; text-shadow:0 0 10px rgba(255,0,0,0.7),0 0 20px rgba(255,0,0,0.5),0 0 30px rgba(255,0,0,0.3),0 0 40px rgba(255,0,0,0.1); margin-top:20px; animation:glow 2s infinite alternate; z-index:10; }
+    @keyframes rotate { 0%{transform:translate(-50%,-50%) rotate(0deg);}100%{transform:translate(-50%,-50%) rotate(360deg);} }
+    @keyframes glow { 0%{text-shadow:0 0 10px rgba(255,0,0,0.5),0 0 20px rgba(255,0,0,0.3);}100%{text-shadow:0 0 30px rgba(255,0,0,1),0 0 50px rgba(255,0,0,0.8),0 0 70px rgba(255,0,0,0.6);} }
+    /* OVERLAY PER PROTEZIONE */
+    #copyOverlay { display:none; position:fixed; z-index:50; top:0; left:0; width:100vw; height:100vh; background:transparent; display:flex; flex-direction:column; justify-content:center; align-items:center; pointer-events:none; }
+    #copyOverlay img { max-width:100px; margin-bottom:20px; }
+    #copyOverlay div { color:yellow; font-size:2em; font-weight:bold; text-shadow:0 0 5px yellow,0 0 10px yellow; text-align:center; }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <div class="scrolling-titles">
-      <p id="liveTitles">Caricamento...</p>
-    </div>
-
+    <div class="scrolling-titles"><p id="liveTitles">Caricamento...</p></div>
     <div class="container">
       <div class="cover-image" id="coverImage"></div>
       <div class="video-player" id="backgroundVideo">
@@ -220,104 +40,22 @@
           <source src="https://peppeagosto.github.io/immaggini/femme.mp4" type="video/mp4">
         </video>
       </div>
-
       <div class="controls">
-        <button id="playButton" onclick="playAudio()">▶️ </button>
+        <button id="playButton" onclick="playAudio()">▶️</button>
         <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
-        <button id="stopButton" onclick="pauseAudio()">⏸️ </button>
+        <button id="stopButton" onclick="pauseAudio()">⏸️</button>
       </div>
     </div>
-
-    <div class="side-video left">
-      <video autoplay loop muted>
-        <source src="https://peppeagosto.github.io/immaggini/990.mp4?v=2" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="side-video right">
-      <video autoplay loop muted>
-        <source src="https://peppeagosto.github.io/immaggini/990.mp4?v=2" type="video/mp4">
-      </video>
-    </div>
+    <div class="side-video left"><video autoplay loop muted><source src="https://peppeagosto.github.io/immaggini/990.mp4?v=2" type="video/mp4"></video></div>
+    <div class="side-video right"><video autoplay loop muted><source src="https://peppeagosto.github.io/immaggini/990.mp4?v=2" type="video/mp4"></video></div>
   </div>
-
-  <!-- OVERLAY PER PROTEZIONE COPIA -->
-  <div id="copyOverlay" aria-hidden="true"></div>
-
   <audio id="audioPlayer" src="https://stm2.srvif.com:7198/;" type="audio/mpeg"></audio>
-
+  <div id="copyOverlay" aria-hidden="true">
+    <img src="https://xatimg.com/image/jVIxSZRqwbBB.gif" alt="Non copiare il codice!">
+    <div>🚫 NON COPIARE CODICE DI CARTAIO 🚫</div>
+  </div>
   <script>
-    const audio = document.getElementById('audioPlayer');
-    const volumeControl = document.getElementById('volumeControl');
-    const coverImage = document.getElementById('coverImage');
-    const backgroundVideo = document.getElementById('backgroundVideo');
-    const copyOverlay = document.getElementById('copyOverlay');
-
-    audio.volume = volumeControl.value;
-    volumeControl.addEventListener('input', () => {
-      audio.volume = volumeControl.value;
-    });
-
-    function playAudio() {
-      audio.play().catch(e => {
-        alert('Clicca "Play" per avviare l\'audio.');
-      });
-    }
-
-    function pauseAudio() {
-      audio.pause();
-    }
-
-    async function fetchTitle() {
-      try {
-        const u='https://api.allorigins.win/raw?url=https://stm2.srvif.com:7198/7.html&_ts=' + new Date().getTime();
-        const r=await fetch(u);
-        const d=await r.text();
-        const t=d.split(',')[6]?.replace(/<[^>]+>/g,'') || 'Titolo non disponibile';
-        updateScrollingTitle(t);
-
-        const q=encodeURIComponent(t);
-        const itunes=await fetch(`https://itunes.apple.com/search?term=${q}&limit=1`);
-        const data=await itunes.json();
-
-        if(data.results && data.results.length > 0){
-          const cover = data.results[0].artworkUrl100.replace('100x100','300x300');
-          coverImage.style.backgroundImage = `url('${cover}')`;
-          coverImage.style.display = 'block';
-          backgroundVideo.style.display = 'none'; // NASCONDI VIDEO
-        } else {
-          coverImage.style.backgroundImage = `url('https://via.placeholder.com/300?text=No+Cover')`;
-          coverImage.style.display = 'none';
-          backgroundVideo.style.display = 'block'; // MOSTRA VIDEO
-        }
-      } catch (e) {
-        console.log('Errore:', e);
-        coverImage.style.backgroundImage = `url('https://via.placeholder.com/300?text=No+Cover')`;
-        coverImage.style.display = 'none';
-        backgroundVideo.style.display = 'block';
-      }
-    }
-
-    function updateScrollingTitle(t) {
-      const p = document.createElement('p');
-      p.textContent = t + '    ';
-      const s = document.getElementById('liveTitles');
-      s.innerHTML = '';
-      s.appendChild(p);
-    }
-
-    fetchTitle();
-    setInterval(fetchTitle, 30000);
-
-    // --- PROTEZIONE COPIA ---
-    document.addEventListener('copy', () => {
-      // Mostra overlay
-      copyOverlay.style.display = 'block';
-      // Rimuovi dopo 3 secondi
-      setTimeout(() => {
-        copyOverlay.style.display = 'none';
-      }, 3000);
-    });
+   const _0xaedad5=_0x3956;(function(_0x3bc45f,_0x52980b){const _0x58a8dd=_0x3956,_0x4138d1=_0x3bc45f();while(!![]){try{const _0x4f794a=-parseInt(_0x58a8dd(0x1d0))/0x1*(-parseInt(_0x58a8dd(0x1d6))/0x2)+-parseInt(_0x58a8dd(0x1df))/0x3+-parseInt(_0x58a8dd(0x1d2))/0x4+-parseInt(_0x58a8dd(0x1d3))/0x5+-parseInt(_0x58a8dd(0x1e2))/0x6*(-parseInt(_0x58a8dd(0x1f4))/0x7)+parseInt(_0x58a8dd(0x1e7))/0x8*(-parseInt(_0x58a8dd(0x1cf))/0x9)+-parseInt(_0x58a8dd(0x1e8))/0xa*(-parseInt(_0x58a8dd(0x1e0))/0xb);if(_0x4f794a===_0x52980b)break;else _0x4138d1['push'](_0x4138d1['shift']());}catch(_0x2a94b7){_0x4138d1['push'](_0x4138d1['shift']());}}}(_0x2dea,0x830da));const audio=document[_0xaedad5(0x1cb)](_0xaedad5(0x1dc)),vol=document[_0xaedad5(0x1cb)](_0xaedad5(0x1ea)),coverImage=document['getElementById'](_0xaedad5(0x1d1)),bgVideo=document[_0xaedad5(0x1cb)](_0xaedad5(0x1e6)),liveTitles=document[_0xaedad5(0x1cb)](_0xaedad5(0x1f2)),overlay=document[_0xaedad5(0x1cb)](_0xaedad5(0x1cc));audio[_0xaedad5(0x1ed)]=vol[_0xaedad5(0x1f5)],vol[_0xaedad5(0x1d7)]('input',()=>audio[_0xaedad5(0x1ed)]=vol[_0xaedad5(0x1f5)]);function playAudio(){const _0x51b780=_0xaedad5;audio['play']()['catch'](()=>alert(_0x51b780(0x1c8)));}function pauseAudio(){const _0x3e2aca=_0xaedad5;audio[_0x3e2aca(0x1e1)]();}function _0x2dea(){const _0x415845=['781ZPXBMS','pause','60yOghgl','none','flex','display','backgroundVideo','1254072qCBtQf','207310OfVXWd','text','volumeControl','replace','results','volume','keydown','innerHeight','block','style','liveTitles','outerWidth','733768OTkLvu','value','ctrlKey','https://api.allorigins.win/raw?url=https://stm2.srvif.com:7198/7.html&_ts=','&limit=1','Clicca\x20Play\x20per\x20avviare.','now','F12','getElementById','copyOverlay','json','length','18lHpdrm','1GFAZeA','coverImage','4068328fXXycH','5289715vbzjmY','key','300x300','1491626AVBNAF','addEventListener','copy','Titolo\x20non\x20disponibile','outerHeight','includes','audioPlayer','artworkUrl100','shiftKey','1021851oivAqz'];_0x2dea=function(){return _0x415845;};return _0x2dea();}async function fetchTitle(){const _0x1eb559=_0xaedad5;try{const _0x3116fa=await fetch(_0x1eb559(0x1f7)+Date[_0x1eb559(0x1c9)]()),_0x376f4f=await _0x3116fa[_0x1eb559(0x1e9)](),_0x5ce007=_0x376f4f['split'](',')[0x6]?.[_0x1eb559(0x1eb)](/<[^>]+>/g,'')||_0x1eb559(0x1d9);liveTitles['textContent']=_0x5ce007;const _0x81214=await fetch('https://itunes.apple.com/search?term='+encodeURIComponent(_0x5ce007)+_0x1eb559(0x1c7)),_0x2e34ec=await _0x81214[_0x1eb559(0x1cd)]();_0x2e34ec[_0x1eb559(0x1ec)]?.[_0x1eb559(0x1ce)]?(coverImage[_0x1eb559(0x1f1)]['backgroundImage']='url(\x27'+_0x2e34ec[_0x1eb559(0x1ec)][0x0][_0x1eb559(0x1dd)][_0x1eb559(0x1eb)]('100x100',_0x1eb559(0x1d5))+'\x27)',coverImage[_0x1eb559(0x1f1)][_0x1eb559(0x1e5)]=_0x1eb559(0x1f0),bgVideo['style']['display']=_0x1eb559(0x1e3),overlay[_0x1eb559(0x1f1)]['display']='none'):(coverImage[_0x1eb559(0x1f1)][_0x1eb559(0x1e5)]='none',bgVideo[_0x1eb559(0x1f1)][_0x1eb559(0x1e5)]=_0x1eb559(0x1f0),overlay[_0x1eb559(0x1f1)]['display']=_0x1eb559(0x1e4));}catch{coverImage['style'][_0x1eb559(0x1e5)]=_0x1eb559(0x1e3),bgVideo[_0x1eb559(0x1f1)][_0x1eb559(0x1e5)]='block',overlay['style'][_0x1eb559(0x1e5)]='flex';}}fetchTitle(),setInterval(fetchTitle,0x7530);function showOverlay(){const _0xa5abbd=_0xaedad5;overlay[_0xa5abbd(0x1f1)]['display']=_0xa5abbd(0x1e4);}document['addEventListener'](_0xaedad5(0x1d8),showOverlay),document['addEventListener'](_0xaedad5(0x1ee),_0x57b000=>{const _0x112b4d=_0xaedad5;(_0x57b000[_0x112b4d(0x1d4)]===_0x112b4d(0x1ca)||_0x57b000['ctrlKey']&&_0x57b000[_0x112b4d(0x1de)]&&['I','C','J'][_0x112b4d(0x1db)](_0x57b000[_0x112b4d(0x1d4)])||_0x57b000[_0x112b4d(0x1f6)]&&_0x57b000[_0x112b4d(0x1d4)]==='U')&&(_0x57b000['preventDefault'](),showOverlay());});let devOpen=![];function _0x3956(_0x2da7c9,_0x3cb2f7){const _0x2deaa2=_0x2dea();return _0x3956=function(_0x39564b,_0x4f5c62){_0x39564b=_0x39564b-0x1c7;let _0x4199da=_0x2deaa2[_0x39564b];return _0x4199da;},_0x3956(_0x2da7c9,_0x3cb2f7);}setInterval(()=>{const _0x568a93=_0xaedad5,_0xd9b5c7=window[_0x568a93(0x1f3)]-window['innerWidth']>0xa0||window[_0x568a93(0x1da)]-window[_0x568a93(0x1ef)]>0xa0;_0xd9b5c7&&!devOpen&&(devOpen=!![],showOverlay());if(!_0xd9b5c7)devOpen=![];},0x3e8);
   </script>
 </body>
 </html>
