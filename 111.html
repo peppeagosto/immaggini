@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video con Neon Glow Potenziato</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 486px;
+    }
+    .video-wrapper {
+      position: absolute;
+      width: 290px;
+      height: 486px;
+      top: 0;
+      overflow: visible;
+      z-index: 1;
+      border-radius: 15px;
+      box-shadow:
+        0 0 12px #ff00ff,
+        0 0 25px #00ffff,
+        0 0 35px #ff00ff,
+        0 0 50px #00ffff,
+        0 0 70px #ff00ff;
+      animation: neonPulse 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes neonPulse {
+      0% {
+        box-shadow:
+          0 0 10px #ff00ff,
+          0 0 20px #00ffff,
+          0 0 30px #ff00ff,
+          0 0 45px #00ffff,
+          0 0 65px #ff00ff;
+      }
+      50% {
+        box-shadow:
+          0 0 18px #ff00ff,
+          0 0 35px #00ffff,
+          0 0 45px #ff00ff,
+          0 0 70px #00ffff,
+          0 0 90px #ff00ff;
+      }
+      100% {
+        box-shadow:
+          0 0 12px #ff00ff,
+          0 0 25px #00ffff,
+          0 0 35px #ff00ff,
+          0 0 50px #00ffff,
+          0 0 70px #ff00ff;
+      }
+    }
+    .video-wrapper video {
+      width: 290px;
+      height: 486px;
+      object-fit: cover;
+      border-radius: 15px;
+      display: block;
+      position: relative;
+      z-index: 2;
+    }
+    .left-wrapper {
+      left: -20px;
+    }
+    .right-wrapper {
+      right: -20px;
+    }
+    .center-image {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 728px;
+      height: 486px;
+      z-index: 3;
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="video-wrapper left-wrapper">
+      <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/111.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro trasparente" />
+
+    <div class="video-wrapper right-wrapper">
+      <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/111.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+  </div>
+</body>
+</html>
