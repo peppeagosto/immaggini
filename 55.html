@@ -94,7 +94,7 @@
   <div class="container">
 
     <div class="video-wrapper left-wrapper">
-      <video autoplay loop muted playsinline>
+      <video id="videoLeft" autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/55.mp4" type="video/mp4" />
       </video>
     </div>
@@ -102,11 +102,18 @@
     <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro trasparente" />
 
     <div class="video-wrapper right-wrapper">
-      <video autoplay loop muted playsinline>
+      <video id="videoRight" autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/55.mp4" type="video/mp4" />
       </video>
     </div>
 
   </div>
+
+  <script>
+    // Rallenta i due video a 0.25x
+    document.getElementById("videoLeft").playbackRate = 0.25;
+    document.getElementById("videoRight").playbackRate = 0.25;
+  </script>
 </body>
 </html>
+
