@@ -3,76 +3,59 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Switch Color Background - Solo Gradiente</title>
+  <title>Switch Color Background - Colori Forti</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      background-image: linear-gradient(109.6deg, rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%);
-      overflow: hidden;
+      height: 100%;
+      background-image: linear-gradient(to right, red, blue);
       transition: background 1s ease;
+      overflow: hidden;
+      position: relative;
     }
 
     .but {
-      z-index: 1000;
-      position: absolute;
+      z-index: 9999;
+      position: fixed;
       background-color: #383838;
       padding: 20px 8px 8px 8px;
       border-radius: 6px;
       border: 1px solid #707070;
       top: 6%;
+      right: 1%;
       color: #ffffff;
       text-decoration: none;
-      right: 1%;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 0 15px #00ffff;
     }
 
     .but:hover {
       background-color: #000000;
       opacity: 0.8;
-    }
-
-    .but1 {
-      z-index: 1000;
-      position: absolute;
-      background-color: #646464;
-      padding: 50px 8px 50px 8px;
-      border-radius: 6px;
-      border: 1px solid #707070;
-      top: 81%;
-      color: #ffffff;
-      text-decoration: none;
-      opacity: 0.8;
-    }
-
-    .but1:hover {
-      opacity: 0.8;
-    }
-
-    .info {
-      z-index: 1000;
-      position: absolute;
-      top: 8%;
-      color: #fff;
+      box-shadow: 0 0 25px #00ffff, 0 0 10px #ff00ff;
     }
   </style>
 </head>
 
 <body>
-  <a class="but" href="#" onclick="Bgs()">Switch Background</a>
+  <div class="but" onclick="Bgs()">🎨 Cambia Colore</div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script>
-    var count = 0;
+    let count = 0;
     const gradients = [
-      'linear-gradient(110.6deg, rgba(179,157,219,1) 7%, rgba(150,159,222,1) 47.7%, rgba(24,255,255,1) 100.6%)',
-      'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-      'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)',
-      'linear-gradient(60deg, #f093fb 0%, #f5576c 100%)',
-      'linear-gradient(to right, #43e97b 0%, #38f9d7 100%)',
-      'linear-gradient(to right, #fa709a 0%, #fee140 100%)',
-      'linear-gradient(to right, #30cfd0 0%, #330867 100%)',
-      'linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)',
-      'linear-gradient(to right, #00c6ff 0%, #0072ff 100%)',
-      'linear-gradient(109.6deg, rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%)'
+      'linear-gradient(to right, red, darkred)',
+      'linear-gradient(to right, lime, green)',
+      'linear-gradient(to right, blue, navy)',
+      'linear-gradient(to right, cyan, teal)',
+      'linear-gradient(to right, magenta, purple)',
+      'linear-gradient(to right, orange, red)',
+      'linear-gradient(to right, yellow, gold)',
+      'linear-gradient(to right, deepskyblue, midnightblue)',
+      'linear-gradient(to right, fuchsia, deeppink)',
+      'linear-gradient(to right, #00ffff, #0000ff)'
     ];
 
     function Bgs() {
