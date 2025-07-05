@@ -1,40 +1,39 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Switch Color Background - Colori Forti</title>
+  <title>Switch Background - Colori Forti</title>
   <style>
     html, body {
       margin: 0;
+      padding: 0;
       height: 100%;
+      width: 100%;
       background-image: linear-gradient(to right, red, blue);
-      transition: transparent 1s ease;
+      transition: background-image 1s ease;
       overflow: hidden;
-      position: relative;
     }
 
     .but {
-      z-index: 9999;
       position: fixed;
-      background-color: #383838;
-      padding: 20px 8px 8px 8px;
-      border-radius: 6px;
-      border: 1px solid #707070;
       top: 6%;
       right: 1%;
-      color: #ffffff;
-      text-decoration: none;
-      cursor: pointer;
+      padding: 15px 20px;
+      background: #000;
+      color: white;
       font-weight: bold;
       font-size: 16px;
-      box-shadow: 0 0 15px #00ffff;
+      border: 2px solid #00ffff;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff inset;
+      transition: all 0.3s ease;
     }
 
     .but:hover {
-      background-color: #000000;
-      opacity: 0.8;
-      box-shadow: 0 0 25px #00ffff, 0 0 10px #ff00ff;
+      background: #111;
+      box-shadow: 0 0 15px #ff00ff, 0 0 25px #00ffff inset;
     }
   </style>
 </head>
@@ -65,6 +64,7 @@
   </script>
 </body>
 </html>
+
 
 
 
