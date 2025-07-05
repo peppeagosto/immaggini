@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Luci DJ</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+    }
+
+    #luce {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      pointer-events: none;
+      z-index: 9999;
+      transition: background-color 0.4s ease;
+    }
+
+    .pulsanti-luce {
+      position: fixed;
+      top: 50px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 10000;
+    }
+
+    .pulsante {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .pulsante.white {
+      background: white;
+      border: 1px solid gray;
+    }
+  </style>
+</head>
+<body>
+
+<div class="pulsanti-luce">
+  <div class="pulsante" style="background:red;" onclick="accendiLuce('rgba(255, 0, 0, 0.3)')"></div>
+  <div class="pulsante" style="background:lime;" onclick="accendiLuce('rgba(0, 255, 0, 0.3)')"></div>
+  <div class="pulsante" style="background:blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.3)')"></div>
+  <div class="pulsante" style="background:yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.3)')"></div>
+  <div class="pulsante" style="background:magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.3)')"></div>
+  <div class="pulsante white" onclick="accendiLuce('transparent')"></div>
+</div>
+
+<div id="luce"></div>
+
+<script>
+function accendiLuce(colore) {
+  document.getElementById('luce').style.backgroundColor = colore;
+}
+</script>
+
+</body>
+</html>
