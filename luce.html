@@ -1,3 +1,62 @@
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Switch Color Background - 20 Colori</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(109.6deg, rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%);
+      overflow: hidden;
+      transition: background 1s ease;
+    }
+
+    .but {
+      z-index: 1000;
+      position: fixed;
+      top: 6%;
+      right: 1%;
+      padding: 14px 20px;
+      background: linear-gradient(to right, #ff00cc, #3333ff);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #ff00cc, 0 0 12px #3333ff inset;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .but:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ffffff, 0 0 20px #ff00cc inset;
+    }
+  </style>
+</head>
+
+<body>
+  <a class="but" href="#" onclick="Bgs()">🎨 Cambia colore</a>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    let count = 0;
+
+    const colori = [
+      '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff',
+      '#00ffff', '#ffa500', '#ff1493', '#00fa9a', '#1e90ff',
+      '#ff6347', '#7b68ee', '#40e0d0', '#f08080', '#20b2aa',
+      '#d2691e', '#c71585', '#3cb371', '#8a2be2', '#2f4f4f'
+    ];
+
+    function Bgs() {
+      $('body').css('background', colori[count]);
+      count = (count + 1) % colori.length;
+    }
+  </script>
+</body>
+</html>
 
 
