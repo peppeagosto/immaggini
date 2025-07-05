@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Luci DJ - Bottoni Centrati</title>
+  <title>Luci DJ - Fix Click</title>
   <style>
     html, body {
       background: transparent !important;
@@ -35,58 +36,45 @@
       top: 50%;
       right: 20px;
       transform: translateY(-50%);
-      background: transparent;
-      padding: 10px;
-      border-radius: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      pointer-events: none;
       z-index: 9999;
+      pointer-events: auto;
     }
 
     .pulsante {
       position: relative;
-      z-index: 10000;
-      cursor: pointer;
-      margin-bottom: 25px; /* spazio tra i bottoni */
-      pointer-events: auto;
-      padding: 10px;
-    }
-
-    .pulsante::before {
-      content: "";
-      display: block;
-      width: 20px;
-      height: 20px;
+      width: 40px;
+      height: 40px;
+      margin: 10px 0;
       border-radius: 50%;
-      background-color: inherit;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      background-color: red;
+      cursor: pointer;
+      z-index: 10000;
+      border: 2px solid #fff;
     }
 
-    .pulsante.white::before {
+    .pulsante.white {
       background-color: white;
-      border: 1px solid gray;
+      border: 2px solid gray;
     }
   </style>
 </head>
 <body style="background: transparent;">
 
 <video id="bg-video" autoplay loop muted>
-  <source src="https://peppeagosto.github.io/immaggini/luce.mp4" type="video/mp4" />
+  <source src="https://peppeagosto.github.io/immaggini/luce.mp4" type="video/mp4">
 </video>
 
 <div id="luce"></div>
 
 <div class="pulsanti-luce">
-  <div class="pulsante" style="background:red;" onclick="accendiLuce('rgba(255, 0, 0, 0.3)')"></div>
-  <div class="pulsante" style="background:lime;" onclick="accendiLuce('rgba(0, 255, 0, 0.3)')"></div>
-  <div class="pulsante" style="background:blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.3)')"></div>
-  <div class="pulsante" style="background:yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.3)')"></div>
-  <div class="pulsante" style="background:magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.3)')"></div>
+  <div class="pulsante" style="background-color: red;" onclick="accendiLuce('rgba(255, 0, 0, 0.3)')"></div>
+  <div class="pulsante" style="background-color: lime;" onclick="accendiLuce('rgba(0, 255, 0, 0.3)')"></div>
+  <div class="pulsante" style="background-color: blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.3)')"></div>
+  <div class="pulsante" style="background-color: yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.3)')"></div>
+  <div class="pulsante" style="background-color: magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.3)')"></div>
   <div class="pulsante white" onclick="accendiLuce('transparent')" title="Spegni luce"></div>
 </div>
 
