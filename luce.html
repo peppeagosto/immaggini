@@ -1,91 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <title>Luci DJ - Fix Click</title>
-  <style>
-    html, body {
-      background: transparent !important;
-      margin: 0;
-      overflow: hidden;
-      height: 100%;
-    }
-
-    video#bg-video {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    #luce {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: transparent;
-      pointer-events: none;
-      z-index: 1;
-      transition: background-color 0.4s ease;
-    }
-
-    .pulsanti-luce {
-      position: fixed;
-      top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 9999;
-      pointer-events: auto;
-    }
-
-    .pulsante {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      margin: 10px 0;
-      border-radius: 50%;
-      background-color: red;
-      cursor: pointer;
-      z-index: 10000;
-      border: 2px solid #fff;
-    }
-
-    .pulsante.white {
-      background-color: white;
-      border: 2px solid gray;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Accendi le luci colorate</title>
+<style>
+  body {
+    background: transparent;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    transition: background-color 0.7s ease;
+  }
+  .but {
+    z-index: 1000;
+    position: absolute;
+    background-color: #383838;
+    padding: 20px 15px;
+    border-radius: 6px;
+    border: 1px solid #707070;
+    top: 6%;
+    color: #ffffff;
+    right: 1%;
+    cursor: pointer;
+    user-select: none;
+  }
+  .but:hover {
+    background-color: #000000;
+    opacity: 0.8;
+  }
+</style>
 </head>
-<body style="background: transparent;">
+<body>
 
-<video id="bg-video" autoplay loop muted>
-  <source src="https://peppeagosto.github.io/immaggini/luce.mp4" type="video/mp4">
-</video>
-
-<div id="luce"></div>
-
-<div class="pulsanti-luce">
-  <div class="pulsante" style="background-color: red;" onclick="accendiLuce('rgba(255, 0, 0, 0.3)')"></div>
-  <div class="pulsante" style="background-color: lime;" onclick="accendiLuce('rgba(0, 255, 0, 0.3)')"></div>
-  <div class="pulsante" style="background-color: blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.3)')"></div>
-  <div class="pulsante" style="background-color: yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.3)')"></div>
-  <div class="pulsante" style="background-color: magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.3)')"></div>
-  <div class="pulsante white" onclick="accendiLuce('transparent')" title="Spegni luce"></div>
-</div>
+<div class="but" onclick="cambiaLuce()">Accendi le luci colorate</div>
 
 <script>
-  function accendiLuce(colore) {
-    document.getElementById('luce').style.backgroundColor = colore;
+  const luci = [
+    'rgba(255, 0, 0, 0.3)',       // rosso
+    'rgba(0, 255, 0, 0.3)',       // verde
+    'rgba(0, 0, 255, 0.3)',       // blu
+    'rgba(255, 255, 0, 0.3)',     // giallo
+    'rgba(255, 0, 255, 0.3)',     // magenta
+    'rgba(0, 255, 255, 0.3)',     // ciano
+    'transparent'                 // trasparente/spegnimento
+  ];
+  let indice = 0;
+
+  function cambiaLuce() {
+    document.body.style.backgroundColor = luci[indice];
+    indice++;
+    if (indice >= luci.length) indice = 0;
   }
 </script>
 
 </body>
 </html>
+
 
 
 
