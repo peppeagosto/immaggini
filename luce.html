@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Luci DJ fix</title>
+<title>Luci DJ - fix area cliccabile</title>
 <style>
   body {
     margin: 0;
@@ -32,38 +32,47 @@
   .pulsanti-luce {
     position: fixed;
     top: 50px; right: 10px;
-    /* background trasparente senza bordi */
-    background: transparent !important;
-    border: none !important;
+    background: transparent;
     padding: 10px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    pointer-events: none; /* container non riceve eventi */
+    pointer-events: none;
     z-index: 9999;
   }
 
   .pulsante {
-    width: 20px; height: 20px;
-    border-radius: 50%;
+    position: relative;
+    z-index: 10000;
     cursor: pointer;
     margin-bottom: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.7);
-    border: 2px solid white;
-    position: relative;
-    z-index: 9999;
-    pointer-events: auto; /* bottoni ricevano click */
-    transition: transform 0.2s ease;
-  }
-  .pulsante:hover {
-    transform: scale(1.2);
+    pointer-events: auto;
+
+    /* area cliccabile più grande */
+    padding: 10px; /* allarga la zona cliccabile */
   }
 
-  .pulsante.white {
-    background: white;
-    border-color: gray;
+  /* cerchio visibile */
+  .pulsante::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: inherit;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
+
+  .pulsante.white::before {
+    background-color: white;
+    border: 1px solid gray;
+  }
+
+  /* niente zoom hover per evitare confusione */
 </style>
 </head>
 <body>
@@ -91,4 +100,5 @@
 
 </body>
 </html>
+
 
