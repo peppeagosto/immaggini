@@ -2,12 +2,13 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Luci DJ - Xat Ready</title>
+  <title>Luci DJ - Bottoni Centrati</title>
   <style>
     html, body {
       background: transparent !important;
       margin: 0;
       overflow: hidden;
+      height: 100%;
     }
 
     video#bg-video {
@@ -31,7 +32,9 @@
 
     .pulsanti-luce {
       position: fixed;
-      top: 50px; right: 10px;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
       background: transparent;
       padding: 10px;
       border-radius: 10px;
@@ -46,9 +49,9 @@
       position: relative;
       z-index: 10000;
       cursor: pointer;
-      margin-bottom: 10px;
+      margin-bottom: 25px; /* spazio tra i bottoni */
       pointer-events: auto;
-      padding: 10px; /* rende clic più facile */
+      padding: 10px;
     }
 
     .pulsante::before {
@@ -84,7 +87,7 @@
   <div class="pulsante" style="background:blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.3)')"></div>
   <div class="pulsante" style="background:yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.3)')"></div>
   <div class="pulsante" style="background:magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.3)')"></div>
-  <div class="pulsante white" onclick="accendiLuce('transparent')"></div>
+  <div class="pulsante white" onclick="accendiLuce('transparent')" title="Spegni luce"></div>
 </div>
 
 <script>
@@ -95,6 +98,7 @@
 
 </body>
 </html>
+
 
 
 
