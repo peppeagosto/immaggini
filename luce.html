@@ -1,127 +1,96 @@
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Luce Animata</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100vh;
-      background: transparent;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>Luci DJ con animazione</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent;
+  }
 
-    /* Luce di sfondo */
-    #luce {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: transparent;
-      z-index: -1; /* dietro tutto */
-      animation: none;
-      transition: background-color 0.6s ease;
-    }
+  /* Div luce animato */
+  #luce {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    z-index: -1;
+    animation: none;
+    transition: background-color 0.5s ease;
+  }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
 
-    /* Contenitore bottone */
-    .lampadina-container {
-      position: fixed;
-      top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      z-index: 10;
-    }
+  /* Contenitore dei bottoni tondi */
+  .pulsanti-luce {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+  }
 
-    .lampadina {
-      width: 60px;
-      height: 90px;
-      background: #ffc107;
-      border-radius: 30px 30px 18px 18px;
-      box-shadow: 0 0 15px #ffeb3b;
-      cursor: pointer;
-      position: relative;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
+  .pulsante {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px #000;
+    border: 2px solid white;
+    transition: transform 0.2s;
+  }
 
-    .lampadina::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 36px;
-      height: 48px;
-      background: radial-gradient(circle at center, #fff9c4, #fbc02d);
-      border-radius: 18px 18px 14px 14px;
-      box-shadow: 0 0 12px #fffde7;
-      filter: drop-shadow(0 0 8px #fffde7);
-    }
+  .pulsante:hover {
+    transform: scale(1.2);
+  }
 
-    .lampadina::after {
-      content: '';
-      position: absolute;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 32px;
-      height: 14px;
-      background: #7b5e00;
-      border-radius: 8px;
-      box-shadow: inset 0 2px 4px #a18500;
-    }
-
-    .lampadina:hover {
-      background: #ffecb3;
-      box-shadow: 0 0 30px #fff59d;
-    }
-  </style>
+  .bianco {
+    background-color: white;
+    border: 2px solid gray;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Sfondo luce -->
-  <div id="luce"></div>
+<!-- Div luce -->
+<div id="luce"></div>
 
-  <!-- Bottone lampadina -->
-  <div class="lampadina-container">
-    <div class="lampadina" onclick="cambiaLuce()" title="Cambia colore luce"></div>
-  </div>
+<!-- Pulsanti colorati -->
+<div class="pulsanti-luce">
+  <div class="pulsante" style="background:red;" onclick="accendiLuce('rgba(255, 0, 0, 0.4)')"></div>
+  <div class="pulsante" style="background:lime;" onclick="accendiLuce('rgba(0, 255, 0, 0.4)')"></div>
+  <div class="pulsante" style="background:blue;" onclick="accendiLuce('rgba(0, 0, 255, 0.4)')"></div>
+  <div class="pulsante" style="background:yellow;" onclick="accendiLuce('rgba(255, 255, 0, 0.4)')"></div>
+  <div class="pulsante" style="background:magenta;" onclick="accendiLuce('rgba(255, 0, 255, 0.4)')"></div>
+  <div class="pulsante bianco" onclick="accendiLuce('transparent')"></div>
+</div>
 
-  <script>
-    const luci = [
-      'rgba(255, 0, 0, 0.6)',       // rosso
-      'rgba(0, 255, 0, 0.6)',       // verde
-      'rgba(0, 0, 255, 0.6)',       // blu
-      'rgba(255, 255, 0, 0.6)',     // giallo
-      'rgba(255, 0, 255, 0.6)',     // magenta
-      'rgba(0, 255, 255, 0.6)',     // ciano
-      'transparent'                // spento
-    ];
+<script>
+  function accendiLuce(colore) {
+    const luce = document.getElementById('luce');
+    luce.style.backgroundColor = colore;
 
-    let indice = 0;
-
-    function cambiaLuce() {
-      const luce = document.getElementById('luce');
-      const colore = luci[indice];
-
-      luce.style.backgroundColor = colore;
-
-      if (colore !== 'transparent') {
-        luce.style.animation = 'pulse 2s infinite';
-      } else {
-        luce.style.animation = 'none';
-      }
-
-      indice = (indice + 1) % luci.length;
+    if (colore !== 'transparent') {
+      luce.style.animation = 'pulse 2s infinite';
+    } else {
+      luce.style.animation = 'none';
     }
-  </script>
+  }
+</script>
 
 </body>
 </html>
-
 
 
