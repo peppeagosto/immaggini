@@ -1,51 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<title>Scariche Elettriche Trasparenti</title>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    background: #000;
-    font-family: Verdana, sans-serif;
-    color: #00ffff;
-  }
-  .electric-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.1); /* sfondo nero molto trasparente */
-    overflow: hidden;
-  }
-  .electric-gif {
-    position: absolute;
-    width: 250px; /* più grande */
-    height: auto;
-    pointer-events: none; /* non cliccabile */
-  }
-  .left-gif {
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-  }
-  .center-gif {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .right-gif {
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>EL Diablo - Scariche Elettriche</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* 🎥 VIDEO DI SFONDO */
+    .videobg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* ⚡ SCARICHE ELETTRICHE */
+    .scarica {
+      position: absolute;
+      width: 180px;
+      height: auto;
+      opacity: 1;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .s1 { top: 0; left: 0; }
+    .s2 { top: 33%; left: 0; }
+    .s3 { bottom: 0; left: 0; }
+
+    .s4 { top: 0; right: 0; transform: scaleX(-1); }
+    .s5 { top: 33%; right: 0; transform: scaleX(-1); }
+    .s6 { bottom: 0; right: 0; transform: scaleX(-1); }
+
+    /* CENTRA CHAT (SE SERVE) */
+    .chat {
+      position: absolute;
+      width: 620px;
+      height: 410px;
+      z-index: 5;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
 </head>
 <body>
-  <div class="electric-container">
-    <img class="electric-gif left-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica sinistra" />
-    <img class="electric-gif center-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica centro" />
-    <img class="electric-gif right-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica destra" />
+
+  <!-- 🎥 VIDEO SFONDO -->
+  <video class="videobg" src="https://peppeagosto.github.io/immaggini/lorydiablo.mp4" autoplay loop muted></video>
+
+  <!-- ⚡ 6 SCARICHE ELETTRICHE -->
+  <img class="scarica s1" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+  <img class="scarica s2" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+  <img class="scarica s3" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+  <img class="scarica s4" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+  <img class="scarica s5" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+  <img class="scarica s6" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="">
+
+  <!-- (facoltativo) Contenuto centrale -->
+  <div class="chat">
+    <!-- qui puoi mettere player o altro -->
   </div>
+
 </body>
 </html>
