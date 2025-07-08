@@ -1,78 +1,47 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video a sinistra e destra con immagine trasparente al centro</title>
+<html><head>
+        <meta charset="utf-8">
+        <title>diablo video</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+
+
 <style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
 
-  .container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-  }
+body {margin:0; padding:0;}
 
-  video.side-video {
-    position: absolute;
-    top: 0;
-    width: 290px;
-    height: 486px;
+.videobg {
+    width: 100%;
+    height:100vh;
     object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    z-index: 1;
-  }
+    z-index: 99999;
+}
+.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
 
-  /* Avvicinati al centro */
-  .left-video {
-    left: -40px;
-  }
-
-  .right-video {
-    right: -40px;
-  }
-
-  img.center-image {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
-  }
 </style>
-</head>
-<body>
 
-<div class="container">
-  <!-- Video a sinistra -->
-  <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/9999.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
 
-  <!-- Immagine centrale -->
-  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
+    </head>
+    <body>
 
-  <!-- Video a destra -->
-  <video class="side-video right-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/9999.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
-</div>
 
-</body>
-</html>
+      <!-- Area Video Aghetto Server89.com-->
+          <video class="videobg" src="https://peppeagosto.github.io/immaggini/9999.mp4" autoplay="" loop="" muted="">
+        <source src="https://peppeagosto.github.io/immaggini/9999.mp4" type="video/mp4">
+      </video>
+
+
+
+
+0 comments on commit fa3438b
+@peppeagosto
+Comment
+ 
+Leave a comment
+ 
+ You’re receiving notifications because you’re watching this repository.
+Footer
+© 2024 GitHub, Inc.
+Footer navigation
+Terms
+Privac
+</body></html>
