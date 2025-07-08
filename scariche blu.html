@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Scariche Elettriche Trasparenti</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    font-family: Verdana, sans-serif;
+    color: #00ffff;
+  }
+  .electric-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.1); /* sfondo nero molto trasparente */
+    overflow: hidden;
+  }
+  .electric-gif {
+    position: absolute;
+    width: 250px; /* più grande */
+    height: auto;
+    pointer-events: none; /* non cliccabile */
+  }
+  .left-gif {
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  .center-gif {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .right-gif {
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+</style>
+</head>
+<body>
+  <div class="electric-container">
+    <img class="electric-gif left-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica sinistra" />
+    <img class="electric-gif center-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica centro" />
+    <img class="electric-gif right-gif" src="https://xatimg.com/image/wMFr3qpPkXVV.gif" alt="Scarica elettrica destra" />
+  </div>
+</body>
+</html>
