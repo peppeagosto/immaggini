@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Globo Interattivo - Visitatori xat.com</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.29.0/dist/globe.gl.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -39,23 +43,9 @@
       max-width: 100%;
       max-height: 100%;
     }
-    .title {
-      font-size: 32px;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      text-shadow: 0 0 5px #00ffea, 0 0 10px #ff00ff;
-      margin-bottom: 10px;
-    }
-    .status {
-      font-size: 16px;
-      background: linear-gradient(90deg, #00ffea, #ff00ff, #00b7eb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
     .label {
       position: absolute;
       font-weight: bold;
-      pointer-events: none;
       font-size: 12px;
       text-shadow: 0 0 5px black;
       white-space: nowrap;
@@ -74,9 +64,6 @@
       font-weight: bold;
       text-align: center;
       text-shadow: 0 0 5px black;
-      user-select: none;
-      pointer-events: none;
-      font-family: 'Courier New', Courier, monospace;
       background: rgba(0, 0, 0, 0.3);
       padding: 6px 20px;
       border-radius: 10px;
@@ -87,7 +74,7 @@
       position: fixed;
       right: 20px;
       top: 100px;
-      width: 250px;
+      width: 270px;
       max-height: 400px;
       background: rgba(0, 0, 0, 0.7);
       border: 2px solid #00ffea;
@@ -128,23 +115,37 @@
       color: #ffff00;
       font-size: 12px;
     }
+    #riepilogo-visite {
+      margin-top: 10px;
+      border-top: 1px solid #00ffaa;
+      padding-top: 10px;
+      font-weight: bold;
+      color: #00ffaa;
+      font-size: 13px;
+    }
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
   </style>
 </head>
 <body>
   <div id="datario"></div>
-  <div class="title">Globo Visitatori xat.com</div>
   <div id="globe-container"></div>
-  <div class="status" id="status">Caricamento posizione...</div>
   <div id="visitor-list">
     <h3>Visitatori</h3>
     <div id="visitor-count">Totale visitatori: 0</div>
     <ul id="visitor-list-ul"></ul>
+    <div id="riepilogo-visite"></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://unpkg.com/globe.gl@2.29.0/dist/globe.gl.min.js"></script>
   <script>
+    // CONFIG FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyB15gRwPXe7Pl6KLEhyacg0-ep5pOr2Qu8",
+      authDomain: "your-project.firebaseapp.com",
+      projectId: "your-project",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     const globe = Globe()
       .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
       .backgroundColor('#0a0a1a')
@@ -154,14 +155,17 @@
       .pointsMerge(true)
       (document.getElementById('globe-container'));
 
-    let visitors = [];
+    // *** AGGIUNTA ROTAZIONE AUTOMATICA ***
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.3;
+    // ***************************************
 
-    function getScreenPosition(lat, lng, radius = 1.01) {
+    function getScreenPosition(lat, lng) {
       const phi = (90 - lat) * (Math.PI / 180);
       const theta = (lng + 180) * (Math.PI / 180);
-      const x = -radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.cos(phi);
-      const z = radius * Math.sin(phi) * Math.sin(theta);
+      const x = -Math.sin(phi) * Math.cos(theta);
+      const y = Math.cos(phi);
+      const z = Math.sin(phi) * Math.sin(theta);
       const vector = new THREE.Vector3(x, y, z);
       vector.project(globe.camera());
       const canvas = globe.renderer().domElement;
@@ -178,25 +182,77 @@
       return now.toLocaleTimeString('it-IT', { hour12: false });
     }
 
-    function addVisitor(lat, lng, city) {
-      if (isNaN(lat) || isNaN(lng)) return null;
-      const timestamp = formatTimestamp();
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = `${city} (${timestamp})`;
-      document.body.appendChild(label);
+    async function saveVisitor(city, region, country, lat, lon) {
+      const timestamp = Date.now();
+      await db.collection("visitatori").add({
+        city,
+        region,
+        country,
+        lat,
+        lon,
+        timestamp
+      });
+    }
 
-      const visitor = { lat, lng, city, timestamp, label };
-      visitors.push(visitor);
-      globe.pointsData(visitors);
+    async function loadVisitors() {
+      const snapshot = await db.collection("visitatori")
+        .orderBy("timestamp", "desc")
+        .limit(100)
+        .get();
 
-      const li = document.createElement('li');
-      li.innerHTML = `${city} <span class="timestamp">${timestamp}</span>`;
-      document.getElementById('visitor-list-ul').prepend(li);
+      const data = [];
+      const ul = document.getElementById("visitor-list-ul");
+      ul.innerHTML = "";
 
-      document.getElementById('visitor-count').textContent = `Totale visitatori: ${visitors.length}`;
+      const visitePerCitta = {};
 
-      function updateLabel() {
+      snapshot.forEach(doc => {
+        const v = doc.data();
+        const key = `${v.city}|${v.region}|${v.country}`;
+
+        // Conta visite per città
+        if (!visitePerCitta[key]) {
+          visitePerCitta[key] = {
+            city: v.city,
+            region: v.region,
+            country: v.country,
+            lat: v.lat,
+            lon: v.lon,
+            count: 0
+          };
+        }
+        visitePerCitta[key].count++;
+
+        // Label sul globo
+        const label = document.createElement("div");
+        label.className = "label";
+        label.textContent = `${v.city}, ${v.region}`;
+        document.body.appendChild(label);
+
+        // Lista singola visita
+        const li = document.createElement("li");
+        li.innerHTML = `${v.city}, ${v.region} <span class="timestamp">${formatTimestamp()}</span>`;
+        ul.appendChild(li);
+
+        data.push({ lat: v.lat, lng: v.lon });
+        updateLabel(label, v.lat, v.lon);
+      });
+
+      // Mostra riepilogo visite per città sotto lista
+      const riepilogoDiv = document.getElementById("riepilogo-visite");
+      let riepilogoTesto = "Visite totali per città:<br>";
+      for (const key in visitePerCitta) {
+        const c = visitePerCitta[key];
+        riepilogoTesto += `${c.city}, ${c.region}, ${c.country}: ${c.count} visite<br>`;
+      }
+      riepilogoDiv.innerHTML = riepilogoTesto;
+
+      globe.pointsData(data);
+      document.getElementById("visitor-count").textContent = `Totale visitatori: ${data.length}`;
+    }
+
+    function updateLabel(label, lat, lng) {
+      function update() {
         const pos = getScreenPosition(lat, lng);
         if (pos.visible) {
           label.style.display = 'block';
@@ -205,38 +261,29 @@
         } else {
           label.style.display = 'none';
         }
+        requestAnimationFrame(update);
       }
-
-      return updateLabel;
+      update();
     }
 
     async function getVisitorLocation() {
-      const status = document.getElementById('status');
       try {
         const res = await fetch('https://ipinfo.io/json?token=b36581ef70cb35');
+        if (!res.ok) throw new Error(`Errore API: ${res.status}`);
         const data = await res.json();
-        const [lat, lon] = data.loc.split(',');
-        const cityText = `${data.city}, ${data.region}, ${data.country}`;
-
-        status.textContent = `Visitatore da: ${cityText}`;
-        const updateLabel = addVisitor(parseFloat(lat), parseFloat(lon), cityText);
-
-        if (updateLabel) {
-          requestAnimationFrame(function animate() {
-            updateLabel();
-            requestAnimationFrame(animate);
-          });
-        }
+        const [lat, lon] = data.loc ? data.loc.split(',') : [41.9, 12.5]; // fallback Roma
+        const city = data.city || 'Sconosciuto';
+        const region = data.region || '';
+        const country = data.country || 'IT';
+        await saveVisitor(city, region, country, parseFloat(lat), parseFloat(lon));
+        loadVisitors();
       } catch (err) {
-        status.textContent = 'Errore nella geolocalizzazione.';
-        console.error(err);
+        console.error('Errore geolocalizzazione:', err);
       }
     }
 
     getVisitorLocation();
-
-    globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 1;
+    setInterval(loadVisitors, 10000); // aggiorna ogni 10 sec
 
     function updateDateTime() {
       const now = new Date();
@@ -253,4 +300,5 @@
   </script>
 </body>
 </html>
+
 
