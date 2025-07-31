@@ -213,7 +213,7 @@
     async function getVisitorLocation() {
       const status = document.getElementById('status');
       try {
-        const res = await fetch('https://ipinfo.io/json?token=6e1f90b3092cde');
+        const res = await fetch('https://ipinfo.io/json?token=b36581ef70cb35');
         const data = await res.json();
         const [lat, lon] = data.loc.split(',');
         const cityText = `${data.city}, ${data.region}, ${data.country}`;
@@ -253,3 +253,4 @@
   </script>
 </body>
 </html>
+
