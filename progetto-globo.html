@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Globo Interattivo - Visitatori xat.com</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffea;
+      user-select: none;
+      overflow: hidden;
+    }
+    #globe-container {
+      width: 500px;
+      height: 500px;
+      border: 2px solid #00ffea;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 234, 0.7);
+      background: radial-gradient(circle, #1c2526, #0a0a1a);
+      overflow: hidden;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #globe-container canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .title {
+      font-size: 32px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 0 0 5px #00ffea, 0 0 10px #ff00ff;
+      margin-bottom: 10px;
+    }
+    .status {
+      font-size: 16px;
+      background: linear-gradient(90deg, #00ffea, #ff00ff, #00b7eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .label {
+      position: absolute;
+      font-weight: bold;
+      pointer-events: none;
+      font-size: 12px;
+      text-shadow: 0 0 5px black;
+      white-space: nowrap;
+      color: #00ff00;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2px 6px;
+      border-radius: 3px;
+      z-index: 1000;
+    }
+    #datario {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 0 0 5px black;
+      user-select: none;
+      pointer-events: none;
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 20px;
+      border-radius: 10px;
+      white-space: nowrap;
+      z-index: 10000;
+    }
+    #visitor-list {
+      position: fixed;
+      right: 20px;
+      top: 100px;
+      width: 250px;
+      max-height: 400px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ffea;
+      border-radius: 10px;
+      padding: 10px;
+      overflow-y: auto;
+      color: #00ff00;
+      font-size: 14px;
+      z-index: 1000;
+    }
+    #visitor-list h3 {
+      margin: 0 0 10px 0;
+      color: #00ffea;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    #visitor-count {
+      margin: 5px 0;
+      color: #ff00ff;
+      text-align: center;
+      font-weight: bold;
+    }
+    #visitor-list ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #visitor-list li {
+      margin-bottom: 5px;
+      padding: 5px;
+      background: rgba(0, 255, 234, 0.1);
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #visitor-list li span.timestamp {
+      color: #ffff00;
+      font-size: 12px;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+  </style>
+</head>
+<body>
+  <div id="datario"></div>
+  <div class="title">Globo Visitatori xat.com</div>
+  <div id="globe-container"></div>
+  <div class="status" id="status">Caricamento posizione...</div>
+  <div id="visitor-list">
+    <h3>Visitatori</h3>
+    <div id="visitor-count">Totale visitatori: 0</div>
+    <ul id="visitor-list-ul"></ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.29.0/dist/globe.gl.min.js"></script>
+  <script>
+    const globe = Globe()
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
+      .backgroundColor('#0a0a1a')
+      .pointRadius(0.5)
+      .pointColor(() => '#ff0000')
+      .pointAltitude(0.1)
+      .pointsMerge(true)
+      (document.getElementById('globe-container'));
+
+    let visitors = [];
+
+    function getScreenPosition(lat, lng, radius = 1.01) {
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lng + 180) * (Math.PI / 180);
+      const x = -radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.cos(phi);
+      const z = radius * Math.sin(phi) * Math.sin(theta);
+      const vector = new THREE.Vector3(x, y, z);
+      vector.project(globe.camera());
+      const canvas = globe.renderer().domElement;
+      const containerRect = document.getElementById('globe-container').getBoundingClientRect();
+      return {
+        x: (vector.x * 0.5 + 0.5) * canvas.clientWidth + containerRect.left,
+        y: (-vector.y * 0.5 + 0.5) * canvas.clientHeight + containerRect.top,
+        visible: vector.z < 1
+      };
+    }
+
+    function formatTimestamp() {
+      const now = new Date();
+      return now.toLocaleTimeString('it-IT', { hour12: false });
+    }
+
+    function addVisitor(lat, lng, city) {
+      if (isNaN(lat) || isNaN(lng)) return null;
+      const timestamp = formatTimestamp();
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = `${city} (${timestamp})`;
+      document.body.appendChild(label);
+
+      const visitor = { lat, lng, city, timestamp, label };
+      visitors.push(visitor);
+      globe.pointsData(visitors);
+
+      const li = document.createElement('li');
+      li.innerHTML = `${city} <span class="timestamp">${timestamp}</span>`;
+      document.getElementById('visitor-list-ul').prepend(li);
+
+      document.getElementById('visitor-count').textContent = `Totale visitatori: ${visitors.length}`;
+
+      function updateLabel() {
+        const pos = getScreenPosition(lat, lng);
+        if (pos.visible) {
+          label.style.display = 'block';
+          label.style.left = `${pos.x}px`;
+          label.style.top = `${pos.y - 10}px`;
+        } else {
+          label.style.display = 'none';
+        }
+      }
+
+      return updateLabel;
+    }
+
+    async function getVisitorLocation() {
+      const status = document.getElementById('status');
+      try {
+        const res = await fetch('https://ipinfo.io/json?token=6e1f90b3092cde');
+        const data = await res.json();
+        const [lat, lon] = data.loc.split(',');
+        const cityText = `${data.city}, ${data.region}, ${data.country}`;
+
+        status.textContent = `Visitatore da: ${cityText}`;
+        const updateLabel = addVisitor(parseFloat(lat), parseFloat(lon), cityText);
+
+        if (updateLabel) {
+          requestAnimationFrame(function animate() {
+            updateLabel();
+            requestAnimationFrame(animate);
+          });
+        }
+      } catch (err) {
+        status.textContent = 'Errore nella geolocalizzazione.';
+        console.error(err);
+      }
+    }
+
+    getVisitorLocation();
+
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 1;
+
+    function updateDateTime() {
+      const now = new Date();
+      const d = now.toLocaleDateString('it-IT').split('/');
+      const t = now.toLocaleTimeString('it-IT');
+      document.getElementById('datario').innerHTML = `
+        <span style="color:#00ffff;">Ora:</span> 
+        <span style="color:#ffffff;">${t}</span> 
+        <span style="color:#00ffff;">- Data:</span> 
+        <span style="color:#ff00ff;">${d[0]}</span>/<span style="color:#00ff00;">${d[1]}</span>/<span style="color:#ffff00;">${d[2]}</span>
+      `;
+    }
+    setInterval(updateDateTime, 1000);
+  </script>
+</body>
+</html>
