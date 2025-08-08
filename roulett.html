@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Roulette Il Cartaio</title>
+<style>
+  body {
+    margin: 0;
+    background: radial-gradient(circle, #000000, #222222);
+    color: gold;
+    font-family: 'Arial Black', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    user-select: none;
+    padding: 15px;
+  }
+  h1 {
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px gold;
+  }
+  #loginSection, #gameSection {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #loginSection input {
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 2px solid gold;
+    width: 220px;
+    margin-right: 10px;
+    color: black;
+  }
+  #loginSection button {
+    font-size: 18px;
+    padding: 7px 20px;
+    border-radius: 25px;
+    border: none;
+    background: gold;
+    cursor: pointer;
+    box-shadow: 0 0 20px gold;
+  }
+  #loginSection button:hover {
+    background: #ffdd55;
+  }
+  #cartaio {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 7px gold;
+  }
+  .roulette-container {
+    position: relative;
+    width: 420px;
+    height: 420px;
+    margin: 0 auto 10px auto;
+  }
+  .table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle at center, #064214 70%, #01350f 100%);
+    border-radius: 50%;
+    border: 6px solid gold;
+    box-shadow: 0 0 40px gold inset;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+  .numbers-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 420px;
+    height: 420px;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  .number {
+    position: absolute;
+    width: 38px;
+    height: 23px;
+    line-height: 23px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.1);
+    text-shadow: 0 0 5px black;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+  .number.selected {
+    background: gold;
+    color: black;
+  }
+  .red { color: red; }
+  .black {
+    color: black;
+    text-shadow: 0 0 2px white;
+  }
+  .green {
+    color: limegreen;
+    font-weight: 900;
+  }
+  #pointer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 160px;
+    background: linear-gradient(to top, gold, #ffaa00);
+    border-radius: 4px;
+    box-shadow: 0 0 15px gold;
+    transform-origin: 50% 90%;
+    transform: translate(-50%, -100%) rotate(0deg);
+    z-index: 5;
+    pointer-events: none;
+  }
+  #playBtn {
+    margin-top: 10px;
+    background: gold;
+    border: none;
+    padding: 12px 30px;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 20px gold;
+    transition: background 0.3s;
+  }
+  #playBtn:hover:not(:disabled) { background: #ffdd55; }
+  #playBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  #result {
+    margin-top: 15px;
+    font-size: 24px;
+    min-height: 30px;
+    min-width: 380px;
+    text-shadow: 0 0 7px gold;
+  }
+  #leaderboard {
+    margin-top: 30px;
+    width: 400px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid gold;
+    border-radius: 10px;
+    padding: 10px;
+    color: gold;
+    font-weight: bold;
+    box-shadow: 0 0 10px gold;
+  }
+  #leaderboard h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    text-shadow: 0 0 8px gold;
+  }
+  #leaderboard ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  #leaderboard li {
+    padding: 3px 5px;
+    border-bottom: 1px solid gold;
+    display: flex;
+    justify-content: space-between;
+  }
+  #resetBtn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    background: gold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 20px gold;
+    display: none;
+  }
+  #resetBtn:hover {
+    background: #ffdd55;
+  }
+</style>
+</head>
+<body>
+
+<h1>Roulette 3D - Il Cartaio</h1>
+
+<div id="loginSection">
+  <input type="text" id="nickname" placeholder="Inserisci il tuo nickname" maxlength="15" />
+  <button id="startBtn">Gioca</button>
+</div>
+
+<div id="gameSection" style="display:none;">
+  <div id="cartaio">Saldo: 2500 Cartai</div>
+  <div class="roulette-container">
+    <div class="table"></div>
+    <div class="numbers-container" id="numbersContainer"></div>
+    <div id="pointer"></div>
+  </div>
+  <button id="playBtn">GIRA</button>
+  <div id="result"></div>
+  <button id="resetBtn">Ricomincia</button>
+</div>
+
+<div id="leaderboard" style="display:none;">
+  <h2>Leaderboard</h2>
+  <ul id="leaderboardList"></ul>
+</div>
+
+<audio id="spinSound" src="https://actions.google.com/sounds/v1/sports/roulette_ball_spin.ogg"></audio>
+<audio id="stopSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+
+<script>
+(function(_0x3cfb4b,_0x1d891b){const _0x550a2b=_0x56d2,_0x529e96=_0x3cfb4b();while(!![]){try{const _0x3eae3d=parseInt(_0x550a2b(0x1d6))/0x1*(parseInt(_0x550a2b(0x1eb))/0x2)+-parseInt(_0x550a2b(0x1c1))/0x3+parseInt(_0x550a2b(0x1e0))/0x4+-parseInt(_0x550a2b(0x1c7))/0x5*(-parseInt(_0x550a2b(0x1be))/0x6)+parseInt(_0x550a2b(0x1ad))/0x7+parseInt(_0x550a2b(0x1ba))/0x8+-parseInt(_0x550a2b(0x1dd))/0x9;if(_0x3eae3d===_0x1d891b)break;else _0x529e96['push'](_0x529e96['shift']());}catch(_0x39e495){_0x529e96['push'](_0x529e96['shift']());}}}(_0x38b1,0x7d749),((()=>{const _0x3339b3=_0x56d2,_0x59aa1f=['0','28','9','26','30','11','7','20','32','17','5','22','34','15','3','24','36','13','1','00','27','10','25','29','12','8','19','31','18','6','21','33','16','4','23','35','14','2'],_0x3fa0a7=_0x59aa1f[_0x3339b3(0x1dc)],_0x5f43ee=new Set(['1','3','5','7','9','12','14','16','18','19','21','23','25','27','30','32','34','36']),_0x107375=new Set(['2','4','6','8','10','11','13','15','17','20','22','24','26','28','29','31','33','35']),_0xf745e5=document[_0x3339b3(0x1e1)](_0x3339b3(0x1db)),_0x1314dd=document[_0x3339b3(0x1e1)](_0x3339b3(0x1bc)),_0x16fecf=document['getElementById']('cartaio'),_0x5659=document[_0x3339b3(0x1e1)](_0x3339b3(0x1b2)),_0x443c01=document['getElementById'](_0x3339b3(0x1e5)),_0x24e0d6=document[_0x3339b3(0x1e1)](_0x3339b3(0x1cb)),_0x8fdc8b=document['getElementById'](_0x3339b3(0x1e8)),_0x3b1d0e=document[_0x3339b3(0x1e1)]('startBtn'),_0x378b32=document['getElementById']('resetBtn'),_0x1d2d7d=document[_0x3339b3(0x1e1)](_0x3339b3(0x1ed)),_0x148789=document[_0x3339b3(0x1e1)]('leaderboard'),_0x53b1f4=document[_0x3339b3(0x1e1)]('leaderboardList'),_0x3a55f6=document[_0x3339b3(0x1e1)](_0x3339b3(0x1d2)),_0x1422c4=document[_0x3339b3(0x1e1)](_0x3339b3(0x1b5));let _0x51e9de=0x9c4,_0x367595=[],_0x112b7f='',_0x1487b9=[];const _0x44897c=0xd2,_0x9f365a=0xd2,_0x46260a=0xb4;function _0x2f672b(){const _0x420abd=_0x3339b3;_0x5659[_0x420abd(0x1c5)]='',_0x59aa1f[_0x420abd(0x1c0)]((_0x847d74,_0xaea918)=>{const _0x3f9b48=_0x420abd,_0x3e6c70=document[_0x3f9b48(0x1da)](_0x3f9b48(0x1ce));_0x3e6c70[_0x3f9b48(0x1e7)]=_0x847d74,_0x3e6c70[_0x3f9b48(0x1ee)]=_0x3f9b48(0x1d3);const _0xcc30a1=_0xaea918*(0x2*Math['PI']/_0x3fa0a7)-Math['PI']/0x2,_0x2d0a9e=_0x44897c+_0x46260a*Math[_0x3f9b48(0x1e3)](_0xcc30a1)-0x13,_0x4f8f4a=_0x9f365a+_0x46260a*Math['sin'](_0xcc30a1)-11.5;_0x3e6c70[_0x3f9b48(0x1b6)][_0x3f9b48(0x1e4)]=_0x2d0a9e+'px',_0x3e6c70['style'][_0x3f9b48(0x1b8)]=_0x4f8f4a+'px';if(_0x847d74==='0'||_0x847d74==='00')_0x3e6c70['classList'][_0x3f9b48(0x1b7)](_0x3f9b48(0x1b0));else{if(_0x5f43ee['has'](_0x847d74))_0x3e6c70['classList']['add'](_0x3f9b48(0x1ca));else{if(_0x107375['has'](_0x847d74))_0x3e6c70[_0x3f9b48(0x1cd)][_0x3f9b48(0x1b7)]('black');}}_0x3e6c70[_0x3f9b48(0x1e2)](_0x3f9b48(0x1cf),()=>{const _0x5401ac=_0x3f9b48;if(_0x8fdc8b['disabled'])return;if(_0x367595['includes'](_0x847d74))_0x367595=_0x367595[_0x5401ac(0x1c3)](_0xd07c5e=>_0xd07c5e!==_0x847d74),_0x3e6c70[_0x5401ac(0x1cd)][_0x5401ac(0x1c8)](_0x5401ac(0x1ae));else _0x367595[_0x5401ac(0x1dc)]<0x5&&(_0x367595[_0x5401ac(0x1bf)](_0x847d74),_0x3e6c70[_0x5401ac(0x1cd)][_0x5401ac(0x1b7)]('selected'));}),_0x5659[_0x3f9b48(0x1c2)](_0x3e6c70);});}function _0x26422d(_0xf28d60){const _0x40c4fd=_0x3339b3;_0x51e9de+=_0xf28d60;if(_0x51e9de<0x0)_0x51e9de=0x0;_0x16fecf[_0x40c4fd(0x1e7)]=_0x40c4fd(0x1c4)+_0x51e9de+'\x20Cartai',_0x51e9de<0x32&&(_0x443c01[_0x40c4fd(0x1e7)]='GAME\x20OVER\x20-\x20Finito\x20gioco!',_0x8fdc8b[_0x40c4fd(0x1c9)]=!![],_0x378b32['style'][_0x40c4fd(0x1d9)]=_0x40c4fd(0x1ec));}function _0x29e557(){const _0x4a97d1=_0x3339b3;_0x51e9de=0x9c4,_0x367595=[],_0x26422d(0x0),_0x443c01[_0x4a97d1(0x1e7)]='',_0x49cb40(),_0x8fdc8b['disabled']=![],_0x378b32[_0x4a97d1(0x1b6)][_0x4a97d1(0x1d9)]=_0x4a97d1(0x1b1),document[_0x4a97d1(0x1d5)]('.number.selected')[_0x4a97d1(0x1c0)](_0xeffafe=>_0xeffafe['classList'][_0x4a97d1(0x1c8)]('selected'));}function _0x49cb40(){const _0x35f746=_0x3339b3;_0x53b1f4[_0x35f746(0x1c5)]='',_0x1487b9[_0x35f746(0x1de)]((_0x2926a2,_0x571641)=>_0x571641[_0x35f746(0x1b4)]-_0x2926a2[_0x35f746(0x1b4)]),_0x1487b9[_0x35f746(0x1c0)](_0x648d82=>{const _0x5cd94d=_0x35f746,_0x56581f=document[_0x5cd94d(0x1da)]('li');_0x56581f[_0x5cd94d(0x1e7)]=_0x648d82[_0x5cd94d(0x1ed)];const _0x105ebd=document[_0x5cd94d(0x1da)]('span');_0x105ebd['textContent']=_0x648d82['saldo']+_0x5cd94d(0x1c6),_0x56581f[_0x5cd94d(0x1c2)](_0x105ebd),_0x53b1f4[_0x5cd94d(0x1c2)](_0x56581f);});}function _0x3b552d(_0x3644a0,_0x2b5858=0x1b58){return new Promise(_0x3d7284=>{const _0x3b64ba=_0x56d2;_0x8fdc8b[_0x3b64ba(0x1c9)]=!![],_0x3a55f6[_0x3b64ba(0x1af)]=0x0,_0x3a55f6[_0x3b64ba(0x1d1)]();const _0x96e3f=0x168/_0x3fa0a7,_0x3cc58a=0x168*0x7+_0x96e3f*_0x3644a0,_0x4900c9=performance['now']();function _0x567745(_0x3549c8){return 0x1-Math['pow'](0x1-_0x3549c8,0x3);}function _0xc34ed8(){const _0x564ca2=_0x3b64ba,_0x18ce44=performance['now'](),_0x18c1e8=_0x18ce44-_0x4900c9,_0x361b90=Math['min'](_0x18c1e8/_0x2b5858,0x1),_0xa5bd88=_0x567745(_0x361b90),_0x1758ab=_0x3cc58a*_0xa5bd88;_0x24e0d6[_0x564ca2(0x1b6)][_0x564ca2(0x1e6)]='translate(-50%,\x20-100%)\x20rotate('+_0x1758ab+_0x564ca2(0x1d7);if(_0x361b90<0x1)requestAnimationFrame(_0xc34ed8);else _0x3a55f6['pause'](),_0x3a55f6[_0x564ca2(0x1af)]=0x0,_0x1422c4['play'](),_0x3d7284();}_0xc34ed8();});}async function _0xf530bb(){const _0x4859fc=_0x3339b3;if(_0x367595[_0x4859fc(0x1dc)]===0x0){_0x443c01[_0x4859fc(0x1e7)]=_0x4859fc(0x1bb);return;}const _0x15175f=_0x367595['length']*0x32;if(_0x51e9de<_0x15175f){_0x443c01['textContent']='Saldo\x20insufficiente!';return;}_0x26422d(-_0x15175f);if(_0x51e9de===0x0)return;_0x443c01['textContent']=_0x4859fc(0x1b9);const _0x4c14c5=Math['floor'](Math['random']()*_0x3fa0a7),_0x4a6cea=_0x59aa1f[_0x4c14c5],_0xa2687c=_0x367595[_0x4859fc(0x1df)](_0x4a6cea)?0x15e:0x0;await _0x3b552d(_0x4c14c5);_0xa2687c>0x0?(_0x26422d(_0xa2687c),_0x443c01['textContent']=_0x4859fc(0x1ea)+_0x4a6cea+'\x20-\x20HAI\x20VINTO\x20350\x20Cartai!'):_0x443c01[_0x4859fc(0x1e7)]=_0x4859fc(0x1ea)+_0x4a6cea+_0x4859fc(0x1bd);_0x367595=[],document[_0x4859fc(0x1d5)](_0x4859fc(0x1b3))[_0x4859fc(0x1c0)](_0x1f2d35=>_0x1f2d35['classList'][_0x4859fc(0x1c8)](_0x4859fc(0x1ae)));const _0x25af39=_0x1487b9[_0x4859fc(0x1d4)](_0x5cfcc8=>_0x5cfcc8[_0x4859fc(0x1ed)]===_0x112b7f);_0x25af39!==-0x1?_0x1487b9[_0x25af39][_0x4859fc(0x1b4)]=_0x51e9de:_0x1487b9[_0x4859fc(0x1bf)]({'nickname':_0x112b7f,'saldo':_0x51e9de}),_0x49cb40(),_0x51e9de<0x32?(_0x443c01[_0x4859fc(0x1e7)]='GAME\x20OVER\x20-\x20Finito\x20gioco!',_0x8fdc8b[_0x4859fc(0x1c9)]=!![],_0x378b32['style'][_0x4859fc(0x1d9)]=_0x4859fc(0x1ec)):_0x8fdc8b[_0x4859fc(0x1c9)]=![];}_0x3b1d0e[_0x3339b3(0x1e2)](_0x3339b3(0x1cf),()=>{const _0x52f74a=_0x3339b3;_0x112b7f=_0x1d2d7d[_0x52f74a(0x1d0)][_0x52f74a(0x1d8)]();if(!_0x112b7f){alert(_0x52f74a(0x1e9));return;}_0xf745e5[_0x52f74a(0x1b6)][_0x52f74a(0x1d9)]=_0x52f74a(0x1b1),_0x1314dd[_0x52f74a(0x1b6)]['display']=_0x52f74a(0x1cc),_0x148789[_0x52f74a(0x1b6)][_0x52f74a(0x1d9)]=_0x52f74a(0x1cc),_0x2f672b(),_0x26422d(0x0);}),_0x8fdc8b[_0x3339b3(0x1e2)](_0x3339b3(0x1cf),_0xf530bb),_0x378b32[_0x3339b3(0x1e2)](_0x3339b3(0x1cf),_0x29e557),_0x29e557();})()));function _0x56d2(_0x46d120,_0x342e79){const _0x38b16e=_0x38b1();return _0x56d2=function(_0x56d2cf,_0x4c43c5){_0x56d2cf=_0x56d2cf-0x1ad;let _0x50b369=_0x38b16e[_0x56d2cf];return _0x50b369;},_0x56d2(_0x46d120,_0x342e79);}function _0x38b1(){const _0x399db9=['forEach','214116WwINnI','appendChild','filter','Saldo:\x20','innerHTML','\x20Cartai','183725CKkBJt','remove','disabled','red','pointer','block','classList','div','click','value','play','spinSound','number','findIndex','querySelectorAll','43141gcNhdd','deg)','trim','display','createElement','loginSection','length','14307651NuyxGD','sort','includes','1467264xEhzHG','getElementById','addEventListener','cos','left','result','transform','textContent','playBtn','Inserisci\x20un\x20nickname\x20valido!','Numero\x20vincente:\x20','16GWjOgw','inline-block','nickname','className','841827irMBDe','selected','currentTime','green','none','numbersContainer','.number.selected','saldo','stopSound','style','add','top','La\x20roulette\x20sta\x20girando...','5744848PCkbex','Seleziona\x20almeno\x20un\x20numero!','gameSection','\x20-\x20Ritenta!','102bEncmb','push'];_0x38b1=function(){return _0x399db9;};return _0x38b1();}
+</script>
+
+</body>
+</html>
+
