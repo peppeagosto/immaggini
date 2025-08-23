@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario con Orologio</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: url('https://xatimg.com/image/Ec0wZQF1DmhW.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .info-container {
+            display: flex;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .info-box {
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 5px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #clock {
+            background-color: #0077ff;
+            color: white;
+        }
+
+        #calendar {
+            background-color: #ff7300;
+            color: white;
+        }
+
+        #location {
+            background-color: rgba(0, 255, 98, 0.8);
+            color: black;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #location:hover {
+            background-color: rgba(0, 255, 98, 1);
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            document.getElementById("clock").innerText = now.toLocaleTimeString();
+            document.getElementById("calendar").innerText = now.toLocaleDateString();
+        }
+
+        function getLocation() {
+            fetch("https://ipapi.co/json/")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("location").innerText = "Città: " + data.city;
+                })
+                .catch(() => {
+                    document.getElementById("location").innerText = "Città: Non disponibile";
+                });
+        }
+
+        setInterval(updateTime, 1000);
+        window.onload = function () {
+            updateTime();
+            getLocation();
+        };
+    </script>
+</head>
+<body>
+    <div class="info-container">
+        <div id="clock" class="info-box"></div>
+        <div id="calendar" class="info-box"></div>
+        <div id="location" class="info-box"></div>
+    </div>
+</body>
+</html>
