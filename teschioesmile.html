@@ -8,7 +8,7 @@
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: transparent;
+    background: transparent; /* 🔥 Background completamente trasparente */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,6 +19,26 @@
     position: relative;
     width: 1308px;
     height: 486px;
+    border-radius: 15px; /* Arrotonda i bordi del container */
+    background: transparent; /* 🔥 Assicura trasparenza anche nel container */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 40px rgba(255, 255, 255, 0.2),
+                0 0 60px rgba(255, 255, 255, 0.1);
+    animation: glow-container 2.5s ease-in-out infinite alternate;
+  }
+
+  /* Animazione per effetto luminoso pulsante sul container */
+  @keyframes glow-container {
+    0% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+                  0 0 40px rgba(255, 255, 255, 0.2),
+                  0 0 60px rgba(255, 255, 255, 0.1);
+    }
+    100% {
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.6),
+                  0 0 60px rgba(255, 255, 255, 0.4),
+                  0 0 90px rgba(255, 255, 255, 0.2);
+    }
   }
 
   video.side-video {
@@ -28,9 +48,27 @@
     height: 486px;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    background: transparent; /* 🔥 Rimuove qualsiasi sfondo nero */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(255, 255, 255, 0.2),
+                0 0 50px rgba(255, 255, 255, 0.1);
     z-index: 1;
-    mix-blend-mode: screen; /* 🔥 nero diventa trasparente */
+    mix-blend-mode: screen; /* 🔥 Elimina il nero dai video */
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Animazione per effetto luminoso pulsante sui video */
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3),
+                  0 0 30px rgba(255, 255, 255, 0.2),
+                  0 0 50px rgba(255, 255, 255, 0.1);
+    }
+    100% {
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.6),
+                  0 0 50px rgba(255, 255, 255, 0.4),
+                  0 0 80px rgba(255, 255, 255, 0.2);
+    }
   }
 
   /* Avvicinati al centro */
@@ -52,7 +90,8 @@
     pointer-events: none;
     user-select: none;
     z-index: 10;
-    mix-blend-mode: screen; /* 🔥 elimina il nero dall'immagine */
+    mix-blend-mode: screen; /* 🔥 Elimina il nero dall'immagine */
+    background: transparent; /* 🔥 Assicura trasparenza */
   }
 </style>
 </head>
