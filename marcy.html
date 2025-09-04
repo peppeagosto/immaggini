@@ -1,3 +1,4 @@
+
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
@@ -54,30 +55,35 @@
     width: 100%;
     pointer-events: none;
     z-index: 3;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     height: 100%;
-    padding-top: 50px; /* alzato sopra video per non coprire torta */
+    padding-top: 50px; /* alzato leggermente */
   }
 
   .marcy-text, .wish-text {
     font-weight: bold;
+    font-family: sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
     background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 400% 400%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-size: 400% 400%;
     animation: rainbow 5s linear infinite, pulse 1.2s infinite alternate;
+    mix-blend-mode: screen; /* fa risaltare il testo sopra il video */
   }
 
-  .marcy-text { font-size: 22px; }
-  .wish-text { font-size: 16px; margin-top: 10px; }
+  .wish-text {
+    font-size: 16px;
+    margin-top: 10px;
+  }
 
-  /* spostamento finale buon compleanno e testo dx/sx */
-  .left-text .wish-text { transform: translateX(25px); }  /* spostato leggermente a dx */
-  .right-text .wish-text { transform: translateX(-25px); } /* spostato leggermente a sx */
+  /* spostamento finale buon compleanno */
+  .left-text .wish-text { transform: translateX(15px); }
+  .right-text .wish-text { transform: translateX(-15px); }
 
   .left-text { left: -40px; width: 290px; }
   .right-text { right: -40px; width: 290px; }
