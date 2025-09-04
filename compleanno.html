@@ -1,0 +1,131 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video Marcy</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+  }
+
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 290px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    z-index: 1;
+  }
+
+  .left-video { left: -40px; }
+  .right-video { right: -40px; }
+
+  img.center-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    height: 486px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+  }
+
+  /* Testo centrato sopra i video */
+  .side-text {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    pointer-events: none;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    padding-top: 50px; /* alzato leggermente */
+  }
+
+  .marcy-text, .wish-text {
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow 5s linear infinite, pulse 1.2s infinite alternate;
+    mix-blend-mode: screen; /* fa risaltare il testo sopra il video */
+  }
+
+  .wish-text {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  /* spostamento finale buon compleanno */
+  .left-text .wish-text { transform: translateX(15px); }
+  .right-text .wish-text { transform: translateX(-15px); }
+
+  .left-text { left: -40px; width: 290px; }
+  .right-text { right: -40px; width: 290px; }
+
+  @keyframes pulse {
+    0% { opacity: 0.5; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Video a sinistra -->
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/marcy.mp4" type="video/mp4" />
+  </video>
+  <!-- Testi centrati video sinistro -->
+  <div class="side-text left-text">
+    <div class="marcy-text">marcy</div>
+    <div class="wish-text">lo staff ti augura buon compleanno</div>
+  </div>
+
+  <!-- Immagine centrale trasparente -->
+  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro trasparente" />
+
+  <!-- Video a destra -->
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/marcy.mp4" type="video/mp4" />
+  </video>
+  <!-- Testi centrati video destro -->
+  <div class="side-text right-text">
+    <div class="marcy-text">marcy</div>
+    <div class="wish-text">lo staff ti augura buon compleanno</div>
+  </div>
+</div>
+
+</body>
+</html>
+
