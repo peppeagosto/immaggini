@@ -21,25 +21,32 @@
     height: 486px;
   }
 
-  video.side-video {
+  .video-wrapper {
     position: absolute;
-    top: 0;
     width: 290px;
     height: 486px;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
     z-index: 1;
+  }
+
+  video.side-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     mix-blend-mode: screen; /* 🔥 nero diventa trasparente */
   }
 
   /* Avvicinati al centro */
-  .left-video {
+  .left-video-wrapper {
     left: -40px;
+    top: 0;
   }
 
-  .right-video {
+  .right-video-wrapper {
     right: -40px;
+    top: 0;
   }
 
   img.center-image {
@@ -54,25 +61,54 @@
     z-index: 10;
     mix-blend-mode: screen; /* 🔥 elimina il nero dall'immagine */
   }
+
+  /* 🔥 Testo dentro i video */
+  .video-text {
+    position: absolute;
+    bottom: 5px; /* leggermente sopra il bordo basso */
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff7300, 0 0 30px #ff0000;
+    font-family: Arial, sans-serif;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  .left-text {
+    left: 55%; /* spostato un po' più a destra */
+    transform: translateX(-50%);
+  }
+
+  .right-text {
+    left: 45%; /* spostato un po' più a sinistra */
+    transform: translateX(-50%);
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Video a sinistra -->
-  <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/xxxxx.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
+  <!-- Video sinistro con testo -->
+  <div class="video-wrapper left-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/xxxxx.mp4" type="video/mp4" />
+      Il tuo browser non supporta il video.
+    </video>
+    <div class="video-text left-text">PUMA SIEDITI SUL DITO</div>
+  </div>
 
   <!-- Immagine centrale -->
   <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
 
-  <!-- Video a destra -->
-  <video class="side-video right-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/xxxxx.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
+  <!-- Video destro con testo -->
+  <div class="video-wrapper right-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/xxxxx.mp4" type="video/mp4" />
+      Il tuo browser non supporta il video.
+    </video>
+    <div class="video-text right-text">PUMA SIEDITI SUL DITO</div>
+  </div>
 </div>
 
 </body>
