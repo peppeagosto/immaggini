@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Player con Cartaio</title>
+<style>
+body {
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+.media-player {
+  background: #111;
+  border: 3px solid #00ff00;
+  box-shadow: 0 0 30px #00ff00, inset 0 0 15px #00ff00;
+  width: 500px;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  color: #00ff00;
+  text-shadow: 0 0 8px #00ff00;
+  transition: box-shadow 0.3s ease;
+}
+.screen {
+  background: #000;
+  width: 100%;
+  height: 120px;
+  margin-bottom: 20px;
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 15px #00ff00;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+.controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+}
+button {
+  background: transparent;
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: pulse 2s infinite;
+  transition: all 0.3s ease;
+}
+button:hover {
+  background: #00ff00;
+  color: #000;
+  box-shadow: 0 0 15px #00ff00;
+  transform: scale(1.1);
+}
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 5px #00ff00; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #00ff00; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #00ff00; }
+}
+input[type="range"] {
+  width: 200px;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 2px solid #00ff00;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ff00;
+  transition: box-shadow 0.3s ease;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #00ff00;
+  box-shadow: 0 0 15px #00ff00;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+.circles-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.vinyl, .cover-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #00ff00;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  animation: spin 4s linear infinite;
+  box-shadow: 0 0 15px #00ff00;
+}
+.vinyl video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.vinyl.video-active video {
+  display: block;
+}
+@keyframes spin { 
+  0% { transform: rotate(0deg); } 
+  100% { transform: rotate(360deg); } 
+}
+.datetime { 
+  font-size: 14px; 
+  margin-top: 10px; 
+  color: #00ff00; 
+  text-shadow: 0 0 8px #00ff00;
+}
+#stars-canvas { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  pointer-events: none; 
+  z-index: -1; 
+}
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  border-top: 1px solid #00ff00;
+  border-bottom: 1px solid #00ff00;
+  padding: 2px 0;
+  margin-bottom: 5px;
+  box-shadow: 0 0 10px #00ff00;
+  transition: box-shadow 0.3s ease;
+}
+.marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+  text-shadow: 0 0 8px #00ff00;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+#static-cover { 
+  background-image: url('https://xatimg.com/image/fX16DRuiWiP6.gif'); 
+}
+#vinyl { 
+  width: 100px; 
+  height: 100px; 
+  border-radius: 50%; 
+  border: 2px solid #00ff00; 
+  background-size: cover; 
+  animation: spin 4s linear infinite; 
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<div class="media-player" id="player">
+  <div class="marquee"><span id="scrolling-titles">Titolo Canzone - Artista</span></div>
+  <div class="circles-container">
+    <div id="static-cover" class="cover-circle"></div>
+    <div id="vinyl" class="vinyl">
+      <video id="annuncio" preload="auto">
+        <source src="https://peppeagosto.github.io/immaggini/05.mp4" type="video/mp4">
+        Il tuo browser non supporta il tag video.
+      </video>
+    </div>
+  </div>
+  <div class="screen">
+    <canvas id="cartaio-canvas" width="500" height="120"></canvas>
+  </div>
+  <audio id="audio" src="https://stm2.srvif.com:7198/;stream.mp3"></audio>
+  <div class="controls">
+    <button id="playBtn">▶</button>
+    <input type="range" id="volumeControl" min="0" max="100" value="100">
+    <button id="stopBtn">■</button>
+  </div>
+  <div class="datetime" id="datetime"></div>
+</div>
+
+<script>
+// Stelline animate
+const starsCanvas = document.getElementById('stars-canvas');
+const ctxStars = starsCanvas.getContext('2d');
+starsCanvas.width = window.innerWidth;
+starsCanvas.height = window.innerHeight;
+const stars = [];
+for(let i = 0; i < 100; i++) {
+  stars.push({
+    x: Math.random() * starsCanvas.width,
+    y: Math.random() * starsCanvas.height,
+    size: Math.random() * 2 + (Math.random() < 0.1 ? 2 : 0),
+    speed: Math.random() * 0.5 + 0.1
+  });
+}
+function animateStars() {
+  ctxStars.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+  ctxStars.fillStyle = '#00ff00';
+  stars.forEach(s => {
+    ctxStars.beginPath();
+    ctxStars.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctxStars.fill();
+    s.y += s.speed;
+    if (s.y > starsCanvas.height) s.y = 0;
+  });
+  requestAnimationFrame(animateStars);
+}
+animateStars();
+
+// Animazione ray per "IL CARTAIO"
+var txt = "IL CARTAIO";
+var txtH = 85;
+var font = "'Impact Regular', sans-serif";
+var rayColor1 = "#FF0000";
+var rayColor2 = "#FFDD00";
+var rayColor3 = "#FF69B4";
+var rayColor4 = "#FFDD00";
+var canvasCartaio = document.getElementById("cartaio-canvas");
+var ctxCartaio = canvasCartaio.getContext("2d");
+var cwCartaio = canvasCartaio.width = 500;
+var chCartaio = canvasCartaio.height = 120;
+var w2Cartaio = cwCartaio / 2;
+var h2Cartaio = chCartaio / 2;
+var piCartaio = Math.PI;
+var pi2Cartaio = piCartaio * 0.5;
+var txtCanvasCartaio = document.createElement("canvas");
+var txtCtxCartaio = txtCanvasCartaio.getContext("2d");
+txtCtxCartaio.font = txtH + "px " + font;
+txtCtxCartaio.textBaseline = "middle";
+var txtWCartaio = Math.floor(txtCtxCartaio.measureText(txt).width);
+txtCanvasCartaio.width = txtWCartaio;
+txtCanvasCartaio.height = txtH;
+var gradientCartaio = ctxCartaio.createRadialGradient(w2Cartaio, h2Cartaio, 0, w2Cartaio, h2Cartaio, txtWCartaio);
+gradientCartaio.addColorStop(0, rayColor3);
+gradientCartaio.addColorStop(0.5, rayColor2);
+gradientCartaio.addColorStop(1, rayColor1);
+ctxCartaio.strokeStyle = gradientCartaio;
+txtCtxCartaio.fillStyle = gradientCartaio;
+txtCtxCartaio.font = txtH + "px " + font;
+txtCtxCartaio.textBaseline = "middle";
+txtCtxCartaio.fillText(txt, 0, txtH * 0.5);
+
+var bufferCanvasCartaio = document.createElement("canvas");
+bufferCanvasCartaio.width = txtWCartaio;
+bufferCanvasCartaio.height = txtH;
+var bufferCartaio = bufferCanvasCartaio.getContext("2d");
+
+var sxCartaio = (cwCartaio - txtWCartaio) / 2;
+var syCartaio = (chCartaio - txtH) / 2;
+
+var raysCartaio = [];
+var txtDataCartaio = txtCtxCartaio.getImageData(0, 0, txtWCartaio, txtH);
+for (var i = 0; i < txtDataCartaio.data.length; i += 4) {
+  var ii = i / 4;
+  var row = Math.floor(ii / txtWCartaio);
+  var col = ii % txtWCartaio;
+  var alpha = txtDataCartaio.data[i + 3];
+  if (alpha !== 0) {
+    var c = "rgba(" + txtDataCartaio.data[i] + "," + txtDataCartaio.data[i + 1] + "," + txtDataCartaio.data[i + 2] + "," + (alpha / 255) + ")";
+    raysCartaio.push(new RayCartaio(row, col, c));
+  }
+}
+
+var currentCartaio = 0;
+tickCartaio();
+
+function tickCartaio() {
+  ctxCartaio.clearRect(0, 0, cwCartaio, chCartaio);
+  ctxCartaio.drawImage(bufferCanvasCartaio, 0, 0, currentCartaio, txtH, sxCartaio, syCartaio, currentCartaio, txtH);
+  ctxCartaio.save();
+  ctxCartaio.globalAlpha = 0.05;
+  ctxCartaio.globalCompositeOperation = "lighter";
+  if (drawRaysCartaio(currentCartaio)) {
+    currentCartaio++;
+    currentCartaio = Math.min(currentCartaio, txtWCartaio);
+    window.requestAnimationFrame(tickCartaio);
+  } else {
+    fadeOutCartaio();
+  }
+  ctxCartaio.restore();
+}
+
+function fadeOutCartaio() {
+  ctxCartaio.clearRect(0, 0, cwCartaio, chCartaio);
+  ctxCartaio.globalAlpha *= 0.95;
+  ctxCartaio.drawImage(bufferCanvasCartaio, 0, 0, currentCartaio, txtH, sxCartaio, syCartaio, currentCartaio, txtH);
+  if (ctxCartaio.globalAlpha > 0.01) {
+    window.requestAnimationFrame(fadeOutCartaio);
+  } else {
+    window.setTimeout(restartCartaio, 500);
+  }
+}
+
+function restartCartaio() {
+  for (var i = 0; i < raysCartaio.length; i++) {
+    raysCartaio[i].reset();
+  }
+  ctxCartaio.globalAlpha = 1;
+  bufferCartaio.clearRect(0, 0, txtWCartaio, txtH);
+  currentCartaio = 0;
+  tickCartaio();
+}
+
+function drawRaysCartaio(c) {
+  var count = 0;
+  ctxCartaio.beginPath();
+  for (var i = 0; i < raysCartaio.length; i++) {
+    var ray = raysCartaio[i];
+    if (ray.col < c) {
+      count += ray.draw();
+    }
+  }
+  ctxCartaio.stroke();
+  return count !== raysCartaio.length;
+}
+
+function RayCartaio(row, col, f) {
+  this.col = col;
+  this.row = row;
+  var xp = sxCartaio + col;
+  var yp = syCartaio + row;
+  var fill = f;
+  var ath = txtH;
+  var a = pi2Cartaio * (this.row - ath * 0.5) / ath;
+  if (a === 0) {
+    a = (Math.random() - 0.5) * pi2Cartaio;
+  }
+  var da = 0.02 * Math.sign(a);
+  var q = 2 * piCartaio * (this.col - txtWCartaio * 0.5) / txtWCartaio;
+  if (q === 0) {
+    q = (Math.random() - 0.5) * piCartaio;
+  }
+  var dq = 0.02 * Math.sign(q);
+  da += (Math.random() - 0.5) * 0.005;
+  var l = 0;
+  var dl = Math.random() * 2 + 2;
+  var buffered = false;
+
+  this.reset = function () {
+    q = 2 * piCartaio * (this.col - txtWCartaio * 0.5) / txtWCartaio;
+    a = pi2Cartaio * (this.row - ath * 0.5) / ath;
+    if (a === 0) {
+      a = -pi2Cartaio * 0.5;
+    }
+    l = 0;
+    buffered = false;
+  };
+
+  this.draw = function () {
+    if (l < 0) {
+      if (!buffered) {
+        bufferCartaio.fillStyle = fill;
+        bufferCartaio.fillRect(this.col, this.row, 1, 1);
+        buffered = true;
+      }
+      return 1;
+    } else {
+      ctxCartaio.moveTo(xp, yp);
+      ctxCartaio.quadraticCurveTo(
+        xp + Math.cos(q) * l * 0.5,
+        yp + Math.sin(q) * l * 0.5,
+        xp + Math.cos(a) * l,
+        yp + Math.sin(a) * l
+      );
+      a += da;
+      q += dq;
+      l += Math.cos(a) * dl;
+      return 0;
+    }
+  };
+}
+
+// Player
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const volumeControl = document.getElementById('volumeControl');
+const titlesContainer = document.getElementById("scrolling-titles");
+const vinylEl = document.getElementById("vinyl");
+const player = document.getElementById("player");
+const annuncio = document.getElementById("annuncio");
+const staticCover = document.getElementById("static-cover");
+const datetimeEl = document.getElementById("datetime");
+
+audio.volume = volumeControl.value / 100;
+annuncio.volume = volumeControl.value / 100;
+volumeControl.addEventListener('input', () => {
+  audio.volume = volumeControl.value / 100;
+  annuncio.volume = volumeControl.value / 100;
+});
+
+// Gestione errore caricamento video
+annuncio.addEventListener('error', (e) => {
+  console.error("Errore caricamento video annuncio:", e.message || "URL non valido o problema di rete");
+});
+
+// Verifica se il video è pronto
+annuncio.addEventListener('canplay', () => {
+  console.log("Video annuncio pronto per la riproduzione");
+});
+
+// Passa allo streaming quando il video finisce
+annuncio.addEventListener('ended', () => {
+  annuncio.pause();
+  vinylEl.classList.remove('video-active');
+  vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+  fetchTitle();
+  audio.play().catch((err) => console.error("Errore audio:", err.message || err));
+  datetimeEl.style.display = 'block';
+  updateDateTime();
+});
+
+let annuncioTimeout = null;
+
+function updateDateTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const mins = now.getMinutes().toString().padStart(2, '0');
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  const year = now.getFullYear();
+  datetimeEl.innerHTML = `<span>${hours}:${mins} - ${day}/${month}/${year}</span>`;
+}
+updateDateTime();
+setInterval(updateDateTime, 6000);
+
+playBtn.addEventListener('click', () => {
+  if (!player.classList.contains('active')) {
+    player.classList.add('active');
+    staticCover.style.display = 'none';
+    vinylEl.classList.add('video-active');
+    vinylEl.style.backgroundImage = 'none';
+    annuncio.currentTime = 0;
+    annuncio.play().catch((err) => {
+      console.error("Errore durante la riproduzione del video annuncio:", err.message || err);
+      vinylEl.classList.remove('video-active');
+      vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+      fetchTitle();
+      audio.play().catch((err) => console.error("Errore audio:", err.message || err));
+      datetimeEl.style.display = 'block';
+      updateDateTime();
+    });
+    clearTimeout(annuncioTimeout);
+    annuncioTimeout = setTimeout(() => {
+      annuncio.pause();
+      vinylEl.classList.remove('video-active');
+      vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+      fetchTitle();
+      audio.play().catch((err) => console.error("Errore audio:", err.message || err));
+      datetimeEl.style.display = 'block';
+      updateDateTime();
+    }, 8000);
+    playBtn.textContent = '⏸';
+  } else {
+    player.classList.remove('active');
+    annuncio.pause();
+    vinylEl.classList.remove('video-active');
+    audio.pause();
+    audio.currentTime = 0;
+    staticCover.style.display = 'block';
+    vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+    clearTimeout(annuncioTimeout);
+    playBtn.textContent = '▶';
+  }
+});
+
+stopBtn.addEventListener('click', () => {
+  player.classList.remove('active');
+  annuncio.pause();
+  vinylEl.classList.remove('video-active');
+  audio.pause();
+  audio.currentTime = 0;
+  staticCover.style.display = 'block';
+  vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+  clearTimeout(annuncioTimeout);
+  playBtn.textContent = '▶';
+});
+
+// Fetch titoli e cover
+async function fetchTitle() {
+  try {
+    const url = 'https://api.allorigins.win/raw?url=https://stm2.srvif.com:7198/7.html&_ts=' + Date.now();
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status} ${response.statusText}`);
+    }
+    const text = await response.text();
+    if (!text) {
+      throw new Error("Risposta vuota dal server");
+    }
+    const parts = text.split(',');
+    if (parts.length < 7 || !parts[6]) {
+      throw new Error("Dati del titolo non validi o mancanti");
+    }
+    let rawTitle = parts[6].replace(/<[^>]+>/g, '').trim();
+    if (!rawTitle) {
+      rawTitle = "Titolo non disponibile";
+    }
+    titlesContainer.innerHTML = `<span>${rawTitle}</span>`;
+    if (rawTitle !== "Titolo non disponibile") {
+      let cleanedTitle = rawTitle.replace(/[^a-zA-Z0-9À-ÿ\s:'\-]/g, '').trim();
+      const titleParts = cleanedTitle.split(/[-:]/);
+      const searchTerm = titleParts.length > 1 ? titleParts[0].trim() + " " + titleParts[1].trim() : cleanedTitle;
+      console.log("Ricerca cover per:", searchTerm);
+      const coverUrl = await fetchiTunesCover(searchTerm);
+      if (coverUrl) {
+        console.log("Cover trovata:", coverUrl);
+        vinylEl.style.backgroundImage = `url('${coverUrl}')`;
+        staticCover.style.display = 'none';
+      } else {
+        console.log("Nessuna cover trovata, uso GIF di fallback");
+        vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+        staticCover.style.display = 'block';
+      }
+    } else {
+      console.log("Titolo non disponibile, uso GIF di fallback");
+      vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+      staticCover.style.display = 'block';
+    }
+  } catch (err) {
+    console.error("Errore fetch titolo:", err.message || err);
+    titlesContainer.innerHTML = `<span>Titolo non disponibile</span>`;
+    vinylEl.style.backgroundImage = "url('https://xatimg.com/image/fX16DRuiWiP6.gif')";
+    staticCover.style.display = 'block';
+  }
+}
+
+async function fetchiTunesCover(query) {
+  const q = encodeURIComponent(query);
+  const url = `https://itunes.apple.com/search?term=${q}&limit=1`;
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) {
+      throw new Error(`Errore iTunes API: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.resultCount > 0) {
+      return data.results[0].artworkUrl100.replace('100x100', '600x600');
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error("Errore fetch iTunes cover:", err.message || err);
+    return null;
+  }
+}
+
+fetchTitle();
+setInterval(fetchTitle, 15000);
+
+// Logiche per disabilitare right-click, selezione, etc.
+var message = "ILCARTAIO";
+
+function clickIE4() {
+  if (event.button == 2) {
+    alert(message);
+    return false;
+  }
+}
+
+function clickNS4(e) {
+  if (document.layers || document.getElementById && !document.all) {
+    if (e.which == 2 || e.which == 3) {
+      alert(message);
+      return false;
+    }
+  }
+}
+
+if (document.layers) {
+  document.captureEvents(Event.MOUSEDOWN);
+  document.onmousedown = clickNS4;
+} else if (document.all && !document.getElementById) {
+  document.onmousedown = clickIE4;
+}
+
+document.oncontextmenu = new Function("alert(message);return false");
+
+function disableselect(e) {
+  return false;
+}
+function reEnable() {
+  return true;
+}
+document.onselectstart = new Function("return false");
+if (window.sidebar) {
+  document.onmousedown = disableselect;
+  document.onclick = reEnable;
+}
+
+window.oncontextmenu = function () {
+  console.log("Right Click Disabled");
+  return false;
+};
+</script>
+</body>
+</html>
