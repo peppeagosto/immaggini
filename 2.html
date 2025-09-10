@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<title>si </title>
+<style>
+html, body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2100px;
+  font-family: Arial, sans-serif;
+}
+#container {
+  position: relative;
+  width: 360px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Cubo 3D */
+#scene {
+  width: 260px;
+  height: 260px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin 20s infinite linear;
+  margin: auto;
+  display: none;
+}
+.face {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  border: 6px solid transparent;
+  border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1;
+  animation: pulse 2s infinite alternate;
+}
+.front  { transform: rotateY(0deg) translateZ(130px); }
+.back   { transform: rotateY(180deg) translateZ(130px); }
+.right  { transform: rotateY(90deg) translateZ(130px); }
+.left   { transform: rotateY(-90deg) translateZ(130px); }
+.top    { transform: rotateX(90deg) translateZ(130px); }
+.bottom { transform: rotateX(-90deg) translateZ(130px); }
+
+@keyframes pulse {
+  0% { border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1; }
+  50% { border-image: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red) 1; }
+  100% { border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1; }
+}
+
+/* Cerchio MP4 */
+#roundWrapper {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  display: block; /* visibile di default */
+}
+#roundVideo {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Controlli */
+#controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+#playBtn, #stopBtn {
+  padding: 8px 16px;
+  background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8));
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 6px;
+  animation: rainbowPulse 2s infinite alternate;
+}
+#volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 8px;
+  background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8));
+  outline: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: white;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+#volumeSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: white;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+@keyframes rainbowPulse {
+  0% { background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8)); }
+  50% { background: linear-gradient(90deg, rgba(238,130,238,0.8), rgba(75,0,130,0.8), rgba(0,0,255,0.8), rgba(0,128,0,0.8), rgba(255,255,0,0.8), rgba(255,165,0,0.8), rgba(255,0,0,0.8)); }
+  100% { background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8)); }
+}
+
+/* Rettangolo sfumato titoli */
+#titleWrapper {
+  width: 300px;
+  height: 30px;
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, rgba(176,224,230,0.0), rgba(176,224,230,0.7) 10%, rgba(176,224,230,0.7) 90%, rgba(176,224,230,0.0));
+}
+#marquee-text {
+  white-space: nowrap;
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #ff4500;
+  text-shadow: 0 0 2px #fff;
+  position: absolute;
+}
+#marquee-text span { display: inline-block; }
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes spin {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to   { transform: rotateX(360deg) rotateY(360deg); }
+}
+@keyframes throwDice {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  20% { transform: rotateX(720deg) rotateY(540deg); }
+  40% { transform: rotateX(1080deg) rotateY(1080deg); }
+  60% { transform: rotateX(1440deg) rotateY(1620deg); }
+  80% { transform: rotateX(1800deg) rotateY(2160deg); }
+  100% { transform: rotateX(2160deg) rotateY(2700deg); }
+}
+
+audio { display: none; }
+</style>
+</head>
+<body>
+
+<div id="container">
+  <!-- Cubo 3D -->
+  <div id="scene">
+    <div class="face front"></div>
+    <div class="face back"></div>
+    <div class="face right"></div>
+    <div class="face left"></div>
+    <div class="face top"></div>
+    <div class="face bottom"></div>
+  </div>
+
+  <!-- Cerchio Rotondo MP4 -->
+  <div id="roundWrapper">
+    <video id="roundVideo" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/011.mp4?v=2" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Rettangolo sfumato titoli -->
+  <div id="titleWrapper">
+    <div id="marquee-text"><span>Caricamento titolo...</span></div>
+  </div>
+
+  <!-- Controlli -->
+  <div id="controls">
+    <button id="playBtn">Play</button>
+    <input type="range" id="volumeSlider" min="0" max="100" value="100">
+    <button id="stopBtn">Stop</button>
+  </div>
+
+  <!-- Audio nascosto -->
+  <audio id="audioPlayer" src="https://stm2.srvif.com:7198/stream" preload="auto"></audio>
+</div>
+
+<script>
+function _0x5c38(_0x3070c0,_0x31761c){const _0x16253e=_0x1625();return _0x5c38=function(_0x5c3846,_0xc1a616){_0x5c3846=_0x5c3846-0x108;let _0x2daaef=_0x16253e[_0x5c3846];return _0x2daaef;},_0x5c38(_0x3070c0,_0x31761c);}const _0x5e159a=_0x5c38;(function(_0x58972c,_0x3db707){const _0x809fec=_0x5c38,_0x5dc395=_0x58972c();while(!![]){try{const _0x2e3418=-parseInt(_0x809fec(0x131))/0x1+-parseInt(_0x809fec(0x114))/0x2*(-parseInt(_0x809fec(0x132))/0x3)+-parseInt(_0x809fec(0x139))/0x4*(parseInt(_0x809fec(0x12a))/0x5)+parseInt(_0x809fec(0x121))/0x6+-parseInt(_0x809fec(0x140))/0x7*(-parseInt(_0x809fec(0x115))/0x8)+parseInt(_0x809fec(0x127))/0x9*(-parseInt(_0x809fec(0x11e))/0xa)+parseInt(_0x809fec(0x126))/0xb;if(_0x2e3418===_0x3db707)break;else _0x5dc395['push'](_0x5dc395['shift']());}catch(_0x3e8a85){_0x5dc395['push'](_0x5dc395['shift']());}}}(_0x1625,0x26cd7));const scene=document[_0x5e159a(0x147)](_0x5e159a(0x14c)),roundWrapper=document[_0x5e159a(0x147)](_0x5e159a(0x12f)),roundVideo=document[_0x5e159a(0x147)](_0x5e159a(0x137)),marqueeText=document[_0x5e159a(0x147)](_0x5e159a(0x108)),audioPlayer=document[_0x5e159a(0x147)](_0x5e159a(0x148)),playBtn=document[_0x5e159a(0x147)](_0x5e159a(0x136)),stopBtn=document[_0x5e159a(0x147)](_0x5e159a(0x10f)),volumeSlider=document[_0x5e159a(0x147)](_0x5e159a(0x146));playBtn[_0x5e159a(0x122)](_0x5e159a(0x13c),()=>{const _0x44f383=_0x5e159a;scene['style'][_0x44f383(0x14b)]=_0x44f383(0x10c),roundWrapper[_0x44f383(0x11c)]['display']=_0x44f383(0x129),audioPlayer[_0x44f383(0x124)]()[_0x44f383(0x117)](_0x4a2b46=>console[_0x44f383(0x112)](_0x44f383(0x10a),_0x4a2b46)),roundVideo[_0x44f383(0x13f)](),scene[_0x44f383(0x11c)]['animation']=_0x44f383(0x135),setTimeout(()=>{const _0x19de80=_0x44f383;scene[_0x19de80(0x11c)]['animation']=_0x19de80(0x14a);},0x2710);}),stopBtn[_0x5e159a(0x122)](_0x5e159a(0x13c),()=>{const _0x2838db=_0x5e159a;scene['style'][_0x2838db(0x14b)]='none',roundWrapper['style']['display']='block',audioPlayer[_0x2838db(0x13f)](),audioPlayer[_0x2838db(0x110)]=0x0,roundVideo['currentTime']=0x0,roundVideo[_0x2838db(0x124)]();}),volumeSlider['addEventListener'](_0x5e159a(0x119),()=>{const _0x26bd16=_0x5e159a;audioPlayer[_0x26bd16(0x123)]=volumeSlider[_0x26bd16(0x142)]/0x64;});const faces={'front':document[_0x5e159a(0x109)](_0x5e159a(0x144)),'back':document[_0x5e159a(0x109)]('.face.back'),'right':document['querySelector'](_0x5e159a(0x12c)),'left':document['querySelector'](_0x5e159a(0x120)),'top':document[_0x5e159a(0x109)]('.face.top'),'bottom':document[_0x5e159a(0x109)](_0x5e159a(0x14d))},fallbackImages=[_0x5e159a(0x118),'https://xatimg.com/image/ZE0sHPJuxgFV.jpg',_0x5e159a(0x12b),_0x5e159a(0x13b),_0x5e159a(0x10d),_0x5e159a(0x13a)];function _0x1625(){const _0x589a24=['71351ipQOQU','50793cytbaT','left','Titolo\x20non\x20disponibile','throwDice\x2010s\x20ease-in-out','playBtn','roundVideo','replace','16ivdZaa','https://xatimg.com/image/akRwJK9GGCS3.jpg','https://xatimg.com/image/Hi0VSZFXUzbi.jpg','click','100x100','right','pause','7VyveGQ','trim','value','json','.face.front','<span>Titolo\x20non\x20disponibile</span>','volumeSlider','getElementById','audioPlayer','bottom','spin\x2020s\x20infinite\x20linear','display','scene','.face.bottom','marquee-text','querySelector','Audio\x20play\x20error:','results','block','https://xatimg.com/image/GAac3WCeg3Hv.jpg','text','stopBtn','currentTime','<span>','log','artworkUrl100','4JLAazs','296056vdHsJc','url(','catch','https://xatimg.com/image/sBjhMR2mNWvZ.jpg','input','url(\x22','front','style','error','590iWIfjz','innerHTML','.face.left','526158Kgqtoh','addEventListener','volume','play','top','5564262KdtoYI','19746NVwPpX','backgroundImage','none','380840TlYzKL','https://xatimg.com/image/ICpE2P3ZO5Og.jpg','.face.right','back','</span>','roundWrapper','length'];_0x1625=function(){return _0x589a24;};return _0x1625();}async function fetchTrackInfo(){const _0x2a35e3=_0x5e159a;try{const _0x2f4fa1=await fetch('https://api.allorigins.win/raw?url=https://stm2.srvif.com:7198/7.html&_ts='+Date['now']()),_0xf5db67=await _0x2f4fa1[_0x2a35e3(0x10e)]();let _0x4d5c33=_0xf5db67['split'](',')[0x6]||_0x2a35e3(0x134);_0x4d5c33=_0x4d5c33[_0x2a35e3(0x138)](/<[^>]+>/g,'')[_0x2a35e3(0x141)](),marqueeText[_0x2a35e3(0x11f)]=_0x2a35e3(0x111)+_0x4d5c33+_0x2a35e3(0x12e);const _0x9238a8=encodeURIComponent(_0x4d5c33),_0x3102a9=await fetch('https://itunes.apple.com/search?term='+_0x9238a8+'&limit=1'),_0x41acaa=await _0x3102a9[_0x2a35e3(0x143)]();let _0x286c45=null;_0x41acaa[_0x2a35e3(0x10b)]&&_0x41acaa[_0x2a35e3(0x10b)][_0x2a35e3(0x130)]>0x0&&(_0x286c45=_0x41acaa['results'][0x0][_0x2a35e3(0x113)][_0x2a35e3(0x138)](_0x2a35e3(0x13d),'260x260'));if(_0x286c45)for(const _0x5d9333 in faces){faces[_0x5d9333][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x11a)+_0x286c45+'\x22)';}else faces[_0x2a35e3(0x11b)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x0]+')',faces[_0x2a35e3(0x12d)]['style'][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x1]+')',faces[_0x2a35e3(0x13e)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x2]+')',faces[_0x2a35e3(0x133)][_0x2a35e3(0x11c)]['backgroundImage']='url('+fallbackImages[0x3]+')',faces[_0x2a35e3(0x125)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x4]+')',faces[_0x2a35e3(0x149)]['style']['backgroundImage']=_0x2a35e3(0x116)+fallbackImages[0x5]+')';}catch(_0x200c48){marqueeText[_0x2a35e3(0x11f)]=_0x2a35e3(0x145),faces[_0x2a35e3(0x11b)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x0]+')',faces['back'][_0x2a35e3(0x11c)]['backgroundImage']=_0x2a35e3(0x116)+fallbackImages[0x1]+')',faces[_0x2a35e3(0x13e)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x2]+')',faces[_0x2a35e3(0x133)][_0x2a35e3(0x11c)][_0x2a35e3(0x128)]=_0x2a35e3(0x116)+fallbackImages[0x3]+')',faces['top']['style']['backgroundImage']=_0x2a35e3(0x116)+fallbackImages[0x4]+')',faces[_0x2a35e3(0x149)][_0x2a35e3(0x11c)]['backgroundImage']='url('+fallbackImages[0x5]+')',console[_0x2a35e3(0x11d)](_0x200c48);}}fetchTrackInfo(),setInterval(fetchTrackInfo,0x3a98);</script>
+
+</body>
+</html>
