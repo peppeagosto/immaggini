@@ -1,43 +1,273 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>DJ Live Indicator</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<title>DJ Luana Live</title>
 <style>
-  #dj-live {
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-    font-weight: bold;
-    color: #ff0000;
-  }
+html, body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2100px;
+  font-family: Arial, sans-serif;
+}
+#container {
+  position: relative;
+  width: 360px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Cubo 3D */
+#scene {
+  width: 260px;
+  height: 260px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin 20s infinite linear;
+  margin: auto;
+}
+.face {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  border: 6px solid transparent;
+  border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1;
+  animation: pulse 2s infinite alternate;
+}
+.front  { transform: rotateY(0deg) translateZ(130px); }
+.back   { transform: rotateY(180deg) translateZ(130px); }
+.right  { transform: rotateY(90deg) translateZ(130px); }
+.left   { transform: rotateY(-90deg) translateZ(130px); }
+.top    { transform: rotateX(90deg) translateZ(130px); }
+.bottom { transform: rotateX(-90deg) translateZ(130px); }
+
+@keyframes pulse {
+  0% { border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1; }
+  50% { border-image: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red) 1; }
+  100% { border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1; }
+}
+
+/* Cerchio DJ */
+#roundWrapper {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Controlli */
+#controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+#playBtn, #stopBtn {
+  padding: 8px 16px;
+  background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8));
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 6px;
+  animation: rainbowPulse 2s infinite alternate;
+}
+#volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 8px;
+  background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8));
+  outline: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: white;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+#volumeSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: white;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+@keyframes rainbowPulse {
+  0% { background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8)); }
+  50% { background: linear-gradient(90deg, rgba(238,130,238,0.8), rgba(75,0,130,0.8), rgba(0,0,255,0.8), rgba(0,128,0,0.8), rgba(255,255,0,0.8), rgba(255,165,0,0.8), rgba(255,0,0,0.8)); }
+  100% { background: linear-gradient(90deg, rgba(255,0,0,0.8), rgba(255,165,0,0.8), rgba(255,255,0,0.8), rgba(0,128,0,0.8), rgba(0,0,255,0.8), rgba(75,0,130,0.8), rgba(238,130,238,0.8)); }
+}
+
+/* Rettangolo sfumato titoli */
+#titleWrapper {
+  width: 300px;
+  height: 30px;
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, rgba(176,224,230,0.0), rgba(176,224,230,0.7) 10%, rgba(176,224,230,0.7) 90%, rgba(176,224,230,0.0));
+}
+#marquee-text {
+  white-space: nowrap;
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #ff4500;
+  text-shadow: 0 0 2px #fff;
+  position: absolute;
+}
+#marquee-text span { display: inline-block; }
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes spin {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to   { transform: rotateX(360deg) rotateY(360deg); }
+}
 </style>
 </head>
 <body>
 
-<h2>DJ in diretta:</h2>
-<div id="dj-live">Caricamento...</div>
+<div id="container">
+
+  <!-- Cubo 3D -->
+  <div id="scene">
+    <div class="face front"></div>
+    <div class="face back"></div>
+    <div class="face right"></div>
+    <div class="face left"></div>
+    <div class="face top"></div>
+    <div class="face bottom"></div>
+  </div>
+
+  <!-- Cerchio DJ -->
+  <div id="roundWrapper"></div>
+
+  <!-- Rettangolo sfumato titoli -->
+  <div id="titleWrapper">
+    <div id="marquee-text"><span>Caricamento titolo...</span></div>
+  </div>
+
+  <!-- Controlli -->
+  <div id="controls">
+    <button id="playBtn">Play</button>
+    <input type="range" id="volumeSlider" min="0" max="100" value="100">
+    <button id="stopBtn">Stop</button>
+  </div>
+
+  <!-- Audio nascosto -->
+  <audio id="audioPlayer" src="https://stm2.srvif.com:7198/stream" preload="auto"></audio>
+</div>
 
 <script>
-const djJsonUrl = 'https://raw.githubusercontent.com/TUOUSERNAME/TUOREPO/main/dj.json';
+// URL del JSON su GitHub
+const JSON_URL = 'https://raw.githubusercontent.com/TUO-USERNAME/TUO-REPO/main/dj.json';
 
-function aggiornaDJ() {
-  fetch(djJsonUrl)
-    .then(res => res.json())
-    .then(data => {
-      const liveDJ = Object.keys(data).filter(dj => data[dj]);
-      document.getElementById('dj-live').innerText = 
-        liveDJ.length ? "DJ " + liveDJ.join(", ") + " in diretta" : "Nessun DJ in diretta";
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById('dj-live').innerText = "Errore nel caricamento";
-    });
+const scene = document.getElementById('scene');
+const roundWrapper = document.getElementById('roundWrapper');
+const marqueeText = document.getElementById('marquee-text');
+const audioPlayer = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+
+const faces = {
+  'front': document.querySelector('.face.front'),
+  'back': document.querySelector('.face.back'),
+  'right': document.querySelector('.face.right'),
+  'left': document.querySelector('.face.left'),
+  'top': document.querySelector('.face.top'),
+  'bottom': document.querySelector('.face.bottom')
+};
+
+playBtn.addEventListener('click', () => {
+  scene.style.display = 'block';
+  audioPlayer.play().catch(e => console.log('Audio play error:', e));
+});
+
+stopBtn.addEventListener('click', () => {
+  scene.style.display = 'none';
+  audioPlayer.pause();
+  audioPlayer.currentTime = 0;
+});
+
+volumeSlider.addEventListener('input', () => {
+  audioPlayer.volume = volumeSlider.value / 100;
+});
+
+async function fetchDJStatus() {
+  try {
+    const res = await fetch(JSON_URL);
+    const djStatus = await res.json();
+
+    let activeDJ = null;
+    for (const dj in djStatus) {
+      if (djStatus[dj] !== 'idle') {
+        activeDJ = dj;
+        break;
+      }
+    }
+
+    if (activeDJ) {
+      // Aggiorna cubo
+      for (const face in faces) {
+        faces[face].style.backgroundImage = `url(https://peppeagosto.github.io/immaggini/${activeDJ}.png)`;
+      }
+      // Aggiorna cerchio
+      roundWrapper.style.backgroundImage = `url(https://peppeagosto.github.io/immaggini/${activeDJ}.png)`;
+      // Aggiorna marquee
+      marqueeText.innerHTML = `<span>DJ ${activeDJ} in diretta</span>`;
+      audioPlayer.pause();
+    } else {
+      marqueeText.innerHTML = `<span>Streaming normale</span>`;
+      audioPlayer.play().catch(e => console.log('Audio play error:', e));
+    }
+
+  } catch (err) {
+    console.log('Errore fetch DJ:', err);
+  }
 }
 
-// Aggiorna ogni 10 secondi
-aggiornaDJ();
-setInterval(aggiornaDJ, 10000);
+// Aggiorna ogni 3 secondi
+fetchDJStatus();
+setInterval(fetchDJStatus, 3000);
 </script>
 
 </body>
 </html>
+
+
