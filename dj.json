@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, user-scalable=no" />
-<title>DJ Live</title>
+<title>DJ Live - Luana</title>
 <style>
 html, body {
   margin: 0;
@@ -195,7 +195,7 @@ html, body {
 
 <script>
 // URL del JSON su GitHub
-const JSON_URL = 'https://raw.githubusercontent.com/TUO-USERNAME/TUO-REPO/main/dj.json';
+const JSON_URL = 'https://raw.githubusercontent.com/diablo123/globo/main/dj.json';
 
 const scene = document.getElementById('scene');
 const roundWrapper = document.getElementById('roundWrapper');
