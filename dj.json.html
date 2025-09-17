@@ -194,8 +194,8 @@ html, body {
 </div>
 
 <script>
-// URL del JSON su GitHub
-const JSON_URL = 'https://raw.githubusercontent.com/diablo123/globo/main/dj.json';
+// URL del JSON corretto
+const JSON_URL = 'https://raw.githubusercontent.com/peppeagosto/immaggini/main/dj.json';
 
 const scene = document.getElementById('scene');
 const roundWrapper = document.getElementById('roundWrapper');
@@ -234,20 +234,26 @@ async function fetchDJStatus() {
     const res = await fetch(JSON_URL);
     const djStatus = await res.json();
 
-    if(djStatus.luana.status === 'live'){
+    let activeDJ = null;
+    for (const dj in djStatus) {
+      if (djStatus[dj] !== 'idle') {
+        activeDJ = dj;
+        break;
+      }
+    }
+
+    if (activeDJ) {
       // Aggiorna cubo
       for (const face in faces) {
-        faces[face].style.backgroundImage = `url(${djStatus.luana.cover})`;
+        faces[face].style.backgroundImage = `url(https://peppeagosto.github.io/immaggini/${activeDJ}.png)`;
       }
       // Aggiorna cerchio
-      roundWrapper.style.backgroundImage = `url(${djStatus.luana.cover})`;
+      roundWrapper.style.backgroundImage = `url(https://peppeagosto.github.io/immaggini/${activeDJ}.png)`;
       // Aggiorna marquee
-      marqueeText.innerHTML = `<span>DJ Luana in diretta</span>`;
-      audioPlayer.src = djStatus.luana.stream;
-      audioPlayer.play().catch(e => console.log('Audio play error:', e));
+      marqueeText.innerHTML = `<span>DJ ${activeDJ} in diretta</span>`;
+      audioPlayer.pause();
     } else {
       marqueeText.innerHTML = `<span>Streaming normale</span>`;
-      audioPlayer.src = 'https://stm2.srvif.com:7198/stream';
       audioPlayer.play().catch(e => console.log('Audio play error:', e));
     }
 
@@ -256,12 +262,10 @@ async function fetchDJStatus() {
   }
 }
 
-// Aggiorna ogni 3 secondi
+// Aggiorna ogni 15 secondi
 fetchDJStatus();
-setInterval(fetchDJStatus, 3000);
+setInterval(fetchDJStatus, 15000);
 </script>
 
 </body>
 </html>
-
-
