@@ -19,16 +19,26 @@ html, body {
     position: relative;
     width: 1308px;
     height: 486px;
-    background: transparent;
 }
 
+/* VIDEO BACKGROUND */
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1308px;
+    height: 486px;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* VIDEO LATERALI */
 .video-wrapper {
     position: absolute;
     width: 290px;
     height: 486px;
     overflow: hidden;
     border-radius: 10px;
-    background: transparent;
     z-index: 1;
 }
 
@@ -36,14 +46,13 @@ video.side-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: transparent;
-    mix-blend-mode: screen; /* nero trasparente */
+    mix-blend-mode: screen; /* fa vedere il background attorno */
 }
 
 .left-video-wrapper { left: -40px; top: 0; }
 .right-video-wrapper { right: -40px; top: 0; }
 
-/* Video centrale */
+/* VIDEO CENTRALE */
 .center-video-wrapper {
     position: absolute;
     top: 0;
@@ -52,17 +61,17 @@ video.side-video {
     width: 728px;
     height: 486px;
     overflow: hidden;
-    z-index: 10;
+    z-index: 2;
 }
 
 .center-video-wrapper video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: transparent;
-    mix-blend-mode: screen; /* trasparenza su nero */
+    mix-blend-mode: screen; /* background visibile anche sotto il centrale */
 }
 
+/* TESTI SOPRA I VIDEO LATERALI */
 .video-text {
     position: absolute;
     bottom: 8px;
@@ -72,7 +81,7 @@ video.side-video {
     text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
     font-family: "Trebuchet MS", Arial, sans-serif;
     white-space: nowrap;
-    z-index: 2;
+    z-index: 3;
 }
 
 .left-text { left: 50%; transform: translateX(-50%); }
@@ -82,7 +91,12 @@ video.side-video {
 <body>
 
 <div class="container">
-  <!-- Video sinistro -->
+  <!-- VIDEO BACKGROUND -->
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/fra.mp4" type="video/mp4" />
+  </video>
+
+  <!-- VIDEO SINISTRO -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4" />
@@ -90,15 +104,14 @@ video.side-video {
     <div class="video-text left-text">Creato da Cartaio</div>
   </div>
 
-  <!-- Video centrale -->
+  <!-- VIDEO CENTRALE -->
   <div class="center-video-wrapper">
     <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/forum.mp4" type="video/mp4" />
-      Il tuo browser non supporta il video.
+      <source src="https://peppeagosto.github.io/immaggini/from.mp4" type="video/mp4" />
     </video>
   </div>
 
-  <!-- Video destro -->
+  <!-- VIDEO DESTRO -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4" />
@@ -109,3 +122,4 @@ video.side-video {
 
 </body>
 </html>
+
