@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>mio</title>
+<title>Player Xat Trasparente</title>
 <style>
 html, body {
     margin: 0;
@@ -37,13 +37,13 @@ video.side-video {
     height: 100%;
     object-fit: cover;
     background: transparent;
-    mix-blend-mode: screen;
+    mix-blend-mode: screen; /* nero trasparente */
 }
 
 .left-video-wrapper { left: -40px; top: 0; }
 .right-video-wrapper { right: -40px; top: 0; }
 
-/* ---- VIDEO CENTRALE ---- */
+/* Video centrale */
 .center-video-wrapper {
     position: absolute;
     top: 0;
@@ -93,7 +93,7 @@ video.side-video {
   <!-- Video centrale -->
   <div class="center-video-wrapper">
     <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/from.mp4" type="video/mp4" />
+      <source src="https://peppeagosto.github.io/immaggini/forum.mp4" type="video/mp4" />
       Il tuo browser non supporta il video.
     </video>
   </div>
@@ -109,4 +109,3 @@ video.side-video {
 
 </body>
 </html>
-
