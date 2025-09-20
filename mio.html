@@ -8,17 +8,19 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100vh;
+    width: 100vw;
     background: transparent;
+    overflow: hidden; /* rimuove bianco sotto */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 
 .container {
     position: relative;
     width: 1308px;
     height: 486px;
+    background: transparent;
 }
 
 /* VIDEO BACKGROUND */
@@ -26,19 +28,19 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 1308px;
-    height: 486px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     z-index: 0;
 }
 
-/* TESTO SUL BACKGROUND */
+/* SCRITTA ANIMATA SUL BACKGROUND */
 .background-text {
     position: absolute;
     top: 0;
     left: 0;
-    width: 1308px;
-    height: 486px;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,17 +48,13 @@ html, body {
     font-size: 28px;
     font-weight: bold;
     color: #00ffff;
-    text-shadow: 
-        0 0 5px #00ffff,
-        0 0 10px #00ffff,
-        0 0 20px #00ffff,
-        0 0 40px #00ffff;
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
     z-index: 1;
     pointer-events: none;
     animation: rotateText 8s linear infinite;
 }
 
-/* Animazione della scritta sui 4 bordi */
+/* Animazione sui 4 bordi */
 @keyframes rotateText {
     0% { transform: translate(0,0) rotate(0deg); }
     25% { transform: translate(100%,0) rotate(90deg); }
@@ -72,7 +70,7 @@ html, body {
     height: 486px;
     overflow: hidden;
     border-radius: 10px;
-    z-index: 2; /* sopra il background e testo */
+    z-index: 2;
 }
 
 video.side-video {
@@ -94,7 +92,7 @@ video.side-video {
     width: 728px;
     height: 486px;
     overflow: hidden;
-    z-index: 3; /* sopra tutto tranne testo del background */
+    z-index: 3;
 }
 
 .center-video-wrapper video {
@@ -158,4 +156,5 @@ video.side-video {
 
 </body>
 </html>
+
 
