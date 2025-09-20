@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>mio</title>
 <style>
-  html, body {
+html, body {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -13,16 +13,16 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-  }
+}
 
-  .container {
+.container {
     position: relative;
     width: 1308px;
     height: 486px;
     background: transparent;
-  }
+}
 
-  .video-wrapper {
+.video-wrapper {
     position: absolute;
     width: 290px;
     height: 486px;
@@ -30,41 +30,40 @@
     border-radius: 10px;
     background: transparent;
     z-index: 1;
-  }
+}
 
-  video.side-video {
+video.side-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     background: transparent;
-    mix-blend-mode: screen; /* 🔥 trasparenza sui neri */
-  }
+    mix-blend-mode: screen;
+}
 
-  .left-video-wrapper {
-    left: -40px;
-    top: 0;
-  }
+.left-video-wrapper { left: -40px; top: 0; }
+.right-video-wrapper { right: -40px; top: 0; }
 
-  .right-video-wrapper {
-    right: -40px;
-    top: 0;
-  }
-
-  img.center-image {
+/* ---- VIDEO CENTRALE ---- */
+.center-video-wrapper {
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 728px;
     height: 486px;
-    pointer-events: none;
-    user-select: none;
+    overflow: hidden;
     z-index: 10;
-    background: transparent;
-    mix-blend-mode: screen; /* 🔥 elimina il nero dall'immagine */
-  }
+}
 
-  .video-text {
+.center-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: transparent;
+    mix-blend-mode: screen; /* trasparenza su nero */
+}
+
+.video-text {
     position: absolute;
     bottom: 8px;
     font-size: 14px;
@@ -74,39 +73,35 @@
     font-family: "Trebuchet MS", Arial, sans-serif;
     white-space: nowrap;
     z-index: 2;
-  }
+}
 
-  .left-text {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .right-text {
-    left: 50%;
-    transform: translateX(-50%);
-  }
+.left-text { left: 50%; transform: translateX(-50%); }
+.right-text { left: 50%; transform: translateX(-50%); }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Video sinistro con scritta -->
+  <!-- Video sinistro -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4" />
-      Il tuo browser non supporta il video.
     </video>
     <div class="video-text left-text">Creato da Cartaio</div>
   </div>
 
-  <!-- Immagine centrale -->
-  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
+  <!-- Video centrale -->
+  <div class="center-video-wrapper">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/from.mp4" type="video/mp4" />
+      Il tuo browser non supporta il video.
+    </video>
+  </div>
 
-  <!-- Video destro con scritta -->
+  <!-- Video destro -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4" />
-      Il tuo browser non supporta il video.
     </video>
     <div class="video-text right-text">Creato da Cartaio</div>
   </div>
@@ -114,3 +109,4 @@
 
 </body>
 </html>
+
