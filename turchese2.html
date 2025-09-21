@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -10,57 +11,19 @@ html, body {
     height: 100vh;
     width: 100vw;
     background: transparent;
-    overflow: hidden; /* rimuove bianco sotto */
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Trebuchet MS", Arial, sans-serif;
 }
 
+/* CONTENITORE GENERALE */
 .container {
     position: relative;
     width: 1308px;
     height: 486px;
     background: transparent;
-}
-
-/* VIDEO BACKGROUND */
-.background-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-}
-
-/* SCRITTA ANIMATA SUL BACKGROUND */
-.background-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    font-size: 28px;
-    font-weight: bold;
-    color: #00ffff;
-    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
-    z-index: 1;
-    pointer-events: none;
-    animation: rotateText 8s linear infinite;
-}
-
-/* Animazione sui 4 bordi */
-@keyframes rotateText {
-    0% { transform: translate(0,0) rotate(0deg); }
-    25% { transform: translate(100%,0) rotate(90deg); }
-    50% { transform: translate(100%,100%) rotate(180deg); }
-    75% { transform: translate(0,100%) rotate(270deg); }
-    100% { transform: translate(0,0) rotate(360deg); }
 }
 
 /* VIDEO LATERALI */
@@ -69,7 +32,7 @@ html, body {
     width: 290px;
     height: 486px;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 12px;
     z-index: 2;
 }
 
@@ -77,11 +40,10 @@ video.side-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: screen;
 }
 
-.left-video-wrapper { left: -40px; top: 0; }
-.right-video-wrapper { right: -40px; top: 0; }
+.left-video-wrapper { left: 0; top: 0; }
+.right-video-wrapper { right: 0; top: 0; }
 
 /* VIDEO CENTRALE */
 .center-video-wrapper {
@@ -92,6 +54,7 @@ video.side-video {
     width: 728px;
     height: 486px;
     overflow: hidden;
+    border-radius: 12px;
     z-index: 3;
 }
 
@@ -99,59 +62,78 @@ video.side-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: screen;
 }
 
-/* TESTI SOPRA I VIDEO LATERALI */
+/* TESTI SUI VIDEO LATERALI */
 .video-text {
     position: absolute;
     bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
     font-weight: bold;
     color: #ffffffcc;
     text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
-    font-family: "Trebuchet MS", Arial, sans-serif;
     white-space: nowrap;
     z-index: 4;
 }
 
-.left-text { left: 50%; transform: translateX(-50%); }
-.right-text { left: 50%; transform: translateX(-50%); }
+/* SCRITTA ANIMATA GENERALE */
+.background-text {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
+    z-index: 5;
+    pointer-events: none;
+    animation: rotateText 8s linear infinite;
+}
+
+@keyframes rotateText {
+    0% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(100%,0) rotate(90deg); }
+    50% { transform: translate(100%,100%) rotate(180deg); }
+    75% { transform: translate(0,100%) rotate(270deg); }
+    100% { transform: translate(0,0) rotate(360deg); }
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- VIDEO BACKGROUND -->
-  <video class="background-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/turchese2.mp4" type="video/mp4">
-  </video>
-
-  <!-- SCRITTA ANIMATA SOLO SUL BACKGROUND -->
-  <div class="background-text">Il Cartaio</div>
 
   <!-- VIDEO SINISTRO -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/turchese2.mp4" type="video/mp4">
     </video>
-    <div class="video-text left-text">Creato da Cartaio</div>
+    <div class="video-text">Creato da Cartaio</div>
   </div>
 
   <!-- VIDEO CENTRALE -->
   <div class="center-video-wrapper">
     <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/turchese2.mp4" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/cyan.mp4" type="video/mp4">
     </video>
   </div>
 
   <!-- VIDEO DESTRO -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/turchese2.mp4" type="video/mp4">
     </video>
-    <div class="video-text right-text">Creato da Cartaio</div>
+    <div class="video-text">Creato da Cartaio</div>
   </div>
+
+  <!-- SCRITTA ANIMATA -->
+  <div class="background-text">Il Cartaio</div>
+
 </div>
 
 </body>
