@@ -42,8 +42,8 @@ video.side-video {
     object-fit: cover;
 }
 
-.left-video-wrapper { left: 10px; top: 0; }   /* spostato dentro */
-.right-video-wrapper { right: 10px; top: 0; } /* spostato dentro */
+.left-video-wrapper { left: 10px; top: 0; }
+.right-video-wrapper { right: 10px; top: 0; }
 
 /* VIDEO CENTRALE */
 .center-video-wrapper {
@@ -70,37 +70,21 @@ video.side-video {
     bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 14px;
+    font-size: 20px; /* leggermente più grande */
     font-weight: bold;
     color: #ffffffcc;
     text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
     white-space: nowrap;
     z-index: 4;
+    animation: flashMoveText 25s infinite;
 }
 
-/* SCRITTA ANIMATA GENERALE */
-.background-text {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #00ffff;
-    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
-    z-index: 5;
-    pointer-events: none;
-    animation: rotateText 8s linear infinite;
-}
-
-@keyframes rotateText {
-    0% { transform: translate(0,0) rotate(0deg); }
-    25% { transform: translate(100%,0) rotate(90deg); }
-    50% { transform: translate(100%,100%) rotate(180deg); }
-    75% { transform: translate(0,100%) rotate(270deg); }
-    100% { transform: translate(0,0) rotate(360deg); }
+/* ANIMAZIONE LAMPEGGIO + MOVIMENTO VERTICALE */
+@keyframes flashMoveText {
+    0% { opacity: 1; bottom: 50%; }      /* lampeggio in centro verticale */
+    20% { opacity: 1; bottom: 50%; }     /* rimane 5 secondi al centro */
+    21% { opacity: 0; bottom: 8px; }     /* ritorna sotto e invisibile */
+    100% { opacity: 0; bottom: 8px; }    /* fermo sotto fino al prossimo ciclo */
 }
 </style>
 </head>
@@ -113,7 +97,7 @@ video.side-video {
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/homo.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Creato da Cartaio</div>
+    <div class="video-text">Il Cartaio</div>
   </div>
 
   <!-- VIDEO CENTRALE -->
@@ -128,14 +112,12 @@ video.side-video {
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/homo.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Creato da Cartaio</div>
+    <div class="video-text">Il Cartaio</div>
   </div>
-
-  <!-- SCRITTA ANIMATA -->
-  <div class="background-text">Il Cartaio</div>
 
 </div>
 
 </body>
 </html>
+
 
