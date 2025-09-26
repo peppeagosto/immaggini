@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immagine centrale con fade opacità</title>
+<style>
+body {
+  margin: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  position: relative;
+  width: 1308px;
+  height: 486px;
+}
+
+/* Video laterali */
+.video-wrapper {
+  position: absolute;
+  width: 290px;
+  height: 486px;
+  overflow: hidden;
+  border-radius: 12px;
+  z-index: 2;
+}
+video.side-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.left-video-wrapper { left: 10px; top: 0; }
+.right-video-wrapper { right: 10px; top: 0; }
+
+/* Immagine centrale dinamica */
+.center-image {
+  position: absolute;
+  top: 0;
+  left: 310px; /* posizione centrale */
+  width: 708px; /* spazio tra i due video */
+  height: 486px;
+  border-radius: 12px;
+  opacity: 0;
+  animation: fadeOpacity 20s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+  box-shadow: 0 0 0px #00ffff;
+}
+
+/* Fade in/out con opacità */
+@keyframes fadeOpacity {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }   /* fade in 5s */
+  75%  { opacity: 1; }   /* rimane visibile 10s */
+  100% { opacity: 0; }   /* fade out 5s */
+}
+
+/* Bagliore neon */
+@keyframes glow {
+  0% { box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+  50% { box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff; }
+  100% { box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+}
+
+/* Testi sui video laterali */
+.video-text {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffffcc;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
+  white-space: nowrap;
+  z-index: 4;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Video sinistro -->
+  <div class="video-wrapper left-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/lu1.mp4?v=2" type="video/mp4">
+    </video>
+    <div class="video-text">Creato Dal Cartaio</div>
+  </div>
+
+  <!-- Video destro -->
+  <div class="video-wrapper right-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/lu1.mp4?v=2" type="video/mp4">
+    </video>
+    <div class="video-text">Creato Dal Cartaio</div>
+  </div>
+
+  <!-- Immagine centrale -->
+  <img src="https://xatimg.com/image/X0Vg0FjqkD49.jpg" class="center-image" />
+
+</div>
+</body>
+</html>
