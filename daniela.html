@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Player Xat Trasparente</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTENITORE GENERALE */
+.container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+    background: transparent;
+}
+
+/* VIDEO LATERALI */
+.video-wrapper {
+    position: absolute;
+    width: 290px;
+    height: 486px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+video.side-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.left-video-wrapper { left: 10px; top: 0; }
+.right-video-wrapper { right: 10px; top: 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- VIDEO SINISTRO -->
+  <div class="video-wrapper left-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/daniela.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- VIDEO DESTRO -->
+  <div class="video-wrapper right-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/daniela.mp4" type="video/mp4">
+    </video>
+  </div>
+
+</div>
+
+</body>
+</html>
