@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sfondo Sfumato 20 Colori</title>
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* --- Sfumatura con 20 colori --- */
+body {
+  background: linear-gradient(270deg,
+    #ff6b6b, #ff8e72, #ffb86b, #ffd56b, #fff36b,
+    #e6ff7a, #8effa6, #5fffd7, #5fe3ff, #6ca0ff,
+    #7b7bff, #b28bff, #f39bff, #ff9bd1, #ff6fbf,
+    #ff5f9b, #ff7a7a, #ffa07a, #ffd1a9, #fff1b6
+  );
+  background-size: 400% 400%;
+  animation: gradientFlow 20s ease infinite;
+}
+
+/* --- Animazione dolce e infinita --- */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+</head>
+<body>
+</body>
+</html>
