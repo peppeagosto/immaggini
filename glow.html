@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL DIABLO Protected</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 748px;
+  height: 484px;
+  background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
+}
+
+#sfondo {
+  position: relative;
+  width: 748px;
+  height: 484px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: radial-gradient(circle at center, #000 0%, #000 100%);
+}
+
+/* Luci animate */
+.luce {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 1;
+  mix-blend-mode: screen;
+  animation: muovi 12s infinite ease-in-out;
+}
+.l1 { background: #ff0000; top: -200px; left: -200px; animation-delay: 0s; }
+.l2 { background: #00ffff; top: -200px; right: -200px; animation-delay: 2s; }
+.l3 { background: #00ff00; bottom: -200px; left: -200px; animation-delay: 4s; }
+.l4 { background: #ff00ff; bottom: -200px; right: -200px; animation-delay: 6s; }
+.l5 { background: #ffff00; top: 30%; left: 30%; width: 600px; height: 600px; filter: blur(200px); animation-delay: 1s; }
+
+@keyframes muovi {
+  0% { transform: translate(0,0) scale(1); opacity:1; }
+  25% { transform: translate(80px, -60px) scale(1.1); opacity:0.9; }
+  50% { transform: translate(-80px, 80px) scale(1.2); opacity:1; }
+  75% { transform: translate(60px, 100px) scale(1); opacity:0.9; }
+  100% { transform: translate(0,0) scale(1); opacity:1; }
+}
+
+/* Bordo neon */
+#sfondo::before {
+  content: "";
+  position: absolute;
+  top: -20px; left: -20px; right: -20px; bottom: -20px;
+  border-radius: 40px;
+  background: conic-gradient(
+    from 0deg,
+    #ff0000,
+    #ff9900,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #ff00ff,
+    #ff0000
+  );
+  filter: blur(60px) brightness(2.5);
+  animation: neon 8s linear infinite;
+  mix-blend-mode: screen;
+  z-index: 1;
+}
+
+@keyframes neon {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Font e testo */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+.testo {
+  position: absolute;
+  font-family: 'Creepster', cursive;
+  font-size: 36px; /* testo più piccolo */
+  color: #ff0000;
+  text-shadow:
+    0 0 10px #ff0000,
+    0 0 20px #ff3300,
+    0 0 40px #ff6600,
+    0 0 80px #ff0000;
+  z-index: 5;
+  perspective: 800px;
+}
+
+/* Destra -> centro */
+.dx {
+  right: -300px;
+  top: 40px;
+  animation: entraDx 6s ease-in-out infinite alternate;
+}
+
+/* Sinistra -> centro */
+.sx {
+  left: -300px;
+  bottom: 40px;
+  animation: entraSx 6s ease-in-out infinite alternate;
+}
+
+/* Animazioni testo */
+@keyframes entraDx {
+  0% { transform: translateX(0) rotateY(-60deg) translateY(-200px); opacity: 0; }
+  40% { opacity: 1; }
+  50% { transform: translateX(-260px) rotateY(0deg) translateY(0); }
+  70% { transform: translateX(-220px) rotateY(15deg) translateY(10px); }
+  100% { transform: translateX(-260px) rotateY(0deg) translateY(0); opacity: 1; }
+}
+
+@keyframes entraSx {
+  0% { transform: translateX(0) rotateY(60deg) translateY(-200px); opacity: 0; }
+  40% { opacity: 1; }
+  50% { transform: translateX(260px) rotateY(0deg) translateY(0); }
+  70% { transform: translateX(220px) rotateY(-15deg) translateY(10px); }
+  100% { transform: translateX(260px) rotateY(0deg) translateY(0); opacity: 1; }
+}
+</style>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL DIABLO Safe Glow</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Container */
+#sfondo {
+  width: 1200px;
+  height: 600px;
+  position: relative;
+  margin: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+  overflow: hidden;
+  background: linear-gradient(270deg, #ff004c, #ff9300, #ffe600, #00ff87, #00c3ff, #cc00ff, #ff006a);
+  background-size: 1400% 1400%;
+  animation: gradiente 20s ease infinite;
+}
+
+/* Onde di luce */
+.luce {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  animation: muovi 15s ease-in-out infinite alternate;
+}
+
+.l1 { background: #ff0000; top: 10%; left: 5%; animation-delay: 0s; }
+.l2 { background: #00ffff; top: 20%; right: 5%; animation-delay: 3s; }
+.l3 { background: #00ff00; bottom: 15%; left: 10%; animation-delay: 6s; }
+.l4 { background: #ff00ff; bottom: 20%; right: 10%; animation-delay: 9s; }
+.l5 { background: #ffff00; top: 40%; left: 40%; width: 500px; height: 500px; filter: blur(150px); animation-delay: 12s; }
+
+@keyframes gradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes muovi {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(50px, 30px); }
+  50% { transform: translate(-50px, -30px); }
+  75% { transform: translate(30px, 50px); }
+  100% { transform: translate(0,0); }
+}
+</style>
+</head>
+<body>
+<div id="sfondo">
+  <div class="luce l1"></div>
+  <div class="luce l2"></div>
+  <div class="luce l3"></div>
+  <div class="luce l4"></div>
+  <div class="luce l5"></div>
+</div>
+
+<script>
+// Simulazione blocco se elemento protetto manomesso
+(function() {
+  const sfondo = document.getElementById('sfondo');
+
+  function controllaIntegrita() {
+    if (!sfondo || sfondo.children.length < 5) {
+      document.body.innerHTML = `
+        <div style="width:1200px;height:600px;background:black;display:flex;flex-direction:column;justify-content:center;align-items:center;color:red;font-family:sans-serif;font-size:32px;">
+          <img src="https://peppeagosto.github.io/immaggini/io.mp4" alt="Bloccato" style="width:250px;margin-bottom:20px;">
+          <div>BLOCCATO 🔒</div>
+        </div>
+      `;
+    }
+  }
+
+  // Controllo iniziale
+  controllaIntegrita();
+
+  // Controllo continuo
+  setInterval(controllaIntegrita, 1000);
+})();
+</script>
+</body>
+</html>
