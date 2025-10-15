@@ -1,99 +1,131 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>EL DIABLO Protected</title>
-
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
-}
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
 
-/* Container principale */
-#sfondo {
-  position: relative;
-  width: 1200px;
-  height: 600px;
-  overflow: hidden;
-  border-radius: 25px;
-  background: radial-gradient(circle at center, #000 0%, #000 100%);
-}
+  html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    font-family: 'Creepster', cursive;
+  }
 
-/* Luci animate */
-.luce {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(150px);
-  opacity: 1;
-  mix-blend-mode: screen;
-  animation: muovi 12s infinite ease-in-out;
-}
-.l1 { background: #ff0000; top: -200px; left: -200px; animation-delay: 0s; }
-.l2 { background: #00ffff; top: -200px; right: -200px; animation-delay: 2s; }
-.l3 { background: #00ff00; bottom: -200px; left: -200px; animation-delay: 4s; }
-.l4 { background: #ff00ff; bottom: -200px; right: -200px; animation-delay: 6s; }
-.l5 { background: #ffff00; top: 30%; left: 30%; width: 600px; height: 600px; filter: blur(200px); animation-delay: 1s; }
+  /* CONTENITORE UNICO 1200x600 */
+  #sfondo{
+    position:relative;
+    width:1200px;
+    height:600px;
+    border-radius:25px;
+    overflow:hidden;
+    background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
+  }
 
-@keyframes muovi {
-  0% { transform: translate(0,0) scale(1); opacity:1; }
-  25% { transform: translate(80px, -60px) scale(1.1); opacity:0.9; }
-  50% { transform: translate(-80px, 80px) scale(1.2); opacity:1; }
-  75% { transform: translate(60px, 100px) scale(1); opacity:0.9; }
-  100% { transform: translate(0,0) scale(1); opacity:1; }
-}
+  /* Bordo neon */
+  #sfondo::before{
+    content:"";
+    position:absolute;
+    top:-20px; left:-20px; right:-20px; bottom:-20px;
+    border-radius:40px;
+    background: conic-gradient(from 0deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);
+    filter: blur(60px) brightness(2.5);
+    animation: neon 8s linear infinite;
+    mix-blend-mode: screen;
+    z-index:1;
+  }
+  @keyframes neon{ 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
 
-/* Bordo neon */
-#sfondo::before {
-  content: "";
-  position: absolute;
-  top: -20px; left: -20px; right: -20px; bottom: -20px;
-  border-radius: 40px;
-  background: conic-gradient(
-    from 0deg,
-    #ff0000,
-    #ff9900,
-    #ffff00,
-    #00ff00,
-    #00ffff,
-    #0000ff,
-    #ff00ff,
-    #ff0000
-  );
-  filter: blur(60px) brightness(2.5);
-  animation: neon 8s linear infinite;
-  mix-blend-mode: screen;
-  z-index: 1;
-}
+  /* Luci animate */
+  .luce{ position:absolute; width:500px; height:500px; border-radius:50%; filter:blur(150px); opacity:0.9; mix-blend-mode:screen; animation:muovi 12s infinite ease-in-out; z-index:2; }
+  .l1{ background:#ff0000; top:-200px; left:-200px; animation-delay:0s; }
+  .l2{ background:#00ffff; top:-200px; right:-200px; animation-delay:2s; }
+  .l3{ background:#00ff00; bottom:-200px; left:-200px; animation-delay:4s; }
+  .l4{ background:#ff00ff; bottom:-200px; right:-200px; animation-delay:6s; }
+  .l5{ background:#ffff00; top:30%; left:30%; width:600px; height:600px; filter:blur(200px); animation-delay:1s; }
+  @keyframes muovi{
+    0%{transform:translate(0,0) scale(1);opacity:0.9}
+    25%{transform:translate(80px,-60px) scale(1.05);opacity:0.85}
+    50%{transform:translate(-80px,80px) scale(1.15);opacity:0.95}
+    75%{transform:translate(60px,100px) scale(1.02);opacity:0.88}
+    100%{transform:translate(0,0) scale(1);opacity:0.9}
+  }
 
-@keyframes neon {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+  /* TESTO CENTRALE (invisibile ma presente nel DOM) */
+  #diablo{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:40px;
+    color:transparent; /* invisibile */
+    user-select:none;
+    z-index:5;
+    pointer-events:none;
+  }
 
-/* Testo invisibile di protezione */
-#diablo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Creepster', cursive;
-  font-size: 40px;
-  color: transparent;
-  user-select: none;
-}
+  /* TESTI LATERALI VISIBILI PICCOLI E ANIMATI VERTICALE */
+  .side {
+    position:absolute;
+    font-family:'Creepster', cursive;
+    color:#ff2d2d;
+    text-shadow:0 0 8px rgba(255,0,0,0.9), 0 0 18px rgba(255,80,0,0.7);
+    font-size:20px;
+    z-index:6;
+    user-select:none;
+    white-space:nowrap;
+  }
+
+  /* destra e sinistra posizionamento */
+  #diablo_dx{
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    animation: updown-right 2.2s ease-in-out infinite;
+  }
+  #diablo_sx{
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+    animation: updown-left 2.6s ease-in-out infinite;
+  }
+
+  /* Movimento verticale (solo Y) */
+  @keyframes updown-right{
+    0%{ transform: translateY(-18px); }
+    50%{ transform: translateY(18px); }
+    100%{ transform: translateY(-18px); }
+  }
+  @keyframes updown-left{
+    0%{ transform: translateY(18px); }
+    50%{ transform: translateY(-18px); }
+    100%{ transform: translateY(18px); }
+  }
+
+  /* BLOCCO di protezione (quando scatta) */
+  .bloccato{
+    width:1200px;
+    height:600px;
+    background:#000;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:red;
+    font-family:sans-serif;
+    font-size:36px;
+  }
+  .bloccato video{ width:320px; height:auto; margin-bottom:18px; }
 </style>
 </head>
-
 <body>
   <div id="sfondo">
     <div class="luce l1"></div>
@@ -101,28 +133,52 @@ body {
     <div class="luce l3"></div>
     <div class="luce l4"></div>
     <div class="luce l5"></div>
+
+    <!-- Testo invisibile di protezione (centrale) -->
     <div id="diablo">Diablo</div>
+
+    <!-- Testi visibili ai lati (piccoli, animati verticalmente) -->
+    <div id="diablo_sx" class="side">Diablo</div>
+    <div id="diablo_dx" class="side">Diablo</div>
   </div>
 
-  <script>
-  // Protezione: se viene alterato "Diablo", mostra blocco
-  (function() {
-    const testoOriginale = "Diablo";
-    const elemento = document.getElementById("diablo");
+<script>
+(function(){
+  const expected = "Diablo";
+  const center = document.getElementById("diablo");
+  const left = document.getElementById("diablo_sx");
+  const right = document.getElementById("diablo_dx");
 
-    function controlla() {
-      if (elemento.textContent !== testoOriginale) {
-        document.body.innerHTML = `
-          <div style="width:1200px;height:600px;background:black;display:flex;flex-direction:column;justify-content:center;align-items:center;color:red;font-family:sans-serif;font-size:36px;">
-            <video src="https://peppeagosto.github.io/immaggini/io.mp4" autoplay loop style="width:280px;margin-bottom:20px;"></video>
-            <div>BLOCCATO 🔒</div>
-          </div>
-        `;
-      }
+  function isIntact(){
+    // controlla che tutti e tre i testi siano esattamente "Diablo"
+    return center && left && right &&
+      center.textContent.trim() === expected &&
+      left.textContent.trim() === expected &&
+      right.textContent.trim() === expected;
+  }
+
+  function blocca(){
+    // mostra solo il blocco e il video iomp4
+    document.body.innerHTML = `
+      <div class="bloccato">
+        <video id="iomp4" src="https://peppeagosto.github.io/immaggini/iomp4.mp4" autoplay loop muted playsinline></video>
+        <div>BLOCCATO 🔒</div>
+      </div>
+    `;
+  }
+
+  // controllo continuo ogni secondo
+  setInterval(function(){
+    if(!isIntact()){
+      blocca();
     }
+  }, 1000);
 
-    setInterval(controlla, 1000);
-  })();
-  </script>
+  // controllo iniziale al caricamento
+  if(!isIntact()) blocca();
+})();
+</script>
 </body>
 </html>
+
+
