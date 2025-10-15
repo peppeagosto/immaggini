@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video di Sfondo con Stream Audio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('https://via.placeholder.com/650x550?text=Video+Non+Caricato') no-repeat center center/cover;
+        }
+
+        .container {
+            width: 650px;
+            height: 550px;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            background: linear-gradient(45deg, red, orange);
+            color: white;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: glow 2s ease-in-out infinite alternate, pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 8px red, 0 0 15px red, 0 0 25px orange;
+            }
+            100% {
+                box-shadow: 0 0 8px orange, 0 0 15px orange, 0 0 25px red;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .controls input[type="range"] {
+            width: 80px;
+            -webkit-appearance: none;
+            background: linear-gradient(45deg, red, orange);
+            border-radius: 5px;
+            height: 8px;
+            outline: none;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+        }
+
+        .controls input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+        }
+
+        .scroller {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #titolocanzone {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 20px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            animation: scroll 10s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        #album-cover {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 1;
+            animation: rotate 10s linear infinite;
+        }
+
+        #album-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 16px;
+            z-index: 2;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video id="myVideo" muted autoplay loop playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/19.mp4" type="video/mp4">
+            Il tuo browser non supporta il tag video.
+        </video>
+        <audio id="audio" preload="none">
+            <source src="https://stream.zeno.fm/mcrnn0ibuzatv" type="audio/mpeg">
+            Il tuo browser non supporta l'audio.
+        </audio>
+        <div class="error-message" id="error-message">Errore: Video o audio non caricati</div>
+        <div class="controls">
+            <button id="play-pause">Play</button>
+            <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+            <button id="stop-btn">Stop</button>
+        </div>
+        <div class="scroller">
+            <div id="titolocanzone">Titolo in caricamento...</div>
+        </div>
+        <div id="album-cover">
+            <img src="https://via.placeholder.com/100?text=Cover" alt="Cover Art">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('myVideo');
+            const audio = document.getElementById('audio');
+            const playPauseBtn = document.getElementById('play-pause');
+            const stopBtn = document.getElementById('stop-btn');
+            const volumeSlider = document.getElementById('volume');
+            const coverImg = document.getElementById('album-cover');
+            const titolocanzone = document.getElementById('titolocanzone');
+            const errorMessage = document.getElementById('error-message');
+            const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/mcrnn0ibuzatv";
+
+            let isPlaying = false;
+
+            // Funzione per ottenere il titolo
+            async function fetchNowPlaying() {
+                try {
+                    const response = await fetch(nowPlayingUrl);
+                    const data = await response.json();
+                    const title = data.title && data.title.trim() !== "" ? data.title : "Titolo non disponibile";
+                    titolocanzone.innerHTML = `<span>${title}</span>`;
+                    fetchCoverFromiTunes(title);
+                } catch (error) {
+                    titolocanzone.innerHTML = `<span>Errore durante il caricamento</span>`;
+                    console.error("Errore API Zenoplay:", error);
+                }
+            }
+
+            async function fetchCoverFromiTunes(songTitle) {
+                try {
+                    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(songTitle)}&media=music&limit=1`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    if (data.results && data.results.length > 0) {
+                        const artworkUrl = data.results[0].artworkUrl100.replace('100x100', '300x300');
+                        coverImg.innerHTML = `<img src="${artworkUrl}" alt="Copertina album" style="width:100%; height:100%; border-radius: 50%;">`;
+                    } else {
+                        coverImg.innerHTML = `<img src="/immaggini/default-cover.jpg" alt="Copertina non disponibile" style="width:100%; height:100%; border-radius: 50%;">`;
+                    }
+                } catch (error) {
+                    console.error("Errore nella ricerca copertina:", error);
+                    coverImg.innerHTML = `<img src="/immaggini/default-cover.jpg" alt="Errore copertina" style="width:100%; height:100%; border-radius: 50%;">`;
+                }
+            }
+
+            // Controlli audio
+            playPauseBtn.addEventListener('click', () => {
+                if (!isPlaying) {
+                    audio.play().catch((error) => {
+                        console.error("Errore riproduzione audio:", error);
+                        errorMessage.style.display = 'block';
+                        errorMessage.textContent = "Errore: Impossibile riprodurre l'audio. Verifica l'URL dello stream.";
+                    });
+                    isPlaying = true;
+                    playPauseBtn.textContent = "Pause";
+                } else {
+                    audio.pause();
+                    isPlaying = false;
+                    playPauseBtn.textContent = "Play";
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                audio.pause();
+                audio.currentTime = 0;
+                isPlaying = false;
+                playPauseBtn.textContent = "Play";
+            });
+
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = parseFloat(e.target.value);
+                audio.muted = parseFloat(e.target.value) === 0;
+            });
+
+            audio.volume = parseFloat(volumeSlider.value);
+
+            // Debug video
+            video.addEventListener('loadeddata', () => {
+                video.play();
+                errorMessage.style.display = 'none';
+            });
+
+            video.addEventListener('error', () => {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "Errore: Video non caricato";
+                console.error("Errore caricamento video");
+            });
+
+            // Debug audio con gestione ritardo
+            audio.addEventListener('error', () => {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "Errore: Audio non caricato. Verifica l'URL dello stream.";
+                console.error("Errore caricamento audio");
+            });
+
+            audio.addEventListener('waiting', () => {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = "Caricamento audio in corso...";
+            });
+
+            audio.addEventListener('playing', () => {
+                errorMessage.style.display = 'none';
+            });
+
+            // Esecuzione iniziale e aggiornamento periodico
+            fetchNowPlaying();
+            setInterval(fetchNowPlaying, 15000);
+        });
+    </script>
+</body>
+</html>
