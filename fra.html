@@ -1,0 +1,140 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL DIABLO</title>
+
+<style>
+body {
+  background: #000;
+  margin: 0;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ====== CORNICI VISIBILI E DISTACCATE ====== */
+.frame {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 8px solid;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 0 25px 8px;
+  margin: 25px;
+}
+
+/* ROSSA (esterna) */
+#layer2 {
+  border-color: #ff0000;
+  box-shadow: 0 0 25px 8px #ff0000;
+}
+
+/* GIF tra ROSSO e GIALLO */
+.between2-3 {
+  height: 40px;
+  background: url("https://xatimg.com/image/1q0ge4rff7N1.gif") center/cover no-repeat;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+/* GIALLA */
+#layer3 {
+  border-color: #ffff00;
+  box-shadow: 0 0 25px 8px #ffff00;
+}
+
+/* GIF tra GIALLO e BLU */
+.between3-4 {
+  height: 40px;
+  background: url("https://xatimg.com/image/sq8v5tmJSN0j.gif") center/cover no-repeat;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+/* BLU */
+#layer4 {
+  border-color: #0066ff;
+  box-shadow: 0 0 25px 8px #0066ff;
+}
+
+/* GIF tra BLU e VERDE */
+.between4-5 {
+  height: 40px;
+  background: url("https://xatimg.com/image/3m4OixTmgc0O.gif") center/cover no-repeat;
+  margin: 15px 0;
+  border-radius: 10px;
+}
+
+/* VERDE */
+#layer5 {
+  border-color: #00ff00;
+  box-shadow: 0 0 25px 8px #00ff00;
+}
+
+/* ====== TESTO HORROR ====== */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+.gold3d {
+  font-family: 'Creepster', cursive;
+  font-size: 52px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+  color: #ff0000;
+  text-shadow:
+    2px 2px 4px #000,
+    3px 3px 6px #660000,
+    4px 4px 8px #ff0000,
+    0 0 10px #ff3300,
+    0 0 20px #ff0000,
+    0 0 35px #660000;
+}
+
+/* ====== GIF laterali ====== */
+.side-gif {
+  position: fixed;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  z-index: 5;
+  background-repeat: repeat-y;
+}
+.side-left {
+  left: 0;
+  background-image: url('https://xatimg.com/image/sq8v5tmJSN0j.gif');
+}
+.side-right {
+  right: 0;
+  background-image: url('https://xatimg.com/image/sq8v5tmJSN0j.gif');
+}
+</style>
+
+<!-- GIF laterali -->
+<div class="side-gif side-left"></div>
+<div class="side-gif side-right"></div>
+
+<center>
+<div id="layer2" class="frame">
+
+  <div class="between2-3"></div>
+
+  <div id="layer3" class="frame">
+
+    <div class="between3-4"></div>
+
+    <div id="layer4" class="frame">
+
+      <div class="between4-5"></div>
+
+      <div id="layer5" class="frame">
+
+        <!-- RADIO -->
+        [radiohtml:700:650:p6fo1gc7h93]<br>
+        [radiohtml:600:600:]
+
+        <!-- TESTO HORROR -->
+        <div class="gold3d">👹 EL DIABLO 👹</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</center>
