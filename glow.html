@@ -54,13 +54,39 @@
         violet,
         red
     );
-    background-size: 400%; /* Per un effetto sfumato più fluido */
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    animation: rainbow 10s ease infinite, rotateStar 12s linear infinite; /* Animazione arcobaleno + rotazione */
-    filter: blur(60px) brightness(2.5);
-    mix-blend-mode: screen;
-    z-index: 2;
-  }
+    background: linear-gradient(
+  270deg,
+  #ff0000,
+  #ffff33,
+  #8a2be2,
+  #00ff7f,
+  #00e5ff,
+  #ff6600,
+  #ff1493
+);
+background-size: 400% 400%;
+clip-path: polygon(
+  50% 0%, 61% 35%, 98% 35%,
+  68% 57%, 79% 91%, 50% 70%,
+  21% 91%, 32% 57%, 2% 35%, 39% 35%
+);
+animation: rainbow 10s ease infinite, rotateStar 12s linear infinite;
+filter: blur(50px) brightness(2.8) drop-shadow(0 0 20px #ffcc00);
+mix-blend-mode: screen;
+z-index: 2;
+
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes rotateStar {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
 
   /* Animazione per il movimento dell'arcobaleno */
   @keyframes rainbow {
@@ -280,3 +306,4 @@
 </body>
 
 </html>
+
