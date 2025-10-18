@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,123 +7,173 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
 
-  html,body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     font-family: 'Creepster', cursive;
   }
 
   /* CONTENITORE UNICO 1600x800 */
-  #sfondo{
-    position:relative;
-    width:1600px;
-    height:800px;
-    border-radius:25px;
-    overflow:hidden;
+  #sfondo {
+    position: relative;
+    width: 1600px;
+    height: 800px;
+    border-radius: 25px;
+    overflow: hidden;
     background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
   }
 
-  /* Bordo neon */
-  #sfondo::before{
-    content:"";
-    position:absolute;
-    top:-20px; left:-20px; right:-20px; bottom:-20px;
-    border-radius:40px;
-    background: conic-gradient(from 0deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);
+  /* Stella rotante con sfumatura colorata */
+  #sfondo::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 950px; /* Più grande di 748px */
+    height: 950px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle at center, #ff0000 0%, #f210df 20%, #d5f210 40%, #10f230 60%, #10eff2 80%); /* Rosso, rosa, giallo/verde, verde, ciano */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); /* Forma a stella */
     filter: blur(60px) brightness(2.5);
     animation: neon 8s linear infinite;
     mix-blend-mode: screen;
-    z-index:1;
+    z-index: 2;
   }
-  @keyframes neon{ 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
 
-  /* Luci animate */
-  .luce{ position:absolute; width:500px; height:500px; border-radius:50%; filter:blur(150px); opacity:0.9; mix-blend-mode:screen; animation:muovi 12s infinite ease-in-out; z-index:2; }
-  .l1{ background:#ff0000; top:-200px; left:-200px; animation-delay:0s; }
-  .l2{ background:#00ffff; top:-200px; right:-200px; animation-delay:2s; }
-  .l3{ background:#00ff00; bottom:-200px; left:-200px; animation-delay:4s; }
-  .l4{ background:#ff00ff; bottom:-200px; right:-200px; animation-delay:6s; }
-  .l5{ background:#ffff00; top:30%; left:30%; width:600px; height:600px; filter:blur(200px); animation-delay:1s; }
-  @keyframes muovi{
-    0%{transform:translate(0,0) scale(1);opacity:0.9}
-    25%{transform:translate(80px,-60px) scale(1.05);opacity:0.85}
-    50%{transform:translate(-80px,80px) scale(1.15);opacity:0.95}
-    75%{transform:translate(60px,100px) scale(1.02);opacity:0.88}
-    100%{transform:translate(0,0) scale(1);opacity:0.9}
+  /* Code con colori diversi */
+  #sfondo .tail1,
+  #sfondo .tail2,
+  #sfondo .tail3,
+  #sfondo .tail4,
+  #sfondo .tail5 {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 950px;
+    height: 950px;
+    transform: translate(-50%, -50%);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    filter: blur(60px) brightness(2.5);
+    mix-blend-mode: screen;
+    z-index: 2;
+  }
+  #sfondo .tail1 { background: radial-gradient(circle at center, #ff0000 0%, transparent 70%); transform: translate(-50%, -50%) rotate(45deg); } /* Rosso */
+  #sfondo .tail2 { background: radial-gradient(circle at center, #f210df 0%, transparent 70%); transform: translate(-50%, -50%) rotate(90deg); } /* Rosa/Magenta */
+  #sfondo .tail3 { background: radial-gradient(circle at center, #d5f210 0%, transparent 70%); transform: translate(-50%, -50%) rotate(135deg); } /* Giallo/Verde chiaro */
+  #sfondo .tail4 { background: radial-gradient(circle at center, #10f230 0%, transparent 70%); transform: translate(-50%, -50%) rotate(180deg); } /* Verde */
+  #sfondo .tail5 { background: radial-gradient(circle at center, #10eff2 0%, transparent 70%); transform: translate(-50%, -50%) rotate(225deg); } /* Ciano */
+  @keyframes neon {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Luci animate con sfumatura arcobaleno vivace */
+  .luce {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #ff0000 0%, #f210df 20%, #d5f210 40%, #10f230 60%, #10eff2 80%); /* Rosso, rosa, giallo/verde, verde, ciano */
+    filter: blur(150px);
+    opacity: 0.95; /* Più vivace */
+    mix-blend-mode: screen;
+    animation: moveLeft 12s infinite ease-in-out, rotateCounter 12s linear infinite;
+    z-index: 1; /* Sotto la stella */
+  }
+  .l1 { top: -200px; left: -200px; animation-delay: 0s, 0s; }
+  .l2 { top: -200px; right: -200px; animation-delay: 2s, 2s; }
+  .l3 { bottom: -200px; left: -200px; animation-delay: 4s, 4s; }
+  .l4 { bottom: -200px; right: -200px; animation-delay: 6s, 6s; }
+  .l5 { top: 30%; left: 30%; width: 600px; height: 600px; filter: blur(200px); animation-delay: 1s, 1s; }
+  @keyframes moveLeft {
+    0% { transform: translate(100px, 0) scale(1); opacity: 0.95; }
+    25% { transform: translate(-50px, -60px) scale(1.05); opacity: 0.9; }
+    50% { transform: translate(-200px, 80px) scale(1.15); opacity: 1; }
+    75% { transform: translate(-100px, 100px) scale(1.02); opacity: 0.92; }
+    100% { transform: translate(100px, 0) scale(1); opacity: 0.95; }
+  }
+  @keyframes rotateCounter {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
   }
 
   /* TESTO CENTRALE (invisibile ma presente nel DOM) */
-  #Diablo{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    font-size:40px;
-    color:transparent; /* invisibile */
-    user-select:none;
-    z-index:5;
-    pointer-events:none;
+  #Diablo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    color: transparent; /* invisibile */
+    user-select: none;
+    z-index: 5;
+    pointer-events: none;
   }
 
   /* TESTI LATERALI VISIBILI PICCOLI E ANIMATI VERTICALE */
   .side {
-    position:absolute;
-    font-family:'Creepster', cursive;
-    color:#ff2d2d;
-    text-shadow:0 0 8px rgba(255,0,0,0.9), 0 0 18px rgba(255,80,0,0.7);
-    font-size:40px;
-    z-index:6;
-    user-select:none;
-    white-space:nowrap;
+    position: absolute;
+    font-family: 'Creepster', cursive;
+    color: #ff2d2d;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.9), 0 0 18px rgba(255, 80, 0, 0.7);
+    font-size: 40px;
+    z-index: 6;
+    user-select: none;
+    white-space: nowrap;
   }
 
   /* destra e sinistra posizionamento */
-  #Diablo_dx{
-    right:18px;
-    top:50%;
-    transform:translateY(-50%);
+  #Diablo_dx {
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
     animation: updown-right 2.2s ease-in-out infinite;
   }
-  #Diablo_sx{
-    left:18px;
-    top:50%;
-    transform:translateY(-50%);
+  #Diablo_sx {
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
     animation: updown-left 2.6s ease-in-out infinite;
   }
 
   /* Movimento verticale (solo Y) */
-  @keyframes updown-right{
-    0%{ transform: translateY(-18px); }
-    50%{ transform: translateY(18px); }
-    100%{ transform: translateY(-18px); }
+  @keyframes updown-right {
+    0% { transform: translateY(-18px); }
+    50% { transform: translateY(18px); }
+    100% { transform: translateY(-18px); }
   }
-  @keyframes updown-left{
-    0%{ transform: translateY(18px); }
-    50%{ transform: translateY(-18px); }
-    100%{ transform: translateY(18px); }
+  @keyframes updown-left {
+    0% { transform: translateY(18px); }
+    50% { transform: translateY(-18px); }
+    100% { transform: translateY(18px); }
   }
 
   /* BLOCCO di protezione (quando scatta) */
-  .bloccato{
-    width:1200px;
-    height:600px;
-    background:#000;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    color:red;
-    font-family:sans-serif;
-    font-size:36px;
+  .bloccato {
+    width: 1200px;
+    height: 600px;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    font-family: sans-serif;
+    font-size: 36px;
   }
-  .bloccato video{ width:320px; height:auto; margin-bottom:18px; }
+  .bloccato video {
+    width: 320px;
+    height: auto;
+    margin-bottom: 18px;
+  }
 </style>
 </head>
 <body>
@@ -141,6 +190,13 @@
     <!-- Testi visibili ai lati (piccoli, animati verticalmente) -->
     <div id="diablo_sx" class="side">Diablo</div>
     <div id="diablo_dx" class="side">Diablo</div>
+
+    <!-- Contenitore per le code della stella -->
+    <div class="tail1"></div>
+    <div class="tail2"></div>
+    <div class="tail3"></div>
+    <div class="tail4"></div>
+    <div class="tail5"></div>
   </div>
 
 <script>
@@ -151,7 +207,7 @@
   const right = document.getElementById("diablo_dx");
 
   function isIntact(){
-    // controlla che tutti e tre i testi siano esattamente "Diablo"
+    // Controlla che tutti e tre i testi siano esattamente "Diablo"
     return center && left && right &&
       center.textContent.trim() === expected &&
       left.textContent.trim() === expected &&
@@ -159,7 +215,7 @@
   }
 
   function blocca(){
-    // mostra solo il blocco e il video iomp4
+    // Mostra solo il blocco e il video iomp4
     document.body.innerHTML = `
       <div class="bloccato">
         <video id="iomp4" src="https://peppeagosto.github.io/immaggini/io.mp4" autoplay loop muted playsinline></video>
@@ -168,14 +224,14 @@
     `;
   }
 
-  // controllo continuo ogni secondo
+  // Controllo continuo ogni secondo
   setInterval(function(){
     if(!isIntact()){
       blocca();
     }
   }, 1000);
 
-  // controllo iniziale al caricamento
+  // Controllo iniziale al caricamento
   if(!isIntact()) blocca();
 })();
 </script>
