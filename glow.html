@@ -56,19 +56,30 @@ body {
   }
 }
 
+/* Rettangolo sinistro */
+.frame-left {
+  width: 750px;
+  height: 650px;
+  transform: translate(calc(-50% - 40px), -50%); /* Spostato 40px a sinistra */
+  border-image: linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red) 1;
+}
+
+/* Rettangolo viola (a destra) */
 .frame1 {
   width: 750px;
-  height: 750px;
+  height: 650px;
   transform: translate(calc(-50% + 40px), -50%); /* Spostato 40px a destra */
 }
 </style>
 </head>
 <body>
 <div class="frame-container">
+  <div class="frame frame-left"></div>
   <div class="frame frame1"></div>
 </div>
 </body>
 </html>
+
 
 
 
