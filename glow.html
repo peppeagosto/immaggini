@@ -1,283 +1,67 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>EL DIABLO Protected</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    font-family: 'Creepster', cursive;
-  }
-
-  /* CONTENITORE UNICO 1600x800 */
-  #sfondo {
-    position: relative;
-    width: 1600px;
-    height: 800px;
-    border-radius: 25px;
-    overflow: hidden;
-    background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
-  }
-
-  /* Stella rotante con sfumatura arcobaleno */
-  #sfondo::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 950px;
-    height: 600px;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(
-        45deg,
-        red,
-        orange,
-        yellow,
-        green,
-        blue,
-        indigo,
-        violet,
-        red
-    );
-    background-size: 400%; /* Per un effetto sfumato più fluido */
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    animation: rainbow 10s ease infinite, rotateStar 12s linear infinite; /* Animazione arcobaleno + rotazione */
-    filter: blur(60px) brightness(2.5);
-    mix-blend-mode: screen;
-    z-index: 2;
-  }
-
-  /* Animazione per il movimento dell'arcobaleno */
-  @keyframes rainbow {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 400% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-  }
-
-  /* Animazione per la rotazione della stella */
-  @keyframes rotateStar {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
-
-  /* Code della stella (solo forma, senza colore specifico) */
-  #sfondo .tail1,
-  #sfondo .tail2,
-  #sfondo .tail3,
-  #sfondo .tail4,
-  #sfondo .tail5 {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 950px;
-    height: 950px;
-    transform: translate(-50%, -50%);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    filter: blur(60px) brightness(2.5);
-    mix-blend-mode: screen;
-    z-index: 2;
-    animation: rotateStar 12s linear infinite; /* Rotazione sincronizzata */
-  }
-  #sfondo .tail1 { transform: translate(-50%, -50%) rotate(45deg); }
-  #sfondo .tail2 { transform: translate(-50%, -50%) rotate(90deg); }
-  #sfondo .tail3 { transform: translate(-50%, -50%) rotate(135deg); }
-  #sfondo .tail4 { transform: translate(-50%, -50%) rotate(180deg); }
-  #sfondo .tail5 { transform: translate(-50%, -50%) rotate(225deg); }
-
-  /* Luci animate con sfumatura arcobaleno vivace */
-  .luce {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: linear-gradient(
-        45deg,
-        red,
-        orange,
-        yellow,
-        green,
-        blue,
-        indigo,
-        violet,
-        red
-    );
-    background-size: 400%;
-    filter: blur(150px);
-    opacity: 0.95;
-    mix-blend-mode: screen;
-    animation: moveLeft 12s infinite ease-in-out, rotateCounter 12s linear infinite, rainbow 10s ease infinite;
-    z-index: 1;
-  }
-  .l1 { top: -200px; left: -200px; animation-delay: 0s, 0s, 0s; }
-  .l2 { top: -200px; right: -200px; animation-delay: 2s, 2s, 2s; }
-  .l3 { bottom: -200px; left: -200px; animation-delay: 4s, 4s, 4s; }
-  .l4 { bottom: -200px; right: -200px; animation-delay: 6s, 6s, 6s; }
-  .l5 { top: 30%; left: 30%; width: 600px; height: 600px; filter: blur(200px); animation-delay: 1s, 1s, 1s; }
-  @keyframes moveLeft {
-    0% { transform: translate(100px, 0) scale(1); opacity: 0.95; }
-    25% { transform: translate(-50px, -60px) scale(1.05); opacity: 0.9; }
-    50% { transform: translate(-200px, 80px) scale(1.15); opacity: 1; }
-    75% { transform: translate(-100px, 100px) scale(1.02); opacity: 0.92; }
-    100% { transform: translate(100px, 0) scale(1); opacity: 0.95; }
-  }
-  @keyframes rotateCounter {
-    0% { transform: rotate(360deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  /* TESTO CENTRALE (invisibile ma presente nel DOM) */
-  #diablo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 40px;
-    color: transparent;
-    user-select: none;
-    z-index: 5;
-    pointer-events: none;
-  }
-
-  /* TESTI LATERALI VISIBILI PICCOLI E ANIMATI VERTICALE */
-  .side {
-    position: absolute;
-    font-family: 'Creepster', cursive;
-    color: #ff2d2d;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.9), 0 0 18px rgba(255, 80, 0, 0.7);
-    font-size: 40px;
-    z-index: 6;
-    user-select: none;
-    white-space: nowrap;
-  }
-
-  /* destra e sinistra posizionamento */
-  #diablo_dx {
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    animation: updown-right 2.2s ease-in-out infinite;
-  }
-  #diablo_sx {
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    animation: updown-left 2.6s ease-in-out infinite;
-  }
-
-  /* Movimento verticale (solo Y) */
-  @keyframes updown-right {
-    0% { transform: translateY(-18px); }
-    50% { transform: translateY(18px); }
-    100% { transform: translateY(-18px); }
-  }
-  @keyframes updown-left {
-    0% { transform: translateY(18px); }
-    50% { transform: translateY(-18px); }
-    100% { transform: translateY(18px); }
-  }
-
-  /* BLOCCO di protezione (quando scatta) */
-  .bloccato {
-    width: 1200px;
-    height: 600px;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: red;
-    font-family: sans-serif;
-    font-size: 36px;
-  }
-  .bloccato video {
-    width: 320px;
-    height: auto;
-    margin-bottom: 18px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornici Sovrapposte con Glow Animato</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .frame-container {
+            position: relative;
+            width: 730px;
+            height: 730px;
+        }
+        .frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 20px solid;
+            border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
+            animation: glow 2s infinite alternate;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7),
+                        0 0 20px rgba(255, 0, 0, 0.7),
+                        0 0 30px rgba(0, 255, 0, 0.7),
+                        0 0 40px rgba(0, 0, 255, 0.7);
+        }
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+                            0 0 10px rgba(255, 0, 0, 0.5),
+                            0 0 15px rgba(0, 255, 0, 0.5),
+                            0 0 20px rgba(0, 0, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+                            0 0 40px rgba(255, 0, 0, 0.9),
+                            0 0 60px rgba(0, 255, 0, 0.9),
+                            0 0 80px rgba(0, 0, 255, 0.9);
+            }
+        }
+        .frame1 { width: 600px; height: 600px; }
+        .frame2 { width: 480px; height: 480px; }
+        .frame3 { width: 360px; height: 360px; }
+        .frame4 { width: 240px; height: 240px; }
+    </style>
 </head>
 <body>
-  <div id="sfondo">
-    <div class="luce l1"></div>
-    <div class="luce l2"></div>
-    <div class="luce l3"></div>
-    <div class="luce l4"></div>
-    <div class="luce l5"></div>
-
-    <!-- Testo invisibile di protezione (centrale) -->
-    <div id="diablo">Diablo</div>
-
-    <!-- Testi visibili ai lati (piccoli, animati verticalmente) -->
-    <div id="diablo_sx" class="side">Diablo</div>
-    <div id="diablo_dx" class="side">Diablo</div>
-
-    <!-- Contenitore per le code della stella -->
-    <div class="tail1"></div>
-    <div class="tail2"></div>
-    <div class="tail3"></div>
-    <div class="tail4"></div>
-    <div class="tail5"></div>
-  </div>
-
-<script>
-(function(){
-  const expected = "Diablo";
-  const center = document.getElementById("diablo");
-  const left = document.getElementById("diablo_sx");
-  const right = document.getElementById("diablo_dx");
-
-  function isIntact(){
-    return center && left && right &&
-      center.textContent.trim() === expected &&
-      left.textContent.trim() === expected &&
-      right.textContent.trim() === expected;
-  }
-
-  function blocca(){
-    document.body.innerHTML = `
-      <div class="bloccato">
-        <video id="iomp4" src="https://peppeagosto.github.io/immaggini/io.mp4" autoplay loop muted playsinline></video>
-        <div>BLOCCATO 🔒</div>
-      </div>
-    `;
-  }
-
-  setInterval(function(){
-    if(!isIntact()){
-      blocca();
-    }
-  }, 1000);
-
-  if(!isIntact()) blocca();
-})();
-</script>
+    <div class="frame-container">
+        <div class="frame frame1"></div>
+        <div class="frame frame2"></div>
+        <div class="frame frame3"></div>
+        <div class="frame frame4"></div>
+    </div>
+</body>
+</html>
 </body>
 
 </html>
+
 
