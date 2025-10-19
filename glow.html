@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cornici Sovrapposte con Glow Animato e Background Sfumato</title>
+<title>Cornici Glow Perfettamente Simmetriche</title>
 <style>
 body {
   display: flex;
@@ -28,11 +28,11 @@ body {
   height: 700px;
 }
 
-/* rettangoli spostati più a destra */
+/* Cornici perfettamente centrate e simmetriche */
 .frame {
   position: absolute;
   top: 50%;
-  left: 56%; /* prima era 50%, poi 52% — ora più visibilmente a destra */
+  left: 50%;
   transform: translate(-50%, -50%);
   border: 20px solid;
   border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
@@ -58,6 +58,7 @@ body {
   }
 }
 
+/* Dimensioni delle due cornici, simmetriche e centrali */
 .frame1 { width: 760px; height: 700px; }
 .frame2 { width: 660px; height: 600px; }
 </style>
@@ -69,6 +70,8 @@ body {
 </div>
 </body>
 </html>
+
+
 
 
 
