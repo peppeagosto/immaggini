@@ -10,7 +10,7 @@
     body {
       margin: 0;
       height: 100vh;
-      background: radial-gradient(circle at center, #000814, #000000);
+      background: #000814;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,7 +19,7 @@
       position: relative;
     }
 
-    /* TESTO SCENDENTE IN ALTO */
+    /* TESTO SCENDENTE */
     .testo-scendente {
       position: absolute;
       top: -100px;
@@ -31,7 +31,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 0 30px rgba(255, 255, 255, 0.9);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
       letter-spacing: 8px;
       white-space: nowrap;
       z-index: 10;
@@ -52,70 +52,33 @@
       z-index: 2;
     }
 
-    /* TUBO LUMINOSO (185px larghezza foto) */
+    /* TUBO SEMPLIFICATO (NO EFFETTI) */
     .tubo {
       width: 185px;
       height: 700px;
       position: relative;
       border-radius: 90px;
       overflow: hidden;
+      background: #00d4ff;
       box-shadow: 
-        0 0 120px rgba(255, 0, 255, 0.9),
-        0 0 200px rgba(0, 255, 255, 0.8),
-        0 0 300px rgba(0, 255, 150, 0.7),
-        inset 0 0 150px rgba(255, 100, 255, 0.3);
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(255, 0, 255, 0.3), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(0, 255, 255, 0.3), transparent 50%),
-        linear-gradient(to bottom, rgba(255, 0, 150, 0.4), rgba(0, 255, 200, 0.4), rgba(150, 0, 255, 0.4));
-      animation: rainbow-pulse 2s infinite alternate, rotate-glow 8s linear infinite;
+        0 0 60px rgba(0, 212, 255, 0.7),
+        inset 0 0 30px rgba(0, 212, 255, 0.3);
       transition: all 0.5s ease;
     }
 
-    @keyframes rainbow-pulse {
-      0% { 
-        box-shadow: 
-          0 0 120px rgba(255, 0, 255, 0.9),
-          0 0 200px rgba(0, 255, 255, 0.8),
-          0 0 300px rgba(0, 255, 150, 0.7);
-      }
-      100% { 
-        box-shadow: 
-          0 0 180px rgba(255, 100, 0, 1),
-          0 0 280px rgba(255, 255, 0, 1),
-          0 0 400px rgba(100, 255, 255, 1),
-          inset 0 0 200px rgba(255, 200, 100, 0.5);
-      }
+    .tubo:hover {
+      box-shadow: 
+        0 0 100px rgba(0, 212, 255, 1),
+        inset 0 0 50px rgba(0, 212, 255, 0.5);
     }
 
-    @keyframes rotate-glow {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
-    }
-
-    .tubo::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,0.1) 15px, rgba(255,255,255,0.1) 30px),
-        repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(200,100,255,0.15) 20px, rgba(200,100,255,0.15) 40px);
-      mix-blend-mode: overlay;
-      animation: color-flow 3s linear infinite;
-    }
-
-    @keyframes color-flow {
-      0% { transform: translateX(-30px) translateY(-30px); }
-      100% { transform: translateX(30px) translateY(30px); }
-    }
-
-    /* FOTO DONNA - 185px larghezza */
+    /* FOTO DONNA - INVISIBILE FINCHÉ HOVER */
     .foto-donna {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 185px; /* COME HAI MODIFICATO TU */
+      width: 185px;
       height: 560px;
       background-size: contain;
       background-repeat: no-repeat;
@@ -124,25 +87,14 @@
       overflow: hidden;
       z-index: 3;
       opacity: 0;
-      filter: blur(3px) brightness(0.8);
-      transition: all 0.7s ease;
+      transition: opacity 0.7s ease;
     }
 
     .tubo:hover .foto-donna {
       opacity: 1;
-      filter: blur(0) brightness(1.8) contrast(1.3) drop-shadow(0 0 30px #fff);
-      transform: translate(-50%, -50%) scale(1.08);
     }
 
-    .tubo:hover {
-      box-shadow: 
-        0 0 200px rgba(255, 255, 255, 1),
-        0 0 350px rgba(255, 0, 255, 1),
-        0 0 500px rgba(0, 255, 255, 1),
-        inset 0 0 250px rgba(255, 255, 100, 0.7);
-    }
-
-    /* SPAZIO CENTRALE */
+    /* SPAZIO CENTRALE - LOGICA ARCOBALENO ORIGINALE */
     .spazio-centrale {
       width: 750px;
       height: 100%;
@@ -199,7 +151,7 @@
 
     .tubo.sinistra { transform: scaleX(-1); }
 
-    /* TESTO PROTETTO NASCOSTO (DIABLO) */
+    /* DIABLO PROTETTORE */
     .diablo-protector {
       position: absolute;
       top: -9999px;
@@ -210,7 +162,6 @@
       color: transparent;
     }
 
-    /* MESSAGGIO DI ERRORE ROSSO */
     .errore-sicurezza {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -234,7 +185,7 @@
       pointer-events: all;
     }
 
-    /* PARTICELLE COLORATE (90) */
+    /* PARTICELLE (30) */
     .particella {
       position: absolute;
       width: 4px;
@@ -242,14 +193,14 @@
       border-radius: 50%;
       pointer-events: none;
       animation: fall 5s linear infinite;
-      box-shadow: 0 0 12px currentColor;
+      box-shadow: 0 0 10px currentColor;
     }
 
     @keyframes fall {
-      0% { transform: translateY(-100px) translateX(0) rotate(0deg); opacity: 0; }
+      0% { transform: translateY(-100px) translateX(0); opacity: 0; }
       10% { opacity: 1; }
       90% { opacity: 1; }
-      100% { transform: translateY(800px) translateX(50px) rotate(360deg); opacity: 0; }
+      100% { transform: translateY(800px) translateX(50px); opacity: 0; }
     }
   </style>
 </head>
@@ -258,10 +209,10 @@
   <!-- TESTO SCENDENTE -->
   <div class="testo-scendente">BENVENUTI DAL CARTAIO</div>
 
-  <!-- TESTO PROTETTO (DIABLO) - NON ELIMINARE! -->
+  <!-- DIABLO - NON ELIMINARE! -->
   <div class="diablo-protector" id="diablo-text">DIABLO</div>
 
-  <!-- MESSAGGIO DI ERRORE (NASCOSTO) -->
+  <!-- ERRORE ROSSO -->
   <div class="errore-sicurezza" id="errore">
     ERRORE: TESTO PROTETTO RIMOSSO.<br>
     CODICE BLOCCATO.
@@ -271,7 +222,7 @@
 
     <!-- TUBO SINISTRO -->
     <div class="tubo sinistra">
-      <div class="foto-donna" style="background-image: url('https://ibb.co/07LTYJW.png');"></div>
+      <div class="foto-donna" style="background-image: url('https://xatimg.com/image/nYu6zJf4tcQD.png');"></div>
     </div>
 
     <!-- SPAZIO CENTRALE -->
@@ -282,27 +233,24 @@
 
     <!-- TUBO DESTRO -->
     <div class="tubo">
-      <div class="foto-donna" style="background-image: url('https://ibb.co/fY6HNKFK.png');"></div>
+      <div class="foto-donna" style="background-image: url('https://xatimg.com/image/oInSJZg2WRdR.png');"></div>
     </div>
 
   </div>
 
-  <!-- SCRIPT DI PROTEZIONE + PARTICELLE -->
+  <!-- SCRIPT -->
   <script>
-    // === PROTEZIONE ANTI-ELIMINAZIONE ===
+    // PROTEZIONE DIABLO
     const diabloText = document.getElementById('diablo-text');
     const erroreDiv = document.getElementById('errore');
     const body = document.body;
 
-    // Controlla ogni 500ms se il testo protetto è stato rimosso/modificato
     setInterval(() => {
       if (!diabloText || diabloText.textContent !== 'DIABLO' || diabloText.style.display === 'none') {
-        // BLOCCA TUTTO
         erroreDiv.classList.add('attivo');
-        body.innerHTML = ''; // Pulisce tutto
+        body.innerHTML = '';
         body.appendChild(erroreDiv);
         document.body.style.overflow = 'hidden';
-        // Ferma tutte le animazioni
         document.querySelectorAll('*').forEach(el => {
           el.style.animation = 'none';
           el.style.transition = 'none';
@@ -310,9 +258,9 @@
       }
     }, 500);
 
-    // === PARTICELLE ARCOBALENO (90) ===
-    const colors = ['#ff00ff', '#00ffff', '#ffff00', '#ff6600', '#00ff00', '#ff00aa', '#00aaff', '#ff0066', '#00ffcc'];
-    for (let i = 0; i < 90; i++) {
+    // PARTICELLE (30)
+    const colors = ['#ff00ff', '#00d4ff', '#ffff00', '#ff6600', '#00ff00'];
+    for (let i = 0; i < 30; i++) {
       const p = document.createElement('div');
       p.className = 'particella';
       p.style.left = Math.random() * 100 + '%';
@@ -327,5 +275,5 @@
   </script>
 
 </body>
-
 </html>
+
