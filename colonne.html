@@ -52,7 +52,7 @@
       z-index: 2;
     }
 
-    /* TUBO SEMPLIFICATO (NO EFFETTI) */
+    /* TUBO SEMPLIFICATO */
     .tubo {
       width: 185px;
       height: 700px;
@@ -72,26 +72,31 @@
         inset 0 0 50px rgba(0, 212, 255, 0.5);
     }
 
-    /* FOTO DONNA - INVISIBILE FINCHÉ HOVER */
-    .foto-donna {
+    /* VIDEO DONNA - INVISIBILE FINCHÉ HOVER */
+    .video-donna {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 185px;
       height: 560px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
+      object-fit: cover;
       border-radius: 22px;
-      overflow: hidden;
       z-index: 3;
       opacity: 0;
       transition: opacity 0.7s ease;
     }
 
-    .tubo:hover .foto-donna {
+    .tubo:hover .video-donna {
       opacity: 1;
+    }
+
+    .tubo.sinistra {
+      transform: scaleX(-1);
+    }
+
+    .tubo.sinistra .video-donna {
+      transform: translate(-50%, -50%) scaleX(-1); /* Ribalta il video per compensare il tubo */
     }
 
     /* SPAZIO CENTRALE - LOGICA ARCOBALENO ORIGINALE */
@@ -148,8 +153,6 @@
       0%, 100% { opacity: 0.7; }
       50% { opacity: 1; }
     }
-
-    .tubo.sinistra { transform: scaleX(-1); }
 
     /* DIABLO PROTETTORE */
     .diablo-protector {
@@ -222,7 +225,10 @@
 
     <!-- TUBO SINISTRO -->
     <div class="tubo sinistra">
-      <div class="foto-donna" style="background-image: url('https://imgur.com/4Nka5hZ.png');"></div>
+      <video class="video-donna" muted loop playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/xa.mp4" type="video/mp4">
+        Il tuo browser non supporta i video.
+      </video>
     </div>
 
     <!-- SPAZIO CENTRALE -->
@@ -233,7 +239,10 @@
 
     <!-- TUBO DESTRO -->
     <div class="tubo">
-      <div class="foto-donna" style="background-image: url('https://imgur.com/a/NwECC8Q.png');"></div>
+      <video class="video-donna" muted loop playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/xb.mp4" type="video/mp4">
+        Il tuo browser non supporta i video.
+      </video>
     </div>
 
   </div>
@@ -258,6 +267,20 @@
       }
     }, 500);
 
+    // AVVIA I VIDEO SOLO SU HOVER
+    document.querySelectorAll('.tubo').forEach(tubo => {
+      const video = tubo.querySelector('video');
+      
+      tubo.addEventListener('mouseenter', () => {
+        video.play().catch(() => {}); // Ignora errori di autoplay
+      });
+
+      tubo.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0; // Riavvolge al frame iniziale
+      });
+    });
+
     // PARTICELLE (30)
     const colors = ['#ff00ff', '#00d4ff', '#ffff00', '#ff6600', '#00ff00'];
     for (let i = 0; i < 30; i++) {
@@ -276,4 +299,5 @@
 
 </body>
 </html>
+
 
