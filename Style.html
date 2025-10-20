@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #8B0000, #FFD700, #000000);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .frame-container {
+      position: relative;
+      width: 760px;
+      height: 700px;
+    }
+
+    .frame {
+      position: absolute;
+      top: 50%;
+      left: 50%; /* Centrato perfettamente */
+      transform: translate(-50%, -50%);
+      border: 25px solid;
+      border-image: linear-gradient(45deg, #8B0000, #FFD700, #000000) 1;
+      animation: glow 2s infinite alternate, pulse 3s infinite;
+      box-shadow: 0 0 10px rgba(255,255,255,0.7),
+                  0 0 20px rgba(139,0,0,0.7),
+                  0 0 30px rgba(255,215,0,0.7);
+      filter: drop-shadow(0 0 10px rgba(139,0,0,0.8));
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px rgba(255,255,255,0.5),
+                    0 0 10px rgba(139,0,0,0.5),
+                    0 0 15px rgba(255,215,0,0.5);
+      }
+      100% {
+        box-shadow: 0 0 20px rgba(255,255,255,0.9),
+                    0 0 40px rgba(139,0,0,0.9),
+                    0 0 60px rgba(255,215,0,0.9);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .frame1 { width: 760px; height: 700px; z-index: 1; }
+    .frame2 { width: 660px; height: 600px; z-index: 2; }
+  </style>
+</head>
+<body>
+  <div class="frame-container">
+    <div class="frame frame1"></div>
+    <div class="frame frame2"></div>
+  </div>
+</body>
+</html>
