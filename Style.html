@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Style Neon</title>
+  <title>EL DIABLO Neon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       display: flex;
@@ -12,9 +13,10 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background: linear-gradient(135deg, #FF6347, #FF8C00, #FFD700);
+      background: linear-gradient(135deg, #200438, #480c7a, #200438);
       background-size: 400% 400%;
       animation: gradientBG 10s ease infinite;
+      overflow: hidden;
     }
 
     @keyframes gradientBG {
@@ -35,30 +37,33 @@
       left: 50%;
       transform: translate(-50%, -50%);
       border: 25px solid;
-      border-image: linear-gradient(45deg, #FF6347, #FF8C00, #FFD700) 1;
+      border-image: linear-gradient(45deg, #200438, #480c7a, #200438) 1;
       animation: glow 1.5s infinite alternate, pulse 2s infinite;
-      box-shadow: 0 0 20px rgba(255,255,255,0.9),
-                  0 0 40px rgba(255,99,71,0.9),
-                  0 0 60px rgba(255,215,0,1),
-                  0 0 80px rgba(255,215,0,0.8),
-                  0 0 100px rgba(255,215,0,0.7);
-      filter: drop-shadow(0 0 20px rgba(255,99,71,1));
+      box-shadow:
+        0 0 20px #480c7a,
+        0 0 40px #200438,
+        0 0 60px #b617f1,
+        0 0 80px #480c7a,
+        0 0 100px #200438;
+      filter: drop-shadow(0 0 25px #b617f1);
     }
 
     @keyframes glow {
       0% {
-        box-shadow: 0 0 10px rgba(255,255,255,0.7),
-                    0 0 20px rgba(255,99,71,0.7),
-                    0 0 30px rgba(255,215,0,0.8),
-                    0 0 40px rgba(255,215,0,0.6),
-                    0 0 50px rgba(255,215,0,0.5);
+        box-shadow:
+          0 0 10px #480c7a,
+          0 0 20px #200438,
+          0 0 30px #b617f1,
+          0 0 40px #480c7a,
+          0 0 50px #200438;
       }
       100% {
-        box-shadow: 0 0 40px rgba(255,255,255,1),
-                    0 0 80px rgba(255,99,71,1),
-                    0 0 120px rgba(255,215,0,1),
-                    0 0 160px rgba(255,215,0,0.9),
-                    0 0 200px rgba(255,215,0,0.8);
+        box-shadow:
+          0 0 40px #480c7a,
+          0 0 80px #200438,
+          0 0 120px #b617f1,
+          0 0 160px #480c7a,
+          0 0 200px #200438;
       }
     }
 
@@ -70,13 +75,54 @@
 
     .frame1 { width: 760px; height: 700px; z-index: 1; }
     .frame2 { width: 660px; height: 600px; z-index: 2; }
+
+    /* TESTO NEON EL DIABLO */
+    .neon-text {
+      position: absolute;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #b617f1;
+      text-shadow:
+        0 0 10px #b617f1,
+        0 0 20px #b617f1,
+        0 0 40px #480c7a,
+        0 0 60px #480c7a,
+        0 0 80px #200438;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      letter-spacing: 8px;
+      animation: slideDown 6s linear infinite;
+      user-select: none;
+    }
+
+    .left-text {
+      left: -90px;
+      top: -200px;
+    }
+
+    .right-text {
+      right: -90px;
+      top: -200px;
+    }
+
+    @keyframes slideDown {
+      0% { transform: translateY(-100px); opacity: 0.6; }
+      50% { transform: translateY(50px); opacity: 1; }
+      100% { transform: translateY(-100px); opacity: 0.6; }
+    }
+
   </style>
 </head>
 <body>
   <div class="frame-container">
     <div class="frame frame1"></div>
     <div class="frame frame2"></div>
+    <div class="neon-text left-text">EL DIABLO</div>
+    <div class="neon-text right-text">EL DIABLO</div>
   </div>
 </body>
 </html>
+
+
 
