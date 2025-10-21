@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Style</title>
+  <title>Style Neon</title>
   <style>
     body {
       display: flex;
@@ -11,10 +12,9 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      /* Gradient rosso più leggero + gold più intenso */
       background: linear-gradient(135deg, #FF6347, #FF8C00, #FFD700);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      animation: gradientBG 10s ease infinite;
     }
 
     @keyframes gradientBG {
@@ -36,29 +36,35 @@
       transform: translate(-50%, -50%);
       border: 25px solid;
       border-image: linear-gradient(45deg, #FF6347, #FF8C00, #FFD700) 1;
-      animation: glow 2s infinite alternate, pulse 3s infinite;
-      box-shadow: 0 0 10px rgba(255,255,255,0.7),
-                  0 0 25px rgba(255,99,71,0.8),
-                  0 0 40px rgba(255,215,0,0.9);
-      filter: drop-shadow(0 0 15px rgba(255,99,71,0.8));
+      animation: glow 1.5s infinite alternate, pulse 2s infinite;
+      box-shadow: 0 0 20px rgba(255,255,255,0.9),
+                  0 0 40px rgba(255,99,71,0.9),
+                  0 0 60px rgba(255,215,0,1),
+                  0 0 80px rgba(255,215,0,0.8),
+                  0 0 100px rgba(255,215,0,0.7);
+      filter: drop-shadow(0 0 20px rgba(255,99,71,1));
     }
 
     @keyframes glow {
       0% {
-        box-shadow: 0 0 5px rgba(255,255,255,0.5),
-                    0 0 15px rgba(255,99,71,0.6),
-                    0 0 25px rgba(255,215,0,0.7);
+        box-shadow: 0 0 10px rgba(255,255,255,0.7),
+                    0 0 20px rgba(255,99,71,0.7),
+                    0 0 30px rgba(255,215,0,0.8),
+                    0 0 40px rgba(255,215,0,0.6),
+                    0 0 50px rgba(255,215,0,0.5);
       }
       100% {
-        box-shadow: 0 0 25px rgba(255,255,255,1),
-                    0 0 50px rgba(255,99,71,0.9),
-                    0 0 75px rgba(255,215,0,1);
+        box-shadow: 0 0 40px rgba(255,255,255,1),
+                    0 0 80px rgba(255,99,71,1),
+                    0 0 120px rgba(255,215,0,1),
+                    0 0 160px rgba(255,215,0,0.9),
+                    0 0 200px rgba(255,215,0,0.8);
       }
     }
 
     @keyframes pulse {
       0% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.05); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
       100% { transform: translate(-50%, -50%) scale(1); }
     }
 
@@ -73,3 +79,4 @@
   </div>
 </body>
 </html>
+
