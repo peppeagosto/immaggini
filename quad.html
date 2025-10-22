@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>quad</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* Contenitore 1200x1200 con sfondo sfumato 5 colori */
+    .container {
+      width: 1200px;
+      height: 1200px;
+      position: relative;
+      background: linear-gradient(90deg,
+        #ff0000,  /* rosso */
+        #ffff00,  /* giallo */
+        #ff8800,  /* arancione */
+        #00ff00,  /* verde */
+        #00cccc   /* celestino */
+      );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 80px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Cornice base (quadrata) */
+    .frame {
+      position: absolute;
+      border: 12px solid transparent;
+      background-clip: padding-box;
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+
+    /* Cornice esterna: 769px */
+    .frame-outer {
+      width: 769px;
+      height: 769px;
+      background: linear-gradient(45deg,
+        #ff0000, #ff7700, #ffff00, #00ff00,
+        #00ffff, #0000ff, #ff00ff, #ff0000
+      );
+      background-size: 400% 400%;
+      animation: 
+        rainbow-outer 6s linear infinite,
+        pulse 2.5s infinite ease-in-out;
+    }
+
+    /* Cornice interna: 754px */
+    .frame-inner {
+      width: 754px;
+      height: 754px;
+      background: linear-gradient(135deg,
+        #ff00ff, #ff0000, #ffff00, #00ff00,
+        #00ffff, #0000ff, #ff00ff
+      );
+      background-size: 400% 400%;
+      animation: 
+        rainbow-inner 5s linear infinite reverse,
+        pulse 2s infinite ease-in-out;
+    }
+
+    /* Animazione arcobaleno (scorre) */
+    @keyframes rainbow-outer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes rainbow-inner {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* Effetto pulse (respiro luminoso) */
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 50px 25px rgba(255, 255, 255, 0.95);
+        transform: scale(1.025);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="frame frame-outer"></div>
+    <div class="frame frame-inner"></div>
+  </div>
+</body>
+</html>
