@@ -1,148 +1,184 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EL DIABLO Neon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #200438, #480c7a, #200438);
-      background-size: 400% 400%;
-      animation: gradientBG 10s ease infinite;
-      overflow: hidden;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EL DIABLO Neon</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #200438, #480c7a, #200438);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  overflow: hidden;
+}
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    .frame-container {
-      position: relative;
-      width: 760px;
-      height: 700px;
-    }
+.frame-container {
+  position: relative;
+  width: 760px;
+  height: 700px;
+}
 
-    .frame {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 25px solid;
-      border-image: linear-gradient(45deg, #200438, #480c7a, #200438) 1;
-      animation: glow 1.5s infinite alternate, pulse 2s infinite;
-      box-shadow:
-        0 0 20px #480c7a,
-        0 0 40px #200438,
-        0 0 60px #b617f1,
-        0 0 80px #480c7a,
-        0 0 100px #200438;
-      filter: drop-shadow(0 0 25px #b617f1);
-    }
+.frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 25px solid;
+  border-image: linear-gradient(45deg, #200438, #480c7a, #200438) 1;
+  animation: glow 1.5s infinite alternate, pulse 2s infinite;
+  box-shadow:
+    0 0 20px #480c7a,
+    0 0 40px #200438,
+    0 0 60px #b617f1,
+    0 0 80px #480c7a,
+    0 0 100px #200438;
+  filter: drop-shadow(0 0 25px #b617f1);
+}
 
-    @keyframes glow {
-      0% {
-        box-shadow:
-          0 0 10px #480c7a,
-          0 0 20px #200438,
-          0 0 30px #b617f1,
-          0 0 40px #480c7a,
-          0 0 50px #200438;
-      }
-      100% {
-        box-shadow:
-          0 0 40px #480c7a,
-          0 0 80px #200438,
-          0 0 120px #b617f1,
-          0 0 160px #480c7a,
-          0 0 200px #200438;
-      }
-    }
+@keyframes glow {
+  0% {
+    box-shadow:
+      0 0 10px #480c7a,
+      0 0 20px #200438,
+      0 0 30px #b617f1,
+      0 0 40px #480c7a,
+      0 0 50px #200438;
+  }
+  100% {
+    box-shadow:
+      0 0 40px #480c7a,
+      0 0 80px #200438,
+      0 0 120px #b617f1,
+      0 0 160px #480c7a,
+      0 0 200px #200438;
+  }
+}
 
-    @keyframes pulse {
-      0% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.1); }
-      100% { transform: translate(-50%, -50%) scale(1); }
-    }
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
 
-    .frame1 { width: 760px; height: 700px; z-index: 1; }
-    .frame2 { width: 660px; height: 600px; z-index: 2; }
+.frame1 { width: 760px; height: 700px; z-index: 1; }
+.frame2 { width: 660px; height: 600px; z-index: 2; }
 
-    /* TESTO NEON EL DIABLO */
-    .neon-text {
-      position: absolute;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 56px;
-      font-weight: 900;
-      color: #b617f1;
-      text-shadow:
-        0 0 5px #b617f1,
-        0 0 10px #b617f1,
-        0 0 20px #480c7a,
-        0 0 30px #480c7a,
-        0 0 40px #200438,
-        0 0 60px #b617f1;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
-      letter-spacing: 10px;
-      animation: floatText 4s ease-in-out infinite, glowText 1.5s infinite alternate;
-      user-select: none;
-    }
+/* TESTO NEON EL DIABLO */
+.neon-text {
+  position: absolute;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: #b617f1;
+  text-shadow:
+    0 0 5px #b617f1,
+    0 0 10px #b617f1,
+    0 0 20px #480c7a,
+    0 0 30px #480c7a,
+    0 0 40px #200438,
+    0 0 60px #b617f1;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 10px;
+  animation: floatText 4s ease-in-out infinite, glowText 1.5s infinite alternate;
+  user-select: none;
+}
 
-    .left-text {
-      left: -180px; /* più verso sinistra */
-      top: -150px;
-    }
+/* Fumo leggero dietro il testo */
+.neon-text::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 300%;
+  top: -100%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  filter: blur(25px);
+  animation: smoke 6s linear infinite;
+  z-index: -1;
+}
 
-    .right-text {
-      right: -180px; /* più verso destra */
-      top: -150px;
-    }
+@keyframes smoke {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-20px) translateX(10px) rotate(2deg); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg); }
+}
 
-    @keyframes floatText {
-      0% { transform: translateY(-50px); }
-      50% { transform: translateY(50px); }
-      100% { transform: translateY(-50px); }
-    }
+.left-text { left: -180px; top: -150px; }
+.right-text { right: -180px; top: -150px; }
 
-    @keyframes glowText {
-      0% {
-        text-shadow:
-          0 0 5px #b617f1,
-          0 0 10px #b617f1,
-          0 0 20px #480c7a,
-          0 0 30px #480c7a,
-          0 0 40px #200438,
-          0 0 60px #b617f1;
-      }
-      100% {
-        text-shadow:
-          0 0 15px #b617f1,
-          0 0 30px #b617f1,
-          0 0 50px #480c7a,
-          0 0 70px #480c7a,
-          0 0 90px #200438,
-          0 0 120px #b617f1;
-      }
-    }
-  </style>
+@keyframes floatText {
+  0% { transform: translateY(-50px); }
+  50% { transform: translateY(50px); }
+  100% { transform: translateY(-50px); }
+}
+
+@keyframes glowText {
+  0% {
+    text-shadow:
+      0 0 5px #b617f1,
+      0 0 10px #b617f1,
+      0 0 20px #480c7a,
+      0 0 30px #480c7a,
+      0 0 40px #200438,
+      0 0 60px #b617f1;
+  }
+  100% {
+    text-shadow:
+      0 0 15px #b617f1,
+      0 0 30px #b617f1,
+      0 0 50px #480c7a,
+      0 0 70px #480c7a,
+      0 0 90px #200438,
+      0 0 120px #b617f1;
+  }
+}
+
+/* Scintille lampeggianti */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  animation: sparkleAnim 1s infinite;
+}
+
+@keyframes sparkleAnim {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+</style>
 </head>
 <body>
-  <div class="frame-container">
-    <div class="frame frame1"></div>
-    <div class="frame frame2"></div>
-    <div class="neon-text left-text">EL DIABLO</div>
-    <div class="neon-text right-text">EL DIABLO</div>
-  </div>
+<div class="frame-container">
+  <div class="frame frame1"></div>
+  <div class="frame frame2"></div>
+  <div class="neon-text left-text">EL DIABLO</div>
+  <div class="neon-text right-text">EL DIABLO</div>
+  <!-- Scintille casuali -->
+  <div class="sparkle" style="top:50px; left:200px;"></div>
+  <div class="sparkle" style="top:300px; left:100px;"></div>
+  <div class="sparkle" style="top:150px; right:200px;"></div>
+  <div class="sparkle" style="top:400px; right:150px;"></div>
+</div>
 </body>
 </html>
+
+
 
 
 
