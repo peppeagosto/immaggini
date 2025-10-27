@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -80,38 +79,59 @@
     .neon-text {
       position: absolute;
       font-family: 'Orbitron', sans-serif;
-      font-size: 48px;
-      font-weight: 700;
+      font-size: 56px;
+      font-weight: 900;
       color: #b617f1;
       text-shadow:
+        0 0 5px #b617f1,
         0 0 10px #b617f1,
-        0 0 20px #b617f1,
-        0 0 40px #480c7a,
-        0 0 60px #480c7a,
-        0 0 80px #200438;
+        0 0 20px #480c7a,
+        0 0 30px #480c7a,
+        0 0 40px #200438,
+        0 0 60px #b617f1;
       writing-mode: vertical-rl;
       text-orientation: upright;
-      letter-spacing: 8px;
-      animation: slideDown 6s linear infinite;
+      letter-spacing: 10px;
+      animation: floatText 4s ease-in-out infinite, glowText 1.5s infinite alternate;
       user-select: none;
     }
 
     .left-text {
-      left: -90px;
-      top: -200px;
+      left: -180px; /* più verso sinistra */
+      top: -150px;
     }
 
     .right-text {
-      right: -90px;
-      top: -200px;
+      right: -180px; /* più verso destra */
+      top: -150px;
     }
 
-    @keyframes slideDown {
-      0% { transform: translateY(-100px); opacity: 0.6; }
-      50% { transform: translateY(50px); opacity: 1; }
-      100% { transform: translateY(-100px); opacity: 0.6; }
+    @keyframes floatText {
+      0% { transform: translateY(-50px); }
+      50% { transform: translateY(50px); }
+      100% { transform: translateY(-50px); }
     }
 
+    @keyframes glowText {
+      0% {
+        text-shadow:
+          0 0 5px #b617f1,
+          0 0 10px #b617f1,
+          0 0 20px #480c7a,
+          0 0 30px #480c7a,
+          0 0 40px #200438,
+          0 0 60px #b617f1;
+      }
+      100% {
+        text-shadow:
+          0 0 15px #b617f1,
+          0 0 30px #b617f1,
+          0 0 50px #480c7a,
+          0 0 70px #480c7a,
+          0 0 90px #200438,
+          0 0 120px #b617f1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -123,6 +143,8 @@
   </div>
 </body>
 </html>
+
+
 
 
 
