@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>el cartaio</title>
+<title>EL DIABLO - Inferno Arcobaleno 3D</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -15,6 +16,7 @@
     font-family: Arial, sans-serif;
   }
 
+  /* SFONDO ARCOBALENO SFUMATO IN MOVIMENTO */
   body {
     background: linear-gradient(270deg,
       #ff0000,
@@ -27,73 +29,9 @@
       #ff00c8,
       #ff0000
     );
-    background-size: 1800% 1800%;
-    animation: moveGradient 18s ease infinite;
-    filter: brightness(1.4) saturate(1.5);
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    box-shadow:
-      0 0 60px 20px rgba(255,0,0,0.4),
-      0 0 80px 30px rgba(0,255,255,0.3),
-      0 0 100px 40px rgba(255,255,0,0.3);
-    pointer-events: none;
-    mix-blend-mode: screen;
-  }
-
-  /* GIF luminose a destra e sinistra con movimento verticale */
-  .side-gif {
-    position: absolute;
-    top: 50%;
-    width: 240px;
-    height: auto;
-    transform: translateY(-50%);
-    filter: drop-shadow(0 0 15px red) drop-shadow(0 0 30px orange);
-    animation:
-      moveUpDown 5s ease-in-out infinite alternate,
-      neonGlow 4s ease-in-out infinite;
-    z-index: 10;
-  }
-
-  .left-gif {
-    left: 5%;
-  }
-
-  .right-gif {
-    right: 5%;
-  }
-
-  /* Testo luminoso sfumato */
-  .animated-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 80px;
-    font-weight: bold;
-    background: linear-gradient(90deg, #ff0000, #ff7300, #fff700, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    z-index: 12;
-    animation: fadeText 30s linear infinite;
-  }
-
-  /* Movimento verticale */
-  @keyframes moveUpDown {
-    0% { transform: translateY(-50%) translateY(0); }
-    50% { transform: translateY(-50%) translateY(-30px); }
-    100% { transform: translateY(-50%) translateY(30px); }
-  }
-
-  @keyframes neonGlow {
-    0%,100% { filter: hue-rotate(0deg) brightness(1.3) drop-shadow(0 0 15px red); }
-    25%     { filter: hue-rotate(60deg) brightness(1.5) drop-shadow(0 0 25px orange); }
-    50%     { filter: hue-rotate(120deg) brightness(1.3) drop-shadow(0 0 20px yellow); }
-    75%     { filter: hue-rotate(180deg) brightness(1.6) drop-shadow(0 0 25px cyan); }
+    background-size: 2000% 2000%;
+    animation: moveGradient 20s ease infinite;
+    filter: brightness(1.3) saturate(1.5);
   }
 
   @keyframes moveGradient {
@@ -102,31 +40,134 @@
     100% { background-position: 0% 50%; }
   }
 
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    box-shadow:
+      0 0 60px 20px rgba(255,0,0,0.4),
+      0 0 100px 40px rgba(0,255,255,0.4),
+      0 0 140px 60px rgba(255,255,0,0.3);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .side-gif {
+    position: absolute;
+    top: 50%;
+    width: 240px;
+    height: auto;
+    transform: translateY(-50%);
+    filter: drop-shadow(0 0 45px #ff5e00) drop-shadow(0 0 70px #ffae00);
+    animation:
+      moveUpDown 5s ease-in-out infinite alternate,
+      neonGlow 5s ease-in-out infinite;
+    z-index: 10;
+  }
+
+  .left-gif { left: 5%; }
+  .right-gif { right: 5%; }
+
+  @keyframes moveUpDown {
+    0% { transform: translateY(-50%) translateY(0); }
+    50% { transform: translateY(-50%) translateY(-40px); }
+    100% { transform: translateY(-50%) translateY(40px); }
+  }
+
+  @keyframes neonGlow {
+    0%,100% { filter: drop-shadow(0 0 40px #ff0000) drop-shadow(0 0 70px #ff7f00); }
+    25% { filter: drop-shadow(0 0 50px #ffff00) drop-shadow(0 0 80px #00ff00); }
+    50% { filter: drop-shadow(0 0 50px #00ffff) drop-shadow(0 0 80px #0000ff); }
+    75% { filter: drop-shadow(0 0 50px #ff00ff) drop-shadow(0 0 80px #ff007f); }
+  }
+
+  .energy-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    border: 3px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: ringExpand 6s ease-out infinite;
+    z-index: 3;
+  }
+
+  @keyframes ringExpand {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; border-color: rgba(255,255,255,0.8); }
+    100% { transform: translate(-50%, -50%) scale(4); opacity: 0; border-color: rgba(255,255,255,0); }
+  }
+
+  .spark {
+    position: absolute;
+    background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    animation: sparkMove 6s linear infinite;
+    z-index: 5;
+  }
+
+  @keyframes sparkMove {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-800px) scale(0.5); opacity: 0; }
+  }
+
+  /* TESTO 3D NEON CON FADING */
+  .animated-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 90px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    z-index: 6;
+    text-shadow:
+      2px 2px 0 #ff0000,
+      4px 4px 0 #ff7f00,
+      6px 6px 0 #ffff00,
+      8px 8px 0 #00ff00,
+      10px 10px 0 #00ffff,
+      12px 12px 0 #0000ff,
+      14px 14px 0 #ff00ff,
+      16px 16px 20px rgba(0,0,0,0.7);
+    animation: fadeText 20s infinite;
+  }
+
   @keyframes fadeText {
-    0% { opacity: 1; }
-    16.66% { opacity: 0; } 
-    100% { opacity: 0; }
+    0%, 80% { opacity: 1; }
+    90%, 100% { opacity: 0; }
   }
 
   @media(max-width:800px) {
-    .side-gif { width: 100px; }
-    .animated-text { font-size: 50px; }
+    .side-gif { width: 140px; }
+    .animated-text { font-size: 50px; text-shadow: 1px 1px 0 #ff0000, 2px 2px 0 #ff7f00, 3px 3px 0 #ffff00; }
   }
 </style>
 </head>
 <body>
 
-  <!-- GIF a sinistra -->
-  <img class="side-gif left-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione sinistra">
+  <div class="energy-ring"></div>
+  <div class="energy-ring" style="animation-delay:2s;"></div>
+  <div class="energy-ring" style="animation-delay:4s;"></div>
 
-  <!-- GIF a destra -->
-  <img class="side-gif right-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione destra">
+  <img class="side-gif left-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Sinistra">
+  <img class="side-gif right-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Destra">
 
-  <!-- Testo luminoso -->
+  <div class="spark" style="left:20%; top:90%; animation-delay:0s;"></div>
+  <div class="spark" style="left:50%; top:95%; animation-delay:2s;"></div>
+  <div class="spark" style="left:80%; top:92%; animation-delay:4s;"></div>
+
+  <!-- TESTO CENTRALE 3D CHE SPARISCE OGNI 20 SECONDI -->
   <div class="animated-text">EL DIABLO</div>
 
 </body>
 </html>
+
 
 
 
