@@ -44,51 +44,26 @@
     mix-blend-mode: screen;
   }
 
-  /* JPG centrale grande ma altezza ridotta */
-  .center-img {
+  /* GIF luminose a destra e sinistra con movimento verticale */
+  .side-gif {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 740px;
-    height: 600px;
-    border-radius: 12px;
-    box-shadow:
-      0 0 40px 15px rgba(255, 0, 0, 0.7),
-      0 0 80px 30px rgba(0, 255, 255, 0.6);
-    z-index: 10;
-    animation: fadeImages 30s linear infinite;
-    object-fit: cover;
-  }
-
-  /* Contenitore GIF in movimento */
-  .gif-container {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 11;
-    width: 120px;
-    pointer-events: none;
-    animation: moveAround 6s ease-in-out infinite,
-               neonGlow 3s ease-in-out infinite,
-               fadeImages 30s linear infinite;
-  }
-
-  .overlay-gif {
-    width: 100%;
+    width: 240px;
     height: auto;
-    display: block;
-    border-radius: 50%;
-    box-shadow:
-      0 0 10px #ff0000,
-      0 0 20px #ff7300,
-      0 0 30px #fff700,
-      0 0 40px #48ff00,
-      0 0 50px #00ffd5,
-      0 0 60px #002bff,
-      0 0 70px #7a00ff,
-      0 0 80px #ff00c8;
+    transform: translateY(-50%);
+    filter: drop-shadow(0 0 15px red) drop-shadow(0 0 30px orange);
+    animation:
+      moveUpDown 5s ease-in-out infinite alternate,
+      neonGlow 4s ease-in-out infinite;
+    z-index: 10;
+  }
+
+  .left-gif {
+    left: 5%;
+  }
+
+  .right-gif {
+    right: 5%;
   }
 
   /* Testo luminoso sfumato */
@@ -107,50 +82,24 @@
     animation: fadeText 30s linear infinite;
   }
 
-  /* Stelline visibili sopra tutto */
-  .star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: twinkle 3s infinite alternate;
-    z-index: 15;
-    box-shadow: 0 0 6px 2px white;
-  }
-
-  @keyframes twinkle {
-    0% { opacity: 0.2; transform: scale(0.5); }
-    50% { opacity: 1; transform: scale(1.2); }
-    100% { opacity: 0.2; transform: scale(0.5); }
-  }
-
-  /* Animazioni chiave */
-  @keyframes moveAround {
-    0%   { transform: translate(-50%, -50%) translateY(0); }
-    25%  { transform: translate(-50%, -50%) translateY(30px); }
-    50%  { transform: translate(-50%, -50%) translateY(-30px); }
-    60%  { transform: translate(-50%, -50%) translateX(30px); }
-    75%  { transform: translate(-50%, -50%) translateX(-30px); }
-    100% { transform: translate(-50%, -50%) translate(0,0); }
+  /* Movimento verticale */
+  @keyframes moveUpDown {
+    0% { transform: translateY(-50%) translateY(0); }
+    50% { transform: translateY(-50%) translateY(-30px); }
+    100% { transform: translateY(-50%) translateY(30px); }
   }
 
   @keyframes neonGlow {
-    0%,100% { filter: hue-rotate(0deg) brightness(1.2); }
-    25%     { filter: hue-rotate(60deg) brightness(1.5); }
-    50%     { filter: hue-rotate(120deg) brightness(1.3); }
-    75%     { filter: hue-rotate(180deg) brightness(1.5); }
+    0%,100% { filter: hue-rotate(0deg) brightness(1.3) drop-shadow(0 0 15px red); }
+    25%     { filter: hue-rotate(60deg) brightness(1.5) drop-shadow(0 0 25px orange); }
+    50%     { filter: hue-rotate(120deg) brightness(1.3) drop-shadow(0 0 20px yellow); }
+    75%     { filter: hue-rotate(180deg) brightness(1.6) drop-shadow(0 0 25px cyan); }
   }
 
   @keyframes moveGradient {
     0%   { background-position: 0% 50%; }
     50%  { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-  }
-
-  @keyframes fadeImages {
-    0%   { opacity: 1; }
-    66.66% { opacity: 0; } 
-    100% { opacity: 0; }
   }
 
   @keyframes fadeText {
@@ -160,35 +109,25 @@
   }
 
   @media(max-width:800px) {
-    .center-img { width: 90%; height: auto; }
-    .gif-container { width: 40px; }
+    .side-gif { width: 100px; }
     .animated-text { font-size: 50px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- Stelline posizionate dx e sx vicino alla JPG -->
-  <div class="star" style="top:30%; left:25%; width:4px; height:4px;"></div>
-  <div class="star" style="top:40%; left:15%; width:3px; height:3px;"></div>
-  <div class="star" style="top:60%; left:20%; width:2px; height:2px;"></div>
-  <div class="star" style="top:35%; left:75%; width:3px; height:3px;"></div>
-  <div class="star" style="top:50%; left:80%; width:2px; height:2px;"></div>
-  <div class="star" style="top:65%; left:70%; width:4px; height:4px;"></div>
+  <!-- GIF a sinistra -->
+  <img class="side-gif left-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione sinistra">
 
-  <!-- JPG centrale con dimensioni regolate -->
-  <img class="center-img" src="https://xatimg.com/image/7BVTIxShnolV.jpg" alt="DJ al centro">
-
-  <!-- GIF piccolissima in alto con neon pulsante -->
-  <div class="gif-container">
-    <img class="overlay-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione sopra">
-  </div>
+  <!-- GIF a destra -->
+  <img class="side-gif right-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione destra">
 
   <!-- Testo luminoso -->
   <div class="animated-text">EL DIABLO</div>
 
 </body>
 </html>
+
 
 
 
