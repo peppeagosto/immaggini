@@ -50,8 +50,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 748px;       /* larghezza massima rimane 748px */
-    height: 600px;      /* altezza leggermente ridotta */
+    width: 748px;
+    height: 600px;
     border-radius: 12px;
     box-shadow:
       0 0 40px 15px rgba(255, 0, 0, 0.7),
@@ -68,7 +68,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 11;
-    width: 80px; /* dimensione regolabile */
+    width: 80px;
     pointer-events: none;
     animation: moveAround 6s ease-in-out infinite,
                neonGlow 3s ease-in-out infinite,
@@ -107,6 +107,23 @@
     animation: fadeText 30s linear infinite;
   }
 
+  /* Stelline visibili sopra tutto */
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 3s infinite alternate;
+    z-index: 15;
+    box-shadow: 0 0 6px 2px white;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.2; transform: scale(0.5); }
+  }
+
   /* Animazioni chiave */
   @keyframes moveAround {
     0%   { transform: translate(-50%, -50%) translateY(0); }
@@ -130,14 +147,12 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Fade out JPG/GIF in 20s */
   @keyframes fadeImages {
     0%   { opacity: 1; }
     66.66% { opacity: 0; } 
     100% { opacity: 0; }
   }
 
-  /* Testo sparisce entro primi 5s del ciclo */
   @keyframes fadeText {
     0% { opacity: 1; }
     16.66% { opacity: 0; } 
@@ -152,6 +167,15 @@
 </style>
 </head>
 <body>
+
+  <!-- Stelline posizionate dx e sx vicino alla JPG -->
+  <div class="star" style="top:30%; left:25%; width:4px; height:4px;"></div>
+  <div class="star" style="top:40%; left:15%; width:3px; height:3px;"></div>
+  <div class="star" style="top:60%; left:20%; width:2px; height:2px;"></div>
+  <div class="star" style="top:35%; left:75%; width:3px; height:3px;"></div>
+  <div class="star" style="top:50%; left:80%; width:2px; height:2px;"></div>
+  <div class="star" style="top:65%; left:70%; width:4px; height:4px;"></div>
+
   <!-- JPG centrale con dimensioni regolate -->
   <img class="center-img" src="https://xatimg.com/image/7BVTIxShnolV.jpg" alt="DJ al centro">
 
@@ -162,8 +186,11 @@
 
   <!-- Testo luminoso -->
   <div class="animated-text">EL DIABLO</div>
+
 </body>
 </html>
+
+
 
 
 
