@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sfondo Neon + JPG + GIF + Testo + Stelle Sparse</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#000; }
+  body {
+    background: linear-gradient(270deg,#ff0000,#ff7300,#fff700,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000);
+    background-size:1800% 1800%;
+    animation: moveGradient 18s ease infinite;
+    filter: brightness(1.4) saturate(1.5);
+  }
+  body::after {
+    content:""; position: fixed; inset:0;
+    box-shadow:0 0 60px 20px rgba(255,0,0,0.4),
+               0 0 80px 30px rgba(0,255,255,0.3),
+               0 0 100px 40px rgba(255,255,0,0.3);
+    pointer-events:none; mix-blend-mode:screen;
+  }
+
+  .center-img { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:800px; height:auto; border-radius:12px;
+    box-shadow:0 0 50px 20px rgba(255,0,0,0.7),0 0 100px 40px rgba(0,255,255,0.6);
+    z-index:10; transition:opacity 0.5s ease;
+  }
+
+  .gif-container { position:absolute; top:40%; left:50%; transform:translate(-50%,-50%);
+    z-index:11; width:180px;
+    pointer-events:none;
+    animation: moveAround 6s ease-in-out infinite, neonGlow 3s ease-in-out infinite;
+    transition:opacity 0.5s ease;
+  }
+  .overlay-gif { width:100%; height:auto; display:block; border-radius:50%;
+    box-shadow:0 0 30px #ff0000,0 0 60px #ff7300,0 0 90px #fff700,0 0 120px #48ff00,
+               0 0 150px #00ffd5,0 0 180px #002bff,0 0 210px #7a00ff,0 0 240px #ff00c8;
+  }
+
+  .text-el-diablo {
+    font-family:'Creepster',cursive;
+    font-size:120px;
+    background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    animation: rainbowText 5s linear infinite;
+    position:absolute; top:35%;
+    left:50%; transform:translate(-50%,-50%);
+    opacity:0; transition:opacity 0.5s ease; z-index:20;
+    text-shadow:0 0 15px #ff0000,0 0 30px #ff7300,0 0 45px #fff700;
+  }
+
+  .star {
+    position:absolute;
+    width:50px;
+    height:auto;
+    z-index:5;
+    pointer-events:none;
+    animation: starGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes starGlow {
+    0% { opacity:0.2; transform: scale(0.8); }
+    50% { opacity:1; transform: scale(1.2); }
+    100% { opacity:0.2; transform: scale(0.8); }
+  }
+
+  @keyframes rainbowText {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+  @keyframes moveAround {0%{transform:translate(-50%,-50%) translateY(0);}25%{transform:translate(-50%,-50%) translateY(30px);}50%{transform:translate(-50%,-50%) translateY(-30px);}60%{transform:translate(-50%,-50%) translateX(30px);}75%{transform:translate(-50%,-50%) translateX(-30px);}100%{transform:translate(-50%,-50%) translate(0,0);} }
+  @keyframes neonGlow {0%,100%{filter:hue-rotate(0deg) brightness(1.2);}25%{filter:hue-rotate(60deg) brightness(1.5);}50%{filter:hue-rotate(120deg) brightness(1.3);}75%{filter:hue-rotate(180deg) brightness(1.5);} }
+  @keyframes moveGradient {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+  @media(max-width:800px){
+    .center-img{width:90%;}
+    .gif-container{width:120px;}
+    .text-el-diablo{font-size:60px;}
+    .star{width:30px;}
+  }
+</style>
+</head>
+<body>
+
+<img class="center-img" id="centerImg" src="https://xatimg.com/image/7BVTIxShnolV.jpg" alt="DJ al centro">
+<div class="gif-container" id="gifContainer">
+  <img class="overlay-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Animazione sopra">
+</div>
+<div class="text-el-diablo" id="textElDiablo">el diablo</div>
+
+<!-- Stelle sparse casualmente -->
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:5%; left:8%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:12%; left:25%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:18%; left:40%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:7%; left:55%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:10%; left:70%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:20%; left:85%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:25%; left:5%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:30%; left:15%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:28%; left:35%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:35%; left:50%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:40%; left:65%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:38%; left:80%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:45%; left:10%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:50%; left:30%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:55%; left:45%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:60%; left:60%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:65%; left:75%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:70%; left:90%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:75%; left:20%;">
+<img src="https://xatimg.com/image/g6bCHbd6MKan.gif" class="star" style="top:80%; left:50%;">
+
+<script>
+const centerImg = document.getElementById('centerImg');
+const gifContainer = document.getElementById('gifContainer');
+const textElDiablo = document.getElementById('textElDiablo');
+
+function startCycle() {
+  centerImg.style.opacity = 1;
+  gifContainer.style.opacity = 1;
+  textElDiablo.style.opacity = 0;
+
+  setTimeout(()=>{
+    textElDiablo.style.opacity = 1;
+  }, 15000);
+
+  setTimeout(()=>{
+    startCycle();
+  }, 20000);
+}
+
+startCycle();
+</script>
+
+</body>
+</html>
