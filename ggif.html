@@ -5,199 +5,171 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EL DIABLO - Inferno Arcobaleno 3D</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}
 
-  html, body {
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    font-family: Arial, sans-serif;
+  /* SFONDO ARCOBALENO IN MOVIMENTO */
+  body{
+    background:linear-gradient(270deg,#ff0000,#ff7300,#fff700,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000);
+    background-size:2000% 2000%;
+    animation:moveGradient 20s ease infinite;
+    filter:brightness(1.3) saturate(1.5);
+  }
+  @keyframes moveGradient{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
   }
 
-  /* SFONDO ARCOBALENO SFUMATO IN MOVIMENTO */
-  body {
-    background: linear-gradient(270deg,
-      #ff0000,
-      #ff7300,
-      #fff700,
-      #48ff00,
-      #00ffd5,
-      #002bff,
-      #7a00ff,
-      #ff00c8,
-      #ff0000
-    );
-    background-size: 2000% 2000%;
-    animation: moveGradient 20s ease infinite;
-    filter: brightness(1.3) saturate(1.5);
+  body::after{
+    content:"";
+    position:fixed;inset:0;
+    box-shadow:0 0 60px 20px rgba(255,0,0,.4),0 0 100px 40px rgba(0,255,255,.4),0 0 140px 60px rgba(255,255,0,.3);
+    pointer-events:none;mix-blend-mode:screen;
   }
 
-  @keyframes moveGradient {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  .side-gif{
+    position:absolute;top:50%;
+    width:240px;height:auto;
+    transform:translateY(-50%);
+    animation:moveUpDown 5s ease-in-out infinite alternate,neonGlow 5s ease-in-out infinite;
+    z-index:10;
+  }
+  .left-gif{left:5%}
+  .right-gif{right:5%}
+  @keyframes moveUpDown{
+    0%{transform:translateY(-50%) translateY(0)}
+    50%{transform:translateY(-50%) translateY(-40px)}
+    100%{transform:translateY(-50%) translateY(40px)}
+  }
+  @keyframes neonGlow{
+    0%,100%{filter:drop-shadow(0 0 40px #ff0000) drop-shadow(0 0 70px #ff7f00)}
+    25%{filter:drop-shadow(0 0 50px #ffff00) drop-shadow(0 0 80px #00ff00)}
+    50%{filter:drop-shadow(0 0 50px #00ffff) drop-shadow(0 0 80px #0000ff)}
+    75%{filter:drop-shadow(0 0 50px #ff00ff) drop-shadow(0 0 80px #ff007f)}
   }
 
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    box-shadow:
-      0 0 60px 20px rgba(255,0,0,0.4),
-      0 0 100px 40px rgba(0,255,255,0.4),
-      0 0 140px 60px rgba(255,255,0,0.3);
-    pointer-events: none;
-    mix-blend-mode: screen;
+  .energy-ring{
+    position:absolute;top:50%;left:50%;
+    width:200px;height:200px;border:3px solid rgba(255,255,255,.5);border-radius:50%;
+    transform:translate(-50%,-50%) scale(0);
+    animation:ringExpand 6s ease-out infinite;z-index:3;
+  }
+  @keyframes ringExpand{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:.8;border-color:rgba(255,255,255,.8)}
+    100%{transform:translate(-50%,-50%) scale(4);opacity:0;border-color:rgba(255,255,255,0)}
   }
 
-  .side-gif {
-    position: absolute;
-    top: 50%;
-    width: 240px;
-    height: auto;
-    transform: translateY(-50%);
-    filter: drop-shadow(0 0 45px #ff5e00) drop-shadow(0 0 70px #ffae00);
-    animation:
-      moveUpDown 5s ease-in-out infinite alternate,
-      neonGlow 5s ease-in-out infinite;
-    z-index: 10;
+  .spark{
+    position:absolute;width:3px;height:3px;border-radius:50%;
+    background:radial-gradient(circle,#fff 0%,rgba(255,255,255,0) 70%);
+    animation:sparkMove 6s linear infinite;z-index:5;
+  }
+  @keyframes sparkMove{
+    0%{transform:translateY(0) scale(1);opacity:1}
+    100%{transform:translateY(-800px) scale(.5);opacity:0}
   }
 
-  .left-gif { left: 5%; }
-  .right-gif { right: 5%; }
-
-  @keyframes moveUpDown {
-    0% { transform: translateY(-50%) translateY(0); }
-    50% { transform: translateY(-50%) translateY(-40px); }
-    100% { transform: translateY(-50%) translateY(40px); }
-  }
-
-  @keyframes neonGlow {
-    0%,100% { filter: drop-shadow(0 0 40px #ff0000) drop-shadow(0 0 70px #ff7f00); }
-    25% { filter: drop-shadow(0 0 50px #ffff00) drop-shadow(0 0 80px #00ff00); }
-    50% { filter: drop-shadow(0 0 50px #00ffff) drop-shadow(0 0 80px #0000ff); }
-    75% { filter: drop-shadow(0 0 50px #ff00ff) drop-shadow(0 0 80px #ff007f); }
-  }
-
-  .energy-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    border: 3px solid rgba(255,255,255,0.5);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    animation: ringExpand 6s ease-out infinite;
-    z-index: 3;
-  }
-
-  @keyframes ringExpand {
-    0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; border-color: rgba(255,255,255,0.8); }
-    100% { transform: translate(-50%, -50%) scale(4); opacity: 0; border-color: rgba(255,255,255,0); }
-  }
-
-  .spark {
-    position: absolute;
-    background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    animation: sparkMove 6s linear infinite;
-    z-index: 5;
-  }
-
-  @keyframes sparkMove {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-800px) scale(0.5); opacity: 0; }
-  }
-
-  /* TESTO 3D NEON CON FADING */
-  .animated-text {
-    position: absolute;
-    top: 50%;
-    left: 41%;
-    transform: translate(-50%, -50%);
-    font-size: 60px;
-    font-weight: bold;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    z-index: 6;
+  /* TESTO 3D CENTRALE */
+  .animated-text{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-size:60px;font-weight:bold;color:#fff;
+    text-transform:uppercase;letter-spacing:5px;z-index:6;
     text-shadow:
-      2px 2px 0 #ff0000,
-      4px 4px 0 #ff7f00,
-      6px 6px 0 #ffff00,
-      8px 8px 0 #00ff00,
-      10px 10px 0 #00ffff,
-      12px 12px 0 #0000ff,
-      14px 14px 0 #ff00ff,
-      16px 16px 20px rgba(0,0,0,0.7);
-    animation: fadeText 20s infinite;
+      2px 2px 0 #ff0000,4px 4px 0 #ff7f00,6px 6px 0 #ffff00,
+      8px 8px 0 #00ff00,10px 10px 0 #00ffff,12px 12px 0 #0000ff,
+      14px 14px 0 #ff00ff,16px 16px 20px rgba(0,0,0,.7);
+    animation:fadeText 15s ease-in-out infinite;
+  }
+  @keyframes fadeText{
+    0%,70%{opacity:1}
+    100%{opacity:0}
   }
 
-  @keyframes fadeText {
-    0%, 80% { opacity: 1; }
-    90%, 100% { opacity: 0; }
+  /* NOTE MUSICALI */
+  .note{
+    position:absolute;
+    font-size:40px;color:#fff;opacity:.9;
+    text-shadow:0 0 10px rgba(255,255,255,.7);
+    animation:glowPulse 3s ease-in-out infinite;
+    z-index:9;
+  }
+  @keyframes glowPulse{
+    0%,100%{text-shadow:0 0 10px rgba(255,255,255,.7),0 0 20px rgba(255,255,255,.4)}
+    50%{text-shadow:0 0 20px rgba(255,255,255,1),0 0 40px rgba(255,255,255,.8)}
   }
 
-  /* --- NOTE MUSICALI ANIMATE (aggiunta nuova) --- */
-  .note {
-    position: absolute;
-    font-size: 40px;
-    color: #fff;
-    text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
-    opacity: 0.8;
-    animation: floatNotes 6s linear infinite;
-    z-index: 9;
+  /* NOTE DIVISE PER ZONA */
+  .note.left{animation:floatLeft 9s linear infinite,glowPulse 3s ease-in-out infinite;}
+  .note.right{animation:floatRight 9s linear infinite,glowPulse 3s ease-in-out infinite;}
+  .note.center{animation:floatCenter 9s linear infinite,glowPulse 3s ease-in-out infinite;}
+
+  @keyframes floatLeft{
+    0%{left:5%;top:110%;opacity:1}
+    100%{left:30%;top:-10%;opacity:0}
+  }
+  @keyframes floatRight{
+    0%{right:5%;top:110%;opacity:1}
+    100%{right:30%;top:-10%;opacity:0}
+  }
+  @keyframes floatCenter{
+    0%{left:50%;top:110%;transform:translateX(-50%) scale(1);opacity:1}
+    100%{left:50%;top:-10%;transform:translateX(-50%) scale(1.3);opacity:0}
   }
 
-  .note.left {
-    left: 2%;
-    animation-delay: 0s;
-  }
-
-  .note.right {
-    right: 2%;
-    animation-delay: 3s;
-  }
-
-  @keyframes floatNotes {
-    0% { transform: translateY(100vh) scale(1); opacity: 1; }
-    100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
-  }
-
-  @media(max-width:800px) {
-    .side-gif { width: 140px; }
-    .animated-text { font-size: 50px; text-shadow: 1px 1px 0 #ff0000, 2px 2px 0 #ff7f00, 3px 3px 0 #ffff00; }
+  @media(max-width:800px){
+    .side-gif{width:140px}
+    .animated-text{font-size:50px}
   }
 </style>
 </head>
 <body>
 
+  <!-- ANELLI -->
   <div class="energy-ring"></div>
-  <div class="energy-ring" style="animation-delay:2s;"></div>
-  <div class="energy-ring" style="animation-delay:4s;"></div>
+  <div class="energy-ring" style="animation-delay:2s"></div>
+  <div class="energy-ring" style="animation-delay:4s"></div>
 
-  <img class="side-gif left-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Sinistra">
-  <img class="side-gif right-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif" alt="Destra">
+  <!-- GIF LATERALI -->
+  <img class="side-gif left-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif">
+  <img class="side-gif right-gif" src="https://xatimg.com/image/Wiks60Aarpgd.gif">
 
-  <div class="spark" style="left:20%; top:90%; animation-delay:0s;"></div>
-  <div class="spark" style="left:50%; top:95%; animation-delay:2s;"></div>
-  <div class="spark" style="left:80%; top:92%; animation-delay:4s;"></div>
+  <!-- SCINTILLE -->
+  <div class="spark" style="left:20%;top:90%;animation-delay:0s"></div>
+  <div class="spark" style="left:50%;top:95%;animation-delay:2s"></div>
+  <div class="spark" style="left:80%;top:92%;animation-delay:4s"></div>
 
-  <!-- NOTE MUSICALI A DESTRA E SINISTRA -->
-  <div class="note left">♫</div>
-  <div class="note left" style="animation-delay:2s;">♪</div>
-  <div class="note right">♬</div>
-  <div class="note right" style="animation-delay:4s;">♩</div>
+  <!-- NOTE SINISTRA -->
+  <div class="note left" style="animation-delay:0s">♫</div>
+  <div class="note left" style="animation-delay:1s">♪</div>
+  <div class="note left" style="animation-delay:2s">♬</div>
+  <div class="note left" style="animation-delay:3s">♩</div>
+  <div class="note left" style="animation-delay:4s">♪</div>
 
-  <!-- TESTO CENTRALE 3D CHE SPARISCE OGNI 20 SECONDI -->
+  <!-- NOTE DESTRA -->
+  <div class="note right" style="animation-delay:0.5s">♩</div>
+  <div class="note right" style="animation-delay:1.5s">♬</div>
+  <div class="note right" style="animation-delay:2.5s">♪</div>
+  <div class="note right" style="animation-delay:3.5s">♫</div>
+  <div class="note right" style="animation-delay:4.5s">♩</div>
+
+  <!-- NOTE CENTRO -->
+  <div class="note center" style="animation-delay:0s">♬</div>
+  <div class="note center" style="animation-delay:1s">♪</div>
+  <div class="note center" style="animation-delay:2s">♫</div>
+  <div class="note center" style="animation-delay:3s">♩</div>
+  <div class="note center" style="animation-delay:4s">♪</div>
+  <div class="note center" style="animation-delay:5s">♬</div>
+
+  <!-- TESTO CENTRALE -->
   <div class="animated-text">EL DIABLO</div>
 
 </body>
 </html>
+
+
 
 
 
