@@ -1,134 +1,14 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dxsx cartaio</title>
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    background: transparent;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-}
-
-/* CONTENITORE GENERALE */
-.container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-    background: transparent;
-}
-
-/* VIDEO LATERALI */
-.video-wrapper {
-    position: absolute;
-    width: 290px;
-    height: 486px;
-    overflow: hidden;
-    border-radius: 12px;
-    z-index: 2;
-}
-
-video.side-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.left-video-wrapper { left: 10px; top: 0; }
-.right-video-wrapper { right: 10px; top: 0; }
-
-/* VIDEO CENTRALE (SOLO IMMAGINE QUI) */
-.center-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 720px;
-    height: 480px;
-    object-fit: contain;
-    z-index: 3;
-    border-radius: 12px;
-}
-
-/* TESTI SUI VIDEO LATERALI */
-.video-text {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 22px; 
-    font-weight: bold;
-    color: gold;
-    text-shadow: 
-        0 0 5px #ffd700,
-        0 0 10px #ffcc00,
-        0 0 20px #ffaa00,
-        0 0 30px #ff8800;
-    white-space: nowrap;
-    z-index: 4;
-    animation: flashHeartbeat 25s infinite;
-}
-
-/* ANIMAZIONE LAMPEGGIO + BATTITO CUORE */
-@keyframes flashHeartbeat {
-    0%, 20% {
-        opacity: 1;
-        bottom: 50%;
-        transform: translateX(-50%) scale(1);
-    }
-    5%, 15% {
-        transform: translateX(-50%) scale(1.2); 
-    }
-    21%, 100% {
-        opacity: 0;
-        bottom: 8px;
-        transform: translateX(-50%) scale(1);
-    }
-}
-</style>
-</head>
-<body>
-
-<div class="container">
-
-  <!-- VIDEO SINISTRO -->
-  <div class="video-wrapper left-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/all.mp4" type="video/mp4">
-    </video>
-    <div class="video-text"></div>
-  </div>
-
-  <!-- VIDEO DESTRO -->
-  <div class="video-wrapper right-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/all.mp4" type="video/mp4">
-    </video>
-    <div class="video-text"></div>
-  </div>
-
-  <!-- IMMAGINE CENTRALE -->
-<style>
-.center-image {
-  width: 740px; /* puoi cambiare la misura come vuoi */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-</style>
-
-<img class="center-image" src="https://xatimg.com/image/E4OsFYm86TYc.png" alt="center image">
-
-</div>
-
-</body>
-</html>
-
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>dxsx_offuscato_iframe</title></head><body style="margin:0;padding:0;background:#000;color:#fff;">
+<script>
+(function(){
+  var b="PCFET0NUWVBFIGh0bWw+PGh0bWwgbGFuZz0iaXQiPjxoZWFkPjxtZXRhIGNoYXJzZXQ9IlVURi04Ij48bWV0YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEiPjx0aXRsZT5keHN4IGNhcnRhaW88L3RpdGxlPjxzdHlsZT4gaHRtbCwgYm9keSB7IG1hcmdpbjogMDsgcGFkZGluZzogMDsgaGVpZ2h0OiAxMDB2aDsgd2lkdGg6IDEwMHZ3OyBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDsgb3ZlcmZsb3c6IGhpZGRlbjsgZGlzcGxheTogZmxleDsganVzdGlmeS1jb250ZW50OiBjZW50ZXI7IGFsaWduLWl0ZW1zOiBjZW50ZXI7IGZvbnQtZmFtaWx5OiAiVHJlYnVjaGV0IE1TIiwgQXJpYWwsIHNhbnMtc2VyaWY7IH0gLmNvbnRhaW5lciB7IHBvc2l0aW9uOiByZWxhdGl2ZTsgd2lkdGg6IDEzMDhweDsgaGVpZ2h0OiA0ODZweDsgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7IH0gLnZpZGVvLXdyYXBwZXIgeyBwb3NpdGlvbjogYWJzb2x1dGU7IHdpZHRoOiAyOTBweDsgaGVpZ2h0OiA0ODZweDsgb3ZlcmZsb3c6IGhpZGRlbjsgYm9yZGVyLXJhZGl1czogMTJweDsgei1pbmRleDogMjsgfSB2aWRlby5zaWRlLXZpZGVvIHsgd2lkdGg6IDEwMCU7IGhlaWdodDogMTAwJTsgb2JqZWN0LWZpdDogY292ZXI7IH0gLmxlZnQtdmlkZW8td3JhcHBlciB7IGxlZnQ6IDEwcHg7IHRvcDogMDsgfSAucmlnaHQtdmlkZW8td3JhcHBlciB7IHJpZ2h0OiAxMHB4OyB0b3A6IDA7IH0gLmNlbnRlci1pbWFnZSB7IHBvc2l0aW9uOiBhYnNvbHV0ZTsgdG9wOiA1MCU7IGxlZnQ6IDUwJTsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7IHdpZHRoOiA3MjBweDsgaGVpZ2h0OiA0ODBweDsgb2JqZWN0LWZpdDogY29udGFpbjsgei1pbmRleDogMzsgYm9yZGVyLXJhZGl1czogMTJweDsgfSAudmlkZW8tdGV4dCB7IHBvc2l0aW9uOiBhYnNvbHV0ZTsgYm90dG9tOiA4cHg7IGxlZnQ6IDUwJTsgdHJhbnNmb3JtOiB0cmFuc2xhdGVYKC01MCUpOyBmb250LXNpemU6IDIycHg7IGZvbnQtd2VpZ2h0OiBib2xkOyBjb2xvcjogZ29sZDsgdGV4dC1zaGFkb3c6IDAgMCA1cHggI2ZmZDcwMCwgMCAwIDEwcHggI2ZmY2MwMCwgMCAwIDIwcHggI2ZmYWEwMCwgMCAwIDMwcHggI2ZmODgwMDsgd2hpdGUtc3BhY2U6IG5vd3JhcDsgei1pbmRleDogNDsgYW5pbWF0aW9uOiBmbGFzaEhlYXJ0YmVhdCAyNXMgaW5maW5pdGU7IH0gQGtleWZyYW1lcyBmbGFzaEhlYXJ0YmVhdCB7IDAlLCAyMCUgeyBvcGFjaXR5OiAxOyBib3R0b206IDUwJTsgdHJhbnNmb3JtOiB0cmFuc2xhdGVYKC01MCUpIHNjYWxlKDEpOyB9IDUlLCAxNSUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZVgoLTUwJSkgc2NhbGUoMS4yKTsgfSAyMSUsIDEwMCUgeyBvcGFjaXR5OiAwOyBib3R0b206IDhweDsgdHJhbnNmb3JtOiB0cmFuc2xhdGVYKC01MCUpIHNjYWxlKDEpOyB9IH0gPC9zdHlsZT48L2hlYWQ+PGJvZHk+PGRpdiBjbGFzcz0iY29udGFpbmVyIj48IS0tIFZJREVPIFNJTklTVFJPIC0tPjxkaXYgY2xhc3M9InZpZGVvLXdyYXBwZXIgbGVmdC12aWRlby13cmFwcGVyIj48dmlkZW8gY2xhc3M9InNpZGUtdmlkZW8iIGF1dG9wbGF5IGxvb3AgbXV0ZWQgcGxheXNpbmxpbmU+PHNvdXJjZSBzcmM9Imh0dHBzOi8vcGVwcGVhZ29zdG8uZ2l0aHViLmlvL2ltbWFnZ2luaS9hbGwubXA0IiB0eXBlPSJ2aWRlby9tcDQiPjwvdmlkZW8+PGRpdiBjbGFzcz0idmlkZW8tdGV4dCI+PC9kaXY+PC9kaXY+PCEtLSBWSURFTyBERVNUUk8gLS0+PGRpdiBjbGFzcz0idmlkZW8td3JhcHBlciByaWdodC12aWRlby13cmFwcGVyIj48dmlkZW8gY2xhc3M9InNpZGUtdmlkZW8iIGF1dG9wbGF5IGxvb3AgbXV0ZWQgcGxheXNpbmxpbmU+PHNvdXJjZSBzcmM9Imh0dHBzOi8vcGVwcGVhZ29zdG8uZ2l0aHViLmlvL2ltbWFnZ2luaS9hbGwubXA0IiB0eXBlPSJ2aWRlby9tcDQiPjwvdmlkZW8+PGRpdiBjbGFzcz0idmlkZW8tdGV4dCI+PC9kaXY+PC9kaXY+PCEtLSBJTU1BR0lORSBDRU5UUkFMRSAtLT48aW1nIGNsYXNzPSJjZW50ZXItaW1hZ2UiIHNyYz0iaHR0cHM6Ly94YXRpbWcuY29tL2ltYWdlL0U0T3NGWW04NlRZYy5wbmciIGFsdD0iY2VudGVyIGltYWdlIj48L2Rpdj48L2JvZHk+PC9odG1sPg==";
+  try{
+    var s=atob(b);
+    var ifr=document.createElement('iframe');
+    ifr.style.position='fixed';ifr.style.top=0;ifr.style.left=0;ifr.style.width='100%';ifr.style.height='100%';ifr.style.border='0';
+    ifr.srcdoc=s;document.body.appendChild(ifr);
+  }catch(e){document.body.innerText='Errore decodifica: '+e}
+})();
+</script>
+</body></html>
