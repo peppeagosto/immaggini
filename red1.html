@@ -1,76 +1,105 @@
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video a sinistra e destra con immagine trasparente al centro</title>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-  }
-
-  video.side-video {
-    position: absolute;
-    top: 0;
-    width: 290px;
-    height: 486px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    z-index: 1;
-  }
-
-  /* Avvicinati al centro */
-  .left-video {
-    left: -40px;
-  }
-
-  .right-video {
-    right: -40px;
-  }
-
-  img.center-image {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
-  }
-</style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>dxsx_offuscato_protetto</title>
 </head>
-<body>
+<body style="margin:0;padding:0;background:transparent;overflow:hidden;">
+<script>
+/* OFFUSCATO - genera CSS + DOM per 2 video left/right (transparent background) */
+(function(){
+  try{
+    // array di frammenti stringa (camuffati)
+    var _ = [
+      "\x62\x6F\x64\x79\x2C\x20\x68\x74\x6D\x6C","{","\x6D\x61\x72\x67\x69\x6E\x3A\x30\x3B\x70\x61\x64\x64\x69\x6E\x67\x3A\x30\x3B\x68\x65\x69\x67\x68\x74\x3A\x31\x30\x30\x76\x68\x3B\x62\x61\x63\x6B\x67\x72\x6F\x75\x6E\x64\x3A\x74\x72\x61\x6E\x73\x70\x61\x72\x65\x6E\x74\x3B\x64\x69\x73\x70\x6C\x61\x79\x3A\x66\x6C\x65\x78\x3B\x6A\x75\x73\x74\x69\x66\x79\x2D\x63\x6F\x6E\x74\x65\x6E\x74\x3A\x63\x65\x6E\x74\x65\x72\x3B\x61\x6C\x69\x67\x6E\x2D\x69\x74\x65\x6D\x73\x3A\x63\x65\x6E\x74\x65\x72\x3B\x6F\x76\x65\x72\x66\x6C\x6F\x77\x3A\x68\x69\x64\x64\x65\x6E\x3B",
+      "}",
+      ".\x63\x6F\x6E\x74\x61\x69\x6E\x65\x72","{","\x70\x6F\x73\x69\x74\x69\x6F\x6E\x3A\x72\x65\x6C\x61\x74\x69\x76\x65\x3B\x77\x69\x64\x74\x68\x3A\x31\x33\x30\x38\x70\x78\x3B\x68\x65\x69\x67\x68\x74\x3A\x34\x38\x36\x70\x78\x3B","}",
+      ".\x76\x69\x64\x65\x6F\x2D\x77\x72\x61\x70\x70\x65\x72","{","\x70\x6F\x73\x69\x74\x69\x6F\x6E\x3A\x61\x62\x73\x6F\x6C\x75\x74\x65\x3B","}",
+      ".\x76\x69\x64\x65\x6F\x2E\x73\x69\x64\x65\x2D\x76\x69\x64\x65\x6F","{",
+        "\x70\x6F\x73\x69\x74\x69\x6F\x6E\x3A\x61\x62\x73\x6F\x6C\x75\x74\x65\x3B",
+        "\x74\x6F\x70\x3A\x30\x3B",
+        "\x77\x69\x64\x74\x68\x3A\x32\x39\x30\x70\x78\x3B",
+        "\x68\x65\x69\x67\x68\x74\x3A\x34\x38\x36\x70\x78\x3B",
+        "\x6F\x62\x6A\x65\x63\x74\x2D\x66\x69\x74\x3A\x63\x6F\x76\x65\x72\x3B",
+        "\x62\x6F\x72\x64\x65\x72\x2D\x72\x61\x64\x69\x75\x73\x3A\x31\x30\x70\x78\x3B",
+        "\x62\x6F\x78\x2D\x73\x68\x61\x64\x6F\x77\x3A\x30\x20\x30\x20\x31\x35\x70\x78\x20\x72\x67\x62\x61\x28\x32\x35\x35\x2C\x32\x35\x35\x2C\x32\x35\x35\x2C\x30\x2E\x33\x29\x3B",
+        "\x7A\x2D\x69\x6E\x64\x65\x78\x3A\x31\x3B",
+      "}",
+      ".\x6C\x65\x66\x74\x2D\x76\x69\x64\x65\x6F","{","\x6C\x65\x66\x74\x3A\x2D\x34\x30\x70\x78\x3B","}",
+      ".\x72\x69\x67\x68\x74\x2D\x76\x69\x64\x65\x6F","{","\x72\x69\x67\x68\x74\x3A\x2D\x34\x30\x70\x78\x3B","}",
+      // fine css
+      ""
+    ];
+    // crea lo style unendo i frammenti (piu' difficile da leggere)
+    var css = _.slice(0,1).concat(_.slice(1,2), _.slice(2,4), _.slice(4,6), _.slice(6,11), _.slice(11,12), _.slice(12,13), _.slice(13,14)).join("") + _.slice(14).join("");
+    // ma rendiamolo ancora meno ovvio frammentando la stringa CSS
+    var cchunks = [
+      ".container{position:relative;width:1308px;height:486px}",
+      "video.side-video{position:absolute;top:0;width:290px;height:486px;object-fit:cover;border-radius:10px;box-shadow:0 0 15px rgba(255,255,255,0.3);z-index:1}",
+      ".left-video{left:-40px}",
+      ".right-video{right:-40px}"
+    ];
+    // ricompongo css finale
+    var cssFinal = "body,html{margin:0;padding:0;height:100vh;background:transparent;display:flex;justify-content:center;align-items:center;overflow:hidden;}" + cchunks.join("");
+    // insert style
+    var s = document.createElement('style');
+    s.type = 'text/css';
+    s.appendChild(document.createTextNode(cssFinal));
+    document.head.appendChild(s);
 
-<div class="container">
-  <!-- Video a sinistra -->
-  <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/red1.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
+    // funzione di utilita' per creare elementi con attributi (nomi camuffati)
+    function X(tag, attrs, parent){
+      var e = document.createElement(tag);
+      if(attrs){
+        for(var k in attrs){
+          if(!attrs.hasOwnProperty(k)) continue;
+          try{ e.setAttribute(k, attrs[k]); }catch(_){}
+        }
+      }
+      (parent||document.body).appendChild(e);
+      return e;
+    }
 
-  
+    // container
+    var cont = X('div', {'class':'container'}, document.body);
 
-  <!-- Video a destra -->
-  <video class="side-video right-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/red1.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
-  </video>
-</div>
+    // video left
+    var vL = X('video', {'class':'side-video left-video','autoplay':'','loop':'','muted':'','playsinline':''}, cont);
+    var sL = X('source', {'src':'https://peppeagosto.github.io/immaggini/red1.mp4','type':'video/mp4'}, vL);
+    vL.appendChild(document.createTextNode('Il tuo browser non supporta il video.'));
 
+    // video right
+    var vR = X('video', {'class':'side-video right-video','autoplay':'','loop':'','muted':'','playsinline':''}, cont);
+    var sR = X('source', {'src':'https://peppeagosto.github.io/immaggini/red1.mp4','type':'video/mp4'}, vR);
+    vR.appendChild(document.createTextNode('Il tuo browser non supporta il video.'));
+
+    // assicuro che il body sia centrato (injection minimal)
+    document.documentElement.style.background = 'transparent';
+    document.body.style.display = 'flex';
+    document.body.style.justifyContent = 'center';
+    document.body.style.alignItems = 'center';
+    document.body.style.height = '100vh';
+    // nascondo eventuali selezioni per complicare copia
+    document.onselectstart = function(){ return false; };
+    document.ondragstart = function(){ return false; };
+
+    // piccolo anti-copy: sostituisco il toString del contenuto per renderlo piu' difficile da copiar via console
+    try{
+      var _p = Function.prototype.toString;
+      Function.prototype.toString = function(){ return '/* code protected */'; };
+      // dopo 1 secondo ripristino toString per non rompere altre cose (ma rende comunque il dump poco utile subito)
+      setTimeout(function(){ Function.prototype.toString = _p; }, 1500);
+    }catch(e){}
+
+  }catch(err){
+    // in caso di errore mostra un messaggio minimale (ancora offuscato)
+    var m = document.createElement('div');
+    m.style.cssText = 'position:fixed;left:0;top:0;padding:8px;background:rgba(0,0,0,0.6);color:#fff;font-family:Arial,sans-serif;';
+    m.appendChild(document.createTextNode('Err:'+ (err && err.message? err.message : '0') ));
+    document.body.appendChild(m);
+  }
+})();
+</script>
 </body>
 </html>
