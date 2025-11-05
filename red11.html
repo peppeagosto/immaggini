@@ -1,236 +1,77 @@
-<!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>dxsx_offuscato_fix_mp4</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title></title>
 <style>
-  html,body{margin:0;padding:0;height:100vh;background:transparent;overflow:hidden;font-family:Arial,Helvetica,sans-serif}
-  .wrap{width:100%;height:100%;display:flex;justify-content:center;align-items:center}
-  .container{position:relative;width:760px;height:520px;max-width:100%;box-sizing:border-box;display:block}
-  .side-video{position:absolute;bottom:60px;width:290px;height:486px;object-fit:cover;border-radius:10px;z-index:2}
-  .left-video{left:0}
-  .right-video{right:0}
-  .owner-label{
-    position:absolute;
-    bottom:36px;
-    font-size:14px;
-    letter-spacing:0.5px;
-    color:#ffffff;
-    background:rgba(0,0,0,0.35);
-    padding:4px 8px;
-    border-radius:6px;
-    pointer-events:none;
-    z-index:3;
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
-  .owner-left{ left:4px; }
-  .owner-right{ right:4px; }
-  .owner-camo{
-    position:absolute;
-    bottom:18px;
-    font-size:10px;
-    letter-spacing:1px;
-    color:#111;
-    opacity:0.12;
-    pointer-events:none;
-    z-index:3;
-    font-family:monospace;
-    user-select:none;
+
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
   }
-  .camo-left{ left:4px; transform: rotate(-2deg); }
-  .camo-right{ right:4px; transform: rotate(2deg); text-align:right; }
-  .side-video{box-shadow:0 0 25px rgba(255,0,0,0.12), 0 0 45px rgba(255,102,0,0.06)}
-  .lock-screen{
-    position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;
-    background:#000;color:#fff;font-size:28px;padding:20px;text-align:center;z-index:9999;
+
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 290px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    z-index: 1;
   }
-  .lock-screen small{color:#f33;margin-top:12px;font-size:16px}
-  /* friendly warning overlay (domain mismatch) */
-  .warn-screen{
-    position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
-    background:rgba(0,0,0,0.85);color:#fff;font-size:18px;padding:20px;text-align:center;z-index:9998;
+
+  /* Avvicinati al centro */
+  .left-video {
+    left: -40px;
   }
-  .warn-screen button{margin-top:12px;padding:8px 12px;border-radius:6px;border:none;background:#fff;color:#000;cursor:pointer}
+
+  .right-video {
+    right: -40px;
+  }
+
+  img.center-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    height: 486px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="container" id="playerContainer">
-    <video id="videoLeft" class="side-video left-video" autoplay loop muted playsinline webkit-playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/red11.mp4" type="video/mp4">
-      Il tuo browser non supporta il video.
-    </video>
 
-    <video id="videoRight" class="side-video right-video" autoplay loop muted playsinline webkit-playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/red11.mp4" type="video/mp4">
-      Il tuo browser non supporta il video.
-    </video>
+<div class="container">
+  <!-- Video a sinistra -->
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/red11.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
 
-    <!-- scritte visibili -->
-    <div id="ownerLeft" class="owner-label owner-left">il cartaio</div>
-    <div id="ownerRight" class="owner-label owner-right">il cartaio</div>
+  
 
-    <!-- scritte camuffate in binario -->
-    <div id="camoLeft" class="owner-camo camo-left">01101001 01101100 00100000 01100011 01100001 01110010 01110100 01100001 01101001 01101111</div>
-    <div id="camoRight" class="owner-camo camo-right">01101001 01101100 00100000 01100011 01100001 01110010 01110100 01100001 01101001 01101111</div>
-  </div>
+  <!-- Video a destra -->
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/red11.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
 </div>
 
-<!-- warn-screen verrà mostrata se il dominio non è autorizzato (evita bianco totale) -->
-<div id="warnScreen" class="warn-screen" style="display:none">
-  <div>
-    Attenzione: questo codice è protetto e progettato per funzionare solo sul dominio autorizzato.<br/>
-    Host corrente: <strong id="hostName"></strong><br/>
-    Se stai testando localmente, carica la pagina su <em>peppeagosto.github.io</em> o rimuovi temporaneamente il lock nelle impostazioni.
-    <div><button id="dismissWarn">Chiudi avviso</button></div>
-  </div>
-</div>
-
-<script>
-(function(){
-  // CONFIG
-  var ALLOWED_DOMAINS = ['peppeagosto.github.io']; // domini autorizzati (aggiungi altri se vuoi)
-  var expectedVisible = 'il cartaio';
-  var expectedBinary = '01101001011011000010000001100011011000010111001001110100011000010110100101101111';
-  var leftVisible = '#ownerLeft';
-  var rightVisible = '#ownerRight';
-  var leftCamo = '#camoLeft';
-  var rightCamo = '#camoRight';
-
-  function showWarnDomain(){
-    try{
-      var w = document.getElementById('warnScreen');
-      var h = document.getElementById('hostName');
-      if(w && h){
-        h.textContent = location.hostname || 'unknown';
-        w.style.display = 'flex';
-        document.getElementById('dismissWarn').onclick = function(){ w.style.display = 'none'; };
-      }else{
-        // fallback: show a simple message inside body
-        document.body.innerHTML = '<div style="color:#fff;background:#000;padding:20px;text-align:center">Dominio non autorizzato: '+(location.hostname||'?')+'</div>';
-      }
-    }catch(_){
-      try{ document.body.innerHTML = '<div style="color:#fff;background:#000;padding:20px;text-align:center">Dominio non autorizzato</div>'; }catch(_){}
-    }
-  }
-
-  function safeLog(){
-    try{ console.log.apply(console, arguments); }catch(_){}
-  }
-
-  // domain-check: se non autorizzato, NON svuotiamo la pagina; mostriamo un avviso chiaro
-  var hostAllowed = (ALLOWED_DOMAINS.indexOf(location.hostname) !== -1);
-  safeLog('ownerLock: hostAllowed?', hostAllowed, 'hostname=', location.hostname);
-  if(!hostAllowed){
-    // Mostra warn overlay (anziché pagina bianca)
-    showWarnDomain();
-    // non return immediato: permetti al proprietario di chiudere avviso; comunque non armare il lock
-    // se vuoi che non prosegua il resto del codice, commenta la riga seguente:
-    // return;
-  }
-
-  // deterrenti (non perfetti ma deterrenti)
-  try{
-    document.oncontextmenu = function(){ return false; };
-    document.onselectstart = function(){ return false; };
-    document.ondragstart = function(){ return false; };
-    document.onkeydown = function(e){
-      try{
-        var k = e.key || e.keyIdentifier || e.keyCode;
-        if(k === 'F12' || (e.ctrlKey && e.shiftKey && (k === 'I' || k === 73)) || (e.ctrlKey && (k === 'U' || k === 85))){
-          e.preventDefault(); return false;
-        }
-      }catch(_){}
-    };
-  }catch(_){}
-
-  function triggerLock(reason){
-    try{
-      document.querySelectorAll('video,audio').forEach(function(v){
-        try{ v.pause(); v.removeAttribute('src'); if(v.load) v.load(); }catch(_){}
-      });
-      // mostra lock-screen (nera) con messaggio tedesco
-      try{ document.body.innerHTML = ''; }catch(_){}
-      var d = document.createElement('div');
-      d.className = 'lock-screen';
-      d.innerHTML = '<div>Nicht stehlen! <br/><strong>Code geschützt.</strong></div><small>Modifikation erkannt: '+(reason||'chiave')+'</small>';
-      document.body.appendChild(d);
-      try{ if(window.stop) window.stop(); }catch(_){}
-    }catch(_){}
-  }
-
-  function checkKeys(){
-    try{
-      var lv = document.querySelector(leftVisible), rv = document.querySelector(rightVisible);
-      var lc = document.querySelector(leftCamo), rc = document.querySelector(rightCamo);
-      if(!lv || !rv || !lc || !rc) { safeLog('checkKeys: element missing'); triggerLock('elemento mancante'); return false; }
-
-      var ltext = (lv.textContent || lv.innerText || '').trim();
-      var rtext = (rv.textContent || rv.innerText || '').trim();
-      if(ltext !== expectedVisible || rtext !== expectedVisible){ safeLog('checkKeys: visible mismatch', ltext, rtext); triggerLock('testo visibile alterato'); return false; }
-
-      var lbin = (lc.textContent || lc.innerText || '').replace(/\s+/g,'').trim();
-      var rbin = (rc.textContent || rc.innerText || '').replace(/\s+/g,'').trim();
-      if(lbin !== expectedBinary || rbin !== expectedBinary){ safeLog('checkKeys: binary mismatch', lbin, rbin); triggerLock('chiave binaria alterata'); return false; }
-
-      return true;
-    }catch(e){
-      safeLog('checkKeys error', e && e.message);
-      triggerLock('errore controllo');
-      return false;
-    }
-  }
-
-  // primo check (se vuoi che la protezione non venga eseguita su host non autorizzato, disabilita il check seguente quando hostAllowed == false)
-  if(hostAllowed){
-    if(!checkKeys()) return;
-  } else {
-    safeLog('ownerLock: host not allowed - skipping key-arming. Dismiss the warning to continue testing.');
-    // se vuoi bloccare comunque anche su host non autorizzato, sostituisci con: if(!checkKeys()) return;
-  }
-
-  // osservatore DOM
-  var obs = new MutationObserver(function(){
-    if(hostAllowed){
-      if(!checkKeys()){
-        try{ obs.disconnect(); }catch(_){}
-      }
-    } else {
-      // se host non autorizzato, non armare la reazione - evita falsi blocchi durante test
-    }
-  });
-  obs.observe(document.documentElement || document, { childList:true, subtree:true, characterData:true });
-
-  // backup: controllo periodico
-  var periodic = setInterval(function(){
-    if(hostAllowed){
-      if(!checkKeys()){
-        clearInterval(periodic);
-        try{ obs.disconnect(); }catch(_){}
-      }
-    }
-  }, 1200);
-
-  // self-defend temporaneo
-  try{
-    var _orig = Function.prototype.toString;
-    Function.prototype.toString = function(){ return '/* protected */'; };
-    setTimeout(function(){ Function.prototype.toString = _orig; }, 2000);
-  }catch(_){}
-
-  // funzione per debug (solo se serve)
-  window.__ownerLockDisableForDebug = function(){
-    try{
-      obs.disconnect();
-      clearInterval(periodic);
-      try{ Function.prototype.toString = _orig; }catch(_){}
-      console.log('ownerLock disabled (debug).');
-      var w = document.getElementById('warnScreen'); if(w) w.style.display='none';
-    }catch(_){}
-  };
-
-})(); // end IIFE
-</script>
 </body>
 </html>
 
