@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAMPI</title>
+<title>ROSSO22</title>
 <style>
 body {
   margin: 0;
@@ -33,24 +33,11 @@ body {
   background: radial-gradient(circle at center, rgba(255,255,255,0.15), rgba(0,0,0,0.7));
   border: 3px solid rgba(255,255,255,0.7);
   border-radius: 15px;
-  box-shadow:
-    0 0 25px rgba(255,255,255,0.7),
-    inset 0 0 30px rgba(255,255,255,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(4px);
-  transition: 0.5s;
   position: relative;
   z-index: 2;
-}
-
-/* effetto hover */
-#contenitore:hover {
-  box-shadow:
-    0 0 45px rgba(255,255,255,0.9),
-    inset 0 0 40px rgba(255,255,255,0.3);
-  transform: scale(1.02);
 }
 
 /* testo interno */
@@ -61,38 +48,9 @@ body {
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-
-/* MP4 verticali */
-.side-video {
-  position: absolute;
-  width: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-/* MP4 sinistro 485px */
-#videoLeft {
-  left: 10px;
-  top: 50%;
-  height: 485px;
-  transform: translateY(-50%);
-}
-
-/* MP4 destro 726px */
-#videoRight {
-  right: 10px;
-  top: 50%;
-  height: 726px;
-  transform: translateY(-50%);
-}
 </style>
 </head>
 <body>
-  <!-- MP4 verticali -->
-  <video class="side-video" id="videoLeft" src="https://peppeagosto.github.io/immaggini/rosso22.html" autoplay loop muted playsinline></video>
-  <video class="side-video" id="videoRight" src="https://peppeagosto.github.io/immaggini/rosso22.html" autoplay loop muted playsinline></video>
-
   <!-- rettangolo centrale -->
   <div id="contenitore">
     <h1>EL CARTAIO</h1>
