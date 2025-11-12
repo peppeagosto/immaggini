@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROSSO22</title>
+<title>rosso22</title>
 <style>
 body {
   margin: 0;
@@ -11,49 +11,88 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(270deg,
-    #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5,
-    #002bff, #7a00ff, #ff00c8, #ff0000);
-  background-size: 2000% 2000%;
-  animation: rainbowMove 18s ease infinite;
   font-family: 'Arial', sans-serif;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff0000, #ff3300, #ff6600, #ff9900, #6600ff, #ffffff);
+  background-size: 400% 400%;
+  animation: bgAnim 15s ease infinite;
 }
 
-/* animazione arcobaleno */
-@keyframes rainbowMove {
+@keyframes bgAnim {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* contenitore centrale */
+/* MP4 ai lati */
+.side-video {
+  position: absolute;
+  width: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+#videoLeft {
+  left: 0;
+  top: 50%;
+  height: 380px;
+  transform: translateY(-50%);
+}
+
+#videoRight {
+  right: 0;
+  top: 50%;
+  height: 380px;
+  transform: translateY(-50%);
+}
+
+/* contenitore centrale trasparente con bordo lato */
 #contenitore {
   width: 484px;
   height: 380px;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.15), rgba(0,0,0,0.7));
-  border: 3px solid rgba(255,255,255,0.7);
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  z-index: 1;
+  border-radius: 15px;
+  background: transparent; /* centro completamente trasparente */
+}
+
+/* bordo sfumato piccolo spessore solo sui 4 lati */
+#contenitore::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5px; /* spessore bordo */
+  border-radius: 15px;
+  background: linear-gradient(270deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  background-size: 400% 400%;
+  animation: rainbowBorder 10s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   z-index: 2;
 }
 
-/* testo interno */
-#contenitore h1 {
-  color: white;
-  font-size: 24px;
-  text-shadow: 0 0 10px #ffffff, 0 0 20px #ff00ff;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+@keyframes rainbowBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 </style>
 </head>
 <body>
-  <!-- rettangolo centrale -->
-  <div id="contenitore">
-    <h1>EL CARTAIO</h1>
-  </div>
+  <!-- MP4 ai lati -->
+  <video class="side-video" id="videoLeft" src="https://peppeagosto.github.io/immaggini/rosso22.mp4" autoplay loop muted playsinline></video>
+  <video class="side-video" id="videoRight" src="https://peppeagosto.github.io/immaggini/rosso22.mp4" autoplay loop muted playsinline></video>
+
+ 
+  <div id="contenitore"></div>
 </body>
 </html>
+
