@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Il Cartaio - Buon Natale</title>
+  <style>
+    *{margin:0;padding:0}
+    body,html{height:100vh;overflow:hidden;background:#000;display:flex;justify-content:center;align-items:center;font-family:Arial,sans-serif}
+    .container{position:relative;width:1308px;height:486px}
+    .vid{position:absolute;top:0;width:290px;height:486px;object-fit:cover;border-radius:10px;box-shadow:0 0 20px rgba(255,0,0,.7);z-index:2}
+    .left{left:-40px}.right{right:-40px}
+    canvas{position:fixed;top:0;left:0;pointer-events:none}
+    #stars-canvas{z-index:1}#snow-canvas{z-index:3}
+
+    /* TESTO + STELLA COMETA */
+    .text-container{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;text-align:center;
+      animation:fade 20s infinite;
+    }
+    .text{
+      font-size:3.5em;color:#ff3333;font-weight:bold;
+      text-shadow:0 0 20px #ff0000,0 0 40px #ff3333;
+      white-space:nowrap;position:relative;
+      animation:pulse 2s infinite;
+    }
+    
+    /* STELLA SPOSTATA A SINISTRA (sulla B) */
+    .comet-star{
+      position:absolute;top:-75px;left:50%;transform:translateX(-75%); /* SPOSTATA A SINISTRA */
+      width:70px;height:70px;
+      background:radial-gradient(circle at 30% 30%, #fff, #ffd700 40%, #ffaa00 70%);
+      clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      box-shadow:0 0 30px #fff,0 0 50px #ffd700,0 0 70px #ffcc00;
+      z-index:6;
+      animation:twinkle 1.8s infinite alternate;
+    }
+
+    /* CODA LUMINOSA: STRETTA → LARGA (parte da punta destra della stella) */
+    .comet-tail{
+      position:absolute;top:-40px;left:65px; /* Inizia più a sinistra per allinearsi */
+      width:230px;height:50px;
+      background:linear-gradient(90deg, 
+        rgba(255,215,0,0.1) 0%, 
+        rgba(255,215,0,0.6) 20%, 
+        #ffd700 40%, 
+        #ffcc00 60%, 
+        rgba(255,204,0,0.8) 80%, 
+        transparent 100%);
+      filter:blur(8px);
+      transform-origin:left center;
+      transform:rotate(-12deg);
+      box-shadow:0 0 30px #ffd700,0 0 50px #ffcc00,0 0 70px #ffaa00;
+      border-radius:50%;
+      z-index:5;
+      clip-path:polygon(0% 40%, 100% 20%, 100% 80%, 0% 60%);
+      opacity:0.9;
+    }
+
+    @keyframes fade{0%,40%{opacity:1}50%,90%{opacity:0}100%{opacity:1}}
+    @keyframes twinkle{0%{transform:translateX(-75%) scale(1)}100%{transform:translateX(-75%) scale(1.3)}}
+    @keyframes pulse{0%,100%{text-shadow:0 0 20px #ff0000}50%{text-shadow:0 0 40px #ff3333,0 0 60px #ff0000}}
+    audio{display:none}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <video class="vid left" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+    </video>
+    <video class="vid right" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- STELLA SULLA B + CODA + TESTO -->
+  <div class="text-container">
+    <div class="comet-star"></div>
+    <div class="comet-tail"></div>
+    <div class="text">BUON NATALE</div>
+  </div>
+
+  <canvas id="stars-canvas"></canvas>
+  <canvas id="snow-canvas"></canvas>
+
+  <audio id="voce" src="voce_natale.mp3" preload="auto"></audio>
+
+  <script>
+    // === STELLE LUCENTI ===
+    const starsCanvas = document.getElementById('stars-canvas');
+    const sctx = starsCanvas.getContext('2d');
+    starsCanvas.width = innerWidth; starsCanvas.height = innerHeight;
+    window.onresize = () => { starsCanvas.width = innerWidth; starsCanvas.height = innerHeight; };
+
+    const stars = [], numStars = 160;
+    class Star {
+      constructor() { this.reset(); }
+      reset() {
+        this.size = Math.random() * 3.2 + 1;
+        this.x = Math.random() * starsCanvas.width;
+        this.y = -60;
+        this.speed = Math.random() * 1.8 + 0.6;
+        this.time = 0;
+        this.duration = Math.random() * 18 + 12;
+        this.phase = Math.random() * Math.PI * 2;
+      }
+      update() {
+        this.time += 0.016;
+        this.y += this.speed;
+        if (this.time > this.duration || this.y > starsCanvas.height + 60) this.reset();
+      }
+      draw() {
+        const pulse = 0.75 + 0.25 * Math.sin(this.time * 6 + this.phase);
+        sctx.globalAlpha = pulse;
+        sctx.shadowBlur = 22; sctx.shadowColor = '#fff';
+        sctx.beginPath(); sctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        sctx.fillStyle = '#fff'; sctx.fill();
+        if (this.size > 2.3) {
+          sctx.shadowBlur = 35; sctx.shadowColor = '#ffd700';
+          this.drawStar(this.x, this.y, this.size * 2.2, this.size * 0.9);
+        }
+      }
+      drawStar(cx, cy, R, r) {
+        let rot = Math.PI / 2 * 3, x = cx, y = cy, step = Math.PI / 5;
+        sctx.beginPath(); sctx.moveTo(cx, cy - R);
+        for (let i = 0; i < 5; i++) {
+          x = cx + Math.cos(rot) * R; y = cy + Math.sin(rot) * R; sctx.lineTo(x, y); rot += step;
+          x = cx + Math.cos(rot) * r; y = cy + Math.sin(rot) * r; sctx.lineTo(x, y); rot += step;
+        }
+        sctx.closePath(); sctx.fillStyle = '#ffd700'; sctx.fill();
+      }
+    }
+    for (let i = 0; i < numStars; i++) stars.push(new Star());
+    function animateStars() {
+      sctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+      stars.forEach(s => { s.update(); s.draw(); });
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    // === NEVE LEGGERA ===
+    const snowCanvas = document.getElementById('snow-canvas');
+    const nctx = snowCanvas.getContext('2d');
+    snowCanvas.width = innerWidth; snowCanvas.height = innerHeight;
+    const flakes = [], numFlakes = 80;
+    class Flake {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * snowCanvas.width;
+        this.y = -10;
+        this.size = Math.random() * 2 + 1;
+        this.speed = Math.random() * 1 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.5;
+      }
+      update() {
+        this.y += this.speed;
+        if (this.y > snowCanvas.height) this.reset();
+      }
+      draw() {
+        nctx.globalAlpha = this.opacity;
+        nctx.fillStyle = '#fff';
+        nctx.beginPath();
+        nctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        nctx.fill();
+      }
+    }
+    for (let i = 0; i < numFlakes; i++) flakes.push(new Flake());
+    function animateSnow() {
+      nctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+      flakes.forEach(f => { f.update(); f.draw(); });
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
+
+    // === VOCE FEMMINILE ===
+    setTimeout(() => {
+      document.getElementById('voce').play().catch(() => {});
+    }, 1500);
+  </script>
+</body>
+</html>
