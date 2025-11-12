@@ -35,16 +35,16 @@ body {
 }
 
 #videoLeft {
-  left: 0;
+  left: 30px; /* più vicino al centro rispetto a 0 */
   top: 50%;
-  height: 380px;
+  height: 360px; /* quasi quanto il contenitore centrale (380px) */
   transform: translateY(-50%);
 }
 
 #videoRight {
-  right: 0;
+  right: 30px; /* più vicino al centro rispetto a 0 */
   top: 50%;
-  height: 380px;
+  height: 360px; /* quasi quanto il contenitore centrale (380px) */
   transform: translateY(-50%);
 }
 
@@ -91,7 +91,7 @@ body {
   <video class="side-video" id="videoLeft" src="https://peppeagosto.github.io/immaggini/rosso22.mp4" autoplay loop muted playsinline></video>
   <video class="side-video" id="videoRight" src="https://peppeagosto.github.io/immaggini/rosso22.mp4" autoplay loop muted playsinline></video>
 
- 
+  
   <div id="contenitore"></div>
 </body>
 </html>
