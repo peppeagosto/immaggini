@@ -12,53 +12,7 @@
     .left{left:-40px}.right{right:-40px}
     canvas{position:fixed;top:0;left:0;pointer-events:none}
     #stars-canvas{z-index:1}#snow-canvas{z-index:3}
-
-    /* TESTO + STELLA COMETA */
-    .text-container{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;text-align:center;
-      animation:fade 20s infinite;
-    }
-    .text{
-      font-size:3.5em;color:#ff3333;font-weight:bold;
-      text-shadow:0 0 20px #ff0000,0 0 40px #ff3333;
-      white-space:nowrap;position:relative;
-      animation:pulse 2s infinite;
-    }
-    
-    /* STELLA SPOSTATA A SINISTRA (sulla B) */
-    .comet-star{
-      position:absolute;top:-75px;left:50%;transform:translateX(-75%); /* SPOSTATA A SINISTRA */
-      width:70px;height:70px;
-      background:radial-gradient(circle at 30% 30%, #fff, #ffd700 40%, #ffaa00 70%);
-      clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-      box-shadow:0 0 30px #fff,0 0 50px #ffd700,0 0 70px #ffcc00;
-      z-index:6;
-      animation:twinkle 1.8s infinite alternate;
-    }
-
-    /* CODA LUMINOSA: STRETTA → LARGA (parte da punta destra della stella) */
-    .comet-tail{
-      position:absolute;top:-40px;left:65px; /* Inizia più a sinistra per allinearsi */
-      width:230px;height:50px;
-      background:linear-gradient(90deg, 
-        rgba(255,215,0,0.1) 0%, 
-        rgba(255,215,0,0.6) 20%, 
-        #ffd700 40%, 
-        #ffcc00 60%, 
-        rgba(255,204,0,0.8) 80%, 
-        transparent 100%);
-      filter:blur(8px);
-      transform-origin:left center;
-      transform:rotate(-12deg);
-      box-shadow:0 0 30px #ffd700,0 0 50px #ffcc00,0 0 70px #ffaa00;
-      border-radius:50%;
-      z-index:5;
-      clip-path:polygon(0% 40%, 100% 20%, 100% 80%, 0% 60%);
-      opacity:0.9;
-    }
-
-    @keyframes fade{0%,40%{opacity:1}50%,90%{opacity:0}100%{opacity:1}}
-    @keyframes twinkle{0%{transform:translateX(-75%) scale(1)}100%{transform:translateX(-75%) scale(1.3)}}
+    .text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3.5em;color:#ff3333;font-weight:bold;text-shadow:0 0 20px #ff0000,0 0 40px #ff3333;animation:pulse 2s infinite;z-index:4;white-space:nowrap}
     @keyframes pulse{0%,100%{text-shadow:0 0 20px #ff0000}50%{text-shadow:0 0 40px #ff3333,0 0 60px #ff0000}}
     audio{display:none}
   </style>
@@ -74,12 +28,7 @@
     </video>
   </div>
 
-  <!-- STELLA SULLA B + CODA + TESTO -->
-  <div class="text-container">
-    <div class="comet-star"></div>
-    <div class="comet-tail"></div>
-    <div class="text">BUON NATALE</div>
-  </div>
+  <div class="text">BUON NATALE</div>
 
   <canvas id="stars-canvas"></canvas>
   <canvas id="snow-canvas"></canvas>
