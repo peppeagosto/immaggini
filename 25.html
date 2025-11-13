@@ -16,14 +16,12 @@
     font-family:Arial,sans-serif;
     position:relative;
   }
-
   .container{
     position:relative;
     width:1330px;
     height:486px;
     text-align:center;
   }
-
   .vid{
     position:absolute;
     width:330px;
@@ -48,11 +46,9 @@
     box-shadow:0 0 30px rgba(255,0,0,0.8);
     animation:fade 20s infinite;
   }
-
   @keyframes fade {
     0%,40%{opacity:1} 50%,90%{opacity:0} 100%{opacity:1}
   }
-
   canvas{
     position:fixed;
     top:0;left:0;
@@ -62,49 +58,57 @@
   #snow-canvas{z-index:4}
   #comet-canvas{z-index:5}
 
-  /* PULSANTE DENTRO IL CONTAINER - XAT LO ACCETTA */
+  /* PULSANTE FISSO E CLICCABILE */
   #playAudio{
-    position:relative;
-    margin-top:510px;
-    display:inline-block;
-    padding:12px 28px;
-    font-size:18px;
-    font-weight:bold;
-    color:#fff;
-    background:#c00;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    box-shadow:0 0 20px #f00;
-    z-index:10;
-    pointer-events:auto !important;
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 32px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background: #c00;
+    border: 3px solid #f00;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 0 25px #f00, inset 0 0 15px rgba(255,0,0,0.5);
+    z-index: 9999;
+    pointer-events: auto !important;
+    transition: all 0.3s;
+    user-select: none;
   }
-  #playAudio:hover{background:#a00}
+  #playAudio:hover {
+    background: #a00;
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 0 35px #ff0, inset 0 0 20px rgba(255,255,0,0.5);
+  }
+  #playAudio:active {
+    transform: translateX(-50%) scale(0.98);
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
-
   <video class="vid left" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
-
   <video class="vid center" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
   </video>
-
   <video class="vid right" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
 
-  <!-- PULSANTE DENTRO IL CONTAINER + ONCLICK INLINE -->
-  <button id="playAudio" onclick="document.getElementById('voce').play()">Ascolta Il buon Natale Da Gerry</button>
-
+  <!-- PULSANTE CON FUNZIONE JS SICURA -->
+  <button id="playAudio" onclick="playChristmasAudio()">Ascolta Il buon Natale Da Gerry</button>
 </div>
 
-<audio id="voce" preload="auto">
+<!-- AUDIO CON ID -->
+<audio id="voce" preload="auto" oncanplaythrough="audioReady=true">
   <source src="https://peppeagosto.github.io/immaggini/25.m4a" type="audio/mp4">
+  Your browser does not support the audio element.
 </audio>
 
 <canvas id="stars-canvas"></canvas>
@@ -112,6 +116,32 @@
 <canvas id="comet-canvas"></canvas>
 
 <script>
+// Variabile per sapere se l'audio è pronto
+let audioReady = false;
+const audio = document.getElementById('voce');
+
+// Funzione sicura per riprodurre l'audio
+function playChristmasAudio() {
+  // Sblocca il contesto audio (obbligatorio su mobile)
+  if (audio.paused) {
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Audio riprodotto con successo!");
+          document.getElementById('playAudio').textContent = "Riproducendo...";
+          setTimeout(() => {
+            document.getElementById('playAudio').textContent = "Ascolta Il buon Natale Da Gerry";
+          }, 3000);
+        })
+        .catch(err => {
+          console.log("Errore riproduzione:", err);
+          alert("Premi di nuovo per ascoltare! (Prima interazione richiesta)");
+        });
+    }
+  }
+}
+
 // CANVAS (invariati)
 const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id=>document.getElementById(id));
 const ctxs = canvases.map(c=>c.getContext('2d'));
@@ -139,11 +169,10 @@ function drawStar(ctx,cx,cy,R,r){let rot=Math.PI/2*3; ctx.beginPath(); ctx.moveT
 function animateComet(){cctx.clearRect(0,0,innerWidth,innerHeight); comet.x += comet.speedX; comet.y += comet.speedY; if(comet.x < -50 || comet.x > innerWidth+50) comet.speedX*=-1; if(comet.y < 0 || comet.y > innerHeight-50) comet.speedY*=-1; comet.trail.push({x:comet.x,y:comet.y}); if(comet.trail.length>comet.maxTrail) comet.trail.shift(); comet.trail.forEach((p,i)=>{const alpha=(i+1)/comet.trail.length; cctx.globalAlpha=alpha*0.7; cctx.shadowBlur=30; cctx.shadowColor=`rgba(255,220,100,${alpha})`; cctx.beginPath(); cctx.arc(p.x,p.y,comet.size*0.5*alpha,0,Math.PI*2); cctx.fillStyle='#ffdc64'; cctx.fill();}); cctx.globalAlpha=1; cctx.shadowBlur=60; cctx.shadowColor='#ffd700'; drawStar(cctx,comet.x,comet.y,comet.size,comet.size*0.45); requestAnimationFrame(animateComet);}
 animateComet();
 
-// NESSUN EVENT LISTENER JS - USARE ONCLICK INLINE
 </script>
-
 </body>
 </html>
+
 
 
 
