@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -16,27 +15,29 @@
   canvas{position:fixed;top:0;left:0;pointer-events:none;}
   #stars-canvas{z-index:1}#snow-canvas{z-index:4}#comet-canvas{z-index:5}
 
-  /* PULSANTE INDISTRUTTIBILE */
+  /* PULSANTE GIGANTE, SEMPRE SOPRA */
   #playBtn{
     position:fixed !important;
-    bottom:15px !important;
+    bottom:10px !important;
     left:50% !important;
     transform:translateX(-50%) !important;
-    padding:20px 45px !important;
-    font-size:24px !important;
+    padding:22px 50px !important;
+    font-size:26px !important;
     font-weight:bold !important;
     color:#fff !important;
     background:#c00 !important;
-    border:5px solid #f00 !important;
-    border-radius:25px !important;
+    border:6px solid #f00 !important;
+    border-radius:30px !important;
     cursor:pointer !important;
-    box-shadow:0 0 50px #f00, 0 0 80px rgba(255,0,0,0.9) !important;
+    box-shadow:0 0 60px #f00, 0 0 100px rgba(255,0,0,0.9) !important;
     z-index:999999999 !important;
     pointer-events:auto !important;
     user-select:none !important;
     transition:all 0.3s !important;
+    text-transform:uppercase;
+    letter-spacing:1px;
   }
-  #playBtn:hover{background:#e00 !important;transform:translateX(-50%) scale(1.15) !important;box-shadow:0 0 70px #ff0 !important;}
+  #playBtn:hover{background:#e00 !important;transform:translateX(-50%) scale(1.2) !important;box-shadow:0 0 80px #ff0 !important;}
   #playBtn:active{transform:translateX(-50%) scale(0.95) !important;}
 </style>
 </head>
@@ -55,10 +56,10 @@
 </div>
 
 <!-- PULSANTE GIGANTE -->
-<button id="playBtn" onclick="startAudio()">ASCOLTA GERRY</button>
+<button id="playBtn" onclick="unlockAndPlay()">TOCCA PER GERRY</button>
 
 <!-- AUDIO MP3 -->
-<audio id="natale" preload="auto">
+<audio id="natale" preload="auto" crossorigin="anonymous">
   <source src="https://peppeagosto.github.io/immaggini/25.mp3" type="audio/mpeg">
 </audio>
 
@@ -67,36 +68,47 @@
 <canvas id="comet-canvas"></canvas>
 
 <script>
-// FUNZIONE SICURA AL 1000%
-function startAudio() {
+// VARIABILE GLOBALE
+let unlocked = false;
+
+function unlockAndPlay() {
   const audio = document.getElementById('natale');
   const btn = document.getElementById('playBtn');
 
-  // Prova a riprodurre
-  const promise = audio.play();
-
-  if (promise !== undefined) {
-    promise
-      .then(() => {
-        btn.innerHTML = "IN RIPRODUZIONE...";
-        btn.style.background = "#090";
-        btn.style.borderColor = "#0f0";
-        setTimeout(() => {
-          btn.innerHTML = "ASCOLTA GERRY";
-          btn.style.background = "#c00";
-          btn.style.borderColor = "#f00";
-        }, 3500);
-      })
-      .catch(err => {
-        // SE FALLISCE → CHIEDI UN SECONDO CLICK
-        btn.innerHTML = "CLICCA DI NUOVO!";
-        btn.style.background = "#900";
-        console.log("Audio bloccato, riprova:", err);
-      });
+  // PRIMO CLICK: SBLOCCA IL CONTESTO AUDIO
+  if (!unlocked) {
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          unlocked = true;
+          btn.innerHTML = "GERRY STA PARLANDO...";
+          btn.style.background = "#090";
+          setTimeout(() => {
+            btn.innerHTML = "TOCCA PER GERRY";
+            btn.style.background = "#c00";
+          }, 4000);
+        })
+        .catch(() => {
+          btn.innerHTML = "TOCCA ANCORA!";
+          btn.style.background = "#900";
+        });
+    }
+    return;
   }
+
+  // SECONDO CLICK: RIPRODUCI
+  audio.currentTime = 0;
+  audio.play();
+  btn.innerHTML = "IN RIPRODUZIONE...";
+  btn.style.background = "#090";
+  setTimeout(() => {
+    btn.innerHTML = "TOCCA PER GERRY";
+    btn.style.background = "#c00";
+  }, 3000);
 }
 
-// CANVAS (invariati)
+// CANVAS (invariati - tutto perfetto)
 const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id=>document.getElementById(id));
 const ctxs = canvases.map(c=>c.getContext('2d'));
 const [sctx,nctx,cctx]=ctxs;
@@ -125,6 +137,7 @@ animateComet();
 </script>
 </body>
 </html>
+
 
 
 
