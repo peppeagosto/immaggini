@@ -16,11 +16,15 @@
     font-family:Arial,sans-serif;
     position:relative;
   }
+
+  /* CONTAINER IDENTICO AL PRIMO CODICE */
   .container{
     position:relative;
-    width:1200px;
+    width:1308px;     /* 290 + 728 + 290 */
     height:486px;
   }
+
+  /* VIDEO LATERALI – MISURE IDENTICHE */
   .vid{
     position:absolute;
     width:290px;
@@ -31,21 +35,37 @@
     z-index:2;
   }
   .left{
-    left:0px;       /* Spostato verso il centro per vedere tutto */
-    top:55%;        /* Centrato verticalmente */
-    transform:translateY(-50%);
-  }   
-  .right{
-    right:-50px;
+    left:-40px;       /* Sporgenza come nel primo codice */
     top:0;
-  } 
+  }
+  .right{
+    right:-40px;      /* Sporgenza simmetrica */
+    top:0;
+  }
+
+  /* VIDEO CENTRALE – MISURE IDENTICHE */
   .center{
+    position:absolute;
     left:50%;
+    top:0;
     transform:translateX(-50%);
-    width:730px;  
+    width:728px;
     height:486px;
     z-index:3;
+    border:3px solid #ff0000;
+    border-radius:12px;
+    box-shadow:0 0 30px rgba(255,0,0,0.8);
+    animation:fade 20s infinite;
   }
+
+  /* FADE OGNI 20 SECONDI (COME NEL PRIMO) */
+  @keyframes fade {
+    0%, 40% { opacity:1; }
+    50%, 90% { opacity:0; }
+    100% { opacity:1; }
+  }
+
+  /* CANVAS */
   canvas{
     position:fixed;
     top:0;
@@ -56,9 +76,10 @@
   #snow-canvas{z-index:4}
   #comet-canvas{z-index:5}
 
+  /* PULSANTE AUDIO */
   #playAudio{
     position:absolute;
-    bottom:0px;
+    bottom:20px;
     left:50%;
     transform:translateX(-50%);
     padding:10px 25px;
@@ -78,21 +99,25 @@
 <body>
 
 <div class="container">
-  <video class="vid left" autoplay loop muted playsinline>
+
+  <!-- VIDEO SINISTRO -->
+  <video class="vid left" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
 
-  <video class="vid center" autoplay loop muted playsinline>
+  <!-- VIDEO CENTRALE CON FADE -->
+  <video class="vid center" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
   </video>
 
-  <video class="vid right" autoplay loop muted playsinline>
+  <!-- VIDEO DESTRO -->
+  <video class="vid right" autoplay loop muted playsinline: true
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
+
 </div>
 
-<button id="playAudio">🎧 Ascolta Il buon Natale Da Gerry</button>
-
+<button id="playAudio">Ascolta Il buon Natale Da Gerry</button>
 <audio id="voce" preload="auto">
   <source src="https://peppeagosto.github.io/immaggini/25.m4a" type="audio/mp4">
 </audio>
@@ -186,6 +211,7 @@ document.getElementById("playAudio").addEventListener("click", function(){
 
 </body>
 </html>
+
 
 
 
