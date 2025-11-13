@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Il Cartaio - Cometa</title>
+<title>Il Cartaio - Cometa (Audio Fix xat)</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body,html{height:100vh;overflow:hidden;background:#000;display:flex;justify-content:center;align-items:center;position:relative;font-family:Arial,sans-serif;}
@@ -21,25 +21,27 @@
     bottom:20px !important;
     left:50% !important;
     transform:translateX(-50%) !important;
-    padding:22px 60px !important;
-    font-size:28px !important;
+    padding:16px 48px !important;
+    font-size:20px !important;
     font-weight:bold !important;
     color:#fff !important;
     background:#c00 !important;
-    border:6px solid #f00 !important;
-    border-radius:30px !important;
+    border:4px solid #f00 !important;
+    border-radius:26px !important;
     cursor:pointer !important;
-    box-shadow:0 0 70px #f00, 0 0 100px rgba(255,0,0,0.9) !important;
+    box-shadow:0 0 30px #f00, 0 0 60px rgba(255,0,0,0.9) !important;
     z-index:999999999 !important;
     pointer-events:auto !important;
     user-select:none !important;
-    transition:all 0.3s !important;
+    transition:all 0.22s !important;
     text-transform:uppercase;
-    letter-spacing:2px;
+    letter-spacing:1.5px;
     font-family:Arial Black, sans-serif;
   }
-  #playBtn:hover{background:#e00 !important;transform:translateX(-50%) scale(1.2) !important;box-shadow:0 0 90px #ff0 !important;}
-  #playBtn:active{transform:translateX(-50%) scale(0.95) !important;}
+  #playBtn:hover{background:#e00 !important;transform:translateX(-50%) scale(1.05) !important;box-shadow:0 0 60px #ff0 !important;}
+  #status{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);color:#fff;font-weight:bold;z-index:9999999999;text-shadow:0 0 8px #000;pointer-events:none}
+  #volWrap{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:9999999999;display:flex;align-items:center;gap:8px}
+  #vol{width:160px}
 </style>
 </head>
 <body>
@@ -57,46 +59,138 @@
 </div>
 
 <!-- PULSANTE: SOLO QUANDO CLICCHI TU -->
-<button id="playBtn" onclick="playGerryOnce()">ASCOLTA GERRY</button>
+<button id="playBtn" onclick="handlePlayClick()">ASCOLTA GERRY</button>
+<div id="status">Audio fermo</div>
+<div id="volWrap" style="display:none;">
+  <label for="vol" style="color:#fff;font-weight:bold;text-shadow:0 0 6px #000">Volume</label>
+  <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" />
+</div>
 
-<!-- AUDIO MP3 - NESSUN AUTOPLAY -->
-<audio id="gerry" preload="auto">
-  <source src="https://peppeagosto.github.io/immaggini/25.mp3" type="audio/mpeg">
-</audio>
-
+<!-- NOTA: l'elemento audio viene creato al volo via JS per gestire meglio i permessi -->
 <canvas id="stars-canvas"></canvas>
 <canvas id="snow-canvas"></canvas>
 <canvas id="comet-canvas"></canvas>
 
 <script>
-// FUNZIONE: RIPRODUCE UNA SOLA VOLTA AL CLICK
-function playGerryOnce() {
-  const audio = document.getElementById('gerry');
-  const btn = document.getElementById('playBtn');
+/*
+  VERSIONE RINFORZATA PER xat/edit:
+  - crea l'elemento <audio> al primo click
+  - imposta crossOrigin per evitare problemi CORS con AudioContext
+  - usa AudioContext resume() su gesture per sbloccare l'audio
+  - mostra stato e controllo volume
+  - vari fallback se play() viene rifiutato
+*/
 
-  // Sblocca e riproduce
-  const playPromise = audio.play();
+const AUDIO_SRC = "https://peppeagosto.github.io/immaggini/25.mp3"; // il tuo mp3
+let audioEl = null;
+let audioCtx = null;
+let audioSourceNode = null;
+let isPlaying = false;
 
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        btn.innerHTML = "GERRY PARLA!";
-        btn.style.background = "#090";
-        btn.style.borderColor = "#0f0";
-        setTimeout(() => {
-          btn.innerHTML = "ASCOLTA GERRY";
-          btn.style.background = "#c00";
-          btn.style.borderColor = "#f00";
-        }, 3500);
-      })
-      .catch(() => {
-        btn.innerHTML = "TOCCA DI NUOVO!";
-        btn.style.background = "#900";
-      });
+const btn = document.getElementById('playBtn');
+const status = document.getElementById('status');
+const volWrap = document.getElementById('volWrap');
+const vol = document.getElementById('vol');
+
+function createAudioElement() {
+  // se già esiste ritorna
+  if (audioEl) return audioEl;
+
+  const a = document.createElement('audio');
+  a.id = 'gerry';
+  a.preload = 'auto';
+  a.crossOrigin = 'anonymous'; // importante per AudioContext / CORS
+  a.src = AUDIO_SRC;
+  a.loop = false; // se vuoi loop true
+  a.setAttribute('playsinline',''); // utile su mobile
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  audioEl = a;
+  return a;
+}
+
+async function initAudioContext() {
+  if (audioCtx) return audioCtx;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AC();
+    // crea nodo sorgente collegato all'audio element
+    audioSourceNode = audioCtx.createMediaElementSource(audioEl);
+    audioSourceNode.connect(audioCtx.destination);
+    return audioCtx;
+  } catch(e) {
+    console.warn("AudioContext non disponibile:", e);
+    return null;
   }
 }
 
-// CANVAS (invariati - tutto perfetto)
+async function tryPlayOnce() {
+  status.innerText = "Sto avviando...";
+  try {
+    await audioEl.play();
+    isPlaying = true;
+    status.innerText = "In riproduzione";
+    btn.innerText = "PAUSA GERRY";
+    btn.style.background = "#090";
+    volWrap.style.display = "flex";
+    return true;
+  } catch (err) {
+    console.warn("play() rifiutato:", err);
+    status.innerText = "Tocca di nuovo per consentire l'audio";
+    return false;
+  }
+}
+
+async function handlePlayClick() {
+  // primo click: crea audio e AudioContext se necessario
+  if (!audioEl) {
+    createAudioElement();
+    await initAudioContext();
+  }
+
+  // se AudioContext sospeso, prova a risvegliarlo
+  if (audioCtx && audioCtx.state === 'suspended') {
+    try { await audioCtx.resume(); } catch(e){ console.warn("resume() fallito", e); }
+  }
+
+  // se non sta suonando, tenta di avviare
+  if (!isPlaying) {
+    // riprova a caricare (in alcuni ambienti aiuta)
+    try { audioEl.load(); } catch(e){ /* ignore */ }
+
+    const ok = await tryPlayOnce();
+    if (!ok) {
+      // fallback: ricrea elemento audio e ritenta (alcuni iframes preferiscono elemento creato on-gesture)
+      console.log("Tentativo fallback: ricreo audio e ritento");
+      try {
+        if (audioEl) { audioEl.pause(); audioEl.remove(); audioEl = null; }
+        createAudioElement();
+        await initAudioContext();
+        const ok2 = await tryPlayOnce();
+        if (!ok2) {
+          status.innerText = "Impossibile riprodurre qui. Prova a cliccare direttamente sull'area o a caricare il file su dominio consentito da xat.";
+        }
+      } catch(e) {
+        console.error("Fallback failed:", e);
+        status.innerText = "Errore riproduzione: " + (e && e.message ? e.message : "unknown");
+      }
+    }
+  } else {
+    // se sta suonando, metti in pausa
+    audioEl.pause();
+    isPlaying = false;
+    btn.innerText = "ASCOLTA GERRY";
+    btn.style.background = "#c00";
+    status.innerText = "Audio fermo";
+  }
+}
+
+// volume control
+vol.addEventListener('input', e=>{
+  if (audioEl) audioEl.volume = parseFloat(e.target.value);
+});
+
+// --- CANVAS EFFETTI (restano inalterati) ---
 const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id=>document.getElementById(id));
 const ctxs = canvases.map(c=>c.getContext('2d'));
 const [sctx,nctx,cctx]=ctxs;
@@ -112,7 +206,7 @@ animateStars();
 
 // NEVE
 const flakes=[],numFlakes=80;
-class Flake{constructor(){this.reset();} reset(){this.x=Math.random()*innerWidth;this.y=-10;this.size=Math.random()*2+1;this.speed=Math.random()*1+0.5;this.opacity=Math.random()*0.5+0.5;this.wind=Math.random()*2-1;} update(){this.y+=this.speed;this.x+=this.wind*0.3;if(this.y>innerHeight||this.x<-20||this.x>innerWidth+20)this.reset();} draw(){nctx.globalAlpha=this.opacity;nctx.fillStyle='#fff';nctx.beginPath();nctx.arc(this.x,this.y,this.size,0,Math.PI*2);nctx.fill();}}
+class Flake{constructor(){this.reset();} reset(){this.x=Math.random()*innerWidth;this.y=-10;this.size=Math.random()*2+1;this.speed=Math.random()*1+0.5;this.opacity=Math.random()*0.5+0.5;this.wind=Math.random()*2-1;} update(){this.y+=this.speed;this.x+=this.wind*0.3;if(this.y>innerHeight||this.x<-20||this.x>innerWidth+20)this.reset();} draw(){nctx.globalAlpha=this.opacity;nctx.fillStyle='#fff';nctx.beginPath();nctx.arc(this.x,this.y,this.size,0,Math.PI*2);nctx.fill();} }
 for(let i=0;i<numFlakes;i++)flakes.push(new Flake());
 function animateSnow(){nctx.clearRect(0,0,innerWidth,innerHeight);flakes.forEach(f=>{f.update();f.draw();});requestAnimationFrame(animateSnow);}
 animateSnow();
@@ -125,6 +219,7 @@ animateComet();
 </script>
 </body>
 </html>
+
 
 
 
