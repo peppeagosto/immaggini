@@ -58,33 +58,34 @@
   #snow-canvas{z-index:4}
   #comet-canvas{z-index:5}
 
-  /* PULSANTE FISSO E CLICCABILE */
+  /* PULSANTE FISSO, FUORI DA XAT OVERLAY */
   #playAudio{
-    position: absolute;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 14px 32px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    background: #c00;
-    border: 3px solid #f00;
-    border-radius: 15px;
-    cursor: pointer;
-    box-shadow: 0 0 25px #f00, inset 0 0 15px rgba(255,0,0,0.5);
-    z-index: 9999;
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 16px 36px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    background: #c00 !important;
+    border: 4px solid #f00 !important;
+    border-radius: 18px !important;
+    cursor: pointer !important;
+    box-shadow: 0 0 30px #f00, 0 0 50px rgba(255,0,0,0.8) !important;
+    z-index: 2147483647 !important; /* MAX Z-INDEX */
     pointer-events: auto !important;
-    transition: all 0.3s;
-    user-select: none;
+    user-select: none !important;
+    transition: all 0.3s ease !important;
+    font-family: Arial, sans-serif !important;
   }
   #playAudio:hover {
-    background: #a00;
-    transform: translateX(-50%) scale(1.05);
-    box-shadow: 0 0 35px #ff0, inset 0 0 20px rgba(255,255,0,0.5);
+    background: #e00 !important;
+    transform: translateX(-50%) scale(1.1) !important;
+    box-shadow: 0 0 50px #ff0, 0 0 70px rgba(255,255,0,0.6) !important;
   }
   #playAudio:active {
-    transform: translateX(-50%) scale(0.98);
+    transform: translateX(-50%) scale(0.95) !important;
   }
 </style>
 </head>
@@ -100,15 +101,13 @@
   <video class="vid right" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
-
-  <!-- PULSANTE CON FUNZIONE JS SICURA -->
-  <button id="playAudio" onclick="playChristmasAudio()">Ascolta Il buon Natale Da Gerry</button>
 </div>
 
-<!-- AUDIO CON ID -->
-<audio id="voce" preload="auto" oncanplaythrough="audioReady=true">
+<!-- PULSANTE FUORI DAL CONTAINER -->
+<button id="playAudio" onclick="playAudioSafe()">ASCOLTA IL BUON NATALE DA GERRY</button>
+
+<audio id="voce" preload="auto">
   <source src="https://peppeagosto.github.io/immaggini/25.m4a" type="audio/mp4">
-  Your browser does not support the audio element.
 </audio>
 
 <canvas id="stars-canvas"></canvas>
@@ -116,29 +115,27 @@
 <canvas id="comet-canvas"></canvas>
 
 <script>
-// Variabile per sapere se l'audio è pronto
-let audioReady = false;
-const audio = document.getElementById('voce');
+// FUNZIONE SICURA PER XAT
+function playAudioSafe() {
+  const audio = document.getElementById('voce');
+  const btn = document.getElementById('playAudio');
 
-// Funzione sicura per riprodurre l'audio
-function playChristmasAudio() {
-  // Sblocca il contesto audio (obbligatorio su mobile)
-  if (audio.paused) {
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          console.log("Audio riprodotto con successo!");
-          document.getElementById('playAudio').textContent = "Riproducendo...";
-          setTimeout(() => {
-            document.getElementById('playAudio').textContent = "Ascolta Il buon Natale Da Gerry";
-          }, 3000);
-        })
-        .catch(err => {
-          console.log("Errore riproduzione:", err);
-          alert("Premi di nuovo per ascoltare! (Prima interazione richiesta)");
-        });
-    }
+  // Sblocca audio con interazione
+  const playPromise = audio.play();
+  
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        btn.textContent = "IN RIPRODUZIONE...";
+        btn.style.background = "#090";
+        setTimeout(() => {
+          btn.textContent = "ASCOLTA IL BUON NATALE DA GERRY";
+          btn.style.background = "#c00";
+        }, 3000);
+      })
+      .catch(err => {
+        alert("Clicca di nuovo! Xat richiede due click a volte.");
+      });
   }
 }
 
@@ -172,6 +169,7 @@ animateComet();
 </script>
 </body>
 </html>
+
 
 
 
