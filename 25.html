@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -14,13 +12,13 @@
     font-family:Arial,sans-serif;
   }
 
-  .container{position:relative;width:1330px;height:486px;text-align:center;}
+  .container{position:relative;width:1330px;height:486px;text-align:center;z-index:1;}
   .vid{position:absolute;width:330px;height:486px;object-fit:cover;
-    border-radius:10px;box-shadow:0 0 20px rgba(255,0,0,.7);z-index:2;}
+    border-radius:10px;box-shadow:0 0 20px rgba(255,0,0,.7);}
   .left{left:-40px;top:0;}
   .right{right:-40px;top:0;}
   .center{position:absolute;left:50%;top:0;transform:translateX(-50%);
-    width:728px;height:486px;z-index:3;
+    width:728px;height:486px;
     border:3px solid #ff0000;border-radius:12px;
     box-shadow:0 0 30px rgba(255,0,0,0.8);
     animation:fade 20s infinite;}
@@ -42,6 +40,7 @@
     box-shadow:0 0 30px #ff0000;
     transition:all .3s;
     animation:rotateStar 6s linear infinite, glow 2s ease-in-out infinite alternate;
+    z-index:99999999;
     pointer-events:auto;
   }
   .star-btn:hover{
@@ -59,15 +58,15 @@
 
   /* Controlli centrati in orizzontale */
   .controls{
-    position:fixed;
+    position:fixed !important;
     bottom:25px;
     left:50%;
     transform:translateX(-50%);
     display:flex;
     flex-direction:column;
     align-items:center;
-    z-index:9999999; /* alto per Xat */
-    pointer-events:auto;
+    z-index:99999999 !important; /* sopra tutto su Xat */
+    pointer-events:none; /* container ignora clic, solo figli cliccabili */
   }
 
   .buttons{
@@ -75,7 +74,6 @@
     gap:40px;
     justify-content:center;
     align-items:center;
-    pointer-events:auto;
   }
 
   /* Slider volume rosso luminoso */
@@ -88,7 +86,7 @@
     border-radius:5px;
     outline:none;
     box-shadow:0 0 10px red;
-    pointer-events:auto;
+    pointer-events:auto; /* slider cliccabile */
   }
   input[type=range]::-webkit-slider-thumb{
     appearance:none;
@@ -100,13 +98,14 @@
     cursor:pointer;
   }
 
-  /* Testo marquee */
+  /* Marquee */
   .marquee{
     color:#ff2020;
     font-size:22px;
     font-weight:bold;
     text-shadow:0 0 12px #fff;
     margin-bottom:15px;
+    pointer-events:auto;
   }
 
   canvas{position:fixed;top:0;left:0;pointer-events:none;}
@@ -130,7 +129,7 @@
 <!-- CONTROLLI -->
 <div class="controls">
   <marquee class="marquee" behavior="alternate" scrollamount="5">
-    🎅 BUON NATALE DA  GERRY SCOTTI🎅
+     GERRY SCOTTI DA IL 🎅BUON NATALE 🎅�
   </marquee>
   <div class="buttons">
     <button class="star-btn" onclick="playAudio()">PLAY</button>
@@ -187,6 +186,8 @@ animateComet();
 </script>
 </body>
 </html>
+
+
 
 
 
