@@ -5,87 +5,60 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Il Cartaio - Cometa</title>
 <style>
-  *{margin:0;padding:0}
+  *{margin:0;padding:0;box-sizing:border-box}
   body,html{
-    height:100vh;
-    overflow:hidden;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:Arial,sans-serif;
-    position:relative;
+    height:100vh;overflow:hidden;background:#000;
+    display:flex;justify-content:center;align-items:center;
+    font-family:Arial,sans-serif;position:relative;
   }
   .container{
-    position:relative;
-    width:1330px;
-    height:486px;
-    text-align:center;
+    position:relative;width:1330px;height:486px;text-align:center;
   }
   .vid{
-    position:absolute;
-    width:330px;
-    height:486px;
-    object-fit:cover;
-    border-radius:10px;
-    box-shadow:0 0 20px rgba(255,0,0,.7);
-    z-index:2;
+    position:absolute;width:330px;height:486px;object-fit:cover;
+    border-radius:10px;box-shadow:0 0 20px rgba(255,0,0,.7);z-index:2;
   }
   .left{left:-40px;top:0;}
   .right{right:-40px;top:0;}
   .center{
-    position:absolute;
-    left:50%;
-    top:0;
-    transform:translateX(-50%);
-    width:728px;
-    height:486px;
-    z-index:3;
-    border:3px solid #ff0000;
-    border-radius:12px;
+    position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:728px;height:486px;z-index:3;
+    border:3px solid #ff0000;border-radius:12px;
     box-shadow:0 0 30px rgba(255,0,0,0.8);
     animation:fade 20s infinite;
   }
-  @keyframes fade {
-    0%,40%{opacity:1} 50%,90%{opacity:0} 100%{opacity:1}
-  }
-  canvas{
-    position:fixed;
-    top:0;left:0;
-    pointer-events:none;
-  }
-  #stars-canvas{z-index:1}
-  #snow-canvas{z-index:4}
-  #comet-canvas{z-index:5}
+  @keyframes fade{0%,40%{opacity:1}50%,90%{opacity:0}100%{opacity:1}}
+  canvas{position:fixed;top:0;left:0;pointer-events:none;}
+  #stars-canvas{z-index:1}#snow-canvas{z-index:4}#comet-canvas{z-index:5}
 
-  /* PULSANTE FISSO, FUORI DA XAT OVERLAY */
+  /* PULSANTE INDISTRUTTIBILE SU XAT */
   #playAudio{
-    position: fixed !important;
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    padding: 16px 36px !important;
-    font-size: 20px !important;
-    font-weight: bold !important;
-    color: #fff !important;
-    background: #c00 !important;
-    border: 4px solid #f00 !important;
-    border-radius: 18px !important;
-    cursor: pointer !important;
-    box-shadow: 0 0 30px #f00, 0 0 50px rgba(255,0,0,0.8) !important;
-    z-index: 2147483647 !important; /* MAX Z-INDEX */
-    pointer-events: auto !important;
-    user-select: none !important;
-    transition: all 0.3s ease !important;
-    font-family: Arial, sans-serif !important;
+    position:fixed !important;
+    bottom:20px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    padding:18px 40px !important;
+    font-size:22px !important;
+    font-weight:bold !important;
+    color:#fff !important;
+    background:#c00 !important;
+    border:4px solid #f00 !important;
+    border-radius:20px !important;
+    cursor:pointer !important;
+    box-shadow:0 0 40px #f00, 0 0 60px rgba(255,0,0,0.9) !important;
+    z-index:2147483647 !important;
+    pointer-events:auto !important;
+    user-select:none !important;
+    transition:all 0.3s ease !important;
+    text-shadow:0 0 10px #000;
   }
-  #playAudio:hover {
-    background: #e00 !important;
-    transform: translateX(-50%) scale(1.1) !important;
-    box-shadow: 0 0 50px #ff0, 0 0 70px rgba(255,255,0,0.6) !important;
+  #playAudio:hover{
+    background:#e00 !important;
+    transform:translateX(-50%) scale(1.12) !important;
+    box-shadow:0 0 60px #ff0, 0 0 80px rgba(255,255,0,0.7) !important;
   }
-  #playAudio:active {
-    transform: translateX(-50%) scale(0.95) !important;
+  #playAudio:active{
+    transform:translateX(-50%) scale(0.95) !important;
   }
 </style>
 </head>
@@ -103,71 +76,158 @@
   </video>
 </div>
 
-<!-- PULSANTE FUORI DAL CONTAINER -->
-<button id="playAudio" onclick="playAudioSafe()">ASCOLTA IL BUON NATALE DA GERRY</button>
+<!-- PULSANTE GIGANTE E FISSO -->
+<button id="playAudio" onclick="playAudioNow()">ASCOLTA IL BUON NATALE DA GERRY</button>
 
+<!-- AUDIO MP3 CORRETTO -->
 <audio id="voce" preload="auto">
   <source src="https://peppeagosto.github.io/immaggini/25.mp3" type="audio/mpeg">
+  Your browser does not support audio.
+</audio>
 
 <canvas id="stars-canvas"></canvas>
 <canvas id="snow-canvas"></canvas>
 <canvas id="comet-canvas"></canvas>
 
 <script>
-// FUNZIONE SICURA PER XAT
-function playAudioSafe() {
+// FUNZIONE PER FAR PARTIRE L'AUDIO ANCHE SU XAT
+function playAudioNow() {
   const audio = document.getElementById('voce');
   const btn = document.getElementById('playAudio');
-
-  // Sblocca audio con interazione
-  const playPromise = audio.play();
   
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        btn.textContent = "IN RIPRODUZIONE...";
-        btn.style.background = "#090";
-        setTimeout(() => {
-          btn.textContent = "ASCOLTA IL BUON NATALE DA GERRY";
-          btn.style.background = "#c00";
-        }, 3000);
-      })
-      .catch(err => {
-        alert("Clicca di nuovo! Xat richiede due click a volte.");
-      });
-  }
+  audio.play().then(() => {
+    btn.innerHTML = "IN RIPRODUZIONE...";
+    btn.style.background = "#090";
+    btn.style.borderColor = "#0f0";
+    setTimeout(() => {
+      btn.innerHTML = "ASCOLTA IL BUON NATALE DA GERRY";
+      btn.style.background = "#c00";
+      btn.style.borderColor = "#f00";
+    }, 4000);
+  }).catch(err => {
+    alert("Clicca ancora una volta! Xat a volte vuole 2 click");
+    console.log("Errore:", err);
+  });
 }
 
-// CANVAS (invariati)
-const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id=>document.getElementById(id));
-const ctxs = canvases.map(c=>c.getContext('2d'));
-const [sctx,nctx,cctx]=ctxs;
-const resize=()=>canvases.forEach(c=>{c.width=innerWidth;c.height=innerHeight});
-resize(); window.onresize=resize;
+// CANVAS STELLE, NEVE, COMETA (tutto invariato e perfetto)
+const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id => document.getElementById(id));
+const ctxs = canvases.map(c => c.getContext('2d'));
+const [sctx, nctx, cctx] = ctxs;
+const resize = () => canvases.forEach(c => { c.width = innerWidth; c.height = innerHeight; });
+resize(); window.onresize = resize;
 
 // STELLE
-const stars=[],numStars=160;
-class Star{constructor(){this.reset();} reset(){this.size=Math.random()*3.2+1; this.x=Math.random()*innerWidth; this.y=-60; this.speed=Math.random()*1.8+0.6; this.time=0; this.duration=Math.random()*18+12; this.phase=Math.random()*Math.PI*2;} update(){this.time+=0.016; this.y+=this.speed; if(this.time>this.duration||this.y>innerHeight+60)this.reset();} draw(){const pulse=0.75+0.25*Math.sin(this.time*6+this.phase); sctx.globalAlpha=pulse; sctx.shadowBlur=22;sctx.shadowColor='#fff'; sctx.beginPath();sctx.arc(this.x,this.y,this.size,0,Math.PI*2); sctx.fillStyle='#fff'; sctx.fill(); if(this.size>2.3){ sctx.shadowBlur=35;sctx.shadowColor='#ffd700'; drawStar(sctx,this.x,this.y,this.size*2.2,this.size*0.9); }}}
-for(let i=0;i<numStars;i++)stars.push(new Star());
-function animateStars(){sctx.clearRect(0,0,innerWidth,innerHeight);stars.forEach(s=>{s.update();s.draw();});requestAnimationFrame(animateStars);}
+const stars = [], numStars = 160;
+class Star {
+  constructor() { this.reset(); }
+  reset() {
+    this.size = Math.random() * 3.2 + 1;
+    this.x = Math.random() * innerWidth;
+    this.y = -60;
+    this.speed = Math.random() * 1.8 + 0.6;
+    this.time = 0;
+    this.duration = Math.random() * 18 + 12;
+    this.phase = Math.random() * Math.PI * 2;
+  }
+  update() {
+    this.time += 0.016;
+    this.y += this.speed;
+    if (this.time > this.duration || this.y > innerHeight + 60) this.reset();
+  }
+  draw() {
+    const pulse = 0.75 + 0.25 * Math.sin(this.time * 6 + this.phase);
+    sctx.globalAlpha = pulse;
+    sctx.shadowBlur = 22; sctx.shadowColor = '#fff';
+    sctx.beginPath(); sctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    sctx.fillStyle = '#fff'; sctx.fill();
+    if (this.size > 2.3) {
+      sctx.shadowBlur = 35; sctx.shadowColor = '#ffd700';
+      drawStar(sctx, this.x, this.y, this.size * 2.2, this.size * 0.9);
+    }
+  }
+}
+for (let i = 0; i < numStars; i++) stars.push(new Star());
+function animateStars() {
+  sctx.clearRect(0, 0, innerWidth, innerHeight);
+  stars.forEach(s => { s.update(); s.draw(); });
+  requestAnimationFrame(animateStars);
+}
 animateStars();
 
 // NEVE
-const flakes=[],numFlakes=80;
-class Flake{constructor(){this.reset();} reset(){this.x=Math.random()*innerWidth; this.y=-10; this.size=Math.random()*2+1; this.speed=Math.random()*1+0.5; this.opacity=Math.random()*0.5+0.5; this.wind=Math.random()*2-1;} update(){this.y+=this.speed;this.x+=this.wind*0.3;if(this.y>innerHeight||this.x<-20||this.x>innerWidth+20)this.reset();} draw(){nctx.globalAlpha=this.opacity;nctx.fillStyle='#fff';nctx.beginPath();nctx.arc(this.x,this.y,this.size,0,Math.PI*2);nctx.fill();}}
-for(let i=0;i<numFlakes;i++)flakes.push(new Flake());
-function animateSnow(){nctx.clearRect(0,0,innerWidth,innerHeight);flakes.forEach(f=>{f.update();f.draw();});requestAnimationFrame(animateSnow);}
+const flakes = [], numFlakes = 80;
+class Flake {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * innerWidth;
+    this.y = -10;
+    this.size = Math.random() * 2 + 1;
+    this.speed = Math.random() * 1 + 0.5;
+    this.opacity = Math.random() * 0.5 + 0.5;
+    this.wind = Math.random() * 2 - 1;
+  }
+  update() {
+    this.y += this.speed;
+    this.x += this.wind * 0.3;
+    if (this.y > innerHeight || this.x < -20 || this.x > innerWidth + 20) this.reset();
+  }
+  draw() {
+    nctx.globalAlpha = this.opacity;
+    nctx.fillStyle = '#fff';
+    nctx.beginPath();
+    nctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    nctx.fill();
+  }
+}
+for (let i = 0; i < numFlakes; i++) flakes.push(new Flake());
+function animateSnow() {
+  nctx.clearRect(0, 0, innerWidth, innerHeight);
+  flakes.forEach(f => { f.update(); f.draw(); });
+  requestAnimationFrame(animateSnow);
+}
 animateSnow();
 
 // COMETA
-const comet={x:innerWidth+50,y:50,speedX:-5,speedY:3,size:28,trail:[],maxTrail:50};
-function drawStar(ctx,cx,cy,R,r){let rot=Math.PI/2*3; ctx.beginPath(); ctx.moveTo(cx,cy-R); for(let i=0;i<5;i++){ ctx.lineTo(cx+Math.cos(rot)*R,cy+Math.sin(rot)*R); rot+=Math.PI/5; ctx.lineTo(cx+Math.cos(rot)*r,cy+Math.sin(rot)*r); rot+=Math.PI/5;} ctx.closePath(); const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,R); grad.addColorStop(0,'#ffffff'); grad.addColorStop(0.4,'#fff8a8'); grad.addColorStop(1,'#ffdc64'); ctx.fillStyle=grad; ctx.fill();}
-function animateComet(){cctx.clearRect(0,0,innerWidth,innerHeight); comet.x += comet.speedX; comet.y += comet.speedY; if(comet.x < -50 || comet.x > innerWidth+50) comet.speedX*=-1; if(comet.y < 0 || comet.y > innerHeight-50) comet.speedY*=-1; comet.trail.push({x:comet.x,y:comet.y}); if(comet.trail.length>comet.maxTrail) comet.trail.shift(); comet.trail.forEach((p,i)=>{const alpha=(i+1)/comet.trail.length; cctx.globalAlpha=alpha*0.7; cctx.shadowBlur=30; cctx.shadowColor=`rgba(255,220,100,${alpha})`; cctx.beginPath(); cctx.arc(p.x,p.y,comet.size*0.5*alpha,0,Math.PI*2); cctx.fillStyle='#ffdc64'; cctx.fill();}); cctx.globalAlpha=1; cctx.shadowBlur=60; cctx.shadowColor='#ffd700'; drawStar(cctx,comet.x,comet.y,comet.size,comet.size*0.45); requestAnimationFrame(animateComet);}
+const comet = { x: innerWidth + 50, y: 50, speedX: -5, speedY: 3, size: 28, trail: [], maxTrail: 50 };
+function drawStar(ctx, cx, cy, R, r) {
+  let rot = Math.PI / 2 * 3;
+  ctx.beginPath(); ctx.moveTo(cx, cy - R);
+  for (let i = 0; i < 5; i++) {
+    ctx.lineTo(cx + Math.cos(rot) * R, cy + Math.sin(rot) * R);
+    rot += Math.PI / 5;
+    ctx.lineTo(cx + Math.cos(rot) * r, cy + Math.sin(rot) * r);
+    rot += Math.PI / 5;
+  }
+  ctx.closePath();
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+  grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.4, '#fff8a8'); grad.addColorStop(1, '#ffdc64');
+  ctx.fillStyle = grad; ctx.fill();
+}
+function animateComet() {
+  cctx.clearRect(0, 0, innerWidth, innerHeight);
+  comet.x += comet.speedX; comet.y += comet.speedY;
+  if (comet.x < -50 || comet.x > innerWidth + 50) comet.speedX *= -1;
+  if (comet.y < 0 || comet.y > innerHeight - 50) comet.speedY *= -1;
+  comet.trail.push({ x: comet.x, y: comet.y });
+  if (comet.trail.length > comet.maxTrail) comet.trail.shift();
+  comet.trail.forEach((p, i) => {
+    const alpha = (i + 1) / comet.trail.length;
+    cctx.globalAlpha = alpha * 0.7;
+    cctx.shadowBlur = 30; cctx.shadowColor = `rgba(255,220,100,${alpha})`;
+    cctx.beginPath(); cctx.arc(p.x, p.y, comet.size * 0.5 * alpha, 0, Math.PI * 2);
+    cctx.fillStyle = '#ffdc64'; cctx.fill();
+  });
+  cctx.globalAlpha = 1; cctx.shadowBlur = 60; cctx.shadowColor = '#ffd700';
+  drawStar(cctx, comet.x, comet.y, comet.size, comet.size * 0.45);
+  requestAnimationFrame(animateComet);
+}
 animateComet();
 
 </script>
 </body>
 </html>
+
 
 
 
