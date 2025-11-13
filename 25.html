@@ -17,14 +17,12 @@
     position:relative;
   }
 
-  /* CONTAINER IDENTICO AL PRIMO CODICE */
   .container{
     position:relative;
-    width:1308px;     /* 290 + 728 + 290 */
+    width:1308px;
     height:486px;
   }
 
-  /* VIDEO LATERALI – MISURE IDENTICHE */
   .vid{
     position:absolute;
     width:290px;
@@ -34,16 +32,8 @@
     box-shadow:0 0 20px rgba(255,0,0,.7);
     z-index:2;
   }
-  .left{
-    left:-40px;       /* Sporgenza come nel primo codice */
-    top:0;
-  }
-  .right{
-    right:-40px;      /* Sporgenza simmetrica */
-    top:0;
-  }
-
-  /* VIDEO CENTRALE – MISURE IDENTICHE */
+  .left{left:-40px;top:0;}
+  .right{right:-40px;top:0;}
   .center{
     position:absolute;
     left:50%;
@@ -58,68 +48,63 @@
     animation:fade 20s infinite;
   }
 
-  /* FADE OGNI 20 SECONDI (COME NEL PRIMO) */
   @keyframes fade {
-    0%, 40% { opacity:1; }
-    50%, 90% { opacity:0; }
-    100% { opacity:1; }
+    0%,40%{opacity:1} 50%,90%{opacity:0} 100%{opacity:1}
   }
 
-  /* CANVAS */
+  /* CANVAS NON BLOCCANO PIÙ I CLICK */
   canvas{
     position:fixed;
-    top:0;
-    left:0;
-    pointer-events:none;
+    top:0;left:0;
+    pointer-events:none !important; /* ← CHIAVE */
+    z-index:1;
   }
   #stars-canvas{z-index:1}
   #snow-canvas{z-index:4}
   #comet-canvas{z-index:5}
 
-  /* PULSANTE AUDIO */
+  /* PULSANTE SEMPRE CLICCABILE */
   #playAudio{
-    position:absolute;
-    bottom:20px;
+    position:fixed !important; /* ← fixed per stare sopra */
+    bottom:30px;
     left:50%;
     transform:translateX(-50%);
-    padding:10px 25px;
+    padding:12px 28px;
     font-size:18px;
     font-weight:bold;
     color:#fff;
-    background:red;
+    background:#c00;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     cursor:pointer;
-    box-shadow:0 0 15px red;
-    z-index:7;
+    box-shadow:0 0 20px #f00, 0 0 40px #c00;
+    z-index:9999 !important; /* ← sopra TUTTO */
+    transition:0.3s;
   }
-  #playAudio:hover{background:darkred}
+  #playAudio:hover{background:#a00; transform:translateX(-50%) scale(1.05);}
+  #playAudio:active{transform:translateX(-50%) scale(0.95);}
 </style>
 </head>
 <body>
 
 <div class="container">
-
-  <!-- VIDEO SINISTRO -->
   <video class="vid left" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
-
-  <!-- VIDEO CENTRALE CON FADE -->
   <video class="vid center" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
   </video>
-
-  <!-- VIDEO DESTRO -->
-  <video class="vid right" autoplay loop muted playsinline: true
+  <video class="vid right" autoplay loop muted playsinline preload="auto">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
-
 </div>
 
+<!-- PULSANTE AUDIO -->
 <button id="playAudio">Ascolta Il buon Natale Da Gerry</button>
-<audio id="voce" preload="auto">
+
+<audio id="voce" preload="auto" playsinline>
   <source src="https://peppeagosto.github.io/immaggini/25.m4a" type="audio/mp4">
+  <source src="https://peppeagosto.github.io/immaggini/25.m4a" type="audio/m4a">
 </audio>
 
 <canvas id="stars-canvas"></canvas>
@@ -127,14 +112,14 @@
 <canvas id="comet-canvas"></canvas>
 
 <script>
-// === CANVAS SETUP ===
+// CANVAS
 const canvases = ['stars-canvas','snow-canvas','comet-canvas'].map(id=>document.getElementById(id));
 const ctxs = canvases.map(c=>c.getContext('2d'));
 const [sctx,nctx,cctx]=ctxs;
 const resize=()=>canvases.forEach(c=>{c.width=innerWidth;c.height=innerHeight});
-resize();window.onresize=resize;
+resize(); window.onresize=resize;
 
-// === STELLE ===
+// STELLE
 const stars=[],numStars=160;
 class Star{
   constructor(){this.reset();}
@@ -146,8 +131,7 @@ class Star{
     sctx.globalAlpha=pulse;
     sctx.shadowBlur=22;sctx.shadowColor='#fff';
     sctx.beginPath();sctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    sctx.fillStyle='#fff';
-    sctx.fill();
+    sctx.fillStyle='#fff'; sctx.fill();
     if(this.size>2.3){
       sctx.shadowBlur=35;sctx.shadowColor='#ffd700';
       drawStar(sctx,this.x,this.y,this.size*2.2,this.size*0.9);
@@ -158,7 +142,7 @@ for(let i=0;i<numStars;i++)stars.push(new Star());
 function animateStars(){sctx.clearRect(0,0,innerWidth,innerHeight);stars.forEach(s=>{s.update();s.draw();});requestAnimationFrame(animateStars);}
 animateStars();
 
-// === NEVE ===
+// NEVE
 const flakes=[],numFlakes=80;
 class Flake{
   constructor(){this.reset();}
@@ -171,7 +155,7 @@ for(let i=0;i<numFlakes;i++)flakes.push(new Flake());
 function animateSnow(){nctx.clearRect(0,0,innerWidth,innerHeight);flakes.forEach(f=>{f.update();f.draw();});requestAnimationFrame(animateSnow);}
 animateSnow();
 
-// === COMETA ===
+// COMETA
 const comet={x:innerWidth+50,y:50,speedX:-5,speedY:3,size:28,trail:[],maxTrail:50};
 function drawStar(ctx,cx,cy,R,r){
   let rot=Math.PI/2*3; ctx.beginPath(); ctx.moveTo(cx,cy-R);
@@ -184,8 +168,7 @@ function drawStar(ctx,cx,cy,R,r){
 }
 function animateComet(){
   cctx.clearRect(0,0,innerWidth,innerHeight);
-  comet.x += comet.speedX;
-  comet.y += comet.speedY;
+  comet.x += comet.speedX; comet.y += comet.speedY;
   if(comet.x < -50 || comet.x > innerWidth+50) comet.speedX*=-1;
   if(comet.y < 0 || comet.y > innerHeight-50) comet.speedY*=-1;
   comet.trail.push({x:comet.x,y:comet.y});
@@ -202,15 +185,29 @@ function animateComet(){
 }
 animateComet();
 
-// === AUDIO SOLO SU CLICK ===
-const audio=document.getElementById('voce');
-document.getElementById("playAudio").addEventListener("click", function(){
-  audio.play().catch(err=>console.log("Errore audio:",err));
-});
-</script>
+// AUDIO FUNZIONA SU TUTTI I DISPOSITIVI
+const audio = document.getElementById('voce');
+const btn = document.getElementById('playAudio');
 
+btn.addEventListener('click', () => {
+  audio.play().catch(err => {
+    console.log("Audio bloccato (normale su mobile)", err);
+    // Su mobile, mostro un messaggio
+    btn.innerHTML = "Premi di nuovo per riprodurre";
+    btn.style.background = "#0a0";
+  });
+});
+
+// Opzionale: riprova se l'utente tocca lo schermo
+document.body.addEventListener('touchstart', function unlockAudio() {
+  audio.play().catch(() => {});
+  document.body.removeEventListener('touchstart', unlockAudio);
+}, { once: true });
+
+</script>
 </body>
 </html>
+
 
 
 
