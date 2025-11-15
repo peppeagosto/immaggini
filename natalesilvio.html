@@ -29,7 +29,7 @@
   #box {
     width:400px;
     height:450px;
-    background:rgba(255,0,0,1); /* rosso Natale */
+    background:rgba(255,0,0,1);
     border-radius:20px;
     box-shadow:0 0 20px rgba(255,0,0,0.7);
     text-align:center;
@@ -37,7 +37,44 @@
     z-index:12;
     position:relative;
     backdrop-filter: blur(5px);
+    transition: border-radius 1.2s ease, transform 1.2s ease, box-shadow 1.2s ease;
+    overflow: hidden;
   }
+
+  /* STATO VINILE GIRANTE DOPO 54 SECONDI */
+  #box.rounded {
+    width: 420px !important;
+    height: 420px !important;
+    border-radius: 50% !important;
+    padding: 25px;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.9), 0 0 80px rgba(255, 215, 0, 0.6);
+    
+    /* Texture vinile realistica */
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 40%),
+      repeating-conic-gradient(from 0deg at 50% 50%, 
+        rgba(0,0,0,0.2) 0deg, transparent 2deg, 
+        transparent 8deg, rgba(0,0,0,0.2) 10deg
+      ),
+      rgba(139, 0, 0, 1); /* rosso vinile */
+
+    animation: 
+      christmasMorph 2s ease-in-out forwards,
+      spinVinyl 15s linear infinite;
+    animation-delay: 0s, 1.5s;
+  }
+
+  @keyframes christmasMorph {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.08) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes spinVinyl {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   #titolocanzone {
     width:100%;
     background:transparent;
@@ -50,6 +87,11 @@
     margin-bottom:20px;
     white-space: nowrap;
   }
+  #box.rounded #titolocanzone {
+    font-size: 18px;
+    padding: 8px;
+    margin-bottom: 15px;
+  }
   #titolocanzone span {
     display:inline-block;
     padding-left:100%;
@@ -60,8 +102,9 @@
     100%{transform:translateX(-100%);}
   }
   @keyframes rainbowText {
-    0%{color:#ff0000;}50%{color:#ffff00;}100%{color:#ff0000;}
+    0%{color:#ff0000;} 50%{color:#ffff00;} 100%{color:#ff0000;}
   }
+
   #album-art {
     width:130px;
     height:130px;
@@ -74,37 +117,105 @@
     background-position: center;
     transition: transform 0.5s ease;
   }
+  #box.rounded #album-art {
+    width: 180px;
+    height: 180px;
+    margin: 20px auto 15px;
+    border: 6px solid #fff;
+    box-shadow: 
+      0 0 20px rgba(255,255,255,0.8),
+      inset 0 0 30px rgba(0,0,0,0.4);
+  }
   #album-art.pulse { animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.12);} }
   #album-art.no-cover { background-image: url('https://xatimg.com/image/xmTZE8IRcKFj.gif'); }
 
-  #controls { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:nowrap; margin-top:15px; }
-  .btn-xmas { width:60px; height:60px; background:transparent; border:none; cursor:pointer; position:relative; border-radius:50%; box-shadow:0 0 10px rgba(255,0,0,0.7); transition:0.2s; }
+  #controls { 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    gap:10px; 
+    flex-wrap:nowrap; 
+    margin-top:15px; 
+  }
+  #box.rounded #controls {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .btn-xmas { 
+    width:60px; 
+    height:60px; 
+    background:transparent; 
+    border:none; 
+    cursor:pointer; 
+    position:relative; 
+    border-radius:50%; 
+    box-shadow:0 0 10px rgba(255,0,0,0.7); 
+    transition:0.2s; 
+  }
   #play { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   #stop { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   .btn-xmas:hover { transform:scale(1.1); opacity:0.8; }
 
-  input[type=range]{-webkit-appearance:none;background:transparent;}
-  input[type=range]::-webkit-slider-runnable-track{height:6px;background:#ff0000;border-radius:3px;}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#fff;border:2px solid red;border-radius:50%;margin-top:-6px;cursor:pointer;}
+  input[type=range]{
+    -webkit-appearance:none;
+    background:transparent;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:6px;
+    background:#ff0000;
+    border-radius:3px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:18px;
+    height:18px;
+    background:#fff;
+    border:2px solid red;
+    border-radius:50%;
+    margin-top:-6px;
+    cursor:pointer;
+  }
   #volume-slider { width:100px; }
+  #box.rounded #volume-slider { width: 75%; margin: 8px auto; }
 
   .mp4-side {
-    position:absolute; top:50%; width:180px; height:500px;
-    transform:translateY(-50%); object-fit:cover; z-index:1;
-    border-radius:15px; box-shadow:0 0 20px rgba(255,0,0,0.6); opacity:0.8;
+    position:absolute; 
+    top:50%; 
+    width:180px; 
+    height:500px;
+    transform:translateY(-50%); 
+    object-fit:cover; 
+    z-index:1;
+    border-radius:15px; 
+    box-shadow:0 0 20px rgba(255,0,0,0.6); 
+    opacity:0.8;
   }
   #leftVideo{left:-150px;}
   #rightVideo{right:-150px;}
 
   .snowflake {
-    position:absolute; top:-15px; width:6px; height:6px; background:#fff; border-radius:50%;
-    pointer-events:none; user-select:none; animation:fall linear infinite;
-    z-index:5; box-shadow:0 0 6px rgba(255,255,255,0.8); opacity:0.9;
+    position:absolute; 
+    top:-15px; 
+    width:6px; 
+    height:6px; 
+    background:#fff; 
+    border-radius:50%;
+    pointer-events:none; 
+    user-select:none; 
+    animation:fall linear infinite;
+    z-index:5; 
+    box-shadow:0 0 6px rgba(255,255,255,0.8); 
+    opacity:0.9;
   }
-  @keyframes fall { 0%{transform:translateY(0) translateX(0) rotate(0deg); opacity:0.9;} 100%{transform:translateY(110vh) translateX(30px) rotate(360deg); opacity:0;} }
+  @keyframes fall { 
+    0%{transform:translateY(0) translateX(0) rotate(0deg); opacity:0.9;} 
+    100%{transform:translateY(110vh) translateX(30px) rotate(360deg); opacity:0;} 
+  }
 
-  /* COMETA A 5 PUNTE CON CODA LUNGA */
+  /* COMETA */
   #comet-container {
     position: absolute;
     top: 0;
@@ -129,13 +240,13 @@
   #comet-tail {
     position: absolute;
     top: 25px;
-    left: -200px; /* molto lunga dietro la stella */
+    left: -200px;
     width: 200px;
     height: 12px;
     background: linear-gradient(to right, rgba(255,255,0,0.9), rgba(135,206,250,0.5), rgba(255,255,0,0.2));
     transform-origin: right center;
     filter: blur(4px);
-    z-index:1; /* dietro la stella */
+    z-index:1;
   }
 
   #attendi {
@@ -155,6 +266,8 @@
   @media(max-width:768px){
     #container { width:100%; height:auto; padding:20px 0; }
     #box { width:90%; height:auto; padding:15px; }
+    #box.rounded { width: 320px !important; height: 320px !important; padding: 20px; }
+    #box.rounded #album-art { width: 140px; height: 140px; }
     .mp4-side { width:90%; height:250px; position:relative; transform:none; margin:15px auto; left:auto !important; right:auto !important; }
     #controls { flex-wrap:wrap; gap:12px; }
     #volume-slider { width: 70%; }
@@ -183,11 +296,10 @@
   <div id="comet"></div>
   <div id="comet-tail"></div>
 </div>
-
 <div id="attendi">ATTENDI FINE AUGURI</div>
 
 <script>
-// LOGICA ZENOPLAY
+// ELEMENTI
 const player = document.getElementById("player");
 const silvio = document.getElementById("silvio");
 const playBtn = document.getElementById("play");
@@ -196,70 +308,84 @@ const volumeSlider = document.getElementById("volume-slider");
 const albumArt = document.getElementById("album-art");
 const currentTitle = document.querySelector('#titolocanzone span');
 const attendi = document.getElementById('attendi');
-
+const box = document.getElementById('box');
 const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv';
 const defaultCover = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
-
 let lastTitle = '';
 
+// PLAY BUTTON
 playBtn.addEventListener("click", () => {
   attendi.style.display = 'block';
   silvio.currentTime = 0;
   silvio.play();
   albumArt.classList.add('pulse');
 
-  setTimeout(()=>{ 
+  setTimeout(() => {
     attendi.style.display = 'none';
-    player.play(); 
-  }, 54000); // dopo 54 secondi parte lo streaming
+    player.play();
+
+    // ATTIVA VINILE GIRANTE
+    box.classList.add('rounded');
+
+    // Ferma pulse sull'album art (ora gira il vinile)
+    setTimeout(() => {
+      albumArt.classList.remove('pulse');
+    }, 1500);
+
+  }, 54000);
 });
 
-stopBtn.addEventListener("click", () => { 
-  player.pause(); 
+// STOP BUTTON
+stopBtn.addEventListener("click", () => {
+  player.pause();
   silvio.pause();
   silvio.currentTime = 0;
-  player.currentTime = 0; 
-  albumArt.classList.remove('pulse'); 
+  player.currentTime = 0;
+  albumArt.classList.remove('pulse');
+  box.classList.remove('rounded'); // Torna rettangolare
 });
-volumeSlider.addEventListener("input", () => { player.volume = volumeSlider.value; });
 
+// VOLUME
+volumeSlider.addEventListener("input", () => { 
+  player.volume = volumeSlider.value; 
+});
+
+// FETCH TITOLO E COPERTINA
 async function fetchNowPlaying() {
-    try {
-        const res = await fetch(`${nowPlayingUrl}?t=${new Date().getTime()}`, { cache: 'no-store' });
-        const data = await res.json();
-        const title = data.title || 'Titolo non disponibile';
-        const artist = data.artist || '';
+  try {
+    const res = await fetch(`${nowPlayingUrl}?t=${new Date().getTime()}`, { cache: 'no-store' });
+    const data = await res.json();
+    const title = data.title || 'Titolo non disponibile';
+    const artist = data.artist || '';
+    if(title !== lastTitle){
+      lastTitle = title;
+      currentTitle.textContent = title;
+      currentTitle.style.animation = 'none';
+      currentTitle.offsetHeight;
+      currentTitle.style.animation = 'scrollTitle 15s linear infinite, rainbowText 5s linear infinite';
 
-        if(title !== lastTitle){
-            lastTitle = title;
-            currentTitle.textContent = title;
-            currentTitle.style.animation = 'none';
-            currentTitle.offsetHeight;
-            currentTitle.style.animation = 'scrollTitle 15s linear infinite, rainbowText 5s linear infinite';
-
-            const query = encodeURIComponent(title + ' ' + artist);
-            const url = `https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
-            try {
-                const resCover = await fetch(url, { cache: 'no-store' });
-                const dataCover = await resCover.json();
-                if(dataCover.results && dataCover.results.length > 0 && dataCover.results[0].artworkUrl100){
-                    albumArt.style.backgroundImage = `url(${dataCover.results[0].artworkUrl100.replace('100x100','600x600')}?t=${Date.now()})`;
-                } else {
-                    albumArt.style.backgroundImage = `url(${defaultCover})`;
-                }
-            } catch(e){
-                albumArt.style.backgroundImage = `url(${defaultCover})`;
-            }
+      const query = encodeURIComponent(title + ' ' + artist);
+      const url = `https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
+      try {
+        const resCover = await fetch(url, { cache: 'no-store' });
+        const dataCover = await resCover.json();
+        if(dataCover.results && dataCover.results.length > 0 && dataCover.results[0].artworkUrl100){
+          albumArt.style.backgroundImage = `url(${dataCover.results[0].artworkUrl100.replace('100x100','600x600')}?t=${Date.now()})`;
+        } else {
+          albumArt.style.backgroundImage = `url(${defaultCover})`;
         }
-    } catch(e){
-        currentTitle.textContent = 'Errore caricamento titolo';
+      } catch(e){
         albumArt.style.backgroundImage = `url(${defaultCover})`;
+      }
     }
+  } catch(e){
+    currentTitle.textContent = 'Errore caricamento titolo';
+    albumArt.style.backgroundImage = `url(${defaultCover})`;
+  }
 }
-
-setInterval(fetchNowPlaying,8000);
+setInterval(fetchNowPlaying, 8000);
 fetchNowPlaying();
-player.addEventListener('play', ()=>{ fetchNowPlaying(); });
+player.addEventListener('play', () => { fetchNowPlaying(); });
 
 // NEVE
 function createSnowflake(){
@@ -272,12 +398,12 @@ function createSnowflake(){
   flake.style.width = size+'px';
   flake.style.height = size+'px';
   document.body.appendChild(flake);
-  setTimeout(()=>flake.remove(), duration*1000+1000);
+  setTimeout(() => flake.remove(), duration*1000+1000);
 }
-setInterval(createSnowflake,200);
-for(let i=0;i<40;i++){ createSnowflake(); }
+setInterval(createSnowflake, 200);
+for(let i=0; i<40; i++){ createSnowflake(); }
 
-// MOVIMENTO COMETA
+// COMETA
 const cometContainer = document.getElementById('comet-container');
 let posX = 0, posY = 0;
 let dirX = 1, dirY = 1;
@@ -285,21 +411,15 @@ function moveComet() {
   const speed = 3;
   const maxX = window.innerWidth - 250;
   const maxY = window.innerHeight - 60;
-
   posX += speed * dirX;
   posY += speed * dirY;
-
   if(posX >= maxX || posX <= 0) dirX *= -1;
   if(posY >= maxY || posY <= 0) dirY *= -1;
-
   cometContainer.style.left = posX + 'px';
   cometContainer.style.top = posY + 'px';
-
   requestAnimationFrame(moveComet);
 }
 moveComet();
 </script>
 </body>
 </html>
-
-
