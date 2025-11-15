@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NATALE by Diablo</title>
+<title>NATALE dal  cartaio</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
-    background:#8b0000;
+    background:transparent;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -18,8 +18,8 @@
   }
   #container {
     position: relative;
-    width:700px;
-    height:750px;
+    width:600px;
+    height:550px;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -28,10 +28,10 @@
   }
   #box {
     width:400px;
-    height:520px;
-    background:rgba(0,0,0,0.45);
+    height:450px;
+    background:rgba(255,0,0,1); /* rosso Natale */
     border-radius:20px;
-    box-shadow:0 0 20px red;
+    box-shadow:0 0 20px rgba(255,0,0,0.7);
     text-align:center;
     padding:20px;
     z-index:12;
@@ -40,7 +40,7 @@
   }
   #titolocanzone {
     width:100%;
-    background:linear-gradient(to right,#ff0000,#a00000,#ff0000);
+    background:transparent;
     padding:12px;
     color:#fff;
     font-size:22px;
@@ -79,7 +79,7 @@
   #album-art.no-cover { background-image: url('https://xatimg.com/image/xmTZE8IRcKFj.gif'); }
 
   #controls { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:nowrap; margin-top:15px; }
-  .btn-xmas { width:60px; height:60px; background:transparent; border:none; cursor:pointer; position:relative; border-radius:50%; box-shadow:0 0 10px red; transition:0.2s; }
+  .btn-xmas { width:60px; height:60px; background:transparent; border:none; cursor:pointer; position:relative; border-radius:50%; box-shadow:0 0 10px rgba(255,0,0,0.7); transition:0.2s; }
   #play { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   #stop { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   .btn-xmas:hover { transform:scale(1.1); opacity:0.8; }
@@ -104,82 +104,77 @@
   }
   @keyframes fall { 0%{transform:translateY(0) translateX(0) rotate(0deg); opacity:0.9;} 100%{transform:translateY(110vh) translateX(30px) rotate(360deg); opacity:0;} }
 
-  /* COMETA */
+  /* COMETA A 5 PUNTE CON CODA LUNGA */
   #comet-container {
     position: absolute;
     top: 0;
     left: 0;
-    width: 20px;
-    height: 20px;
-    z-index: 20;
+    width: 60px;
+    height: 60px;
+    z-index:15;
     pointer-events: none;
   }
   #comet {
-    width: 20px;
-    height: 20px;
+    width: 60px;
+    height: 60px;
     background: yellow;
     clip-path: polygon(
       50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
       50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
     );
-    box-shadow: 0 0 10px yellow, 0 0 20px gold;
+    box-shadow: 0 0 15px yellow, 0 0 30px gold;
     position: relative;
+    z-index:2;
   }
   #comet-tail {
     position: absolute;
-    top: 10px;
-    left: -10px;
-    width: 50px;
-    height: 10px;
-    background: linear-gradient(to right, rgba(255,255,0,0.8), rgba(255,255,0,0.2), rgba(255,255,0,0));
-    transform-origin: left center;
-    filter: blur(3px);
+    top: 25px;
+    left: -200px; /* molto lunga dietro la stella */
+    width: 200px;
+    height: 12px;
+    background: linear-gradient(to right, rgba(255,255,0,0.9), rgba(135,206,250,0.5), rgba(255,255,0,0.2));
+    transform-origin: right center;
+    filter: blur(4px);
+    z-index:1; /* dietro la stella */
   }
 
-  /* TESTO LAMPEGGIANTE AUGURI */
-  #auguri-msg {
+  #attendi {
     position:absolute;
-    top:10px;
+    bottom:20px;
     width:100%;
     text-align:center;
-    font-size:26px;
+    font-size:22px;
     font-weight:bold;
-    color:#fff;
-    text-shadow:0 0 12px red, 0 0 20px yellow;
-    animation:blink 1s infinite;
+    color:red;
+    animation:blink 1s linear infinite;
     display:none;
-    z-index:30;
+    z-index:20;
   }
-  @keyframes blink {
-    0%{opacity:1;}
-    50%{opacity:0.2;}
-    100%{opacity:1;}
-  }
+  @keyframes blink { 0%,50%,100%{opacity:1;} 25%,75%{opacity:0;} }
 
+  @media(max-width:768px){
+    #container { width:100%; height:auto; padding:20px 0; }
+    #box { width:90%; height:auto; padding:15px; }
+    .mp4-side { width:90%; height:250px; position:relative; transform:none; margin:15px auto; left:auto !important; right:auto !important; }
+    #controls { flex-wrap:wrap; gap:12px; }
+    #volume-slider { width: 70%; }
+  }
 </style>
 </head>
 <body>
-
 <div id="container">
-
-  <div id="auguri-msg">ATTENDI CHE FINISCE GLI AUGURI…</div>
-
   <video id="leftVideo" class="mp4-side" src="https://peppeagosto.github.io/immaggini/2025.mp4" autoplay loop muted playsinline></video>
   <video id="rightVideo" class="mp4-side" src="https://peppeagosto.github.io/immaggini/2025.mp4" autoplay loop muted playsinline></video>
-
   <div id="box">
     <div id="titolocanzone"><span></span></div>
     <div id="album-art" class="no-cover"></div>
-
     <div id="controls">
       <button id="play" class="btn-xmas"></button>
       <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.8">
       <button id="stop" class="btn-xmas"></button>
     </div>
-
     <audio id="player" src="https://stream-164.zeno.fm/mcrnn0ibuzatv" preload="auto"></audio>
-    <audio id="silvio" src="https://peppeagosto.github.io/immaggini/silvio.mp3"></audio>
-
+    <audio id="silvio" src="https://peppeagosto.github.io/immaggini/silvio.mp3" preload="auto"></audio>
   </div>
 </div>
 
@@ -189,8 +184,10 @@
   <div id="comet-tail"></div>
 </div>
 
+<div id="attendi">ATTENDI FINE AUGURI</div>
+
 <script>
-// ELEMENTI
+// LOGICA ZENOPLAY
 const player = document.getElementById("player");
 const silvio = document.getElementById("silvio");
 const playBtn = document.getElementById("play");
@@ -198,133 +195,110 @@ const stopBtn = document.getElementById("stop");
 const volumeSlider = document.getElementById("volume-slider");
 const albumArt = document.getElementById("album-art");
 const currentTitle = document.querySelector('#titolocanzone span');
-const auguriMsg = document.getElementById("auguri-msg");
+const attendi = document.getElementById('attendi');
 
 const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv';
 const defaultCover = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
 
 let lastTitle = '';
-let firstPlay = true;
 
-// PLAY
 playBtn.addEventListener("click", () => {
+  attendi.style.display = 'block';
+  silvio.currentTime = 0;
+  silvio.play();
+  albumArt.classList.add('pulse');
 
-  if(firstPlay){
-    // PRIMA VOLTA → PARTE SILVIO
-    auguriMsg.style.display = "block";
-    silvio.play();
-    silvio.volume = volumeSlider.value;
-
-    // dopo 54 sec parte lo streaming
-    setTimeout(()=>{
-      auguriMsg.style.display = "none";
-      player.play();
-      albumArt.classList.add('pulse');
-      fetchNowPlaying();
-      firstPlay = false;
-    }, 54000);
-
-  } else {
-    // DOPO LA PRIMA VOLTA → STREAMING DIRETTO
-    player.play();
-    albumArt.classList.add('pulse');
-  }
+  setTimeout(()=>{ 
+    attendi.style.display = 'none';
+    player.play(); 
+  }, 54000); // dopo 54 secondi parte lo streaming
 });
 
-// STOP
-stopBtn.addEventListener("click", () => {
-  player.pause();
+stopBtn.addEventListener("click", () => { 
+  player.pause(); 
   silvio.pause();
   silvio.currentTime = 0;
-  player.currentTime = 0;
-  albumArt.classList.remove('pulse');
-  auguriMsg.style.display = "none";
+  player.currentTime = 0; 
+  albumArt.classList.remove('pulse'); 
 });
+volumeSlider.addEventListener("input", () => { player.volume = volumeSlider.value; });
 
-// VOLUME
-volumeSlider.addEventListener("input", () => {
-  player.volume = volumeSlider.value;
-  silvio.volume = volumeSlider.value;
-});
+async function fetchNowPlaying() {
+    try {
+        const res = await fetch(`${nowPlayingUrl}?t=${new Date().getTime()}`, { cache: 'no-store' });
+        const data = await res.json();
+        const title = data.title || 'Titolo non disponibile';
+        const artist = data.artist || '';
 
-// FETCH NOW PLAYING
-async function fetchNowPlaying(){
-  try{
-    const res = await fetch(`${nowPlayingUrl}?t=${Date.now()}`, {cache:'no-store'});
-    const data = await res.json();
-    const title = data.title || 'Titolo non disponibile';
-    const artist = data.artist || '';
+        if(title !== lastTitle){
+            lastTitle = title;
+            currentTitle.textContent = title;
+            currentTitle.style.animation = 'none';
+            currentTitle.offsetHeight;
+            currentTitle.style.animation = 'scrollTitle 15s linear infinite, rainbowText 5s linear infinite';
 
-    if(title !== lastTitle){
-      lastTitle = title;
-      currentTitle.textContent = title;
-
-      currentTitle.style.animation = 'none';
-      currentTitle.offsetHeight;
-      currentTitle.style.animation = 'scrollTitle 15s linear infinite, rainbowText 5s linear infinite';
-
-      const query = encodeURIComponent(title + ' ' + artist);
-      const url = `https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
-
-      try{
-        const c = await fetch(url, {cache:'no-store'});
-        const d = await c.json();
-        if(d.results && d.results[0] && d.results[0].artworkUrl100){
-          albumArt.style.backgroundImage = `url(${d.results[0].artworkUrl100.replace('100x100','600x600')})`;
-        } else {
-          albumArt.style.backgroundImage = `url(${defaultCover})`;
+            const query = encodeURIComponent(title + ' ' + artist);
+            const url = `https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
+            try {
+                const resCover = await fetch(url, { cache: 'no-store' });
+                const dataCover = await resCover.json();
+                if(dataCover.results && dataCover.results.length > 0 && dataCover.results[0].artworkUrl100){
+                    albumArt.style.backgroundImage = `url(${dataCover.results[0].artworkUrl100.replace('100x100','600x600')}?t=${Date.now()})`;
+                } else {
+                    albumArt.style.backgroundImage = `url(${defaultCover})`;
+                }
+            } catch(e){
+                albumArt.style.backgroundImage = `url(${defaultCover})`;
+            }
         }
-      } catch(e){
+    } catch(e){
+        currentTitle.textContent = 'Errore caricamento titolo';
         albumArt.style.backgroundImage = `url(${defaultCover})`;
-      }
     }
-  } catch(e){
-    currentTitle.textContent = 'Errore caricamento titolo';
-    albumArt.style.backgroundImage = `url(${defaultCover})`;
-  }
 }
 
-setInterval(fetchNowPlaying, 8000);
+setInterval(fetchNowPlaying,8000);
+fetchNowPlaying();
+player.addEventListener('play', ()=>{ fetchNowPlaying(); });
 
 // NEVE
 function createSnowflake(){
-  const flake=document.createElement('div');
+  const flake = document.createElement('div');
   flake.classList.add('snowflake');
-  flake.style.left=Math.random()*100+'vw';
-  const duration=Math.random()*7+8;
-  flake.style.animationDuration=duration+'s';
-  const size=Math.random()*4+3;
-  flake.style.width=size+'px';
-  flake.style.height=size+'px';
+  flake.style.left = Math.random()*100+'vw';
+  const duration = Math.random()*7+8;
+  flake.style.animationDuration = duration+'s';
+  const size = Math.random()*4+3;
+  flake.style.width = size+'px';
+  flake.style.height = size+'px';
   document.body.appendChild(flake);
   setTimeout(()=>flake.remove(), duration*1000+1000);
 }
 setInterval(createSnowflake,200);
 for(let i=0;i<40;i++){ createSnowflake(); }
 
-// COMETA
-const cometContainer=document.getElementById('comet-container');
-let posX=0,posY=0;
-let dirX=1,dirY=1;
+// MOVIMENTO COMETA
+const cometContainer = document.getElementById('comet-container');
+let posX = 0, posY = 0;
+let dirX = 1, dirY = 1;
+function moveComet() {
+  const speed = 3;
+  const maxX = window.innerWidth - 250;
+  const maxY = window.innerHeight - 60;
 
-function moveComet(){
-  const speed=3;
-  const maxX=window.innerWidth-50;
-  const maxY=window.innerHeight-50;
+  posX += speed * dirX;
+  posY += speed * dirY;
 
-  posX+=speed*dirX;
-  posY+=speed*dirY;
+  if(posX >= maxX || posX <= 0) dirX *= -1;
+  if(posY >= maxY || posY <= 0) dirY *= -1;
 
-  if(posX>=maxX || posX<=0) dirX*=-1;
-  if(posY>=maxY || posY<=0) dirY*=-1;
-
-  cometContainer.style.left=posX+'px';
-  cometContainer.style.top=posY+'px';
+  cometContainer.style.left = posX + 'px';
+  cometContainer.style.top = posY + 'px';
 
   requestAnimationFrame(moveComet);
 }
 moveComet();
 </script>
-
 </body>
 </html>
+
