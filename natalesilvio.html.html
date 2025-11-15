@@ -7,7 +7,7 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
-    background:#8b0000;
+    background:transparent;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -18,8 +18,8 @@
   }
   #container {
     position: relative;
-    width:700px;
-    height:750px;
+    width:600px;
+    height:550px;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -28,10 +28,10 @@
   }
   #box {
     width:400px;
-    height:520px;
-    background:rgba(0,0,0,0.45);
+    height:450px;
+    background:rgba(255,0,0,1); /* rosso Natale */
     border-radius:20px;
-    box-shadow:0 0 20px red;
+    box-shadow:0 0 20px rgba(255,0,0,0.7);
     text-align:center;
     padding:20px;
     z-index:12;
@@ -40,7 +40,7 @@
   }
   #titolocanzone {
     width:100%;
-    background:linear-gradient(to right,#ff0000,#a00000,#ff0000);
+    background:transparent;
     padding:12px;
     color:#fff;
     font-size:22px;
@@ -79,7 +79,7 @@
   #album-art.no-cover { background-image: url('https://xatimg.com/image/xmTZE8IRcKFj.gif'); }
 
   #controls { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:nowrap; margin-top:15px; }
-  .btn-xmas { width:60px; height:60px; background:transparent; border:none; cursor:pointer; position:relative; border-radius:50%; box-shadow:0 0 10px red; transition:0.2s; }
+  .btn-xmas { width:60px; height:60px; background:transparent; border:none; cursor:pointer; position:relative; border-radius:50%; box-shadow:0 0 10px rgba(255,0,0,0.7); transition:0.2s; }
   #play { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   #stop { background-image:url('https://xatimg.com/image/pElJqwm2CuHl.png'); background-size:cover; background-position:center; }
   .btn-xmas:hover { transform:scale(1.1); opacity:0.8; }
@@ -104,37 +104,53 @@
   }
   @keyframes fall { 0%{transform:translateY(0) translateX(0) rotate(0deg); opacity:0.9;} 100%{transform:translateY(110vh) translateX(30px) rotate(360deg); opacity:0;} }
 
-  /* COMETA A 5 PUNTE CON CODA */
+  /* COMETA A 5 PUNTE CON CODA LUNGA */
   #comet-container {
     position: absolute;
     top: 0;
     left: 0;
-    width: 20px;
-    height: 20px;
-    z-index: 20;
+    width: 60px;
+    height: 60px;
+    z-index:15;
     pointer-events: none;
   }
   #comet {
-    width: 20px;
-    height: 20px;
+    width: 60px;
+    height: 60px;
     background: yellow;
     clip-path: polygon(
       50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
       50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
     );
-    box-shadow: 0 0 10px yellow, 0 0 20px gold;
+    box-shadow: 0 0 15px yellow, 0 0 30px gold;
     position: relative;
+    z-index:2;
   }
   #comet-tail {
     position: absolute;
-    top: 10px;
-    left: -10px;
-    width: 50px;
-    height: 10px;
-    background: linear-gradient(to right, rgba(255,255,0,0.8), rgba(255,255,0,0.2), rgba(255,255,0,0));
-    transform-origin: left center;
-    filter: blur(3px);
+    top: 25px;
+    left: -200px; /* molto lunga dietro la stella */
+    width: 200px;
+    height: 12px;
+    background: linear-gradient(to right, rgba(255,255,0,0.9), rgba(135,206,250,0.5), rgba(255,255,0,0.2));
+    transform-origin: right center;
+    filter: blur(4px);
+    z-index:1; /* dietro la stella */
   }
+
+  #attendi {
+    position:absolute;
+    bottom:20px;
+    width:100%;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    color:red;
+    animation:blink 1s linear infinite;
+    display:none;
+    z-index:20;
+  }
+  @keyframes blink { 0%,50%,100%{opacity:1;} 25%,75%{opacity:0;} }
 
   @media(max-width:768px){
     #container { width:100%; height:auto; padding:20px 0; }
@@ -158,6 +174,7 @@
       <button id="stop" class="btn-xmas"></button>
     </div>
     <audio id="player" src="https://stream-164.zeno.fm/mcrnn0ibuzatv" preload="auto"></audio>
+    <audio id="silvio" src="https://peppeagosto.github.io/immaggini/silvio.mp3" preload="auto"></audio>
   </div>
 </div>
 
@@ -167,22 +184,43 @@
   <div id="comet-tail"></div>
 </div>
 
+<div id="attendi">ATTENDI FINE AUGURI</div>
+
 <script>
 // LOGICA ZENOPLAY
 const player = document.getElementById("player");
+const silvio = document.getElementById("silvio");
 const playBtn = document.getElementById("play");
 const stopBtn = document.getElementById("stop");
 const volumeSlider = document.getElementById("volume-slider");
 const albumArt = document.getElementById("album-art");
 const currentTitle = document.querySelector('#titolocanzone span');
+const attendi = document.getElementById('attendi');
 
 const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv';
 const defaultCover = 'https://xatimg.com/image/xmTZE8IRcKFj.gif';
 
 let lastTitle = '';
 
-playBtn.addEventListener("click", () => { player.play(); albumArt.classList.add('pulse'); });
-stopBtn.addEventListener("click", () => { player.pause(); player.currentTime = 0; albumArt.classList.remove('pulse'); });
+playBtn.addEventListener("click", () => {
+  attendi.style.display = 'block';
+  silvio.currentTime = 0;
+  silvio.play();
+  albumArt.classList.add('pulse');
+
+  setTimeout(()=>{ 
+    attendi.style.display = 'none';
+    player.play(); 
+  }, 54000); // dopo 54 secondi parte lo streaming
+});
+
+stopBtn.addEventListener("click", () => { 
+  player.pause(); 
+  silvio.pause();
+  silvio.currentTime = 0;
+  player.currentTime = 0; 
+  albumArt.classList.remove('pulse'); 
+});
 volumeSlider.addEventListener("input", () => { player.volume = volumeSlider.value; });
 
 async function fetchNowPlaying() {
@@ -245,8 +283,8 @@ let posX = 0, posY = 0;
 let dirX = 1, dirY = 1;
 function moveComet() {
   const speed = 3;
-  const maxX = window.innerWidth - 50;
-  const maxY = window.innerHeight - 50;
+  const maxX = window.innerWidth - 250;
+  const maxY = window.innerHeight - 60;
 
   posX += speed * dirX;
   posY += speed * dirY;
@@ -263,6 +301,8 @@ moveComet();
 </script>
 </body>
 </html>
+
+
 
 
 
