@@ -12,7 +12,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  background: linear-gradient(135deg, #200438, #480c7a, #200438);
+  background: linear-gradient(135deg, #200000, #ff3300, #ffaa00);
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
   overflow: hidden;
@@ -36,33 +36,33 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   border: 25px solid;
-  border-image: linear-gradient(45deg, #200438, #480c7a, #200438) 1;
+  border-image: linear-gradient(45deg, #ff0000, #ff5500, #ffaa00) 1;
   animation: glow 1.5s infinite alternate, pulse 2s infinite;
   box-shadow:
-    0 0 20px #480c7a,
-    0 0 40px #200438,
-    0 0 60px #b617f1,
-    0 0 80px #480c7a,
-    0 0 100px #200438;
-  filter: drop-shadow(0 0 25px #b617f1);
+    0 0 20px #ff0000,
+    0 0 40px #ff5500,
+    0 0 60px #ffaa00,
+    0 0 80px #ff3300,
+    0 0 100px #ffbb00;
+  filter: drop-shadow(0 0 25px #ff6600);
 }
 
 @keyframes glow {
   0% {
     box-shadow:
-      0 0 10px #480c7a,
-      0 0 20px #200438,
-      0 0 30px #b617f1,
-      0 0 40px #480c7a,
-      0 0 50px #200438;
+      0 0 10px #ff0000,
+      0 0 20px #ff5500,
+      0 0 30px #ffaa00,
+      0 0 40px #ff3300,
+      0 0 50px #ffbb00;
   }
   100% {
     box-shadow:
-      0 0 40px #480c7a,
-      0 0 80px #200438,
-      0 0 120px #b617f1,
-      0 0 160px #480c7a,
-      0 0 200px #200438;
+      0 0 40px #ff0000,
+      0 0 80px #ff5500,
+      0 0 120px #ffaa00,
+      0 0 160px #ff3300,
+      0 0 200px #ffbb00;
   }
 }
 
@@ -75,25 +75,31 @@ body {
 .frame1 { width: 760px; height: 700px; z-index: 1; }
 .frame2 { width: 660px; height: 600px; z-index: 2; }
 
-/* TESTO NEON EL DIABLO */
+/* TESTO NEON EL DIABLO - sfumato luce calda */
 .neon-text {
   position: absolute;
   font-family: 'Orbitron', sans-serif;
   font-size: 56px;
   font-weight: 900;
-  color: #b617f1;
-  text-shadow:
-    0 0 5px #b617f1,
-    0 0 10px #b617f1,
-    0 0 20px #480c7a,
-    0 0 30px #480c7a,
-    0 0 40px #200438,
-    0 0 60px #b617f1;
+  background: linear-gradient(0deg, #ff0000, #ff5500, #ffaa00, #ffff00);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 6s linear infinite, floatText 4s ease-in-out infinite, glowText 1.5s infinite alternate;
   writing-mode: vertical-rl;
   text-orientation: upright;
   letter-spacing: 10px;
-  animation: floatText 4s ease-in-out infinite, glowText 1.5s infinite alternate;
   user-select: none;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff;
+}
+
+/* Animazione sfumatura calda */
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Fumo leggero dietro il testo */
@@ -126,24 +132,8 @@ body {
 }
 
 @keyframes glowText {
-  0% {
-    text-shadow:
-      0 0 5px #b617f1,
-      0 0 10px #b617f1,
-      0 0 20px #480c7a,
-      0 0 30px #480c7a,
-      0 0 40px #200438,
-      0 0 60px #b617f1;
-  }
-  100% {
-    text-shadow:
-      0 0 15px #b617f1,
-      0 0 30px #b617f1,
-      0 0 50px #480c7a,
-      0 0 70px #480c7a,
-      0 0 90px #200438,
-      0 0 120px #b617f1;
-  }
+  0% { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff5500, 0 0 20px #ffaa00, 0 0 30px #ffff00; }
+  100% { text-shadow: 0 0 15px #ff0000, 0 0 30px #ff5500, 0 0 50px #ffaa00, 0 0 70px #ffff00; }
 }
 
 /* Scintille lampeggianti */
@@ -177,6 +167,8 @@ body {
 </div>
 </body>
 </html>
+
+
 
 
 
