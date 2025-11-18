@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>I TUOI SFONDI EPICI</title>
+<style>
+    body, html {margin:0;padding:0;height:100%;overflow:hidden;background:#000}
+    #bg-video {position:fixed;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);z-index:-100;object-fit:cover;}
+    .gradient-bg {position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(109.6deg, rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%);z-index:-99;}
+    .but {position:fixed;top:6%;right:2%;background:#383838;color:white;padding:20px 30px;border-radius:12px;font: bold 18px Arial;text-decoration:none;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.7);}
+    .but:hover {background:#000;transform:scale(1.1);transition:.3s}
+</style>
+</head>
+<body>
+
+<a class="but" href="#" onclick="switchBg();return false;">SCEGLI BACKGROUND</a>
+
+<video id="bg-video" autoplay muted loop playsinline></video>
+<div class="gradient-bg" id="gradient"></div>
+
+<script>
+// METTI QUI I TUOI 9 LINK CATBOX (o litterbox / 0x0.st)
+var videoSources = [
+    "https://peppeagosto.github.io/immaggini/a.mp4",    // a
+    "https://peppeagosto.github.io/immaggini/b.mp4",  // b
+    "https://peppeagosto.github.io/immaggini/c.mp4",    // c
+    "https://peppeagosto.github.io/immaggini/d.mp4",   // d
+    "https://peppeagosto.github.io/immaggini/fmp4",   // f
+    "https://peppeagosto.github.io/immaggini/g.mp4",    // g
+    "https://peppeagosto.github.io/immaggini/h.mp4",  // h
+    "https://peppeagosto.github.io/immaggini/m.mp4",   // m
+    "https://peppeagosto.github.io/immaggini/n.mp4"      // n
+];
+
+let count = -1;
+function switchBg() {
+    const v = document.getElementById("bg-video");
+    const g = document.getElementById("gradient");
+    count++;
+    if (count >= videoSources.length) {
+        count = -1; v.pause(); v.src = ""; g.style.display = "block";
+    } else {
+        g.style.display = "none";
+        v.src = videoSources[count];
+        v.load();
+        v.play();
+    }
+}
+</script>
+
+</body>
+</html>
