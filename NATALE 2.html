@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BASS</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:transparent;
+  font-family:'Orbitron',sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  height:100vh;
+  gap:0;
+  overflow:hidden;
+}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+/* STREAMING AUDIO INVISIBILE */
+#stream-audio{display:none;}
+
+/* CONTROLLI */
+#controls-bar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+  z-index:100;
+}
+.btn-neon{
+  width:30px;height:30px;
+  background:transparent;
+  border:2px solid gold;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:11px;
+  color:gold;
+  font-weight:bold;
+  box-shadow:0 0 12px gold;
+  transition:.2s;
+}
+.btn-neon:hover{
+  background:gold;
+  color:#000;
+  box-shadow:0 0 20px gold;
+}
+#volume-slider{
+  width:60px;
+  height:3px;
+  background:#333;
+  border-radius:2px;
+  outline:none;
+  -webkit-appearance:none;
+}
+#volume-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:11px;height:11px;
+  background:gold;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:0 0 8px gold;
+}
+
+/* PLAYER CENTRALE */
+#square-container{
+  width:690px;
+  height:450px;
+  background:rgba(0,0,0,0.9);
+  border:3px solid gold;
+  border-radius:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  box-shadow:0 0 40px rgba(255,215,0,0.7);
+  position:relative;
+  margin-top:8px;
+}
+
+/* TESTI NATALIZI IN BASSO */
+.christmas-bottom-left{
+  position:absolute;
+  bottom:18px;
+  left:45px;
+  color:gold;
+  font-size:19px;
+  font-weight:bold;
+  text-shadow:0 0 8px rgba(255,215,0,0.8);
+  z-index:30;
+}
+.christmas-bottom-center{
+  position:absolute;
+  bottom:18px;
+  left:84%;
+  transform:translateX(-50%);
+  color:gold;
+  font-size:22px;
+  font-weight:bold;
+  text-shadow:0 0 10px rgba(255,215,0,0.9);
+  z-index:30;
+}
+
+/* VIDEO LATERALI E CENTRALE */
+.side-rect{
+  width:520px;
+  height:100%;
+  background:transparent;
+  border:3px solid gold;
+  border-radius:18px;
+  overflow:hidden;
+  margin:0 12px;
+  box-shadow:0 0 15px gold, 0 0 30px rgba(255,215,0,0.6);
+}
+.side-video{
+  width:100%;height:100%;
+  object-fit:cover;
+  border-radius:15px;
+  filter:brightness(1.1);
+}
+#center-container{position:relative;width:100%;height:100%;}
+#center-video{
+  width:100%;height:100%;
+  object-fit:cover;
+  border-radius:20px;
+  border:3px solid gold;
+  box-shadow:0 0 20px gold, 0 0 40px rgba(255,215,0,0.7);
+}
+#radio-text{
+  position:absolute;
+  top:25px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:24px;
+  font-weight:bold;
+  color:gold;
+  text-shadow:0 0 10px gold;
+  white-space:nowrap;
+  z-index:25;
+}
+
+/* SCROLLER TITOLI */
+#title-scroller{
+  width:690px;
+  margin-top:10px;
+  overflow:hidden;
+  background:rgba(0,0,0,0.7);
+  border:2px solid gold;
+  border-radius:15px;
+  padding:8px 0;
+  box-shadow:0 0 20px rgba(255,215,0,0.5);
+}
+#scroller-content{
+  display:inline-block;
+  white-space:nowrap;
+  font-size:16px;
+  color:gold;
+  text-shadow:0 0 8px gold;
+  animation:scroll 25s linear infinite;
+}
+@keyframes scroll{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
+}
+
+/* COMETA */
+#comet{
+  position:absolute;
+  width:6px;height:6px;
+  background:#fff;
+  border-radius:50%;
+  box-shadow:0 0 15px #fff,0 0 30px gold;
+  pointer-events:none;
+  z-index:20;
+}
+#comet::after{
+  content:''; position:absolute;
+  top:0;left:-60px;
+  width:70px;height:2px;
+  background:linear-gradient(90deg,gold,transparent);
+}
+
+/* NEVE */
+.snowflake{
+  position:absolute;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:5;
+  opacity:0.9;
+  box-shadow:0 0 8px #fff;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(120vh) rotate(720deg);opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<audio id="stream-audio" src="https://sp3.server89.com:7018/stream" preload="none"></audio>
+
+<div id="controls-bar">
+  <button id="play-btn" class="btn-neon">Play</button>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
+  <button id="stop-btn" class="btn-neon">Stop</button>
+</div>
+
+<div id="square-container">
+
+  <!-- TESTI NATALIZI IN BASSO -->
+  <div class="christmas-bottom-left">BUON NATALE</div>
+  <div class="christmas-bottom-center"> DA BASS</div>
+
+  <div class="side-rect">
+    <video class="side-video" src="https://djbas18.github.io/djbas/albero.mp4" autoplay loop muted playsinline></video>
+  </div>
+  
+  <div id="center-container">
+    <video id="center-video" src="https://djbas18.github.io/djbas/babb.mp4" autoplay loop muted playsinline></video>
+    <div id="radio-text">RadioPolignanoWeb</div>
+  </div>
+  
+  <div class="side-rect">
+    <video class="side-video" src="https://djbas18.github.io/djbas/albero.mp4" autoplay loop muted playsinline></video>
+  </div>
+</div>
+
+<div id="title-scroller">
+  <div id="scroller-content">Caricamento titolo...</div>
+</div>
+
+<div id="comet"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+// STREAM AUDIO CONTROLLI
+const stream=document.getElementById('stream-audio');
+const playBtn=document.getElementById('play-btn');
+const stopBtn=document.getElementById('stop-btn');
+const volumeSlider=document.getElementById('volume-slider');
+const comet=document.getElementById('comet');
+
+playBtn.addEventListener('click',()=>{
+  if(stream.paused){
+    stream.play();
+    playBtn.innerHTML='Pause';
+  }else{
+    stream.pause();
+    playBtn.innerHTML='Play';
+  }
+});
+stopBtn.addEventListener('click',()=>{
+  stream.pause();
+  stream.currentTime=0;
+  playBtn.innerHTML='Play';
+});
+volumeSlider.addEventListener('input',()=>stream.volume=volumeSlider.value);
+
+// COMETA SEGUIRE MOUSE
+document.addEventListener('mousemove',e=>{
+  comet.style.left=e.clientX+'px';
+  comet.style.top=e.clientY+'px';
+});
+
+// NEVE
+function createSnow(){
+  const s=document.createElement('div');
+  s.classList.add('snowflake');
+  s.style.left=Math.random()*100+'vw';
+  const size=Math.random()*8+4;
+  s.style.width=s.style.height=size+'px';
+  const dur=size>8?(Math.random()*4+8):(Math.random()*4+6);
+  s.style.animationDuration=dur+'s';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),14000);
+}
+setInterval(createSnow,100);
+
+// TITOLO STREAMING SHOUTCAST
+function updateRealTitle(){
+  fetch('https://sp3.server89.com:7018/stats?sid=1')
+  .then(r=>r.text())
+  .then(xml=>{
+    try{
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const songTitle = doc.querySelector('SONGTITLE')?.textContent || '';
+      
+      const scroller=document.getElementById('scroller-content');
+      scroller.textContent = songTitle.trim();
+      // riavvia animazione per scorrimento continuo
+      scroller.style.animation='none';
+      void scroller.offsetWidth; // trigger reflow
+      scroller.style.animation='scroll 25s linear infinite';
+    }catch(e){
+      console.error('Errore parsing Shoutcast:', e);
+    }
+  })
+  .catch(e=>console.error('Errore fetch Shoutcast:', e));
+}
+setInterval(updateRealTitle,30000);
+updateRealTitle();
+</script>
+
+</body>
+</html>
+
+
