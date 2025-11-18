@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL DIABLO RAINBOW NO-VIOLET</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(45deg,
+      #ff0000, #ff4400, #ff8800, #ffff00, #00ff00, #00ff88, #00ffff, #0088ff, #0044ff, #ff0000);
+    background-size: 1000% 1000%;
+    animation: rainbowNoViolet 10s linear infinite;
+    overflow: hidden;
+  }
+
+  @keyframes rainbowNoViolet {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
+  .frame-container {
+    position: relative;
+    width: 760px;
+    height: 700px;
+  }
+
+  .frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 30px solid transparent;
+    border-image: conic-gradient(from var(--angle),
+      #ff0000, #ff6600, #ffff00, #00ff00, #00ffff, #0088ff, #ff0000) 1;
+    animation: glow 2s ease-in-out infinite alternate,
+               pulse 3s ease-in-out infinite,
+               rotateBorder 16s linear infinite;
+    box-shadow: 0 0 40px #00ffff, 0 0 80px #ffff00, 0 0 120px #ff0000;
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotateBorder {
+    from { --angle: 0deg; }
+    to { --angle: 360deg; }
+  }
+
+  .frame1 { width: 760px; height: 700px; z-index: 1; }
+  .frame2 { width: 660px; height: 600px; z-index: 2; }
+
+  /* TESTO ARCOBALENO SENZA VIOLA */
+  .neon-text {
+    position: absolute;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    background: linear-gradient(90deg,
+      #ff0000, #ff4400, #ff8800, #ffff00, #88ff00, #00ff00, #00ffaa, #00ffff, #00aaff, #0088ff);
+    background-size: 800% 800%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textFlow 4.5s linear infinite,
+               floatText 5s ease-in-out infinite,
+               glowText 1.6s ease-in-out infinite alternate;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 14px;
+    user-select: none;
+  }
+
+  @keyframes textFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
+  @keyframes floatText {
+    0%, 100% { transform: translateY(-40px) rotate(1deg); }
+    50% { transform: translateY(60px) rotate(-1deg); }
+  }
+
+  @keyframes glowText {
+    0% { text-shadow: 0 0 15px #fff, 0 0 30px #00ffff, 0 0 50px #ffff00; }
+    100% { text-shadow: 0 0 25px #fff, 0 0 60px #00ffff, 0 0 100px #ff0000, 0 0 140px #00ff00; }
+  }
+
+  .left-text { left: -195px; top: -160px; }
+  .right-text { right: -195px; top: -160px; }
+
+  /* Particelle solo colori consentiti */
+  .particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 20px 5px currentColor;
+    animation: orbit 18s linear infinite, sparkle 1.8s infinite;
+  }
+
+  @keyframes orbit {
+    0% { transform: rotate(0deg) translateX(380px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(380px) rotate(-360deg); }
+  }
+
+  @keyframes sparkle {
+    0%,100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.8); }
+  }
+</style>
+</head>
+<body>
+
+<div class="frame-container">
+  <div class="frame frame1"></div>
+  <div class="frame frame2"></div>
+  
+  <div class="neon-text left-text">EL DIABLO</div>
+  <div class="neon-text right-text">EL DIABLO</div>
+
+  <!-- Particelle senza viola -->
+  <div class="particle" style="top:50%; left:50%; color:#ff0000; animation-delay: 0s;"></div>
+  <div class="particle" style="top:50%; left:50%; color:#ffff00; animation-delay: -3s;"></div>
+  <div class="particle" style="top:50%; left:50%; color:#00ff00; animation-delay: -6s;"></div>
+  <div class="particle" style="top:50%; left:50%; color:#00ffff; animation-delay: -9s;"></div>
+  <div class="particle" style="top:50%; left:50%; color:#0088ff; animation-delay: -12s;"></div>
+  <div class="particle" style="top:50%; left:50%; color:#ff8800; animation-delay: -15s;"></div>
+</div>
+
+</body>
+</html>
