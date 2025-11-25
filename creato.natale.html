@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Natale Diablo</title>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #8B0000, #B22222, #FF0000);
+    overflow: hidden;
+}
+
+/* ❄ NEVE */
+@keyframes neveCaduta {
+    0% { transform: translateY(-10vh); opacity: 0; }
+    100% { transform: translateY(110vh); opacity: 1; }
+}
+
+.fiocco {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.9;
+    animation: neveCaduta linear infinite;
+    z-index: 10;
+}
+
+/* ⭐ COMETA (stella + coda insieme) */
+.cometa {
+    position: absolute;
+    top: 60px;
+    left: -200px;
+    width: 480px;
+    height: 150px;
+    animation: voloCometa 10s linear infinite;
+    transform-origin: left center;
+    z-index: 10;
+}
+
+/* ⭐ STELLA */
+.stella {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(#fff8d0, #ffdd55, #ffa500);
+    clip-path: polygon(
+        50% 0%, 63% 34%, 98% 34%, 70% 55%, 80% 91%,
+        50% 68%, 20% 91%, 31% 55%, 3% 34%, 38% 34%
+    );
+    filter: drop-shadow(0 0 20px #ffcc55);
+}
+
+/* 🌠 CODA – irregolare, distorta, dissolvenza */
+.coda {
+    position: absolute;
+    top: 40px;
+    left: 90px;
+    width: 360px;
+    height: 120px;
+    clip-path: polygon(
+        0% 40%, 5% 60%, 15% 50%, 25% 70%, 40% 55%, 55% 65%,
+        70% 50%, 85% 60%, 100% 48%, 100% 52%, 85% 62%, 70% 55%,
+        55% 70%, 40% 60%, 25% 75%, 15% 55%, 5% 65%, 0% 45%
+    );
+    background: radial-gradient(circle at left,
+        rgba(255,230,90,0.9) 0%,
+        rgba(255,170,40,0.55) 40%,
+        rgba(255,120,20,0.25) 70%,
+        rgba(255,80,0,0) 100%
+    );
+    filter: blur(11px) drop-shadow(0 0 12px rgba(255,200,80,0.8));
+    animation: vibraCoda 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes vibraCoda {
+    0% { transform: scaleY(1) translateY(0px); filter: blur(10px); }
+    100% { transform: scaleY(1.12) translateY(-4px); filter: blur(13px); }
+}
+
+@keyframes voloCometa {
+    0% { transform: translateX(0px) scale(0.35); }
+    50% { transform: translateX(650px) scale(0.55); }
+    100% { transform: translateX(1450px) scale(0.80); }
+}
+
+/* 🎅 BABBO NATALE SLITTA – gigante all’inizio */
+.slitta {
+    position: absolute;
+    top: 0px; 
+    left: 0px;
+    width: 120px;  
+    height: 60px;  
+    background-image: url('https://xatimg.com/image/j9Ad2pCJTuAr.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: voloSlitta 12s linear infinite;
+    transform-origin: center center;
+    z-index: 10;
+}
+
+@keyframes voloSlitta {
+    0%   { transform: translateX(1600px) translateY(20px) scale(6); opacity: 0; }
+    10%  { transform: translateX(1400px) translateY(60px) scale(5.5); opacity: 1; }
+    30%  { transform: translateX(1100px) translateY(120px) scale(3.5); opacity: 1; }
+    50%  { transform: translateX(800px) translateY(180px) scale(2.0); opacity: 1; }
+    70%  { transform: translateX(500px) translateY(230px) scale(1.2); opacity: 0.8; }
+    90%  { transform: translateX(250px) translateY(280px) scale(0.6); opacity: 0.6; }
+    100% { transform: translateX(0px) translateY(320px) scale(0.3); opacity: 0; }
+}
+
+/* 🌟 CONTENITORE CENTRALE TRASPARENTE */
+.centro-trasparente {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 748px;
+    height: auto;
+    max-height: 90vh;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centro-trasparente img {
+    width: 60%;
+    height: auto;
+    object-fit: contain;
+    animation: scompareImmagine 25s linear forwards;
+}
+
+@keyframes scompareImmagine {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* 🎵 CAMPANE NATALIZIE */
+.campana {
+    position: absolute;
+    top: 10px;
+    width: 150px;
+    animation: vibraCampana 1.2s ease-in-out infinite alternate;
+    z-index: 60;
+}
+
+.campana-sx { left: 10px; }
+.campana-dx { right: 10px; }
+
+@keyframes vibraCampana {
+    0% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+    100% { transform: rotate(-8deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ❄ CREA TANTI FIOCCHI DI NEVE -->
+<script>
+for (let i = 0; i < 70; i++) {
+    let f = document.createElement("div");
+    f.className = "fiocco";
+    f.style.left = Math.random() * 100 + "vw";
+    f.style.animationDuration = (6 + Math.random() * 6) + "s";
+    f.style.animationDelay = (-Math.random() * 6) + "s";
+    document.body.appendChild(f);
+}
+</script>
+
+<!-- ⭐ COMETA COMPLETA -->
+<div class="cometa">
+    <div class="stella"></div>
+    <div class="coda"></div>
+</div>
+
+<!-- 🎅 BABBO NATALE -->
+<div class="slitta"></div>
+
+<!-- 🌟 CONTENITORE CENTRALE TRASPARENTE CON IMMAGINE RIDOTTA -->
+<div class="centro-trasparente">
+    <img src="https://xatimg.com/image/wQZVB8kXAw9g.png" alt="Immagine Natale">
+</div>
+
+<!-- 🎵 CAMPANE NATALIZIE IN ALTO DX E SX -->
+<img src="https://xatimg.com/image/DTponKF7xlvY.gif" class="campana campana-sx" alt="Campana Sinistra">
+<img src="https://xatimg.com/image/DTponKF7xlvY.gif" class="campana campana-dx" alt="Campana Destra">
+
+</body>
+</html>
