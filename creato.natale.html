@@ -88,7 +88,7 @@ body {
     100% { transform: translateX(1450px) scale(0.80); }
 }
 
-/* 🎅 BABBO NATALE SLITTA – gigante all’inizio */
+/* 🎅 BABBO NATALE SLITTA – parte più in basso ora */
 .slitta {
     position: absolute;
     top: 0px; 
@@ -105,13 +105,13 @@ body {
 }
 
 @keyframes voloSlitta {
-    0%   { transform: translateX(1600px) translateY(20px) scale(6); opacity: 0; }
-    10%  { transform: translateX(1400px) translateY(60px) scale(5.5); opacity: 1; }
-    30%  { transform: translateX(1100px) translateY(120px) scale(3.5); opacity: 1; }
-    50%  { transform: translateX(800px) translateY(180px) scale(2.0); opacity: 1; }
-    70%  { transform: translateX(500px) translateY(230px) scale(1.2); opacity: 0.8; }
-    90%  { transform: translateX(250px) translateY(280px) scale(0.6); opacity: 0.6; }
-    100% { transform: translateX(0px) translateY(320px) scale(0.3); opacity: 0; }
+    0%   { transform: translateX(1600px) translateY(200px) scale(6); opacity: 0; }
+    10%  { transform: translateX(1400px) translateY(220px) scale(5.5); opacity: 1; }
+    30%  { transform: translateX(1100px) translateY(250px) scale(3.5); opacity: 1; }
+    50%  { transform: translateX(800px) translateY(280px) scale(2.0); opacity: 1; }
+    70%  { transform: translateX(500px) translateY(300px) scale(1.2); opacity: 0.8; }
+    90%  { transform: translateX(250px) translateY(320px) scale(0.6); opacity: 0.6; }
+    100% { transform: translateX(0px) translateY(340px) scale(0.3); opacity: 0; }
 }
 
 /* 🌟 CONTENITORE CENTRALE TRASPARENTE */
@@ -145,7 +145,7 @@ body {
 /* 🎵 CAMPANE NATALIZIE */
 .campana {
     position: absolute;
-    top: 50px;  /* <-- abbassate da 10px a 50px */
+    top: 50px;  /* abbassate */
     width: 150px;
     animation: vibraCampana 1.2s ease-in-out infinite alternate;
     z-index: 60;
@@ -195,3 +195,5 @@ for (let i = 0; i < 70; i++) {
 
 </body>
 </html>
+
+
