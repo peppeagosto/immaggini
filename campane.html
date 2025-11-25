@@ -63,11 +63,11 @@ body {
     100% { opacity:0.1; transform:scale(1); }
 }
 
-/* VIDEO SX */
+/* GIF CAMPANE SX */
 .video-sx {
     position: fixed;
     left: 10px;
-    top: 50%;
+    top: 40%; /* leggermente più in alto rispetto al 50% precedente */
     transform: translateY(-50%);
     width: 180px;
     height: 320px;
@@ -76,11 +76,11 @@ body {
     z-index: 20;
 }
 
-/* VIDEO DX */
+/* GIF CAMPANE DX */
 .video-dx {
     position: fixed;
     right: 10px;
-    top: 50%;
+    top: 40%; /* leggermente più in alto rispetto al 50% precedente */
     transform: translateY(-50%);
     width: 180px;
     height: 320px;
@@ -110,16 +110,11 @@ for (let i = 0; i < 150; i++) {
 }
 </script>
 
-<!-- VIDEO SINISTRA (muted) -->
-<video class="video-sx" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/campane.mp4" type="video/mp4">
-</video>
+<!-- GIF SINISTRA -->
+<img class="video-sx" src="https://peppeagosto.github.io/immaggini/campane.gif" alt="Campane SX">
 
-<!-- VIDEO DESTRA (muted) -->
-<video class="video-dx" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/campane.mp4" type="video/mp4">
-</video>
+<!-- GIF DESTRA -->
+<img class="video-dx" src="https://peppeagosto.github.io/immaggini/campane.gif" alt="Campane DX">
 
 </body>
 </html>
-
