@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>CAPODANNO 2025 - BRINDISI EPICO</title>
+<title>CAPODANNO 2025 - EPICO</title>
 <style>
     body{margin:0;height:100vh;background:radial-gradient(circle at center,#1a0033,#000);overflow:hidden;color:gold}
     @keyframes fuochi{0%{transform:translateY(-10vh) scale(0);opacity:0}50%{opacity:1}100%{transform:translateY(110vh) scale(1.2);opacity:0}}
@@ -23,14 +23,19 @@
 </head>
 <body>
 
-<!-- I TUOI 3 VIDEO -->
+<!-- I TUOI VIDEO CON I NOMI NUOVI -->
 <div style="display:flex;height:100vh;position:fixed;top:0;left:0;width:100%;z-index:1;">
-    <video src="video-sx.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
-    <video src="brindo.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;"></video>
-    <video src="video-dx.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
+    <!-- SINISTRA -->
+    <video src=" https://peppeagosto.github.io/immaggini/giochi1" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
+    
+    <!-- CENTRO - IL BRINDISI -->
+    <video src=" https://peppeagosto.github.io/immaggini/brind1" autoplay loop muted playsinline style="flex:1;object-fit:cover;"></video>
+    
+    <!-- DESTRA - (metti il tuo quando ce l'hai, altrimenti fuochi temporanei) -->
+    <video src=" https://peppeagosto.github.io/immaggini/giochi1" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
 </div>
 
-<!-- FUOCHI + CORIANDOLI -->
+<!-- FUOCHI E CORIANDOLI -->
 <script>
 for(let i=0;i<180;i++){
     let f=document.createElement("div");f.className="fuoco";
@@ -43,16 +48,14 @@ for(let i=0;i<180;i++){
 }
 </script>
 
-<!-- BOTTIGLIE CHE SCOPPIANO -->
+<!-- BOTTIGLIE -->
 <script>
 setInterval(()=>{let b=document.createElement("div");b.className="bottiglia";b.style.left=Math.random()*90+"vw";document.body.appendChild(b);setTimeout(()=>b.remove(),9000)},1000);
 </script>
 
-<!-- COUNTDOWN + BUON ANNO -->
 <div class="countdown" id="cd">10</div>
 <div class="buonanno">BUON 2025 FRATELLO!!! CIN CIN!!!</div>
 
-<!-- OROLOGI -->
 <img src="https://i.ibb.co/5kpN7YJ/clock-newyear.png" class="orologio orologio-sx">
 <img src="https://i.ibb.co/5kpN7YJ/clock-newyear.png" class="orologio orologio-dx">
 
@@ -62,8 +65,7 @@ const cd=document.getElementById("cd");
 function update(){
     let diff=Math.floor((capodanno-new Date())/1000);
     if(diff<=0){
-        cd.textContent="2025!!!";
-        cd.style.fontSize="24vw";
+        cd.textContent="2025!!!";cd.style.fontSize="24vw";
         document.querySelector(".buonanno").style.opacity=1;
         return;
     }
@@ -72,6 +74,5 @@ function update(){
 }
 update();
 </script>
-
 </body>
 </html>
