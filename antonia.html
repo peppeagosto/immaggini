@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -45,55 +46,34 @@ video.side-video {
 .left-video-wrapper { left: 10px; top: 0; }
 .right-video-wrapper { right: 10px; top: 0; }
 
-/* VIDEO CENTRALE */
-.center-video-wrapper {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    overflow: hidden;
-    border-radius: 12px;
-    z-index: 3;
-}
-
-.center-video-wrapper video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* TESTI SUI VIDEO LATERALI */
+/* TESTO SU VIDEO LATERALI */
 .video-text {
     position: absolute;
-    bottom: 8px;
+    bottom: 18px; /* leggermente sopra il fondo */
     left: 50%;
     transform: translateX(-50%);
-    font-size: 22px; 
+    font-size: 22px;
     font-weight: bold;
-    color: #ffffffcc;
-    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
+    color: #ffffff; /* bianco */
     white-space: nowrap;
     z-index: 4;
-    animation: flashHeartbeat 25s infinite;
+
+    /* Sfumatura rossa leggera */
+    text-shadow:
+      0 0 5px rgba(255, 50, 50, 0.7),
+      0 0 10px rgba(255, 0, 0, 0.4),
+      0 0 15px rgba(255, 0, 0, 0.2);
+
+    /* Animazione battito di cuore */
+    animation: heartbeat 2s infinite;
 }
 
-/* ANIMAZIONE LAMPEGGIO + BATTITO CUORE */
-@keyframes flashHeartbeat {
-    0%, 20% {
-        opacity: 1;
-        bottom: 50%;
-        transform: translateX(-50%) scale(1);
-    }
-    5%, 15% {
-        transform: translateX(-50%) scale(1.2); 
-    }
-    21%, 100% {
-        opacity: 0;
-        bottom: 8px;
-        transform: translateX(-50%) scale(1);
-    }
+/* ANIMAZIONE BATTITO */
+@keyframes heartbeat {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    25% { transform: translateX(-50%) scale(1.1); }
+    50% { transform: translateX(-50%) scale(1); }
+    75% { transform: translateX(-50%) scale(1.1); }
 }
 </style>
 </head>
@@ -106,7 +86,7 @@ video.side-video {
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Creato Dal Cartaio</div>
+    <div class="video-text">DinamicFM</div>
   </div>
 
   <!-- VIDEO DESTRO -->
@@ -114,23 +94,11 @@ video.side-video {
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Creato Dal Cartaio</div>
+    <div class="video-text">DinamicFM</div>
   </div>
 
 </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
