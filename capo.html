@@ -2,74 +2,152 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>CAPODANNO 2025 - EPICO</title>
+<title>CAPODANNO 2026 - IL CARTAIO</title>
 <style>
-    body{margin:0;height:100vh;background:radial-gradient(circle at center,#1a0033,#000);overflow:hidden;color:gold}
+    body{margin:0;height:100vh;background:radial-gradient(circle at center,#1a0033,#000);overflow:hidden;position:relative;font-family:sans-serif}
     @keyframes fuochi{0%{transform:translateY(-10vh) scale(0);opacity:0}50%{opacity:1}100%{transform:translateY(110vh) scale(1.2);opacity:0}}
-    .fuoco{position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 15px 4px gold;animation:fuoco linear infinite;z-index:10}
-    .bottiglia{position:absolute;width:80px;height:200px;background:linear-gradient(#333,#111);border-radius:40px 40px 20px 20px;animation:bottigliaVolante 8s linear infinite;z-index:15}
-    .bottiglia::before{content:'';position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:50px;height:60px;background:gold;border-radius:25px 25px 0 0}
-    .bottiglia::after{content:'🍾';position:absolute;top:-60px;left:50%;font-size:60px;transform:translateX(-50%);animation:scoppio .8s ease-out infinite}
-    @keyframes scoppio{0%,100%{transform:translateX(-50%) translateY(0) scale(1)}50%{transform:translateX(-50%) translateY(-30px) scale(1.4)}}
-    @keyframes bottigliaVolante{0%{transform:translateY(120vh) rotate(0deg);opacity:0}15%{opacity:1}100%{transform:translateY(-200px) rotate(720deg);opacity:0}}
-    .countdown{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18vw;font-weight:900;letter-spacing:10px;text-shadow:0 0 40px gold,0 0 80px orange,0 0 120px red;animation:pulse 1.5s infinite;z-index:50}
-    @keyframes pulse{0%,100%{opacity:.8;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
-    .buonanno{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);font-size:6vw;letter-spacing:8px;text-shadow:0 0 30px gold;z-index:50;opacity:0;animation:appari 1s forwards 3s}
-    @keyframes appari{to{opacity:1}}
-    .orologio{position:absolute;top:40px;width:180px;filter:drop-shadow(0 0 20px gold);animation:vibraOrologio 1s ease-in-out infinite alternate;z-index:60}
-    .orologio-sx{left:20px}.orologio-dx{right:20px}
-    @keyframes vibraOrologio{0%{transform:rotate(-12deg)}100%{transform:rotate(12deg)}}
+    .fuoco{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 20px 5px gold;animation:fuoco linear infinite;z-index:10}
+    
+    /* SOLO LE TUE IMMAGINI */
+    .bottiglia{
+        position:absolute;
+        width:80px;
+        height:80px;
+        background:url('https://xatimg.com/image/UmYFosvCkKpV.png') center/contain no-repeat;
+        animation:bottigliaVolante 7s linear infinite;
+        z-index:15;
+    }
+    .bottiglia:nth-child(odd){background-image:url('https://xatimg.com/image/rNy0H9Rr2kBi.png');}
+    .bottiglia:nth-child(3n){transform:scale(0.8);}
+    .bottiglia:nth-child(5n){transform:scale(1.1);}
+    @keyframes bottigliaVolante{
+        0%{transform:translateY(120vh) rotate(0deg);opacity:0}
+        15%{opacity:1}
+        100%{transform:translateY(-150px) rotate(720deg);opacity:0}
+    }
+
+    /* COUNTDOWN ORO SFUMATO E ANIMATO */
+    .countdown{
+        position:absolute;
+        top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        font-size:20vw;
+        font-weight:900;
+        letter-spacing:8px;
+        background:linear-gradient(45deg,#ffd700,#ffea00,#b8860b,#ffd700,#ffea00);
+        -webkit-background-clip:text;
+        background-clip:text;
+        -webkit-text-fill-color:transparent;
+        text-shadow:0 0 60px rgba(255,215,0,0.8);
+        animation:goldPulse 3s ease-in-out infinite;
+        z-index:50;
+    }
+    @keyframes goldPulse{
+        0%,100%{background-size:200% 200%;background-position:0% 50%;}
+        50%{background-size:300% 300%;background-position:100% 50%;}
+    }
+
+    .traPoco{
+        position:absolute;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        font-size:9vw;font-weight:900;color:#fff;
+        text-shadow:0 0 60px gold;text-align:center;line-height:1.4;
+        z-index:998;opacity:0;
+    }
+    .traPoco.show{opacity:1;animation:flash 1.3s infinite}
+    @keyframes flash{0%,100%{opacity:0.8;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+
+    .finale{
+        position:absolute;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        font-size:10vw;font-weight:900;color:#ff0000;
+        text-shadow:0 0 80px #ff0000;text-align:center;line-height:1.4;
+        z-index:999;opacity:0;
+    }
+    .finale.show{opacity:1;animation:lampeggio 1s infinite}
+    @keyframes lampeggio{0%,100%{opacity:0.7;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}
+
+    /* TESTO PICCOLO IN BASSO */
+    .credit{
+        position:fixed;
+        bottom:15px;
+        right:20px;
+        font-size:14px;
+        color:#ffea00;
+        text-shadow:0 0 15px gold;
+        font-weight:600;
+        letter-spacing:2px;
+        z-index:999;
+        animation:shine 4s infinite;
+    }
+    @keyframes shine{
+        0%,100%{opacity:0.6}
+        50%{opacity:1;text-shadow:0 0 25px gold}
+    }
 </style>
 </head>
 <body>
 
-<!-- I TUOI VIDEO CON I NOMI NUOVI -->
+<!-- VIDEO SFONDO -->
 <div style="display:flex;height:100vh;position:fixed;top:0;left:0;width:100%;z-index:1;">
-    <!-- SINISTRA -->
-    <video src=" https://peppeagosto.github.io/immaggini/giochi1.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
-    
-    <!-- CENTRO - IL BRINDISI -->
-    <video src=" https://peppeagosto.github.io/immaggini/brind1.mp4 autoplay loop muted playsinline style="flex:1;object-fit:cover;"></video>
-    
-    <!-- DESTRA - (metti il tuo quando ce l'hai, altrimenti fuochi temporanei) -->
-    <video src=" https://peppeagosto.github.io/immaggini/giochi1.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
+    <video src="https://peppeagosto.github.io/immaggini/giochi1.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
+    <video src="https://peppeagosto.github.io/immaggini/brind1.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;"></video>
+    <video src="https://peppeagosto.github.io/immaggini/giochi1.mp4" autoplay loop muted playsinline style="flex:1;object-fit:cover;filter:brightness(1.1)"></video>
 </div>
 
-<!-- FUOCHI E CORIANDOLI -->
+<!-- FUOCHI + TUE IMMAGINI -->
 <script>
-for(let i=0;i<180;i++){
+for(let i=0;i<250;i++){
     let f=document.createElement("div");f.className="fuoco";
     f.style.left=Math.random()*100+"vw";
     f.style.background=["gold","white","#ff0066","#00ffff","#ff4400"][Math.floor(Math.random()*5)];
-    f.style.animationDuration=(3+Math.random()*5)+"s";
-    f.style.animationDelay=Math.random()*4+"s";
-    f.style.boxShadow="0 0 20px 6px "+f.style.background;
+    f.style.animationDuration=(2+Math.random()*4)+"s";
+    f.style.animationDelay=Math.random()*3+"s";
+    f.style.boxShadow="0 0 25px 8px "+f.style.background;
     document.body.appendChild(f);
 }
+setInterval(()=>{
+    let b=document.createElement("div");
+    b.className="bottiglia";
+    b.style.left=Math.random()*90+"vw";
+    b.style.animationDuration=(6+Math.random()*3)+"s";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),10000);
+},650);
 </script>
 
-<!-- BOTTIGLIE -->
-<script>
-setInterval(()=>{let b=document.createElement("div");b.className="bottiglia";b.style.left=Math.random()*90+"vw";document.body.appendChild(b);setTimeout(()=>b.remove(),9000)},1000);
-</script>
+<div class="countdown" id="cd">COUNTDOWN</div>
+<div class="traPoco" id="traPoco">VI FARÒ GLI AUGURI<br>TRA UN ATTIMO…</div>
+<div class="finale" id="finale">
+    IL CARTAIO VI AUGURA<br>BUON ANNO<br><br>CIAO A TUTTI
+</div>
 
-<div class="countdown" id="cd">10</div>
-<div class="buonanno">BUON 2025 FRATELLO!!! CIN CIN!!!</div>
-
-<img src="https://i.ibb.co/5kpN7YJ/clock-newyear.png" class="orologio orologio-sx">
-<img src="https://i.ibb.co/5kpN7YJ/clock-newyear.png" class="orologio orologio-dx">
+<!-- FIRMA -->
+<div class="credit">CREATO DAL CARTAIO</div>
 
 <script>
-const capodanno=new Date("2026-01-01T00:00:00");
-const cd=document.getElementById("cd");
+const capodanno = new Date("2026-01-01T00:00:00");
+const cd = document.getElementById("cd");
+const traPoco = document.getElementById("traPoco");
+const finale = document.getElementById("finale");
 function update(){
-    let diff=Math.floor((capodanno-new Date())/1000);
-    if(diff<=0){
-        cd.textContent="2025!!!";cd.style.fontSize="24vw";
-        document.querySelector(".buonanno").style.opacity=1;
+    let diff = Math.floor((capodanno - new Date()) / 1000);
+    if (diff <= 0) {
+        cd.style.display = "none";
+        traPoco.style.display = "none";
+        finale.classList.add("show");
         return;
     }
-    cd.textContent=diff;
+    if (diff === 1) {
+        cd.style.display = "none";
+        traPoco.classList.add("show");
+        setTimeout(() => {
+            traPoco.style.opacity = 0;
+            finale.classList.add("show");
+        }, 5000);
+        return;
+    }
+    cd.textContent = diff;
     requestAnimationFrame(update);
 }
 update();
