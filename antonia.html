@@ -1,14 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EL CARTAIO NATALE</title>
+<title>EL CARTAIO NATALE - PERFETTO</title>
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
+  * { margin:0; padding:0; box-sizing:border-box; }
   html, body {
-    margin: 0; padding: 0;
     height: 100vh; width: 100vw;
     background: #000;
     overflow: hidden;
@@ -17,76 +16,71 @@
     align-items: center;
   }
 
-  .container { 
-    position: relative; 
-    width: 100vw; 
+  .container {
+    position: relative;
+    width: 100vw;
     height: 100vh;
-    max-width: 1400px;
   }
 
-  /* VIDEO LATERALI - più piccoli */
+  /* LATERALI - ben visibili e distanziati */
   .video-wrapper {
     position: absolute;
-    width: 240px; 
-    height: 520px;
+    width: 240px;
+    height: 480px;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 16px;
     z-index: 2;
-    border: 3px solid transparent;
+    border: 4px solid transparent;
     animation: glowBorder 3s infinite ease-in-out;
-  }
-  video.side-video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
+    box-shadow: 0 0 40px rgba(255,0,0,0.8);
   }
 
-  .left-video-wrapper  { 
-    left: 20px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-  }
-  .right-video-wrapper { 
-    right: 20px; 
-    top: 50%; 
-    transform: translateY(-50%); 
+  video.side-video {
+    width: 100%; height: 100%; object-fit: cover;
   }
 
-  /* VIDEO CENTRALE - GROSSO 748px */
+  .left-video-wrapper {
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .right-video-wrapper {
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* CENTRO - grande ma NON copre i laterali */
   .center-video-wrapper {
     position: absolute;
-    top: 50%; 
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 520px;           /* rapporto 9:13 circa per stare bene */
-    height: 748px;          /* come hai chiesto tu, bello grande! */
-    max-width: 90vw;
-    max-height: 90vh;
+    width: 620px;           /* perfetto compromesso */
+    height: 480px;          /* altezza bilanciata */
+    max-width: 88vw;
+    max-height: 82vh;
     overflow: hidden;
     border-radius: 20px;
     z-index: 3;
     border: 6px solid #ff0088;
-    box-shadow: 0 0 50px #ff0000, 0 0 100px #ffff00, 0 0 160px #ff0000;
+    box-shadow: 0 0 60px #ff0000, 0 0 120px #ffff00, 0 0 180px #ff0000;
     animation: centerPulse 4s infinite alternate;
   }
 
-  .center-video-wrapper video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    border-radius: 16px; 
+  .center-video-wrapper video {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 16px;
   }
 
   @keyframes glowBorder {
-    0%   { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; border-color: #ff0000; }
-    50%  { box-shadow: 0 0 35px #ffff00, 0 0 70px #ffff00, 0 0 90px #ff8800; border-color: #ffff00; }
-    100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; border-color: #ff0000; }
+    0%, 100% { box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000; border-color: #ff0000; }
+    50%      { box-shadow: 0 0 45px #ffff00, 0 0 90px #ffff00, 0 0 110px #ff8800; border-color: #ffff00; }
   }
 
   @keyframes centerPulse {
-    0%   { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000, 0 0 160px #ff0000; }
-    50%  { box-shadow: 0 0 80px #ffff00, 0 0 140px #ffff00, 0 0 200px #ff8800; }
-    100% { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000, 0 0 160px #ff0000; }
+    0%, 100% { box-shadow: 0 0 60px #ff0000, 0 0 120px #ff0000, 0 0 180px #ff0000; }
+    50%      { box-shadow: 0 0 90px #ffff00, 0 0 160px #ffff00, 0 0 240px #ff8800; }
   }
 
   .video-text {
@@ -98,39 +92,38 @@
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 3px;
-    font-family: 'Mountains of Christmas', 'Caveat', cursive;
+    font-family: 'Mountains of Christmas', cursive;
     white-space: nowrap;
     text-shadow:
-      0 0 10px #fff,
-      0 0 20px #fff,
-      0 0 30px #ff0000,
-      0 0 50px #ff0000,
+      0 0 12px #fff,
+      0 0 24px #fff,
+      0 0 40px #ff0000,
       0 0 70px #ff0000,
-      3px 3px 8px rgba(0,0,0,0.8);
+      0 0 100px #ff0000,
+      4px 4px 12px rgba(0,0,0,0.9);
     z-index: 4;
-    animation: softGlow 3s infinite alternate;
+    animation: softGlow 2.8s infinite alternate;
   }
 
   @keyframes softGlow {
-    0%   { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 50px #ff0000; }
-    100% { text-shadow: 0 0 15px #fff, 0 0 30px #fff, 0 0 50px #ff0000, 0 0 80px #ff0000, 0 0 100px #ff0000; }
+    0%   { text-shadow: 0 0 12px #fff, 0 0 24px #fff, 0 0 40px #ff0000; }
+    100% { text-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 70px #ff0000, 0 0 120px #ff0000; }
   }
 
-  #stars-canvas { 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; 
-    height: 100%; 
-    pointer-events: none; 
-    z-index: 1; 
+  #stars-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
   }
 
-  /* Responsive per mobile */
+  /* Mobile */
   @media (max-width: 1100px) {
-    .video-wrapper { display: none; } /* nasconde i laterali su schermi piccoli */
+    .video-wrapper { display: none; }
     .center-video-wrapper {
-      width: 90vw;
-      height: 90vh;
+      width: 92vw;
+      height: 76vh;
     }
   }
 </style>
@@ -140,7 +133,8 @@
 <canvas id="stars-canvas"></canvas>
 
 <div class="container">
-  <!-- Laterali (si nascondono su mobile) -->
+
+  <!-- Sinistra -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
@@ -148,6 +142,14 @@
     <div class="video-text">DinamicFM</div>
   </div>
 
+  <!-- Centro - perfetto */
+  <div class="center-video-wrapper">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/antonia2.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Destra -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
@@ -155,15 +157,8 @@
     <div class="video-text">DinamicFM</div>
   </div>
 
-  <!-- Centro GROSSO -->
-  <div class="center-video-wrapper">
-    <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/antonia2.mp4" type="video/mp4">
-    </video>
-  </div>
 </div>
 
-<!-- Script stelle (invariato ma più fluido) -->
 <script>
 const canvas = document.getElementById('stars-canvas');
 const ctx = canvas.getContext('2d');
@@ -175,23 +170,22 @@ class Star {
   constructor() {
     this.reset();
     this.speed = Math.random() * 2 + 0.8;
-    this.color = Math.random() > 0.3 ? '#ffff99' : '#ffffff';
+    this.color = Math.random() > 0.3 ? '#ffff88' : '#ffffff';
   }
   reset() {
     this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height - canvas.height;
-    this.size = Math.random() * 3 + 1.5;
-    this.opacity = 0;
+    this.y = -50;
+    this.size = Math.random() * 3.5 + 1.5;
+    this.opacity = 1;
   }
   update() {
     this.y += this.speed;
-    this.opacity = Math.min(1, this.opacity + 0.02);
-    if (this.y > canvas.height) this.reset();
+    if (this.y > canvas.height + 50) this.reset();
   }
   draw() {
     ctx.globalAlpha = this.opacity;
     ctx.fillStyle = this.color;
-    ctx.shadowBlur = this.size * 12;
+    ctx.shadowBlur = this.size * 18;
     ctx.shadowColor = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -199,7 +193,7 @@ class Star {
   }
 }
 
-for (let i = 0; i < 180; i++) stars.push(new Star());
+for (let i = 0; i < 220; i++) stars.push(new Star());
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -216,4 +210,5 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
