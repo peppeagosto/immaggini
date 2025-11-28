@@ -15,10 +15,9 @@
     justify-content: center;
     align-items: center;
   }
-
-  .container { 
-    position: relative; 
-    width: 100vw; 
+  .container {
+    position: relative;
+    width: 100vw;
     height: 100vh;
     max-width: 1400px;
   }
@@ -26,62 +25,49 @@
   /* VIDEO LATERALI */
   .video-wrapper {
     position: absolute;
-    width: 240px; 
+    width: 240px;
     height: 520px;
     overflow: hidden;
     border-radius: 14px;
     z-index: 2;
     border: 3px solid transparent;
-
-    /* MENO SFUMATO */
     animation: glowBorder 3s infinite ease-in-out;
     filter: drop-shadow(0 0 10px #ff0000);
   }
-
-  video.side-video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
+  video.side-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-
-  .left-video-wrapper  { 
-    left: 20px; 
-    top: 50%; 
-    transform: translateY(-50%); 
+  .left-video-wrapper, .right-video-wrapper {
+    top: 54%;
+    transform: translateY(-50%);
   }
-  .right-video-wrapper { 
-    right: 20px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-  }
+  .left-video-wrapper { left: 20px; }
+  .right-video-wrapper { right: 20px; }
 
-  /* VIDEO CENTRALE - PIÙ GRANDE */
+  /* VIDEO CENTRALE */
   .center-video-wrapper {
     position: absolute;
-    top: 50%; 
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    width: 560px;      /* AUMENTATO */
-    height: 520px;     /* AUMENTATO */
-
+    width: 560px;
+    height: 520px;
     max-width: 90vw;
     max-height: 90vh;
     overflow: hidden;
-
     border-radius: 20px;
     z-index: 3;
     border: 6px solid #ff0088;
-
     box-shadow: 0 0 40px #ff0000, 0 0 80px #ffff00;
     animation: centerPulse 4s infinite alternate;
   }
-
-  .center-video-wrapper video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    border-radius: 16px; 
+  .center-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
   }
 
   @keyframes glowBorder {
@@ -89,48 +75,83 @@
     50%  { box-shadow: 0 0 20px #ffff00; border-color: #ffff00; }
     100% { box-shadow: 0 0 10px #ff0000; border-color: #ff0000; }
   }
-
   @keyframes centerPulse {
     0%   { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000; }
     50%  { box-shadow: 0 0 70px #ffff00, 0 0 140px #ff8800; }
     100% { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000; }
   }
 
+  /* TESTO BIANCO + GLOW ROSSO CHE PULSA DAVVERO FORTE */
   .video-text {
     position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     font-family: 'Mountains of Christmas', 'Caveat', cursive;
     white-space: nowrap;
+    z-index: 4;
+
+    /* GLOW BASE BIANCO + ROSSO */
     text-shadow:
       0 0 10px #fff,
       0 0 20px #fff,
       0 0 30px #ff0000,
-      3px 3px 8px rgba(0,0,0,0.8);
-    z-index: 4;
-    animation: softGlow 3s infinite alternate;
+      0 0 50px #ff0000,
+      0 0 70px #ff0000,
+      0 0 90px #ff0000,
+      3px 3px 15px rgba(0,0,0,0.9);
+
+    /* PULSAZIONE POTENTE */
+    animation: neonPulse 1.6s infinite ease-in-out;
   }
 
-  @keyframes softGlow {
-    0%   { text-shadow: 0 0 10px #fff, 0 0 30px #ff0000; }
-    100% { text-shadow: 0 0 15px #fff, 0 0 50px #ff0000; }
+  @keyframes neonPulse {
+    0% {
+      text-shadow:
+        0 0 10px #fff,
+        0 0 20px #fff,
+        0 0 30px #ff0000,
+        0 0 50px #ff0000,
+        0 0 70px #ff0000,
+        0 0 90px #ff0000,
+        3px 3px 15px rgba(0,0,0,0.9);
+    }
+    50% {
+      text-shadow:
+        0 0 20px #fff,
+        0 0 40px #fff,
+        0 0 60px #ff0000,
+        0 0 90px #ff0000,
+        0 0 120px #ff0000,
+        0 0 150px #ff0000,
+        0 0 180px #ff0000,
+        5px 5px 25px rgba(255,0,0,0.8);
+    }
+    100% {
+      text-shadow:
+        0 0 10px #fff,
+        0 0 20px #fff,
+        0 0 30px #ff0000,
+        0 0 50px #ff0000,
+        0 0 70px #ff0000,
+        0 0 90px #ff0000,
+        3px 3px 15px rgba(0,0,0,0.9);
+    }
   }
 
-  #stars-canvas { 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; 
-    height: 100%; 
-    pointer-events: none; 
-    z-index: 1; 
+  #stars-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
   }
 
-  /* Responsive per mobile */
   @media (max-width: 1100px) {
     .video-wrapper { display: none; }
     .center-video-wrapper {
@@ -145,7 +166,6 @@
 <canvas id="stars-canvas"></canvas>
 
 <div class="container">
-
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
@@ -165,7 +185,6 @@
       <source src="https://peppeagosto.github.io/immaggini/antonia2.mp4" type="video/mp4">
     </video>
   </div>
-
 </div>
 
 <script>
@@ -202,7 +221,6 @@ class Star {
     ctx.fill();
   }
 }
-
 for (let i = 0; i < 180; i++) stars.push(new Star());
 
 function animate() {
@@ -220,12 +238,3 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
