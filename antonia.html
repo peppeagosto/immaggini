@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -15,22 +16,66 @@
     justify-content: center;
     align-items: center;
   }
-  .container { position: relative; width: 1200px; height: 738px; }
 
-  /* VIDEO LATERALI */
+  .container { 
+    position: relative; 
+    width: 100vw; 
+    height: 100vh;
+    max-width: 1400px;
+  }
+
+  /* VIDEO LATERALI - più piccoli */
   .video-wrapper {
     position: absolute;
-    width: 240px; height: 520px;
+    width: 240px; 
+    height: 520px;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 14px;
     z-index: 2;
     border: 3px solid transparent;
     animation: glowBorder 3s infinite ease-in-out;
   }
-  video.side-video { width: 100%; height: 100%; object-fit: cover; }
+  video.side-video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+  }
 
-  .left-video-wrapper  { left: 40px; top: 50%; transform: translateY(-50%); }
-  .right-video-wrapper { right: 40px; top: 50%; transform: translateY(-50%); }
+  .left-video-wrapper  { 
+    left: 20px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+  }
+  .right-video-wrapper { 
+    right: 20px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+  }
+
+  /* VIDEO CENTRALE - GROSSO 748px */
+  .center-video-wrapper {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;           /* rapporto 9:13 circa per stare bene */
+    height: 748px;          /* come hai chiesto tu, bello grande! */
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+    border-radius: 20px;
+    z-index: 3;
+    border: 6px solid #ff0088;
+    box-shadow: 0 0 50px #ff0000, 0 0 100px #ffff00, 0 0 160px #ff0000;
+    animation: centerPulse 4s infinite alternate;
+  }
+
+  .center-video-wrapper video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    border-radius: 16px; 
+  }
 
   @keyframes glowBorder {
     0%   { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; border-color: #ff0000; }
@@ -38,27 +83,12 @@
     100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; border-color: #ff0000; }
   }
 
-  /* VIDEO CENTRALE (lasciato invariato) */
-  .center-video-wrapper {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 360px; height: 520px;
-    overflow: hidden;
-    border-radius: 16px;
-    z-index: 3;
-    border: 5px solid #ff0088;
-    box-shadow: 0 0 40px #ff0000, 0 0 80px #ffff00, 0 0 120px #ff0000;
-    animation: centerPulse 4s infinite alternate;
-  }
   @keyframes centerPulse {
-    0%   { box-shadow: 0 0 40px #ff0000, 0 0 80px #ff0000, 0 0 120px #ff0000; }
-    50%  { box-shadow: 0 0 60px #ffff00, 0 0 100px #ffff00, 0 0 150px #ff8800; }
-    100% { box-shadow: 0 0 40px #ff0000, 0 0 80px #ff0000, 0 0 120px #ff0000; }
+    0%   { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000, 0 0 160px #ff0000; }
+    50%  { box-shadow: 0 0 80px #ffff00, 0 0 140px #ffff00, 0 0 200px #ff8800; }
+    100% { box-shadow: 0 0 50px #ff0000, 0 0 100px #ff0000, 0 0 160px #ff0000; }
   }
-  .center-video-wrapper video { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
 
-  /* ==================== TESTI DINAMICFM MODIFICATI ==================== */
   .video-text {
     position: absolute;
     bottom: 20px;
@@ -66,52 +96,43 @@
     transform: translateX(-50%);
     font-size: 32px;
     font-weight: 700;
-    font-family: 'Mountains of Christmas', 'Caveat', cursive;
+    color: #ffffff;
     letter-spacing: 3px;
+    font-family: 'Mountains of Christmas', 'Caveat', cursive;
     white-space: nowrap;
-
-    /* Testo bianco con sfumatura bianca → rossa */
-    background: linear-gradient(180deg, #ffffff 0%, #ffaaaa 50%, #ff3333 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent; /* per browser vecchi */
-
-    /* Glow rosso super forte + animazione battito */
-    text-shadow: 
+    text-shadow:
       0 0 10px #fff,
       0 0 20px #fff,
-      0 0 40px #ff0000,
-      0 0 60px #ff0000,
-      0 0 90px #ff0000,
-      0 0 120px #ff0040;
-
+      0 0 30px #ff0000,
+      0 0 50px #ff0000,
+      0 0 70px #ff0000,
+      3px 3px 8px rgba(0,0,0,0.8);
     z-index: 4;
-
-    /* ANIMAZIONE BATTITO CARDIACO */
-    animation: heartbeat 1.4s ease-in-out infinite, glowPulse 2s infinite alternate;
+    animation: softGlow 3s infinite alternate;
   }
 
-  /* Piccolo aggiustamento per il testo di destra (era leggermente spostato) */
-  .right-video-wrapper .video-text {
-    left: 50%;
+  @keyframes softGlow {
+    0%   { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 50px #ff0000; }
+    100% { text-shadow: 0 0 15px #fff, 0 0 30px #fff, 0 0 50px #ff0000, 0 0 80px #ff0000, 0 0 100px #ff0000; }
   }
 
-  @keyframes heartbeat {
-    0%   { transform: translateX(-50%) scale(1); }
-    20%  { transform: translateX(-50%) scale(1.1); }
-    40%  { transform: translateX(-50%) scale(0.95); }
-    60%  { transform: translateX(-50%) scale(1.08); }
-    80%  { transform: translateX(-50%) scale(0.98); }
-    100% { transform: translateX(-50%) scale(1); }
+  #stars-canvas { 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; 
+    height: 100%; 
+    pointer-events: none; 
+    z-index: 1; 
   }
 
-  @keyframes glowPulse {
-    0%   { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #ff0000, 0 0 60px #ff0000, 0 0 90px #ff0000; }
-    100% { text-shadow: 0 0 15px #fff, 0 0 30px #fff, 0 0 60px #ff0044, 0 0 90px #ff0044, 0 0 130px #ff0088, 0 0 160px #ff0000; }
+  /* Responsive per mobile */
+  @media (max-width: 1100px) {
+    .video-wrapper { display: none; } /* nasconde i laterali su schermi piccoli */
+    .center-video-wrapper {
+      width: 90vw;
+      height: 90vh;
+    }
   }
-
-  #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 </style>
 </head>
 <body>
@@ -119,17 +140,12 @@
 <canvas id="stars-canvas"></canvas>
 
 <div class="container">
+  <!-- Laterali (si nascondono su mobile) -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
     </video>
     <div class="video-text">DinamicFM</div>
-  </div>
-
-  <div class="center-video-wrapper">
-    <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/antonia2.mp4" type="video/mp4">
-    </video>
   </div>
 
   <div class="video-wrapper right-video-wrapper">
@@ -138,11 +154,17 @@
     </video>
     <div class="video-text">DinamicFM</div>
   </div>
+
+  <!-- Centro GROSSO -->
+  <div class="center-video-wrapper">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/antonia2.mp4" type="video/mp4">
+    </video>
+  </div>
 </div>
 
-<!-- Script stelle (invariato) -->
+<!-- Script stelle (invariato ma più fluido) -->
 <script>
-// STELLE CADENTI NATALIZIE
 const canvas = document.getElementById('stars-canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -151,38 +173,33 @@ let stars = [];
 
 class Star {
   constructor() {
+    this.reset();
+    this.speed = Math.random() * 2 + 0.8;
+    this.color = Math.random() > 0.3 ? '#ffff99' : '#ffffff';
+  }
+  reset() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height - canvas.height;
-    this.size = Math.random() * 3.5 + 1.2;
-    this.speed = Math.random() * 1.8 + 0.6;
-    this.opacity = Math.random();
-    this.color = Math.random() > 0.4 ? '#ffff88' : '#ffffff';
+    this.size = Math.random() * 3 + 1.5;
+    this.opacity = 0;
   }
   update() {
     this.y += this.speed;
-    this.opacity = Math.sin((this.y / canvas.height) * Math.PI);
-    if (this.y > canvas.height) {
-      this.y = -30;
-      this.x = Math.random() * canvas.width;
-    }
+    this.opacity = Math.min(1, this.opacity + 0.02);
+    if (this.y > canvas.height) this.reset();
   }
   draw() {
     ctx.globalAlpha = this.opacity;
     ctx.fillStyle = this.color;
-    ctx.shadowBlur = this.size * 10;
+    ctx.shadowBlur = this.size * 12;
     ctx.shadowColor = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
-    if (this.size > 2.5) {
-      ctx.globalAlpha = this.opacity * 0.5;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
   }
 }
-for (let i = 0; i < 140; i++) stars.push(new Star());
+
+for (let i = 0; i < 180; i++) stars.push(new Star());
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
