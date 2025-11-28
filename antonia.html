@@ -21,8 +21,8 @@ html, body {
 /* CONTENITORE GENERALE */
 .container {
     position: relative;
-    width: 1300px;
-    height: 700px; /* leggermente più alto per contenere i piedi */
+    width: 690px;
+    height: 450px;
     background: transparent;
 }
 
@@ -30,11 +30,11 @@ html, body {
 .video-wrapper {
     position: absolute;
     width: 240px;
-    height: 520px; /* più alto per mostrare i piedi */
+    height: 520px;
     overflow: hidden;
     border-radius: 12px;
     z-index: 2;
-    border: 3px solid transparent; /* per il glow */
+    border: 3px solid transparent;
     animation: glowBorder 2s infinite alternate;
 }
 
@@ -44,8 +44,9 @@ video.side-video {
     object-fit: cover;
 }
 
-.left-video-wrapper { left: 0; top: 50%; transform: translateY(-50%); }
-.right-video-wrapper { right: 0; top: 50%; transform: translateY(-50%); }
+/* ALLONTANA I LATERALI DAL CENTRO */
+.left-video-wrapper { left: -90px; top: 50%; transform: translateY(-50%); }
+.right-video-wrapper { right: -90px; top: 50%; transform: translateY(-50%); }
 
 /* GLOW ANIMATO ROSSO-GIALLO */
 @keyframes glowBorder {
@@ -54,14 +55,14 @@ video.side-video {
     100% { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; border-color: #ff0000; }
 }
 
-/* VIDEO CENTRALE (più largo, centrato verticalmente) */
+/* VIDEO CENTRALE */
 .center-video-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 360px;  /* più largo dei laterali */
-    height: 520px; /* uguale ai laterali */
+    width: 360px;
+    height: 520px;
     overflow: hidden;
     border-radius: 12px;
     z-index: 3;
@@ -78,7 +79,7 @@ video.side-video {
 /* TESTI SUI VIDEO LATERALI */
 .video-text {
     position: absolute;
-    bottom: 8px; /* leggermente sopra il bordo inferiore */
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 22px;
@@ -133,3 +134,4 @@ video.side-video {
 
 </body>
 </html>
+
