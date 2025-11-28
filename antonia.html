@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DinamicFM - Natale Edition</title>
+<title>EL CARTAIO NATALE</title>
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
   html, body {
@@ -39,7 +38,7 @@
     100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; border-color: #ff0000; }
   }
 
-  /* VIDEO CENTRALE */
+  /* VIDEO CENTRALE (lasciato invariato) */
   .center-video-wrapper {
     position: absolute;
     top: 50%; left: 50%;
@@ -59,41 +58,57 @@
   }
   .center-video-wrapper video { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
 
-  /* TESTO FINALE - PICCOLO, BIANCO, SFUMATO ROSSO E GLOW DELICATO */
+  /* ==================== TESTI DINAMICFM MODIFICATI ==================== */
   .video-text {
     position: absolute;
-    bottom: 16px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 28px;                    /* più piccolo e perfetto */
+    font-size: 32px;
     font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 2px;
     font-family: 'Mountains of Christmas', 'Caveat', cursive;
+    letter-spacing: 3px;
     white-space: nowrap;
-    text-align: center;
 
-    /* GLOW BIANCO + SFUMATURA ROSSA DELICATA */
-    text-shadow:
-      0 0 8px #ffffff,
-      0 0 16px #ffffff,
-      0 0 24px #ff0000,
-      0 0 32px #ff0000,
+    /* Testo bianco con sfumatura bianca → rossa */
+    background: linear-gradient(180deg, #ffffff 0%, #ffaaaa 50%, #ff3333 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* per browser vecchi */
+
+    /* Glow rosso super forte + animazione battito */
+    text-shadow: 
+      0 0 10px #fff,
+      0 0 20px #fff,
       0 0 40px #ff0000,
-      2px 2px 6px rgba(0,0,0,0.7);
+      0 0 60px #ff0000,
+      0 0 90px #ff0000,
+      0 0 120px #ff0040;
 
     z-index: 4;
-    animation: softGlow 3s infinite alternate;
+
+    /* ANIMAZIONE BATTITO CARDIACO */
+    animation: heartbeat 1.4s ease-in-out infinite, glowPulse 2s infinite alternate;
   }
 
-  /* Piccola correzione per il destro (sempre perfetto) */
+  /* Piccolo aggiustamento per il testo di destra (era leggermente spostato) */
   .right-video-wrapper .video-text {
-    left: 50.5%;
+    left: 50%;
   }
 
-  @keyframes softGlow {
-    0%   { text-shadow: 0 0 8px #fff, 0 0 16px #fff, 0 0 24px #ff0000, 0 0 32px #ff0000; }
-    100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 45px #ff0000, 0 0 60px #ff0000; }
+  @keyframes heartbeat {
+    0%   { transform: translateX(-50%) scale(1); }
+    20%  { transform: translateX(-50%) scale(1.1); }
+    40%  { transform: translateX(-50%) scale(0.95); }
+    60%  { transform: translateX(-50%) scale(1.08); }
+    80%  { transform: translateX(-50%) scale(0.98); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
+  @keyframes glowPulse {
+    0%   { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #ff0000, 0 0 60px #ff0000, 0 0 90px #ff0000; }
+    100% { text-shadow: 0 0 15px #fff, 0 0 30px #fff, 0 0 60px #ff0044, 0 0 90px #ff0044, 0 0 130px #ff0088, 0 0 160px #ff0000; }
   }
 
   #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
@@ -125,6 +140,7 @@
   </div>
 </div>
 
+<!-- Script stelle (invariato) -->
 <script>
 // STELLE CADENTI NATALIZIE
 const canvas = document.getElementById('stars-canvas');
