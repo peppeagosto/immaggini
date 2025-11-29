@@ -5,42 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Campane di Natale 2025</title>
 <style>
-  body,html{margin:0;padding:0;height:100vh;background:#0b0d2c;overflow:hidden;display:flex;justify-content:center;align-items:center;position:relative}
-  .snowball{position:absolute;background:#fff;border-radius:50%;pointer-events:none;box-shadow:0 0 15px #fff,0 0 30px #ff3366;animation:g 3s infinite alternate}
-  .star{position:absolute;background:#ff0000;pointer-events:none;clip-path:polygon(50%0%,63%38%,100%38%,73%62%,85%100%,50%75%,15%100%,27%62%,0%38%,37%38%);box-shadow:0 0 20px #ff0000,0 0 40px #ff3366;animation:g 2.5s infinite alternate}
-  @keyframes g{0%{box-shadow:0 0 15px #fff,0 0 30px #ff3366}100%{box-shadow:0 0 25px #fff,0 0 55px #ff3366}}
-  @keyframes fall{to{transform:translateY(120vh) translateX(60px)}}
-  @keyframes fall2{to{transform:translateY(120vh) translateX(-50px)}}
+  body,html{margin:0;padding:0;height:100vh;background:#8B0000;overflow:hidden;display:flex;justify-content:center;align-items:center;position:relative;
+    background:radial-gradient(circle at center,#A00000,#600000)}
 
   .container{
     display:flex;justify-content:center;align-items:center;
-    gap:30px;                      /* spazio tra i video */
-    height:100vh;
+    gap:40px;height:100vh;padding:0 15px;
+    position:relative;z-index:10;
   }
 
-  /* CAMPANE SINISTRA E DESTRA - più strette */
+  /* CAMPANE SINISTRA E DESTRA */
   video.campana{
-    width:320px;
-    height:580px;
-    border-radius:26px;
+    width:280px;height:580px;border-radius:28px;
     object-fit:cover;
-    box-shadow:0 0 35px rgba(100,180,255,0.9);
-    z-index:10;
+    box-shadow:0 0 50px rgba(255,0,0,0.9), 0 0 90px rgba(255,100,100,0.8);
+    position:relative;z-index:10;
   }
 
-  /* TENDA CENTRALE - bella grossa come vuoi tu */
+  /* TENDA CENTRALE */
   .center-tenda{
-    width:460px;                    /* più larga di prima */
-    height:818px;                   /* perfetto 9:16 (460×818) */
-    border-radius:32px;
-    overflow:hidden;
-    box-shadow:0 0 70px rgba(255,255,255,1), 0 0 140px rgba(0,200,255,0.9);
-    z-index:20;
+    width:500px;height:889px;border-radius:38px;overflow:hidden;
+    box-shadow:0 0 60px rgba(255,255,255,0.9),0 0 100px #ff0000,0 0 140px gold,0 0 180px #ff0000;
+    position:relative;z-index:15;
+    border:4px solid transparent;
+    background:linear-gradient(white,white) padding-box,
+               repeating-linear-gradient(45deg,#ff0000 0,#ff0000 10px,gold 10px,gold 20px) border-box;
   }
-  video.tenda{
-    width:100%;height:100%;
-    object-fit:cover;
+  video.tenda{width:100%;height:100%;object-fit:cover}
+
+  /* ========== PARTICELLE DAVANTI A TUTTO ========== */
+  .snow, .goldstar{
+    position:fixed; /* fisso così copre tutto */
+    pointer-events:none;
   }
+
+  /* Neve bianca */
+  .snow{
+    background:#fff;border-radius:50%;opacity:0.9;
+    box-shadow:0 0 12px #fff;
+  }
+
+  /* Stelline dorate glitter */
+  .goldstar{
+    background:linear-gradient(45deg,#ffdd00,#ffaa00);
+    clip-path:polygon(50%0%,63%38%,100%38%,73%62%,85%100%,50%75%,15%100%,27%62%,0%38%,37%38%);
+    box-shadow:0 0 20px #ffdd00,0 0 40px #ffaa00;
+    animation:twinkle 2s infinite alternate;
+  }
+  @keyframes twinkle{
+    0%{box-shadow:0 0 15px #ffdd00,0 0 30px #ffaa00}
+    100%{box-shadow:0 0 30px #fff,0 0 70px #ffff00}
+  }
+
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+  @keyframes fall2{to{transform:translateY(110vh) translateX(-100px) rotate(-360deg)}}
 </style>
 </head>
 <body>
@@ -49,57 +67,58 @@
   <source src="https://peppeagosto.github.io/immaggini/dindon-natale-12sec.mp3" type="audio/mp3">
 </audio>
 
-<script>
-// Musica solo al primo tocco/click - 12 secondi e stop
-let played = false;
-function playBells() {
-  if (played) return;
-  played = true;
-  const audio = document.getElementById('dindon');
-  audio.volume = 0.9;
-  audio.play();
-  setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 12000);
-}
-document.addEventListener('click', playBells, {once:true});
-document.addEventListener('touchstart', playBells, {once:true});
-
-// Neve e stelline
-for(let i=0;i<130;i++){
-  let s=document.createElement("div");s.className="snowball";
-  let z=6+Math.random()*11;s.style.width=s.style.height=z+"px";
-  s.style.left=Math.random()*100+"vw";s.style.top=(-200-Math.random()*600)+"px";
-  s.style.animation=(i%2?"fall":"fall2")+" "+(16+Math.random()*18)+"s linear infinite";
-  document.body.appendChild(s);
-}
-for(let i=0;i<95;i++){
-  let st=document.createElement("div");st.className="star";
-  let z=7+Math.random()*15;st.style.width=st.style.height=z+"px";
-  st.style.left=Math.random()*100+"vw";st.style.top=(-300-Math.random()*700)+"px";
-  st.style.animation="fall "+(18+Math.random()*22)+"s linear infinite";
-  document.body.appendChild(st);
-}
-</script>
-
+<!-- VIDEO E TENDA -->
 <div class="container">
-
-  <!-- CAMPANA SINISTRA (più stretta) -->
   <video class="campana" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
   </video>
 
-  <!-- TENDA CENTRALE GROSSA E BELLA -->
   <div class="center-tenda">
     <video class="tenda" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/tenda.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- CAMPANA DESTRA (più stretta) -->
   <video class="campana" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
   </video>
-
 </div>
+
+<script>
+// Musica 12 secondi al primo ingresso
+let played=false;
+function playBells(){
+  if(played)return;
+  played=true;
+  const a=document.getElementById('dindon');
+  a.volume=0.9;a.play();
+  setTimeout(()=>{a.pause();a.currentTime=0},12000);
+}
+document.addEventListener('click',playBells,{once:true});
+document.addEventListener('touchstart',playBells,{once:true});
+
+// ==== NEVE BIANCA DAVANTI (150 fiocchi) ====
+for(let i=0;i<150;i++){
+  let s=document.createElement("div");s.className="snow";
+  let size=4+Math.random()*14;
+  s.style.width=s.style.height=size+"px";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=-100-Math.random()*200+"px";
+  s.style.animation=(i%2?"fall":"fall2")+" "+(12+Math.random()*18)+"s linear infinite";
+  document.body.appendChild(s);
+}
+
+// ==== STELLINE DORATE DAVANTI (110 stelline) ====
+for(let i=0;i<110;i++){
+  let st=document.createElement("div");st.className="goldstar";
+  let size=7+Math.random()*18;
+  st.style.width=st.style.height=size+"px";
+  st.style.left=Math.random()*100+"vw";
+  st.style.top=-200-Math.random()*400+"px";
+  st.style.animation="fall "+(15+Math.random()*22)+"s linear infinite";
+  document.body.appendChild(st);
+}
+</script>
 
 </body>
 </html>
