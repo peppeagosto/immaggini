@@ -1,75 +1,55 @@
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>campane</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campane di Natale 2025</title>
 <style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-  }
-
-  video.side-video {
-    position: absolute;
-    top: 0;
-    width: 290px;
-    height: 486px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    z-index: 1;
-  }
-
-  /* Avvicinati al centro */
-  .left-video {
-    left: -40px;
-  }
-
-  .right-video {
-    right: -40px;
-  }
-
-  img.center-image {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
-  }
+  body,html{margin:0;padding:0;height:100vh;background:#0b0d2c;overflow:hidden;display:flex;justify-content:center;align-items:center;position:relative}
+  .snowball{position:absolute;background:#fff;border-radius:50%;pointer-events:none;box-shadow:0 0 15px #fff,0 0 30px #ff3366;animation:g 3s infinite alternate}
+  .star{position:absolute;background:#ff0000;pointer-events:none;clip-path:polygon(50%0%,63%38%,100%38%,73%62%,85%100%,50%75%,15%100%,27%62%,0%38%,37%38%);box-shadow:0 0 20px #ff0000,0 0 40px #ff3366;animation:g 2.5s infinite alternate}
+  @keyframes g{0%{box-shadow:0 0 15px #fff,0 0 30px #ff3366}100%{box-shadow:0 0 25px #fff,0 0 55px #ff3366}}
+  @keyframes fall{to{transform:translateY(120vh) translateX(60px)}}
+  @keyframes fall2{to{transform:translateY(120vh) translateX(-50px)}}
+  .container{position:relative;width:1308px;height:380px;z-index:10}
+  video.side-video{top:50%;transform:translateY(-50%);position:absolute;width:220px;height:380px;object-fit:cover;border-radius:20px;box-shadow:0 0 20px rgba(100,180,255,0.8)}
+  .left-video{left:-40px}.right-video{right:-40px}
+  img.center-image{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:680px;height:380px;object-fit:cover;border-radius:20px;box-shadow:0 0 40px rgba(255,255,255,0.7),0 0 80px rgba(0,200,255,0.6);z-index:20}
 </style>
 </head>
 <body>
 
+<!-- MP3 DIN DON NATALE (12 secondi e poi stop) -->
+<audio id="dindon" preload="auto">
+  <source src="https://peppeagosto.github.io/immaggini/dindon-natale-12sec.mp3" type="audio/mp3">
+</audio>
+
+<script>
+// Parte sicuro al 100% (pc + telefono)
+function playDinDon() {
+  const audio = document.getElementById('dindon');
+  audio.volume = 0.9;
+  audio.play();
+  setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 12000);
+}
+
+// Prova da solo, altrimenti al primo tocco
+setTimeout(playDinDon, 1000);
+document.addEventListener('touchstart', playDinDon, {once:true});
+document.addEventListener('click', playDinDon, {once:true});
+
+// Neve e stelline
+for(let i=0;i<130;i++){let s=document.createElement("div");s.className="snowball";let z=6+Math.random()*11;s.style.width=s.style.height=z+"px";s.style.left=Math.random()*100+"vw";s.style.top=(-200-Math.random()*600)+"px";s.style.animation=(i%2?"fall":"fall2")+" "+(16+Math.random()*18)+"s linear infinite";document.body.appendChild(s)}
+for(let i=0;i<95;i++){let st=document.createElement("div");st.className="star";let z=7+Math.random()*15;st.style.width=st.style.height=z+"px";st.style.left=Math.random()*100+"vw";st.style.top=(-300-Math.random()*700)+"px";st.style.animation="fall "+(18+Math.random()*22)+"s linear infinite";document.body.appendChild(st)}
+</script>
+
 <div class="container">
-  <!-- Video a sinistra -->
   <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
+    <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
   </video>
-
-  <!-- Immagine centrale -->
-  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Immagine trasparente centro" />
-
-  <!-- Video a destra -->
+  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro">
   <video class="side-video right-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
+    <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
   </video>
 </div>
 
