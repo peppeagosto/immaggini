@@ -34,17 +34,18 @@
     flex-direction:column;
     align-items:center;
     gap:8px;
-    width:280px; /* larghezza totale del blocco per allineare con tenda */
+    width:280px;
   }
 
-  /* video laterali (campane) */
+  /* video laterali (campane) - solo abbassati senza ridurre altezza */
   .campana{
     width:280px;
-    height:380px;
+    height:380px; /* altezza originale mantenuta */
     border-radius:28px;
     object-fit:cover;
     box-shadow:0 0 50px rgba(255,0,0,0.9),0 0 90px rgba(255,100,100,0.8);
     display:block;
+    transform: translateY(20px); /* spostati leggermente più in basso */
   }
 
   /* center tenda (GIF) */
@@ -78,8 +79,6 @@
     text-align: center;
     margin-top: 6px;
     font-weight: 700;
-
-    /* sfumato bianco dietro il testo */
     background: rgba(255,255,255,0.22);
     padding: 6px 12px;
     border-radius: 12px;
@@ -90,29 +89,30 @@
   /* responsiveness small screens */
   @media (max-width:1100px){
     .center-gif{width:520px;height:740px}
-    .campana{width:220px;height:300px}
+    .campana{width:220px;height:300px;transform: translateY(15px);}
     .side-block{width:220px}
   }
   @media (max-width:750px){
     .container{flex-direction:column;gap:16px}
     .center-gif{width:90vw;height:60vh;border-radius:20px}
     .side-block{flex-direction:row;gap:12px;width:100%;justify-content:center}
-    .campana{width:160px;height:220px;border-radius:14px}
+    .campana{width:160px;height:220px;transform: translateY(10px);}
     .scritte-diablo{font-size:20px;padding:5px 10px;border-radius:10px}
   }
 
-  /* PARTICELLE (neve e stelle) vengono create via JS */
+  /* PARTICELLE (neve e stelle) */
   .snow, .goldstar{position:fixed;pointer-events:none;}
   .snow{background:#fff;border-radius:50%;opacity:0.9;box-shadow:0 0 12px #fff;}
   .goldstar{background:linear-gradient(45deg,#ffdd00,#ffaa00);clip-path:polygon(50%0%,63%38%,100%38%,73%62%,85%100%,50%75%,15%100%,27%62%,0%38%,37%38%);box-shadow:0 0 20px #ffdd00,0 0 40px #ffaa00;animation:twinkle 2s infinite alternate;}
   @keyframes twinkle{0%{box-shadow:0 0 15px #ffdd00,0 0 30px #ffaa00}100%{box-shadow:0 0 30px #fff,0 0 70px #ffff00}}
-  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}} @keyframes fall2{to{transform:translateY(110vh) translateX(-100px) rotate(-360deg)}}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}} 
+  @keyframes fall2{to{transform:translateY(110vh) translateX(-100px) rotate(-360deg)}}
 
 </style>
 </head>
 <body>
 
-<!-- audio campane (suona una volta al primo click/touch) -->
+<!-- audio campane -->
 <audio id="dindon" preload="auto">
   <source src="https://peppeagosto.github.io/immaggini/dindon-natale-12sec.mp3" type="audio/mp3">
 </audio>
@@ -120,7 +120,7 @@
 <!-- CONTENITORE PRINCIPALE -->
 <div class="container">
 
-  <!-- BLOCCO SINISTRO: video + scritta -->
+  <!-- BLOCCO SINISTRO -->
   <div class="side-block">
     <video class="campana" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
@@ -133,7 +133,7 @@
     <img src="https://xatimg.com/image/0tghW7qx72EB.gif" alt="Tenda Natale">
   </div>
 
-  <!-- BLOCCO DESTRO: video + scritta -->
+  <!-- BLOCCO DESTRO -->
   <div class="side-block">
     <video class="campana" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/campane25.mp4" type="video/mp4">
@@ -180,3 +180,5 @@ for(let i=0;i<110;i++){
 
 </body>
 </html>
+
+
