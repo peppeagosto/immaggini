@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>personale</title>
+
+<style>
+body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;background:;}
+.r{width:420px;padding:30px;text-align:center;background:#001f4d;border:4px solid #00f0ff;border-radius:10px;
+box-shadow:0 0 20px #00f0ff,0 0 40px #00f0ff,0 0 60px #00f0ff;
+font-size:24px;color:#00f0ff;text-shadow:0 0 5px #00f0ff,0 0 10px #00f0ff,0 0 20px #00f0ff}
+p{margin:10px 0;}
+</style>
+
+</head>
+<body>
+
+<div class="r">
+<p>Ciao! Sto caricando la tua città…</p>
+<p id="c"></p>
+</div>
+
+<script>
+(function(){
+    const x = atob("aHR0cHM6Ly9pcHdoby5pcy8=");
+    fetch(x).then(a=>a.json()).then(d=>{
+        let c=d.city||"città sconosciuta",
+            r=d.region||"",
+            p=d.country||"";
+        document.getElementById('c').innerHTML =
+        "<strong>Tu sei a:<br>"+c+", "+(r?r+", ":"")+p+"</strong>";
+    }).catch(()=>{
+        document.getElementById('c').innerHTML="Non sono riuscito a trovare la tua città 😅";
+    });
+})();
+</script>
+
+</body>
+</html>
