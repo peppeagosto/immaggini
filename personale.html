@@ -1,34 +1,40 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
-
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>personale</title>
 
 <style>
-
-body {margin:0; padding:0;}
-
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
-
+body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;background:;}
+.r{width:420px;padding:30px;text-align:center;background:#001f4d;border:4px solid #00f0ff;border-radius:10px;
+box-shadow:0 0 20px #00f0ff,0 0 40px #00f0ff,0 0 60px #00f0ff;
+font-size:24px;color:#00f0ff;text-shadow:0 0 5px #00f0ff,0 0 10px #00f0ff,0 0 20px #00f0ff}
+p{margin:10px 0;}
 </style>
 
+</head>
+<body>
 
-    </head>
-    <body>
+<div class="r">
+<p>Ciao! Sto caricando la tua città…</p>
+<p id="c"></p>
+</div>
 
+<script>
+(function(){
+    const x = atob("aHR0cHM6Ly9pcHdoby5pcy8=");
+    fetch(x).then(a=>a.json()).then(d=>{
+        let c=d.city||"città sconosciuta",
+            r=d.region||"",
+            p=d.country||"";
+        document.getElementById('c').innerHTML =
+        "<strong>Tu sei a:<br>"+c+", "+(r?r+", ":"")+p+"</strong>";
+    }).catch(()=>{
+        document.getElementById('c').innerHTML="Non sono riuscito a trovare la tua città 😅";
+    });
+})();
+</script>
 
-  
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/personale.mp4" autoplay="" loop="" muted="">
-        <source src="https://peppeagosto.github.io/immaggini/personale.mp4" type="video/mp4">
-      </video>
-
-
-
-</body></html>
+</body>
+</html>
