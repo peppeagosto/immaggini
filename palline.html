@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Buon Natale dal Cartaio</title>
+<style>
+  body{
+    margin:0;padding:0;background:#000;
+    display:flex;justify-content:center;align-items:center;
+    min-height:100vh;overflow:hidden;
+  }
+  .container{
+    max-width:1400px;
+    width:100%;
+    aspect-ratio:1400/720;
+    position:relative;
+    background:radial-gradient(circle at center,#180000 0%,#000 90%);
+    overflow:hidden;
+  }
+
+  /* NEVE */
+  .snow{position:absolute;inset:0;pointer-events:none;z-index:10;}
+  .snowflake{
+    position:absolute;color:#ffeeee;opacity:0.75;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-150px)}
+    100%{transform:translateY(calc(100% + 150px))}
+  }
+
+  /* TESTO ANCORA PIÙ PICCOLO – ORA È PERFETTO */
+  .natale-text{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-family:"Arial Black",sans-serif;
+    font-size:clamp(28px, 4.4vw, 62px);   /* ridotto ancora – perfetto con "IL CARTAIO" */
+    font-weight:900;
+    color:#ff0000;
+    letter-spacing:0.6vw;
+    white-space:nowrap;
+    text-transform:uppercase;
+    text-shadow:
+      0 0 10px #ff0000,
+      0 0 24px #ff0000,
+      0 0 48px #ff0000,
+      3px 3px 0 #880000,
+      6px 6px 0 #660000,
+      9px 9px 0 #440000,
+      12px 12px 38px #000;
+    animation:pulse 4.2s ease-in-out infinite;
+    z-index:20;
+  }
+  @keyframes pulse{
+    0%,100%{transform:translate(-50%,-50%) scale(1);}
+    50%{transform:translate(-50%,-50%) scale(1.04);}
+  }
+
+  /* CORNICE LUCINE – SEMPRE VISIBILI */
+  .christmas-border{
+    position:absolute;
+    top:-30px;left:-30px;right:-30px;bottom:-30px;
+    padding:30px;
+    box-sizing:border-box;
+    pointer-events:none;
+    z-index:30;
+  }
+  .light{
+    position:absolute;
+    width:30px;height:30px;
+    border-radius:50%;
+    box-shadow:0 0 50px 15px currentColor;
+    animation:twinkle 2.8s infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.6;transform:scale(0.9);}
+    50%{opacity:1;transform:scale(1.6);}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="snow" id="snow"></div>
+  <div class="natale-text">BUON NATALE IL CARTAIO</div>
+  <div class="christmas-border" id="lights"></div>
+</div>
+
+<script>
+// Neve
+for(let i=0;i<160;i++){
+  let f=document.createElement('div');
+  f.className='snowflake';
+  f.textContent=['❅','❆','✻','✺','*'][Math.floor(Math.random()*5)];
+  f.style.left=Math.random()*100+'%';
+  f.style.animationDuration=12+Math.random()*18+'s';
+  f.style.animationDelay=Math.random()*15+'s';
+  f.style.fontSize=10+Math.random()*22+'px';
+  document.getElementById('snow').appendChild(f);
+}
+
+// Lucine cornice – 100% visibili
+const border=document.getElementById('lights');
+const colors=['#ff0000','#00ff00','#ffff00','#00ffff','#ff00ff','#ffffff','#ff8800','#ff0088','#88ff00','#ff4444','#00ff88'];
+
+function createLights(){
+  border.innerHTML='';
+  const rect=document.querySelector('.container').getBoundingClientRect();
+  const w=rect.width, h=rect.height;
+  const step=Math.max(32, w/40);
+
+  // TOP + BOTTOM
+  for(let x=15; x<w-50; x+=step){
+    let t=document.createElement('div'); t.className='light';
+    t.style.top='0'; t.style.left=x+'px';
+    t.style.background=colors[Math.floor(Math.random()*colors.length)];
+    t.style.color=t.style.background;
+    t.style.animationDelay=Math.random()*3+'s';
+    border.appendChild(t);
+
+    let b=t.cloneNode();
+    b.style.top=(h-60)+'px';
+    border.appendChild(b);
+  }
+
+  // LEFT + RIGHT
+  for(let y=step; y<h-step*2; y+=step){
+    let l=document.createElement('div'); l.className='light';
+    l.style.left='0'; l.style.top=y+'px';
+    l.style.background=colors[Math.floor(Math.random()*colors.length)];
+    l.style.color=l.style.background;
+    l.style.animationDelay=Math.random()*3+'s';
+    border.appendChild(l);
+
+    let r=l.cloneNode();
+    r.style.left=(w-60)+'px';
+    border.appendChild(r);
+  }
+}
+
+createLights();
+window.addEventListener('resize', createLights);
+</script>
+
+</body>
+</html>
