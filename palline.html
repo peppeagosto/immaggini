@@ -10,37 +10,46 @@
     min-height:100vh;overflow:hidden;
   }
   .container{
-    max-width:1400px;
-    width:100%;
-    aspect-ratio:1400/720;
-    position:relative;
-    background:radial-gradient(circle at center,#180000 0%,#000 90%);
+    max-width:1400px;width:100%;aspect-ratio:1400/720;
+    position:relative;background:radial-gradient(circle at center,#180000 0%,#000 90%);
     overflow:hidden;
   }
 
-  /* NEVE */
+  /* STELLINE A 5 PUNTE GIALLE CHE CADONO */
+  .stars{
+    position:absolute;inset:0;pointer-events:none;z-index:15;
+  }
+  .star{
+    position:absolute;
+    color:#ffff00;
+    font-size:18px;
+    text-shadow:0 0 12px #ffff00, 0 0 24px #ffaa00;
+    animation:fallStar linear infinite;
+    opacity:0.9;
+  }
+  @keyframes fallStar{
+    0%   {transform:translateY(-100px) rotate(0deg);}
+    100% {transform:translateY(calc(100% + 100px)) rotate(360deg);}
+  }
+
+  /* NEVE BIANCA CLASSICA (leggera) */
   .snow{position:absolute;inset:0;pointer-events:none;z-index:10;}
   .snowflake{
-    position:absolute;color:#ffeeee;opacity:0.75;
+    position:absolute;color:#ffeeee;opacity:0.7;
     animation:fall linear infinite;
   }
   @keyframes fall{
-    0%{transform:translateY(-150px)}
-    100%{transform:translateY(calc(100% + 150px))}
+    0%{transform:translateY(-100px)}
+    100%{transform:translateY(calc(100% + 100px))}
   }
 
-  /* TESTO ANCORA PIÙ PICCOLO – ORA È PERFETTO */
+  /* TESTO PICCOLO E PERFETTO */
   .natale-text{
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     font-family:"Arial Black",sans-serif;
-    font-size:clamp(28px, 4.4vw, 62px);   /* ridotto ancora – perfetto con "IL CARTAIO" */
-    font-weight:900;
-    color:#ff0000;
-    letter-spacing:0.6vw;
-    white-space:nowrap;
-    text-transform:uppercase;
+    font-size:clamp(28px, 4.4vw, 62px);
+    font-weight:900;color:#ff0000;
+    letter-spacing:0.6vw;white-space:nowrap;text-transform:uppercase;
     text-shadow:
       0 0 10px #ff0000,
       0 0 24px #ff0000,
@@ -57,19 +66,13 @@
     50%{transform:translate(-50%,-50%) scale(1.04);}
   }
 
-  /* CORNICE LUCINE – SEMPRE VISIBILI */
+  /* CORNICE LUCINE NATALIZIE */
   .christmas-border{
-    position:absolute;
-    top:-30px;left:-30px;right:-30px;bottom:-30px;
-    padding:30px;
-    box-sizing:border-box;
-    pointer-events:none;
-    z-index:30;
+    position:absolute;top:-30px;left:-30px;right:-30px;bottom:-30px;
+    padding:30px;box-sizing:border-box;pointer-events:none;z-index:30;
   }
   .light{
-    position:absolute;
-    width:30px;height:30px;
-    border-radius:50%;
+    position:absolute;width:30px;height:30px;border-radius:50%;
     box-shadow:0 0 50px 15px currentColor;
     animation:twinkle 2.8s infinite;
   }
@@ -82,35 +85,52 @@
 <body>
 
 <div class="container">
+  <!-- STELLINE GIALLE -->
+  <div class="stars" id="stars"></div>
+
+  <!-- NEVE BIANCA -->
   <div class="snow" id="snow"></div>
+
   <div class="natale-text">BUON NATALE IL CARTAIO</div>
+
   <div class="christmas-border" id="lights"></div>
 </div>
 
 <script>
-// Neve
-for(let i=0;i<160;i++){
+// STELLINE A 5 PUNTE GIALLE (vere!)
+const stars = document.getElementById('stars');
+for(let i=0;i<90;i++){
+  let s = document.createElement('div');
+  s.className='star';
+  s.innerHTML = '★';                     // stellina vera a 5 punte
+  s.style.left = Math.random()*100+'%';
+  s.style.fontSize = (16 + Math.random()*20)+'px';
+  s.style.animationDuration = (8 + Math.random()*12)+'s';
+  s.style.animationDelay = Math.random()*10+'s';
+  stars.appendChild(s);
+}
+
+// Neve bianca leggera
+for(let i=0;i<120;i++){
   let f=document.createElement('div');
   f.className='snowflake';
   f.textContent=['❅','❆','✻','✺','*'][Math.floor(Math.random()*5)];
   f.style.left=Math.random()*100+'%';
   f.style.animationDuration=12+Math.random()*18+'s';
   f.style.animationDelay=Math.random()*15+'s';
-  f.style.fontSize=10+Math.random()*22+'px';
+  f.style.fontSize=10+Math.random()*20+'px';
   document.getElementById('snow').appendChild(f);
 }
 
-// Lucine cornice – 100% visibili
+// Lucine cornice
 const border=document.getElementById('lights');
-const colors=['#ff0000','#00ff00','#ffff00','#00ffff','#ff00ff','#ffffff','#ff8800','#ff0088','#88ff00','#ff4444','#00ff88'];
-
+const colors=['#ff0000','#00ff00','#ffff00','#00ffff','#ff00ff','#ffffff','#ff8800','#ff0088','#88ff00','#ff4444'];
 function createLights(){
   border.innerHTML='';
   const rect=document.querySelector('.container').getBoundingClientRect();
   const w=rect.width, h=rect.height;
   const step=Math.max(32, w/40);
 
-  // TOP + BOTTOM
   for(let x=15; x<w-50; x+=step){
     let t=document.createElement('div'); t.className='light';
     t.style.top='0'; t.style.left=x+'px';
@@ -118,13 +138,10 @@ function createLights(){
     t.style.color=t.style.background;
     t.style.animationDelay=Math.random()*3+'s';
     border.appendChild(t);
-
     let b=t.cloneNode();
     b.style.top=(h-60)+'px';
     border.appendChild(b);
   }
-
-  // LEFT + RIGHT
   for(let y=step; y<h-step*2; y+=step){
     let l=document.createElement('div'); l.className='light';
     l.style.left='0'; l.style.top=y+'px';
@@ -132,13 +149,11 @@ function createLights(){
     l.style.color=l.style.background;
     l.style.animationDelay=Math.random()*3+'s';
     border.appendChild(l);
-
     let r=l.cloneNode();
     r.style.left=(w-60)+'px';
     border.appendChild(r);
   }
 }
-
 createLights();
 window.addEventListener('resize', createLights);
 </script>
