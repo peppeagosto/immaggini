@@ -10,7 +10,7 @@
     min-height:100vh;overflow:hidden;
   }
 
-  /* CONTENITORE CENTRATO – NIENTE PIÙ MARGIN */
+  /* CONTENITORE CENTRATO */
   .container{
     max-width:1300px;
     width:100%;
@@ -107,7 +107,7 @@ for(let i=0;i<120;i++){
   document.getElementById('snow').appendChild(f);
 }
 
-// Lucine
+// Lucine cornice
 const border=document.getElementById('lights');
 const colors=['#ff0000','#00ff00','#ffff00','#00ffff','#ff00ff','#ffffff','#ff8800','#ff0088','#88ff00','#ff4444'];
 
@@ -131,18 +131,19 @@ function createLights(){
     border.appendChild(b);
   }
 
-  // Left & Right
+  // Left & Right (spostate ancora un pochino a dx)
   for(let y=step; y<h-step*2; y+=step){
     let l=document.createElement('div'); l.className='light';
-    l.style.left='50px';
+    l.style.left='68px';  // prima 65px
     l.style.top=y+'px';
     let col=colors[Math.floor(Math.random()*colors.length)];
-    l.style.background=col; l.style.color=col;
+    l.style.background=col; 
+    l.style.color=col;
     l.style.animationDelay=Math.random()*3+'s';
     border.appendChild(l);
 
     let r=l.cloneNode();
-    r.style.left=(w-90)+'px';
+    r.style.left=(w-68)+'px'; // prima w-65
     border.appendChild(r);
   }
 }
@@ -153,4 +154,6 @@ window.addEventListener('resize', createLights);
 
 </body>
 </html>
+
+
 
