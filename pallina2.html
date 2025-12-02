@@ -9,25 +9,15 @@
     display:flex;justify-content:center;align-items:center;
     min-height:100vh;overflow:hidden;
   }
+
+  /* CONTENITORE CENTRATO – NIENTE PIÙ MARGIN */
   .container{
-    max-width:1200px;width:100%;aspect-ratio:1200/748;
-    position:relative;background:radial-gradient(circle at center,#180000 0%,#000 90%);
+    max-width:1300px;
+    width:100%;
+    aspect-ratio:1300/748;
+    position:relative;
+    background:radial-gradient(circle at center,#180000 0%,#000 90%);
     overflow:hidden;
-    /* Spostamento più forte verso destra */
-    margin-left: 0px;     /* da 40 a 80px */
-    margin-right: -80px;   /* compensa a destra */
-  }
-  @media (max-width: 748px) {
-    .container {
-      margin-left: 50px;
-      margin-right: -50px;
-    }
-  }
-  @media (max-width: 480px) {
-    .container {
-      margin-left: 30px;
-      margin-right: -30px;
-    }
   }
 
   /* STELLINE GIALLE */
@@ -83,6 +73,7 @@
 </style>
 </head>
 <body>
+
 <div class="container">
   <div class="stars" id="stars"></div>
   <div class="snow" id="snow"></div>
@@ -116,7 +107,7 @@ for(let i=0;i<120;i++){
   document.getElementById('snow').appendChild(f);
 }
 
-// Lucine cornice (spostate un po' più dentro a sinistra)
+// Lucine
 const border=document.getElementById('lights');
 const colors=['#ff0000','#00ff00','#ffff00','#00ffff','#ff00ff','#ffffff','#ff8800','#ff0088','#88ff00','#ff4444'];
 
@@ -127,7 +118,7 @@ function createLights(){
   const step=Math.max(34, w/38);
 
   // Top & Bottom
-  for(let x=60; x<w-90; x+=step){  // partito da 60px invece di 15
+  for(let x=60; x<w-90; x+=step){
     let t=document.createElement('div'); t.className='light';
     t.style.top='0'; t.style.left=x+'px';
     let col=colors[Math.floor(Math.random()*colors.length)];
@@ -140,10 +131,10 @@ function createLights(){
     border.appendChild(b);
   }
 
-  // Left & Right (sinistra inizia più interna)
+  // Left & Right
   for(let y=step; y<h-step*2; y+=step){
     let l=document.createElement('div'); l.className='light';
-    l.style.left='50px';  // da 0 a 50px così non spariscono
+    l.style.left='50px';
     l.style.top=y+'px';
     let col=colors[Math.floor(Math.random()*colors.length)];
     l.style.background=col; l.style.color=col;
@@ -159,9 +150,12 @@ function createLights(){
 createLights();
 window.addEventListener('resize', createLights);
 </script>
-</body>
 
+</body>
 </html>
+
+
+
 
 
 
