@@ -1,177 +1,126 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EL CARTAIO NATALE</title>
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Caveat:wght@700&display=swap" rel="stylesheet">
-<style>
-  html, body {
-    margin: 0; padding: 0;
-    height: 100vh; width: 100vw;
-    background: transparent;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    max-width: 1400px;
-  }
+  <meta charset="UTF-8">
+  <title>EL DIABLO</title>
 
-  /* VIDEO LATERALI */
-  .video-wrapper {
-    position: absolute;
-    width: 240px;
-    height: 520px;
-    overflow: hidden;
-    border-radius: 14px;
-    z-index: 2;
-    border: 2px solid transparent;
-    animation: glowBorder 3s infinite ease-in-out;
-  }
-  video.side-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .left-video-wrapper, .right-video-wrapper {
-    top: 54%;
-    transform: translateY(-50%);
-  }
-  .left-video-wrapper { left: 20px; }
-  .right-video-wrapper { right: 20px; }
-
-  @keyframes glowBorder {
-    0% { box-shadow: 0 0 6px #ff0000; border-color: #ff0000; }
-    50% { box-shadow: 0 0 10px #ffff00; border-color: #ffff00; }
-    100% { box-shadow: 0 0 6px #ff0000; border-color: #ff0000; }
-  }
-
-  /* IMMAGINE CENTRALE SPOSTATA UN PO' PIÙ A DESTRA */
-  .center-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-45%, -50%); /* spostata circa 5% più a destra rispetto al centro perfetto */
-    width: 620px;     /* leggermente più larga così le mani entrano tutte */
-    height: auto;
-    max-width: 90vw;
-    object-fit: contain;
-    border-radius: 20px;
-    z-index: 3;
-    border: 4px solid #ff0088;
-    box-shadow: 0 0 20px #ff0000, 0 0 40px #ffff00;
-  }
-
-  /* TESTO DINAMICFM */
-  .video-text {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 30px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 4px;
-    font-family: 'Mountains of Christmas';
-    white-space: nowrap;
-    z-index: 4;
-    text-shadow: 0 0 10px #fff, 0 0 20px #ff0000;
-  }
-
-  /* STELLINE */
-  #stars-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  @media (max-width: 1100px) {
-    .video-wrapper { display: none; }
-    .center-image {
-      width: 90vw;
-      height: auto;
-      transform: translate(-50%, -50%);
+  <style>
+    body {
+      margin: 0;
+      background: ;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-  }
-</style>
+
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 486px;
+    }
+
+    .video-wrapper {
+      position: absolute;
+      width: 290px;
+      height: 486px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      z-index: 1;
+    }
+
+    video.side-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: screen;
+    }
+
+    .left-video-wrapper {
+      left: -40px;
+      top: 0;
+    }
+
+    .right-video-wrapper {
+      right: -40px;
+      top: 0;
+    }
+
+    /* ⭐ IMMAGINE CENTRALE CON ZOOM ANIMATO */
+    img.center-image {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 728px;
+      height: 486px;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
+      animation: zoom 4s ease-in-out infinite alternate;
+    }
+
+    /* ⭐ Animazione zoom morbido */
+    @keyframes zoom {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.05); }
+    }
+
+    .video-text {
+      position: absolute;
+      bottom: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .left-text {
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffffffcc;
+      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
+    }
+
+    .right-text {
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffdddd;
+      text-shadow:
+        0 0 6px #ff0000,
+        0 0 12px #ff3333,
+        0 0 20px #ff5555,
+        0 0 30px #ff0000;
+    }
+
+  </style>
 </head>
+
 <body>
-<canvas id="stars-canvas"></canvas>
 
 <div class="container">
+
+  <!-- VIDEO SINISTRO -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/dorina.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Dorina</div>
+    <div class="video-text left-text">Dorina</div>
   </div>
 
+  
+
+  <!-- VIDEO DESTRO -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/dorina2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Dorina</div>
+    <div class="video-text right-text">Dorina</div>
   </div>
 
- </spam> centro</spam>
+</div>
 
-<script>
-const canvas = document.getElementById('stars-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let stars = [];
-
-function drawStar(x, y, size, opacity) {
-  ctx.save();
-  ctx.globalAlpha = opacity;
-  ctx.fillStyle = "#FFD700";
-  ctx.beginPath();
-  ctx.arc(x, y, size, 0, Math.PI * 2);
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = "#FFD700";
-  ctx.fill();
-  ctx.restore();
-}
-
-class Star {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * -canvas.height;
-    this.size = 1 + Math.random() * 2;
-    this.speed = 0.6 + Math.random() * 1.2;
-    this.opacity = 0;
-  }
-  update() {
-    this.y += this.speed;
-    this.opacity = Math.min(1, this.opacity + 0.02);
-    if (this.y > canvas.height) this.reset();
-  }
-  draw() { drawStar(this.x, this.y, this.size, this.opacity); }
-}
-
-for (let i = 0; i < 80; i++) stars.push(new Star());
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  stars.forEach(s => { s.update(); s.draw(); });
-  requestAnimationFrame(animate);
-}
-animate();
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
 </body>
 </html>
