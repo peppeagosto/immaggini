@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Laterali Perfetti + Arcobaleno Completo</title>
+  <title>Video Laterali Stretti + Arcobaleno Perfetto (senza testi)</title>
   <style>
     body {
       margin: 0;
@@ -18,25 +17,28 @@
 
     .container {
       position: relative;
-      width: 1200px;           /* più stretto = bordi si vedono tutti */
+      width: 1200px;
       height: 486px;
     }
 
-    /* Bordo arcobaleno spesso e visibile su tutti i lati */
     .video-wrapper {
       position: absolute;
       top: 0;
-      width: 280px;            /* 200px video + 40px di bordo (20+20) */
-      height: 506px;           /* 486px + 20px sopra/sotto */
-      padding: 20px;           /* ← bordo arcobaleno bello spesso */
+      width: 220px;
+      height: 506px;
+      padding: 10px;
       background: linear-gradient(45deg,
         #ff0080, #ff8000, #ffff00, #80ff00,
         #00ffff, #0080ff, #8000ff, #ff0080);
-      background-size: 500% 500%;
-      animation: rainbow 8s linear infinite;
-      border-radius: 28px;
-      box-shadow: 0 0 40px rgba(255,255,255,0.7);
+      background-size: 600% 600%;
+      animation: rainbow 10s linear infinite;
+      border-radius: 20px;
       box-sizing: border-box;
+      box-shadow:
+        0 0 15px #00ffff,
+        0 0 30px #00ccff,
+        0 0 50px #0099ff,
+        0 0 80px rgba(0, 200, 255, 0.7);
     }
 
     @keyframes rainbow {
@@ -49,9 +51,9 @@
       width: 100%;
       height: 100%;
       background: black;
-      border-radius: 16px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
     }
 
     video {
@@ -61,71 +63,32 @@
       mix-blend-mode: screen;
     }
 
-    /* Posizionamento più interno così i bordi esterni si vedono tutti */
-    .left-video-wrapper  { left: -20px; }
-    .right-video-wrapper { right: -20px; }
-
-    .video-text {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-weight: bold;
-      font-size: 18px;
-      text-shadow: 0 0 15px black;
-      z-index: 10;
-    }
-    .left-text  { color: #00ffff; }
-    .right-text { color: #ff3366; }
-
-    /* Centro 728px (immagine opzionale) */
-    img.center-image {
-      position: absolute;
-      top: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 728px;
-      height: 486px;
-      border-radius: 14px;
-      box-shadow: 0 0 40px rgba(255,255,255,0.8);
-      z-index: 10;
-      animation: zoom 4s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-    @keyframes zoom {
-      0%   { transform: translateX(-50%) scale(1); }
-      100% { transform: translateX(-50%) scale(1.05); }
-    }
+    .left-video-wrapper  { left: -60px; }
+    .right-video-wrapper { right: -60px; }
   </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- VIDEO SINISTRO -->
+  <!-- VIDEO SINISTRO (senza testo) -->
   <div class="video-wrapper left-video-wrapper">
     <div class="video-container">
       <video autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/patrizia.mp4" type="video/mp4">
       </video>
     </div>
-    
   </div>
 
-  <!-- VIDEO DESTRO -->
+  <!-- VIDEO DESTRO (senza testo) -->
   <div class="video-wrapper right-video-wrapper">
     <div class="video-container">
       <video autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/patrizia.mp4" type="video/mp4">
       </video>
     </div>
-    
   </div>
 
-  <!-- IMMAGINE CENTRALE (se vuoi) -->
-  <!-- <img src="TUA_IMMAGINE.jpg" class="center-image"> -->
-
 </div>
-
 </body>
 </html>
