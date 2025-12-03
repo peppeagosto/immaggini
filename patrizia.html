@@ -2,8 +2,8 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>2 Video Laterali con Centro 748px</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2 Video Laterali + Bordi Arcobaleno Animati</title>
   <style>
     body {
       margin: 0;
@@ -12,22 +12,35 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
-
     .container {
       position: relative;
       width: 1308px;
       height: 486px;
     }
 
+    /* Wrapper video con bordo arcobaleno animato */
     .video-wrapper {
       position: absolute;
       width: 290px;
       height: 486px;
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      border-radius: 15px;
+      padding: 8px; /* spessore del bordo arcobaleno */
+      background: linear-gradient(45deg, #ff0000, #ff9900, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      background-size: 400% 400%;
+      animation: rainbow 8s linear infinite;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
       z-index: 1;
+    }
+
+    /* Contenitore interno per il video (per far vedere il bordo esterno) */
+    .inner-video {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: black;
     }
 
     video.side-video {
@@ -37,17 +50,17 @@
       mix-blend-mode: screen;
     }
 
-    .left-video-wrapper {
-      left: -40px;
-      top: 0;
+    .left-video-wrapper  { left: -40px; top: 0; }
+    .right-video-wrapper { right: -40px; top: 0; }
+
+    /* Animazione gradiente arcobaleno */
+    @keyframes rainbow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .right-video-wrapper {
-      right: -40px;
-      top: 0;
-    }
-
-    /* ⭐ IMMAGINE CENTRALE CON ZOOM ANIMATO */
+    /* IMMAGINE CENTRALE 728px con zoom */
     img.center-image {
       position: absolute;
       top: 0;
@@ -59,69 +72,63 @@
       user-select: none;
       z-index: 10;
       animation: zoom 4s ease-in-out infinite alternate;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
     }
 
-    /* ⭐ Animazione zoom morbido */
     @keyframes zoom {
-      0% { transform: translateX(-50%) scale(1); }
+      0%   { transform: translateX(-50%) scale(1); }
       100% { transform: translateX(-50%) scale(1.05); }
     }
 
+    /* Testi sotto i video */
     .video-text {
       position: absolute;
-      bottom: 8px;
-      font-size: 14px;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 15px;
       font-weight: bold;
       font-family: "Trebuchet MS", Arial, sans-serif;
       white-space: nowrap;
       z-index: 2;
+      text-shadow: 2px 2px 8px black;
     }
-
-    .left-text {
-      left: 50%;
-      transform: translateX(-50%);
-      color: #ffffffcc;
-      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
-    }
-
-    .right-text {
-      left: 50%;
-      transform: translateX(-50%);
-      color: #ffdddd;
-      text-shadow:
-        0 0 6px #ff0000,
-        0 0 12px #ff3333,
-        0 0 20px #ff5555,
-        0 0 30px #ff0000;
-    }
-
+    .left-text  { color: #00ffff; }
+    .right-text { color: #ff3366; }
   </style>
 </head>
-
 <body>
 
 <div class="container">
 
   <!-- VIDEO SINISTRO -->
   <div class="video-wrapper left-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4">
-    </video>
+    <div class="inner-video">
+      <video class="side-video" autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/patrizia.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="video-text left-text">Angel & Patrizia</div>
   </div>
 
-  <!-- ⭐ IMMAGINE CENTRALE NUOVA CON ZOOM -->
-  <img class="center-image" src="https://xatimg.com/image/Tb5S6E11TP5W.jpg" alt="Immagine centrata">
-
   <!-- VIDEO DESTRO -->
   <div class="video-wrapper right-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/abc.mp4" type="video/mp4">
-    </video>
+    <div class="inner-video">
+      <video class="side-video" autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/patrizia.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="video-text right-text">Angel & Patrizia</div>
   </div>
+
+  <!-- IMMAGINE CENTRALE (se vuoi metterla, altrimenti togli) -->
+  <!--
+  <img src="TUA_IMMAGINE_CENTRALE_QUI.jpg" class="center-image" alt="Centro">
+  -->
 
 </div>
 
 </body>
 </html>
+
