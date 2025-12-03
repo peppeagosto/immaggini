@@ -5,16 +5,16 @@
 <title>Buon Natale dal Cartaio</title>
 <style>
   body{
-    margin:0;padding:0;background:transparent;
+    margin:0;padding:0;background:#000;
     display:flex;justify-content:center;align-items:center;
     min-height:100vh;overflow:hidden;
   }
   .container{
-    max-width:1300px;width:100%;aspect-ratio:1300/748;
+    max-width:1300px;width:100%;aspect-ratio:1300/720;
     position:relative;background:radial-gradient(circle at center,#180000 0%,#000 90%);
     overflow:hidden;
     /* Spostamento più forte verso destra */
-    margin-left: 0px;     /* da 40 a 80px */
+    margin-left: 80px;     /* da 40 a 80px */
     margin-right: -80px;   /* compensa a destra */
   }
   @media (max-width: 768px) {
@@ -86,7 +86,7 @@
 <div class="container">
   <div class="stars" id="stars"></div>
   <div class="snow" id="snow"></div>
-  <div class="natale-text">BUONE FESTE/div>
+  <div class="natale-text">BUON NATALE IL CARTAIO</div>
   <div class="christmas-border" id="lights"></div>
 </div>
 
@@ -160,8 +160,8 @@ createLights();
 window.addEventListener('resize', createLights);
 </script>
 </body>
-
 </html>
+
 
 
 
