@@ -21,15 +21,15 @@
       height: 484px;
     }
 
-    /* VIDEO LATERALI */
+    /* VIDEO LATERALI PIÙ SOTTILI */
     .video-wrapper {
       position: absolute;
-      width: 250px;
+      width: 180px;  /* 🔥 PRIMA ERA 250px */
       height: 484px;
       overflow: hidden;
       border-radius: 10px;
       z-index: 1;
-      border: 8px solid transparent;
+      border: 3px solid transparent;
       animation: rainbowGlow 4s infinite linear;
     }
 
@@ -50,6 +50,7 @@
       100% { box-shadow: 0 0 20px #ff0000, 0 0 30px #ff7f00, 0 0 40px #ffff00, 0 0 50px #00ff00; border-color: #ff0000; }
     }
 
+    /* TESTO SOTTO VIDEO */
     .video-text {
       position: absolute;
       bottom: 8px;
@@ -58,18 +59,16 @@
       font-family: "Trebuchet MS", Arial, sans-serif;
       white-space: nowrap;
       z-index: 2;
+      width: 100%;
+      text-align: center;
     }
 
     .left-text {
-      left: 50%;
-      transform: translateX(-50%);
       color: #ffffffcc;
       text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #0088ff;
     }
 
     .right-text {
-      left: 50%;
-      transform: translateX(-50%);
       color: #ffdddd;
       text-shadow: 0 0 6px #ff0000, 0 0 12px #ff3333, 0 0 20px #ff5555, 0 0 30px #ff0000;
     }
@@ -100,6 +99,7 @@
 
 </body>
 </html>
+
 
 
 
