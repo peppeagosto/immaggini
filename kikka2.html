@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BENVENUTI 748px - GLOW 1400</title>
+  <title>BENVENUTI 748px - GLOW 1400 + ICONA</title>
   <style>
     body, html {
       margin: 0;
@@ -14,20 +14,18 @@
       font-family: 'Arial Black', sans-serif;
     }
 
-    /* Rettangolo 748px con bordo sfumato + mega glow pulsante */
+    /* Rettangolo centrale 748px */
     .box {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 748px;
-      height: 748px;                /* quadrato perfetto per le stories */
+      height: 748px;
       padding: 20px;
       border-radius: 30px;
       background: linear-gradient(45deg, #00ffff, #00f2ea, #00ffaa, #00d0ff, #00ffff);
       background-size: 400% 400%;
-      
-      /* GLOW ESTERNO NUCLEARE CHE PULSA */
       box-shadow: 
         0 0 80px #00ffff,
         0 0 160px #00f2ea,
@@ -35,11 +33,9 @@
         0 0 380px #00d0ff,
         0 0 520px rgba(0,255,255,0.9),
         0 0 680px rgba(0,255,255,0.7);
-
       animation: mega-pulse 2.5s infinite alternate, gradient 10s ease infinite;
     }
 
-    /* Rettangolo interno trasparente (dove andrà la tua foto) */
     .inner {
       width: 100%;
       height: 100%;
@@ -63,6 +59,17 @@
       animation: benvenuti 8s infinite;
     }
 
+    /* ICONA IN BASSO A DESTRA */
+    .icon {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      width: 90px;
+      z-index: 10;
+      filter: drop-shadow(0 0 40px #00ffff) drop-shadow(0 0 40px #00f2ea);
+      animation: icon-pulse 3s infinite alternate;
+    }
+
     /* Animazioni */
     @keyframes mega-pulse {
       0%   { box-shadow: 0 0 80px #00ffff, 0 0 160px #00f2ea, 0 0 260px #00ffaa, 0 0 380px #00d0ff; }
@@ -77,19 +84,27 @@
     @keyframes benvenuti {
       0%    { left: -100%; opacity: 0; }
       15%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }
-      50%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }   /* fermo 2+ sec */
+      50%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }
       60%   { opacity: 0; }
       100%  { left: 120%; opacity: 0; }
+    }
+
+    @keyframes icon-pulse {
+      0%   { filter: drop-shadow(0 0 20px #00ffff) drop-shadow(0 0 40px #00f2ea); }
+      100% { filter: drop-shadow(0 0 40px #00ffff) drop-shadow(0 0 80px #00f2ea); }
     }
   </style>
 </head>
 <body>
 
   <div class="box">
-    <div class="inner"></div>   <!-- qui dentro metti la tua foto con l'editor -->
+    <div class="inner"></div>
   </div>
 
   <div class="text">BENVENUTI</div>
+
+  <!-- ICONA IN BASSO A DESTRA -->
+  <img src="https://xatimg.com/image/lvWPGqAn6sFs.png" class="icon" alt="icon">
 
 </body>
 </html>
