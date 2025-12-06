@@ -3,107 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BENVENUTI 748px - GLOW 1400 + ICONA</title>
+  <title>BENVENUTI VERTICALE - GLOW </title>
   <style>
     body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
+      margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden;
       font-family: 'Arial Black', sans-serif;
     }
 
-    /* Rettangolo centrale 748px */
     .box {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 748px;
-      height: 748px;
-      padding: 20px;
-      border-radius: 30px;
+      width: 748px; height: 748px;
+      padding: 20px; border-radius: 30px;
       background: linear-gradient(45deg, #00ffff, #00f2ea, #00ffaa, #00d0ff, #00ffff);
       background-size: 400% 400%;
-      box-shadow: 
-        0 0 80px #00ffff,
-        0 0 160px #00f2ea,
-        0 0 260px #00ffaa,
-        0 0 380px #00d0ff,
-        0 0 520px rgba(0,255,255,0.9),
-        0 0 680px rgba(0,255,255,0.7);
+      box-shadow: 0 0 80px #00ffff, 0 0 160px #00f2ea, 0 0 260px #00ffaa, 0 0 380px #00d0ff, 0 0 520px rgba(0,255,255,0.9);
       animation: mega-pulse 2.5s infinite alternate, gradient 10s ease infinite;
     }
 
-    .inner {
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      border-radius: 20px;
-    }
+    .inner {width:100%;height:100%;background:transparent;border-radius:20px;}
 
-    /* Testo BENVENUTI */
-    .text {
+    /* TESTO VERTICALE SINISTRA */
+    .vert-left {
       position: absolute;
-      top: 50%;
-      left: -100%;
-      transform: translateY(-50%);
-      font-size: 48px;
+      left: 28%;
+      top: -100%;
+      transform: translateX(-420px) rotate(-90deg); /* -420px = poco fuori a sinistra */
+      font-size: 52px;
       font-weight: 900;
       color: #00ffff;
-      letter-spacing: 8px;
+      letter-spacing: 10px;
       text-shadow: 0 0 20px #00ffff, 0 0 50px #00f2ea, 0 0 90px #00ffff;
       white-space: nowrap;
-      pointer-events: none;
-      animation: benvenuti 8s infinite;
+      animation: down 9s infinite;
     }
 
-    /* ICONA IN BASSO A DESTRA */
+    /* TESTO VERTICALE DESTRA (specchiato) */
+    .vert-right {
+      position: absolute;
+      left: 50%;
+      top: -100%;
+      transform: translateX(420px) rotate(90deg); /* +420px = poco fuori a destra */
+      font-size: 52px;
+      font-weight: 900;
+      color: #00ffff;
+      letter-spacing: 10px;
+      text-shadow: 0 0 20px #00ffff, 0 0 50px #00f2ea, 0 0 90px #00ffff;
+      white-space: nowrap;
+      animation: down 9s infinite;
+    }
+
     .icon {
       position: absolute;
-      right: 30px;
-      bottom: 30px;
-      width: 90px;
-      z-index: 10;
-      filter: drop-shadow(0 0 40px #00ffff) drop-shadow(0 0 40px #00f2ea);
+      right: 30px; bottom: 30px;
+      width: 90px; z-index: 10;
+      filter: drop-shadow(0 0 30px #00ffff);
       animation: icon-pulse 3s infinite alternate;
     }
 
-    /* Animazioni */
-    @keyframes mega-pulse {
-      0%   { box-shadow: 0 0 80px #00ffff, 0 0 160px #00f2ea, 0 0 260px #00ffaa, 0 0 380px #00d0ff; }
-      100% { box-shadow: 0 0 160px #00ffff, 0 0 300px #00f2ea, 0 0 460px #00ffaa, 0 0 660px #00d0ff, 0 0 900px rgba(0,255,255,1); }
+    @keyframes down {
+      0%   { top: -100%; opacity: 0; }
+      15%  { top: 50%; transform: translateX(-420px) rotate(-90deg) translateY(-50%); opacity: 1; }
+      45%  { top: 50%; transform: translateX(-420px) rotate(-90deg) translateY(-50%); opacity: 1; } /* fermo 2-3 sec */
+      55%  { opacity: 0; }
+      100% { top: 110%; opacity: 0; }
     }
 
-    @keyframes gradient {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    /* destra usa la stessa animazione (è già ruotata e spostata) */
+    .vert-right { animation: down-right 9s infinite; }
+    @keyframes down-right {
+      0%   { top: -100%; opacity: 0; }
+      15%  { top: 50%; transform: translateX(420px) rotate(90deg) translateY(-50%); opacity: 1; }
+      45%  { top: 50%; transform: translateX(420px) rotate(90deg) translateY(-50%); opacity: 1; }
+      55%  { opacity: 0; }
+      100% { top: 110%; opacity: 0; }
     }
 
-    @keyframes benvenuti {
-      0%    { left: -100%; opacity: 0; }
-      15%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }
-      50%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }
-      60%   { opacity: 0; }
-      100%  { left: 120%; opacity: 0; }
-    }
-
-    @keyframes icon-pulse {
-      0%   { filter: drop-shadow(0 0 20px #00ffff) drop-shadow(0 0 40px #00f2ea); }
-      100% { filter: drop-shadow(0 0 40px #00ffff) drop-shadow(0 0 80px #00f2ea); }
-    }
+    @keyframes mega-pulse { /* stesso di prima */ }
+    @keyframes gradient { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    @keyframes icon-pulse { 0%{filter:drop-shadow(0 0 20px #00ffff)} 100%{filter:drop-shadow(0 0 50px #00ffff)} }
   </style>
 </head>
 <body>
 
-  <div class="box">
-    <div class="inner"></div>
-  </div>
+  <div class="box"><div class="inner"></div></div>
 
-  <div class="text">BENVENUTI</div>
+  <!-- TESTI VERTICALI -->
+  <div class="vert-left">BENVENUTI</div>
+  <div class="vert-right">BENVENUTI</div>
 
-  <!-- ICONA IN BASSO A DESTRA -->
+  <!-- ICONA -->
   <img src="https://xatimg.com/image/lvWPGqAn6sFs.png" class="icon" alt="icon">
 
 </body>
