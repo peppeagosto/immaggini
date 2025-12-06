@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BENVENUTI 748px - GLOW 1400</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Arial Black', sans-serif;
+    }
+
+    /* Rettangolo 748px con bordo sfumato + mega glow pulsante */
+    .box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 748px;
+      height: 748px;                /* quadrato perfetto per le stories */
+      padding: 20px;
+      border-radius: 30px;
+      background: linear-gradient(45deg, #00ffff, #00f2ea, #00ffaa, #00d0ff, #00ffff);
+      background-size: 400% 400%;
+      
+      /* GLOW ESTERNO NUCLEARE CHE PULSA */
+      box-shadow: 
+        0 0 80px #00ffff,
+        0 0 160px #00f2ea,
+        0 0 260px #00ffaa,
+        0 0 380px #00d0ff,
+        0 0 520px rgba(0,255,255,0.9),
+        0 0 680px rgba(0,255,255,0.7);
+
+      animation: mega-pulse 2.5s infinite alternate, gradient 10s ease infinite;
+    }
+
+    /* Rettangolo interno trasparente (dove andrà la tua foto) */
+    .inner {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border-radius: 20px;
+    }
+
+    /* Testo BENVENUTI */
+    .text {
+      position: absolute;
+      top: 50%;
+      left: -100%;
+      transform: translateY(-50%);
+      font-size: 48px;
+      font-weight: 900;
+      color: #00ffff;
+      letter-spacing: 8px;
+      text-shadow: 0 0 20px #00ffff, 0 0 50px #00f2ea, 0 0 90px #00ffff;
+      white-space: nowrap;
+      pointer-events: none;
+      animation: benvenuti 8s infinite;
+    }
+
+    /* Animazioni */
+    @keyframes mega-pulse {
+      0%   { box-shadow: 0 0 80px #00ffff, 0 0 160px #00f2ea, 0 0 260px #00ffaa, 0 0 380px #00d0ff; }
+      100% { box-shadow: 0 0 160px #00ffff, 0 0 300px #00f2ea, 0 0 460px #00ffaa, 0 0 660px #00d0ff, 0 0 900px rgba(0,255,255,1); }
+    }
+
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes benvenuti {
+      0%    { left: -100%; opacity: 0; }
+      15%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }
+      50%   { left: 50%; transform: translate(-50%, -50%); opacity: 1; }   /* fermo 2+ sec */
+      60%   { opacity: 0; }
+      100%  { left: 120%; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <div class="inner"></div>   <!-- qui dentro metti la tua foto con l'editor -->
+  </div>
+
+  <div class="text">BENVENUTI</div>
+
+</body>
+</html>
