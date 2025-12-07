@@ -7,14 +7,21 @@
   <style>
     body, html {margin:0;padding:0;height:100%;background:#000;overflow:hidden;font-family:'Arial Black',sans-serif;}
 
-    /* Rettangoli laterali */
-    .side-rect {
-      position:absolute;top:50%;transform:translateY(-50%);
-      height:748px;width:200px;border-radius:55px;padding:18px;box-sizing:border-box;
-      background:linear-gradient(135deg,#cc0000,#ff1a1a,#ff6600,#ffd700);
-      box-shadow:0 0 120px #ff0000,0 0 240px #ff3300,0 0 400px #ffd700;
-      animation:pulse 3s infinite alternate;z-index:4;
-    }
+    /* Rettangoli laterali più larghi */
+.side-rect {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 748px;
+  width: 280px;                  /* ← più largo */
+  border-radius: 55px;
+  padding: 18px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #cc0000, #ff1a1a, #ff6600, #ffd700);
+  box-shadow: 0 0 120px #ff0000, 0 0 240px #ff3300, 0 0 400px #ffd700;
+  animation: pulse 3s infinite alternate;
+  z-index: 4;
+}
     .left-rect  {left:calc(50% - 540px);}
     .right-rect {right:calc(50% - 540px);}
     .side-video {width:100%;height:100%;border-radius:38px;overflow:hidden;border:4px solid rgba(255,215,0,0.8);}
@@ -23,7 +30,7 @@
     /* Testo BENVENUTI */
     .text {
       position:absolute;top:50%;left:-100%;transform:translateY(-50%);
-      font-size:86px;font-weight:900;color:#ff0000;letter-spacing:20px;
+      font-size:56px;font-weight:900;color:#ff0000;letter-spacing:20px;
       text-shadow:0 0 50px #ff0000,0 0 100px #ffd700,0 0 160px #fff;
       -webkit-text-stroke:6px #ffd700;paint-order:stroke fill;
       white-space:nowrap;z-index:10;pointer-events:none;
@@ -128,6 +135,7 @@
 
 </body>
 </html>
+
 
 
 
