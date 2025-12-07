@@ -3,140 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BENVENUTI Natale Rosso - 3 Video</title>
+  <title>BENVENUTI Natale - Stelle che cadono DAVVERO</title>
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
-      font-family: 'Arial Black', sans-serif;
-    }
+    body, html {margin:0;padding:0;height:100%;background:#000;overflow:hidden;font-family:'Arial Black',sans-serif;}
 
-    /* Centrale 748×748px */
-    .box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 748px;
-      height: 748px;
-      padding: 20px;
-      border-radius: 30px;
-      background: linear-gradient(45deg, #ff0000, #ff3333, #ff0066, #b30000, #ff9900, #ffcc00, #ff0066, #006400);
-      background-size: 600% 600%;
-      box-shadow: 0 0 80px #ff0000, 0 0 160px #ff3333, 0 0 260px #ff0066, 0 0 360px #ff9900, 0 0 480px #ffd700, 0 0 620px rgba(255,215,0,0.9);
-      animation: natale-pulse 3s infinite alternate, gradient 12s ease infinite;
-      z-index: 5;
-    }
-    .inner, .side-video {
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 2px solid rgba(255,215,0,0.4);
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 18px;
-    }
-
-    /* RETTANGOLI LATERALI DX e SX - ora contengono VIDEO (140px larghi) */
+    /* Rettangoli laterali */
     .side-rect {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 748px;
-      width: 140px;               /* larghi come volevi */
-      border-radius: 40px;
-      background: linear-gradient(135deg, #ff0000, #cc0000, #ff3300, #ffd700);
-      background-size: 400% 400%;
-      box-shadow: 0 0 70px #ff0000, 0 0 140px #ff3300, 0 0 220px #ffd700, 0 0 300px rgba(255,215,0,0.8);
-      animation: natale-pulse-side 2.8s infinite alternate, gradient 10s ease infinite;
-      z-index: 4;
-      padding: 10px;              /* per non tagliare il bordo del video */
-      box-sizing: border-box;
+      position:absolute;top:50%;transform:translateY(-50%);
+      height:748px;width:200px;border-radius:55px;padding:18px;box-sizing:border-box;
+      background:linear-gradient(135deg,#cc0000,#ff1a1a,#ff6600,#ffd700);
+      box-shadow:0 0 120px #ff0000,0 0 240px #ff3300,0 0 400px #ffd700;
+      animation:pulse 3s infinite alternate;z-index:4;
     }
-    .left-rect  { left:  calc(50% - 374px - 180px); }
-    .right-rect { right: calc(50% - 374px - 180px); }
+    .left-rect  {left:calc(50% - 540px);}
+    .right-rect {right:calc(50% - 540px);}
+    .side-video {width:100%;height:100%;border-radius:38px;overflow:hidden;border:4px solid rgba(255,215,0,0.8);}
+    video {width:100%;height:100%;object-fit:cover;border-radius:35px;}
 
+    /* Testo BENVENUTI */
     .text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 68px;
-      font-weight: 900;
-      color: #ff0000;
-      letter-spacing: 14px;
-      text-shadow: 0 0 20px #ff0000, 0 0 50px #ff3333, 0 0 90px #ffd700, 3px 3px 8px #000;
-      -webkit-text-stroke: 3px #ffd700;
-      paint-order: stroke fill;
-      white-space: nowrap;
-      pointer-events: none;
-      z-index: 10;
-      animation: benvenuti 9s infinite;
+      position:absolute;top:50%;left:-100%;transform:translateY(-50%);
+      font-size:86px;font-weight:900;color:#ff0000;letter-spacing:20px;
+      text-shadow:0 0 50px #ff0000,0 0 100px #ffd700,0 0 160px #fff;
+      -webkit-text-stroke:6px #ffd700;paint-order:stroke fill;
+      white-space:nowrap;z-index:10;pointer-events:none;
+      animation:benvenuti 10s infinite;
     }
 
-    @keyframes natale-pulse, @keyframes natale-pulse-side, @keyframes gradient, @keyframes benvenuti {
-      /* identiche a prima - le ho lasciate uguali per non appesantire */
-      0%   { box-shadow: 0 0 80px #ff0000, 0 0 160px #ff3333, 0 0 260px #ff0066, 0 0 360px #ff9900; }
-      100% { box-shadow: 0 0 140px #ff0000, 0 0 280px #ff3333, 0 0 460px #ff0066, 0 0 680px #ffd700, 0 0 900px rgba(255,215,0,1); }
-    }
-    @keyframes natale-pulse-side {
-      0%   { box-shadow: 0 0 70px #ff0000, 0 0 140px #ff3300; }
-      100% { box-shadow: 0 0 120px #ff0000, 0 0 220px #ff6600, 0 0 340px #ffd700, 0 0 460px rgba(255,215,0,0.9); }
-    }
-    @keyframes gradient { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    @keyframes pulse   {0%{box-shadow:0 0 120px #ff0000}100%{box-shadow:0 0 240px #ff0000,0 0 500px #ffd700}}
     @keyframes benvenuti {
-      0%   { opacity:0; transform:translate(-50%,-50%) scale(0.7); }
-      15%  { opacity:1; transform:translate(-50%,-50%) scale(1); }
-      55%  { opacity:1; transform:translate(-50%,-50%) scale(1); }
-      65%  { opacity:0; transform:translate(-50%,-50%) scale(1.3); }
-      100% { opacity:0; }
+      0%   {left:-100%;opacity:0}
+      10%  {left:50%;transform:translate(-50%,-50%);opacity:1}
+      60%  {left:50%;transform:translate(-50%,-50%);opacity:1}
+      70%  {opacity:0}
+      100% {left:120%;opacity:0}
+    }
+
+    /* ==== STELLE CHE CADONO DAVVERO ==== */
+    .falling-star {
+      position: absolute;
+      color: #ffd700;
+      font-size: 32px;
+      pointer-events: none;
+      animation: fall linear forwards;
+      text-shadow: 0 0 20px #fff, 0 0 40px #ffd700;
     }
   </style>
 </head>
 <body>
 
-  <!-- VIDEO SINISTRO -->
+  <!-- Video sinistra -->
   <div class="side-rect left-rect">
-    <div class="side-video">
-      <video autoplay muted loop playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/palla3.mp4" type="video/mp4">
-      </video>
-    </div>
+    <div class="side-video"><video autoplay muted loop playsinline><source src="https://peppeagosto.github.io/immaggini/pallina3a.mp4" type="video/mp4"></video></div>
   </div>
 
-  
-
-  <!-- VIDEO DESTRO -->
+  <!-- Video destra -->
   <div class="side-rect right-rect">
-    <div class="side-video">
-      <video autoplay muted loop playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/palla3.mp4" type="video/mp4">
-      </video>
-    </div>
+    <div class="side-video"><video autoplay muted loop playsinline><source src="https://peppeagosto.github.io/immaggini/pallina3.mp4" type="video/mp4"></video></div>
   </div>
 
   <div class="text">BENVENUTI</div>
 
-  <!-- Fiocchi oro (opzionali) -->
+  <!-- STELLE + NEVE CHE CADONO LENTISSIME -->
   <script>
+    function createStar() {
+      const star = document.createElement('div');
+      star.className = 'falling-star';
+      star.innerHTML = '★';
+      
+      // Posizione casuale
+      star.style.left = Math.random() * 100 + 'vw';
+      
+      // Dimensione casuale
+      const size = Math.random() * 30 + 25;
+      star.style.fontSize = size + 'px';
+      
+      // Colore casuale: oro, rosso o bianco
+      const colors = ['#ffd700', '#ff0066', '#ffffff'];
+      star.style.color = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Durata caduta lenta (15-30 secondi)
+      const duration = Math.random() * 15 + 15;
+      star.style.animation = `fall ${duration}s linear forwards`;
+      
+      // Oscillazione laterale per effetto naturale
+      const sway = Math.random() * 200 - 100; // da -100px a +100px
+      star.style.setProperty('--sway', sway + 'px');
+      
+      document.body.appendChild(star);
+      
+      // Rimuovi dopo la caduta
+      setTimeout(() => star.remove(), duration * 1000);
+    }
+
+    // Crea tantissime stelle
+    setInterval(createStar, 200); // ogni 200ms = tempesta di stelle
+
+    // Anche un po' di neve classica
     setInterval(() => {
-      const s = document.createElement('div');
-      s.innerHTML = ['❅','✶','✴','❆'][Math.floor(Math.random()*4)];
-      s.style.cssText = `position:absolute; color:#ffd700; font-size:${Math.random()*15+15}px; left:${Math.random()*100}vw; pointer-events:none; animation:fall ${Math.random()*5+7}s linear infinite; opacity:${Math.random()*0.6+0.4}`;
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 14000);
-    }, 300);
+      if (Math.random() > 0.4) {
+        const snow = document.createElement('div');
+        snow.style.position = 'absolute';
+        snow.style.color = '#fff';
+        snow.style.fontSize = Math.random()*20+18 + 'px';
+        snow.style.left = Math.random()*100 + 'vw';
+        snow.style.pointerEvents = 'none';
+        snow.innerHTML = ['❅','❆','❄'][Math.floor(Math.random()*3)];
+        snow.style.animation = `fall ${Math.random()*10+12}s linear forwards`;
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 22000);
+      }
+    }, 150);
+
+    // Keyframes direttamente nello script così sono sicure
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fall {
+        0%   { transform: translateY(-100vh) translateX(0)    rotate(0deg);    opacity: 1; }
+        100% { transform: translateY(120vh)  translateX(var(--sway)) rotate(720deg); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
-  <style>
-    @keyframes fall { 0%{transform:translateY(-100vh) rotate(0deg)} 100%{transform:translateY(110vh) rotate(360deg); opacity:0} }
-  </style>
 
 </body>
 </html>
+
