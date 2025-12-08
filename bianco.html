@@ -2,10 +2,11 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 <style>
 body {
   margin: 0;
-  background: transparent;
+  background: transparent; /* trasparente */
   overflow: hidden;
 }
 
@@ -14,7 +15,7 @@ body {
   position: absolute;
   top: 50%;
   width: 280px;
-  height: 720px;
+  height: 680px;
   border-radius: 120px;
   transform: translateY(-50%);
   object-fit: cover;
@@ -22,22 +23,16 @@ body {
 
 /* SINISTRA */
 #leftVideo {
-  left: 10px; /* leggermente più a sx */
-  border: 5px solid #40E0D0; /* turchese */
-  box-shadow:
-    0 0 30px #40E0D0,
-    10px 0 60px #40E0D0,
-    inset 0 0 50px #40E0D0;
+  left: calc(50% - 400px/2 - 40px - 280px);
+  border: 5px solid #FFFFFF;
+  box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
 }
 
 /* DESTRA */
 #rightVideo {
-  right: 10px; /* leggermente più a dx */
-  border: 5px solid #40E0D0; /* turchese */
-  box-shadow:
-    0 0 30px #40E0D0,
-    -10px 0 60px #40E0D0,
-    inset 0 0 50px #40E0D0;
+  left: calc(50% + 400px/2 + 40px);
+  border: 5px solid  #FFFFFF;
+  box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
 }
 
 /* VIDEO CENTRALE */
@@ -46,29 +41,22 @@ body {
   top: 50%;
   left: 50%;
   width: 400px;
-  height: 720px;
+  height: 680px;
   transform: translate(-50%, -50%);
   border-radius: 30px;
   object-fit: cover;
   z-index: 10;
 
-  border: 5px solid #FFD700;
-  box-shadow:
-    0 0 40px #FFD700,
-    0 0 80px #FFD700,
-    0 0 120px #FFD700,
-    0 0 160px #FFD700 inset;
-
+  border: 5px solid #40E0D0;
+  box-shadow: 0 0 30px #40E0D0, 0 0 60px #40E0D0, 0 0 90px #40E0D0, 0 0 120px #40E0D0 inset;
   animation: centerAnim 6s infinite ease-in-out;
 }
 
-/* Animazione glow + zoom + leggera oscillazione */
 @keyframes centerAnim {
-  0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); box-shadow:0 0 40px #FFD700,0 0 80px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700 inset; }
-  25%  { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); box-shadow:0 0 50px #FFD700,0 0 100px #FFD700,0 0 140px #FFD700,0 0 180px #FFD700 inset; }
-  50%  { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); box-shadow:0 0 60px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700,0 0 200px #FFD700 inset; }
-  75%  { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); box-shadow:0 0 50px #FFD700,0 0 100px #FFD700,0 0 140px #FFD700,0 0 180px #FFD700 inset; }
-  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); box-shadow:0 0 40px #FFD700,0 0 80px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700 inset; }
+  0%,100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  25% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
+  50% { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); }
+  75% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
 }
 
 /* TESTO CENTRALE */
@@ -90,33 +78,41 @@ body {
   100% { transform: translateX(-20%); }
 }
 
-/* TESTO SOPRA IL VIDEO CENTRALE */
+/* TESTO SOPRA IL VIDEO CENTRALE - IL CARTAIO HORROR 3D */
 #videoText {
   position: absolute;
-  bottom: 30px; /* quasi a fine video */
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 28px;
+  font-size: 36px;
+  font-family: 'Creepster', cursive;
   font-weight: bold;
-  color: #FFD700;
-  font-family: 'Arial Black', sans-serif;
+  color: #FFFFFF;
   text-shadow:
-    0 0 5px #fff,
-    0 0 10px #FFD700,
-    0 0 20px #FFD700,
-    0 0 30px #FFD700;
+    2px 2px 0 #888,
+    4px 4px 0 #555,
+    6px 6px 0 #222,
+    0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 30px #fff;
   z-index: 20;
   pointer-events: none;
+  animation: pulseText 2s infinite ease-in-out;
+}
+
+@keyframes pulseText {
+  0%,100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.08); }
 }
 </style>
 </head>
 <body>
 
-<div class="center-text">BENVENUTI</div>
+<div class="center-text">cartaio</div>
 
 <!-- VIDEO LATERALE SINISTRO -->
 <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
-  <source src="https://peppeagosto.github.io/immaggini/fant.mp4" type="video/mp4">
+  <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
 <!-- VIDEO CENTRALE -->
@@ -125,34 +121,14 @@ body {
 </video>
 
 <!-- TESTO SOPRA IL VIDEO CENTRALE -->
-<div id="videoText">Testo modificato dal Cartaio</div>
+<div id="videoText">il Cartaio</div>
 
 <!-- VIDEO LATERALE DESTRO -->
 <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
-<script>
-// LISTA DEI VIDEO CHE SI ALTERNANO
-const videos = [
-  "https://peppeagosto.github.io/immaggini/fant.mp4",
-  "https://peppeagosto.github.io/immaggini/bianco0.mp4"
-];
-
-const left = document.getElementById("leftVideo");
-const right = document.getElementById("rightVideo");
-
-let index = 0;
-
-// CAMBIA VIDEO LATERALI OGNI 16 SECONDI
-setInterval(() => {
-  index = (index + 1) % videos.length;
-  left.querySelector('source').src = videos[index];
-  left.load();
-  right.querySelector('source').src = videos[index];
-  right.load();
-}, 16000);
-</script>
-
 </body>
 </html>
+
+
