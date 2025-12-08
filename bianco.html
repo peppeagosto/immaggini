@@ -2,76 +2,157 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>CARTAIO – ANGELO DI FUOCO</title>
 <style>
-  body{margin:0;background:#000;height:100vh;display:flex;justify-content:center;align-items:center}
+body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+}
 
-  .main{width:680px;height:580px;position:relative}
+/* VIDEO LATERALI */
+.side-video {
+  position: absolute;
+  top: 50%;
+  width: 280px;
+  height: 720px;
+  border-radius: 120px;
+  transform: translateY(-50%);
+  object-fit: cover;
+}
 
-  /* BORDO BIANCO 3D GLOW fortissimo */
-  .glow3d {
-    border:5px solid #fff;
-    border-radius:22px;
-    box-shadow:
-      0 0 30px #fff,
-      0 0 60px #fff,
-      0 0 90px #ffffff,
-      0 0 120px #ff3300,
-      inset 0 0 40px #ffffff66;
-  }
+/* SINISTRA */
+#leftVideo {
+  left: 10px; /* leggermente più a sx */
+  border: 5px solid #40E0D0; /* turchese */
+  box-shadow:
+    0 0 30px #40E0D0,
+    10px 0 60px #40E0D0,
+    inset 0 0 50px #40E0D0;
+}
 
-  /* VIDEO LATERALI – si scambiano ogni 20 secondi */
-  .side{width:160px;height:460px;object-fit:cover;position:absolute;top:60px;border-radius:22px}
-  .left{left:0;animation:goRight 40s infinite linear}
-  .right{right:0;animation:goLeft 40s infinite linear}
+/* DESTRA */
+#rightVideo {
+  right: 10px; /* leggermente più a dx */
+  border: 5px solid #40E0D0; /* turchese */
+  box-shadow:
+    0 0 30px #40E0D0,
+    -10px 0 60px #40E0D0,
+    inset 0 0 50px #40E0D0;
+}
 
-  @keyframes goRight{0%,48%{left:0}52%,100%{left:520px}}
-  @keyframes goLeft{0%,48%{right:0}52%,100%{right:520px}}
+/* VIDEO CENTRALE */
+#centerVideo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 720px;
+  transform: translate(-50%, -50%);
+  border-radius: 30px;
+  object-fit: cover;
+  z-index: 10;
 
-  /* CENTRO – ANGELO DI FUOCO */
-  .center{
-    position:absolute;left:50%;top:60px;
-    width:320px;height:460px;
-    transform:translateX(-50%);
-    border-radius:22px;
-    overflow:hidden;
-  }
+  border: 5px solid #FFD700;
+  box-shadow:
+    0 0 40px #FFD700,
+    0 0 80px #FFD700,
+    0 0 120px #FFD700,
+    0 0 160px #FFD700 inset;
 
-  .footer{
-    position:absolute;bottom:15px;left:50%;transform:translateX(-50%);
-    font-family:Impact,sans-serif;font-size:26px;letter-spacing:6px;
-    background:linear-gradient(90deg,#ff0000,#ff7700,#ffff00,#ff0000);
-    background-size:400%;-webkit-background-clip:text;color:transparent;
-    animation:r 4s linear infinite;text-shadow:0 0 30px #fff}
-  @keyframes r{0%{background-position:0%}100%{background-position:400%}}
+  animation: centerAnim 6s infinite ease-in-out;
+}
 
-  .typing{
-    position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:10;
-    font-family:'Creepster',cursive;font-size:36px;
-    background:linear-gradient(to right,#ff0000,#ffffff,#ff8800);
-    -webkit-background-clip:text;color:transparent;text-shadow:0 0 30px #fff}
+/* Animazione glow + zoom + leggera oscillazione */
+@keyframes centerAnim {
+  0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); box-shadow:0 0 40px #FFD700,0 0 80px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700 inset; }
+  25%  { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); box-shadow:0 0 50px #FFD700,0 0 100px #FFD700,0 0 140px #FFD700,0 0 180px #FFD700 inset; }
+  50%  { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); box-shadow:0 0 60px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700,0 0 200px #FFD700 inset; }
+  75%  { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); box-shadow:0 0 50px #FFD700,0 0 100px #FFD700,0 0 140px #FFD700,0 0 180px #FFD700 inset; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); box-shadow:0 0 40px #FFD700,0 0 80px #FFD700,0 0 120px #FFD700,0 0 160px #FFD700 inset; }
+}
+
+/* TESTO CENTRALE */
+.center-text {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  font-size: 55px;
+  font-weight: bold;
+  color: white;
+  font-family: Arial Black, sans-serif;
+  animation: slide 6s infinite linear;
+}
+
+@keyframes slide {
+  0% { transform: translateX(-20%); }
+  50% { transform: translateX(20%); }
+  100% { transform: translateX(-20%); }
+}
+
+/* TESTO SOPRA IL VIDEO CENTRALE */
+#videoText {
+  position: absolute;
+  bottom: 30px; /* quasi a fine video */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: #FFD700;
+  font-family: 'Arial Black', sans-serif;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #FFD700,
+    0 0 20px #FFD700,
+    0 0 30px #FFD700;
+  z-index: 20;
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
 
-<div class="main">
+<div class="center-text">BENVENUTI</div>
 
-  <!-- VIDEO SINISTRA (parte SX) -->
-  <video class="side left glow3d" src="https://peppeagosto.github.fant/immaggini/fant.mp4" autoplay loop muted></video>
+<!-- VIDEO LATERALE SINISTRO -->
+<video id="leftVideo" class="side-video" autoplay loop muted playsinline>
+  <source src="https://peppeagosto.github.io/immaggini/fant.mp4" type="video/mp4">
+</video>
 
-  <!-- VIDEO DESTRA (parte DX) -->
-  <video class="side right glow3d" src="https://peppeagosto.github.io/immaggini/bianco0.mp4" autoplay loop muted></video>
+<!-- VIDEO CENTRALE -->
+<video id="centerVideo" autoplay loop muted playsinline>
+  <source src="https://peppeagosto.github.io/immaggini/master.mp4" type="video/mp4">
+</video>
 
-    <div class="center glow3d">
-    <video width="320" height="460" autoplay loop muted>
-      <source src="https://peppeagosto.github.io/immaggini/master.mp4" type="video/mp4">
-    </video>
-    <div class="typing">BENVENUTO DAL CARTAIO</div>
-  </div>
+<!-- TESTO SOPRA IL VIDEO CENTRALE -->
+<div id="videoText">Testo modificato dal Cartaio</div>
 
-  <div class="footer">CODICE MODIFICATO DA CARTAIO</div>
+<!-- VIDEO LATERALE DESTRO -->
+<video id="rightVideo" class="side-video" autoplay loop muted playsinline>
+  <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
+</video>
 
-</div>
+<script>
+// LISTA DEI VIDEO CHE SI ALTERNANO
+const videos = [
+  "https://peppeagosto.github.io/immaggini/fant.mp4",
+  "https://peppeagosto.github.io/immaggini/bianco0.mp4"
+];
+
+const left = document.getElementById("leftVideo");
+const right = document.getElementById("rightVideo");
+
+let index = 0;
+
+// CAMBIA VIDEO LATERALI OGNI 16 SECONDI
+setInterval(() => {
+  index = (index + 1) % videos.length;
+  left.querySelector('source').src = videos[index];
+  left.load();
+  right.querySelector('source').src = videos[index];
+  right.load();
+}, 16000);
+</script>
 
 </body>
 </html>
