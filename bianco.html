@@ -6,8 +6,11 @@
 <style>
 body {
   margin: 0;
-  background: transparent; /* trasparente */
+  background: transparent;
   overflow: hidden;
+  width: 1400px;
+  height: 748px;
+  position: relative;
 }
 
 /* VIDEO LATERALI */
@@ -21,17 +24,17 @@ body {
   object-fit: cover;
 }
 
-/* SINISTRA */
+/* VIDEO SINISTRO - perfettamente a SX */
 #leftVideo {
-  left: calc(50% - 400px/2 - 40px - 280px);
+  left: 0px;
   border: 5px solid #FFFFFF;
   box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
 }
 
-/* DESTRA */
+/* VIDEO DESTRO - perfettamente a DX */
 #rightVideo {
-  left: calc(50% + 400px/2 + 40px);
-  border: 5px solid  #FFFFFF;
+  right: 0px;
+  border: 5px solid #FFFFFF;
   box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
 }
 
@@ -59,7 +62,7 @@ body {
   75% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
 }
 
-/* TESTO CENTRALE */
+/* TESTO IN ALTO */
 .center-text {
   position: absolute;
   top: 40px;
@@ -78,7 +81,7 @@ body {
   100% { transform: translateX(-20%); }
 }
 
-/* TESTO SOPRA IL VIDEO CENTRALE - IL CARTAIO HORROR 3D */
+/* TESTO SUL VIDEO CENTRALE */
 #videoText {
   position: absolute;
   bottom: 30px;
@@ -110,25 +113,27 @@ body {
 
 <div class="center-text">cartaio</div>
 
+<!-- VIDEO SINISTRO -->
 <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
-
+<!-- VIDEO CENTRALE -->
 <video id="centerVideo" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/master.mp4" type="video/mp4">
 </video>
 
-
 <div id="videoText">il Cartaio</div>
 
-
+<!-- VIDEO DESTRO -->
 <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
 </body>
 </html>
+
+
 
 
 
