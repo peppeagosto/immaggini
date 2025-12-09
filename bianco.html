@@ -13,7 +13,7 @@ body {
   position: relative;
 }
 
-/* VIDEO LATERALI */
+/* VIDEO LATERALI - GLOW FORTE BIANCO/TURCHESE */
 .side-video {
   position: absolute;
   top: 50%;
@@ -22,36 +22,47 @@ body {
   border-radius: 120px;
   transform: translateY(-50%);
   object-fit: cover;
+  z-index: 5;
 }
 
-/* VIDEO SINISTRO */
 #leftVideo {
-  left: 25px;
-  border: 5px solid #FFFFFF;
-  box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
+  left: 30px;
+  border: 6px solid #40E0D0;
+  box-shadow: 
+    0 0 40px #40E0D0,
+    0 0 80px #40E0D0,
+    0 0 120px #FFFFFF,
+    0 0 160px #40E0D0,
+    inset 0 0 60px rgba(64, 224, 208, 0.6);
 }
 
-/* VIDEO DESTRO — SPOSATO PIÙ A SINISTRA */
 #rightVideo {
-  right: 71px; /* ❤️ CORREZIONE FATTA QUI */
-  border: 5px solid #FFFFFF;
-  box-shadow: 0 0 60px #FFFFFF, inset 0 0 40px #FFFFFF;
+  right: 30px;
+  border: 6px solid #40E0D0;
+  box-shadow: 
+    0 0 40px #40E0D0,
+    0 0 80px #40E0D0,
+    0 0 120px #FFFFFF,
+    0 0 160px #40E0D0,
+    inset 0 0 60px rgba(64, 224, 208, 0.6);
 }
 
-/* VIDEO CENTRALE */
+/* VIDEO CENTRALE - PIÙ GRANDE + GLOW LEGGERO */
 #centerVideo {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 400px;
+  width: 560px;           /* ingrandito */
   height: 680px;
   transform: translate(-50%, -50%);
-  border-radius: 30px;
+  border-radius: 40px;
   object-fit: cover;
   z-index: 10;
-
-  border: 5px solid #40E0D0;
-  box-shadow: 0 0 30px #40E0D0, 0 0 60px #40E0D0, 0 0 90px #40E0D0, 0 0 120px #40E0D0 inset;
+  border: 6px solid #40E0D0;
+  box-shadow: 
+    0 0 20px #40E0D0,
+    0 0 40px rgba(64, 224, 208, 0.5),
+    inset 0 0 30px rgba(64, 224, 208, 0.3);
   animation: centerAnim 6s infinite ease-in-out;
 }
 
@@ -62,68 +73,19 @@ body {
   75% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
 }
 
-/* TESTO IN ALTO */
-.center-text {
-  position: absolute;
-  top: 40px;
-  width: 100%;
-  text-align: center;
-  font-size: 55px;
-  font-weight: bold;
-  color: white;
-  font-family: Arial Black, sans-serif;
-  animation: slide 6s infinite linear;
-}
-
-@keyframes slide {
-  0% { transform: translateX(-20%); }
-  50% { transform: translateX(20%); }
-  100% { transform: translateX(-20%); }
-}
-
-/* TESTO SUL VIDEO CENTRALE */
-#videoText {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 36px;
-  font-family: 'Creepster', cursive;
-  font-weight: bold;
-  color: #FFFFFF;
-  text-shadow:
-    2px 2px 0 #888,
-    4px 4px 0 #555,
-    6px 6px 0 #222,
-    0 0 10px #fff,
-    0 0 20px #fff,
-    0 0 30px #fff;
-  z-index: 20;
-  pointer-events: none;
-  animation: pulseText 2s infinite ease-in-out;
-}
-
-@keyframes pulseText {
-  0%,100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.08); }
-}
 </style>
 </head>
 <body>
-
-<div class="center-text">cartaio</div>
 
 <!-- VIDEO SINISTRO -->
 <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
-<!-- VIDEO CENTRALE -->
+<!-- VIDEO CENTRALE (più grande) -->
 <video id="centerVideo" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/master.mp4" type="video/mp4">
 </video>
-
-<div id="videoText">il Cartaio</div>
 
 <!-- VIDEO DESTRO -->
 <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
@@ -132,6 +94,7 @@ body {
 
 </body>
 </html>
+
 
 
 
