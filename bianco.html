@@ -6,7 +6,7 @@
 <style>
 body {
   margin: 0;
-  background: transparent;
+  background: #000;
   overflow: hidden;
   width: 1400px;
   height: 748px;
@@ -26,9 +26,9 @@ body {
 }
 
 #leftVideo {
-  left: 30px;
+  left: 60px;   /* spostato per simmetria */
   border: 6px solid #40E0D0;
-  box-shadow: 
+  box-shadow:
     0 0 40px #40E0D0,
     0 0 80px #40E0D0,
     0 0 120px #FFFFFF,
@@ -37,9 +37,9 @@ body {
 }
 
 #rightVideo {
-  right: 30px;
+  right: 60px;  /* ora uguale al sinistro → perfetto! */
   border: 6px solid #40E0D0;
-  box-shadow: 
+  box-shadow:
     0 0 40px #40E0D0,
     0 0 80px #40E0D0,
     0 0 120px #FFFFFF,
@@ -47,19 +47,19 @@ body {
     inset 0 0 60px rgba(64, 224, 208, 0.6);
 }
 
-/* VIDEO CENTRALE - PIÙ GRANDE + GLOW LEGGERO */
+/* VIDEO CENTRALE - PIÙ GRANDE */
 #centerVideo {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 560px;           /* ingrandito */
+  width: 560px;
   height: 680px;
   transform: translate(-50%, -50%);
   border-radius: 40px;
   object-fit: cover;
   z-index: 10;
   border: 6px solid #40E0D0;
-  box-shadow: 
+  box-shadow:
     0 0 20px #40E0D0,
     0 0 40px rgba(64, 224, 208, 0.5),
     inset 0 0 30px rgba(64, 224, 208, 0.3);
@@ -68,32 +68,29 @@ body {
 
 @keyframes centerAnim {
   0%,100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-  25% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
-  50% { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); }
-  75% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
+  25%     { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
+  50%     { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); }
+  75%     { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
 }
-
 </style>
 </head>
 <body>
 
-<!-- VIDEO SINISTRO -->
 <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
-<!-- VIDEO CENTRALE (più grande) -->
 <video id="centerVideo" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/master.mp4" type="video/mp4">
 </video>
 
-<!-- VIDEO DESTRO -->
 <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
   <source src="https://peppeagosto.github.io/immaggini/bianco0.mp4" type="video/mp4">
 </video>
 
 </body>
 </html>
+
 
 
 
