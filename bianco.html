@@ -13,7 +13,7 @@ body {
   position: relative;
 }
 
-/* VIDEO LATERALI - GLOW FORTE BIANCO/TURCHESE */
+/* VIDEO LATERALI */
 .side-video {
   position: absolute;
   top: 50%;
@@ -26,28 +26,18 @@ body {
 }
 
 #leftVideo {
-  left: 60px;   /* spostato per simmetria */
+  left: 100px;   /* ← distanza perfetta */
   border: 6px solid #40E0D0;
-  box-shadow:
-    0 0 40px #40E0D0,
-    0 0 80px #40E0D0,
-    0 0 120px #FFFFFF,
-    0 0 160px #40E0D0,
-    inset 0 0 60px rgba(64, 224, 208, 0.6);
+  box-shadow: 0 0 40px #40E0D0, 0 0 80px #40E0D0, 0 0 120px #FFFFFF, 0 0 160px #40E0D0, inset 0 0 60px rgba(64,224,208,0.6);
 }
 
 #rightVideo {
-  right: 60px;  /* ora uguale al sinistro → perfetto! */
+  right: 100px;  /* ← stessa identica distanza del sinistro */
   border: 6px solid #40E0D0;
-  box-shadow:
-    0 0 40px #40E0D0,
-    0 0 80px #40E0D0,
-    0 0 120px #FFFFFF,
-    0 0 160px #40E0D0,
-    inset 0 0 60px rgba(64, 224, 208, 0.6);
+  box-shadow: 0 0 40px #40E0D0, 0 0 80px #40E0D0, 0 0 120px #FFFFFF, 0 0 160px #40E0D0, inset 0 0 60px rgba(64,224,208,0.6);
 }
 
-/* VIDEO CENTRALE - PIÙ GRANDE */
+/* VIDEO CENTRALE */
 #centerVideo {
   position: absolute;
   top: 50%;
@@ -59,18 +49,15 @@ body {
   object-fit: cover;
   z-index: 10;
   border: 6px solid #40E0D0;
-  box-shadow:
-    0 0 20px #40E0D0,
-    0 0 40px rgba(64, 224, 208, 0.5),
-    inset 0 0 30px rgba(64, 224, 208, 0.3);
+  box-shadow: 0 0 20px #40E0D0, 0 0 40px rgba(64,224,208,0.5), inset 0 0 30px rgba(64,224,208,0.3);
   animation: centerAnim 6s infinite ease-in-out;
 }
 
 @keyframes centerAnim {
   0%,100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-  25%     { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
-  50%     { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); }
-  75%     { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
+  25% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
+  50% { transform: translate(-50%, -50%) scale(1.05) rotate(-1deg); }
+  75% { transform: translate(-50%, -50%) scale(1.02) rotate(1deg); }
 }
 </style>
 </head>
@@ -90,6 +77,7 @@ body {
 
 </body>
 </html>
+
 
 
 
