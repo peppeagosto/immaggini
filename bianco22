@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+    width: 1400px;
+    height: 748px;
+    position: relative;
+  }
+
+  /* VIDEO LATERALI */
+  .side-video {
+    position: absolute;
+    top: 50%;
+    width: 280px;
+    height: 680px;
+    border-radius: 120px;
+    transform: translateY(-50%);
+    object-fit: cover;
+    z-index: 5;
+    border: 6px solid #FFFFFF;
+    box-shadow:
+      0 0 90px #FFFFFF,
+      0 0 160px #40E0D0,
+      inset 0 0 80px rgba(255,255,255,0.9);
+  }
+
+  #leftVideo  { left: 28px; }
+  #rightVideo { right: 80px; }
+
+  /* VIDEO CENTRALE - SPOSTATO A SINISTRA */
+  #centerVideo {
+    position: absolute;
+    top: 50%;
+    left: 48%;   /* ← SPOSTAMENTO A SINISTRA */
+    width: 560px;
+    height: 680px;
+    transform: translate(-50%, -50%);
+    border-radius: 40px;
+    object-fit: cover;
+    z-index: 10;
+    border: 6px solid #40E0D0;
+    box-shadow:
+      0 0 50px #40E0D0,
+      0 0 100px #40E0D0,
+      0 0 160px #FFFFFF,
+      inset 0 0 60px rgba(64,224,208,0.6);
+    animation: centerAnim 6s infinite ease-in-out;
+  }
+
+  @keyframes centerAnim {
+    0%,100% { transform: translate(-50%,-50%) scale(1) rotate(0deg); }
+    25% { transform: translate(-50%,-50%) scale(1.02) rotate(1deg); }
+    50% { transform: translate(-50%,-50%) scale(1.05) rotate(-1deg); }
+    75% { transform: translate(-50%,-50%) scale(1.02) rotate(1deg); }
+  }
+
+  /* TITOLO SOTTO */
+  #videoText {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 60px;
+    color: #FFFFFF;
+    font-family: 'Creepster', cursive;
+    text-shadow:
+      0 0 30px #40E0D0,
+      0 0 70px #40E0D0,
+      0 0 120px #fff,
+      6px 6px 20px #000;
+    z-index: 20;
+    pointer-events: none;
+    animation: pulseText 2s infinite ease-in-out;
+  }
+
+  @keyframes pulseText {
+    0%,100% { transform: translateX(-50%) scale(1); }
+    50%     { transform: translateX(-50%) scale(1.18); }
+  }
+</style>
+</head>
+<body>
+
+  <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/pink.mp4" type="video/mp4">
+  </video>
+
+  <video id="centerVideo" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/wj.mp4" type="video/mp4">
+  </video>
+
+  <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/pink.mp4" type="video/mp4">
+  </video>
+
+  <div id="videoText">IL CARTAIO</div>
+
+</body>
+</html>
