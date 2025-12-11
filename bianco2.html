@@ -2,16 +2,28 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<title>IL CARTAIO</title>
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 <style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
   body {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    overflow: hidden;
     width: 1400px;
     height: 748px;
+    overflow: hidden;
     position: relative;
+    background: #000;
+  }
+
+  /* SFONDO = home.mp4 sfocato (oro e stelline perfetti) */
+  #bgVideo {
+    position: fixed;
+    top: 50%; left: 50%;
+    min-width: 100%; min-height: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    filter: blur(10px) brightness(0.7) saturate(1.5);
+    opacity: 0.9;
   }
 
   /* VIDEO LATERALI */
@@ -23,34 +35,44 @@
     border-radius: 120px;
     transform: translateY(-50%);
     object-fit: cover;
-    z-index: 5;
-    border: 6px solid #FFFFFF;
-    box-shadow:
-      0 0 90px #FFFFFF,
-      0 0 160px #40E0D0,
-      inset 0 0 80px rgba(255,255,255,0.9);
+    z-index: 10;
+    
+    /* Bordo bianco interno */
+    border: 8px solid #ffffff;
+    
+    /* GLOW ORO ESTERNO POTENTE */
+    box-shadow: 
+      0 0 60px 30px #ffd700,
+      0 0 100px 50px #ffaa00,
+      0 0 140px 70px #ff9500,
+      0 0 180px 90px rgba(255,215,0,0.6),
+      inset 0 0 80px rgba(255,255,255,0.8);
   }
-
   #leftVideo  { left: 28px; }
   #rightVideo { right: 80px; }
 
-  /* VIDEO CENTRALE - SPOSTATO A SINISTRA */
+  /* VIDEO CENTRALE */
   #centerVideo {
     position: absolute;
     top: 50%;
-    left: 48%;   /* ← SPOSTAMENTO A SINISTRA */
+    left: 48%;
     width: 560px;
     height: 680px;
     transform: translate(-50%, -50%);
     border-radius: 40px;
     object-fit: cover;
-    z-index: 10;
-    border: 6px solid #40E0D0;
-    box-shadow:
-      0 0 50px #40E0D0,
-      0 0 100px #40E0D0,
-      0 0 160px #FFFFFF,
-      inset 0 0 60px rgba(64,224,208,0.6);
+    z-index: 15;
+    
+    /* Bordo bianco + GLOW ORO ANCORA PIÙ FORTE */
+    border: 10px solid #ffffff;
+    box-shadow: 
+      0 0 80px 40px #ffd700,
+      0 0 130px 70px #ffaa00,
+      0 0 180px 100px #ff9500,
+      0 0 240px 130px rgba(255,215,0,0.7),
+      0 0 300px 160px rgba(255,200,0,0.5),
+      inset 0 0 100px rgba(64,224,208,0.5),
+      inset 0 0 160px rgba(255,255,255,0.6);
     animation: centerAnim 6s infinite ease-in-out;
   }
 
@@ -61,43 +83,53 @@
     75% { transform: translate(-50%,-50%) scale(1.02) rotate(1deg); }
   }
 
-  /* TITOLO SOTTO */
+  /* TITOLO */
   #videoText {
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 60px;
-    color: #FFFFFF;
+    font-size: 76px;
+    color: #ffffff;
     font-family: 'Creepster', cursive;
-    text-shadow:
-      0 0 30px #40E0D0,
-      0 0 70px #40E0D0,
-      0 0 120px #fff,
-      6px 6px 20px #000;
+    text-shadow: 
+      0 0 40px #40E0D0,
+      0 0 90px #40E0D0,
+      0 0 160px #ffd700,
+      0 0 240px #ffaa00,
+      10px 10px 50px #000;
     z-index: 20;
     pointer-events: none;
-    animation: pulseText 2s infinite ease-in-out;
+    animation: pulseText 2.5s infinite ease-in-out;
+    letter-spacing: 6px;
   }
 
   @keyframes pulseText {
     0%,100% { transform: translateX(-50%) scale(1); }
-    50%     { transform: translateX(-50%) scale(1.18); }
+    50% { transform: translateX(-50%) scale(1.28); }
   }
 </style>
 </head>
 <body>
 
+  <!-- SFONDO ORO CON STELLINE -->
+  <video id="bgVideo" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/home.mp4" type="video/mp4">
+  </video>
+
+  <!-- VIDEO SINISTRO -->
   <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/Pink.mp4" type="video/mp4">
   </video>
 
-  <video id="centerVideo" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/home.mp4" type="video/mp4">
-  </video>
-
+  <!-- VIDEO DESTRO -->
   <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/Pink.mp4" type="video/mp4">
+  </video>
+
+  <!-- VIDEO CENTRALE -->
+  <video id="centerVideo" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/home.mp4" type="video/mp4">
   </video>
 
   <div id="videoText">IL CARTAIO</div>
