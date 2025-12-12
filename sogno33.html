@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>il cartaio non copiare rimba-mbito</title>
+  <title>il cartaio x sogno</title>
   <style>
     body {
       margin: 0;
@@ -19,6 +19,8 @@
       align-items: center;
       gap: 15px;
     }
+
+    /* ===== VIDEO LATERALE NORMALE ===== */
     .side-video {
       width: 140px;
       height: 350px;
@@ -34,6 +36,25 @@
       height: 100%;
       object-fit: cover;
     }
+
+    /* ===== VIDEO LATERALE SPECCHIATO ===== */
+    .side-video-mirror {
+      width: 140px;
+      height: 350px;
+      background: black;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      animation: rainbowBorder 5s linear infinite;
+    }
+    .side-video-mirror video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* SPECCHIO ORIZZONTALE */
+    }
+
     .tv-body {
       width: 400px;
       background: #222;
@@ -215,7 +236,8 @@
 <body>
   <div class="tv-setup">
 
-    <div class="side-video">
+    <!-- VIDEO SPECCHIATO A SINISTRA -->
+    <div class="side-video-mirror">
       <video src="https://peppeagosto.github.io/immaggini/maria.mp4" autoplay loop muted></video>
     </div>
 
@@ -238,13 +260,14 @@
       </div>
     </div>
 
+    <!-- VIDEO NORMALE A DESTRA -->
     <div class="side-video">
       <video src="https://peppeagosto.github.io/immaggini/maria.mp4" autoplay loop muted></video>
     </div>
 
   </div>
 
-  <!-- AUDIO AGGIORNATO (senza autoplay) -->
+  <!-- AUDIO -->
   <audio id="radioStream"
          src="https://stream-175.zeno.fm/se91s1gqfg0uv"
          preload="auto"
@@ -264,9 +287,8 @@
     const defaultCover = 'https://xatimg.com/image/Kv3fwJvdDUOP.gif';
 
     let lastTitle = '';
-    let isPlaying = false; // CORRETTO
+    let isPlaying = false;
 
-    // PLAY / PAUSA
     playButton.addEventListener("click", () => {
       if (isPlaying) {
         player.pause();
@@ -278,12 +300,10 @@
       isPlaying = !isPlaying;
     });
 
-    // VOLUME
     volumeSlider.addEventListener("input", () => {
       player.volume = volumeSlider.value;
     });
 
-    // METADATI + COVER
     async function fetchNowPlaying() {
       try {
         const res = await fetch(`${nowPlayingUrl}?t=${Date.now()}`, { cache: 'no-store' });
@@ -342,3 +362,4 @@
 
 </body>
 </html>
+
