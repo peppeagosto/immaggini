@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>il cartaio non copiare rimba-mbito</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+    .tv-setup {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .side-video {
+      width: 140px;
+      height: 350px;
+      background: black;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      animation: rainbowBorder 5s linear infinite;
+    }
+    .side-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tv-body {
+      width: 400px;
+      background: #222;
+      border: 12px solid transparent;
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+      position: relative;
+      padding: 20px 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: rainbowBorder 5s linear infinite;
+    }
+    .tv-screen {
+      width: 100%;
+      height: 250px;
+      background: #000;
+      border: 8px solid transparent;
+      border-radius: 10px;
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+      overflow: hidden;
+      position: relative;
+      animation: rainbowBorder 5s linear infinite;
+    }
+    .tv-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      opacity: 0.5;
+    }
+    #album-art {
+      z-index: 3;
+      display: block;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      background: no-repeat center center;
+      background-size: contain;
+      border-radius: 10px;
+      box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.5);
+      animation: rainbowBorder 5s linear infinite, zoomEffect 3s ease-in-out infinite;
+    }
+    @keyframes zoomEffect {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .bottom-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      height: 28px;
+      margin: 10px 0;
+    }
+    .cerchietto-sx, .cerchietto-dx {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      animation: rainbow 5s linear infinite;
+    }
+    #title-container {
+      flex-grow: 1;
+      height: 28px;
+      line-height: 28px;
+      margin: 0 10px;
+      overflow: hidden;
+      font-size: 16px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    #title-container span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollText 15s linear infinite, rainbow 5s linear infinite;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @keyframes scrollText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 400% 50%; }
+    }
+    @keyframes rainbowBorder {
+      0% { border-color: red; box-shadow: 0 0 15px red; }
+      14% { border-color: orange; box-shadow: 0 0 15px orange; }
+      28% { border-color: yellow; box-shadow: 0 0 15px yellow; }
+      42% { border-color: green; box-shadow: 0 0 15px green; }
+      57% { border-color: blue; box-shadow: 0 0 15px blue; }
+      71% { border-color: indigo; box-shadow: 0 0 15px indigo; }
+      85% { border-color: violet; box-shadow: 0 0 15px violet; }
+      100% { border-color: red; box-shadow: 0 0 15px red; }
+    }
+    .tv-stand {
+      width: 120px;
+      height: 25px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      margin-top: 10px;
+      border-radius: 12px;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 6px 10px #000;
+      color: white;
+      text-align: center;
+      line-height: 25px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      animation: rainbow 5s linear infinite;
+    }
+    .tv-base {
+      width: 180px;
+      height: 12px;
+      background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      margin: 5px auto;
+      border-radius: 6px;
+      box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.5), 0 3px 8px #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: rainbow 5s linear infinite;
+    }
+    .tv-base input[type="range"] {
+      width: 90%;
+      height: 6px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      -webkit-appearance: none;
+      border-radius: 6px;
+      animation: rainbow 5s linear infinite;
+    }
+    .tv-base input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      animation: rainbow 5s linear infinite;
+    }
+    #alertFra {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: black;
+      color: red;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 3rem;
+      padding: 20px 40px;
+      border: 3px solid red;
+      z-index: 9999;
+      text-align: center;
+      user-select: none;
+      white-space: nowrap;
+      letter-spacing: 3px;
+      box-shadow: 0 0 15px red;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="tv-setup">
+
+    <div class="side-video">
+      <video src="https://peppeagosto.github.io/immaggini/maria.mp4" autoplay loop muted></video>
+    </div>
+
+    <div class="tv-body">
+      <div class="tv-screen">
+        <video id="mainVideo" src="https://peppeagosto.github.io/immaggini/love.mp4" autoplay muted loop></video>
+        <div id="album-art"></div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="cerchietto-dx"></div>
+        <div id="title-container"><span id="scrollText">Caricamento titolo...</span></div>
+        <div class="cerchietto-sx"></div>
+      </div>
+
+      <div class="tv-stand" id="playButton">PLAY</div>
+
+      <div class="tv-base">
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+      </div>
+    </div>
+
+    <div class="side-video">
+      <video src="https://peppeagosto.github.io/immaggini/maria.mp4" autoplay loop muted></video>
+    </div>
+
+  </div>
+
+  <!-- AUDIO AGGIORNATO (senza autoplay) -->
+  <audio id="radioStream"
+         src="https://stream-175.zeno.fm/se91s1gqfg0uv"
+         preload="auto"
+         playsinline>
+  </audio>
+
+  <div id="alertFra">Sogno</div>
+
+  <script>
+    const player = document.getElementById("radioStream");
+    const playButton = document.getElementById("playButton");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const albumArt = document.getElementById("album-art");
+    const currentTitle = document.getElementById("scrollText");
+
+    const nowPlayingUrl = 'https://zenoplay.zenomedia.com/api/zenofm/nowplaying/se91s1gqfg0uv';
+    const defaultCover = 'https://xatimg.com/image/Kv3fwJvdDUOP.gif';
+
+    let lastTitle = '';
+    let isPlaying = false; // CORRETTO
+
+    // PLAY / PAUSA
+    playButton.addEventListener("click", () => {
+      if (isPlaying) {
+        player.pause();
+        playButton.textContent = "PLAY";
+      } else {
+        player.play();
+        playButton.textContent = "PAUSE";
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // VOLUME
+    volumeSlider.addEventListener("input", () => {
+      player.volume = volumeSlider.value;
+    });
+
+    // METADATI + COVER
+    async function fetchNowPlaying() {
+      try {
+        const res = await fetch(`${nowPlayingUrl}?t=${Date.now()}`, { cache: 'no-store' });
+        const data = await res.json();
+
+        const title = data.title || 'Titolo non disponibile';
+        const artist = data.artist || '';
+
+        if (title !== lastTitle) {
+          lastTitle = title;
+          currentTitle.textContent = title;
+
+          currentTitle.style.animation = 'none';
+          currentTitle.offsetHeight;
+          currentTitle.style.animation = 'scrollText 15s linear infinite, rainbow 5s linear infinite';
+
+          const query = encodeURIComponent(title + ' ' + artist);
+          const url = `https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
+
+          try {
+            const resCover = await fetch(url, { cache: 'no-store' });
+            const dataCover = await resCover.json();
+
+            if (dataCover.results && dataCover.results[0]?.artworkUrl100) {
+              const coverUrl = dataCover.results[0].artworkUrl100.replace('100x100','300x300');
+              albumArt.style.backgroundImage = `url(${coverUrl})`;
+            } else {
+              albumArt.style.backgroundImage = `url(${defaultCover})`;
+            }
+
+          } catch {
+            albumArt.style.backgroundImage = `url(${defaultCover})`;
+          }
+        }
+
+      } catch {
+        currentTitle.textContent = 'Errore caricamento titolo';
+        albumArt.style.backgroundImage = `url(${defaultCover})`;
+      }
+    }
+
+    setInterval(fetchNowPlaying, 8000);
+    fetchNowPlaying();
+
+    player.addEventListener('play', () => {
+      fetchNowPlaying();
+      playButton.textContent = "PAUSE";
+      isPlaying = true;
+    });
+
+    player.addEventListener('pause', () => {
+      playButton.textContent = "PLAY";
+      isPlaying = false;
+    });
+  </script>
+
+</body>
+</html>
