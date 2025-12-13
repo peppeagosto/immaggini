@@ -25,7 +25,7 @@
   .video-wrapper {
     position: absolute;
     width: 270px;
-    height: 544px;
+    height: 484px;
     overflow: hidden;
     border-radius: 18px;
     z-index: 1;
@@ -38,22 +38,6 @@
       fireWave 4s infinite linear,
       fireFlicker 0.12s infinite alternate;
     transition: left 1s ease, right 1s ease;
-  }
-
-  @keyframes firePulse {
-    0% { box-shadow:0 0 55px #ffc828,0 0 110px #ff4600,inset 0 0 45px #ff3200; }
-    50% { box-shadow:0 0 90px #ff7800,0 0 150px #ff0000,inset 0 0 65px #ff0000; }
-    100% { box-shadow:0 0 55px #ffc828,0 0 110px #ff4600,inset 0 0 45px #ff3200; }
-  }
-
-  @keyframes fireWave {
-    0%,100% { filter: drop-shadow(0 0 30px #ff9600) drop-shadow(0 0 60px #ff2800); }
-    50% { filter: drop-shadow(0 0 50px #ffc800) drop-shadow(0 0 80px #ff0000); }
-  }
-
-  @keyframes fireFlicker {
-    from { box-shadow:0 0 75px #ffa000,inset 0 0 45px #ff2800; }
-    to { box-shadow:0 0 105px #ff3c00,inset 0 0 60px #ff0000; }
   }
 
   video.side-video {
@@ -74,11 +58,11 @@
     font-weight: bold;
     font-family: Trebuchet MS, Arial;
     color: #ffe0c0;
-    text-shadow: 0 0 12px #ff4d00, 0 0 26px #ff0000, 0 0 40px #ff6a00;
+    text-shadow: 0 0 12px #ff4d00, 0 0 26px #ff0000;
     z-index: 2;
   }
 
-  /* ZONA CENTRALE */
+  /* ZONA CENTRALE (MISURE DEFAULT XAT) */
   .center-area {
     position: absolute;
     left: 300px;
@@ -92,11 +76,13 @@
     pointer-events: none;
   }
 
+  /* IMMAGINE CENTRALE CORRETTA */
   .center-image {
-    height: 720px;
-    width: px;
+    height: 100%;        /* 👈 stessa altezza default */
+    width: auto;         /* 👈 proporzioni corrette */
+    max-width: 100%;
     border-radius: 20px;
-    object-fit: cover;
+    object-fit: contain;
     box-shadow:
       0 0 60px rgba(255,180,0,1),
       0 0 120px rgba(255,60,0,1),
@@ -106,16 +92,10 @@
 
   @keyframes centerGlow {
     from {
-      box-shadow:
-        0 0 50px #ffb000,
-        0 0 90px #ff4500,
-        inset 0 0 40px #ff2a00;
+      box-shadow: 0 0 50px #ffb000, 0 0 90px #ff4500;
     }
     to {
-      box-shadow:
-        0 0 80px #ffd000,
-        0 0 140px #ff0000,
-        inset 0 0 60px #ff0000;
+      box-shadow: 0 0 80px #ffd000, 0 0 140px #ff0000;
     }
   }
 </style>
@@ -160,13 +140,11 @@
     if (swapped) {
       videoA.style.left = "auto";
       videoA.style.right = "0";
-
       videoB.style.right = "auto";
       videoB.style.left = "0";
     } else {
       videoA.style.right = "auto";
       videoA.style.left = "0";
-
       videoB.style.left = "auto";
       videoB.style.right = "0";
     }
