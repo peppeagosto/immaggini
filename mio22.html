@@ -20,7 +20,7 @@
     height: 484px;
   }
 
-  /* VIDEO LATERALI ANIMAZIONE FUOCO */
+  /* VIDEO LATERALI */
   .video-wrapper {
     position: absolute;
     width: 250px;
@@ -29,9 +29,9 @@
     border-radius: 18px;
     z-index: 1;
     box-shadow:
-      0 0 60px rgba(255, 180, 0, 1),
-      0 0 110px rgba(255, 60, 0, 1),
-      inset 0 0 45px rgba(255, 40, 0, 0.9);
+      0 0 60px rgba(255,180,0,1),
+      0 0 110px rgba(255,60,0,1),
+      inset 0 0 45px rgba(255,40,0,0.9);
     animation:
       firePulse 2.2s infinite ease-in-out,
       fireWave 4s infinite linear,
@@ -39,19 +39,19 @@
   }
 
   @keyframes firePulse {
-    0% { box-shadow: 0 0 55px #ffc828, 0 0 110px #ff4600, inset 0 0 45px #ff3200; transform: scale(1);}
-    50% { box-shadow: 0 0 90px #ff7800, 0 0 150px #ff0000, inset 0 0 65px #ff0000; transform: scale(1.02);}
-    100% { box-shadow: 0 0 55px #ffc828, 0 0 110px #ff4600, inset 0 0 45px #ff3200; transform: scale(1);}
+    0% { box-shadow:0 0 55px #ffc828,0 0 110px #ff4600,inset 0 0 45px #ff3200; }
+    50% { box-shadow:0 0 90px #ff7800,0 0 150px #ff0000,inset 0 0 65px #ff0000; }
+    100% { box-shadow:0 0 55px #ffc828,0 0 110px #ff4600,inset 0 0 45px #ff3200; }
   }
 
   @keyframes fireWave {
-    0%, 100% { filter: drop-shadow(0 0 30px #ff9600) drop-shadow(0 0 60px #ff2800);}
-    50% { filter: drop-shadow(0 0 50px #ffc800) drop-shadow(0 0 80px #ff0000);}
+    0%,100% { filter: drop-shadow(0 0 30px #ff9600) drop-shadow(0 0 60px #ff2800); }
+    50% { filter: drop-shadow(0 0 50px #ffc800) drop-shadow(0 0 80px #ff0000); }
   }
 
   @keyframes fireFlicker {
-    from { box-shadow:0 0 75px #ffa000, inset 0 0 45px #ff2800;}
-    to { box-shadow:0 0 105px #ff3c00, inset 0 0 60px #ff0000;}
+    from { box-shadow:0 0 75px #ffa000,inset 0 0 45px #ff2800; }
+    to { box-shadow:0 0 105px #ff3c00,inset 0 0 60px #ff0000; }
   }
 
   video.side-video {
@@ -70,78 +70,80 @@
     transform: translateX(-50%);
     font-size: 25px;
     font-weight: bold;
-    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-family: Trebuchet MS, Arial;
     color: #ffe0c0;
     text-shadow: 0 0 12px #ff4d00, 0 0 26px #ff0000, 0 0 40px #ff6a00;
     z-index: 2;
   }
 
-  /* CENTRO: DUE VIDEO DAL CENTRO */
+  /* ZONA CENTRALE (DISTACCO GARANTITO) */
   .center-area {
     position: absolute;
-    left: 250px;
-    right: 250px;
+    left: 300px;   /* 250 video + 50 distacco */
+    right: 300px;  /* 250 video + 50 distacco */
     top: 0;
     height: 484px;
-    z-index: 5;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    pointer-events: auto;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    pointer-events: none;
   }
 
-  .center-area video {
-    width: 150px;
-    height: 484px;
+  .center-image {
+    height: 484px;       /* STESSA ALTEZZA MP4 */
+    width: auto;
+    border-radius: 20px;
     object-fit: cover;
-    object-position: top;
+    box-shadow:
+      0 0 60px rgba(255,180,0,1),
+      0 0 120px rgba(255,60,0,1),
+      inset 0 0 50px rgba(255,40,0,0.9);
+    animation: centerGlow 2.5s infinite alternate;
   }
 
-  /* FARETTI CENTRALI */
-  .faretto {
-    position: absolute;
-    width: 100px;
-    height: 200px;
-    z-index: 6;
-    top: 0;
-    object-fit: cover;
-    animation: farettoPulse 1.8s infinite alternate;
+  @keyframes centerGlow {
+    from {
+      box-shadow:
+        0 0 50px #ffb000,
+        0 0 90px #ff4500,
+        inset 0 0 40px #ff2a00;
+    }
+    to {
+      box-shadow:
+        0 0 80px #ffd000,
+        0 0 140px #ff0000,
+        inset 0 0 60px #ff0000;
+    }
   }
-
-  .faretto-left { left: 275px; }  /* sopra video sinistro */
-  .faretto-right { right: 275px; } /* sopra video destro */
-
-  @keyframes farettoPulse {
-    0% { opacity: 0.6; transform: scaleY(0.9);}
-    50% { opacity: 1; transform: scaleY(1.1);}
-    100% { opacity: 0.6; transform: scaleY(0.9);}
-  }
-
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <!-- VIDEO LATERALE SINISTRO -->
+  <!-- SINISTRA -->
   <div class="video-wrapper left-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/dora11.mp4" type="video/mp4">
     </video>
-    <div class="video-text">EL CARTAIO </div>
+    <div class="video-text">DORA</div>
   </div>
 
-
-
-  <!-- VIDEO LATERALE DESTRO -->
+  <!-- DESTRA -->
   <div class="video-wrapper right-video-wrapper">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/rosalia1" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/rosalia1.mp4" type="video/mp4">
     </video>
-    <div class="video-text">EL DIABLO</div>
+    <div class="video-text">ROSALÍA</div>
+  </div>
+
+  <!-- CENTRO DISTACCATO -->
+  <div class="center-area">
+    <img src="https://xatimg.com/image/sqKb5TXfmkQe.png" class="center-image" alt="centro">
   </div>
 
 </div>
 </body>
-
 </html>
+
