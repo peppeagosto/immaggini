@@ -21,7 +21,7 @@ body {
   height: 484px;
 }
 
-/* ===== EFFETTO ORO + GLOW (COMUNE) ===== */
+/* ===== EFFETTO ORO + GLOW ===== */
 .gold-glow {
   border-radius: 20px;
   border: 2px solid transparent;
@@ -91,8 +91,8 @@ video.side-video {
 /* ===== CENTRO ===== */
 .center-area {
   position: absolute;
-  left: 300px;
-  right: 300px;
+  left: 320px;   /* 👈 AVVICINATA AI MP4 */
+  right: 320px;  /* 👈 AVVICINATA AI MP4 */
   top: 0;
   height: 484px;
   display: flex;
@@ -104,10 +104,12 @@ video.side-video {
 .center-image {
   height: 100%;
   width: auto;
-  max-width: 100%;
-  margin-top: 90px;
-  transform: scaleX(1.03);
+  max-width: none;      /* 👈 SBLOCCO LARGHEZZA */
+  margin-top: 70px;
+
+  transform: scaleX(1.05);  /* 👈 ALLARGAMENTO CONTROLLATO */
   transform-origin: center center;
+
   object-fit: contain;
 }
 </style>
@@ -143,4 +145,5 @@ video.side-video {
 
 </body>
 </html>
+
 
