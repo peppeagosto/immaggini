@@ -21,7 +21,6 @@
     height: 484px;
   }
 
-  /* VIDEO LATERALI */
   .video-wrapper {
     position: absolute;
     width: 270px;
@@ -33,10 +32,6 @@
       0 0 60px rgba(255,180,0,1),
       0 0 110px rgba(255,60,0,1),
       inset 0 0 45px rgba(255,40,0,0.9);
-    animation:
-      firePulse 2.2s infinite ease-in-out,
-      fireWave 4s infinite linear,
-      fireFlicker 0.12s infinite alternate;
     transition: left 1s ease, right 1s ease;
   }
 
@@ -59,10 +54,8 @@
     font-family: Trebuchet MS, Arial;
     color: #ffe0c0;
     text-shadow: 0 0 12px #ff4d00, 0 0 26px #ff0000;
-    z-index: 2;
   }
 
-  /* ZONA CENTRALE (MISURE DEFAULT XAT) */
   .center-area {
     position: absolute;
     left: 300px;
@@ -72,17 +65,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 4;
     pointer-events: none;
   }
 
-  /* IMMAGINE CENTRALE CORRETTA */
   .center-image {
-    height: 100%;        /* 👈 stessa altezza default */
-    width: auto;         /* 👈 proporzioni corrette */
-    max-width: 100%;
-    border-radius: 20px;
-    object-fit: contain;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  margin-top: 45px;
+
+  transform: scaleX(1.03);   /* 👈 ALLARGAMENTO MINIMO */
+  transform-origin: center center;
+
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+}
+
     box-shadow:
       0 0 60px rgba(255,180,0,1),
       0 0 120px rgba(255,60,0,1),
@@ -91,12 +91,8 @@
   }
 
   @keyframes centerGlow {
-    from {
-      box-shadow: 0 0 50px #ffb000, 0 0 90px #ff4500;
-    }
-    to {
-      box-shadow: 0 0 80px #ffd000, 0 0 140px #ff0000;
-    }
+    from { box-shadow: 0 0 50px #ffb000, 0 0 90px #ff4500; }
+    to { box-shadow: 0 0 80px #ffd000, 0 0 140px #ff0000; }
   }
 </style>
 </head>
@@ -105,51 +101,26 @@
 
 <div class="container">
 
-  <!-- SINISTRA -->
   <div class="video-wrapper left-video-wrapper" id="videoA">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/dora11.mp4" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/dora11.mp4">
     </video>
     <div class="video-text">MANUELA</div>
   </div>
 
-  <!-- DESTRA -->
   <div class="video-wrapper right-video-wrapper" id="videoB">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/rosalia1.mp4" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/rosalia1.mp4">
     </video>
     <div class="video-text">ROSALÍA</div>
   </div>
 
-  <!-- CENTRO -->
   <div class="center-area">
-    <img src="https://xatimg.com/image/sqKb5TXfmkQe.png" class="center-image">
+    <img src="https://xatimg.com/image/5Gw4MuWZXSfO.png" class="center-image">
   </div>
 
 </div>
 
-<script>
-  const videoA = document.getElementById("videoA");
-  const videoB = document.getElementById("videoB");
-
-  let swapped = false;
-
-  setInterval(() => {
-    swapped = !swapped;
-
-    if (swapped) {
-      videoA.style.left = "auto";
-      videoA.style.right = "0";
-      videoB.style.right = "auto";
-      videoB.style.left = "0";
-    } else {
-      videoA.style.right = "auto";
-      videoA.style.left = "0";
-      videoB.style.left = "auto";
-      videoB.style.right = "0";
-    }
-  }, 20000);
-</script>
-
 </body>
 </html>
+
