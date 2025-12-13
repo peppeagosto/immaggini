@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>EL DIABLO</title>
+
 <style>
   body {
     margin: 0;
@@ -36,6 +37,7 @@
       firePulse 2.2s infinite ease-in-out,
       fireWave 4s infinite linear,
       fireFlicker 0.12s infinite alternate;
+    transition: left 1s ease, right 1s ease;
   }
 
   @keyframes firePulse {
@@ -76,11 +78,11 @@
     z-index: 2;
   }
 
-  /* ZONA CENTRALE (DISTACCO GARANTITO) */
+  /* ZONA CENTRALE */
   .center-area {
     position: absolute;
-    left: 300px;   /* 250 video + 50 distacco */
-    right: 300px;  /* 250 video + 50 distacco */
+    left: 300px;
+    right: 300px;
     top: 0;
     height: 484px;
     display: flex;
@@ -91,8 +93,8 @@
   }
 
   .center-image {
-    height: 728px;       /* STESSA ALTEZZA MP4 */
-    width: 448px;
+    height: 726px;
+    width: 484px;
     border-radius: 20px;
     object-fit: cover;
     box-shadow:
@@ -120,10 +122,11 @@
 </head>
 
 <body>
+
 <div class="container">
 
   <!-- SINISTRA -->
-  <div class="video-wrapper left-video-wrapper">
+  <div class="video-wrapper left-video-wrapper" id="videoA">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/dora11.mp4" type="video/mp4">
     </video>
@@ -131,19 +134,46 @@
   </div>
 
   <!-- DESTRA -->
-  <div class="video-wrapper right-video-wrapper">
+  <div class="video-wrapper right-video-wrapper" id="videoB">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/rosalia1.mp4" type="video/mp4">
     </video>
     <div class="video-text">ROSALÍA</div>
   </div>
 
-  <!-- CENTRO DISTACCATO -->
+  <!-- CENTRO -->
   <div class="center-area">
-    <img src="https://xatimg.com/image/sqKb5TXfmkQe.png" class="center-image" alt="centro">
+    <img src="https://xatimg.com/image/sqKb5TXfmkQe.png" class="center-image">
   </div>
 
 </div>
-</body>
 
+<script>
+  const videoA = document.getElementById("videoA");
+  const videoB = document.getElementById("videoB");
+
+  let swapped = false;
+
+  setInterval(() => {
+    swapped = !swapped;
+
+    if (swapped) {
+      videoA.style.left = "auto";
+      videoA.style.right = "0";
+
+      videoB.style.right = "auto";
+      videoB.style.left = "0";
+    } else {
+      videoA.style.right = "auto";
+      videoA.style.left = "0";
+
+      videoB.style.left = "auto";
+      videoB.style.right = "0";
+    }
+  }, 20000);
+</script>
+
+</body>
 </html>
+
+
