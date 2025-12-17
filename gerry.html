@@ -39,6 +39,11 @@ video{
   transform:translateX(-50%);
   width:728px;
 }
+
+/* Nasconde il player audio */
+#audioPlayer{
+  display:none;
+}
 </style>
 </head>
 
@@ -47,20 +52,26 @@ video{
 <!-- VIDEO -->
 <div class="container">
   <video autoplay loop muted playsinline class="left">
-    <source src="https://peppeagosto.github.io/immaggini/25.mp4">
+    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
 
   <video autoplay loop muted playsinline class="center">
-    <source src="https://peppeagosto.github.io/immaggini/babbo.mp4">
+    <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
   </video>
 
   <video autoplay loop muted playsinline class="right">
-    <source src="https://peppeagosto.github.io/immaggini/25.mp4">
+    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
 </div>
 
+<!-- AUDIO MP3 250 -->
+<audio id="audioPlayer" autoplay loop>
+  <source src="https://peppeagosto.github.io/immaggini/250.mp3" type="audio/mpeg">
+</audio>
+
 </body>
 </html>
+
 
 
 
