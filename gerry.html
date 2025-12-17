@@ -21,6 +21,7 @@ video{
   height:486px;
   object-fit:cover;
   border-radius:10px;
+  pointer-events:none; /* permette click sugli elementi sopra */
 }
 
 .container{
@@ -47,7 +48,7 @@ video{
   left:50%;
   transform:translateX(-50%);
   text-align:center;
-  z-index:10;
+  z-index:1000; /* sopra i video */
 }
 
 #playBtn, #stopBtn{
@@ -95,7 +96,7 @@ video{
 
 <!-- TASTI E TESTO -->
 <div id="audioControls">
-  <span id="playText">BUON NATALE  DA GERRY  SCOTT</span>
+  <span id="playText">BUON NATALE DA GERRY SCOTT</span>
   <button id="playBtn">Play</button>
   <button id="stopBtn">Stop</button>
 </div>
@@ -125,6 +126,7 @@ stopBtn.addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
 
