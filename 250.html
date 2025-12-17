@@ -21,7 +21,7 @@ video{
   height:486px;
   object-fit:cover;
   border-radius:10px;
-  pointer-events:none; /* permette click sugli elementi sopra */
+  pointer-events:none; /* i video non bloccano il click */
 }
 
 .container{
@@ -33,6 +33,7 @@ video{
   height:486px;
 }
 
+/* VIDEO LAYOUT */
 .left{left:-40px}
 .right{right:-40px}
 .center{
@@ -41,33 +42,30 @@ video{
   width:728px;
 }
 
-/* TASTI E TESTO */
+/* TESTO CLICCABILE */
 #audioControls{
   position:absolute;
   bottom:30px;
   left:50%;
   transform:translateX(-50%);
   text-align:center;
-  z-index:1000; /* sopra i video */
-}
-
-#playBtn, #stopBtn{
-  background:#ff0000;
-  color:white;
-  border:none;
-  padding:10px 20px;
-  margin:5px;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:16px;
+  z-index:1000;
 }
 
 #playText{
-  color:white;
-  font-size:18px;
+  color:#00ffff;
+  font-size:20px;
   cursor:pointer;
-  display:block;
-  margin-bottom:10px;
+  padding:10px 20px;
+  border:2px solid #00ffff;
+  border-radius:5px;
+  transition: all 0.3s ease;
+  display:inline-block;
+}
+
+#playText:hover{
+  background:#00ffff;
+  color:black;
 }
 </style>
 </head>
@@ -89,41 +87,28 @@ video{
   </video>
 </div>
 
-<!-- AUDIO MP3 250 -->
+<!-- AUDIO -->
 <audio id="audioPlayer" loop>
   <source src="https://peppeagosto.github.io/immaggini/250.mp3" type="audio/mpeg">
 </audio>
 
-<!-- TASTI E TESTO -->
+<!-- TESTO CLICCABILE -->
 <div id="audioControls">
   <span id="playText">BUON NATALE DA GERRY SCOTT</span>
-  <button id="playBtn">Play</button>
-  <button id="stopBtn">Stop</button>
 </div>
 
 <script>
 const audio = document.getElementById('audioPlayer');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopBtn');
 const playText = document.getElementById('playText');
 
-// PLAY al click sul testo
+// Parte l'audio quando clicchi il testo
 playText.addEventListener('click', () => {
   audio.play();
-});
-
-// PLAY al click sul bottone
-playBtn.addEventListener('click', () => {
-  audio.play();
-});
-
-// STOP al click sul bottone
-stopBtn.addEventListener('click', () => {
-  audio.pause();
-  audio.currentTime = 0;
 });
 </script>
 
 </body>
 </html>
+
+
 
