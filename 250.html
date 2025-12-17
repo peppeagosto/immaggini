@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerry Natale</title>
+
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:black;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+}
+
+video{
+  position:absolute;
+  width:330px;
+  height:486px;
+  object-fit:cover;
+  border-radius:10px;
+  pointer-events:none; /* permette click sugli elementi sopra */
+}
+
+.container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:1330px;
+  height:486px;
+}
+
+.left{left:-40px}
+.right{right:-40px}
+.center{
+  left:50%;
+  transform:translateX(-50%);
+  width:728px;
+}
+
+/* TASTI E TESTO */
+#audioControls{
+  position:absolute;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  z-index:1000; /* sopra i video */
+}
+
+#playBtn, #stopBtn{
+  background:#ff0000;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  margin:5px;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+#playText{
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  display:block;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO -->
+<div class="container">
+  <video autoplay loop muted playsinline class="left">
+    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+  </video>
+
+  <video autoplay loop muted playsinline class="center">
+    <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
+  </video>
+
+  <video autoplay loop muted playsinline class="right">
+    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- AUDIO MP3 250 -->
+<audio id="audioPlayer" loop>
+  <source src="https://peppeagosto.github.io/immaggini/250.mp3" type="audio/mpeg">
+</audio>
+
+<!-- TASTI E TESTO -->
+<div id="audioControls">
+  <span id="playText">BUON NATALE DA GERRY SCOTT</span>
+  <button id="playBtn">Play</button>
+  <button id="stopBtn">Stop</button>
+</div>
+
+<script>
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const playText = document.getElementById('playText');
+
+// PLAY al click sul testo
+playText.addEventListener('click', () => {
+  audio.play();
+});
+
+// PLAY al click sul bottone
+playBtn.addEventListener('click', () => {
+  audio.play();
+});
+
+// STOP al click sul bottone
+stopBtn.addEventListener('click', () => {
+  audio.pause();
+  audio.currentTime = 0;
+});
+</script>
+
+</body>
+</html>
+
