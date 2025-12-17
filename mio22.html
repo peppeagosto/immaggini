@@ -1,159 +1,132 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>EL DIABLO</title>
-    <style>
-        body {
-            margin: 0;
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            position: relative;
-            width: 1308px;
-            height: 484px;
-        }
-
-        /* ===== EFFETTO ARCOCBALENO ANIMATO SU TUTTI I BORDI ===== */
-        .rainbow-glow {
-            border-radius: 20px;
-            border: 4px solid transparent;
-            background: 
-                linear-gradient(black, black) padding-box,
-                conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000) border-box;
-            background-size: 400% 400%;
-            animation: rainbowShift 2s linear infinite, rainbowRotate 3s linear infinite;
-            box-shadow: 
-                0 0 30px rgba(255,0,0,0.6),
-                0 0 60px rgba(255,127,0,0.5),
-                0 0 90px rgba(255,255,0,0.4),
-                inset 0 0 20px rgba(0,255,0,0.3);
-        }
-
-        @keyframes rainbowShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes rainbowRotate {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        /* ===== VIDEO LATERALI ===== */
-        .video-wrapper {
-            position: absolute;
-            width: 270px;
-            height: 484px;
-            overflow: hidden;
-            z-index: 1;
-            transition: all 1s ease;
-        }
-
-        video.side-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .left {
-            left: 0;
-        }
-
-        .right {
-            right: 0;
-        }
-
-        .video-text {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 25px;
-            font-family: Trebuchet MS, Arial;
-            color: #ffe9b0;
-            text-shadow: 0 0 10px #ff0000, 0 0 20px #ffff00;
-            animation: textGlow 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes textGlow {
-            from { text-shadow: 0 0 10px #ff0000, 0 0 20px #ffff00, 0 0 30px #00ff00; }
-            to { text-shadow: 0 0 20px #0000ff, 0 0 30px #ff00ff, 0 0 40px #00ffff; }
-        }
-
-        /* ===== CENTRO ===== */
-        .center-area {
-            position: absolute;
-            left: 260px;
-            right: 260px;
-            top: 0;
-            height: 484px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .center-image {
-            height: 100%;
-            width: auto;
-            margin-top: 50px;
-            transform: scaleX(1.51);
-            object-fit: contain;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>EL DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
+/* ===== ARCOBALENO ===== */
+.rainbow-glow{
+  border-radius:20px;
+  border:4px solid transparent;
+  background:
+    linear-gradient(black, black) padding-box,
+    conic-gradient(from 0deg,
+      #ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3,#ff0000) border-box;
+  animation: rainbowRotate 3s linear infinite;
+}
+@keyframes rainbowRotate{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(360deg)}
+}
+/* ===== VIDEO ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  overflow:hidden;
+  z-index:1;
+  transition:1s;
+}
+.left{left:0}
+.right{right:0}
+.side-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.video-text{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+  font-family:Trebuchet MS;
+  color:#ffe9b0;
+}
+/* ===== CENTRO ===== */
+.center-area{
+  position:absolute;
+  left:260px;
+  right:260px;
+  height:484px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+}
+.center-wrapper{
+  position:relative;
+  height:100%;
+}
+/* IMMAGINE CENTRALE */
+.center-image{
+  height:100%;
+  margin-top:50px;
+  transform:scaleX(1.51);
+  object-fit:contain;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- VIDEO 1 -->
-        <div id="videoA" class="video-wrapper left rainbow-glow">
-            <video class="side-video" autoplay loop muted playsinline>
-                <source src="https://peppeagosto.github.io/immaggini/dora11.mp4">
-            </video>
-            <div class="video-text">MANUELA</div>
-        </div>
-
-        <!-- VIDEO 2 -->
-        <div id="videoB" class="video-wrapper right rainbow-glow">
-            <video class="side-video" autoplay loop muted playsinline>
-                <source src="https://peppeagosto.github.io/immaggini/dora11.mp4">
-            </video>
-            <div class="video-text">ROSALÍA</div>
-        </div>
-
-        <!-- CENTRO -->
-        <div class="center-area">
-            <img src="https://xatimg.com/image/FeUs5XftZzmQ.jpg" 
-                 class="center-image rainbow-glow">
-        </div>
+<div class="container">
+  <!-- VIDEO SINISTRO -->
+  <div id="videoA" class="video-wrapper left rainbow-glow">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/dora11.mp4">
+    </video>
+    <div class="video-text">MANUELA</div>
+  </div>
+  <!-- VIDEO DESTRO -->
+  <div id="videoB" class="video-wrapper right rainbow-glow">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/marro.mp4">
+    </video>
+    <div class="video-text">ROSALÍA</div>
+  </div>
+  <!-- CENTRO -->
+  <div class="center-area">
+    <div class="center-wrapper">
+      <img src="https://xatimg.com/image/FeUs5XftZzmQ.jpg"
+           class="center-image rainbow-glow">
     </div>
+  </div>
+</div>
 
-    <script>
-        let swapped = false;
-        setInterval(() => {
-            const a = document.getElementById("videoA");
-            const b = document.getElementById("videoB");
-            if (!swapped) {
-                a.classList.remove("left");
-                a.classList.add("right");
-                b.classList.remove("right");
-                b.classList.add("left");
-            } else {
-                a.classList.remove("right");
-                a.classList.add("left");
-                b.classList.remove("left");
-                b.classList.add("right");
-            }
-            swapped = !swapped;
-        }, 10000); // ⏱️ 10 secondi
-    </script>
+<!-- Faretto sinistro - fascio allungato -->
+<div style="z-index:99999; position:absolute; left:40px; top:85px;">
+  <img src="https://xatimg.com/image/hfg1mIt2rlaV.gif" width="140px" 
+       style="transform: scaleY(2); transform-origin: top;">
+</div>
+
+<!-- Faretto destro - fascio allungato -->
+<div style="z-index:99999; position:absolute; right:40px; top:85px;">
+  <img src="https://xatimg.com/image/I3MZ0k3f8As5.gif" width="140px" 
+       style="transform: scaleY(2); transform-origin: top;">
+</div>
+
+<script>
+setInterval(()=>{
+  videoA.classList.toggle("left");
+  videoA.classList.toggle("right");
+  videoB.classList.toggle("left");
+  videoB.classList.toggle("right");
+},10000);
+</script>
 </body>
 </html>
+
 
