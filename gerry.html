@@ -2,8 +2,8 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Il Cartaio - Cometa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerry Natale</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -16,42 +16,47 @@ html,body{
   font-family:Arial,sans-serif;
 }
 
-/* OVERLAY SBLOCCO AUDIO */
+/* ===== OVERLAY SBLOCCO AUDIO ===== */
 #unlock{
   position:fixed;
   inset:0;
-  background:black;
-  color:#ff2020;
+  background:radial-gradient(circle,#200,#000);
+  color:#ff3030;
   display:flex;
   justify-content:center;
   align-items:center;
   text-align:center;
-  font-size:26px;
+  font-size:30px;
   font-weight:bold;
-  z-index:9999999;
-  animation:pulse 1.5s infinite alternate;
-}
-@keyframes pulse{
-  from{text-shadow:0 0 10px red}
-  to{text-shadow:0 0 30px white}
+  z-index:99999999;
+  pointer-events:auto;
+  touch-action:manipulation;
+  animation:pulseText 1.4s infinite alternate;
 }
 
+@keyframes pulseText{
+  from{text-shadow:0 0 10px red}
+  to{text-shadow:0 0 35px white}
+}
+
+/* ===== VIDEO ===== */
 .container{
-  position:relative;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
   width:1330px;
   height:486px;
-  margin:auto;
-  top:50%;
-  transform:translateY(-50%);
 }
 
-.vid{
+video{
   position:absolute;
   width:330px;
   height:486px;
   object-fit:cover;
-  border-radius:10px;
-  box-shadow:0 0 20px rgba(255,0,0,.7);
+  border-radius:12px;
+  box-shadow:0 0 25px red;
+  pointer-events:none;
 }
 
 .left{left:-40px}
@@ -61,10 +66,9 @@ html,body{
   transform:translateX(-50%);
   width:728px;
   border:3px solid red;
-  box-shadow:0 0 30px red;
 }
 
-/* CONTROLLI */
+/* ===== CONTROLLI ===== */
 .controls{
   position:fixed;
   bottom:25px;
@@ -77,10 +81,10 @@ html,body{
 }
 
 .marquee{
-  color:#ff2020;
+  color:#ff3030;
   font-size:22px;
   font-weight:bold;
-  text-shadow:0 0 12px white;
+  text-shadow:0 0 15px white;
   margin-bottom:15px;
 }
 
@@ -91,51 +95,59 @@ html,body{
 }
 
 .star-btn{
-  width:80px;
-  height:80px;
-  background:radial-gradient(circle,#ff2020,#900);
+  width:85px;
+  height:85px;
+  background:radial-gradient(circle,#ff3030,#900);
   border:none;
   color:white;
   font-weight:bold;
+  cursor:pointer;
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 
                      68% 57%, 79% 91%, 50% 70%, 
                      21% 91%, 32% 57%, 2% 35%, 39% 35%);
   box-shadow:0 0 30px red;
-  cursor:pointer;
 }
 
-input[type=range]{
-  width:200px;
+/* pulsazione PLAY */
+.play-ready{
+  animation:pulseBtn 1.2s infinite alternate;
 }
+
+@keyframes pulseBtn{
+  from{box-shadow:0 0 20px red}
+  to{box-shadow:0 0 60px white}
+}
+
+input[type=range]{width:200px}
 </style>
 </head>
 
 <body>
 
-<!-- OVERLAY AUDIO -->
+<!-- OVERLAY -->
 <div id="unlock">🎅 TOCCA PER SENTIRE GERRY SCOTTI 🎄</div>
 
+<!-- VIDEO -->
 <div class="container">
-  <video class="vid left" autoplay loop muted playsinline>
+  <video autoplay loop muted playsinline class="left">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4">
   </video>
 
-  <video class="vid center" autoplay loop muted playsinline>
+  <video autoplay loop muted playsinline class="center">
     <source src="https://peppeagosto.github.io/immaggini/babbo.mp4">
   </video>
 
-  <video class="vid right" autoplay loop muted playsinline>
+  <video autoplay loop muted playsinline class="right">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4">
   </video>
 </div>
 
+<!-- CONTROLLI -->
 <div class="controls">
-  <marquee class="marquee" behavior="alternate">
-    🎄 GERRY SCOTTI VI AUGURA BUON NATALE 🎅
-  </marquee>
+  <marquee class="marquee">🎄 GERRY SCOTTI VI AUGURA BUON NATALE 🎅</marquee>
 
   <div class="buttons">
-    <button class="star-btn" onclick="playAudio()">PLAY</button>
+    <button id="playBtn" class="star-btn">PLAY</button>
     <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
     <button class="star-btn" onclick="stopAudio()">STOP</button>
   </div>
@@ -148,33 +160,60 @@ input[type=range]{
 
 <script>
 const audio = document.getElementById("gerry");
-const volume = document.getElementById("volume");
 const unlock = document.getElementById("unlock");
+const volume = document.getElementById("volume");
+const playBtn = document.getElementById("playBtn");
 
-/* SBLOCCO MOBILE */
-unlock.addEventListener("click",()=>{
+/* ===== UNLOCK AUDIO MOBILE ===== */
+unlock.addEventListener("touchstart", unlockAudio, {once:true});
+unlock.addEventListener("click", unlockAudio, {once:true});
+
+function unlockAudio(){
+  audio.volume = 0;
   audio.play().then(()=>{
     audio.pause();
-    audio.currentTime=0;
+    audio.currentTime = 0;
     unlock.style.display="none";
-  });
-});
 
-function playAudio(){
-  audio.volume = volume.value;
+    document.querySelectorAll("video")
+      .forEach(v=>v.style.pointerEvents="auto");
+
+    playBtn.classList.add("play-ready");
+  });
+}
+
+/* ===== PLAY CON FADE IN ===== */
+playBtn.onclick = ()=>{
+  audio.currentTime = 0;
+  audio.volume = 0;
   audio.play();
+  fadeIn();
+};
+
+function fadeIn(){
+  let v = 0;
+  const fade = setInterval(()=>{
+    v += 0.05;
+    if(v >= volume.value){
+      v = volume.value;
+      clearInterval(fade);
+    }
+    audio.volume = v;
+  },100);
 }
 
 function stopAudio(){
   audio.pause();
-  audio.currentTime=0;
+  audio.currentTime = 0;
 }
 
-volume.oninput=()=>audio.volume=volume.value;
+volume.oninput = ()=> audio.volume = volume.value;
 </script>
 
 </body>
 </html>
+
+
 
 
 
