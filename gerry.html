@@ -20,7 +20,7 @@ html,body{
   width:330px;
   height:486px;
   border-radius:10px;
-  pointer-events:none; /* Blocca i click sul wrapper e sul video dentro */
+  pointer-events:none;
   overflow:hidden;
 }
 
@@ -48,32 +48,30 @@ video{
   width:728px;
 }
 
-/* TASTO CLICCABILE - SOPRA TUTTO */
+/* TESTO DECORATIVO (non più cliccabile per audio) */
 #audioControls{
   position:fixed;
   bottom:40px;
   left:50%;
   transform:translateX(-50%);
-  z-index:99999; /* Altissimo */
+  z-index:99999;
   text-align:center;
   width:100%;
-  pointer-events:none; /* Contenitore non blocca */
 }
 
 #playText{
   color:#00ffff;
   font-size:28px;
   font-weight:bold;
-  cursor:pointer;
-  padding:40px 100px; /* AREA ENORME, impossibile non cliccarla */
+  padding:40px 100px;
   border:4px solid #00ffff;
   border-radius:15px;
   background:rgba(0,0,0,0.6);
   transition: all 0.3s ease;
   display:inline-block;
-  pointer-events:auto; /* Solo questo riceve click */
   user-select:none;
   box-shadow:0 0 30px rgba(0,255,255,0.7);
+  animation: pulse 2s infinite;
 }
 
 #playText:hover{
@@ -83,8 +81,11 @@ video{
   box-shadow:0 0 50px rgba(0,255,255,1);
 }
 
-#playText:active{
-  transform:scale(1.1);
+/* Piccola animazione per renderlo più vivo */
+@keyframes pulse {
+  0% { box-shadow:0 0 30px rgba(0,255,255,0.7); }
+  50% { box-shadow:0 0 50px rgba(0,255,255,1); }
+  100% { box-shadow:0 0 30px rgba(0,255,255,0.7); }
 }
 </style>
 </head>
@@ -117,31 +118,8 @@ video{
   </div>
 </div>
 
-<!-- AUDIO -->
-<audio id="audioPlayer" loop>
-  <source src="https://peppeagosto.github.io/immaggini/250.mp3" type="audio/mpeg">
-</audio>
 
-<!-- TASTO CLICCABILE -->
-<div id="audioControls">
-  <span id="playText">BUON NATALE DA GERRY SCOTTI</span>
 </div>
-
-<script>
-const audio = document.getElementById('audioPlayer');
-const playText = document.getElementById('playText');
-
-playText.addEventListener('click', () => {
-  audio.play().then(() => {
-    playText.innerText = "♪ AUDIO ATTIVO ♪ BUON NATALE DA GERRY SCOTTI";
-    playText.style.background = '#00ffff';
-    playText.style.color = 'black';
-  }).catch(error => {
-    console.error("Errore audio:", error);
-    playText.innerText = "ERRORE - PROVA A CLICCARE DI NUOVO";
-  });
-});
-</script>
 
 </body>
 </html>
