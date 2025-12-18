@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gerry Natale</title>
-
 <style>
 html,body{
   margin:0;
@@ -14,16 +13,14 @@ html,body{
   overflow:hidden;
   font-family:Arial,sans-serif;
 }
-
 video{
   position:absolute;
   width:330px;
   height:486px;
   object-fit:cover;
   border-radius:10px;
-  pointer-events:none; /* i video non bloccano il click */
+  pointer-events:none; /* i video non intercettano click */
 }
-
 .container{
   position:absolute;
   top:50%;
@@ -32,8 +29,7 @@ video{
   width:1330px;
   height:486px;
 }
-
-/* VIDEO LAYOUT */
+/* POSIZIONI VIDEO */
 .left{left:-40px}
 .right{right:-40px}
 .center{
@@ -41,8 +37,7 @@ video{
   transform:translateX(-50%);
   width:728px;
 }
-
-/* TESTO CLICCABILE */
+/* CONTROLLI AUDIO */
 #audioControls{
   position:absolute;
   bottom:30px;
@@ -50,26 +45,30 @@ video{
   transform:translateX(-50%);
   text-align:center;
   z-index:1000;
+  width:100%;
+  height:120px;              /* area sensibile più alta */
+  pointer-events:none;       /* il contenitore non blocca i click */
 }
-
 #playText{
   color:#00ffff;
   font-size:20px;
   cursor:pointer;
-  padding:10px 20px;
+  padding:25px 50px;         /* area cliccabile molto più grande */
   border:2px solid #00ffff;
-  border-radius:5px;
+  border-radius:8px;
   transition: all 0.3s ease;
   display:inline-block;
+  pointer-events:auto;       /* solo questo elemento riceve i click */
+  background:rgba(0,0,0,0.4); /* leggero sfondo per maggiore visibilità */
+  user-select:none;
 }
-
 #playText:hover{
   background:#00ffff;
   color:black;
+  transform:scale(1.05);
 }
 </style>
 </head>
-
 <body>
 
 <!-- VIDEO -->
@@ -77,11 +76,9 @@ video{
   <video autoplay loop muted playsinline class="left">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
-
   <video autoplay loop muted playsinline class="center">
     <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
   </video>
-
   <video autoplay loop muted playsinline class="right">
     <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
   </video>
@@ -94,16 +91,32 @@ video{
 
 <!-- TESTO CLICCABILE -->
 <div id="audioControls">
-  <span id="playText">BUON NATALE DAL CARTAIO</span>
+  <span id="playText">BUON NATALE DA GERRY SCOTT</span>
 </div>
 
 <script>
 const audio = document.getElementById('audioPlayer');
 const playText = document.getElementById('playText');
 
-// Parte l'audio quando clicchi il testo
 playText.addEventListener('click', () => {
-  audio.play();
+  audio.play().then(() => {
+    // Audio partito con successo
+    playText.innerText = "AUDIO ATTIVO - BUON NATALE DA GERRY SCOTT";
+    playText.style.background = '#00ffff';
+    playText.style.color = 'black';
+  }).catch(error => {
+    console.error("Errore riproduzione audio:", error);
+    playText.innerText = "CLICCA DI NUOVO PER L'AUDIO";
+  });
+});
+
+// Opzionale: se l'utente clicca di nuovo può rimettere il testo originale
+playText.addEventListener('dblclick', () => {
+  if (audio.paused) {
+    playText.innerText = "BUON NATALE DA GERRY SCOTT";
+    playText.style.background = 'rgba(0,0,0,0.4)';
+    playText.style.color = '#00ffff';
+  }
 });
 </script>
 
