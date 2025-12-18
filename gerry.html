@@ -13,14 +13,24 @@ html,body{
   overflow:hidden;
   font-family:Arial,sans-serif;
 }
-video{
+
+/* Wrapper per bloccare i click sui video */
+.video-wrapper {
   position:absolute;
   width:330px;
   height:486px;
-  object-fit:cover;
   border-radius:10px;
-  pointer-events:none; /* i video non intercettano click */
+  pointer-events:none; /* Blocca i click sul wrapper e sul video dentro */
+  overflow:hidden;
 }
+
+video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* POSIZIONI VIDEO */
 .container{
   position:absolute;
   top:50%;
@@ -29,59 +39,82 @@ video{
   width:1330px;
   height:486px;
 }
-/* POSIZIONI VIDEO */
-.left{left:-40px}
-.right{right:-40px}
-.center{
+
+.left .video-wrapper {left:-40px}
+.right .video-wrapper {right:-40px}
+.center .video-wrapper {
   left:50%;
   transform:translateX(-50%);
   width:728px;
 }
-/* CONTROLLI AUDIO */
+
+/* TASTO CLICCABILE - SOPRA TUTTO */
 #audioControls{
-  position:absolute;
-  bottom:30px;
+  position:fixed;
+  bottom:40px;
   left:50%;
   transform:translateX(-50%);
+  z-index:99999; /* Altissimo */
   text-align:center;
-  z-index:1000;
   width:100%;
-  height:120px;              /* area sensibile più alta */
-  pointer-events:none;       /* il contenitore non blocca i click */
+  pointer-events:none; /* Contenitore non blocca */
 }
+
 #playText{
   color:#00ffff;
-  font-size:20px;
+  font-size:28px;
+  font-weight:bold;
   cursor:pointer;
-  padding:25px 50px;         /* area cliccabile molto più grande */
-  border:2px solid #00ffff;
-  border-radius:8px;
+  padding:40px 100px; /* AREA ENORME, impossibile non cliccarla */
+  border:4px solid #00ffff;
+  border-radius:15px;
+  background:rgba(0,0,0,0.6);
   transition: all 0.3s ease;
   display:inline-block;
-  pointer-events:auto;       /* solo questo elemento riceve i click */
-  background:rgba(0,0,0,0.4); /* leggero sfondo per maggiore visibilità */
+  pointer-events:auto; /* Solo questo riceve click */
   user-select:none;
+  box-shadow:0 0 30px rgba(0,255,255,0.7);
 }
+
 #playText:hover{
   background:#00ffff;
   color:black;
-  transform:scale(1.05);
+  transform:scale(1.15);
+  box-shadow:0 0 50px rgba(0,255,255,1);
+}
+
+#playText:active{
+  transform:scale(1.1);
 }
 </style>
 </head>
 <body>
 
-<!-- VIDEO -->
+<!-- VIDEO con wrapper -->
 <div class="container">
-  <video autoplay loop muted playsinline class="left">
-    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
-  </video>
-  <video autoplay loop muted playsinline class="center">
-    <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
-  </video>
-  <video autoplay loop muted playsinline class="right">
-    <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
-  </video>
+  <div class="left">
+    <div class="video-wrapper">
+      <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="video-wrapper">
+      <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/babbo.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="video-wrapper">
+      <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/25.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
 </div>
 
 <!-- AUDIO -->
@@ -89,9 +122,9 @@ video{
   <source src="https://peppeagosto.github.io/immaggini/250.mp3" type="audio/mpeg">
 </audio>
 
-<!-- TESTO CLICCABILE -->
+<!-- TASTO CLICCABILE -->
 <div id="audioControls">
-  <span id="playText">BUON NATALE DA GERRY SCOTT</span>
+  <span id="playText">BUON NATALE DA GERRY SCOTTI</span>
 </div>
 
 <script>
@@ -100,23 +133,13 @@ const playText = document.getElementById('playText');
 
 playText.addEventListener('click', () => {
   audio.play().then(() => {
-    // Audio partito con successo
-    playText.innerText = "AUDIO ATTIVO - BUON NATALE DA GERRY SCOTT";
+    playText.innerText = "♪ AUDIO ATTIVO ♪ BUON NATALE DA GERRY SCOTTI";
     playText.style.background = '#00ffff';
     playText.style.color = 'black';
   }).catch(error => {
-    console.error("Errore riproduzione audio:", error);
-    playText.innerText = "CLICCA DI NUOVO PER L'AUDIO";
+    console.error("Errore audio:", error);
+    playText.innerText = "ERRORE - PROVA A CLICCARE DI NUOVO";
   });
-});
-
-// Opzionale: se l'utente clicca di nuovo può rimettere il testo originale
-playText.addEventListener('dblclick', () => {
-  if (audio.paused) {
-    playText.innerText = "BUON NATALE DA GERRY SCOTT";
-    playText.style.background = 'rgba(0,0,0,0.4)';
-    playText.style.color = '#00ffff';
-  }
 });
 </script>
 
