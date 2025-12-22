@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio Zeno Player Blue Glow con MP4</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: radial-gradient(circle at top, #0a2a5e, #020b18 70%);
+  font-family:Segoe UI,Arial,sans-serif;
+  color:white;
+  overflow:hidden;
+}
+
+/* LUCI BLU DI SFONDO */
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle, rgba(0,160,255,.35), transparent 70%);
+  filter:blur(60px);
+  animation:moveLight 12s linear infinite;
+}
+body::after{
+  animation-delay:6s;
+  top:60%;
+  left:60%;
+}
+
+@keyframes moveLight{
+  0%{ transform:translate(0,0); }
+  50%{ transform:translate(-120px,80px); }
+  100%{ transform:translate(0,0); }
+}
+
+/* CONTENITORE TOTALE */
+#layout{
+  width:650px;
+  height:484px;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* MP4 LATERALI */
+.side-video{
+  position:absolute;
+  top:0;
+  width:140px;
+  height:100%;
+  object-fit:cover;
+  opacity:0.9;
+  pointer-events:none;
+}
+#leftVideo{ left:0; }
+#rightVideo{ right:0; }
+
+/* PLAYER CENTRALE */
+.player{
+  position:relative;
+  width:370px;
+  height:100%;
+  padding:25px;
+  border-radius:22px;
+  background:rgba(0,15,40,0.75);
+  backdrop-filter:blur(14px);
+  box-shadow:
+    0 0 25px rgba(0,140,255,.6),
+    0 0 60px rgba(0,140,255,.4);
+  text-align:center;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+}
+
+/* COVER FERMA */
+.cover{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid rgba(120,200,255,.8);
+  box-shadow:0 0 25px rgba(0,160,255,.9), inset 0 0 20px rgba(0,160,255,.6);
+}
+.cover img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* SCROLLER */
+.scroller{
+  width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  margin:15px 0 25px;
+}
+.scroll-text{
+  display:inline-block;
+  padding-left:100%;
+  font-size:1.3em;
+  font-weight:700;
+  background:linear-gradient(270deg,#00ccff,#00ffea,#4d8dff,#8b5cff,#00ccff);
+  background-size:600% 600%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:scroll 14s linear infinite, rainbow 6s linear infinite;
+  filter:drop-shadow(0 0 8px rgba(0,200,255,.9));
+}
+@keyframes scroll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-100%); }
+}
+@keyframes rainbow{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+/* CONTROLLI */
+.controls button{
+  background:none;
+  border:none;
+  color:#cfefff;
+  font-size:2em;
+  margin:0 18px;
+  cursor:pointer;
+  transition:transform .2s, filter .2s;
+}
+.controls button:hover{
+  transform:scale(1.25);
+  filter:drop-shadow(0 0 12px #00aaff);
+}
+
+/* VOLUME */
+.volume{
+  margin-top:18px;
+}
+input[type=range]{
+  width:80%;
+  accent-color:#00aaff;
+}
+
+/* STATUS */
+.status{
+  font-size:.85em;
+  margin-top:12px;
+  opacity:.75;
+}
+</style>
+</head>
+
+<body>
+
+<div id="layout">
+
+  <!-- MP4 SINISTRA -->
+  <video id="leftVideo" class="side-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/alba.mp4" type="video/mp4">
+  </video>
+
+  <!-- MP4 DESTRA -->
+  <video id="rightVideo" class="side-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/alba.mp4" type="video/mp4">
+  </video>
+
+  <!-- PLAYER CENTRALE -->
+  <div class="player">
+    <div class="cover">
+      <img id="coverArt" src="https://xatimg.com/image/bP423qrrb5Rg.jpg">
+    </div>
+    <div class="scroller">
+      <div class="scroll-text" id="scrollText">In attesa metadata…</div>
+    </div>
+    <div class="controls">
+      <button id="stopBtn">⏹️</button>
+      <button id="playBtn">▶️</button>
+    </div>
+    <div class="volume">
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+    </div>
+    <div class="status">Blue Glow Radio</div>
+  </div>
+
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const stopBtn = document.getElementById("stopBtn");
+const volume = document.getElementById("volume");
+const scrollText = document.getElementById("scrollText");
+const coverArt = document.getElementById("coverArt");
+
+const FALLBACK_COVER = "https://xatimg.com/image/bP423qrrb5Rg.jpg";
+const STREAM_URL = "https://stream.zeno.fm/qs3aarshmtzuv";
+const API_URL = "https://api.zeno.fm/mounts/metadata/subscribe/qs3aarshmtzuv";
+
+let playing=false;
+audio.src=STREAM_URL;
+audio.volume=volume.value;
+
+/* CONTROLLI */
+playBtn.onclick=()=>{
+  if(!playing){
+    audio.play().catch(()=>{});
+    playBtn.textContent="⏸️";
+    playing=true;
+  }else{
+    audio.pause();
+    playBtn.textContent="▶️";
+    playing=false;
+  }
+};
+stopBtn.onclick=()=>{
+  audio.pause();
+  audio.currentTime=0;
+  playBtn.textContent="▶️";
+  playing=false;
+};
+volume.oninput=()=>audio.volume=volume.value;
+
+/* METADATA */
+function connectMetadata(){
+  const es=new EventSource(API_URL);
+  es.onmessage=e=>{
+    const data=JSON.parse(e.data);
+    if(!data.streamTitle) return;
+    scrollText.textContent=data.streamTitle;
+
+    fetch(`https://api.deezer.com/search?q=${encodeURIComponent(data.streamTitle)}&limit=1`)
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.data && d.data[0]?.album?.cover_big){
+        coverArt.src=d.data[0].album.cover_big;
+      }else{
+        coverArt.src=FALLBACK_COVER;
+      }
+    })
+    .catch(()=> coverArt.src=FALLBACK_COVER);
+  };
+}
+connectMetadata();
+</script>
+
+</body>
+</html>
