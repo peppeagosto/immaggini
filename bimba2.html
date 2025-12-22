@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>bimba2</title>
+<title>Natale Reale – Neve e Stelline Cadenti</title>
 
 <style>
 html,body{
@@ -35,8 +35,8 @@ html,body{
   overflow:hidden;
 }
 
-.left-video-wrapper{ left:10px; }
-.right-video-wrapper{ right:10px; }
+.left-video-wrapper{ left:15px; }
+.right-video-wrapper{ right:15px; }
 
 video.side-video{
   width:100%;
@@ -58,7 +58,7 @@ video.side-video{
   animation:glow 1.5s infinite alternate;
 }
 
-/* Entrambi i video: testo rosso con bordo azzurro */
+/* Testo rosso con bordo azzurro */
 .video-text{
   color:red;
   text-shadow:
@@ -130,8 +130,14 @@ img.center-image{
   box-shadow:0 0 10px rgba(255,215,0,0.9);
 }
 
+/* Stelline grandi cadono lentamente e brillano */
 .stars span.large{
-  animation:twinkle 2.8s infinite alternate;
+  animation:fallAndTwinkle 20s linear infinite, twinkle 2.8s infinite alternate;
+}
+
+@keyframes fallAndTwinkle{
+  0%{ transform: translateY(0); }
+  100%{ transform: translateY(530px); }
 }
 
 @keyframes twinkle{
@@ -150,12 +156,13 @@ img.center-image{
     <script>
       for(let i=0;i<120;i++){
         const size = Math.random()<0.2 ? 6+Math.random()*4 : 2+Math.random()*2;
+        const duration = 15 + Math.random()*10; // neve lenta
         document.write(`
           <span style="
             left:${Math.random()*100}%;
             width:${size}px;
             height:${size}px;
-            animation-duration:${7+Math.random()*10}s;
+            animation-duration:${duration}s;
             opacity:${0.5+Math.random()*0.5};
           "></span>
         `);
@@ -166,9 +173,12 @@ img.center-image{
   <!-- STELLE -->
   <div class="stars">
     <script>
+      // 10 stelline grandi cadenti e brillanti
       for(let i=0;i<10;i++){
-        document.write(`<span class="large" style="top:${Math.random()*100}%; left:${Math.random()*100}%; width:30px; height:30px;"></span>`);
+        const duration = 15 + Math.random()*10;
+        document.write(`<span class="large" style="top:${Math.random()*100}%; left:${Math.random()*100}%; width:30px; height:30px; animation-duration:${duration}s;"></span>`);
       }
+      // 30 stelline piccole statiche
       for(let i=0;i<30;i++){
         document.write(`<span style="top:${Math.random()*100}%; left:${Math.random()*100}%; width:10px; height:10px;"></span>`);
       }
@@ -198,6 +208,8 @@ img.center-image{
 
 </body>
 </html>
+
+
 
 
 
