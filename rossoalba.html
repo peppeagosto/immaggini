@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>GIF 1300x750</title>
+<title>GIF con testo centrale</title>
 <style>
 html,body{
   margin:0;
@@ -13,26 +12,63 @@ html,body{
   display:flex;
   justify-content:center;
   align-items:center;
+  font-family:Arial, sans-serif;
 }
 
-.gif-box{
+#layout{
+  width:1600px;
+  height:750px;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.side-img{
+  width:200px;
+  height:auto;
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+#left-img{
+  left:80px;
+}
+
+#right-img{
+  right:80px;
+}
+
+.center-gif{
   width:1300px;
   height:750px;
-  overflow:hidden;
+  object-fit:cover;
 }
 
-.gif-box img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  image-rendering:auto;
+#center-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:100px;
+  font-weight:bold;
+  background: linear-gradient(to bottom, red, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align:center;
+  pointer-events:none;
 }
 </style>
 </head>
-
 <body>
-  <div class="gif-box">
-    <img src="https://peppeagosto.github.io/immaggini/rossa2.gif" alt="rossa2">
+  <div id="layout">
+    <img id="left-img" class="side-img" src="https://xatimg.com/image/OQWZRIaVZFN0.png" alt="sx">
+    <img id="right-img" class="side-img" src="https://xatimg.com/image/OQWZRIaVZFN0.png" alt="dx">
+    <img class="center-gif" src="https://peppeagosto.github.io/immaggini/rossa2.gif" alt="centro">
+    <div id="center-text">ALBANIA</div>
   </div>
 </body>
 </html>
+
+
