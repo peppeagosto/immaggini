@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Video/GIF 1300x750</title>
+<title>GIF 1300x750</title>
 <style>
 html,body{
   margin:0;
@@ -14,30 +14,29 @@ html,body{
   align-items:center;
 }
 
-.video-box{
+.gif-box{
   width:1300px;
   height:750px;
   overflow:hidden;
 }
 
-.video-box video{
+.gif-box img{
   width:100%;
   height:100%;
   object-fit:cover;
+  image-rendering:auto;
 }
 </style>
 </head>
 
 <body>
-  <div class="video-box">
-    <video autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/rossa2.mp4" type="video/mp4">
-      <!-- Se vuoi usare GIF originale come fallback -->
-      <img src="https://peppeagosto.github.io/immaggini/rossa2.gif" alt="rossa2">
-    </video>
+  <div class="gif-box">
+    <img src="https://peppeagosto.github.io/immaggini/rossa2.gif" alt="rossa2">
   </div>
 </body>
 </html>
+
+
 
 
 
