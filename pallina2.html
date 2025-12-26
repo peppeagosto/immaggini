@@ -1,3 +1,218 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>EditCartaio</title><style>body{margin:0;padding:0;background:transparent;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden}.container{max-width:1300px;width:100%;aspect-ratio:1300/748;position:relative;background:radial-gradient(circle at center,#180000 0%,#000 90%);overflow:hidden}.photos{position:absolute;inset:0;z-index:10}.photo{width:120px;height:200px;object-fit:contain;background:#000;border:2px solid #fff;box-shadow:0 0 14px rgba(255,255,255,.85);transition:transform .3s ease,box-shadow .3s ease}.photo:hover{transform:scale(1.45);box-shadow:0 0 36px rgba(255,255,255,1);z-index:999}.nick{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-family:Arial,sans-serif;font-size:11px;font-weight:bold;color:#fff;text-shadow:0 0 8px #000;pointer-events:none}.rainbow-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:"Arial Black",sans-serif;font-size:clamp(36px,5.5vw,78px);font-weight:900;letter-spacing:.6vw;text-transform:uppercase;background:linear-gradient(90deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);background-size:300% 300%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 8s linear infinite,pulse 4s ease-in-out infinite;z-index:20;text-shadow:0 0 20px rgba(255,255,255,.3)}@keyframes rainbow{0%{background-position:0% 50%}100%{background-position:100% 50%}}@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}.christmas-border{position:absolute;top:-30px;left:-30px;right:-30px;bottom:-30px;padding:30px;pointer-events:none;z-index:30}.light{position:absolute;width:30px;height:30px;border-radius:50%;box-shadow:0 0 50px 15px currentColor;animation:twinkle 2.8s infinite}@keyframes twinkle{0%,100%{opacity:.6;transform:scale(.9)}50%{opacity:1;transform:scale(1.6)}}@keyframes fall{0%{transform:translateY(-300px)}100%{transform:translateY(calc(100vh + 300px))}}</style></head><body><div class="container"><div class="photos" id="p"></div><div class="rainbow-text">I MIEI DJ</div><div class="christmas-border" id="l"></div></div><script>const a=['https://xatimg.com/image/1ZsGZV3559Dk.png','https://xatimg.com/image/w4kDkkKOYnO8.png','https://xatimg.com/image/qoe7hRjCkaob.png','https://xatimg.com/image/BX6a2XZOqcw5.png','https://xatimg.com/image/Hl8a1GWgOFmj.png','https://xatimg.com/image/Z695pc9to7Wr.png','https://xatimg.com/image/GfKx6ACgVr3m.png','https://xatimg.com/image/LOS35pm7Ljih.png','https://xatimg.com/image/npuvPjE3PM4E.png','https://xatimg.com/image/GDQMMZwTzzSi.png'],b=['DJ FIRE','DJ ICE','DJ DARK','DJ SUN','DJ STAR','DJ MOON','DJ LIGHT','DJ SHADOW'],c=document.getElementById('p');let d=0;setTimeout(()=>{e();setInterval(e,900)},3000);function e(){let f=document.createElement('div');f.style.position='absolute';let g=[6,14,66,74];f.style.left=g[Math.floor(Math.random()*g.length)]+'%';f.style.top='-300px';let h=8+Math.random()*4;f.style.animation=`fall ${h}s linear infinite`;let i=document.createElement('img');i.className='photo';i.src=a[d%a.length];let j=document.createElement('div');j.className='nick';j.textContent=b[Math.floor(Math.random()*b.length)];f.appendChild(i);f.appendChild(j);c.appendChild(f);d++}const k=document.getElementById('l'),m=['#ff0000','#00ff00','#ffff00','#ff8800','#00ffff','#ff00ff','#ffffff','#ff0088'];function n(){k.innerHTML='';let r=document.querySelector('.container').getBoundingClientRect(),w=r.width,h=r.height,s=Math.max(34,w/38);for(let x=60;x<w-90;x+=s){['top','bottom'].forEach(p=>{let t=document.createElement('div');t.className='light';let c=m[Math.floor(Math.random()*m.length)];t.style.background=c;t.style.color=c;t.style.left=x+'px';t.style.top=p==='top'?'0px':(h-60)+'px';t.style.animationDelay=Math.random()*3+'s';k.appendChild(t)})}for(let y=s;y<h-s*2;y+=s){['left','right'].forEach(sid=>{let t=document.createElement('div');t.className='light';let c=m[Math.floor(Math.random()*m.length)];t.style.background=c;t.style.color=c;t.style.top=y+'px';t.style.left=sid==='left'?'68px':(w-68)+'px';t.style.animationDelay=Math.random()*3+'s';k.appendChild(t)})}}n();window.addEventListener('resize',n);</script></body></html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>EditCartaio</title>
+<style>
+body {
+    margin:0;
+    padding:0;
+    background:transparent;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow:hidden
+}
+.container {
+    max-width:1300px;
+    width:100%;
+    aspect-ratio:1300/748;
+    position:relative;
+    background:radial-gradient(circle at center,#180000 0%,#000 90%);
+    overflow:hidden
+}
+.photos {
+    position:absolute;
+    inset:0;
+    z-index:10
+}
+.photo {
+    width:120px;
+    height:200px;
+    object-fit:contain;
+    background:#000;
+    border:2px solid #fff;
+    box-shadow:0 0 14px rgba(255,255,255,.85);
+    transition:transform .3s ease,box-shadow .3s ease
+}
+.photo:hover {
+    transform:scale(1.45);
+    box-shadow:0 0 36px rgba(255,255,255,1);
+    z-index:999
+}
+.nick {
+    position:absolute;
+    top:4px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:Arial,sans-serif;
+    font-size:11px;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:0 0 8px #000;
+    pointer-events:none
+}
+.rainbow-text {
+    position:absolute;
+    top:70%;                  /* Spostato molto più in basso */
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-family:"Arial Black",sans-serif;
+    font-size:clamp(36px,5.5vw,78px);
+    font-weight:900;
+    letter-spacing:.6vw;
+    text-transform:uppercase;
+    background:linear-gradient(90deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);
+    background-size:300% 300%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:rainbow 8s linear infinite,pulse 4s ease-in-out infinite;
+    z-index:20;
+    text-shadow:0 0 20px rgba(255,255,255,.3)
+}
+@keyframes rainbow {
+    0%{background-position:0% 50%}
+    100%{background-position:100% 50%}
+}
+@keyframes pulse {
+    0%,100%{transform:translate(-50%,-50%) scale(1)}
+    50%{transform:translate(-50%,-50%) scale(1.06)}
+}
+.christmas-border {
+    position:absolute;
+    top:-30px;
+    left:-30px;
+    right:-30px;
+    bottom:-30px;
+    padding:30px;
+    pointer-events:none;
+    z-index:30
+}
+.light {
+    position:absolute;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    box-shadow:0 0 50px 15px currentColor;
+    animation:twinkle 2.8s infinite
+}
+@keyframes twinkle {
+    0%,100%{opacity:.6;transform:scale(.9)}
+    50%{opacity:1;transform:scale(1.6)}
+}
+@keyframes fall {
+    0% { transform: translateY(-300px); }
+    100% { transform: translateY(calc(100vh + 300px)); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="photos" id="p"></div>
+    <div class="rainbow-text">I MIEI DJ</div>
+    <div class="christmas-border" id="l"></div>
+</div>
 
+<script>
+const immagini = [
+    'https://xatimg.com/image/1ZsGZV3559Dk.png',
+    'https://xatimg.com/image/w4kDkkKOYnO8.png',
+    'https://xatimg.com/image/qoe7hRjCkaob.png',
+    'https://xatimg.com/image/BX6a2XZOqcw5.png',
+    'https://xatimg.com/image/Hl8a1GWgOFmj.png',
+    'https://xatimg.com/image/Z695pc9to7Wr.png',
+    'https://xatimg.com/image/GfKx6ACgVr3m.png',
+    'https://xatimg.com/image/LOS35pm7Ljih.png',
+    'https://xatimg.com/image/npuvPjE3PM4E.png',
+    'https://xatimg.com/image/GDQMMZwTzzSi.png'
+];
+const nomi = ['DJ FIRE','DJ ICE','DJ DARK','DJ SUN','DJ STAR','DJ MOON','DJ LIGHT','DJ SHADOW'];
 
+const photosContainer = document.getElementById('p');
+let indice = 0;
+
+setTimeout(() => {
+    creaFiocco();
+    setInterval(creaFiocco, 900);  // uno ogni 0.9 secondi
+}, 3000);
+
+function creaFiocco() {
+    const fiocco = document.createElement('div');
+    fiocco.style.position = 'absolute';
+    
+    // Posizione orizzontale casuale su tutta la larghezza (5% - 95%)
+    const leftPercent = 5 + Math.random() * 90;
+    fiocco.style.left = leftPercent + '%';
+    
+    fiocco.style.top = '-300px';
+    
+    // Durata caduta lenta e variabile (tra 18 e 28 secondi) per effetto nevicata naturale
+    const durata = 18 + Math.random() * 10;
+    fiocco.style.animation = `fall ${durata}s linear infinite`;
+    
+    // Immagine del DJ
+    const img = document.createElement('img');
+    img.className = 'photo';
+    img.src = immagini[indice % immagini.length];
+    
+    // Nome casuale
+    const nick = document.createElement('div');
+    nick.className = 'nick';
+    nick.textContent = nomi[Math.floor(Math.random() * nomi.length)];
+    
+    fiocco.appendChild(img);
+    fiocco.appendChild(nick);
+    photosContainer.appendChild(fiocco);
+    
+    indice++;
+}
+
+// Luci di Natale (invariato)
+const border = document.getElementById('l');
+const colori = ['#ff0000','#00ff00','#ffff00','#ff8800','#00ffff','#ff00ff','#ffffff','#ff0088'];
+
+function creaLuci() {
+    border.innerHTML = '';
+    const containerRect = document.querySelector('.container').getBoundingClientRect();
+    const width = containerRect.width;
+    const height = containerRect.height;
+    const passo = Math.max(34, width / 38);
+    
+    // Top e bottom
+    for (let x = 60; x < width - 90; x += passo) {
+        ['top', 'bottom'].forEach(pos => {
+            const luce = document.createElement('div');
+            luce.className = 'light';
+            const colore = colori[Math.floor(Math.random() * colori.length)];
+            luce.style.background = colore;
+            luce.style.color = colore;
+            luce.style.left = x + 'px';
+            luce.style.top = pos === 'top' ? '0px' : (height - 60) + 'px';
+            luce.style.animationDelay = Math.random() * 3 + 's';
+            border.appendChild(luce);
+        });
+    }
+    
+    // Left e right
+    for (let y = passo; y < height - passo * 2; y += passo) {
+        ['left', 'right'].forEach(side => {
+            const luce = document.createElement('div');
+            luce.className = 'light';
+            const colore = colori[Math.floor(Math.random() * colori.length)];
+            luce.style.background = colore;
+            luce.style.color = colore;
+            luce.style.top = y + 'px';
+            luce.style.left = side === 'left' ? '68px' : (width - 68) + 'px';
+            luce.style.animationDelay = Math.random() * 3 + 's';
+            border.appendChild(luce);
+        });
+    }
+}
+
+creaLuci();
+window.addEventListener('resize', creaLuci);
+</script>
+</body>
+</html>
