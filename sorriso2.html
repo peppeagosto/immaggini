@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>EL DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
+
+/* ===== CONTENITORE VIDEO ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  overflow:hidden;
+  z-index:1;
+  transition:1s;
+  background:transparent;
+  border-radius:20px;
+}
+.left{left:0}
+.right{right:0}
+
+/* ===== SOLO BORDI ARCOBALENO + GLOW (STATICI) ===== */
+.video-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:4px;          /* spessore bordo */
+  border-radius:20px;
+  background:conic-gradient(
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #0000ff,
+    #4b0082,
+    #9400d3,
+    #ff0000
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  filter:
+    drop-shadow(0 0 6px rgba(255,0,0,.6))
+    drop-shadow(0 0 12px rgba(0,255,255,.5));
+  pointer-events:none;
+}
+
+/* ===== VIDEO ===== */
+.side-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:transparent;
+  border-radius:16px;
+}
+
+.video-text{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+  font-family:Trebuchet MS;
+  color:#ffe9b0;
+  z-index:2;
+}
+
+/* ===== AREA CENTRALE ===== */
+.center-area{
+  position:absolute;
+  left:260px;
+  right:260px;
+  height:484px;
+  pointer-events:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- VIDEO SINISTRO -->
+  <div id="videoA" class="video-wrapper left">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/sorriso.html.mp4">
+    </video>
+    <div class="video-text">MANUELA</div>
+  </div>
+
+  <!-- VIDEO DESTRO -->
+  <div id="videoB" class="video-wrapper right">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/sorriso.html.mp4">
+    </video>
+    <div class="video-text">ROSALÍA</div>
+  </div>
+
+  <div class="center-area"></div>
+</div>
+
+<script>
+setInterval(()=>{
+  videoA.classList.toggle("left");
+  videoA.classList.toggle("right");
+  videoB.classList.toggle("left");
+  videoB.classList.toggle("right");
+},10000);
+</script>
+
+</body>
+</html>
