@@ -22,40 +22,9 @@ body {
     background:radial-gradient(circle at center,#180000 0%,#000 90%);
     overflow:hidden
 }
-.photos {
-    position:absolute;
-    inset:0;
-    z-index:10
-}
-.photo {
-    width:120px;
-    height:200px;
-    object-fit:contain;
-    background:#000;
-    border:2px solid #fff;
-    box-shadow:0 0 14px rgba(255,255,255,.85);
-    transition:transform .3s ease,box-shadow .3s ease
-}
-.photo:hover {
-    transform:scale(1.45);
-    box-shadow:0 0 36px rgba(255,255,255,1);
-    z-index:999
-}
-.nick {
-    position:absolute;
-    top:4px;
-    left:50%;
-    transform:translateX(-50%);
-    font-family:Arial,sans-serif;
-    font-size:11px;
-    font-weight:bold;
-    color:#fff;
-    text-shadow:0 0 8px #000;
-    pointer-events:none
-}
 .rainbow-text {
     position:absolute;
-    top:70%;                  /* Spostato molto più in basso */
+    top:70%;
     left:50%;
     transform:translate(-50%,-50%);
     font-family:"Arial Black",sans-serif;
@@ -102,74 +71,16 @@ body {
     0%,100%{opacity:.6;transform:scale(.9)}
     50%{opacity:1;transform:scale(1.6)}
 }
-@keyframes fall {
-    0% { transform: translateY(-300px); }
-    100% { transform: translateY(calc(100vh + 300px)); }
-}
 </style>
 </head>
 <body>
 <div class="container">
-    <div class="photos" id="p"></div>
-    <div class="rainbow-text">I MIEI DJ</div>
+    <div class="rainbow-text">IL  CARTAIO</div>
     <div class="christmas-border" id="l"></div>
 </div>
 
 <script>
-const immagini = [
-    'https://xatimg.com/image/1ZsGZV3559Dk.png',
-    'https://xatimg.com/image/w4kDkkKOYnO8.png',
-    'https://xatimg.com/image/qoe7hRjCkaob.png',
-    'https://xatimg.com/image/BX6a2XZOqcw5.png',
-    'https://xatimg.com/image/Hl8a1GWgOFmj.png',
-    'https://xatimg.com/image/Z695pc9to7Wr.png',
-    'https://xatimg.com/image/GfKx6ACgVr3m.png',
-    'https://xatimg.com/image/LOS35pm7Ljih.png',
-    'https://xatimg.com/image/npuvPjE3PM4E.png',
-    'https://xatimg.com/image/GDQMMZwTzzSi.png'
-];
-const nomi = ['DJ FIRE','DJ ICE','DJ DARK','DJ SUN','DJ STAR','DJ MOON','DJ LIGHT','DJ SHADOW'];
-
-const photosContainer = document.getElementById('p');
-let indice = 0;
-
-setTimeout(() => {
-    creaFiocco();
-    setInterval(creaFiocco, 900);  // uno ogni 0.9 secondi
-}, 3000);
-
-function creaFiocco() {
-    const fiocco = document.createElement('div');
-    fiocco.style.position = 'absolute';
-    
-    // Posizione orizzontale casuale su tutta la larghezza (5% - 95%)
-    const leftPercent = 5 + Math.random() * 90;
-    fiocco.style.left = leftPercent + '%';
-    
-    fiocco.style.top = '-300px';
-    
-    // Durata caduta lenta e variabile (tra 18 e 28 secondi) per effetto nevicata naturale
-    const durata = 18 + Math.random() * 10;
-    fiocco.style.animation = `fall ${durata}s linear infinite`;
-    
-    // Immagine del DJ
-    const img = document.createElement('img');
-    img.className = 'photo';
-    img.src = immagini[indice % immagini.length];
-    
-    // Nome casuale
-    const nick = document.createElement('div');
-    nick.className = 'nick';
-    nick.textContent = nomi[Math.floor(Math.random() * nomi.length)];
-    
-    fiocco.appendChild(img);
-    fiocco.appendChild(nick);
-    photosContainer.appendChild(fiocco);
-    
-    indice++;
-}
-
-// Luci di Natale (invariato)
+// Luci di Natale (mantenute)
 const border = document.getElementById('l');
 const colori = ['#ff0000','#00ff00','#ffff00','#ff8800','#00ffff','#ff00ff','#ffffff','#ff0088'];
 
@@ -179,7 +90,7 @@ function creaLuci() {
     const width = containerRect.width;
     const height = containerRect.height;
     const passo = Math.max(34, width / 38);
-    
+   
     // Top e bottom
     for (let x = 60; x < width - 90; x += passo) {
         ['top', 'bottom'].forEach(pos => {
@@ -194,7 +105,7 @@ function creaLuci() {
             border.appendChild(luce);
         });
     }
-    
+   
     // Left e right
     for (let y = passo; y < height - passo * 2; y += passo) {
         ['left', 'right'].forEach(side => {
@@ -216,3 +127,4 @@ window.addEventListener('resize', creaLuci);
 </script>
 </body>
 </html>
+
