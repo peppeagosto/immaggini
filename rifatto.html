@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 rettangoli con cover centrale, EQ e scroller</title>
+<style>
+body {
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: ;
+  font-family:sans-serif;
+  color:white;
+  position:relative;
+  overflow:hidden;
+}
+/* Video background MP4 su tutto il body */
+#bgVideo {
+  position:fixed;
+  top:50%;
+  left:50%;
+  min-width:100%;
+  min-height:100%;
+  width:auto;
+  height:auto;
+  transform:translateX(-50%) translateY(-50%);
+  z-index:-1;
+  opacity:0.6;
+}
+#layout { width:740px; height:650px; position:relative; display:flex; justify-content:space-around; align-items:center; }
+
+/* Nuovo video popup sovrapposto esattamente al rettangolo centrale */
+#popupVideo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;   /* stessa larghezza di #centerRect */
+  height: 400px;  /* stessa altezza di #centerRect */
+  z-index: 50;    /* sopra il background del centro, ma sotto eventuali elementi più alti se necessario */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease-in-out;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.9);
+}
+#popupVideo.show {
+  opacity: 0.85;  /* leggermente trasparente per far intravedere cover e GIF sotto */
+}
+#popupVideo video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#centerRect {
+  width:300px; height:400px;
+  background:
+    url('https://xatimg.com/image/23MIvJ9tSlwC.jpg') center/cover no-repeat,
+    rgba(0,255,255,0.05);
+  border:4px solid;
+  border-image: linear-gradient(45deg, red, yellow, white, cyan) 1;
+  box-shadow:0 0 20px #0ff,0 0 40px #33ffff inset;
+  position:relative;
+}
+#centerCover {
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid #0ff;
+  box-shadow:0 0 15px #0ff, inset 0 0 10px #0ff;
+  animation:rotate 5s linear infinite;
+}
+#centerCover img { width:100%; height:100%; object-fit:cover; }
+/* GIF attorno al cerchio */
+.cover-gif {
+  position:absolute;
+  width:40px; height:40px;
+  pointer-events:none;
+}
+#gif1 { top:-20px; left:50%; transform:translateX(-50%); }
+#gif2 { top:10%; left:calc(50% + 90px); transform:translateY(-50%); }
+#gif3 { top:50%; left:calc(50% + 90px); transform:translateY(-50%); }
+#gif4 { bottom:10%; left:calc(50% + 60px); transform:translateX(-50%); }
+#gif5 { bottom:-20px; left:50%; transform:translateX(-50%); }
+#gif6 { bottom:10%; left:calc(50% - 60px); transform:translateX(-50%); }
+#gif7 { top:50%; left:calc(50% - 90px); transform:translateY(-50%); }
+#gif8 { top:10%; left:calc(50% - 90px); transform:translateY(-50%); }
+#gif9 { top:0%; left:50%; transform:translateY(-50%); }
+@keyframes rotate { from { transform: translateX(-50%) rotate(0deg); } to { transform: translateX(-50%) rotate(360deg); } }
+#eq { position:absolute; bottom:90px; left:50%; transform:translateX(-50%); display:flex; justify-content:space-between; width:90%; height:40px; align-items:flex-end; gap:4px; }
+#eq .bar { width:6%; height:5px; border-radius:3px; background: linear-gradient(to top, #ff00ff, #00ffff); box-shadow:0 0 10px #00ffff, 0 0 15px #ff00ff; transition: height 0.05s; }
+#titoloscroller { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:90%; overflow:hidden; white-space:nowrap; text-align:center; font-weight:700; font-size:14px; text-shadow:1px 1px 2px #ff0000, -1px -1px 2px #ffffff; color:white; }
+#titoloscroller span { display:inline-block; padding-left:100%; animation:scrollText 10s linear infinite; }
+@keyframes scrollText { from {transform:translateX(0);} to {transform:translateX(-100%);} }
+.side-rect { width:190px; height:480px; background:#0ff; border:2px solid #00f; box-shadow:0 0 20px #0ff,0 0 40px #33ffff inset; position:relative; overflow:hidden; border-radius:10px; }
+.side-rect video { width:100%; height:100%; object-fit:cover; }
+#leftRect { margin-left:-40px; }
+#rightRect { margin-right:-40px; }
+.controls { position:absolute; bottom:80px; left:190px; width:320px; display:flex; justify-content:flex-start; align-items:center; padding:0 10px; background:linear-gradient(90deg, rgba(0,180,255,.2), rgba(0,100,255,.2)); border-radius:20px; box-shadow:0 0 20px rgba(0,200,255,.5); gap:10px; }
+.controls button { background:linear-gradient(90deg,#00f,#0ff); border:none; border-radius:50%; width:35px; height:35px; color:white; font-size:1.2em; cursor:pointer; box-shadow:0 0 8px #0ff,0 0 15px #00f; transition:transform .2s, box-shadow .2s; }
+.controls input[type=range] { width:180px; margin:0 5px; accent-color:#00aaff; border-radius:10px; }
+</style>
+</head>
+<body>
+<!-- Background video -->
+<video id="bgVideo" autoplay loop muted playsinline>
+  <source src="https://player.vimeo.com/external/348108436.hd.mp4?s=5e3b6f2d2b0c0e0b7d3f3b0e4f0e0e0e&profile_id=175" type="video/mp4">
+</video>
+
+<!-- Video popup sovrapposto al centro -->
+<div id="popupVideo">
+  <video autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/bn.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div id="layout">
+  <div id="leftRect" class="side-rect">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/alby2.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div id="centerRect">
+    <div id="centerCover">
+      <img src="https://xatimg.com/image/CLCxEtGZJyPN.jpg" alt="Cover">
+    </div>
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif1">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif2">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif3">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif4">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif5">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif6">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif7">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif8">
+    <img src="https://xatimg.com/image/nnxMz34wxcol.gif" class="cover-gif" id="gif9">
+    <div id="eq">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div id="titoloscroller"><span>Caricamento titolo...</span></div>
+  </div>
+  <div id="rightRect" class="side-rect">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/alby2.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="controls">
+    <button id="playBtn">▶️</button>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+    <button id="stopBtn">⏹️</button>
+  </div>
+</div>
+
+<script>
+const audio = new Audio("https://stream.zeno.fm/ylkruiq5e4fvv");
+audio.crossOrigin="anonymous";
+audio.volume = 0.8;
+let playing = false;
+let audioCtx, analyser, eqBars;
+
+const playBtn = document.getElementById("playBtn");
+playBtn.onclick = async () => {
+  if(!playing){
+    await audio.play().catch(()=>{});
+    playing = true;
+    playBtn.textContent = "⏸️";
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      const source = audioCtx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      eqBars = document.querySelectorAll("#eq .bar");
+      animateEQ();
+    }
+  } else {
+    audio.pause();
+    playing = false;
+    playBtn.textContent = "▶️";
+  }
+};
+document.getElementById("stopBtn").onclick = () => { audio.pause(); audio.currentTime=0; playing=false; playBtn.textContent="▶️"; };
+document.getElementById("volume").oninput = e => audio.volume=e.target.value;
+
+const scrollSpan = document.querySelector("#titoloscroller span");
+const coverImg = document.querySelector("#centerCover img");
+async function updateTitleCover(){
+  try{
+    const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+    const data = await res.json();
+    const titolo = data.title ? data.title : "Radio Cartaio – Live 24/7";
+    scrollSpan.textContent = titolo;
+    if(titolo.includes(" - ")){
+      const [artista, brano] = titolo.split(" - ");
+      const a = encodeURIComponent(artista);
+      const b = encodeURIComponent(brano);
+      const itunesRes = await fetch(`https://itunes.apple.com/search?term=${a}+${b}&media=music&limit=1`);
+      const itunesData = await itunesRes.json();
+      if(itunesData.resultCount > 0){
+        coverImg.src = itunesData.results[0].artworkUrl100.replace("100x100bb","600x600bb");
+        return;
+      }
+    }
+    coverImg.src = "https://xatimg.com/image/zFLSLrjVkQEE.jpg";
+  } catch(e){
+    scrollSpan.textContent = "Radio Diablo – Inferno Eterno";
+    coverImg.src = "https://xatimg.com/image/zFLSLrjVkQEE.jpg";
+  }
+}
+updateTitleCover();
+setInterval(updateTitleCover,5000);
+
+function animateEQ(){
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  function loop(){
+    if(audio.paused){ eqBars.forEach(b=>b.style.height='5px'); }
+    else {
+      analyser.getByteFrequencyData(dataArray);
+      eqBars.forEach((b,i)=>{
+        let val = dataArray[i*3] || 0;
+        b.style.height = (5 + val/3)+'px';
+        b.style.background = `linear-gradient(to top, hsl(${i*40},100%,60%), hsl(${i*40},100%,50%))`;
+        b.style.boxShadow = `0 0 10px hsl(${i*40},100%,60%), 0 0 15px hsl(${i*40},100%,50%)`;
+      });
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// Popup video ogni 15 secondi
+const popupVideo = document.getElementById("popupVideo");
+
+function showPopup() {
+  popupVideo.classList.add("show");
+  setTimeout(() => {
+    popupVideo.classList.remove("show");
+  }, 5000); // visibile per 5 secondi
+}
+
+// Prima apparizione dopo 10 secondi, poi ogni 15 secondi
+setTimeout(() => {
+  showPopup();
+  setInterval(showPopup, 15000);
+}, 10000);
+
+</script>
+</body>
+</html>
