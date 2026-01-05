@@ -3,54 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EL CARTAIO </title>
+<title>EL CARTAIO</title>
+
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-  }
+html,body{
+    margin:0;
+    padding:0;
+    background:#000;
+}
 
-  /* VIDEO LATERALI */
-  .video-left, .video-right {
-    position: fixed;
-    width: 240px;
-    height: 520px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 14px;
-    border: 2px solid #ff0000;
-    box-shadow: 0 0 20px #ff0000, 0 0 40px #ffff00;
-    z-index: 9999;
-  }
+/* CONTENITORI VIDEO */
+.video-box{
+    position:fixed;
+    width:240px;
+    height:520px;
+    top:50%;
+    transform:translateY(-50%);
+    border-radius:14px;
+    border:2px solid #ff0000;
+    box-shadow:0 0 20px #ff0000,0 0 40px #ffff00;
+    overflow:hidden;
+    z-index:9999;
+}
 
-  .video-left { left: 10px; }
-  .video-right { right: 10px; }
+/* POSIZIONE */
+.video-left{left:10px;}
+.video-right{right:10px;}
 
-  .video-text {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 0 8px #fff, 0 0 15px #ff0000;
-    pointer-events: none;
-  }
+/* VIDEO */
+.video-box video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* TESTO */
+.video-text{
+    position:absolute;
+    bottom:8px;
+    left:0;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+    text-shadow:0 0 8px #fff,0 0 15px #ff0000;
+    pointer-events:none;
+    animation:wave 3s ease-in-out infinite;
+}
+
+/* ANIMAZIONE ONDA */
+@keyframes wave{
+    0%{transform:translateY(0) rotate(0deg);}
+    25%{transform:translateY(-4px) rotate(-1deg);}
+    50%{transform:translateY(0) rotate(0deg);}
+    75%{transform:translateY(4px) rotate(1deg);}
+    100%{transform:translateY(0) rotate(0deg);}
+}
 </style>
 </head>
+
 <body>
 
-<video class="video-left" autoplay loop muted playsinline>
-  <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
-</video>
-<div class="video-text" style="left:10px; width:240px; top:auto; bottom:10px;">DinamicFM</div>
+<!-- VIDEO SINISTRO -->
+<div class="video-box video-left">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">DinamicFM</div>
+</div>
 
-<video class="video-right" autoplay loop muted playsinline>
-  <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
-</video>
-<div class="video-text" style="right:10px; width:240px; top:auto; bottom:10px;">DinamicFM</div>
+<!-- VIDEO DESTRO -->
+<div class="video-box video-right">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/antonia.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">DinamicFM</div>
+</div>
 
 </body>
 </html>
+
 
