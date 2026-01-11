@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>EL DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
+
+/* ===== CONTENITORE VIDEO ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  overflow:hidden;
+  z-index:1;
+  background:transparent;
+  border-radius:20px;
+}
+.left{left:0}
+.right{right:0}
+
+/* ===== BORDI ===== */
+.video-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:4px;
+  border-radius:20px;
+  background:conic-gradient(
+    red,orange,yellow,lime,cyan,blue,violet,red
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 10px rgba(255,0,255,.7));
+  pointer-events:none;
+}
+
+/* ===== VIDEO ===== */
+.side-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:16px;
+}
+
+/* ===== TESTO ARCOBALENO VIDEO ===== */
+.video-text{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+  font-family:Trebuchet MS;
+  font-weight:bold;
+  z-index:2;
+  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red);
+  background-size:400% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes rainbowText{
+  0%{background-position:0%}
+  100%{background-position:100%}
+}
+
+/* ===== AREA CENTRALE ===== */
+.center-area{
+  position:absolute;
+  left:280px;
+  right:280px;
+  top:0;
+  bottom:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== CONTENITORE FOTO + TESTO ===== */
+.center-box{
+  position:relative;
+  width:420px;
+  max-width:90%;
+  animation: fadeLoop 6s ease-in-out infinite;
+  filter:drop-shadow(0 0 25px rgba(255,0,0,.4));
+}
+
+.center-box img{
+  width:100%;
+  display:block;
+  border-radius:12px;
+}
+
+/* ===== TESTO JAGUARO 3D ARGENTO ===== */
+.center-title{
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:38px;
+  font-family:Trebuchet MS;
+  font-weight:900;
+  letter-spacing:3px;
+  color:#d8d8d8;
+
+  text-shadow:
+    0 1px 0 #fff,
+    0 2px 0 #cfcfcf,
+    0 3px 0 #b5b5b5,
+    0 4px 0 #9b9b9b,
+    0 6px 10px rgba(0,0,0,.8);
+
+  pointer-events:none;
+}
+
+/* ===== FADE LOOP ===== */
+@keyframes fadeLoop{
+  0%{opacity:0}
+  20%{opacity:0}
+  50%{opacity:1}
+  80%{opacity:0}
+  100%{opacity:0}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- VIDEO SINISTRO -->
+  <div class="video-wrapper left">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/jaguaro.mp4">
+    </video>
+    <div class="video-text">GO_TO_MUSIC</div>
+  </div>
+
+  <!-- VIDEO DESTRO -->
+  <div class="video-wrapper right">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/jaguaro.mp4">
+    </video>
+    <div class="video-text">GO_TO_MUSIC</div>
+  </div>
+
+  <!-- CENTRO FOTO + TESTO -->
+  <div class="center-area">
+    <div class="center-box">
+      <img src="https://xatimg.com/image/SRTi7LoT8mEN.jpg" alt="center">
+      <div class="center-title">JAGUARO</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
