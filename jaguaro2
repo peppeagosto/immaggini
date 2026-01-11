@@ -102,7 +102,7 @@ body{
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/jaguaro.mp4">
     </video>
-    <div class="video-text">MANUELA</div>
+    <div class="video-text">GO_TO_MUSIC</div>
   </div>
 
   <!-- VIDEO DESTRO -->
@@ -110,7 +110,7 @@ body{
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/jaguaro.mp4">
     </video>
-    <div class="video-text">ROSALÍA</div>
+    <div class="video-text">GO_TO_MUSIC</div>
   </div>
 
   <!-- AREA CENTRALE (trasparente) -->
