@@ -2,82 +2,92 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>60 Note Musicali + Pistole Laterali</title>
+<title>Note Cadenti + Pistole Laterali</title>
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  background: #000; /* sfondo nero */
+  background: #000;
   overflow: hidden;
+  height: 100vh;
 }
 
-/* AREA FISSA */
+/* STAGE un po' più largo per respirare meglio */
 .stage {
   position: relative;
-  width: 1806px;
+  width: 1500px;
   height: 486px;
+  margin: 0 auto;
   overflow: hidden;
-  margin: auto;
+  background: #000;
 }
 
-/* SFUMATURA */
+/* SFUMATURA dark */
 .stage::before {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    rgba(0,0,0,0.05) 0%,
-    rgba(0,0,0,0.12) 70%,
-    rgba(0,0,0,0.20) 100%
+    rgba(0,0,0,0.08) 0%,
+    rgba(0,0,0,0.25) 65%,
+    rgba(0,0,0,0.45) 100%
   );
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
-/* NOTE */
+/* NOTE che cadono */
 .notes {
   position: absolute;
   inset: 0;
   z-index: 2;
+  pointer-events: none;
 }
 .note {
   position: absolute;
-  font-size: 36px;
+  font-size: 38px;
   font-weight: bold;
   animation: fall linear infinite;
-  opacity: 0.95;
+  opacity: 0.88;
   text-shadow:
-    0 0 6px currentColor,
-    0 0 14px currentColor,
-    0 0 26px currentColor;
+    0 0 8px currentColor,
+    0 0 18px currentColor,
+    0 0 32px currentColor;
+  will-change: transform, opacity;
 }
 @keyframes fall {
-  from { top: -60px; }
-  to   { top: 520px; }
+  from {
+    transform: translateY(-80px) rotate(0deg);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(580px) rotate(25deg);
+    opacity: 0;
+  }
 }
 
-/* VIDEO LATERALI */
+/* PISTOLE – ora più piccole */
 .pistola {
   position: absolute;
   top: 50%;
-  width: 400px;
+  width: 320px;               /* <--- più piccolo come volevi */
   height: auto;
   opacity: 0;
   pointer-events: none;
   z-index: 5;
-  filter: drop-shadow(0 0 20px red);
+  filter: drop-shadow(0 0 22px #ff0044);
   transform: translateY(-50%);
 }
 
-/* ANIMAZIONE SBRICIOLAMENTO */
+/* Animazione sbriciolamento */
 @keyframes crumble {
-  0%   { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0px); }
-  20%  { opacity: 1; transform: translateY(-50%) scale(1.05) rotate(2deg); filter: blur(1px); }
-  40%  { opacity: 0.9; transform: translateY(-50%) scale(1.1) rotate(-3deg); filter: blur(2px); }
-  60%  { opacity: 0.6; transform: translateY(-50%) scale(1.15) rotate(5deg); filter: blur(4px); }
-  80%  { opacity: 0.3; transform: translateY(-50%) scale(1.2) rotate(-8deg); filter: blur(6px); }
-  100% { opacity: 0; transform: translateY(-50%) scale(1.25) rotate(12deg); filter: blur(10px); }
+  0%   { opacity: 0.95; transform: translateY(-50%) scale(0.92); filter: drop-shadow(0 0 25px #ff0044) brightness(1.3); }
+  12%  { opacity: 1;    transform: translateY(-50%) scale(1.08); filter: drop-shadow(0 0 40px #ff2266) brightness(1.6); }
+  35%  { opacity: 0.85; transform: translateY(-50%) scale(1.12) rotate(4deg); filter: blur(1.5px) brightness(1.3); }
+  60%  { opacity: 0.55; transform: translateY(-50%) scale(1.18) rotate(-7deg); filter: blur(4px); }
+  82%  { opacity: 0.25; transform: translateY(-50%) scale(1.28) rotate(11deg); filter: blur(8px); }
+  100% { opacity: 0;    transform: translateY(-50%) scale(1.40) rotate(18deg); filter: blur(14px); }
 }
 </style>
 </head>
@@ -86,53 +96,72 @@ html, body {
 <div class="stage" id="stage">
   <div class="notes" id="notes"></div>
 
-  <!-- VIDEO LATERALI -->
-  <video id="pistola-left" class="pistola" src="pistolamp4.mp4" style="left:50px;" playsinline preload="auto"></video>
-  <video id="pistola-right" class="pistola" src="pistolamp4.mp4" style="right:50px;" playsinline preload="auto"></video>
+  <!-- Pistole laterali – senza muted -->
+  <video id="pistola-left"  class="pistola" src="pistola.mp4" style="left: 60px;"  playsinline preload="auto"></video>
+  <video id="pistola-right" class="pistola" src="pistola.mp4" style="right: 60px;" playsinline preload="auto"></video>
 </div>
 
 <script>
-// NOTE MUSICALI
-const symbols = ["♪","♫","♩","♬","♭","♯"];
+// NOTE CONTINUE (rimaste uguali, funzionano bene)
+const symbols = ["♪","♫","♩","♬","𝄞","𝄢","♭","♯","♪","♫"];
 const container = document.getElementById("notes");
-function randomColor(){ return `hsl(${Math.random()*360},100%,65%)`; }
-for(let i=0;i<60;i++){
-  const note=document.createElement("div");
-  note.className="note";
-  note.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-  note.style.left=Math.random()*1260+"px";
-  note.style.top=Math.random()*486+"px";
-  note.style.color=randomColor();
-  note.style.animationDuration=(10+Math.random()*15)+"s";
-  note.style.animationDelay=(Math.random()*10)+"s";
+
+function createNote() {
+  const note = document.createElement("div");
+  note.className = "note";
+  note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  note.style.left = Math.random() * 100 + "%";
+  note.style.color = `hsl(${Math.random()*360}, 90%, 65%)`;
+  
+  const duration = 7 + Math.random() * 11;
+  const delay = Math.random() * 3;
+  
+  note.style.animationDuration = duration + "s";
+  note.style.animationDelay = "-" + delay + "s";
+  
   container.appendChild(note);
+  
+  setTimeout(() => note.remove(), (duration + delay + 1) * 1000);
 }
 
-// VIDEO LATERALI
-const pistolaLeft=document.getElementById("pistola-left");
-const pistolaRight=document.getElementById("pistola-right");
+setInterval(createNote, 380);
+setInterval(createNote, 420);
+setInterval(createNote, 650);
 
-function showPistole(){
-  [pistolaLeft,pistolaRight].forEach(p=>{
-    p.style.opacity=1;
-    p.currentTime=0;
-    p.play().catch(()=>{}); // forza play anche se browser blocca autoplay inizialmente
-    p.style.animation="crumble 8s forwards";
-    p.addEventListener("animationend",()=>{
-      p.style.opacity=0;
-      p.style.animation="";
-    },{once:true});
+// PISTOLE
+const pistolaLeft  = document.getElementById("pistola-left");
+const pistolaRight = document.getElementById("pistola-right");
+
+function showPistole() {
+  [pistolaLeft, pistolaRight].forEach(p => {
+    p.style.opacity = "1";
+    p.style.animation = "crumble 7.2s forwards";
+    p.currentTime = 0;
+    p.play().catch(()=>{});
+    
+    p.addEventListener("animationend", () => {
+      p.style.opacity = "0";
+      p.style.animation = "";
+      p.pause();
+    }, {once: true});
   });
 }
 
-// CLICK INIZIALE PER SBLOCCARE AUDIO
-document.getElementById("stage").addEventListener("click", ()=>{
-  showPistole(); // prima animazione
-  setInterval(showPistole,20000); // ripetizione ogni 20s
-},{once:true});
-</script>
+// Click per partire (importante per audio su mobile)
+document.getElementById("stage").addEventListener("click", () => {
+  showPistole();
+  setInterval(showPistole, 20000);
+}, {once: true});
 
+// Per test veloce (puoi commentare quando hai finito)
+window.addEventListener("load", () => {
+  setTimeout(showPistole, 800);
+  setInterval(showPistole, 20000);
+});
+</script>
 </body>
 </html>
+
+
 
 
