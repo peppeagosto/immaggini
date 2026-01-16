@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Note Cadenti + Pistole Laterali</title>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
 <style>
 html, body {
   margin: 0;
@@ -11,8 +12,6 @@ html, body {
   overflow: hidden;
   height: 100vh;
 }
-
-/* STAGE un po' più largo per respirare meglio */
 .stage {
   position: relative;
   width: 1500px;
@@ -20,23 +19,16 @@ html, body {
   margin: 0 auto;
   overflow: hidden;
   background: #000;
+  cursor: pointer;
 }
-
-/* SFUMATURA dark */
 .stage::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0.08) 0%,
-    rgba(0,0,0,0.25) 65%,
-    rgba(0,0,0,0.45) 100%
-  );
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.45) 100%);
   pointer-events: none;
   z-index: 3;
 }
-
 /* NOTE che cadono */
 .notes {
   position: absolute;
@@ -50,116 +42,150 @@ html, body {
   font-weight: bold;
   animation: fall linear infinite;
   opacity: 0.88;
-  text-shadow:
-    0 0 8px currentColor,
-    0 0 18px currentColor,
-    0 0 32px currentColor;
+  text-shadow: 0 0 8px currentColor, 0 0 18px currentColor, 0 0 32px currentColor;
   will-change: transform, opacity;
 }
 @keyframes fall {
-  from {
-    transform: translateY(-80px) rotate(0deg);
-    opacity: 0.9;
-  }
-  to {
-    transform: translateY(580px) rotate(25deg);
-    opacity: 0;
-  }
+  from { transform: translateY(-80px) rotate(0deg); opacity: 0.9; }
+  to { transform: translateY(580px) rotate(25deg); opacity: 0; }
 }
-
-/* PISTOLE – ora più piccole */
+/* PISTOLE */
 .pistola {
   position: absolute;
   top: 50%;
-  width: 320px;               /* <--- più piccolo come volevi */
+  width: 320px;
   height: auto;
   opacity: 0;
   pointer-events: none;
-  z-index: 5;
+  z-index: 4;
   filter: drop-shadow(0 0 22px #ff0044);
   transform: translateY(-50%);
+  object-fit: contain;
+  background: #111;
+  transition: opacity 3s ease-out; /* fade morbido per sparizione */
 }
-
-/* Animazione sbriciolamento */
+/* Effetto sbriciolamento (mantenuto, ma sparizione forzata dopo 7s) */
+.crumbles {
+  animation: crumble 3.8s forwards;
+  animation-delay: 6s;
+}
 @keyframes crumble {
-  0%   { opacity: 0.95; transform: translateY(-50%) scale(0.92); filter: drop-shadow(0 0 25px #ff0044) brightness(1.3); }
-  12%  { opacity: 1;    transform: translateY(-50%) scale(1.08); filter: drop-shadow(0 0 40px #ff2266) brightness(1.6); }
-  35%  { opacity: 0.85; transform: translateY(-50%) scale(1.12) rotate(4deg); filter: blur(1.5px) brightness(1.3); }
-  60%  { opacity: 0.55; transform: translateY(-50%) scale(1.18) rotate(-7deg); filter: blur(4px); }
-  82%  { opacity: 0.25; transform: translateY(-50%) scale(1.28) rotate(11deg); filter: blur(8px); }
-  100% { opacity: 0;    transform: translateY(-50%) scale(1.40) rotate(18deg); filter: blur(14px); }
+  0%   { opacity: 1; transform: translateY(-50%) scale(1.00) rotate(0deg); filter: drop-shadow(0 0 25px #ff0044) brightness(1.2); }
+  20%  { opacity: 0.95; transform: translateY(-50%) scale(1.06) rotate(2deg); filter: drop-shadow(0 0 35px #ff2266) brightness(1.4); }
+  45%  { opacity: 0.75; transform: translateY(-50%) scale(1.14) rotate(-5deg); filter: blur(2px) drop-shadow(0 0 30px #ff0044) brightness(1.1); }
+  70%  { opacity: 0.45; transform: translateY(-50%) scale(1.25) rotate(8deg); filter: blur(5px) brightness(0.9); }
+  100% { opacity: 0; transform: translateY(-50%) scale(1.38) rotate(15deg); filter: blur(12px) brightness(0.6); }
+}
+/* TESTO HORROR AZZURRINO in basso */
+#intro-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 15%;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 3s ease-out; /* fade morbido per sparizione testo */
+}
+#intro-text {
+  font-family: 'Nosifer', cursive;
+  font-size: 3.8vw;
+  color: #00ccff;
+  text-shadow: 0 0 12px #00ffff, 0 0 24px #0099ff, 0 0 36px #0066ff;
+  line-height: 1.15;
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.4);
 }
 </style>
 </head>
 <body>
-
 <div class="stage" id="stage">
   <div class="notes" id="notes"></div>
-
-  <!-- Pistole laterali – senza muted -->
-  <video id="pistola-left"  class="pistola" src="pistola.mp4" style="left: 60px;"  playsinline preload="auto"></video>
-  <video id="pistola-right" class="pistola" src="pistola.mp4" style="right: 60px;" playsinline preload="auto"></video>
+  
+  <div id="intro-wrapper">
+    <div id="intro-text">CONTRO EL DIABLO<br>FARAI STA FINE</div>
+  </div>
+  
+  <video id="pistola-left" class="pistola" src="pistola.mp4" style="left: 60px;" playsinline preload="metadata" muted></video>
+  <video id="pistola-right" class="pistola" src="pistola.mp4" style="right: 60px;" playsinline preload="metadata" muted></video>
 </div>
 
 <script>
-// NOTE CONTINUE (rimaste uguali, funzionano bene)
+// NOTE invariate
 const symbols = ["♪","♫","♩","♬","𝄞","𝄢","♭","♯","♪","♫"];
 const container = document.getElementById("notes");
-
 function createNote() {
   const note = document.createElement("div");
   note.className = "note";
   note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
   note.style.left = Math.random() * 100 + "%";
   note.style.color = `hsl(${Math.random()*360}, 90%, 65%)`;
-  
   const duration = 7 + Math.random() * 11;
   const delay = Math.random() * 3;
-  
   note.style.animationDuration = duration + "s";
   note.style.animationDelay = "-" + delay + "s";
-  
   container.appendChild(note);
-  
   setTimeout(() => note.remove(), (duration + delay + 1) * 1000);
 }
-
 setInterval(createNote, 380);
 setInterval(createNote, 420);
 setInterval(createNote, 650);
 
-// PISTOLE
-const pistolaLeft  = document.getElementById("pistola-left");
+// Elementi
+const stage = document.getElementById("stage");
+const introWrapper = document.getElementById("intro-wrapper");
+const pistolaLeft = document.getElementById("pistola-left");
 const pistolaRight = document.getElementById("pistola-right");
 
-function showPistole() {
+// Funzione per avviare il ciclo (testo + pistole)
+function startCycle() {
+  if (introWrapper) introWrapper.style.display = "block";
+  introWrapper.style.opacity = "1";
+
   [pistolaLeft, pistolaRight].forEach(p => {
-    p.style.opacity = "1";
-    p.style.animation = "crumble 7.2s forwards";
+    p.classList.remove("crumbles");
+    p.style.animation = "none";
+    p.style.opacity = "1"; // visibile subito
     p.currentTime = 0;
-    p.play().catch(()=>{});
-    
-    p.addEventListener("animationend", () => {
-      p.style.opacity = "0";
-      p.style.animation = "";
-      p.pause();
-    }, {once: true});
+    p.pause();
+    p.load();
+    p.play().catch(err => console.log("Play error:", err.message));
+
+    // Aggiunge l'animazione sbriciolamento dopo 6s
+    setTimeout(() => p.classList.add("crumbles"), 80);
   });
+
+  // Nascondi testo dopo 5 secondi (fade lento)
+  setTimeout(() => {
+    if (introWrapper) introWrapper.style.opacity = "0";
+  }, 5000);
+
+  // Nascondi pistole dopo 7 secondi (fade lento)
+  setTimeout(() => {
+    [pistolaLeft, pistolaRight].forEach(p => {
+      p.style.opacity = "0";
+      p.pause();
+    });
+  }, 7000);
+
+  // Dopo 20 secondi dal click/riavvio → riavvia ciclo
+  setTimeout(startCycle, 20000);
 }
 
-// Click per partire (importante per audio su mobile)
-document.getElementById("stage").addEventListener("click", () => {
-  showPistole();
-  setInterval(showPistole, 20000);
-}, {once: true});
+// Primo avvio: solo testo visibile
+if (introWrapper) introWrapper.style.display = "block";
 
-// Per test veloce (puoi commentare quando hai finito)
-window.addEventListener("load", () => {
-  setTimeout(showPistole, 800);
-  setInterval(showPistole, 20000);
-});
+// Al click iniziale → parte il ciclo
+stage.addEventListener("click", function handler() {
+  if (introWrapper) introWrapper.style.display = "block";
+  startCycle();
+  stage.removeEventListener("click", handler);
+}, {once: true});
 </script>
 </body>
 </html>
+
 
 
