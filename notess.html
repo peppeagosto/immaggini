@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>60 Note Musicali – Layer Elegante</title>
+<title>60 Note Musicali + Pistola</title>
 
 <style>
 html, body {
@@ -60,6 +60,30 @@ html, body {
   from { top: -60px; }
   to   { top: 520px; }
 }
+
+/* STILE VIDEO CENTRALE */
+#pistola {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(0 0 10px red);
+}
+
+/* ANIMAZIONE SBRICIOLAMENTO */
+@keyframes crumble {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0px) }
+  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05) rotate(2deg); filter: blur(1px) }
+  40%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); filter: blur(2px) }
+  60%  { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15) rotate(5deg); filter: blur(4px) }
+  80%  { opacity: 0.3; transform: translate(-50%, -50%) scale(1.2) rotate(-8deg); filter: blur(6px) }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25) rotate(12deg); filter: blur(10px) }
+}
 </style>
 </head>
 
@@ -67,37 +91,50 @@ html, body {
 
 <div class="stage">
   <div class="notes" id="notes"></div>
+  <video id="pistola" src="https://peppeagosto.github.io/immaggini/pistola.mp4" muted></video>
 </div>
 
 <script>
 const symbols = ["♪","♫","♩","♬","♭","♯"];
+const container = document.getElementById("notes");
 
 function randomColor() {
   return `hsl(${Math.random() * 360}, 100%, 65%)`;
 }
 
-const container = document.getElementById("notes");
-
+// CREAZIONE NOTE
 for (let i = 0; i < 60; i++) {
   const note = document.createElement("div");
   note.className = "note";
   note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-
-  // DISTRIBUZIONE COMPLETA
   note.style.left = Math.random() * 1260 + "px";
   note.style.top = Math.random() * 486 + "px";
-
-  // COLORE UNICO
   note.style.color = randomColor();
-
-  // TEMPI DIVERSI
   note.style.animationDuration = (10 + Math.random() * 15) + "s";
   note.style.animationDelay = (Math.random() * 10) + "s";
-
   container.appendChild(note);
 }
+
+// VIDEO PISTOLA
+const pistola = document.getElementById("pistola");
+
+function showPistola() {
+  pistola.style.animation = "crumble 8s forwards"; // 8s sbriciolamento lento
+  pistola.currentTime = 0;
+  pistola.play();
+
+  // Rimuove animazione alla fine per poterla riattivare
+  pistola.addEventListener("animationend", () => {
+    pistola.style.opacity = 0;
+    pistola.style.animation = "";
+  }, { once: true });
+}
+
+// Mostra il video ogni 20 secondi
+setInterval(showPistola, 20000);
 </script>
 
 </body>
 </html>
+
 
