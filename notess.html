@@ -2,13 +2,12 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>60 Note Musicali + Pistola</title>
-
+<title>60 Note Musicali + Pistole Laterali</title>
 <style>
 html, body {
   margin: 0;
   padding: 0;
-  background: transparent;
+  background: #000; /* sfondo nero */
   overflow: hidden;
 }
 
@@ -21,7 +20,7 @@ html, body {
   margin: auto;
 }
 
-/* SFUMATURA ELEGANTE */
+/* SFUMATURA */
 .stage::before {
   content: "";
   position: absolute;
@@ -36,14 +35,12 @@ html, body {
   z-index: 1;
 }
 
-/* CONTENITORE NOTE */
+/* NOTE */
 .notes {
   position: absolute;
   inset: 0;
   z-index: 2;
 }
-
-/* NOTA */
 .note {
   position: absolute;
   font-size: 36px;
@@ -55,83 +52,84 @@ html, body {
     0 0 14px currentColor,
     0 0 26px currentColor;
 }
-
 @keyframes fall {
   from { top: -60px; }
   to   { top: 520px; }
 }
 
-/* STILE VIDEO CENTRALE */
-#pistola {
+/* VIDEO LATERALI */
+.pistola {
   position: absolute;
   top: 50%;
-  left: 50%;
   width: 400px;
   height: auto;
-  transform: translate(-50%, -50%);
   opacity: 0;
   pointer-events: none;
   z-index: 5;
-  filter: drop-shadow(0 0 10px red);
+  filter: drop-shadow(0 0 20px red);
+  transform: translateY(-50%);
 }
 
 /* ANIMAZIONE SBRICIOLAMENTO */
 @keyframes crumble {
-  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0px) }
-  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05) rotate(2deg); filter: blur(1px) }
-  40%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); filter: blur(2px) }
-  60%  { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15) rotate(5deg); filter: blur(4px) }
-  80%  { opacity: 0.3; transform: translate(-50%, -50%) scale(1.2) rotate(-8deg); filter: blur(6px) }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25) rotate(12deg); filter: blur(10px) }
+  0%   { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0px); }
+  20%  { opacity: 1; transform: translateY(-50%) scale(1.05) rotate(2deg); filter: blur(1px); }
+  40%  { opacity: 0.9; transform: translateY(-50%) scale(1.1) rotate(-3deg); filter: blur(2px); }
+  60%  { opacity: 0.6; transform: translateY(-50%) scale(1.15) rotate(5deg); filter: blur(4px); }
+  80%  { opacity: 0.3; transform: translateY(-50%) scale(1.2) rotate(-8deg); filter: blur(6px); }
+  100% { opacity: 0; transform: translateY(-50%) scale(1.25) rotate(12deg); filter: blur(10px); }
 }
 </style>
 </head>
-
 <body>
 
-<div class="stage">
+<div class="stage" id="stage">
   <div class="notes" id="notes"></div>
-  <video id="pistola" src="https://peppeagosto.github.io/immaggini/pistola.mp4" muted></video>
+
+  <!-- VIDEO LATERALI -->
+  <video id="pistola-left" class="pistola" src="pistolamp4.mp4" style="left:50px;" playsinline preload="auto"></video>
+  <video id="pistola-right" class="pistola" src="pistolamp4.mp4" style="right:50px;" playsinline preload="auto"></video>
 </div>
 
 <script>
+// NOTE MUSICALI
 const symbols = ["♪","♫","♩","♬","♭","♯"];
 const container = document.getElementById("notes");
-
-function randomColor() {
-  return `hsl(${Math.random() * 360}, 100%, 65%)`;
-}
-
-// CREAZIONE NOTE
-for (let i = 0; i < 60; i++) {
-  const note = document.createElement("div");
-  note.className = "note";
-  note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-  note.style.left = Math.random() * 1260 + "px";
-  note.style.top = Math.random() * 486 + "px";
-  note.style.color = randomColor();
-  note.style.animationDuration = (10 + Math.random() * 15) + "s";
-  note.style.animationDelay = (Math.random() * 10) + "s";
+function randomColor(){ return `hsl(${Math.random()*360},100%,65%)`; }
+for(let i=0;i<60;i++){
+  const note=document.createElement("div");
+  note.className="note";
+  note.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+  note.style.left=Math.random()*1260+"px";
+  note.style.top=Math.random()*486+"px";
+  note.style.color=randomColor();
+  note.style.animationDuration=(10+Math.random()*15)+"s";
+  note.style.animationDelay=(Math.random()*10)+"s";
   container.appendChild(note);
 }
 
-// VIDEO PISTOLA
-const pistola = document.getElementById("pistola");
+// VIDEO LATERALI
+const pistolaLeft=document.getElementById("pistola-left");
+const pistolaRight=document.getElementById("pistola-right");
 
-function showPistola() {
-  pistola.style.animation = "crumble 8s forwards"; // 8s sbriciolamento lento
-  pistola.currentTime = 0;
-  pistola.play();
-
-  // Rimuove animazione alla fine per poterla riattivare
-  pistola.addEventListener("animationend", () => {
-    pistola.style.opacity = 0;
-    pistola.style.animation = "";
-  }, { once: true });
+function showPistole(){
+  [pistolaLeft,pistolaRight].forEach(p=>{
+    p.style.opacity=1;
+    p.currentTime=0;
+    p.play().catch(()=>{}); // forza play anche se browser blocca autoplay inizialmente
+    p.style.animation="crumble 8s forwards";
+    p.addEventListener("animationend",()=>{
+      p.style.opacity=0;
+      p.style.animation="";
+    },{once:true});
+  });
 }
 
-// Mostra il video ogni 20 secondi
-setInterval(showPistola, 20000);
+// CLICK INIZIALE PER SBLOCCARE AUDIO
+document.getElementById("stage").addEventListener("click", ()=>{
+  showPistole(); // prima animazione
+  setInterval(showPistole,20000); // ripetizione ogni 20s
+},{once:true});
 </script>
 
 </body>
