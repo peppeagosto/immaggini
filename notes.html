@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>diablo video</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Codystar&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+}
+
+/* VIDEO */
+.videobg {
+    position: fixed;
+    width: 100%;
+    height:100vh;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* CONTENITORE NOTE */
+.notes-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* SINGOLA NOTA */
+.note {
+    position: absolute;
+    font-size: 26px;
+    animation: fall linear infinite;
+    opacity: 0.9;
+    font-family: 'Codystar', cursive;
+}
+
+/* ANIMAZIONE CADUTA */
+@keyframes fall {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKGROUND -->
+<video class="videobg" autoplay loop muted>
+    <source src="https://peppeagosto.github.io/immaggini/quadro.mp4" type="video/mp4">
+</video>
+
+<!-- NOTE -->
+<div class="notes-container" id="notes"></div>
+
+<script>
+const notes = ["♪","♫","♬","♩"];
+const colors = ["#ff0055","#00eaff","#ffe600","#a855ff","#00ff7f","#ff8c00"];
+const container = document.getElementById("notes");
+const totalNotes = 40;
+
+for (let i = 0; i < totalNotes; i++) {
+    const note = document.createElement("div");
+    note.className = "note";
+    note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+    note.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+    // posizione: sinistra o destra
+    if (i % 2 === 0) {
+        note.style.left = Math.random() * 20 + "vw"; // SINISTRA
+    } else {
+        note.style.left = 80 + Math.random() * 20 + "vw"; // DESTRA
+    }
+
+    note.style.animationDuration = (4 + Math.random() * 6) + "s";
+    note.style.animationDelay = Math.random() * 5 + "s";
+    note.style.fontSize = (18 + Math.random() * 22) + "px";
+
+    container.appendChild(note);
+}
+</script>
+
+</body>
+</html>
