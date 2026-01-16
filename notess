@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>60 Note Musicali – Layer Elegante</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* AREA FISSA */
+.stage {
+  position: relative;
+  width: 1306px;
+  height: 486px;
+  overflow: hidden;
+  margin: auto;
+}
+
+/* SFUMATURA ELEGANTE */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0.05) 0%,
+    rgba(0,0,0,0.12) 70%,
+    rgba(0,0,0,0.20) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* CONTENITORE NOTE */
+.notes {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* NOTA */
+.note {
+  position: absolute;
+  font-size: 36px;
+  font-weight: bold;
+  animation: fall linear infinite;
+  opacity: 0.95;
+  text-shadow:
+    0 0 6px currentColor,
+    0 0 14px currentColor,
+    0 0 26px currentColor;
+}
+
+@keyframes fall {
+  from { top: -60px; }
+  to   { top: 520px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="notes" id="notes"></div>
+</div>
+
+<script>
+const symbols = ["♪","♫","♩","♬","♭","♯"];
+
+function randomColor() {
+  return `hsl(${Math.random() * 360}, 100%, 65%)`;
+}
+
+const container = document.getElementById("notes");
+
+for (let i = 0; i < 60; i++) {
+  const note = document.createElement("div");
+  note.className = "note";
+  note.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+  // DISTRIBUZIONE COMPLETA
+  note.style.left = Math.random() * 1260 + "px";
+  note.style.top = Math.random() * 486 + "px";
+
+  // COLORE UNICO
+  note.style.color = randomColor();
+
+  // TEMPI DIVERSI
+  note.style.animationDuration = (10 + Math.random() * 15) + "s";
+  note.style.animationDelay = (Math.random() * 10) + "s";
+
+  container.appendChild(note);
+}
+</script>
+
+</body>
+</html>
