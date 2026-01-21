@@ -1,0 +1,132 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pendoli Laterali Prospettiva</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  width: 1308px;
+  height: 486px;
+  perspective: 1000px;
+}
+
+/* Pendoli laterali */
+.pendulum-wrapper {
+  position: absolute;
+  top: 50px;
+  width: 4px;
+  height: 200px;
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+/* Filo visibile */
+.pendulum-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -82;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, #fff, #00ffff);
+}
+
+/* Cerchio grande con glow e sfarfallio */
+.pendulum-circle {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #cococo; /* bordo grigio */
+   box-shadow:
+    0 0 50px #888,   /* glow base grigio medio */
+    0 0 100px #aaa,  /* glow intermedio grigio chiaro */
+    0 0 150px #bbb,  /* glow esterno grigio chiaro */
+    0 0 200px #ccc;  /* glow extra più intenso e chiaro */
+  background: #000;
+  animation: rotateCircle 4s linear infinite, flicker 0.2s infinite alternate;
+}
+
+
+
+/* Immagine dentro il cerchio */
+.pendulum-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Animazione rotazione */
+@keyframes rotateCircle {
+  0% { transform: translateX(-50%) rotateY(0deg); }
+  25% { transform: translateX(-50%) rotateY(90deg); }
+  50% { transform: translateX(-50%) rotateY(180deg); }
+  75% { transform: translateX(-50%) rotateY(270deg); }
+  100% { transform: translateX(-50%) rotateY(360deg); }
+}
+
+/* Sfarfallio glow */
+@keyframes flicker {
+  0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; opacity: 1; }
+  50% { box-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; opacity: 0.8; }
+  100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; opacity: 1; }
+}
+
+/* Posizione pendoli più centrali */
+.pendulum-left { left: 120px; }  /* spostato verso il centro DX */
+.pendulum-right { right: 120px; } /* spostato verso il centro SX */
+
+/* Cover centrale */
+.center-image {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 728px;
+  height: 486px;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Pendolo sinistro prospettico -->
+  <div class="pendulum-wrapper pendulum-left">
+    <div class="pendulum-circle">
+      <img src="https://xatimg.com/image/B41X8kV3zeLR.png" alt="Sinistra">
+    </div>
+  </div>
+
+  <!-- Pendolo destro prospettico -->
+  <div class="pendulum-wrapper pendulum-right">
+    <div class="pendulum-circle">
+      <img src="https://xatimg.com/image/B41X8kV3zeLR.png" alt="Destra">
+    </div>
+  </div>
+
+  <!-- Cover centrale -->
+  <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro trasparente">
+
+</div>
+</body>
+</html>
