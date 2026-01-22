@@ -1,177 +1,175 @@
-<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <title>IL CARTAIO</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
-
 <style>
-body{
-  margin:0;
-  background:transparent;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
-}
-.container{
-  position:relative;
-  width:1308px;
-  height:484px;
-}
+  body {
+    margin:0;
+    background:#0a000a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+  }
 
-/* ===== ELEMENTI ===== */
-.video-wrapper,
-.center-area{
-  position:absolute;
-  overflow:hidden;
-  border-radius:22px;
-}
+  .container {
+    position:relative;
+    width:1308px;
+    height:484px;
+  }
 
-/* ===== LATERALI ===== */
-.video-wrapper{
-  width:270px;
-  height:484px;
-  z-index:1;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(8px) saturate(160%);
-  box-shadow:
-    inset 0 0 60px rgba(255,200,200,0.35),
-    0 0 35px rgba(255,150,200,0.45);
-}
+  /* Bordi rainbow su TUTTI i rettangoli */
+  .video-wrapper,
+  .center-area {
+    position:absolute;
+    overflow:hidden;
+    border-radius:22px;
+    background:rgba(255,255,255,0.04);
+    backdrop-filter:blur(8px) saturate(160%);
 
-.left{ left:0; }
-.right{ right:0; }
+    border:5px solid transparent;
+    background-clip:padding-box;
+  }
 
-/* ===== CENTRO RIDOTTO ===== */
-.center-area{
-  width:410px;
-  height:550px;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  z-index:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+  /* Bordo colorato */
+  .video-wrapper::before,
+  .center-area::before {
+    content:"";
+    position:absolute;
+    inset:-8px;
+    border-radius:30px;
+    background:conic-gradient(
+      from 90deg,
+      #ff0000,#ff6600,#ffcc00,#33ff00,
+      #00ffff,#0066ff,#9900ff,#ff00cc,#ff0000
+    );
+    -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    animation:spin 9s linear infinite;
+    z-index:-1;
+    pointer-events:none;
+  }
 
-/* ===== VIDEO CENTRO ===== */
-.center-video{
-  position:absolute;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:22px;
-  opacity:0.95;
-  z-index:1;
-}
+  /* Alone luminoso */
+  .video-wrapper::after,
+  .center-area::after {
+    content:"";
+    position:absolute;
+    inset:-18px;
+    border-radius:38px;
+    background:conic-gradient(
+      from 120deg,
+      #ff004c,#ff8800,#ddff00,#00ff88,
+      #00aaff,#8800ff,#ff00aa,#ff004c
+    );
+    filter:blur(18px);
+    opacity:0.7;
+    animation:spin 16s linear infinite reverse;
+    z-index:-2;
+    pointer-events:none;
+  }
 
-/* ===== GLOW CENTRO ===== */
-.center-area::before{
-  content:"";
-  position:absolute;
-  inset:-10px;
-  padding:6px;
-  border-radius:30px;
-  background:conic-gradient(red,orange,yellow,lime,cyan,blue,purple,magenta,red);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-  animation:spin 8s linear infinite;
-  z-index:-1;
-}
-.center-area::after{
-  content:"";
-  position:absolute;
-  inset:-28px;
-  padding:14px;
-  border-radius:45px;
-  background:conic-gradient(red,orange,yellow,lime,cyan,blue,purple,magenta,red);
-  filter:blur(22px);
-  animation:spin 14s linear infinite reverse;
-  z-index:-2;
-}
+  @keyframes spin { to{transform:rotate(360deg)} }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
+  .video-wrapper {
+    width:270px;
+    height:484px;
+    z-index:1;
+  }
+  .left { left:0; }
+  .right { right:0; }
 
-.center-area{
-  filter:
-    drop-shadow(0 0 30px red)
-    drop-shadow(0 0 60px yellow)
-    drop-shadow(0 0 90px magenta);
-  animation:pulse 5s infinite alternate;
-}
-@keyframes pulse{
-  from{transform:translate(-50%,-50%) scale(1)}
-  to{transform:translate(-50%,-50%) scale(1.02)}
-}
+  .center-area {
+    width:410px;
+    height:550px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    z-index:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    filter:
+      drop-shadow(0 0 25px #ff004c)
+      drop-shadow(0 0 50px #ff8800)
+      drop-shadow(0 0 80px #aa00ff);
+    animation:pulse 6s infinite alternate;
+  }
 
-/* ===== TESTO ===== */
-.cartaio-text{
-  font-family:'Nosifer',cursive;
-  font-size:52px;
-  color:#ff004c;
-  letter-spacing:8px;
-  z-index:3;
-  text-shadow:
-    0 0 30px red,
-    0 0 60px orange,
-    0 0 90px magenta;
-  animation:float 6s infinite ease-in-out;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-}
+  @keyframes pulse {
+    from{transform:translate(-50%,-50%) scale(1)}
+    to  {transform:translate(-50%,-50%) scale(1.025)}
+  }
 
-/* ===== VIDEO ===== */
-.side-video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.video-text{
-  position:absolute;
-  bottom:8px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:25px;
-  color:#fff5c0;
-  text-shadow:0 0 15px black,0 0 25px magenta;
-}
+  .side-video, .center-video {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:22px;
+  }
+  .center-video { opacity:0.94; }
+  .side-video   { opacity:0.91; }
+
+  .video-text {
+    position:absolute;
+    bottom:12px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:26px;
+    font-family:Arial, sans-serif;
+    font-weight:bold;
+    color:#fff5c0;
+    text-shadow:0 0 10px #000,0 0 20px #ff00aa;
+    pointer-events:none;
+  }
+
+  .cartaio-text {
+    font-family:'Nosifer',cursive;
+    font-size:64px;
+    color:#ff004c;
+    letter-spacing:10px;
+    text-shadow:
+      0 0 25px #ff004c,
+      0 0 50px #ff6600,
+      0 0 80px #cc00ff;
+    animation:float 7s infinite ease-in-out;
+    pointer-events:none;
+  }
+
+  @keyframes float {
+    0%,100%{transform:translateY(0)}
+    50%    {transform:translateY(-26px)}
+  }
 </style>
 </head>
-
 <body>
 <div class="container">
 
   <!-- SINISTRA -->
   <div class="video-wrapper left">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/farfa.mp4">
+    <video class="side-video" autoplay loop muted playsinline preload="auto">
+      <source src="https://peppeagosto.github.io/immaggini/farfa.mp4?v=1" type="video/mp4">
     </video>
     <div class="video-text">DIABLO</div>
   </div>
 
   <!-- DESTRA -->
   <div class="video-wrapper right">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/farfa.mp4">
+    <video class="side-video" autoplay loop muted playsinline preload="auto">
+      <source src="https://peppeagosto.github.io/immaggini/farfa.mp4?v=1" type="video/mp4">
     </video>
     <div class="video-text">CARTAIO</div>
   </div>
 
   <!-- CENTRO -->
   <div class="center-area">
-    <video class="center-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/paese.mp4">
+    <video class="center-video" autoplay loop muted playsinline preload="auto">
+      <source src="https://peppeagosto.github.io/immaggini/paese.mp4?v=1" type="video/mp4">
     </video>
-    <div class="cartaio-text"></div>
+    <div class="cartaio-text"</div>
   </div>
 
 </div>
