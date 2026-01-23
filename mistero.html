@@ -1,80 +1,92 @@
-<html lang="it"><head>
+<!DOCTYPE html>
+<html lang="it">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Video DX SX e Centro</title>
+<title>EL CARTAIO</title>
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
+html,body{
+    margin:0;
+    padding:0;
+    background: ;
+}
 
-  .container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-  }
+/* CONTENITORI VIDEO */
+.video-box{
+    position:fixed;
+    width:240px;
+    height:520px;
+    top:50%;
+    transform:translateY(-50%);
+    border-radius:14px;
+    border:2px solid #ff0000;
+    box-shadow:0 0 20px #ff0000,0 0 40px #ffff00;
+    overflow:hidden;
+    z-index:9999;
+}
 
-  video {
-    position: absolute;
-    top: 0;
-    height: 486px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.3);
-  }
+/* POSIZIONE */
+.video-left{left:10px;}
+.video-right{right:10px;}
 
-  /* SINISTRA */
-  .left-video {
-    left: -40px;
-    width: 290px;
-    z-index: 1;
-  }
+/* VIDEO */
+.video-box video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
 
-  /* DESTRA */
-  .right-video {
-    right: -40px;
-    width: 290px;
-    z-index: 1;
-  }
+/* TESTO */
+.video-text{
+    position:absolute;
+    bottom:8px;
+    left:0;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+    text-shadow:0 0 8px #fff,0 0 15px #ff0000;
+    pointer-events:none;
+    animation:wave 3s ease-in-out infinite;
+}
 
-  /* CENTRO */
-  .center-video {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    z-index: 5;
-  }
+/* ANIMAZIONE ONDA */
+@keyframes wave{
+    0%{transform:translateY(0) rotate(0deg);}
+    25%{transform:translateY(-4px) rotate(-1deg);}
+    50%{transform:translateY(0) rotate(0deg);}
+    75%{transform:translateY(4px) rotate(1deg);}
+    100%{transform:translateY(0) rotate(0deg);}
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <!-- SINISTRA 2321 -->
-  <video class="left-video" autoplay="" loop="" muted="" playsinline="">
-    <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
-  </video>
-
-  <!-- CENTRO 231 -->
-  <video class="center-video" autoplay="" loop="" muted="" playsinline="">
-    <source src="https://peppeagosto.github.io/immaggini/231.mp4" type="video/mp4">
-  </video>
-
-  <!-- DESTRA 2321 -->
-  <video class="right-video" autoplay="" loop="" muted="" playsinline="">
-    <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
-  </video>
-
+<!-- VIDEO SINISTRO -->
+<div class="video-box video-left">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">CYBERNELLA</div>
 </div>
 
+<!-- CENTRO 231 -->
+  <video class="center-video" autoplay="" loop="" muted="" playsinline="">
+    <source src="https://peppeagosto.github.io/immaggini/cyberleone.mp4" type="video/mp4">
+  </video>
 
 
-</body></html>
+<!-- VIDEO DESTRO -->
+<div class="video-box video-right">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">MISTERO</div>
+</div>
+
+</body>
+</html>
