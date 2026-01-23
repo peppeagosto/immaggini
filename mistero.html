@@ -1,0 +1,80 @@
+<html lang="it"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video DX SX e Centro</title>
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+  }
+
+  video {
+    position: absolute;
+    top: 0;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  }
+
+  /* SINISTRA */
+  .left-video {
+    left: -40px;
+    width: 290px;
+    z-index: 1;
+  }
+
+  /* DESTRA */
+  .right-video {
+    right: -40px;
+    width: 290px;
+    z-index: 1;
+  }
+
+  /* CENTRO */
+  .center-video {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    z-index: 5;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SINISTRA 2321 -->
+  <video class="left-video" autoplay="" loop="" muted="" playsinline="">
+    <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
+  </video>
+
+  <!-- CENTRO 231 -->
+  <video class="center-video" autoplay="" loop="" muted="" playsinline="">
+    <source src="https://peppeagosto.github.io/immaggini/231.mp4" type="video/mp4">
+  </video>
+
+  <!-- DESTRA 2321 -->
+  <video class="right-video" autoplay="" loop="" muted="" playsinline="">
+    <source src="https://peppeagosto.github.io/immaggini/cybe.mp4" type="video/mp4">
+  </video>
+
+</div>
+
+
+
+</body></html>
