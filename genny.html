@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video a sinistra e destra con immagine trasparente al centro</title>
+<title>Video DX SX e Centro</title>
+
 <style>
-  body, html {
+  html, body {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -21,60 +23,58 @@
     height: 486px;
   }
 
-  video.side-video {
+  video {
     position: absolute;
     top: 0;
-    width: 290px;
     height: 486px;
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  }
+
+  /* SINISTRA */
+  .left-video {
+    left: -40px;
+    width: 290px;
     z-index: 1;
   }
 
-  /* Avvicinati al centro */
-  .left-video {
-    left: -40px;
-  }
-
+  /* DESTRA */
   .right-video {
     right: -40px;
+    width: 290px;
+    z-index: 1;
   }
 
-  img.center-image {
-    position: absolute;
-    top: 0;
+  /* CENTRO */
+  .center-video {
     left: 50%;
     transform: translateX(-50%);
     width: 728px;
-    height: 486px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
+    z-index: 5;
   }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-  <!-- Video a sinistra -->
-  <video class="side-video left-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/2321.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
+
+  <!-- SINISTRA 2321 -->
+  <video class="left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/2321.mp4" type="video/mp4">
   </video>
 
-  <div class="container">
-  <!-- Video a center -->
-  <video class="side-video center-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/231.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
+  <!-- CENTRO 231 -->
+  <video class="center-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/231.mp4" type="video/mp4">
   </video>
 
-  <!-- Video a destra -->
-  <video class="side-video right-video" autoplay loop muted playsinline>
-    <source src="https://peppeagosto.github.io/immaggini/2321.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
+  <!-- DESTRA 2321 -->
+  <video class="right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/2321.mp4" type="video/mp4">
   </video>
+
 </div>
 
 </body>
