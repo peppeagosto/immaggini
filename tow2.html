@@ -1,146 +1,117 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Woofer Neon Wide Max</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background: #000;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIF e MP4 Sovrapposti</title>
 
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 2000px;
-      height: 94vh;
-      position: relative;
-    }
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    .speaker {
-      width: 240px;
-      height: 96%;
-      background: #050505;
-      border-radius: 120px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 
-        0 0 120px #ff00ff,
-        0 0 240px #00ffff,
-        inset 0 0 60px #000;
-    }
+body {
+  background:transparent;
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    .speaker.left  { margin-right: 160px; }
-    .speaker.right { margin-left: 160px; }
+.container {
+  position:relative;
+  width:100%;
+  max-width:2000px;
+  height:94vh;
+  display:flex;
+  justify-content:space-between;
+  align-items:center; /* Centrato verticalmente */
+  padding:0 80px;
+}
 
-    .woofer-hole {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-      height: 130px;
-      background: #000;
-      border-radius: 50%;
-      border: 8px solid #0f0f0f;
-      box-shadow: inset 0 0 40px #000;
-      overflow: hidden;
-      z-index: 5;
-    }
+.column-mask {
+  position:relative;
+  width:240px;       /* Larghezza colonna */
+  height:420px;      /* Altezza colonna */
+  overflow:hidden;   /* Blocca GIF e MP4 */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    .woofer-hole.top    { top: 6%; }
-    .woofer-hole.bottom { top: 72%; }
+.layer {
+  position:relative;
+  width:100%;
+  height:100%;
+}
 
-    .glow-inside {
-      position: absolute;
-      inset: -50px;
-      background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00aa, #00ffea, #ff00ff);
-      background-size: 700% 700%;
-      border-radius: 50%;
-      animation: neonPulse 4.5s ease-in-out infinite;
-      opacity: 1;
-      box-shadow: 
-        inset 0 0 140px rgba(255,255,255,0.7),
-        0 0 220px #00ffff,
-        0 0 340px #ff00ff,
-        0 0 460px #ffff00;
-      pointer-events: none;
-      z-index: 1;
-    }
+.column-video {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;          /* Sotto la GIF */
+  pointer-events:none;
+}
 
-    @keyframes neonPulse {
-      0%, 100% {
-        transform: scale(1.05);
-        opacity: 0.85;
-        background-position: 0% 50%;
-      }
-      50% {
-        transform: scale(1.45);
-        opacity: 1;
-        background-position: 100% 50%;
-      }
-    }
+.color-gif {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;   /* Riempie tutta la colonna */
+  z-index:1;
+  pointer-events:none;
+}
 
-    .woofer-gif {
-      position: absolute;
-      inset: 10px;
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
-      object-fit: contain;
-      object-position: center;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .center-video {
-      width: 70%;
-      height: 92%;
-      object-fit: cover;
-      border-radius: 45px;
-      box-shadow: 
-        0 0 220px #00ffff,
-        0 0 360px #ff00ff,
-        0 0 500px #ffff00;
-      z-index: 10;
-    }
-  </style>
+.column-gif {
+  position:relative;
+  width:100%;
+  height:100%;
+  object-fit:contain;  /* Mantiene i buchi visibili */
+  z-index:5;
+  pointer-events:none;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <!-- SX -->
-    <div class="speaker left">
-      <div class="woofer-hole top">
-        <div class="glow-inside"></div>
-        <img class="woofer-gif" src="https://xatimg.com/image/bCcRL868JNMi.gif" alt="">
-      </div>
-      <div class="woofer-hole bottom">
-        <div class="glow-inside"></div>
-        <img class="woofer-gif" src="https://xatimg.com/image/bCcRL868JNMi.gif" alt="">
-      </div>
-    </div>
+<div class="container">
 
-    
-    <!-- DX -->
-    <div class="speaker right">
-      <div class="woofer-hole top">
-        <div class="glow-inside"></div>
-        <img class="woofer-gif" src="https://xatimg.com/image/bCcRL868JNMi.gif" alt="">
-      </div>
-      <div class="woofer-hole bottom">
-        <div class="glow-inside"></div>
-        <img class="woofer-gif" src="https://xatimg.com/image/bCcRL868JNMi.gif" alt="">
-      </div>
+  <!-- SINISTRA -->
+  <div class="column-mask">
+    <div class="layer">
+      <!-- MP4 dietro la GIF -->
+      <video class="column-video" autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immagini/balli2.mp4" type="video/mp4">
+      </video>
+
+      <!-- GIF sopra -->
+      <img class="color-gif" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color SX">
+
+      <!-- Colonna con buchi -->
+      <img class="column-gif" src="https://xatimg.com/image/dVqXJfM9nk1g.gif" alt="Colonna SX">
     </div>
   </div>
 
+  <!-- DESTRA (senza MP4) -->
+  <div class="column-mask">
+    <div class="layer">
+      <img class="color-gif" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color DX">
+      <img class="column-gif" src="https://xatimg.com/image/dVqXJfM9nk1g.gif" alt="Colonna DX">
+    </div>
+  </div>
+
+</div>
+
 </body>
 </html>
+
