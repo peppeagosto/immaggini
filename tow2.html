@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GIF e MP4 Sovrapposti</title>
+<title>GIF Sovrapposte</title>
 
 <style>
 * {
@@ -29,15 +28,15 @@ body {
   height:94vh;
   display:flex;
   justify-content:space-between;
-  align-items:center; /* Centrato verticalmente */
+  align-items:center;
   padding:0 80px;
 }
 
 .column-mask {
   position:relative;
-  width:240px;       /* Larghezza colonna */
-  height:420px;      /* Altezza colonna */
-  overflow:hidden;   /* Blocca GIF e MP4 */
+  width:240px;
+  height:420px;
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -49,33 +48,36 @@ body {
   height:100%;
 }
 
-.column-video {
+/* GIF sinistra spostata leggermente a sinistra */
+.color-gif-left {
   position:absolute;
   top:0;
-  left:0;
+  left:-10px;  /* spostata leggermente verso sinistra */
   width:100%;
   height:100%;
   object-fit:cover;
-  z-index:0;          /* Sotto la GIF */
-  pointer-events:none;
-}
-
-.color-gif {
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;   /* Riempie tutta la colonna */
   z-index:1;
   pointer-events:none;
 }
 
+/* GIF destra spostata leggermente a destra */
+.color-gif-right {
+  position:absolute;
+  top:0;
+  left:10px;   /* spostata leggermente verso destra */
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:1;
+  pointer-events:none;
+}
+
+/* Colonna con buchi sopra tutto */
 .column-gif {
   position:relative;
   width:100%;
   height:100%;
-  object-fit:contain;  /* Mantiene i buchi visibili */
+  object-fit:contain;
   z-index:5;
   pointer-events:none;
 }
@@ -89,23 +91,21 @@ body {
   <!-- SINISTRA -->
   <div class="column-mask">
     <div class="layer">
-      <!-- MP4 dietro la GIF -->
-      <video class="column-video" autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immagini/balli2.mp4" type="video/mp4">
-      </video>
+      <!-- GIF colorata sinistra leggermente spostata -->
+      <img class="color-gif-left" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color SX">
 
-      <!-- GIF sopra -->
-      <img class="color-gif" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color SX">
-
-      <!-- Colonna con buchi -->
+      <!-- Colonna con buchi sopra -->
       <img class="column-gif" src="https://xatimg.com/image/dVqXJfM9nk1g.gif" alt="Colonna SX">
     </div>
   </div>
 
-  <!-- DESTRA (senza MP4) -->
+  <!-- DESTRA -->
   <div class="column-mask">
     <div class="layer">
-      <img class="color-gif" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color DX">
+      <!-- GIF colorata destra leggermente spostata -->
+      <img class="color-gif-right" src="https://xatimg.com/image/cpDch4tGLKXz.gif" alt="Color DX">
+
+      <!-- Colonna con buchi sopra -->
       <img class="column-gif" src="https://xatimg.com/image/dVqXJfM9nk1g.gif" alt="Colonna DX">
     </div>
   </div>
@@ -114,3 +114,5 @@ body {
 
 </body>
 </html>
+
+
