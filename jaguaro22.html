@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Radar Player Neon</title>
+<style>
+body{
+  background:#050505;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#00ffcc;
+}
+.neon-box{
+  position:relative;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 0 10px #00ffcc,0 0 20px #00ffcc;
+  width:400px;
+  text-align:center;
+}
+
+/* Radar leggermente alzato */
+.radar{
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,#003333 0%,#001111 70%);
+  position:relative;
+  overflow:hidden;
+  border:2px solid #00ffcc;
+  margin:auto;
+  margin-top:-8px; /* pochissimo rialzo */
+}
+.radar-grid, .sweep, .player-dot{
+  position:absolute;
+  inset:0;
+  z-index:5; 
+}
+.radar-grid::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(#00ffcc33 1px,transparent 1px),
+    linear-gradient(90deg,#00ffcc33 1px,transparent 1px);
+  background-size:30px 30px;
+}
+.sweep{
+  background:conic-gradient(from 0deg,rgba(0,255,204,.4),rgba(0,255,204,0) 60%);
+  animation:rotate 3s linear infinite;
+}
+.player-dot{
+  width:10px;
+  height:10px;
+  background:#00ffcc;
+  border-radius:50%;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 10px #00ffcc;
+}
+.cover-center{
+  position:absolute;
+  width:290px;
+  height:290px;
+  border-radius:50%;
+  background:#111;
+  background-size:cover;
+  background-position:center;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 20px #00ffcc;
+  z-index:4;
+}
+.datetime{
+  position:absolute;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+  text-align:center;
+  text-shadow:0 0 8px #00ffcc;
+  z-index:6;
+}
+
+/* CONTROLLI VERTICALI A DX */
+.controls-right{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  z-index:7;
+}
+.controls-right button{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid #00ffcc;
+  background:transparent;
+  color:#00ffcc;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 0 8px #00ffcc;
+}
+
+/* SLIDER VERTICALE TRA PLAY E STOP */
+.controls-right input[type=range]{
+  -webkit-appearance:none;
+  width:6px;
+  height:50px;
+  background:transparent;
+}
+.controls-right input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#00ffcc;
+  cursor:pointer;
+  box-shadow:0 0 8px #00ffcc;
+  border:none;
+}
+.controls-right input[type=range]::-webkit-slider-runnable-track{
+  width:6px;
+  height:100%;
+  background:#003333;
+  border-radius:3px;
+}
+.controls-right input[type=range]::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#00ffcc;
+  cursor:pointer;
+  box-shadow:0 0 8px #00ffcc;
+  border:none;
+}
+.controls-right input[type=range]::-moz-range-track{
+  width:6px;
+  height:100%;
+  background:#003333;
+  border-radius:3px;
+}
+
+/* SCROLLER TITOLI */
+.track-scroller{
+  width:290px;
+  background:rgba(0,255,204,0.05);
+  border:1px solid #00ffcc;
+  border-radius:6px;
+  padding:4px;
+  margin:6px auto 0 auto;
+  font-size:12px;
+  overflow:hidden;
+  text-align:center;
+  color:#00ffcc;
+}
+
+/* LIVE & ASCOLTI */
+.live-box{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  z-index:9;
+}
+.live-led{
+  width:10px;
+  height:10px;
+  background:#0f0;
+  border-radius:50%;
+  box-shadow:0 0 8px #0f0;
+}
+.ascolti-box{
+  background:rgba(0,255,204,0.1);
+  padding:2px 6px;
+  border-radius:4px;
+  border:1px solid #00ffcc;
+}
+
+/* GO_TO_MUSIC */
+.go-text{
+  position:absolute;
+  color:#00ffcc;
+  font-size:16px;
+  font-weight:bold;
+  text-shadow:0 0 8px #00ffcc;
+  opacity:0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events:none;
+  z-index:10;
+}
+.go-top{top:5px; left:50%; transform:translateX(-50%);}
+.go-bottom{bottom:5px; left:50%; transform:translateX(-50%);}
+.go-left{top:50%; left:5px; transform:translateY(-50%);}
+.go-right{top:50%; right:5px; transform:translateY(-50%);}
+
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="neon-box">
+  <div class="radar" id="radar">
+    <div class="radar-grid" id="radarGrid"></div>
+    <div class="sweep" id="sweep"></div>
+    <div class="player-dot" id="dot"></div>
+    <div class="cover-center" id="cover"></div>
+    <div class="datetime" id="datetime"></div>
+  </div>
+
+  <!-- CONTROLLI VERTICALI A DX -->
+  <div class="controls-right">
+    <button id="playButton" style="margin-top:-6px;">▶</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+    <button id="stopButton" style="margin-bottom:-6px;">⏹</button>
+  </div>
+
+  <!-- Scroller titoli sotto -->
+  <div class="track-scroller" id="track">Caricamento titolo…</div>
+
+  <!-- LIVE e ascolti -->
+  <div class="live-box">
+    <div class="live-led"></div>
+    <div>LIVE</div>
+    <div class="ascolti-box" id="ascolti">0</div>
+  </div>
+
+  <!-- GO_TO_MUSIC -->
+  <div class="go-text go-top">Go_To_Music</div>
+  <div class="go-text go-bottom">Go_To_Music</div>
+  <div class="go-text go-left">Go_To_Music</div>
+  <div class="go-text go-right">Go_To_Music</div>
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+// DATA ORA
+function aggiornaDataOra(){
+  document.getElementById("datetime").innerHTML = new Date().toLocaleTimeString("it-IT");
+}
+setInterval(aggiornaDataOra,1000);
+aggiornaDataOra();
+
+// AUDIO
+const audio = document.getElementById("audio");
+const playButton = document.getElementById("playButton");
+const stopButton = document.getElementById("stopButton");
+const volumeSlider = document.getElementById("volumeSlider");
+const track = document.getElementById("track");
+const cover = document.getElementById("cover");
+const sweep = document.getElementById("sweep");
+const radarGrid = document.getElementById("radarGrid");
+const playerDot = document.getElementById("dot");
+const ascolti = document.getElementById("ascolti");
+
+audio.volume = 0.5;
+const streamURL = "https://sp4.server89.com:7027/stream";
+
+playButton.addEventListener("click", ()=>{
+  audio.src = streamURL;
+  audio.play().then(()=>console.log("Audio partito"))
+    .catch(e=>{
+      console.log("Errore audio:",e);
+      alert("Audio bloccato dal browser, premi PLAY");
+    });
+  updateCoverArt();
+});
+
+stopButton.addEventListener("click", ()=>{
+  audio.pause();
+  audio.currentTime=0;
+});
+
+volumeSlider.addEventListener("input", ()=>{
+  audio.volume = volumeSlider.value;
+});
+
+// COVER + RADAR LOGICA
+async function updateCoverArt(){
+  try{
+    const r = await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
+    const j = await r.json();
+    if(!j.songtitle){
+      track.textContent = "Caricamento titolo…";
+      sweep.style.display="block";
+      radarGrid.style.display="block";
+      playerDot.style.display="block";
+      cover.style.backgroundImage = "";
+      ascolti.textContent = j.listeners || 0;
+      return;
+    }
+    const songTitle = j.songtitle;
+    track.textContent = songTitle;
+    ascolti.textContent = j.listeners || 0;
+    const it = await fetch("https://itunes.apple.com/search?term="+encodeURIComponent(songTitle)+"&limit=1");
+    const itj = await it.json();
+    if(itj.results && itj.results.length){
+      cover.style.backgroundImage = "url("+itj.results[0].artworkUrl100+")";
+      sweep.style.display="none";
+      radarGrid.style.display="none";
+      playerDot.style.display="none";
+    } else {
+      cover.style.backgroundImage = "";
+      sweep.style.display="block";
+      radarGrid.style.display="block";
+      playerDot.style.display="block";
+    }
+  }catch(e){
+    console.log("Errore coverArt:",e);
+    sweep.style.display="block";
+    radarGrid.style.display="block";
+    playerDot.style.display="block";
+    cover.style.backgroundImage = "";
+  }
+}
+setInterval(updateCoverArt,10000);
+
+// GO_TO_MUSIC LOGICA
+const goTexts = document.querySelectorAll(".go-text");
+function mostraGoText(){
+  goTexts.forEach(el=>el.style.opacity="1");
+  setTimeout(()=>{ 
+    goTexts.forEach(el=>el.style.opacity="0");
+  }, 1500);
+}
+setInterval(mostraGoText, 10000);
+</script>
+</body>
+</html>
