@@ -2,10 +2,11 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Radar Player Neon</title>
+<title>Radar Player Neon → MP4</title>
+
 <style>
 body{
-  background:#050505;
+  background:;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -43,70 +44,60 @@ body{
   object-fit:cover;
 }
 
-/* RADAR */
-.radar{
-  width:300px;
-  height:300px;
-  border-radius:50%;
-  background:radial-gradient(circle,#003333 0%,#001111 70%);
-  position:relative;
-  overflow:hidden;
-  border:2px solid #00ffcc;
-  box-shadow:0 0 20px #00ffcc,0 0 40px #00ffcc;
-  margin:auto;
-}
-.radar-grid::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(#00ffcc55 1px,transparent 1px),
-    linear-gradient(90deg,#00ffcc55 1px,transparent 1px);
-  background-size:30px 30px;
-}
-.radar-grid,.sweep,.player-dot{
-  position:absolute;
-  inset:0;
-}
-.sweep{
-  background:conic-gradient(from 0deg,rgba(0,255,204,.6),rgba(0,255,204,0) 60%);
-  animation:rotate 3s linear infinite;
-}
-.player-dot{
-  width:10px;
-  height:10px;
-  background:#00ffcc;
-  border-radius:50%;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 20px #00ffcc,0 0 40px #00ffcc;
-}
-.cover-center{
+/* VIDEO CENTRALE MP4 */
+.video-center{
   position:absolute;
   width:290px;
   height:290px;
-  border-radius:50%;
-  background:#111;
-  background-size:cover;
-  background-position:center;
+  border-radius:20px;
+  overflow:hidden;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
   box-shadow:0 0 40px #00ffcc,0 0 60px #00ffcc;
   z-index:4;
 }
+.video-center video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-/* DATA + ORA */
+/* TESTO FLOTTANTE */
+.floating-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  font-size:15px;
+  font-weight:bold;
+  letter-spacing:1px;
+  color:#00ffcc;
+  z-index:6;
+  pointer-events:none;
+  text-shadow:0 0 12px #00ffcc,0 0 24px #00ffcc,0 0 48px #00ffcc;
+  animation:
+    jaguaroMoveX 5s linear infinite alternate,
+    jaguaroMoveY 3s linear infinite alternate;
+}
+@keyframes jaguaroMoveX{
+  from{ transform:translate(-65%,-50%); }
+  to{ transform:translate(-35%,-50%); }
+}
+@keyframes jaguaroMoveY{
+  from{ top:40%; }
+  to{ top:60%; }
+}
+
+/* DATARIO */
 .datetime{
   position:absolute;
-  bottom:60px;
+  bottom:45px;
   left:50%;
   transform:translateX(-50%);
-  font-size:12px;
-  text-align:center;
+  font-size:16px;
+  font-weight:bold;
+  z-index:7;
   text-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
-  z-index:6;
 }
 
 /* CONTROLLI */
@@ -119,7 +110,6 @@ body{
   flex-direction:column;
   align-items:center;
   gap:10px;
-  z-index:7;
 }
 .controls-right button{
   width:40px;
@@ -140,99 +130,68 @@ body{
   background:transparent;
 }
 
-/* SCROLLER */
+/* TITOLO */
 .track-scroller{
   width:290px;
   background:rgba(0,255,204,0.1);
   border:1px solid #00ffcc;
   border-radius:6px;
-  padding:4px;
-  margin:8px auto 0;
-  font-size:12px;
-  text-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
+  padding:6px;
+  margin:10px auto 0;
+  font-size:13px;
+  text-shadow:0 0 16px #00ffcc;
 }
 
-/* LIVE + GIF pulsante */
+/* LIVE */
 .live-box{
   position:absolute;
   top:10px;
   right:10px;
   display:flex;
-  flex-direction:row;
-  align-items:center;
   gap:6px;
-  z-index:9;
-}
-.live-box img{
-  width:40px;
-  height:40px;
-  object-fit:cover;
-  box-shadow:0 0 20px #ff0044,0 0 40px #ff0044;
+  align-items:center;
 }
 .live-text{
   color:#ff0044;
   font-weight:bold;
-  text-shadow:0 0 16px #ff0044,0 0 32px #ff0044;
-  animation: pulse 1s infinite alternate;
+  animation:pulse 1s infinite alternate;
 }
 @keyframes pulse{
-  0% { text-shadow:0 0 10px #ff0044,0 0 20px #ff0044; }
-  100% { text-shadow:0 0 30px #ff0044,0 0 60px #ff0044; }
+  from{text-shadow:0 0 10px #ff0044}
+  to{text-shadow:0 0 30px #ff0044}
 }
 
-/* ASCOLTI REALI in basso a SX */
+/* ASCOLTI */
 .ascolti-box{
   position:absolute;
   bottom:10px;
   left:10px;
-  background:rgba(0,255,204,0.2);
-  padding:4px 8px;
-  border:1px solid #00ffcc;
-  border-radius:6px;
   font-size:12px;
-  color:#00ffcc;
-  box-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
+  border:1px solid #00ffcc;
+  padding:4px 8px;
+  border-radius:6px;
 }
-
-/* TESTO ONDULANTE */
-.go-text{
-  position:absolute;
-  font-size:16px;
-  font-weight:bold;
-  color:#00ffcc;
-  text-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
-  animation:bounce 6s infinite;
-  z-index:10;
-}
-@keyframes bounce{
-  0% { top:5px; left:50%; transform:translateX(-50%); }
-  25% { top:50%; left:10px; transform:translateY(-50%); }
-  50% { top:90%; left:50%; transform:translateX(-50%); }
-  75% { top:50%; left:90%; transform:translateY(-50%); }
-  100% { top:5px; left:50%; transform:translateX(-50%); }
-}
-
-/* ANIMAZIONI */
-@keyframes rotate{to{transform:rotate(360deg)}}
 </style>
 </head>
+
 <body>
 
 <div class="neon-box">
 
   <div class="annuncio-video">
     <video id="annuncioVideo" playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/ferny2.mp4" type="video/mp4">
+      <source src="https://peppeagosto.github.io/immaggini/ferny2.mp4">
     </video>
   </div>
 
-  <div class="radar">
-    <div class="radar-grid"></div>
-    <div class="sweep"></div>
-    <div class="player-dot"></div>
-    <div class="cover-center" id="cover"></div>
-    <div class="datetime" id="datetime"></div>
+  <div class="video-center">
+    <video id="mp4Center" autoplay muted loop playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/ff.mp4" type="video/mp4">
+    </video>
   </div>
+
+  <div class="floating-text">Go_To_Music</div>
+  <div class="datetime" id="datetime"></div>
 
   <div class="controls-right">
     <button id="playButton">▶</button>
@@ -240,106 +199,77 @@ body{
     <button id="stopButton">⏹</button>
   </div>
 
-  <div class="track-scroller" id="track">Tocca PLAY per iniziare</div>
+  <div class="track-scroller" id="track">Tocca PLAY</div>
 
-  <!-- LIVE + GIF -->
   <div class="live-box">
     <div class="live-text">LIVE</div>
-    <img src="https://xatimg.com/image/PDOMxXfzIdCv.gif" alt="GIF">
+    <img src="https://xatimg.com/image/PDOMxXfzIdCv.gif" width="40">
   </div>
 
-  <!-- ASCOLTI REALI -->
   <div class="ascolti-box" id="ascolti">0</div>
-
-  <!-- TESTO ONDULANTE -->
-  <div class="go-text">Go_To_Music</div>
 
 </div>
 
 <audio id="audio" crossorigin="anonymous"></audio>
 
 <script>
-// jaguaro: DATA + ORA
-function aggiornaDataOra(){
-  const n=new Date();
-  const g=String(n.getDate()).padStart(2,"0");
-  const m=String(n.getMonth()+1).padStart(2,"0");
-  const a=n.getFullYear();
-  const o=n.toLocaleTimeString("it-IT");
-  datetime.innerHTML=`${g} ${m} ${a} : ore ${o}`;
-}
-setInterval(aggiornaDataOra,1000);
-aggiornaDataOra();
+const audio = document.getElementById("audio");
+const track = document.getElementById("track");
+const ascolti = document.getElementById("ascolti");
+const datetime = document.getElementById("datetime");
+const annuncioVideo = document.getElementById("annuncioVideo");
 
-// jaguaro: AUDIO + VOLUME
-const audio=document.getElementById("audio");
-const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-const source=audioCtx.createMediaElementSource(audio);
-const gainNode=audioCtx.createGain();
+/* DATARIO */
+setInterval(()=>{
+  const d = new Date();
+  const gg = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const aa = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mi = String(d.getMinutes()).padStart(2,"0");
+  const ss = String(d.getSeconds()).padStart(2,"0");
+  datetime.textContent = `${gg}/${mm}/${aa}  ${hh}:${mi}:${ss}`;
+},1000);
+
+/* AUDIO + VOLUME */
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+const source = audioCtx.createMediaElementSource(audio);
+const gainNode = audioCtx.createGain();
 source.connect(gainNode);
 gainNode.connect(audioCtx.destination);
-gainNode.gain.value=.5;
-volumeSlider.oninput=()=>gainNode.gain.value=volumeSlider.value;
+gainNode.gain.value = 0.5;
 
-// jaguaro: PLAY
-playButton.onclick=async()=>{
+volumeSlider.oninput = ()=> gainNode.gain.value = volumeSlider.value;
+
+/* PLAY */
+playButton.onclick = async ()=>{
   if(audioCtx.state==="suspended") await audioCtx.resume();
   annuncioVideo.currentTime=0;
   annuncioVideo.play();
   setTimeout(()=>{
     audio.src="https://sp4.server89.com:7027/stream";
     audio.play();
-    track.textContent="Stream LIVE attivo";
   },7000);
 };
 
-// jaguaro: STOP
-stopButton.onclick=()=>{
+/* STOP */
+stopButton.onclick = ()=>{
   audio.pause();
   annuncioVideo.pause();
   track.textContent="Fermato";
 };
 
-// jaguaro: AGGIORNA ASCOLTI REALI
+/* ASCOLTI */
 async function aggiornaAscolti(){
   try{
-    const r=await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
-    const j=await r.json();
-    ascolti.textContent=j.listeners||0; // jaguaro
-  }catch(e){console.log("Errore ascolti:",e);}
+    const r = await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
+    const j = await r.json();
+    ascolti.textContent = j.currentlisteners || 0;
+  }catch(e){console.log(e);}
 }
 setInterval(aggiornaAscolti,10000);
 aggiornaAscolti();
-
-// jaguaro: AGGIORNA COVER + RADAR LOGICA
-async function updateCoverArt(){
-  try{
-    const r=await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
-    const j=await r.json();
-    if(!j.songtitle){
-      sweep.style.display="block";
-      radarGrid.style.display="block";
-      playerDot.style.display="block";
-      cover.style.backgroundImage="";
-      return;
-    }
-    const it=await fetch("https://itunes.apple.com/search?term="+encodeURIComponent(j.songtitle)+"&limit=1");
-    const itj=await it.json();
-    if(itj.results?.length){
-      cover.style.backgroundImage="url("+itj.results[0].artworkUrl100+")";
-      sweep.style.display="none";
-      radarGrid.style.display="none";
-      playerDot.style.display="none";
-    } else {
-      cover.style.backgroundImage="";
-      sweep.style.display="block";
-      radarGrid.style.display="block";
-      playerDot.style.display="block";
-    }
-  }catch(e){console.log("Errore coverArt:",e);}
-}
-setInterval(updateCoverArt,10000);
-updateCoverArt();
 </script>
+
 </body>
 </html>
