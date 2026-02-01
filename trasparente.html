@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Radar Player Neon</title>
+<style>
+/* jaguaro: STILE BASE */
+body{
+  background: ;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#00ffcc;
+}
+.neon-box{
+  position:relative;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 0 10px #00ffcc,0 0 20px #00ffcc;
+  width:400px;
+  text-align:center;
+}
+
+/* jaguaro: VIDEO ANNUNCIO */
+.annuncio-video{
+  position:absolute;
+  top:0;
+  left:0;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.5);
+  box-shadow:0 0 12px rgba(255,255,255,0.4);
+  z-index:8;
+  pointer-events:none;
+}
+.annuncio-video video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* jaguaro: RADAR */
+.radar{
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,#003333 0%,#001111 70%);
+  position:relative;
+  overflow:hidden;
+  border:2px solid #00ffcc;
+  margin:auto;
+}
+.radar-grid::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(#00ffcc33 1px,transparent 1px),
+    linear-gradient(90deg,#00ffcc33 1px,transparent 1px);
+  background-size:30px 30px;
+}
+.radar-grid,.sweep,.player-dot{
+  position:absolute;
+  inset:0;
+}
+.sweep{
+  background:conic-gradient(from 0deg,rgba(0,255,204,.4),rgba(0,255,204,0) 60%);
+  animation:rotate 3s linear infinite;
+}
+.player-dot{
+  width:10px;
+  height:10px;
+  background:#00ffcc;
+  border-radius:50%;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 10px #00ffcc;
+}
+.cover-center{
+  position:absolute;
+  width:290px;
+  height:290px;
+  border-radius:50%;
+  background:#111;
+  background-size:cover;
+  background-position:center;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 20px #00ffcc;
+  z-index:4;
+}
+
+/* jaguaro: DATA + ORA */
+.datetime{
+  position:absolute;
+  bottom:60px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:12px; /* come richiesto */
+  text-align:center;
+  text-shadow:0 0 8px #00ffcc;
+  z-index:6;
+}
+
+/* jaguaro: CONTROLLI */
+.controls-right{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  z-index:7;
+}
+.controls-right button{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid #00ffcc;
+  background:transparent;
+  color:#00ffcc;
+  cursor:pointer;
+  box-shadow:0 0 8px #00ffcc;
+}
+.controls-right input[type=range]{
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  writing-mode: bt-lr;
+  width:6px;
+  height:60px;
+  background:transparent;
+}
+
+/* jaguaro: SCROLLER */
+.track-scroller{
+  width:290px;
+  background:rgba(0,255,204,0.05);
+  border:1px solid #00ffcc;
+  border-radius:6px;
+  padding:4px;
+  margin:8px auto 0;
+  font-size:12px;
+}
+
+/* jaguaro: LIVE + GIF pulsante */
+.live-box{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:6px;
+  z-index:9;
+}
+.live-box img{
+  width:40px;
+  height:40px;
+  object-fit:cover;
+}
+.live-text{
+  color:#ff0044;
+  font-weight:bold;
+  text-shadow:0 0 10px #ff0044;
+  animation: pulse 1s infinite alternate; /* jaguaro: pulsing */
+}
+@keyframes pulse{
+  0% { text-shadow:0 0 5px #ff0044,0 0 10px #ff0044; }
+  100% { text-shadow:0 0 15px #ff0044,0 0 30px #ff0044; }
+}
+
+/* jaguaro: ASCOLTI REALI in basso a SX */
+.ascolti-box{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  background:rgba(0,255,204,0.1);
+  padding:2px 6px;
+  border:1px solid #00ffcc;
+  border-radius:4px;
+  font-size:12px;
+  color:#00ffcc;
+}
+
+/* jaguaro: TESTO ONDULANTE */
+.go-text{
+  position:absolute;
+  font-size:16px;
+  font-weight:bold;
+  color:#00ffcc;
+  text-shadow:0 0 12px #00ffcc;
+  animation:bounce 6s infinite;
+  z-index:10;
+}
+@keyframes bounce{
+  0% { top:5px; left:50%; transform:translateX(-50%); }
+  25% { top:50%; left:10px; transform:translateY(-50%); }
+  50% { top:90%; left:50%; transform:translateX(-50%); }
+  75% { top:50%; left:90%; transform:translateY(-50%); }
+  100% { top:5px; left:50%; transform:translateX(-50%); }
+}
+
+/* jaguaro: ANIMAZIONI */
+@keyframes rotate{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="neon-box">
+
+  <div class="annuncio-video">
+    <video id="annuncioVideo" playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/ferny2.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="radar">
+    <div class="radar-grid"></div>
+    <div class="sweep"></div>
+    <div class="player-dot"></div>
+    <div class="cover-center" id="cover"></div>
+    <div class="datetime" id="datetime"></div>
+  </div>
+
+  <div class="controls-right">
+    <button id="playButton">▶</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+    <button id="stopButton">⏹</button>
+  </div>
+
+  <div class="track-scroller" id="track">Tocca PLAY per iniziare</div>
+
+  <!-- LIVE + GIF -->
+  <div class="live-box">
+    <div class="live-text">LIVE</div>
+    <img src="https://xatimg.com/image/PDOMxXfzIdCv.gif" alt="GIF">
+  </div>
+
+  <!-- ASCOLTI REALI in basso a SX -->
+  <div class="ascolti-box" id="ascolti">0</div>
+
+  <!-- TESTO ONDULANTE -->
+  <div class="go-text">Go_To_Music</div>
+
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+// jaguaro: DATA + ORA
+function aggiornaDataOra(){
+  const n=new Date();
+  const g=String(n.getDate()).padStart(2,"0");
+  const m=String(n.getMonth()+1).padStart(2,"0");
+  const a=n.getFullYear();
+  const o=n.toLocaleTimeString("it-IT");
+  datetime.innerHTML=`${g} ${m} ${a} : ore ${o}`;
+}
+setInterval(aggiornaDataOra,1000);
+aggiornaDataOra();
+
+// jaguaro: AUDIO + VOLUME
+const audio=document.getElementById("audio");
+const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+const source=audioCtx.createMediaElementSource(audio);
+const gainNode=audioCtx.createGain();
+source.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+gainNode.gain.value=.5;
+volumeSlider.oninput=()=>gainNode.gain.value=volumeSlider.value;
+
+// jaguaro: PLAY
+playButton.onclick=async()=>{
+  if(audioCtx.state==="suspended") await audioCtx.resume();
+  annuncioVideo.currentTime=0;
+  annuncioVideo.play();
+  setTimeout(()=>{
+    audio.src="https://sp4.server89.com:7027/stream";
+    audio.play();
+    track.textContent="Stream LIVE attivo";
+  },7000);
+};
+
+// jaguaro: STOP
+stopButton.onclick=()=>{
+  audio.pause();
+  annuncioVideo.pause();
+  track.textContent="Fermato";
+};
+
+// jaguaro: AGGIORNA ASCOLTI REALI
+async function aggiornaAscolti(){
+  try{
+    const r=await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
+    const j=await r.json();
+    ascolti.textContent=j.listeners||0; // jaguaro
+  }catch(e){console.log("Errore ascolti:",e);}
+}
+setInterval(aggiornaAscolti,10000);
+aggiornaAscolti();
+
+// jaguaro: AGGIORNA COVER + RADAR LOGICA
+async function updateCoverArt(){
+  try{
+    const r=await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
+    const j=await r.json();
+    if(!j.songtitle){
+      sweep.style.display="block";
+      radarGrid.style.display="block";
+      playerDot.style.display="block";
+      cover.style.backgroundImage="";
+      return;
+    }
+    const it=await fetch("https://itunes.apple.com/search?term="+encodeURIComponent(j.songtitle)+"&limit=1");
+    const itj=await it.json();
+    if(itj.results?.length){
+      cover.style.backgroundImage="url("+itj.results[0].artworkUrl100+")";
+      sweep.style.display="none";
+      radarGrid.style.display="none";
+      playerDot.style.display="none";
+    } else {
+      cover.style.backgroundImage="";
+      sweep.style.display="block";
+      radarGrid.style.display="block";
+      playerDot.style.display="block";
+    }
+  }catch(e){console.log("Errore coverArt:",e);}
+}
+setInterval(updateCoverArt,10000);
+updateCoverArt();
+</script>
+
+</body>
+</html>
+
+
