@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Radar Player Neon → MP4</title>
+
+<style>
+body{
+  background:;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#00ffcc;
+}
+.neon-box{
+  position:relative;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 0 20px #00ffcc,0 0 40px #00ffcc;
+  width:400px;
+  text-align:center;
+}
+
+/* VIDEO ANNUNCIO */
+.annuncio-video{
+  position:absolute;
+  top:0;
+  left:0;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.8);
+  box-shadow:0 0 20px #00ffcc,0 0 40px #00ffcc;
+  z-index:8;
+  pointer-events:none;
+}
+.annuncio-video video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* VIDEO CENTRALE MP4 */
+.video-center{
+  position:absolute;
+  width:290px;
+  height:290px;
+  border-radius:20px;
+  overflow:hidden;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 40px #00ffcc,0 0 60px #00ffcc;
+  z-index:4;
+}
+.video-center video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* TESTO FLOTTANTE */
+.floating-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  font-size:15px;
+  font-weight:bold;
+  letter-spacing:1px;
+  color:#00ffcc;
+  z-index:6;
+  pointer-events:none;
+  text-shadow:0 0 12px #00ffcc,0 0 24px #00ffcc,0 0 48px #00ffcc;
+  animation:
+    jaguaroMoveX 5s linear infinite alternate,
+    jaguaroMoveY 3s linear infinite alternate;
+}
+@keyframes jaguaroMoveX{
+  from{ transform:translate(-65%,-50%); }
+  to{ transform:translate(-35%,-50%); }
+}
+@keyframes jaguaroMoveY{
+  from{ top:40%; }
+  to{ top:60%; }
+}
+
+/* DATARIO */
+.datetime{
+  position:absolute;
+  bottom:45px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:16px;
+  font-weight:bold;
+  z-index:7;
+  text-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
+}
+
+/* CONTROLLI */
+.controls-right{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.controls-right button{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid #00ffcc;
+  background:transparent;
+  color:#00ffcc;
+  cursor:pointer;
+  box-shadow:0 0 16px #00ffcc,0 0 32px #00ffcc;
+}
+.controls-right input[type=range]{
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  writing-mode: bt-lr;
+  width:6px;
+  height:60px;
+  background:transparent;
+}
+
+/* TITOLO */
+.track-scroller{
+  width:290px;
+  background:rgba(0,255,204,0.1);
+  border:1px solid #00ffcc;
+  border-radius:6px;
+  padding:6px;
+  margin:10px auto 0;
+  font-size:13px;
+  text-shadow:0 0 16px #00ffcc;
+}
+
+/* LIVE */
+.live-box{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.live-text{
+  color:#ff0044;
+  font-weight:bold;
+  animation:pulse 1s infinite alternate;
+}
+@keyframes pulse{
+  from{text-shadow:0 0 10px #ff0044}
+  to{text-shadow:0 0 30px #ff0044}
+}
+
+/* ASCOLTI */
+.ascolti-box{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  font-size:12px;
+  border:1px solid #00ffcc;
+  padding:4px 8px;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="neon-box">
+
+  <div class="annuncio-video">
+    <video id="annuncioVideo" playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/ferny2.mp4">
+    </video>
+  </div>
+
+  <div class="video-center">
+    <video id="mp4Center" autoplay muted loop playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/ff.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="floating-text">Go_To_Music</div>
+  <div class="datetime" id="datetime"></div>
+
+  <div class="controls-right">
+    <button id="playButton">▶</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+    <button id="stopButton">⏹</button>
+  </div>
+
+  <div class="track-scroller" id="track">Tocca PLAY</div>
+
+  <div class="live-box">
+    <div class="live-text">LIVE</div>
+    <img src="https://xatimg.com/image/PDOMxXfzIdCv.gif" width="40">
+  </div>
+
+  <div class="ascolti-box" id="ascolti">0</div>
+
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+const audio = document.getElementById("audio");
+const track = document.getElementById("track");
+const ascolti = document.getElementById("ascolti");
+const datetime = document.getElementById("datetime");
+const annuncioVideo = document.getElementById("annuncioVideo");
+
+/* DATARIO */
+setInterval(()=>{
+  const d = new Date();
+  const gg = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const aa = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mi = String(d.getMinutes()).padStart(2,"0");
+  const ss = String(d.getSeconds()).padStart(2,"0");
+  datetime.textContent = `${gg}/${mm}/${aa}  ${hh}:${mi}:${ss}`;
+},1000);
+
+/* AUDIO + VOLUME */
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+const source = audioCtx.createMediaElementSource(audio);
+const gainNode = audioCtx.createGain();
+source.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+gainNode.gain.value = 0.5;
+
+volumeSlider.oninput = ()=> gainNode.gain.value = volumeSlider.value;
+
+/* PLAY */
+playButton.onclick = async ()=>{
+  if(audioCtx.state==="suspended") await audioCtx.resume();
+  annuncioVideo.currentTime=0;
+  annuncioVideo.play();
+  setTimeout(()=>{
+    audio.src="https://sp4.server89.com:7027/stream";
+    audio.play();
+  },7000);
+};
+
+/* STOP */
+stopButton.onclick = ()=>{
+  audio.pause();
+  annuncioVideo.pause();
+  track.textContent="Fermato";
+};
+
+/* ASCOLTI */
+async function aggiornaAscolti(){
+  try{
+    const r = await fetch("https://sp4.server89.com:7027/stats?sid=1&json=1");
+    const j = await r.json();
+    ascolti.textContent = j.currentlisteners || 0;
+  }catch(e){console.log(e);}
+}
+setInterval(aggiornaAscolti,10000);
+aggiornaAscolti();
+</script>
+
+</body>
+</html>
