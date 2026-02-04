@@ -6,114 +6,144 @@
 <title>EL CARTAIO</title>
 
 <style>
-html,body{
-    margin:0;
-    padding:0;
-    background: ;
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
 }
 
-/* CONTENITORI VIDEO */
-.video-box{
-    position:fixed;
-    width:240px;
-    height:520px;
-    top:50%;
-    transform:translateY(-50%);
-    border-radius:14px;
-    border:2px solid #ff0000;
-    box-shadow:0 0 20px #ff0000,0 0 40px #ffff00;
-    overflow:hidden;
-    z-index:9999;
+.video-box {
+    position: fixed;
+    width: 240px;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 14px;
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px #ff0000, 0 0 40px #ffff00;
+    overflow: hidden;
+    z-index: 9999;
 }
 
-/* POSIZIONE */
-.video-left{left:10px;}
-.video-right{right:10px;}
+.video-left  { left: 10px; }
+.video-right { right: 10px; }
 
-/* VIDEO */
-.video-box video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
+.video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-/* TESTO */
-.video-text{
-    position:absolute;
-    bottom:8px;
-    left:0;
-    width:100%;
-    text-align:center;
-    color:#fff;
-    font-size:22px;
-    font-weight:bold;
-    text-shadow:0 0 8px #fff,0 0 15px #ff0000;
-    pointer-events:none;
-    animation:wave 3s ease-in-out infinite;
+.video-text {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #fff, 0 0 15px #ff0000;
+    pointer-events: none;
+    animation: wave 3s ease-in-out infinite;
 }
 
-/* ANIMAZIONE ONDA */
-@keyframes wave{
-    0%{transform:translateY(0) rotate(0deg);}
-    25%{transform:translateY(-4px) rotate(-1deg);}
-    50%{transform:translateY(0) rotate(0deg);}
-    75%{transform:translateY(4px) rotate(1deg);}
-    100%{transform:translateY(0) rotate(0deg);}
+@keyframes wave {
+    0%   { transform: translateY(0)   rotate(0deg);  }
+    25%  { transform: translateY(-4px) rotate(-1deg); }
+    50%  { transform: translateY(0)   rotate(0deg);  }
+    75%  { transform: translateY(4px)  rotate(1deg);  }
+    100% { transform: translateY(0)   rotate(0deg);  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- VIDEO SINISTRO -->
+<!-- LATO SINISTRO FISSO (Z) -->
 <div class="video-box video-left">
     <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/z1.mp4" type="video/mp4">
     </video>
-    <div class="video-text">1</div>
+    <div class="video-text">Z1</div>
 </div>
 
-<!-- VIDEO DESTRO -->
+<!-- LATO DESTRO FISSO (Z) -->
 <div class="video-box video-right">
     <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/z2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">1</div>
+    <div class="video-text">Z2</div>
 </div>
 
-<!-- VIDEO SINISTRO -->
-<div class="video-box video-left">
+<!-- LATO SINISTRO che CAMBIA (doppio) -->
+<div class="video-box video-left" style="z-index: 10000;">
+    <video id="leftVideo" autoplay muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/v1.mp4" type="video/mp4">
+    </video>
+    <div class="video-text" id="leftText">V1</div>
+</div>
+
+<!-- LATO DESTRO che CAMBIA (doppio) -->
+<div class="video-box video-right" style="z-index: 10000;">
+    <video id="rightVideo" autoplay muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/v2.mp4" type="video/mp4">
+    </video>
+    <div class="video-text" id="rightText">V2</div>
+</div>
+
+<!-- Terzo paio fisso (Z) – se vuoi metterlo più in alto o in basso cambia top -->
+<div class="video-box video-left" style="left:280px; z-index:5000;">
     <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/z3.mp4" type="video/mp4">
     </video>
-    <div class="video-text">2</div>
+    <div class="video-text">Z3</div>
 </div>
 
-<!-- VIDEO DESTRO -->
-<div class="video-box video-right">
-    <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
-    </video>
-    <div class="video-text">2</div>
-</div>
+<script>
+// Solo i video "doppi" cambiano ogni 15 secondi
+const videos = [
+    {
+        video: document.getElementById("leftVideo"),
+        text:  document.getElementById("leftText"),
+        v1: "https://peppeagosto.github.io/immaggini/v1.mp4",
+        v2: "https://peppeagosto.github.io/immaggini/v2.mp4"
+    },
+    {
+        video: document.getElementById("rightVideo"),
+        text:  document.getElementById("rightText"),
+        v1: "https://peppeagosto.github.io/immaggini/v1.mp4",
+        v2: "https://peppeagosto.github.io/immaggini/v2.mp4"
+    }
+];
 
-<!-- VIDEO SINISTRO -->
-<div class="video-box video-left">
-    <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
-    </video>
-    <div class="video-text">3</div>
-</div>
+let useV1 = true;
 
-<!-- VIDEO DESTRO -->
-<div class="video-box video-right">
-    <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/   .mp4" type="video/mp4">
-    </video>
-    <div class="video-text">3</div>
-</div>
+function switchVideos() {
+    useV1 = !useV1;
+    const currentSrc = useV1 ? "v1" : "v2";
+    const label = useV1 ? "V1" : "V2";
 
+    videos.forEach(item => {
+        if (item.video.src !== item[currentSrc]) {
+            item.video.src = item[currentSrc];
+            item.video.load();          // importante per cambiare sorgente
+            item.video.play().catch(()=>{});
+        }
+        item.text.textContent = label;
+    });
+}
+
+// Cambia ogni 15 secondi
+setInterval(switchVideos, 15000);
+
+// Prima partenza dopo 15s (o subito se vuoi togliendo il timeout)
+setTimeout(switchVideos, 15000);
+
+</script>
 
 </body>
 </html>
