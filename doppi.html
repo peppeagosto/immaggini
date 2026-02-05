@@ -1,9 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EL CARTAIO</title>
+
 <style>
 html, body {
     margin: 0;
@@ -24,7 +27,7 @@ html, body {
     border: 3px solid #ff0000;
     box-shadow: 0 0 25px #ff0000, 0 0 50px #ffff00;
     overflow: hidden;
-    background: #111; /* fallback */
+    background: #111;
 }
 
 .video-box video {
@@ -48,111 +51,97 @@ html, body {
 }
 
 @keyframes wave {
-    0%   { transform: translateY(0) rotate(0deg); }
-    25%  { transform: translateY(-5px) rotate(-1.5deg); }
-    50%  { transform: translateY(0) rotate(0deg); }
-    75%  { transform: translateY(5px) rotate(1.5deg); }
-    100% { transform: translateY(0) rotate(0deg); }
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
 }
 
-/* TESTO CENTRALE "EL CARTAIO" */
+/* TESTO CENTRALE */
 .center-title {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 10vw;
-    font-weight: 900;
+    font-size: 0vw;
     color: #ff0000;
-    text-shadow: 
+    text-shadow:
         0 0 15px #ff0000,
         0 0 30px #ff0000,
         0 0 60px #ffff00,
         0 0 100px #ffff00;
     letter-spacing: 10px;
-    pointer-events: none;
     z-index: 9999;
-    white-space: nowrap;
-    animation: 
-        pulse 2.8s ease-in-out infinite,
-        flicker 7s linear infinite;
-    user-select: none;
+    animation: pulse 3s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
-    50%      { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    0%,100% { opacity: .8; }
+    50% { opacity: 1; }
 }
 
-@keyframes flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% { 
-        text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 60px #ffff00, 0 0 100px #ffff00; 
-    }
-    20%, 24%, 55% { text-shadow: none; opacity: 0.35; }
-}
-
-/* Posizionamenti */
+/* POSIZIONI */
 #left { left: 20px; z-index: 8000; }
 #center { left: 50%; transform: translate(-50%, -50%); z-index: 9500; }
 #right { right: 20px; z-index: 8000; }
 </style>
 </head>
+
 <body>
 
-<!-- SINISTRA: Z1 FISSO -->
+<!-- SINISTRA -->
 <div class="video-box" id="left">
     <video autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/z1.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Z1</div>
+    <div class="video-text">EL DIABLO</div>
 </div>
 
-<!-- CENTRO: CAMBIA TRA V1 e V2 -->
+<!-- CENTRO (ROTANTE) -->
 <div class="video-box" id="center">
-    <video id="centerVideo" autoplay muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/v1.mp4" type="video/mp4">
-    </video>
-    <div class="video-text" id="centerText">V1</div>
+    <video id="centerVideo" autoplay muted playsinline></video>
+    <div class="video-text" id="centerText"></div>
 </div>
 
-<!-- DESTRA: Z2 FISSO -->
+<!-- DESTRA -->
 <div class="video-box" id="right">
     <video autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/z2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">Z2</div>
+    <div class="video-text">EL DIABLO</div>
 </div>
 
-<!-- Testo centrale sopra tutto -->
 <div class="center-title">EL CARTAIO</div>
 
 <script>
 const centerVideo = document.getElementById("centerVideo");
 const centerText  = document.getElementById("centerText");
 
-const v1 = "https://peppeagosto.github.io/immaggini/v1.mp4";
-const v2 = "https://peppeagosto.github.io/immaggini/v2.mp4";
+/* PLAYLIST ROTANTE */
+const playlist = [
+  { src: "https://peppeagosto.github.io/immaggini/v1.mp4", text: "EL CARTAIO", time: 15000 },
+  { src: "https://peppeagosto.github.io/immaggini/v2.mp4", text: "EL DIABLO", time: 15000 },
+  { src: "https://peppeagosto.github.io/immaggini/questimi.mp4", text: "QUESTIMI", time: 20000 },
+  { src: "https://peppeagosto.github.io/immaggini/m.mp4", text: "M", time: 20000 }
+];
 
-let isV1 = true;
+let index = 0;
 
-function switchCenter() {
-    isV1 = !isV1;
+function playNext() {
+    const item = playlist[index];
 
-    if (isV1) {
-        centerVideo.src = v1;
-        centerText.textContent = "V1";
-    } else {
-        centerVideo.src = v2;
-        centerText.textContent = "V2";
-    }
+    centerVideo.src = item.src;
+    centerText.textContent = item.text;
 
     centerVideo.load();
-    centerVideo.play().catch(() => {});
+    centerVideo.play().catch(()=>{});
+
+    setTimeout(() => {
+        index = (index + 1) % playlist.length;
+        playNext();
+    }, item.time);
 }
 
-setInterval(switchCenter, 15000);
-// Primo cambio dopo 15 secondi
-setTimeout(switchCenter, 15000);
+playNext();
 </script>
 
 </body>
