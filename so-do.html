@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<title>Live DJ Sogno Player</title>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#000 ;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding-top:20px;
+  overflow:hidden;
+}
+
+.player{
+  position:relative;
+  width:900px;
+  height:650px;
+  background:linear-gradient(145deg,#000814,#001122);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 0 60px #00aaff33;
+}
+
+/* VIDEO LATERALI */
+.video-left,.video-right{
+  position:absolute;
+  top:60px; 
+  width:220px;
+  height:520px;
+  border:3px solid red;
+  border-radius:16px;
+  box-shadow:0 0 20px red;
+  overflow:hidden;
+  z-index:1;
+}
+.video-left{left:20px;}
+.video-right{right:20px;}
+.video-left video,
+.video-right video{width:100%;height:100%;object-fit:cover;}
+.video-left video{transform:scaleX(-1);}
+
+/* CENTRO: FOTO + COVER */
+.video-center{
+  position:absolute;
+  top:60px; 
+  left:50%;
+  transform:translateX(-50%);
+  width:300px;
+  height:520px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  z-index:2;
+}
+
+/* FOTO SOPRA */
+.center-photo{
+  width:300px;
+  height:280px;
+  object-fit:cover;
+  border-radius:16px;
+  box-shadow:0 0 25px #00ffff;
+  margin-bottom:20px;
+  z-index:2;
+}
+
+/* COVER ROTANTE SOTTO */
+.cover-container{
+  width:160px;
+  height:160px;
+  margin-top:20px; 
+  z-index:2;
+}
+.cover-ar{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  animation:spin 12s linear infinite;
+  box-shadow:0 0 40px #ff00aa;
+  border:5px solid red;
+  z-index:2;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* MARQUEE */
+.marquee-container{
+  height:35px;
+  overflow:hidden;
+  background:rgba(0,0,0,.6);
+  position:absolute;
+  top: 5px;
+  left:0;
+  width:100%;
+  z-index:3;
+}
+.marquee{
+  white-space:nowrap;
+  animation:scroll-left 15s linear infinite;
+  color:#ff0000;
+  font-size:20px;
+  font-weight:bold;
+  line-height:35px;
+  padding:0 20px;
+  text-shadow:0 0 15px #ff0000;
+}
+@keyframes scroll-left{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+/* CONTROLLI AUDIO: PLAY - SLIDER - STOP */
+.audio-controls{
+  position:absolute;
+  bottom: 5px;
+  left:50%;
+  transform:translateX(-50%);
+  width:320px; 
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:10;
+}
+.btn{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  z-index:11;
+  background:linear-gradient(45deg, red, orange, yellow, lime, cyan, blue, violet);
+  background-size:300% 300%;
+  animation:rainbow 4s linear infinite;
+  box-shadow:0 0 12px rgba(255,255,255,.9);
+  transition:transform .2s;
+}
+.btn:hover{transform:scale(1.15)}
+.btn.play::before{content:"▶";color:#000;font-size:16px;font-weight:bold;}
+.btn.stop::before{content:"■";color:#000;font-size:16px;font-weight:bold;}
+@keyframes rainbow{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+
+.volume-control{
+  width:180px;
+}
+.volume-control input{width:100%;}
+
+/* NOTE MUSICALI CADENTI */
+.note{
+  position:absolute;
+  font-size:24px;
+  z-index:2;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(-50px);}
+  100%{transform:translateY(700px);}
+}
+
+/* TESTO DJ SOGNO 3D CON PULSAR */
+.dj-sogno{
+  position:absolute;
+  bottom:320px; 
+  width:100%;
+  text-align:center;
+  font-size:32px; 
+  font-weight:bold;
+  background: linear-gradient(45deg, #e0e0e0, #f0f0f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 4px #000000aa, -1px -1px 4px #000000aa;
+  z-index:3;
+  animation: pulse 1.5s infinite alternate;
+}
+@keyframes pulse {
+  0% { text-shadow: 1px 1px 4px #000000aa, -1px -1px 4px #000000aa; transform: scale(1); }
+  50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00aaff; transform: scale(1.05); }
+  100% { text-shadow: 1px 1px 4px #000000aa, -1px -1px 4px #000000aa; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="player">
+
+  <!-- MARQUEE TITOLI -->
+  <div class="marquee-container">
+    <div class="marquee" id="titolocanzone">Caricamento titolo...</div>
+  </div>
+
+  <!-- VIDEO LATERALI -->
+  <div class="video-left">
+    <video autoplay loop muted src="https://peppeagosto.github.io/immaggini/maria2.mp4?v=2"></video>
+  </div>
+  <div class="video-right">
+    <video autoplay loop muted src="https://peppeagosto.github.io/immaggini/maria3.mp4?v=2"></video>
+  </div>
+
+  <!-- CENTRO FOTO + COVER -->
+  <div class="video-center">
+    <img class="center-photo" src="https://xatimg.com/image/63D5NSIdo8g8.jpg">
+    <div class="cover-container">
+      <img class="cover-ar" src="https://xatimg.com/image/1ZS7NySEgIoW.png">
+    </div>
+  </div>
+
+  <!-- CONTROLLI AUDIO -->
+  <div class="audio-controls">
+    <button class="btn play" id="playBtn"></button>
+    <div class="volume-control">
+      <input type="range" min="0" max="1" step="0.01" value="1" id="volume">
+    </div>
+    <button class="btn stop" id="stopBtn"></button>
+  </div>
+
+  <!-- TESTO 3D -->
+  <div class="dj-sogno">DJ SOGNO</div>
+
+  <!-- AUDIO -->
+  <audio id="audio" src="https://stream.zeno.fm/se91s1gqfg0uv" crossorigin="anonymous"></audio>
+
+</div>
+
+<script>
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const stopBtn = document.getElementById("stopBtn");
+const volume = document.getElementById("volume");
+const cover = document.querySelector(".cover-ar");
+const marquee = document.getElementById("titolocanzone");
+
+let audioCtx, source, analyser, dataArray;
+let isPlaying = false;
+
+// Volume
+volume.oninput = e => audio.volume = e.target.value;
+
+// Inizializza WebAudio per glow cover
+function initAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioCtx.createMediaElementSource(audio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    pulseGlow();
+}
+
+// PLAY BUTTON
+playBtn.onclick = async () => {
+    initAudio();
+    if(audioCtx.state === "suspended") await audioCtx.resume();
+
+    if(!isPlaying){
+        audio.muted = false;
+        try { await audio.play(); isPlaying=true; cover.style.animationPlayState="running"; }
+        catch(err){console.log("Audio bloccato dal browser");}
+    } else {
+        audio.pause();
+        isPlaying=false;
+        cover.style.animationPlayState="paused";
+    }
+};
+
+// STOP BUTTON
+stopBtn.onclick = () => {
+    audio.pause();
+    audio.currentTime = 0;
+    isPlaying=false;
+    cover.style.animationPlayState="paused";
+    marquee.textContent="Live DJ Sogno";
+};
+
+// Glow cover al beat
+function pulseGlow(){
+    function loop(){
+        requestAnimationFrame(loop);
+        if(!isPlaying) return;
+        analyser.getByteFrequencyData(dataArray);
+        let avg = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
+        let glow = Math.min(80, avg/2);
+        cover.style.boxShadow = `0 0 ${40+glow}px #ff00aa, 0 0 ${80+glow}px #ff0044`;
+    }
+    loop();
+}
+
+// FETCH TITOLI + COVER ITUNES
+async function fetchNowPlaying(){
+    try{
+        const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/se91s1gqfg0uv");
+        const d = await r.json();
+        let song = d.title || "Live DJ Sogno";
+        marquee.textContent = song;
+        if(song) fetchCover(song);
+    } catch{
+        marquee.textContent = "Live DJ Sogno";
+        cover.src = "https://xatimg.com/image/63D5NSIdo8g8.jpg";
+    }
+}
+
+async function fetchCover(query){
+  try{
+    const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=1`);
+    const d = await r.json();
+    if(d.results.length){
+      cover.src = d.results[0].artworkUrl100.replace("100x100","600x600");
+    } else {
+      cover.src = "https://xatimg.com/image/63D5NSIdo8g8.jpg";
+    }
+  }catch{
+    cover.src = "https://xatimg.com/image/4P7tw5xBzXst.png";
+  }
+}
+
+// NOTE MUSICALI CADENTI
+const noteSymbols = ["♪","♫"];
+function createNote(){
+  const note = document.createElement("div");
+  note.className = "note";
+  note.textContent = noteSymbols[Math.floor(Math.random()*noteSymbols.length)];
+  note.style.left = Math.random()*880 + "px";
+  note.style.fontSize = (12+Math.random()*18)+"px";
+  note.style.color = `hsl(${Math.random()*360}, 100%, 70%)`;
+  document.body.appendChild(note);
+  note.animate([{transform:"translateY(-50px)"},{transform:"translateY(700px)"}],{
+    duration:5000+Math.random()*5000,
+    iterations:Infinity,
+    easing:"linear"
+  });
+}
+for(let i=0;i<20;i++) createNote();
+
+setInterval(fetchNowPlaying,15000);
+fetchNowPlaying();
+</script>
+
+</body>
+</html>
