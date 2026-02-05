@@ -15,9 +15,9 @@ html, body {
     font-family: 'Arial Black', Arial, sans-serif;
 }
 
+/* BASE BOX */
 .video-box {
     position: fixed;
-    width: 240px;
     height: 520px;
     top: 50%;
     transform: translateY(-50%);
@@ -26,6 +26,20 @@ html, body {
     box-shadow: 0 0 25px #ff0000, 0 0 50px #ffff00;
     overflow: hidden;
     background: #111;
+}
+
+/* LATERALI */
+#left,
+#right {
+    width: 240px;
+}
+
+/* CENTRO PIÙ LARGO */
+#center {
+    width: 300px; /* <<< QUI HO ALLARGATO */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9500;
 }
 
 .video-box video {
@@ -79,7 +93,6 @@ html, body {
 
 /* POSIZIONI */
 #left { left: 20px; z-index: 8000; }
-#center { left: 50%; transform: translate(-50%, -50%); z-index: 9500; }
 #right { right: 20px; z-index: 8000; }
 </style>
 </head>
@@ -94,7 +107,7 @@ html, body {
     <div class="video-text">EL DIABLO</div>
 </div>
 
-<!-- CENTRO (ROTANTE) -->
+<!-- CENTRO -->
 <div class="video-box" id="center">
     <video id="centerVideo" autoplay muted playsinline></video>
     <div class="video-text" id="centerText"></div>
@@ -114,7 +127,6 @@ html, body {
 const centerVideo = document.getElementById("centerVideo");
 const centerText  = document.getElementById("centerText");
 
-/* PLAYLIST ROTANTE */
 const playlist = [
   { src: "https://peppeagosto.github.io/immaggini/v1.mp4", text: "EL CARTAIO", time: 15000 },
   { src: "https://peppeagosto.github.io/immaggini/v2.mp4", text: "EL DIABLO",  time: 15000 },
@@ -144,3 +156,5 @@ playNext();
 
 </body>
 </html>
+
+
