@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diablo Radio EQ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#111;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+}
+
+/* CONTENITORE CENTRALE */
+#box{
+  position:relative;
+  width:700px;
+  height:450px;
+  background:#111;
+  border-radius:24px;
+  box-shadow:0 0 50px rgba(0,0,0,.9);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:15px;
+  z-index:2;
+}
+
+/* MEDIA VIDEO / COVER */
+.media{
+  width:300px;
+  height:300px;
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+  background:#000;
+  z-index:2;
+}
+.media video,
+.media img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.media img{opacity:0;transition:.5s}
+
+/* SCROLLER TITOLO RIDOTTO MA PIU' LUNGO */
+#title{
+  margin:10px 0;
+  width:250px; /* più lungo ma non tocca MP4 laterali */
+  text-align:center;
+  color:#ff0066;
+  font-size:20px;
+  font-weight:900;
+  overflow:hidden;
+  white-space:nowrap;
+}
+#title span{
+  display:inline-block;
+  animation:scroll 12s linear infinite; /* leggermente più lento */
+}
+@keyframes scroll{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+/* EQ CANVAS */
+#eq{
+  width:280px;
+  height:40px;
+  margin:0 auto 15px;
+  display:block;
+}
+
+/* CONTROLLI */
+.controls{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+button{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:none;
+  font-size:22px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff66cc,#ff0055);
+}
+input[type=range]{width:160px}
+
+/* WOOFER SUB */
+.woofer{
+  width:70px;
+  height:70px;
+  background:url("https://xatimg.com/image/PnKRrz9rZuQB.gif") center/cover no-repeat;
+  border-radius:50%;
+  filter:drop-shadow(0 0 12px #00ffff);
+  will-change:transform;
+  position:absolute;
+  z-index:2;
+}
+
+/* POSIZIONI WOOFER */
+#wL1{left:-120px; top:100px;}
+#wL2{left:-120px; top:320px;}
+#wR1{right:-120px; top:100px;}
+#wR2{right:-120px; top:320px;}
+
+/* GLOW SFUMATO WOOFER */
+.woofer-glow{
+  position:absolute;
+  width:100px;
+  height:400px;
+  top:25px;
+  background:radial-gradient(circle at center, rgba(0,255,255,0.7), transparent 80%);
+  border-radius:50px;
+  filter:blur(30px) brightness(1.5);
+  z-index:1;
+}
+#glowL{left:-150px;}
+#glowR{right:-150px;}
+
+/* CONTENITORI BALLERINE MP4 */
+.dancer{
+  position:absolute;
+  width:120px;
+  height:200px;
+  top:50px;
+  z-index:3;
+}
+#dancerL{left:-180px;}
+#dancerR{right:-180px;}
+.dancer video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:12px;
+}
+</style>
+</head>
+<body>
+
+<!-- SFUMATURE WOOFER -->
+<div class="woofer-glow" id="glowL"></div>
+<div class="woofer-glow" id="glowR"></div>
+
+<!-- BALLERINE MP4 -->
+<div class="dancer" id="dancerL">
+  <video autoplay loop muted>
+    <source src="https://peppeagosto.github.io/immaggini/buono.mp4" type="video/mp4">
+  </video>
+</div>
+<div class="dancer" id="dancerR">
+  <video autoplay loop muted>
+    <source src="https://peppeagosto.github.io/immaggini/buono.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div id="box">
+  <div class="media">
+    <video id="video" autoplay loop muted>
+      <source src="https://peppeagosto.github.io/immaggini/giro.mp4" type="video/mp4">
+    </video>
+    <img id="cover">
+  </div>
+
+  <div id="title"><span>Caricamento radio…</span></div>
+
+  <canvas id="eq"></canvas>
+
+  <div class="controls">
+    <button id="play">▶</button>
+    <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8">
+    <button id="stop">■</button>
+  </div>
+
+  <!-- 2 woofer per lato -->
+  <div class="woofer" id="wL1"></div>
+  <div class="woofer" id="wL2"></div>
+  <div class="woofer" id="wR1"></div>
+  <div class="woofer" id="wR2"></div>
+
+</div>
+
+<audio id="audio" crossorigin="anonymous" src="https://stream.zeno.fm/ylkruiq5e4fvv"></audio>
+
+<script>
+const audio=document.getElementById("audio");
+const play=document.getElementById("play");
+const stop=document.getElementById("stop");
+const vol=document.getElementById("vol");
+const eq=document.getElementById("eq");
+const cover=document.getElementById("cover");
+const video=document.getElementById("video");
+const title=document.getElementById("title");
+
+const woofers=[wL1,wL2,wR1,wR2];
+
+let ctx,analyser,data,isOn=false;
+
+function initAudio(){
+  if(ctx) return;
+  ctx=new AudioContext();
+  const src=ctx.createMediaElementSource(audio);
+  analyser=ctx.createAnalyser();
+  analyser.fftSize=256;
+  data=new Uint8Array(analyser.frequencyBinCount);
+  src.connect(analyser);
+  analyser.connect(ctx.destination);
+  drawEQ();
+  pulseWoofer();
+}
+
+function drawEQ(){
+  const ctxEQ=eq.getContext("2d");
+  function loop(){
+    requestAnimationFrame(loop);
+    ctxEQ.clearRect(0,0,eq.width,eq.height);
+    if(!isOn) return;
+    analyser.getByteFrequencyData(data);
+    const w=eq.width/data.length;
+    data.forEach((v,i)=>{
+      const h=v/255*eq.height;
+      ctxEQ.fillStyle=`hsl(${i*4},90%,60%)`;
+      ctxEQ.fillRect(i*w,eq.height-h,w-1,h);
+    });
+  }
+  loop();
+}
+
+function pulseWoofer(){
+  function loop(){
+    requestAnimationFrame(loop);
+    if(!isOn) return;
+    analyser.getByteFrequencyData(data);
+    const bass=data.slice(0,16).reduce((a,b)=>a+b,0)/16;
+    const scale=1+Math.min(bass/100,1.2);
+    const bounce=Math.sin(Date.now()/80)*0.05;
+    woofers.forEach(w=>{
+      w.style.transform=`scale(${scale+bounce})`;
+    });
+  }
+  loop();
+}
+
+play.onclick=async()=>{
+  initAudio();
+  if(ctx.state==="suspended") await ctx.resume();
+  if(!isOn){
+    audio.play();
+    isOn=true;
+    play.textContent="❚❚";
+  }else{
+    audio.pause();
+    isOn=false;
+    play.textContent="▶";
+  }
+};
+
+stop.onclick=()=>{
+  audio.pause();
+  audio.currentTime=0;
+  isOn=false;
+  play.textContent="▶";
+};
+
+vol.oninput=e=>audio.volume=e.target.value;
+
+// NOW PLAYING
+async function nowPlaying(){
+  try{
+    const res=await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+    const dataZ=await res.json();
+    const song=dataZ.title || "Radio Live";
+    title.innerHTML=`<span>${song}</span>`;
+    
+    if(song){
+      const it=await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(song)}&limit=1`);
+      const j=await it.json();
+      if(j.results[0]){
+        cover.src=j.results[0].artworkUrl100.replace("100x100","600x600");
+        cover.style.opacity=1;
+        video.style.opacity=0;
+        return;
+      }
+    }
+    cover.style.opacity=0;
+    video.style.opacity=1;
+  }catch(err){
+    cover.style.opacity=0;
+    video.style.opacity=1;
+  }
+}
+setInterval(nowPlaying,18000);
+nowPlaying();
+</script>
+</body>
+</html>
