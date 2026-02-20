@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio_Cuore_Crik_Crok</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root { 
+    --accent: #ff2e2e;
+    --accent-glow: #ffd700;
+    --accent-rgb: 255,46,46; 
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+}
+
+.main-container {
+    width: 850px;
+    height: 500px;
+    background: #0f0f14;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.3);
+}
+
+.left-panel {
+    width: 220px;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.digital-clock-box {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 15px;
+    border: 1px solid var(--accent);
+    width: 100%;
+}
+
+#clock-text { font-size: 24px; font-weight: 800; color: var(--accent); font-family: monospace; }
+#date-text { font-size: 10px; opacity: 0.7; }
+#owner-signature { font-size: 9px; font-weight: 900; letter-spacing: 3px; color: var(--accent); opacity: 0.7; margin-top: 5px; }
+
+.cover-box { 
+    width: 150px; 
+    height: 150px; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    border: 2px solid var(--accent);
+    margin-top: 15px; 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover-box img#cover-art {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cover-box .cover-gif {
+    width: 80px; 
+    height: 80px;
+    object-fit: contain;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+}
+
+#song-title { display:block; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:180px; margin-top:5px; }
+
+.controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.controls #play,
+.controls #stop {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.controls #play { background: var(--accent); color:#000; }
+.controls #stop { background:#ffea00; color:#000; }
+.controls #vol {
+    width: 80px;
+    accent-color: var(--accent);
+}
+
+.content { flex:1; display:flex; flex-direction:column; min-width:0; }
+.top-bar { height:50px; background:rgba(0,0,0,0.3); display:flex; align-items:center; overflow:hidden; position:relative; padding-left:20px; }
+#trackTitle { font-size:18px; font-weight:800; color: var(--accent); white-space:nowrap; animation: scroll 15s linear infinite; }
+@keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+.hero-section { flex:1; position:relative; overflow:hidden; margin:10px; border-radius:20px; background:#000; }
+#hero-img { width:100px; height:200px; object-fit:cover; opacity:0.8; }
+
+.stats-footer { padding:10px 25px; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.6); height:75px; }
+#eq-canvas { width:100%; height:50px; background:#000; display:block; }
+
+.il-cartaio-signature-seal { width:54px; height:54px; border-radius:50%; border:2px solid var(--accent); display:flex; justify-content:center; align-items:center; background: radial-gradient(circle, rgba(var(--accent-rgb),0.2) 0%, transparent 70%); box-shadow:0 0 15px var(--accent); margin-top:auto; }
+.il-cartaio-text { font-family:'Inter',sans-serif; font-size:16px; font-weight:900; color:var(--accent); text-shadow:0 0 6px var(--accent-glow); transform:rotate(-10deg); letter-spacing:1px; }
+
+.gif { position:absolute; top:50%; transform:translateY(-50%); width:60px; height:60px; }
+</style>
+</head>
+<body>
+
+<div class="outer-wrapper" id="g-wrapper">
+  <div class="main-container">
+
+    <div class="left-panel">
+      <div class="digital-clock-box">
+        <canvas id="eq-canvas"></canvas>
+        <div id="date-text">-- --- ----</div>
+        <div id="owner-signature">IL CARTAIO:</div>
+      </div>
+
+      <!-- COVER BOX -->
+      <div class="cover-box">
+        <img id="cover-art" src=" " onerror="this.src='https://via.placeholder.com/150?text=NO+IMAGE'">
+        <img class="cover-gif" src=" ">
+      </div>
+
+      <div style="text-align:center;">
+        <b id="song-title">Sintonizzazione...</b>
+      </div>
+
+      <div class="controls">
+        <button id="play">▶</button>
+        <input type="range" id="vol" min="0" max="1" step="0.01" value="1">
+        <button id="stop">■</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="top-bar">
+        <div id="trackTitle"></div>
+      </div>
+      <div class="hero-section">
+        <img id="hero-img" src="" 
+             onerror="this.src='https://via.placeholder.com/600x300?text=NO+IMAGE'">
+        <canvas id="eq"></canvas>
+                
+      </div>
+      <div class="stats-footer">
+        <div style="min-width:30px;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<audio id="audio" preload="none" crossorigin="anonymous"></audio>
+
+<script>
+// CLOCK
+function updateClock(){
+  const now=new Date();
+  document.getElementById('date-text').innerText=now.toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// STREAM
+const STREAM_MP3="https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+const audioElem=document.getElementById("audio");
+audioElem.src=STREAM_MP3;
+audioElem.crossOrigin="anonymous";
+
+const playBtn=document.getElementById("play");
+const stopBtn=document.getElementById("stop");
+const volElem=document.getElementById("vol");
+let isOn=false;
+
+// AUDIO CONTEXT + ANALYSER (per EQ)
+let audioCtx, analyser, dataArray;
+
+async function initAudioContext() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(audioElem);
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 64;
+  dataArray = new Uint8Array(analyser.frequencyBinCount);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+// EQ MULTICOLOR
+const canvas = document.getElementById('eq-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 200;
+canvas.height = 50;
+
+function drawEQ() {
+  requestAnimationFrame(drawEQ);
+  if (!analyser) return;
+  analyser.getByteFrequencyData(dataArray);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const barWidth = canvas.width / dataArray.length;
+  for(let i=0; i<dataArray.length; i++){
+    const barHeight = dataArray[i] / 2;
+    const gradient = ctx.createLinearGradient(0,0,0,canvas.height);
+    gradient.addColorStop(0,'#ffd700');
+    gradient.addColorStop(1,'#ff2e2e');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(i*barWidth, canvas.height-barHeight, barWidth, barHeight);
+  }
+}
+drawEQ();
+
+// PLAY / PAUSE / STOP
+playBtn.onclick = async () => {
+  try {
+    await initAudioContext();
+    if (audioCtx.state === "suspended") {
+      await audioCtx.resume();
+    }
+
+    if (!isOn) {
+      await audioElem.play();
+      isOn = true;
+      playBtn.textContent = "❚❚";
+    } else {
+      audioElem.pause();
+      isOn = false;
+      playBtn.textContent = "▶";
+    }
+  } catch (e) {
+    console.error("Errore audio:", e);
+    alert("Clicca di nuovo Play – il browser blocca l'audio automatico. 😅");
+  }
+};
+
+stopBtn.onclick = () => {
+  audioElem.pause();
+  audioElem.currentTime = 0;
+  isOn = false;
+  playBtn.textContent = "▶";
+};
+
+volElem.oninput = e => audioElem.volume = e.target.value;
+
+// NOW PLAYING
+async function nowPlaying(){
+  try{
+    const r=await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+    const d=await r.json();
+    document.getElementById("trackTitle").innerText=d.title||"";
+    document.getElementById("song-title").innerText=d.title||"Sintonizzazione...";
+    if(d.title){
+      const it=await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(d.title)}&limit=1`);
+      const j=await it.json();
+      if(j.results[0]){
+        const art = j.results[0].artworkUrl100.replace("100x100","600x600");
+        document.getElementById("cover-art").src=art;
+        document.querySelector(".cover-gif").src=art;
+      }
+    }
+  }catch(e){
+    console.log("Errore metadata:", e);
+  }
+}
+setInterval(nowPlaying,18000);
+nowPlaying();
+
+// WOOFER – solo quelli a sinistra (dx eliminati)
+const woofers = [
+  document.getElementById("wL1"),
+  document.getElementById("wL2"),
+  document.getElementById("wL3")
+];
+
+function pulseWoofer(){
+  function loop(){
+    requestAnimationFrame(loop);
+    if(!isOn || !analyser) return;
+    analyser.getByteFrequencyData(dataArray);
+    const bass=dataArray.slice(0,16).reduce((a,b)=>a+b,0)/16;
+    woofers.forEach((w,i)=>{
+      const baseTop=parseInt(w.dataset.baseTop);
+      const scale=0.7 + Math.min(bass/120 + Math.random()*0.3,2);
+      const jitter=Math.sin(Date.now()/50+i)*6;
+      w.style.transform=`scale(${scale})`;
+      w.style.top=`${baseTop + jitter}px`;
+    });
+  }
+  loop();
+}
+
+// Avvia pulse solo sui woofer rimasti
+pulseWoofer();
+</script>
+</body>
+</html>
