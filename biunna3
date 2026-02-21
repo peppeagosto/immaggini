@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio_Cuore_Crik_Crok</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root { 
+    --accent: #ff2e2e;
+    --accent-glow: #ffd700;
+    --accent-rgb: 255,46,46; 
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+}
+
+.main-container {
+    width: 850px;
+    height: 500px;
+    background: #0f0f14;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.3);
+}
+
+.left-panel {
+    width: 220px;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.digital-clock-box {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 15px;
+    border: 1px solid var(--accent);
+    width: 100%;
+}
+
+#clock-text { 
+    font-size: 24px; 
+    font-weight: 800; 
+    color: white; 
+    font-family: monospace; 
+    text-shadow: 0 0 10px var(--accent); 
+}
+
+#date-text { 
+    font-size: 14px; 
+    font-weight: bold;
+    color: var(--accent);
+    margin: 8px 0 4px;
+}
+
+#owner-signature { 
+    font-size: 9px; 
+    font-weight: 900; 
+    letter-spacing: 3px; 
+    color: var(--accent); 
+    opacity: 0.7; 
+    margin-bottom: 10px;
+}
+
+#digital-clock-round {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.6);
+    border: 3px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 8px var(--accent);
+    font-family: monospace;
+}
+
+.live-led-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#live-text {
+    font-size: 18px;
+    font-weight: 900;
+    color: #ff2e2e;
+    text-shadow: 0 0 12px #ff2e2e, 0 0 20px #ff2e2e;
+    animation: pulseLive 1.5s infinite alternate;
+}
+
+#live-led {
+    width: 18px;
+    height: 18px;
+    background: #00ff66;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #00ff66, 0 0 24px #00ff66;
+    animation: pulseLed 1.5s infinite alternate;
+}
+
+@keyframes pulseLive {
+    0% { opacity: 0.4; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes pulseLed {
+    0% { box-shadow: 0 0 8px #00ff66; opacity: 0.6; }
+    100% { box-shadow: 0 0 30px #00ff66, 0 0 50px #00ff66; opacity: 1; }
+}
+
+.controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.controls #play,
+.controls #stop {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.controls #play { background: var(--accent); color:#000; }
+.controls #stop { background:#ffea00; color:#000; }
+.controls #vol {
+    width: 80px;
+    accent-color: var(--accent);
+}
+
+.content { flex:1; display:flex; flex-direction:column; min-width:0; }
+.top-bar { height:50px; background:rgba(0,0,0,0.3); display:flex; align-items:center; overflow:hidden; position:relative; padding-left:20px; }
+#trackTitle { font-size:18px; font-weight:800; color: var(--accent); white-space:nowrap; animation: scroll 15s linear infinite; }
+@keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+.hero-section { 
+    flex:1; 
+    position:relative; 
+    overflow:hidden; 
+    margin:10px; 
+    border-radius:20px; 
+    background:#000; 
+    border: 4px solid transparent; /* per l'arcobaleno */
+    border-image: linear-gradient(45deg, #ff0000, #ff9900, #33ff00, #00ffff, #9933ff, #ff00ff, #ff0000) 1;
+    border-image-slice: 1;
+    animation: rainbowBorder 8s linear infinite;
+}
+
+@keyframes rainbowBorder {
+    0% { border-image-source: linear-gradient(45deg, #ff0000, #ff9900, #33ff00, #00ffff, #9933ff, #ff00ff, #ff0000); }
+    100% { border-image-source: linear-gradient(45deg, #ff00ff, #ff0000, #ff9900, #33ff00, #00ffff, #9933ff, #ff00ff); }
+}
+
+.video-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 16px; /* leggermente più piccolo per far vedere il bordo arcobaleno */
+    overflow: hidden;
+}
+
+#hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+#video-glow {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50px;
+    pointer-events: none;
+    z-index: 0;
+    box-shadow: 
+        0 0 60px #00ccff,
+        0 0 120px #00aaff,
+        0 0 200px #0099cc,
+        0 0 280px #0077aa,
+        0 0 180px rgba(255, 46, 46, 0.5),
+        0 0 300px rgba(255, 46, 46, 0.3);
+}
+</style>
+</head>
+<body>
+
+<div class="outer-wrapper" id="g-wrapper">
+  <div class="main-container">
+
+    <div class="left-panel">
+      <div class="digital-clock-box">
+        <div id="clock-text">--:--:--</div>
+        <div id="date-text">21 Febbraio 2026</div>
+        <div id="owner-signature">IL CARTAIO:</div>
+        <div id="digital-clock-round">--:--:--</div>
+        <div class="live-led-container">
+          <div id="live-led"></div>
+          <span id="live-text">LIVE</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="play">▶</button>
+        <input type="range" id="vol" min="0" max="1" step="0.01" value="1">
+        <button id="stop">■</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="top-bar">
+        <div id="trackTitle"></div>
+      </div>
+      <div class="hero-section">
+        <div class="video-wrapper">
+          <video id="hero-video" autoplay muted loop playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/biunna2.mp4" type="video/mp4">
+            Il tuo browser non supporta il video.
+          </video>
+          <div id="video-glow"></div>
+        </div>
+      </div>
+      <div class="stats-footer">
+        <div style="min-width:30px;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<audio id="audio" preload="none" crossorigin="anonymous"></audio>
+
+<script>
+// OROLOGIO DIGITALE REALE (rotondo)
+function updateDigitalClock(){
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('digital-clock-round').innerText = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateDigitalClock, 1000);
+updateDigitalClock();
+
+// DATA COMPLETA
+function updateDate(){
+  const now = new Date();
+  const day = now.getDate();
+  const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+  const month = monthNames[now.getMonth()];
+  const year = now.getFullYear();
+  document.getElementById('date-text').innerText = `${day} ${month} ${year}`;
+}
+updateDate();
+setInterval(updateDate, 86400000);
+
+// STREAM
+const STREAM_MP3="https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+const audioElem=document.getElementById("audio");
+audioElem.src=STREAM_MP3;
+audioElem.crossOrigin="anonymous";
+
+const playBtn=document.getElementById("play");
+const stopBtn=document.getElementById("stop");
+const volElem=document.getElementById("vol");
+let isOn=false;
+
+// AUDIO CONTEXT
+let audioCtx;
+
+async function initAudioContext() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(audioElem);
+  source.connect(audioCtx.destination);
+}
+
+// PLAY / PAUSE / STOP
+playBtn.onclick = async () => {
+  try {
+    await initAudioContext();
+    if (audioCtx.state === "suspended") {
+      await audioCtx.resume();
+    }
+
+    if (!isOn) {
+      await audioElem.play();
+      isOn = true;
+      playBtn.textContent = "❚❚";
+    } else {
+      audioElem.pause();
+      isOn = false;
+      playBtn.textContent = "▶";
+    }
+  } catch (e) {
+    console.error("Errore audio:", e);
+    alert("Clicca di nuovo Play – il browser blocca l'audio automatico. 😅");
+  }
+};
+
+stopBtn.onclick = () => {
+  audioElem.pause();
+  audioElem.currentTime = 0;
+  isOn = false;
+  playBtn.textContent = "▶";
+};
+
+volElem.oninput = e => audioElem.volume = e.target.value;
+
+// NOW PLAYING
+async function nowPlaying(){
+  try{
+    const r=await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+    const d=await r.json();
+    document.getElementById("trackTitle").innerText=d.title||"";
+  }catch(e){
+    console.log("Errore metadata:", e);
+  }
+}
+setInterval(nowPlaying,18000);
+nowPlaying();
+</script>
+</body>
+</html>
