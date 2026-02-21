@@ -1,210 +1,313 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Interattiva con Effetti</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            background-color: #111;
-            color: #fff;
-        }
-        .parallax {
-            height: 100vh;
-            background: url('https://xatimg.com/image/IEro0ZOHfNyi.gif') no-repeat center center fixed;
-            background-size: 30%;
-            background-position: center center;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: background 0.5s ease;
-            filter: brightness(0.7);
-        }
-        .parallax .content {
-            text-align: center;
-            z-index: 2;
-            position: relative;
-        }
-        .parallax h1 {
-            font-size: 3em;
-            margin: 0;
-            animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
-            background: -webkit-linear-gradient(45deg, #ff6b6b, #f7b733);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background: linear-gradient(45deg, #ff6b6b, #f7b733);
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-        .parallax p {
-            font-size: 1.5em;
-            margin: 10px 0;
-            animation: fadeIn 3s ease-in-out 1s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .parallax .link, .parallax .blog-link, .parallax .custom-link {
-            display: inline-block;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #ff6b6b;
-            text-decoration: none;
-            background: linear-gradient(45deg, #ff6b6b, #f7b733);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        .parallax .link:hover, .parallax .blog-link:hover, .parallax .custom-link:hover {
-            text-decoration: underline;
-        }
-        .scrolling-effect {
-            padding: 50px;
-            background: rgba(0, 0, 0, 0.7);
-            text-align: center;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
-        .scrolling-effect h2 {
-            margin: 0;
-            font-size: 2em;
-            background: -webkit-linear-gradient(90deg, #ff0000, #ff7f7f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background: linear-gradient(90deg, #ff0000, #ff7f7f);
-            background-clip: text;
-            text-fill-color: transparent;
-            animation: scrollEffect 2s ease-in-out infinite;
-        }
-        .scrolling-effect p {
-            margin: 20px 0;
-            font-size: 1.2em;
-            animation: scrollEffect 2s ease-in-out infinite;
-        }
-        .scrolling-effect p.subtitle {
-            font-size: 1.5em;
-            background: -webkit-linear-gradient(90deg, #0000FF, #66CCFF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background: linear-gradient(90deg, #0000FF, #66CCFF);
-            background-clip: text;
-            text-fill-color: transparent;
-            transition: transform 0.5s ease, background 0.5s ease;
-        }
-        .scrolling-effect p.subtitle:hover {
-            transform: scale(1.2);
-            background: -webkit-linear-gradient(90deg, #0000CC, #66CCFF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background: linear-gradient(90deg, #0000CC, #66CCFF);
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        @keyframes scrollEffect {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(-20px);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .embed-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #000;
-            text-align: center;
-            padding: 10px;
-            z-index: 1000;
-        }
-        .embed-container iframe {
-            border: none;
-            width: 100%;
-            height: 60px;
-        }
-        .volume-control {
-            position: fixed;
-            bottom: 70px;
-            right: 20px;
-            background: #333;
-            padding: 10px;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio_Cuore_Crik_Crok</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root { 
+    --accent: #ff2e2e;
+    --accent-glow: #ffd700;
+    --accent-rgb: 255,46,46; 
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+}
+
+.main-container {
+    width: 950px;          /* allargato come chiesto */
+    height: 580px;         /* un po' più alto per proporzioni */
+    background: #0f0f14;
+    border-radius: 36px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 35px rgba(var(--accent-rgb), 0.4);
+}
+
+.left-panel {
+    width: 240px;
+    background: rgba(0,0,0,0.5);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.digital-clock-box {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    width: 100%;
+}
+
+#clock-text { font-size: 26px; font-weight: 800; color: white; font-family: monospace; text-shadow: 0 0 10px var(--accent); }
+#date-text { font-size: 14px; font-weight: bold; color: var(--accent); margin: 8px 0 4px; }
+#owner-signature { font-size: 10px; font-weight: 900; letter-spacing: 3px; color: var(--accent); opacity: 0.7; margin-bottom: 12px; }
+
+#digital-clock-round {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.6);
+    border: 3px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 8px var(--accent);
+    font-family: monospace;
+}
+
+.live-led-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#live-text {
+    font-size: 18px;
+    font-weight: 900;
+    color: #ff2e2e;
+    text-shadow: 0 0 12px #ff2e2e, 0 0 20px #ff2e2e;
+    animation: pulseLive 1.5s infinite alternate;
+}
+
+#live-led {
+    width: 18px;
+    height: 18px;
+    background: #00ff66;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #00ff66, 0 0 24px #00ff66;
+    animation: pulseLed 1.5s infinite alternate;
+}
+
+@keyframes pulseLive { 0% { opacity:0.4; transform:scale(0.95); } 100% { opacity:1; transform:scale(1.05); } }
+@keyframes pulseLed  { 0% { box-shadow:0 0 8px #00ff66; } 100% { box-shadow:0 0 30px #00ff66, 0 0 50px #00ff66; } }
+
+.controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.controls button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#play { background: var(--accent); color:#000; }
+#stop { background:#ffea00; color:#000; }
+
+.content { flex:1; display:flex; flex-direction:column; min-width:0; }
+.top-bar { height:50px; background:rgba(0,0,0,0.3); display:flex; align-items:center; overflow:hidden; position:relative; padding-left:20px; }
+#trackTitle { font-size:18px; font-weight:800; color: var(--accent); white-space:nowrap; animation: scroll 15s linear infinite; }
+@keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+.hero-section { 
+    flex:1; 
+    position:relative; 
+    overflow:hidden; 
+    margin:16px; 
+    border-radius:24px; 
+    background:#000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-wrapper {
+    width: 650px;    /* dimensione video come chiesto */
+    height: 550px;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,240,255,0.4);
+}
+
+#hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+#video-glow {
+    position: absolute;
+    inset: -40px;
+    border-radius: 60px;
+    pointer-events: none;
+    z-index: 0;
+    box-shadow: 
+        0 0 80px #00ccff,
+        0 0 160px #00aaff,
+        0 0 240px #0099cc,
+        0 0 320px #0077aa;
+}
+</style>
 </head>
 <body>
-    <div class="parallax">
-        <div class="content">
-            <h1>Benvenuto sulla mia pagina!</h1>
-            <p class="subtitle">Scorri verso il basso e clicca i link.</p>
-            <a href="https://xat.com/radio_cuore_crik_crok" target="_blank" class="link">Ascolta Radio Cuore Crik Crok</a>
-            <a href="https://pluto.tv/it/live-tv" target="_blank" class="blog-link">GUARDATI FILM SU DEMAND E TV</a>
-               </div>
-    <div class="scrolling-effect">
-        <h2>ASCOLTA LA MIA MUSICA</h2>
-        <p>SE TI PIACE  SALVATELA NEI PREFERITI  GRAZIE .</p>
-        <p><strong>Grazie per la visita!</strong></p>
-        <p class="subtitle">CODICI FATTI DA DIABLO PEPPE .</p>
-    </div>
-    <div class="embed-container">
-        <iframe src="https://radioplayer.link/stream/?autoplay=true&name=PositiveConexzionCrew&bgcolor=000000&textcolor=9ACD32&v=fake&stream=https://stream.zeno.fm/ylkruiq5e4fvv" allow="autoplay"></iframe>
-    </div>
-    <div class="volume-control" id="volumeControl">
-        Volume: <span id="volumeValue">50%</span>
-    </div>
-    <script>
-        // Disabilita il tasto destro del mouse
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
 
-        // Volume Control Script
-        document.getElementById('volumeControl').addEventListener('click', function() {
-            const iframe = document.querySelector('.embed-container iframe');
-            const currentVolume = parseInt(document.getElementById('volumeValue').textContent);
-            const newVolume = currentVolume === 100 ? 0 : currentVolume + 10;
-            document.getElementById('volumeValue').textContent = `${newVolume}%`;
-            iframe.contentWindow.postMessage({ volume: newVolume / 100 }, '*');
-        });
-        
-        // Parallax Effect
-        document.addEventListener('scroll', function() {
-            const scrolled = window.scrollY;
-            document.querySelector('.parallax').style.backgroundPositionY = -(scrolled * 0.5) + 'px';
-        });
-    </script>
+<div class="outer-wrapper" id="g-wrapper">
+  <div class="main-container">
+
+    <div class="left-panel">
+      <div class="digital-clock-box">
+        <div id="clock-text">--:--:--</div>
+        <div id="date-text">21 Febbraio 2026</div>
+        <div id="owner-signature">IL CARTAIO:</div>
+        <div id="digital-clock-round">--:--:--</div>
+        <div class="live-led-container">
+          <div id="live-led"></div>
+          <span id="live-text">LIVE</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="play">▶</button>
+        <input type="range" id="vol" min="0" max="1" step="0.01" value="1">
+        <button id="stop">■</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="top-bar">
+        <div id="trackTitle"></div>
+      </div>
+      <div class="hero-section">
+        <div class="video-wrapper">
+          <video id="hero-video" autoplay muted loop playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/15.mp4" type="video/mp4">
+            Il tuo browser non supporta il video.
+          </video>
+          <div id="video-glow"></div>
+        </div>
+      </div>
+      <div class="stats-footer">
+        <div style="min-width:30px;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<audio id="audio" preload="none" crossorigin="anonymous"></audio>
+
+<script>
+// OROLOGIO DIGITALE REALE (rotondo)
+function updateDigitalClock(){
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('digital-clock-round').innerText = `${h}:${m}:${s}`;
+}
+setInterval(updateDigitalClock, 1000);
+updateDigitalClock();
+
+// DATA COMPLETA
+function updateDate(){
+  const now = new Date();
+  const day = now.getDate();
+  const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+  const month = monthNames[now.getMonth()];
+  const year = now.getFullYear();
+  document.getElementById('date-text').innerText = `${day} ${month} ${year}`;
+}
+updateDate();
+
+// STREAM + PLAY/PAUSE
+const STREAM = "https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+const audio = document.getElementById("audio");
+audio.src = STREAM;
+audio.crossOrigin = "anonymous";
+
+const play = document.getElementById("play");
+const stop = document.getElementById("stop");
+const vol = document.getElementById("vol");
+let isOn = false;
+
+let audioCtx;
+
+async function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(audio);
+  source.connect(audioCtx.destination);
+}
+
+play.onclick = async () => {
+  await initAudio();
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+
+  if (!isOn) {
+    audio.play().catch(e => console.log("Autoplay bloccato"));
+    isOn = true;
+    play.textContent = "❚❚";
+  } else {
+    audio.pause();
+    isOn = false;
+    play.textContent = "▶";
+  }
+};
+
+stop.onclick = () => {
+  audio.pause();
+  audio.currentTime = 0;
+  isOn = false;
+  play.textContent = "▶";
+};
+
+vol.oninput = e => audio.volume = e.target.value;
+
+// NOW PLAYING
+async function nowPlaying(){
+  try{
+    const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+    const d = await r.json();
+    document.getElementById("trackTitle").innerText = d.title || "Radio Live";
+  }catch(e){
+    document.getElementById("trackTitle").innerText = "Radio Live";
+  }
+}
+setInterval(nowPlaying, 15000);
+nowPlaying();
+</script>
 </body>
 </html>
