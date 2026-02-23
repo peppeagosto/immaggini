@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Fluttuante DJ - IL CARTAIO</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: ;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+}
+
+.container {
+  width: 650px;
+  height: 550px;
+  position: relative;
+  margin: auto;
+}
+
+/* Palline fluttuanti */
+.ball {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 20px currentColor;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.ball:hover {
+  transform: scale(1.3);
+  z-index: 20;
+}
+
+.ball.big {
+  transform: scale(1.5);
+  z-index: 100;
+}
+
+.cover-big {
+  background-size: cover !important;
+  background-position: center;
+}
+
+/* Slider volume */
+.rect {
+  position: absolute;
+  width: 160px;
+  height: 40px;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid #ff2e2e;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #ff2e2e;
+  text-align: center;
+  box-shadow: 0 0 10px #ff2e2e;
+  cursor: default;
+  z-index: 10;
+  display: none;
+}
+
+/* EQ avanzato stile DJ */
+#eqPopup {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 120px;
+  display: none;
+  z-index: 100;
+}
+#eqCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="container"></div>
+
+<!-- Slider volume -->
+<div class="rect" id="volumeRect">
+  <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+</div>
+
+<!-- EQ popup -->
+<div id="eqPopup">
+  <canvas id="eqCanvas"></canvas>
+</div>
+
+<script>
+// Container e audio
+const container = document.getElementById('container');
+const audio = new Audio("https://stream.zeno.fm/ylkruiq5e4fvv.aac");
+audio.crossOrigin = "anonymous";
+
+const colors = ['#ff2e2e','#00f0ff','#ff00aa','#00ff66','#aa00ff','#ffd700','#9933ff','#ff9900','#33ff99'];
+
+const contents = [
+  { type: 'social', text: 'Facebook', link: 'https://facebook.com/ilcartaio' },
+  { type: 'social', text: 'Instagram', link: 'https://instagram.com/ilcartaio' },
+  { type: 'social', text: 'Twitter/X', link: 'https://x.com/ilcartaio' },
+  { type: 'social', text: 'TikTok', link: 'https://tiktok.com/@ilcartaio' },
+  { type: 'control', text: 'PLAY' },
+  { type: 'volume', text: 'VOLUME' },
+  { type: 'cover', text: 'COVER', img: 'https://xatimg.com/image/Rp29XpiigeE4.jpg' },
+  { type: 'eq', text: 'EQ' },
+  { type: 'listeners', text: 'ASCOLTI: 0' }
+];
+
+const balls = [];
+const positions = [];
+
+// Crea palline distribuite casualmente
+for(let i=0;i<contents.length;i++){
+  const ball = document.createElement('div');
+  ball.className = 'ball';
+  ball.style.background = colors[i];
+  ball.innerText = contents[i].text;
+  ball.dataset.index = i;
+
+  const x = 40 + i*60; // orizzontale
+  const y = Math.random()*400 + 50;
+  ball.style.left = x + 'px';
+  ball.style.top = y + 'px';
+  positions.push({x, y, dir: Math.random()>0.5?1:-1, speed: 0.2 + Math.random()*0.3});
+
+  container.appendChild(ball);
+  balls.push(ball);
+}
+
+// Volume slider
+const volumeRect = document.getElementById('volumeRect');
+const volumeSlider = document.getElementById('volumeSlider');
+volumeSlider.oninput = e=>audio.volume = e.target.value;
+
+// EQ popup
+const eqPopup = document.getElementById('eqPopup');
+const eqCanvas = document.getElementById('eqCanvas');
+const eqCtx = eqCanvas.getContext('2d');
+
+// Web Audio API
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const audioSource = audioCtx.createMediaElementSource(audio);
+const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 128;
+audioSource.connect(analyser);
+analyser.connect(audioCtx.destination);
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+// Draw EQ stile DJ
+function drawEQ(){
+  requestAnimationFrame(drawEQ);
+  if(eqPopup.style.display==='none') return;
+  analyser.getByteFrequencyData(dataArray);
+  eqCtx.clearRect(0,0,eqCanvas.width,eqCanvas.height);
+  const barWidth = eqCanvas.width / bufferLength;
+  for(let i=0;i<bufferLength;i++){
+    const barHeight = dataArray[i]/2;
+    const hue = i/bufferLength*360;
+    eqCtx.fillStyle = `hsl(${hue},100%,50%)`;
+    eqCtx.fillRect(i*barWidth, eqCanvas.height-barHeight, barWidth-1, barHeight);
+  }
+}
+drawEQ();
+
+// Click palline
+balls.forEach(ball=>{
+  ball.addEventListener('click',()=>{
+    const idx = ball.dataset.index;
+    const content = contents[idx];
+
+    if(content.type==='social') window.open(content.link,'_blank');
+    else if(content.type==='control'){
+      if(audio.paused){
+        audio.play();
+        ball.innerText = 'STOP';
+        audioCtx.resume();
+      }else{
+        audio.pause();
+        ball.innerText = 'PLAY';
+      }
+    }else if(content.type==='cover'){
+      ball.classList.toggle('big');
+      ball.classList.toggle('cover-big');
+      ball.style.backgroundImage = `url(${content.img})`;
+      ball.style.width = '120px';
+      ball.style.height = '120px';
+    }else if(content.type==='volume'){
+      volumeRect.style.display = volumeRect.style.display==='none'?'flex':'none';
+    }else if(content.type==='eq'){
+      eqPopup.style.display = eqPopup.style.display==='none'?'block':'none';
+      audioCtx.resume();
+    }else if(content.type==='listeners'){
+      ball.innerText = 'ASCOLTI: '+Math.floor(Math.random()*500+50);
+    }
+  });
+});
+
+// Movimento verticale casuale lento
+setInterval(()=>{
+  balls.forEach((ball,i)=>{
+    if(!ball.matches(':hover')){
+      positions[i].y += positions[i].dir * positions[i].speed;
+      if(positions[i].y < 10 || positions[i].y > 470) positions[i].dir*=-1;
+      ball.style.top = positions[i].y+'px';
+    }
+  });
+},30);
+</script>
+</body>
+</html>
