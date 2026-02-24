@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -82,8 +83,13 @@ body, html {
 .marquee-container { white-space: nowrap; overflow: hidden; width: 90%; }
 #songTitle { font-size: 16px; animation: scroll-left 10s linear infinite; }
 @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
 #dateBox { top: 60px; left: 10px; width: 190px; text-align: center; padding: 5px; }
 #volumeBox { top: 190px; left: 10px; width: 140px; padding: 10px; text-align: center; }
+
+/* RETTANGOLO ASCOLTI SOTTO VOLUME */
+#listenersBox { top: 290px; left: 10px; width: 140px; padding: 8px; text-align: center; }
+
 #coverBox { top: 250px; left: 220px; width: 150px; height: 150px; border: none; }
 #coverImg { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid #ff0000; }
 #eqPopup { bottom: 10px; left: 50%; transform: translateX(-50%); width: 450px; height: 70px; }
@@ -95,9 +101,16 @@ body, html {
 
 <div class="main-wrapper">
   <div id="ballContainer"></div>
+  
   <div class="popup" id="titleBox"><div class="marquee-container"><div id="songTitle" class="rainbow-text">IL CARTAIO RADIO ---</div></div></div>
   <div class="popup" id="dateBox"><div id="cityInfo" class="rainbow-text" style="font-size:10px; display:block;">📍 CARICAMENTO...</div><div id="datetimeText" class="rainbow-text" style="font-size:14px; display:block;">--/--/-- --:--</div></div>
   <div class="popup" id="volumeBox"><span class="rainbow-text" style="font-size:10px;">VOLUME</span><br><input type="range" id="vol" min="0" max="1" step="0.01" value="0.7" style="width:90%; accent-color:red; cursor:pointer;"></div>
+
+  <div class="popup" id="listenersBox">
+    <span class="rainbow-text" style="font-size:10px;">LISTENERS</span><br>
+    <span id="userCount" class="rainbow-text" style="font-size:16px;">0</span>
+  </div>
+
   <div class="popup" id="coverBox"><img id="coverImg" src="https://xatimg.com/image/oXrwdyo5esWu.jpg"></div>
   <div class="popup" id="eqPopup"><canvas id="canvas" width="450" height="70"></canvas></div>
   <div id="cliquiPopup" class="popup"><video id="vidAnnuncio" width="180" playsinline><source src="https://peppeagosto.github.io/immaggini/spiegazione.mp4" type="video/mp4"></video></div>
@@ -106,11 +119,9 @@ body, html {
 <audio id="mainAudio" crossorigin="anonymous"></audio>
 
 <script>
-// --- PROTEZIONE TASTIERA ---
+// PROTEZIONE TASTIERA
 document.onkeydown = function(e) {
-  if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0))) {
-    return false;
-  }
+  if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0))) return false;
 };
 
 const STREAM = "https://stream.zeno.fm/ylkruiq5e4fvv";
@@ -118,11 +129,13 @@ const DEFAULT_COVER = "https://xatimg.com/image/oXrwdyo5esWu.jpg";
 const audio = document.getElementById("mainAudio");
 audio.src = STREAM;
 
+// AGGIUNTA PALLINA ASCOLTI
 const ballsData = [
   {id: 'play', t: 'Play/Stop', c: '#ffd700'},
   {id: 'title', t: 'Titoli', c: '#00f0ff'},
   {id: 'date', t: 'Datario', c: '#aa00ff'},
   {id: 'volume', t: 'Volume', c: '#ff9900'},
+  {id: 'ascolti', t: 'Ascolti', c: '#ff0055'}, // Nuova pallina
   {id: 'cover', t: 'Cover', c: '#33ff99'},
   {id: 'eq', t: 'EQ', c: '#9933ff'},
   {id: 'cliqui', t: 'Annuncio', c: '#ff0000'},
@@ -159,6 +172,7 @@ function handleAction(id, url) {
   if (id === 'title') toggle('titleBox', 'flex');
   if (id === 'date') toggle('dateBox', 'block');
   if (id === 'volume') toggle('volumeBox', 'block');
+  if (id === 'ascolti') toggle('listenersBox', 'block'); // Azione nuova pallina
   if (id === 'cover') toggle('coverBox', 'block');
   if (id === 'eq') toggle('eqPopup', 'block');
   if (id === 'fb') window.open(url, '_blank');
@@ -212,12 +226,13 @@ function renderFrame() {
   });
 }
 
-async function nowPlaying(){
+async function updateStats(){
   try {
     const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
     const d = await r.json();
     const songName = d.title || "Radio Live";
     document.getElementById('songTitle').innerText = songName.toUpperCase() + " --- IL CARTAIO RADIO --- ";
+    document.getElementById('userCount').innerText = d.listeners || "0";
     const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(songName)}&limit=1`);
     const j = await it.json();
     document.getElementById('coverImg').src = (j.results && j.results[0]) ? j.results[0].artworkUrl100.replace("100x100","600x600") : DEFAULT_COVER;
@@ -225,7 +240,7 @@ async function nowPlaying(){
     document.getElementById('coverImg').src = DEFAULT_COVER;
   }
 }
-setInterval(nowPlaying, 18000); nowPlaying();
+setInterval(updateStats, 15000); updateStats();
 </script>
 </body>
 </html>
