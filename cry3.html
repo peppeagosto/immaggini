@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>RADIO FLEVA - RAINBOW TEXT EDITION</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Orbitron:wght@900&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background: transparent; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; overflow: hidden; 
+        }
+
+        .stage-container {
+            position: relative;
+            width: 850px;
+            height: 480px;
+            background: transparent; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+        }
+
+        /* WRAPPER VIDEO */
+        .video-wrapper {
+            position: relative;
+            width: 170px;
+            height: 445px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3px; 
+            background: linear-gradient(180deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
+            background-size: 100% 300%;
+            border-radius: 12px;
+            animation: rainbowFlow 4s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+        }
+
+        @keyframes rainbowFlow {
+            0% { background-position: 50% 0%; }
+            50% { background-position: 50% 100%; }
+            100% { background-position: 50% 0%; }
+        }
+
+        .video-side {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            border-radius: 10px;
+        }
+
+        .video-side video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* TESTO ARCOBALENO DENTRO IL VIDEO IN BASSO */
+        .side-label-inner {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 5;
+            /* Effetto Arcobaleno sul Testo */
+            background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowText 3s linear infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+        }
+
+        @keyframes rainbowText {
+            to { background-position: 200% center; }
+        }
+
+        /* AREA CENTRALE */
+        .center-matrix {
+            position: relative;
+            flex-grow: 1;
+            height: 440px;
+            margin: 0 15px;
+            background: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .promo-container {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .promo-photo {
+            position: absolute;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            animation: fadeOutPhoto 6s infinite;
+        }
+
+        .promo-text-animated {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #fff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInText 6s infinite;
+            opacity: 0;
+            z-index: 3;
+            text-align: center;
+        }
+
+        @keyframes fadeOutPhoto { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
+        @keyframes fadeInText { 0%, 45% { opacity: 0; } 55%, 90% { opacity: 1; } 100% { opacity: 0; } }
+
+        .engine-box {
+            width: 100%;
+            height: 85px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 5px;
+            margin-top: 5px;
+            border: 1px solid #333;
+        }
+
+        iframe { border: none; width: 100%; height: 100%; }
+
+    </style>
+</head>
+<body>
+
+<div class="stage-container">
+
+    <div class="video-wrapper">
+        <div class="video-side">
+            <video src="https://peppeagosto.github.io/immaggini/cry3.mp4" autoplay loop muted playsinline></video>
+            <div class="side-label-inner">CRISTINA</div>
+        </div>
+    </div>
+
+    <div class="center-matrix">
+        <div class="promo-container">
+            <img src="https://xatimg.com/image/QuWnyfBQsfSt.jpg" class="promo-photo">
+            <div class="promo-text-animated">CRISTINA</div>
+        </div>
+        <div class="engine-box">
+            <iframe src="https://radioplayer.link/stream/?autoplay=false&name=RADIOSKY&bgcolor=000000&textcolor=ff00ff&v=fake&stream=https://cast6.asurahosting.com/proxy/radiosky/stream" scrolling="no"></iframe>
+        </div>
+    </div>
+
+    <div class="video-wrapper">
+        <div class="video-side">
+            <video src="https://peppeagosto.github.io/immaggini/cry3.mp4" autoplay loop muted playsinline></video>
+            <div class="side-label-inner">RADIOFLEVA</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
