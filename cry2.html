@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>CARTAIO - DISCO STAGE FINAL PERFECT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Orbitron:wght@900&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background: #000; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; overflow: hidden; 
+        }
+
+        /* IL TEMPIO */
+        .stage-container {
+            position: relative;
+            width: 850px;
+            height: 480px;
+            background: #050505;
+            border: 2px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .speaker-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 120px;
+            align-items: center;
+        }
+
+        .side-label {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff00ff;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #ff00ff;
+            margin-bottom: 5px;
+        }
+
+        .woofer {
+            width: 105px; height: 105px;
+            background: radial-gradient(circle, #111 30%, #000 70%);
+            border: 4px solid #333;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            animation: pulseWoofer 0.5s infinite alternate;
+        }
+
+        .woofer::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px; height: 35px;
+            background: #222;
+            border-radius: 50%;
+            border: 1px solid #444;
+        }
+
+        @keyframes pulseWoofer {
+            0% { transform: scale(1); border-color: #333; box-shadow: 0 0 5px #ff00ff; }
+            100% { transform: scale(1.05); border-color: #ff00ff; box-shadow: 0 0 20px #ff00ff; }
+        }
+
+        /* AREA CENTRALE CORRETTA PER SPAZIO PERFETTO */
+        .center-matrix {
+            position: relative;
+            flex-grow: 1;
+            height: 400px;
+            margin: 0 20px;
+            background: linear-gradient(180deg, #000 0%, #1a0033 50%, #000 100%);
+            border: 2px solid #ff00ff;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Sposta il motore in basso */
+            align-items: center;
+        }
+
+        .center-matrix::before {
+            content: "";
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 1;
+        }
+
+        /* LOGICA FOTO E TESTO - SPAZIO TOTALE */
+        .promo-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 320px; /* Spazio esatto sopra il motore */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .promo-photo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Riempie lo spazio perfettamente senza distorcere */
+            border-radius: 8px 8px 0 0; /* Arrotonda solo sopra */
+            animation: fadeOutPhoto 6s infinite;
+        }
+
+        .promo-text-animated {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 38px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(to bottom, #ff00ff, #ffb3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+            animation: fadeInText 6s infinite;
+            opacity: 0;
+            text-align: center;
+            z-index: 3;
+            width: 90%;
+        }
+
+        @keyframes fadeOutPhoto {
+            0%, 45% { opacity: 1; transform: scale(1); }
+            55%, 100% { opacity: 0; transform: scale(1.02); }
+        }
+
+        @keyframes fadeInText {
+            0%, 45% { opacity: 0; transform: scale(0.95); }
+            55%, 90% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; }
+        }
+
+        /* MOTORE SOTTO */
+        .engine-box {
+            width: 100%;
+            height: 80px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.95);
+            border-top: 2px solid #ff00ff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        iframe { border: none; width: 100%; height: 100%; }
+
+        .strobe {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            animation: flash 0.2s infinite;
+            z-index: 0;
+        }
+
+        @keyframes flash { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+<div class="stage-container">
+    <div class="strobe"></div>
+
+    <div class="speaker-stack">
+        <div class="side-label">CRISTINA</div>
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+    </div>
+
+    <div class="center-matrix">
+        <div class="promo-container">
+            <img src="https://xatimg.com/image/QuWnyfBQsfSt.jpg" class="promo-photo">
+            <div class="promo-text-animated">CRISTINA</div>
+        </div>
+        
+        <div class="engine-box">
+            <iframe src="https://radioplayer.link/stream/?autoplay=false&name=RADIOSKY&bgcolor=000000&textcolor=ff00ff&v=fake&stream=https://cast6.asurahosting.com/proxy/radiosky/stream" scrolling="no"></iframe>
+        </div>
+    </div>
+
+    <div class="speaker-stack">
+        <div class="side-label">RADIOFLEVA</div>
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+    </div>
+</div>
+
+</body>
+</html>
