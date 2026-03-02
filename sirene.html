@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EL CARTAIO</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Arial Black', Arial, sans-serif;
+}
+
+/* BASE BOX */
+.video-box {
+    position: fixed;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 16px;
+    border: 3px solid #ff0000;
+    box-shadow: 0 0 25px #ff0000, 0 0 50px #ffff00;
+    overflow: hidden;
+    background: #111;
+}
+
+/* LATERALI */
+#left,
+#right {
+    width: 240px;
+}
+
+/* CENTRO PIÙ LARGO */
+#center {
+    width: 300px; /* <<< QUI HO ALLARGATO */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9500;
+}
+
+.video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-text {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #fff, 0 0 20px #ff0000;
+    pointer-events: none;
+    animation: wave 4s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+/* TESTO CENTRALE */
+.center-title {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0vw;
+    color: #ff0000;
+    text-shadow:
+        0 0 15px #ff0000,
+        0 0 30px #ff0000,
+        0 0 60px #ffff00,
+        0 0 100px #ffff00;
+    letter-spacing: 10px;
+    z-index: 9999;
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0%,100% { opacity: .8; }
+    50% { opacity: 1; }
+}
+
+/* POSIZIONI */
+#left { left: 20px; z-index: 8000; }
+#right { right: 20px; z-index: 8000; }
+</style>
+</head>
+
+<body>
+
+<!-- SINISTRA -->
+<div class="video-box" id="left">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/sirene.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL DIABLO</div>
+</div>
+
+<!-- CENTRO -->
+<div class="video-box" id="center">
+    <video id="centerVideo" autoplay muted playsinline></video>
+    <div class="video-text" id="centerText"></div>
+</div>
+
+<!-- DESTRA -->
+<div class="video-box" id="right">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/sirene.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL DIABLO</div>
+</div>
+
+<div class="center-title">EL CARTAIO</div>
+
+<script>
+const centerVideo = document.getElementById("centerVideo");
+const centerText  = document.getElementById("centerText");
+
+const playlist = [
+  { src: "https://peppeagosto.github.io/immaggini/v1.mp4", text: "EL CARTAIO", time: 15000 },
+  { src: "https://peppeagosto.github.io/immaggini/v2.mp4", text: "EL DIABLO",  time: 15000 },
+  { src: "https://peppeagosto.github.io/immaggini/m1.mp4", text: "EL DIABLO",  time: 20000 },
+  { src: "https://peppeagosto.github.io/immaggini/m.mp4",  text: "EL CARTAIO", time: 20000 }
+];
+
+let index = 0;
+
+function playNext() {
+    const item = playlist[index];
+
+    centerVideo.src = item.src;
+    centerText.textContent = item.text;
+
+    centerVideo.load();
+    centerVideo.play().catch(()=>{});
+
+    setTimeout(() => {
+        index = (index + 1) % playlist.length;
+        playNext();
+    }, item.time);
+}
+
+playNext();
+</script>
+
+</body>
+</html>
