@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>V65 GHOST</title>
+<title>V66.1</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Metal+Mania&display=swap');
 
@@ -14,7 +14,6 @@
 
     body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Courier New', monospace; }
 
-    /* SCHERMO DI BLOCCO UMILIANTE */
     #security-lock {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: #000; color: var(--inf-red); z-index: 9999; flex-direction: column;
@@ -54,8 +53,14 @@
     .bar { flex: 1; background: linear-gradient(to top, var(--inf-red), var(--inf-orange), #fff); height: 5px; }
 
     .footer { grid-column: 1 / 3; display: flex; align-items: center; padding: 0 25px; gap: 20px; }
-    .btn { background: rgba(255, 26, 0, 0.3); border: 2px solid var(--inf-red); color: #fff; padding: 10px 25px; cursor: pointer; font-family: var(--horror-font); font-size: 20px; z-index: 100; transition: 0.3s; }
-    #clock { color: var(--inf-orange); font-size: 18px; font-family: 'Metal Mania'; margin-left: auto; }
+    
+    .btn { background: rgba(255, 26, 0, 0.3); border: 2px solid var(--inf-red); color: #fff; padding: 10px 20px; cursor: pointer; font-family: var(--horror-font); font-size: 18px; z-index: 100; transition: 0.3s; width: 100px; }
+    .btn:hover { background: var(--inf-red); box-shadow: 0 0 20px var(--inf-red); }
+    
+    #volRange { -webkit-appearance: none; flex-grow: 1; height: 10px; background: rgba(255, 26, 0, 0.3); border: 1px solid var(--inf-red); border-radius: 5px; outline: none; margin: 0 15px; }
+    #volRange::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--inf-orange); border: 2px solid #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--inf-red); }
+
+    #clock { color: var(--inf-orange); font-size: 18px; font-family: 'Metal Mania'; width: 100px; text-align: right; }
 </style>
 </head>
 <body>
@@ -63,7 +68,6 @@
 <div id="security-lock">
     <h1 style="font-size: 60px; margin: 0;">ACCESS DENIED</h1>
     <p style="font-size: 24px; color: #fff;">NO COPIARE DAL CARTAIO CRETINO FATTELI DA SOLO</p>
-    <p style="font-size: 20px; color: var(--inf-orange); font-style: italic;">DON'T COPY FROM CARTAIO IDIOT, DO IT YOURSELF</p>
 </div>
 
 <div class="main-terminal" id="terminal-body">
@@ -76,8 +80,8 @@
     <div class="monitor-left">
         <div class="info-zone glow-box">
             [IDENTIFICAZIONE]<br>
-            CITTÀ: <span id="city" style="color:var(--inf-orange)">...</span><br>
-            METEO: <span id="temp" style="color:var(--inf-orange)">...</span><br>
+            CITTÀ: <span id="city" style="color:var(--inf-orange)">RICERCA...</span><br>
+            METEO: <span id="temp" style="color:var(--inf-orange)">--°C</span> | <span id="weather" style="color:var(--inf-orange)">...</span><br>
             <hr style="border:0; border-top:1px solid var(--inf-red); margin:5px 0;">
             [OROSCOPO]<br>
             SEGNO: <span id="sign" style="color:var(--inf-orange)">...</span><br>
@@ -89,13 +93,14 @@
     </div>
 
     <div class="console-main">
-        <div class="log-window glow-box" id="log">[SYS] GHOST_PROTECTION ACTIVE.</div>
+        <div class="log-window glow-box" id="log">[SYS] GHOST_PROTECTION ACTIVE.<br>[SYS] CONTROLLI ALLINEATI.</div>
         <div class="visualizer-area glow-box" id="visualizer"></div>
     </div>
 
     <div class="footer glow-box">
-        <button class="btn" id="exeBtn">OPEN_GATE</button>
+        <button class="btn" id="exeBtn">PLAY</button>
         <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.8">
+        <button class="btn" id="stopBtn" style="background:rgba(255,0,0,0.5)">STOP</button>
         <div id="clock">00:00:00</div>
     </div>
 </div>
@@ -104,15 +109,14 @@
 <audio id="alarm-sound" src="https://www.soundjay.com/buttons/sounds/beep-01a.mp3" loop></audio>
 
 <script>
-    // --- IL CODICE OFFUSCATO (LA TRAPPOLA NASCOSTA) ---
-    // Questo blocco gestisce la protezione GIF e la sirena senza farlo capire a chi guarda
+    // --- PROTEZIONE GHOST ---
     const _0x5a21=['src','OfPr406rB1UZ','display','none','flex','pause','play','getElementById','coverArt','terminal-body','security-lock','alarm-sound'];(function(_0x2d1f7e,_0x5a21b3){const _0x4d3822=function(_0x356012){while(--_0x356012){_0x2d1f7e['push'](_0x2d1f7e['shift']());}};_0x4d3822(++_0x5a21b3);}(_0x5a21,0x1b3));const _0x4d38=function(_0x2d1f7e,_0x5a21b3){_0x2d1f7e=_0x2d1f7e-0x0;let _0x4d3822=_0x5a21[_0x2d1f7e];return _0x4d3822;};setInterval(function(){const _0x356012=document[_0x4d38('0x7')](_0x4d38('0x8'));if(!_0x356012[_0x4d38('0x0')]['includes'](_0x4d38('0x1'))){document[_0x4d38('0x7')](_0x4d38('0x9'))['style'][_0x4d38('0x2')]=_0x4d38('0x3');document[_0x4d38('0x7')](_0x4d38('0xa'))['style'][_0x4d38('0x2')]=_0x4d38('0x4');document[_0x4d38('0x7')]('audio')[_0x4d38('0x5')]();document[_0x4d38('0x7')](_0x4d38('0xb'))[_0x4d38('0x6')]();}},0x7d0);
 
-    // --- RESTO DELLE LOGICHE NORMALI ---
     const audio = document.getElementById("audio");
     const log = document.getElementById('log');
     const visualizer = document.getElementById('visualizer');
     const marquee = document.getElementById('track-marquee');
+    const volRange = document.getElementById('volRange');
     let audioCtx, analyser, dataArray, isPlaying = false, currentTitle = "";
 
     function addLog(msg) {
@@ -120,7 +124,38 @@
         log.scrollTop = log.scrollHeight;
     }
 
-    document.getElementById('exeBtn').onclick = () => {
+    async function getSensors() {
+        try {
+            const r = await fetch("https://ipapi.co/json/");
+            const d = await r.json();
+            document.getElementById("city").innerText = d.city.toUpperCase();
+            const wr = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${d.latitude}&longitude=${d.longitude}&current_weather=true`);
+            const wd = await wr.json();
+            document.getElementById("temp").innerText = wd.current_weather.temperature + "°C";
+            document.getElementById("weather").innerText = "INFERNALE";
+        } catch(e) { document.getElementById("city").innerText = "THE ABYSS"; }
+    }
+
+    function getZodiac() {
+        const d = new Date().getDate(), m = new Date().getMonth() + 1;
+        let s = "", f = "";
+        if ((m==3 && d>=21) || (m==4 && d<=19)) {s="ARIETE"; f="Fuoco nelle vene.";}
+        else if ((m==4 && d>=20) || (m==5 && d<=20)) {s="TORO"; f="Forza bruta oggi.";}
+        else if ((m==5 && d>=21) || (m==6 && d<=20)) {s="GEMELLI"; f="Caos favorevole.";}
+        else if ((m==6 && d>=21) || (m==7 && d<=22)) {s="CANCRO"; f="Maree oscure.";}
+        else if ((m==7 && d>=23) || (m==8 && d<=22)) {s="LEONE"; f="Ruggisci forte.";}
+        else if ((m==8 && d>=23) || (m==9 && d<=22)) {s="VERGINE"; f="Calcolo perfetto.";}
+        else if ((m==9 && d>=23) || (m==10 && d<=22)) {s="BILANCIA"; f="Equilibrio instabile.";}
+        else if ((m==10 && d>=23) || (m==11 && d<=21)) {s="SCORPIONE"; f="Mistero fatale.";}
+        else if ((m==11 && d>=22) || (m==12 && d<=21)) {s="SAGITTARIO"; f="Mira infuocata.";}
+        else if ((m==12 && d>=22) || (m==1 && d<=19)) {s="CAPRICORNO"; f="Scalata epica.";}
+        else if ((m==1 && d>=20) || (m==2 && d<=18)) {s="ACQUARIO"; f="Vento di rivolta.";}
+        else {s="PESCI"; f="Abissi sognanti.";}
+        document.getElementById("sign").innerText = s;
+        document.getElementById("fate").innerText = f;
+    }
+
+    function startVisualizer() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioCtx.createAnalyser();
@@ -130,8 +165,13 @@
             visualizer.innerHTML = '';
             for(let i=0; i<45; i++) { let b = document.createElement('div'); b.className = 'bar'; visualizer.appendChild(b); }
         }
+    }
+
+    document.getElementById('exeBtn').onclick = () => {
+        startVisualizer();
         if (audio.paused) { 
             audio.play(); isPlaying = true; document.getElementById('exeBtn').innerText = "CLOSE";
+            addLog("GATE OPENED");
             requestAnimationFrame(function render() {
                 if(!isPlaying) return;
                 requestAnimationFrame(render);
@@ -139,24 +179,34 @@
                 const bars = document.getElementsByClassName('bar');
                 for(let i=0; i<bars.length; i++) { bars[i].style.height = (dataArray[i]/255)*100 + '%'; }
             });
-        } else { audio.pause(); isPlaying = false; document.getElementById('exeBtn').innerText = "OPEN_GATE"; }
+        } else {
+            audio.pause(); isPlaying = false; document.getElementById('exeBtn').innerText = "PLAY";
+            addLog("GATE CLOSED");
+        }
     };
+
+    document.getElementById('stopBtn').onclick = () => {
+        audio.pause(); audio.currentTime = 0; isPlaying = false;
+        document.getElementById('exeBtn').innerText = "PLAY";
+        addLog("STREAM TERMINATED");
+    };
+
+    volRange.oninput = (e) => { audio.volume = e.target.value; };
 
     async function updateTitles() {
         try {
             const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv?t=" + Date.now());
             const d = await r.json();
             if(d.title && d.title.toUpperCase() !== currentTitle) {
-                currentTitle = d.title.toUpperCase();
-                marquee.innerText = currentTitle;
-                addLog("SONG: " + currentTitle);
+                currentTitle = d.title.toUpperCase(); marquee.innerText = currentTitle;
+                addLog("SIGNAL: " + currentTitle);
             }
         } catch(e) {}
     }
 
+    getSensors(); getZodiac();
     setInterval(updateTitles, 10000); updateTitles();
     setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-    document.getElementById('volRange').oninput = (e) => audio.volume = e.target.value;
 </script>
 </body>
 </html>
