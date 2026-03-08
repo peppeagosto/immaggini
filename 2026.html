@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>El Cartaio Music - Ultimate Power Edition</title>
+    <title>Full Fix</title>
     <style>
         :root {
             --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
@@ -28,63 +28,43 @@
         @keyframes rainbow-border { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         /* 🛸 GIF VAGANTE */
-        .ghost-gif { position: absolute; width: 150px; opacity: 0.4; z-index: 5; pointer-events: none; animation: moveGhost 25s linear infinite alternate; }
-        @keyframes moveGhost { 0% { top: 10%; left: 10%; } 50% { top: 20%; left: 80%; } 100% { top: 30%; left: 10%; } }
+        .ghost-gif { position: absolute; width: 140px; opacity: 0.35; z-index: 5; pointer-events: none; animation: moveGhost 25s linear infinite alternate; }
+        @keyframes moveGhost { 0% { top: 5%; left: 5%; } 50% { top: 30%; left: 75%; } 100% { top: 25%; left: 10%; } }
 
-        /* HEADER E TESTO ELETTRIZZATO POTENZIATO ⚡ */
+        /* HEADER ELETTRIZZATO ⚡ */
         .marquee-top-box { position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 680px; z-index: 999; background: rgba(0,0,0,0.8); border-radius: 12px; padding: 8px 0; border: 2px solid; border-image: var(--rainbow) 1; overflow: hidden; }
-        
         .cartaio-title-text { 
             font-family: 'Arial Black', sans-serif; font-size: 38px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; text-align: center; display: block; position: relative; 
             background: var(--gold-luxury); -webkit-background-clip: text; -webkit-text-fill-color: transparent; z-index: 1;
-            transition: filter 0.8s ease-in-out, text-shadow 0.8s ease-in-out;
+            transition: filter 0.8s ease, text-shadow 0.8s ease;
         }
+        .lightning-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://xatimg.com/image/9M6oVfN1C7Uf.gif'); background-size: 250px; pointer-events: none; z-index: 2; mix-blend-mode: color-dodge; opacity: 1; animation: electricity-flash 0.15s steps(2) infinite; transition: filter 0.8s; }
+        @keyframes electricity-flash { 0% { filter: brightness(1.2); } 50% { filter: brightness(2.2); } 100% { filter: brightness(1.5); } }
 
-        .lightning-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://xatimg.com/image/9M6oVfN1C7Uf.gif'); 
-            background-size: 250px; pointer-events: none; z-index: 2; 
-            mix-blend-mode: color-dodge; opacity: 1;
-            animation: electricity-flash 0.15s steps(2) infinite;
-            transition: filter 0.8s ease-in-out;
-        }
-
-        @keyframes electricity-flash {
-            0% { filter: brightness(1.2); opacity: 0.8; }
-            50% { filter: brightness(2.2); opacity: 1; }
-            100% { filter: brightness(1.5); opacity: 0.9; }
-        }
-
-        /* PANNELLO BOX INFO */
+        /* BOX INFO A SINISTRA (QUADRETTINI) */
         .side-panel-left { width: 160px; display: flex; flex-direction: column; gap: 12px; z-index: 10; margin-right: 20px; }
-        .info-box { position: relative; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; color: white; text-align: center; border: 1.5px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; animation: rainbow-border 8s linear infinite; transition: transform 0.05s; }
+        .info-box { position: relative; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; color: white; text-align: center; border: 1.5px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; animation: rainbow-border 8s linear infinite; }
         .info-box h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; font-weight: 900; background: var(--rainbow); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-border 10s linear infinite; }
+        .box-data { font-size: 11px; font-weight: bold; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* FOOTER E SCROLLER TITOLI ARCOBALENO */
+        /* CONTROLLI E SCROLLER */
         .footer-wrap { position: absolute; bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 100; }
-        .controls { display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.6); padding: 12px 25px; border-radius: 50px; border: 1.5px solid rgba(255,255,255,0.1); }
+        .controls { display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.7); padding: 12px 25px; border-radius: 50px; border: 1.5px solid rgba(255,255,255,0.1); }
         .btn-gold { background: var(--gold-btn); border: 1px solid #bf953f; color: #222; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 13px; }
-        
-        #trackTitle { 
-            font-weight: 900; font-size: 16px; text-transform: uppercase;
-            background: var(--rainbow); background-size: 400%;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: rainbow-border 10s linear infinite;
-        }
+        #trackTitle { font-weight: 900; font-size: 16px; text-transform: uppercase; background: var(--rainbow); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-border 10s linear infinite; }
 
-        /* TURNTABLE E WOOFER */
+        /* VINILE */
         .turntable-zone { position: relative; width: 400px; height: 400px; display: flex; justify-content: center; align-items: center; }
         #album-art { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 3px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; }
         .tonearm { position: absolute; width: 100px; height: 260px; right: -110px; top: 140px; background: url('https://xatimg.com/image/XJhVjJdCs2bN.gif'); background-size: contain; background-repeat: no-repeat; transform-origin: top right; transform: rotate(-10deg); transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; }
-        .woofer { width: 50px; height: 50px; border-radius: 50%; border: 3px solid #333; background: radial-gradient(circle, #111 20%, #000 80%); display: flex; align-items: center; justify-content: center; transition: transform 0.05s ease-out; }
-        .woofer-cap { width: 22px; height: 22px; border-radius: 50%; background: #000; border: 1.5px solid var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
 
+        @keyframes rotate-smooth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes shake { 0% { transform: translate(0,0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0,0); } }
     </style>
 </head>
 <body>
 
-    <div class="glass-player">
+    <div class="glass-player" id="player-body">
         <img src="https://xatimg.com/image/b3dAmd77d5UI.gif" class="ghost-gif">
 
         <div id="header-container" class="marquee-top-box">
@@ -95,11 +75,11 @@
         </div>
 
         <div class="side-panel-left">
-            <div id="box-1" class="info-box"><h4>Listeners</h4><div id="count" style="color:#00ff41; font-weight:bold;">00</div></div>
-            <div id="box-2" class="info-box"><h4>Clock</h4><div id="clock-text">00:00:00</div></div>
-            <div id="box-3" class="info-box"><h4>Date</h4><div id="date-text" style="font-size:10px;">-- --- ----</div></div>
-            <div id="box-4" class="info-box"><h4>Artist</h4><div id="artist-name" style="font-size:10px; color:#00f2ff;">---</div></div>
-            <div id="box-5" class="info-box"><h4>Song</h4><div id="song-title" style="font-size:10px;">---</div></div>
+            <div class="info-box"><h4>Listeners</h4><div id="count" class="box-data" style="color:#00ff41;">00</div></div>
+            <div class="info-box"><h4>Clock</h4><div id="clock-text" class="box-data">00:00:00</div></div>
+            <div class="info-box"><h4>Date</h4><div id="date-text" class="box-data">-- --- ----</div></div>
+            <div class="info-box"><h4>Artist</h4><div id="artist-name" class="box-data" style="color:#00f2ff;">---</div></div>
+            <div class="info-box"><h4>Song</h4><div id="song-title" class="box-data">---</div></div>
         </div>
 
         <div class="turntable-zone">
@@ -109,75 +89,57 @@
 
         <div class="footer-wrap">
             <div style="width: 450px; overflow: hidden; margin-bottom: 5px;">
-                <marquee id="trackTitle" behavior="alternate" direction="left" scrollamount="4">SYNCING SERVER LIGHTNING...</marquee>
+                <marquee id="trackTitle" behavior="alternate" direction="left" scrollamount="4">CONNETTENDO SISTEMA INFERNAL...</marquee>
             </div>
             <div class="controls">
-                <div id="woofer-l" class="woofer"><div class="woofer-cap"></div></div>
                 <button id="playBtn" class="btn-gold" onclick="togglePlay()">PLAY</button>
                 <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.8" style="width:100px;">
                 <button class="btn-gold" onclick="togglePlay()">STOP</button>
-                <div id="woofer-r" class="woofer"><div class="woofer-cap"></div></div>
             </div>
         </div>
     </div>
 
 <script>
 (function() {
-    const _Z_ID = "ylkruiq5e4fvv"; 
-    const _Z_URL = "https://stream.zeno.fm/" + _Z_ID;
+    // ⚡ CONFIGURAZIONE BLINDATA ⚡
+    const PROTECTED_ZID = "ylkruiq5e4fvv";
+    const PROTECTED_IMG = "https://xatimg.com/image/or3rbqD5I3rS.png";
+    
+    const _Z_URL = "https://stream.zeno.fm/" + PROTECTED_ZID;
     const _player = new Audio(_Z_URL);
     _player.crossOrigin = "anonymous";
-    let audioCtx, analyser, dataArray, source, isInitialized = false;
 
-    // 🌈 LOGICA CAMBIO COLORE TESTO + FULMINI (OGNI 5 SECONDI) 🌈
+    // 🔒 PROTEZIONE TOTALE (IMG + STREAM) 🔒
+    setInterval(() => {
+        const img = document.getElementById("album-art");
+        // Controllo se l'ID radio è stato cambiato o l'immagine manomessa
+        if (!img || img.getAttribute('src') !== PROTECTED_IMG || PROTECTED_ZID !== "ylkruiq5e4fvv") {
+            _player.pause();
+            document.body.innerHTML = "<div style='background:black; color:red; height:100vh; width:100vw; display:flex; justify-content:center; align-items:center; font-size:30px; font-weight:bold; border:20px solid red; text-align:center;'>🚨 VIOLAZIONE SISTEMA 🚨<br>ACCESSO NEGATO</div>";
+        }
+    }, 1000);
+
+    // 🌈 CAMBIO COLORE TESTO + FULMINI
     const colorStyles = [
-        { filter: "hue-rotate(0deg) saturate(3) brightness(1.5)", shadow: "0 0 20px #00f2ff, 0 0 40px #00f2ff" },
-        { filter: "hue-rotate(290deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #ff00c8, 0 0 40px #ff00c8" },
-        { filter: "hue-rotate(120deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #48ff00, 0 0 40px #48ff00" },
-        { filter: "hue-rotate(0deg) saturate(5) contrast(1.5) brightness(1.2)", shadow: "0 0 20px #ff0000, 0 0 40px #ff0000" }
+        { filter: "hue-rotate(0deg) saturate(3) brightness(1.5)", shadow: "0 0 20px #00f2ff" },
+        { filter: "hue-rotate(290deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #ff00c8" },
+        { filter: "hue-rotate(120deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #48ff00" }
     ];
     let colorIndex = 0;
     setInterval(() => {
         colorIndex = (colorIndex + 1) % colorStyles.length;
-        const style = colorStyles[colorIndex];
-        const title = document.getElementById('main-title');
-        const light = document.getElementById('lightning');
-        title.style.filter = style.filter;
-        title.style.textShadow = style.shadow;
-        light.style.filter = style.filter;
+        const s = colorStyles[colorIndex];
+        const t = document.getElementById('main-title');
+        const l = document.getElementById('lightning');
+        if(t && l) {
+            t.style.filter = s.filter; t.style.textShadow = s.shadow;
+            l.style.filter = s.filter;
+        }
     }, 5000);
 
-    function initAudio() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioCtx.createAnalyser();
-        source = audioCtx.createMediaElementSource(_player);
-        source.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        analyser.fftSize = 64;
-        dataArray = new Uint8Array(analyser.frequencyBinCount);
-        isInitialized = true;
-        animate();
-    }
-
-    function animate() {
-        if(!analyser) return;
-        requestAnimationFrame(animate);
-        analyser.getByteFrequencyData(dataArray);
-        let bass = dataArray[2]; 
-        let intensity = (bass / 255);
-        document.getElementById('woofer-l').style.transform = `scale(${1 + intensity * 0.45})`;
-        document.getElementById('woofer-r').style.transform = `scale(${1 + intensity * 0.45})`;
-        
-        const title = document.getElementById('main-title');
-        if(bass > 190) { title.style.animation = "shake 0.1s infinite"; }
-        else { title.style.animation = "none"; }
-        for(let i=1; i<=5; i++) { document.getElementById('box-'+i).style.transform = `scale(${1 + intensity * 0.15})`; }
-    }
-
+    // FUNZIONI PLAYER
     window.togglePlay = function() {
         if (_player.paused) {
-            if (!isInitialized) initAudio();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             _player.play();
             document.getElementById('album-art').style.animation = "rotate-smooth 5s linear infinite";
             document.getElementById('arm').style.transform = "rotate(35deg)"; 
@@ -191,25 +153,27 @@
     };
 
     document.getElementById('volRange').oninput = e => { _player.volume = e.target.value; };
-    async function syncMeta() {
+
+    // 📊 SINCRONIZZAZIONE DATI (QUADRETTINI) 📊
+    async function syncData() {
         try {
-            const r = await fetch(`https://zenoplay.zenomedia.com/api/zenofm/nowplaying/${_Z_ID}?t=${Date.now()}`);
+            const r = await fetch(`https://zenoplay.zenomedia.com/api/zenofm/nowplaying/${PROTECTED_ZID}?t=` + Date.now());
             const d = await r.json();
             if (d.title) {
                 document.getElementById('trackTitle').innerText = d.title.toUpperCase();
-                document.getElementById('artist-name').innerText = d.title.split(" - ")[0];
+                document.getElementById('artist-name').innerText = d.title.split(" - ")[0] || "---";
                 document.getElementById('song-title').innerText = d.title.split(" - ")[1] || d.title;
             }
         } catch (e) {}
     }
+
     setInterval(() => {
         document.getElementById('clock-text').innerText = new Date().toLocaleTimeString('it-IT');
         document.getElementById('date-text').innerText = new Date().toLocaleDateString('it-IT', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
     }, 1000);
-    setInterval(syncMeta, 15000); syncMeta();
+    
+    setInterval(syncData, 15000); syncData();
 })();
 </script>
-
-<style> @keyframes rotate-smooth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } </style>
 </body>
 </html>
