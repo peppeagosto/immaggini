@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <style>
+        body {
+            background-color: #000; /* Sfondo nero */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Evita scroll fastidiosi */
+        }
+
+        .video-container {
+            display: flex;
+            align-items: center; /* Allinea verticalmente al centro */
+            justify-content: center;
+            gap: 30px; /* Spazio tra i video per non farli toccare */
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Video laterali (ali.mp4) */
+        video {
+            width: 25%; /* Dimensione rettangolare standard */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Video Centrale (neon2.mp4) */
+        .center-video {
+            width: 38%; /* Più grande degli altri */
+            /* Qui impostiamo la forma più quadrata (es. 4:3 invece di 16:9) */
+            aspect-ratio: 1 / 1; /* Prova 1/1 per un quadrato perfetto o 4/3 per quasi quadrato */
+            object-fit: cover; /* Taglia i bordi del video per riempire la forma senza schiacciarlo */
+            border: 3px solid #00f7ff; /* Cornice neon azzurra */
+            box-shadow: 0 0 30px #00f7ff; /* Bagliore neon */
+            border-radius: 20px;
+            z-index: 10; /* Lo tiene leggermente sopra visivamente */
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    <video autoplay muted loop playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/ali.mp4" type="video/mp4">
+    </video>
+
+    <video class="center-video" autoplay muted loop playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/neon2.mp4" type="video/mp4">
+    </video>
+
+    <video autoplay muted loop playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/ali.mp4" type="video/mp4">
+    </video>
+</div>
+
+</body>
+</html>
