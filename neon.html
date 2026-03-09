@@ -2,60 +2,154 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta charset="UTF-8">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
         body {
-            background-color: #000; /* Sfondo nero */
+            background-color: transparent; /* Trasparente per xat */
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* Evita scroll fastidiosi */
+            overflow: hidden;
         }
 
-        .video-container {
-            display: flex;
-            align-items: center; /* Allinea verticalmente al centro */
-            justify-content: center;
-            gap: 30px; /* Spazio tra i video per non farli toccare */
+        /* 📺 CONTAINER PRINCIPALE - LARGHEZZA 550PX */
+        .main-player {
+            position: relative;
+            width: 550px; /* Lunghezza richiesta */
+            height: 310px; /* Altezza proporzionata al formato rettangolare */
+            border: 3px solid #00f7ff;
+            box-shadow: 0 0 30px #00f7ff;
+            border-radius: 15px;
+            background: #000;
+            overflow: hidden;
+        }
+
+        /* VIDEO NEON CENTRALE */
+        #bg-video {
             width: 100%;
-            padding: 20px;
+            height: 100%;
+            object-fit: cover; /* Mantiene il formato senza distorcere */
         }
 
-        /* Video laterali (ali.mp4) */
-        video {
-            width: 28%; /* Dimensione rettangolare standard */
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        /* 💿 COVER ART (Cerchio Centrale) */
+        #cover-art {
+            position: absolute;
+            top: 70%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            border: 2px solid #00f7ff;
+            object-fit: cover;
+            z-index: 10;
+            box-shadow: 0 0 15px #00f7ff;
         }
 
-        /* Video Centrale (neon2.mp4) */
-        .center-video {
-            width: 65%; /* Più grande degli altri */
-            /* Qui impostiamo la forma più quadrata (es. 4:3 invece di 16:9) */
-            aspect-ratio: 1 / 1; /* Prova 1/1 per un quadrato perfetto o 4/3 per quasi quadrato */
-            object-fit: cover; /* Taglia i bordi del video per riempire la forma senza schiacciarlo */
-            border: 3px solid #00f7ff; /* Cornice neon azzurra */
-            box-shadow: 0 0 30px #00f7ff; /* Bagliore neon */
-            border-radius: 20px;
-            z-index: 10; /* Lo tiene leggermente sopra visivamente */
+        /* 🎮 TASTI PLAY/STOP */
+        .btn {
+            position: absolute;
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 247, 255, 0.5);
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            cursor: pointer;
+            z-index: 20;
+            transition: 0.3s;
+        }
+        .btn:hover { background: rgba(0, 247, 255, 0.3); box-shadow: 0 0 15px #00f7ff; }
+        
+        #playBtn { top: 52%; left: 32%; } 
+        #stopBtn { top: 52%; left: 59%; }
+
+        /* 📜 SCROLLER TITOLI */
+        .marquee-box {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 1px solid #ff1a00;
+            padding: 4px 0;
+            z-index: 15;
+        }
+
+        #track-title {
+            color: #00f7ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px #00f7ff;
         }
     </style>
 </head>
 <body>
 
-
-
-    <video class="center-video" autoplay muted loop playsinline>
+<div class="main-player">
+    <video id="bg-video" autoplay muted loop playsinline>
         <source src="https://peppeagosto.github.io/immaggini/neon2.mp4" type="video/mp4">
     </video>
 
-    
+    <img id="cover-art" src="https://xatimg.com/image/oVE5tUzVW2zy.png" alt="Cover">
+
+    <button id="playBtn" class="btn" onclick="toggleRadio()">PLAY</button>
+    <button id="stopBtn" class="btn" onclick="stopRadio()">STOP</button>
+
+    <div class="marquee-box">
+        <marquee id="track-title" direction="left" scrollamount="5">DIABLO PEPPE - EL CARTAIO SYSTEM</marquee>
+    </div>
 </div>
 
+<audio id="zenoAudio" src="https://stream.zeno.fm/ylkruiq5e4fvv"></audio>
+
+<script>
+    const audio = document.getElementById("zenoAudio");
+    const playBtn = document.getElementById("playBtn");
+    const title = document.getElementById("track-title");
+    const cover = document.getElementById("cover-art");
+
+    const FOTO_DIABLO = "https://xatimg.com/image/oVE5tUzVW2zy.png"; 
+    const FOTO_DEFAULT = "https://xatimg.com/image/OfPr406rB1UZ.gif";
+
+    function toggleRadio() {
+        if (audio.paused) {
+            audio.play();
+            playBtn.innerText = "ON";
+        } else {
+            audio.pause();
+            playBtn.innerText = "PLAY";
+        }
+    }
+
+    function stopRadio() {
+        audio.pause();
+        audio.currentTime = 0;
+        playBtn.innerText = "PLAY";
+    }
+
+    async function updateMetadata() {
+        try {
+            const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv?t=" + Date.now());
+            const d = await r.json();
+            if (d.title) {
+                const song = d.title.toUpperCase();
+                title.innerText = song;
+                if (song.includes("DIABLO PEPPE") || song.includes("PEPPE DIABLO")) {
+                    cover.src = FOTO_DIABLO;
+                } else {
+                    cover.src = FOTO_DEFAULT;
+                }
+            }
+        } catch (e) { console.log("Errore metadati"); }
+    }
+
+    setInterval(updateMetadata, 10000);
+    updateMetadata();
+</script>
+
 </body>
-
 </html>
-
-
-
