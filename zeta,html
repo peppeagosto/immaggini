@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Zeno Alien - Satellite Bridge</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .container {
+            width: 420px; background: rgba(15, 0, 0, 0.95);
+            border-radius: 12px; border: 2px solid #ff2a2a;
+            box-shadow: 0 0 20px #ff2a2a; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .header { padding: 10px; background: #ff2a2a; color: #000; font-weight: bold; font-size: 12px; display: flex; justify-content: space-between; }
+        #locations { flex: 1; padding: 15px; min-height: 220px; color: #ff7777; font-size: 14px; overflow-y: auto; scrollbar-width: none; }
+        .item { padding: 8px; margin-bottom: 8px; background: rgba(255, 0, 0, 0.1); border-left: 4px solid #ff2a2a; border-radius: 4px; }
+        #mapBox { display: none; height: 220px; width: 100%; }
+        #map { height: 100%; width: 100%; background: #000; }
+        .btn { background: #220000; color: #ff2a2a; border: 1px solid #ff2a2a; padding: 10px; cursor: pointer; font-weight: bold; width: 100%; text-transform: uppercase; }
+        .leaflet-control-attribution { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><span>● ALIEN RADAR ACTIVE</span><span id="time">00:00:00</span></div>
+    <div id="main-view"><div id="locations"><div id="status">> RICERCA SEGNALE...</div></div></div>
+    <div id="mapBox"><div id="map"></div></div>
+    <button class="btn" onclick="toggleMap()">SWITCH RADAR/LOG</button>
+</div>
+<script>
+    let history = []; let map; let mapInitialized = false;
+    setInterval(() => { document.getElementById('time').textContent = new Date().toLocaleTimeString('it-IT'); }, 1000);
+    window.ipwhois = function(data) {
+        if(data && data.success) {
+            const v = { city: data.city.toUpperCase(), country: data.country_code.toLowerCase(), lat: data.latitude, lon: data.longitude, time: new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) };
+            document.getElementById('status').style.display = 'none';
+            if (history.length === 0 || history[history.length-1].city !== v.city) {
+                history.push(v); if (history.length > 10) history.shift();
+                updateUI();
+            }
+        }
+    };
+    function start() {
+        const s = document.createElement('script');
+        s.src = "https://ipwho.is/?callback=ipwhois";
+        document.body.appendChild(s);
+    }
+    function updateUI() {
+        const log = document.getElementById('locations'); log.innerHTML = "";
+        [...history].reverse().forEach(loc => {
+            log.innerHTML += `<div class="item"><strong>${loc.time}</strong> | ${loc.city} <img src="https://flagcdn.com/16x12/${loc.country}.png" style="vertical-align:middle;"></div>`;
+        });
+    }
+    function toggleMap() {
+        const box = document.getElementById('mapBox'); const main = document.getElementById('main-view');
+        if (box.style.display === "none" || box.style.display === "") {
+            box.style.display = "block"; main.style.display = "none";
+            if (!mapInitialized) {
+                map = L.map('map', {zoomControl: false, attributionControl: false}).setView([20, 0], 2);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+                mapInitialized = true;
+            }
+            setTimeout(() => {
+                map.invalidateSize();
+                history.forEach(loc => {
+                    const icon = L.divIcon({ html: `<img src="https://flagcdn.com/24x18/${loc.country}.png" style="border:1px solid white; width:24px;">`, iconSize: [24, 18] });
+                    L.marker([loc.lat, loc.lon], {icon: icon}).addTo(map);
+                });
+                if(history.length > 0) map.flyTo([history[history.length-1].lat, history[history.length-1].lon], 4);
+            }, 200);
+        } else { box.style.display = "none"; main.style.display = "block"; }
+    }
+    start(); setInterval(start, 25000);
+</script>
+</body>
+</html>zeta
