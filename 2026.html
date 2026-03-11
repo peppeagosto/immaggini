@@ -2,84 +2,65 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Full Fix</title>
+    <title>EL CARTAIO Platinum - PROTECTED SYSTEM</title>
     <style>
         :root {
             --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
             --gold-luxury: linear-gradient(to bottom, #fff 0%, #bf953f 50%, #8a6d3b 100%);
             --gold-btn: linear-gradient(to bottom, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --neon-blue: #00f2ff;
         }
-
         body { background: transparent !important; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
-
+        
+        /* CONTAINER PRINCIPALE */
         .glass-player {
             position: relative; width: 780px; height: 580px; display: flex; align-items: center; justify-content: flex-start;
-            padding: 20px; z-index: 1; background: #000; border-radius: 35px; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+            padding: 20px; z-index: 1; background: #000; border-radius: 35px; box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05);
             overflow: hidden;
         }
-
+        
         .glass-player::before {
             content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px; padding: 6px;
             background: var(--rainbow); background-size: 400%; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor; mask-composite: exclude; border-radius: 40px; animation: rainbow-border 10s linear infinite; z-index: -1;
         }
-
+        
         @keyframes rainbow-border { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        /* TITOLO TOP */
+        .marquee-top-box { position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 680px; z-index: 999; background: rgba(0,0,0,0.85); border-radius: 12px; padding: 10px 0; border: 2px solid; border-image: var(--rainbow) 1; overflow: hidden; }
+        .cartaio-title-text { font-family: 'Arial Black', sans-serif; font-size: 34px; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; text-align: center; display: block; background: var(--gold-luxury); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* 🛸 GIF VAGANTE */
-        .ghost-gif { position: absolute; width: 140px; opacity: 0.35; z-index: 5; pointer-events: none; animation: moveGhost 25s linear infinite alternate; }
-        @keyframes moveGhost { 0% { top: 5%; left: 5%; } 50% { top: 30%; left: 75%; } 100% { top: 25%; left: 10%; } }
+        /* PANNELLO INFO (QUADRETTINI) */
+        .side-panel-left { width: 170px; display: flex; flex-direction: column; gap: 12px; z-index: 10; margin-right: 20px; }
+        .info-box { position: relative; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 8px; color: white; text-align: center; border: 1.5px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; animation: rainbow-border 8s linear infinite; }
+        .info-box h4 { margin: 0; font-size: 9px; text-transform: uppercase; background: var(--rainbow); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .box-data { font-size: 12px; font-weight: bold; color: #fff; }
 
-        /* HEADER ELETTRIZZATO ⚡ */
-        .marquee-top-box { position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 680px; z-index: 999; background: rgba(0,0,0,0.8); border-radius: 12px; padding: 8px 0; border: 2px solid; border-image: var(--rainbow) 1; overflow: hidden; }
-        .cartaio-title-text { 
-            font-family: 'Arial Black', sans-serif; font-size: 38px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; text-align: center; display: block; position: relative; 
-            background: var(--gold-luxury); -webkit-background-clip: text; -webkit-text-fill-color: transparent; z-index: 1;
-            transition: filter 0.8s ease, text-shadow 0.8s ease;
-        }
-        .lightning-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://xatimg.com/image/9M6oVfN1C7Uf.gif'); background-size: 250px; pointer-events: none; z-index: 2; mix-blend-mode: color-dodge; opacity: 1; animation: electricity-flash 0.15s steps(2) infinite; transition: filter 0.8s; }
-        @keyframes electricity-flash { 0% { filter: brightness(1.2); } 50% { filter: brightness(2.2); } 100% { filter: brightness(1.5); } }
-
-        /* BOX INFO A SINISTRA (QUADRETTINI) */
-        .side-panel-left { width: 160px; display: flex; flex-direction: column; gap: 12px; z-index: 10; margin-right: 20px; }
-        .info-box { position: relative; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; color: white; text-align: center; border: 1.5px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; animation: rainbow-border 8s linear infinite; }
-        .info-box h4 { margin: 0 0 4px 0; font-size: 10px; text-transform: uppercase; font-weight: 900; background: var(--rainbow); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-border 10s linear infinite; }
-        .box-data { font-size: 11px; font-weight: bold; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* CONTROLLI E SCROLLER */
-        .footer-wrap { position: absolute; bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 100; }
-        .controls { display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.7); padding: 12px 25px; border-radius: 50px; border: 1.5px solid rgba(255,255,255,0.1); }
-        .btn-gold { background: var(--gold-btn); border: 1px solid #bf953f; color: #222; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 13px; }
-        #trackTitle { font-weight: 900; font-size: 16px; text-transform: uppercase; background: var(--rainbow); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-border 10s linear infinite; }
-
-        /* VINILE */
+        /* ZONA VINILE */
         .turntable-zone { position: relative; width: 400px; height: 400px; display: flex; justify-content: center; align-items: center; }
-        #album-art { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 3px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; }
-        .tonearm { position: absolute; width: 100px; height: 260px; right: -110px; top: 140px; background: url('https://xatimg.com/image/XJhVjJdCs2bN.gif'); background-size: contain; background-repeat: no-repeat; transform-origin: top right; transform: rotate(-10deg); transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; }
-
+        #album-art { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; transition: 0.5s; }
+        .tonearm { position: absolute; width: 100px; height: 260px; right: -110px; top: 140px; background: url('https://xatimg.com/image/XJhVjJdCs2bN.gif'); background-size: contain; background-repeat: no-repeat; transform-origin: top right; transform: rotate(-10deg); transition: 0.8s; z-index: 100; }
+        
+        /* CONTROLLI */
+        .footer-wrap { position: absolute; bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 100; }
+        .controls { display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.8); padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-gold { background: var(--gold-btn); border: 1px solid #bf953f; color: #000; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 900; text-transform: uppercase; }
+        
         @keyframes rotate-smooth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes shake { 0% { transform: translate(0,0); } 50% { transform: translate(-2px, 2px); } 100% { transform: translate(0,0); } }
     </style>
 </head>
 <body>
 
-    <div class="glass-player" id="player-body">
-        <img src="https://xatimg.com/image/b3dAmd77d5UI.gif" class="ghost-gif">
-
-        <div id="header-container" class="marquee-top-box">
-            <div id="lightning" class="lightning-overlay"></div> 
-            <marquee behavior="alternate" direction="left" scrollamount="4">
-                <span id="main-title" class="cartaio-title-text">EL CARTAIO MUSIC</span>
-            </marquee>
+    <div class="glass-player" id="main-frame">
+        <div class="marquee-top-box">
+            <span id="main-title" class="cartaio-title-text">EL CARTAIO PLATINUM</span>
         </div>
 
         <div class="side-panel-left">
-            <div class="info-box"><h4>Listeners</h4><div id="count" class="box-data" style="color:#00ff41;">00</div></div>
             <div class="info-box"><h4>Clock</h4><div id="clock-text" class="box-data">00:00:00</div></div>
-            <div class="info-box"><h4>Date</h4><div id="date-text" class="box-data">-- --- ----</div></div>
             <div class="info-box"><h4>Artist</h4><div id="artist-name" class="box-data" style="color:#00f2ff;">---</div></div>
             <div class="info-box"><h4>Song</h4><div id="song-title" class="box-data">---</div></div>
+            <div class="info-box" id="box-status"><h4>Status</h4><div class="box-data" style="color:yellow;">SECURE</div></div>
         </div>
 
         <div class="turntable-zone">
@@ -88,92 +69,32 @@
         </div>
 
         <div class="footer-wrap">
-            <div style="width: 450px; overflow: hidden; margin-bottom: 5px;">
-                <marquee id="trackTitle" behavior="alternate" direction="left" scrollamount="4">CONNETTENDO SISTEMA INFERNAL...</marquee>
-            </div>
+            <div style="width: 450px; overflow: hidden;"><marquee id="trackTitle" style="color:yellow; font-weight:900;">ATTESA SATELLITE EL CARTAIO...</marquee></div>
             <div class="controls">
                 <button id="playBtn" class="btn-gold" onclick="togglePlay()">PLAY</button>
-                <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.8" style="width:100px;">
-                <button class="btn-gold" onclick="togglePlay()">STOP</button>
+                <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.8">
+                <button class="btn-gold" onclick="stopRadio()">STOP</button>
             </div>
         </div>
     </div>
 
 <script>
 (function() {
-    // ⚡ CONFIGURAZIONE BLINDATA ⚡
-    const PROTECTED_ZID = "ylkruiq5e4fvv";
-    const PROTECTED_IMG = "https://xatimg.com/image/or3rbqD5I3rS.png";
-    
-    const _Z_URL = "https://stream.zeno.fm/" + PROTECTED_ZID;
-    const _player = new Audio(_Z_URL);
+    // 🛡️ CONFIGURAZIONE PROPRIETÀ EL CARTAIO
+    const _MY_ZID = "ylkruiq5e4fvv";
+    const _MY_IMG = "or3rbqD5I3rS";
+    const _MY_NAME = "peppeagosto"; // IL TUO NOME GITHUB
+
+    const _player = new Audio("https://stream.zeno.fm/" + _MY_ZID);
     _player.crossOrigin = "anonymous";
 
-    // 🔒 PROTEZIONE TOTALE (IMG + STREAM) 🔒
-    setInterval(() => {
-        const img = document.getElementById("album-art");
-        // Controllo se l'ID radio è stato cambiato o l'immagine manomessa
-        if (!img || img.getAttribute('src') !== PROTECTED_IMG || PROTECTED_ZID !== "ylkruiq5e4fvv") {
-            _player.pause();
-            document.body.innerHTML = "<div style='background:black; color:red; height:100vh; width:100vw; display:flex; justify-content:center; align-items:center; font-size:30px; font-weight:bold; border:20px solid red; text-align:center;'>🚨 VIOLAZIONE SISTEMA 🚨<br>ACCESSO NEGATO</div>";
-        }
-    }, 1000);
-
-    // 🌈 CAMBIO COLORE TESTO + FULMINI
-    const colorStyles = [
-        { filter: "hue-rotate(0deg) saturate(3) brightness(1.5)", shadow: "0 0 20px #00f2ff" },
-        { filter: "hue-rotate(290deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #ff00c8" },
-        { filter: "hue-rotate(120deg) saturate(4) brightness(1.5)", shadow: "0 0 20px #48ff00" }
-    ];
-    let colorIndex = 0;
-    setInterval(() => {
-        colorIndex = (colorIndex + 1) % colorStyles.length;
-        const s = colorStyles[colorIndex];
-        const t = document.getElementById('main-title');
-        const l = document.getElementById('lightning');
-        if(t && l) {
-            t.style.filter = s.filter; t.style.textShadow = s.shadow;
-            l.style.filter = s.filter;
-        }
-    }, 5000);
-
-    // FUNZIONI PLAYER
-    window.togglePlay = function() {
-        if (_player.paused) {
-            _player.play();
-            document.getElementById('album-art').style.animation = "rotate-smooth 5s linear infinite";
-            document.getElementById('arm').style.transform = "rotate(35deg)"; 
-            document.getElementById('playBtn').innerText = "STOP";
-        } else {
-            _player.pause();
-            document.getElementById('album-art').style.animation = "none";
-            document.getElementById('arm').style.transform = "rotate(-10deg)";
-            document.getElementById('playBtn').innerText = "PLAY";
-        }
-    };
-
-    document.getElementById('volRange').oninput = e => { _player.volume = e.target.value; };
-
-    // 📊 SINCRONIZZAZIONE DATI (QUADRETTINI) 📊
-    async function syncData() {
-        try {
-            const r = await fetch(`https://zenoplay.zenomedia.com/api/zenofm/nowplaying/${PROTECTED_ZID}?t=` + Date.now());
-            const d = await r.json();
-            if (d.title) {
-                document.getElementById('trackTitle').innerText = d.title.toUpperCase();
-                document.getElementById('artist-name').innerText = d.title.split(" - ")[0] || "---";
-                document.getElementById('song-title').innerText = d.title.split(" - ")[1] || d.title;
-            }
-        } catch (e) {}
-    }
-
-    setInterval(() => {
-        document.getElementById('clock-text').innerText = new Date().toLocaleTimeString('it-IT');
-        document.getElementById('date-text').innerText = new Date().toLocaleDateString('it-IT', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
-    }, 1000);
-    
-    setInterval(syncData, 15000); syncData();
-})();
-</script>
-</body>
-</html>
+    // 💀 ALIEN KILLER SWITCH - LA TRAPPOLA 💀
+    function killerSwitch() {
+        const url = window.location.href;
+        const img = document.getElementById('album-art').src;
+        
+        // Verifica se il dominio NON è il tuo GitHub e NON è Xat
+        const isStolen = !url.includes(_MY_NAME) && !url.includes("xat.com") && url !== "about:blank";
+        
+        // Verifica se hanno provato a cambiare l'immagine protetta
+        const is
