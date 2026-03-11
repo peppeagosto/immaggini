@@ -1,133 +1,122 @@
-!DOCTYPE html
-html lang=it
-head
-    meta charset=UTF-8
-    titleEL CARTAIO PLATINUM - PROTECTED 2026title
-    style
-        root {
-            --rainbow linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-            --gold-luxury linear-gradient(to bottom, #fff 0%, #bf953f 50%, #8a6d3b 100%);
-            --gold-btn linear-gradient(to bottom, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --accent #00f2ff;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>EL CARTAIO PLATINUM - PROTECTED 2026</title>
+    <style>
+        :root {
+            --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            --gold-luxury: linear-gradient(to bottom, #fff 0%, #bf953f 50%, #8a6d3b 100%);
+            --gold-btn: linear-gradient(to bottom, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --accent: #00f2ff;
         }
-        body { background transparent !important; margin 0; display flex; justify-content center; align-items center; height 100vh; font-family 'Segoe UI', sans-serif; overflow hidden; }
+        body { background: transparent !important; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
         
         .glass-player {
-            position relative; width 820px; height 600px; display flex; align-items center; justify-content flex-start;
-            padding 25px; z-index 1; background #000; border-radius 40px; box-shadow inset 0 0 30px rgba(255, 255, 255, 0.05);
-            overflow hidden;
+            position: relative; width: 820px; height: 600px; display: flex; align-items: center; justify-content: flex-start;
+            padding: 25px; z-index: 1; background: #000; border-radius: 40px; box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05);
+            overflow: hidden;
         }
         
-        .glass-playerbefore {
-            content ''; position absolute; top -6px; left -6px; right -6px; bottom -6px; padding 6px;
-            background var(--rainbow); background-size 400%; -webkit-mask linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite xor; mask-composite exclude; border-radius 45px; animation rainbow-border 10s linear infinite; z-index -1;
+        .glass-player::before {
+            content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px; padding: 6px;
+            background: var(--rainbow); background-size: 400%; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; border-radius: 45px; animation: rainbow-border 10s linear infinite; z-index: -1;
         }
         
-        @keyframes rainbow-border { 0% { background-position 0% 50%; } 50% { background-position 100% 50%; } 100% { background-position 0% 50%; } }
+        @keyframes rainbow-border { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-         HEADER 
-        .marquee-top-box { position absolute; top 35px; left 50%; transform translateX(-50%); width 720px; height 65px; z-index 999; background rgba(0,0,0,0.85); border-radius 15px; border 2px solid; border-image var(--rainbow) 1; overflow hidden; display flex; align-items center; justify-content center; }
-        .cartaio-title-text { font-family 'Arial Black', sans-serif; font-size 32px; font-weight 900; letter-spacing 5px; text-transform uppercase; text-align center; position absolute; width 100%; background var(--gold-luxury); -webkit-background-clip text; -webkit-text-fill-color transparent; z-index 1; transition 0.8s; }
-        .lightning-overlay { position absolute; top 0; left 0; width 100%; height 100%; background url('httpsxatimg.comimage9M6oVfN1C7Uf.gif'); background-size 250px; pointer-events none; z-index 2; mix-blend-mode color-dodge; opacity 1; animation electricity-flash 0.15s steps(2) infinite; }
-        @keyframes electricity-flash { 0% { filter brightness(1.2); } 50% { filter brightness(2.2); } 100% { filter brightness(1.5); } }
+        .marquee-top-box { position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 720px; height: 65px; z-index: 999; background: rgba(0,0,0,0.85); border-radius: 15px; border: 2px solid; border-image: var(--rainbow) 1; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .cartaio-title-text { font-family: 'Arial Black', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; text-align: center; position: absolute; width: 100%; background: var(--gold-luxury); -webkit-background-clip: text; -webkit-text-fill-color: transparent; z-index: 1; transition: 0.8s; }
+        .lightning-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://xatimg.com/image/9M6oVfN1C7Uf.gif'); background-size: 250px; pointer-events: none; z-index: 2; mix-blend-mode: color-dodge; opacity: 1; animation: electricity-flash 0.15s steps(2) infinite; }
+        @keyframes electricity-flash { 0% { filter: brightness(1.2); } 50% { filter: brightness(2.2); } 100% { filter: brightness(1.5); } }
 
-         SELETTORE COLORI A DESTRA 
-        .color-selector { position absolute; right 30px; top 50%; transform translateY(-50%); display flex; flex-direction column; gap 15px; z-index 1000; }
-        .dot { width 22px; height 22px; border-radius 50%; border 2px solid #fff; cursor pointer; transition 0.3s; box-shadow 0 0 10px rgba(255,255,255,0.2); }
-        .dothover { transform scale(1.3); }
+        .color-selector { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
+        .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .dot:hover { transform: scale(1.3); }
 
-         LATO INFO 
-        .side-panel-left { width 180px; display flex; flex-direction column; gap 10px; z-index 10; margin-right 25px; }
-        .info-box { position relative; background rgba(255,255,255,0.05); border-radius 14px; padding 10px; color white; text-align center; border 1.5px solid transparent; background-image linear-gradient(#000, #000), var(--rainbow); background-origin border-box; background-clip padding-box, border-box; background-size 100%, 400%; animation rainbow-border 8s linear infinite; }
-        .info-box h4 { margin 0; font-size 10px; text-transform uppercase; background var(--rainbow); -webkit-background-clip text; -webkit-text-fill-color transparent; }
+        .side-panel-left { width: 180px; display: flex; flex-direction: column; gap: 10px; z-index: 10; margin-right: 25px; }
+        .info-box { position: relative; background: rgba(255,255,255,0.05); border-radius: 14px; padding: 10px; color: white; text-align: center; border: 1.5px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; animation: rainbow-border 8s linear infinite; }
+        .info-box h4 { margin: 0; font-size: 10px; text-transform: uppercase; background: var(--rainbow); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-         VINILE 
-        .turntable-zone { position relative; width 420px; height 420px; display flex; justify-content center; align-items center; }
-        #album-art { width 340px; height 340px; border-radius 50%; object-fit cover; border 4px solid transparent; background-image linear-gradient(#000, #000), var(--rainbow); background-origin border-box; background-clip padding-box, border-box; background-size 100%, 400%; z-index 10; }
-        .tonearm { position absolute; width 130px; height 300px; right -90px; top 115px; background url('httpsxatimg.comimageXJhVjJdCs2bN.gif'); background-size contain; background-repeat no-repeat; transform-origin top right; transform rotate(-18deg); transition 1.2s; z-index 100; }
+        .turntable-zone { position: relative; width: 420px; height: 420px; display: flex; justify-content: center; align-items: center; }
+        #album-art { width: 340px; height: 340px; border-radius: 50%; object-fit: cover; border: 4px solid transparent; background-image: linear-gradient(#000, #000), var(--rainbow); background-origin: border-box; background-clip: padding-box, border-box; background-size: 100%, 400%; z-index: 10; }
+        .tonearm { position: absolute; width: 130px; height: 300px; right: -90px; top: 115px; background: url('https://xatimg.com/image/XJhVjJdCs2bN.gif'); background-size: contain; background-repeat: no-repeat; transform-origin: top right; transform: rotate(-18deg); transition: 1.2s; z-index: 100; }
         
-        .footer-wrap { position absolute; bottom 30px; width 100%; display flex; flex-direction column; align-items center; gap 15px; z-index 100; }
-        .controls { display flex; gap 20px; align-items center; background rgba(0,0,0,0.8); padding 15px 30px; border-radius 60px; border 1.5px solid rgba(255,255,255,0.15); }
-        .btn-gold { background var(--gold-btn); border 1px solid #bf953f; color #111; padding 12px 25px; border-radius 10px; cursor pointer; font-weight 900; text-transform uppercase; }
+        .footer-wrap { position: absolute; bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; z-index: 100; }
+        .controls { display: flex; gap: 20px; align-items: center; background: rgba(0,0,0,0.8); padding: 15px 30px; border-radius: 60px; border: 1.5px solid rgba(255,255,255,0.15); }
+        .btn-gold { background: var(--gold-btn); border: 1px solid #bf953f; color: #111; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 900; text-transform: uppercase; }
         
-        @keyframes rotate-smooth { from { transform rotate(0deg); } to { transform rotate(360deg); } }
-        .hidden-text { opacity 0; transform translateY(25px); }
-        .visible-text { opacity 1; transform translateY(0); }
-    style
-head
-body
+        @keyframes rotate-smooth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .hidden-text { opacity: 0; transform: translateY(25px); }
+        .visible-text { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
 
-    div id=cartaio-player class=glass-player
-        div class=marquee-top-box
-            div id=lightning class=lightning-overlaydiv
-            span id=main-title class=cartaio-title-text visible-textEL CARTAIO PLATINUMspan
-            span id=track-info class=cartaio-title-text hidden-textCONNECTING...span
-        div
+    <div id="cartaio-player" class="glass-player">
+        <div class="marquee-top-box">
+            <div id="lightning" class="lightning-overlay"></div>
+            <span id="main-title" class="cartaio-title-text visible-text">EL CARTAIO PLATINUM</span>
+            <span id="track-info" class="cartaio-title-text hidden-text">CONNECTING...</span>
+        </div>
 
-        div class=side-panel-left
-            div class=info-boxh4Clockh4div id=clock-text style=font-weightbold;000000divdiv
-            div class=info-boxh4Artisth4div id=artist-name style=font-size11px; colorvar(--accent);---divdiv
-            div class=info-boxh4Songh4div id=song-title style=font-size11px;---divdiv
-            div class=info-boxh4Statush4div id=status-tag style=font-size10px; coloryellow;SECURE ALIENdivdiv
-        div
+        <div class="side-panel-left">
+            <div class="info-box"><h4>Clock</h4><div id="clock-text" style="font-weight:bold;">00:00:00</div></div>
+            <div class="info-box"><h4>Artist</h4><div id="artist-name" style="font-size:11px; color:var(--accent);">---</div></div>
+            <div class="info-box"><h4>Song</h4><div id="song-title" style="font-size:11px;">---</div></div>
+            <div class="info-box"><h4>Status</h4><div id="status-tag" style="font-size:10px; color:yellow;">SECURE ALIEN</div></div>
+        </div>
 
-        div class=turntable-zone
-            img id=album-art src=httpsxatimg.comimageor3rbqD5I3rS.png
-            div id=arm class=tonearmdiv
-        div
+        <div class="turntable-zone">
+            <img id="album-art" src="https://xatimg.com/image/or3rbqD5I3rS.png">
+            <div id="arm" class="tonearm"></div>
+        </div>
 
-        div class=color-selector
-            div class=dot style=background#00f2ff; onclick=changeTheme('hue-rotate(0deg)', '#00f2ff')div
-            div class=dot style=background#ff00c8; onclick=changeTheme('hue-rotate(290deg)', '#ff00c8')div
-            div class=dot style=background#48ff00; onclick=changeTheme('hue-rotate(120deg)', '#48ff00')div
-            div class=dot style=background#fffb00; onclick=changeTheme('hue-rotate(60deg)', '#fffb00')div
-            div class=dot style=background#ff7300; onclick=changeTheme('hue-rotate(30deg)', '#ff7300')div
-        div
+        <div class="color-selector">
+            <div class="dot" style="background:#00f2ff;" onclick="changeTheme('hue-rotate(0deg)', '#00f2ff')"></div>
+            <div class="dot" style="background:#ff00c8;" onclick="changeTheme('hue-rotate(290deg)', '#ff00c8')"></div>
+            <div class="dot" style="background:#48ff00;" onclick="changeTheme('hue-rotate(120deg)', '#48ff00')"></div>
+            <div class="dot" style="background:#fffb00;" onclick="changeTheme('hue-rotate(60deg)', '#fffb00')"></div>
+            <div class="dot" style="background:#ff7300;" onclick="changeTheme('hue-rotate(30deg)', '#ff7300')"></div>
+        </div>
 
-        div class=footer-wrap
-            div class=controls
-                button id=playBtn class=btn-gold onclick=togglePlay()PLAYbutton
-                input type=range id=volRange min=0 max=1 step=0.01 value=0.8 style=width120px;
-                button class=btn-gold onclick=stopRadio()STOPbutton
-            div
-        div
-    div
+        <div class="footer-wrap">
+            <div class="controls">
+                <button id="playBtn" class="btn-gold" onclick="togglePlay()">PLAY</button>
+                <input type="range" id="volRange" min="0" max="1" step="0.01" value="0.8" style="width:120px;">
+                <button class="btn-gold" onclick="stopRadio()">STOP</button>
+            </div>
+        </div>
+    </div>
 
-script
+<script>
 (function() {
-     ⚡ CONFIGURAZIONE KILLER ⚡
-    const _ZID = ylkruiq5e4fvv;
-    const _OWNER = peppeagosto;  IL TUO NOME GITHUB
-    const _IMG = or3rbqD5I3rS;
+    const _ZID = "ylkruiq5e4fvv";
+    const _OWNER = "peppeagosto"; 
+    const _IMG = "or3rbqD5I3rS";
 
-    const _player = new Audio(httpsstream.zeno.fm + _ZID);
-    _player.crossOrigin = anonymous;
+    const _player = new Audio("https://stream.zeno.fm/" + _ZID);
+    _player.crossOrigin = "anonymous";
 
-     💀 ALIEN KILLER SWITCH 💀
     function checkSecurity() {
         const url = window.location.href;
         const img = document.getElementById('album-art').src;
-        const isIllegal = !url.includes(_OWNER) && !url.includes(xat.com) && url !== aboutblank && !url.includes(file);
-        const isTampered = !img.includes(_IMG) && !img.includes(zeno) && !img.includes(itunes);
+        
+        const isIllegal = !url.includes(_OWNER) && !url.includes("xat.com") && url !== "about:blank" && !url.includes("file:");
+        const isTampered = !img.includes(_IMG) && !img.includes("zeno") && !img.includes("itunes");
 
-        if (isIllegal  isTampered) {
+        if (isIllegal || isTampered) {
             _player.pause();
-            document.body.innerHTML = `
-                div style=background#000; colorred; height100vh; width100vw; displayflex; flex-directioncolumn; align-itemscenter; justify-contentcenter; font-familyArial, sans-serif; text-aligncenter; positionfixed; top0; left0; z-index999999; border20px solid red;
-                    h1 style=font-size50px;🚨 PLAYER RUBATO 🚨h1
-                    h2 style=coloryellow; font-size30px;PROPRIETÀ DI EL CARTAIOh2
-                    p style=colorwhite; font-size20px;QUESTO SITO STA USANDO CODICE PIRATA.p
-                div`;
-            throw new Error(KILLER_SWITCH_ACTIVE);
+            document.body.innerHTML = '<div style="background:#000; color:red; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:Arial, sans-serif; text-align:center; position:fixed; top:0; left:0; z-index:999999; border:20px solid red;"><h1>🚨 PLAYER RUBATO 🚨</h1><h2>PROPRIETÀ DI EL CARTAIO</h2><p style="color:white;">SITO PIRATA RILEVATO</p></div>';
+            throw new Error("KILLER_SWITCH_ACTIVE");
         }
     }
     setInterval(checkSecurity, 4000);
 
-     TEMI COLORATI
     window.changeTheme = function(filter, color) {
         const t = document.getElementById('main-title'), i = document.getElementById('track-info'), l = document.getElementById('lightning');
-        [t, i, l].forEach(el = el.style.filter = filter);
+        [t, i, l].forEach(el => el.style.filter = filter);
         document.getElementById('artist-name').style.color = color;
         document.documentElement.style.setProperty('--accent', color);
     };
@@ -135,31 +124,31 @@ script
     window.togglePlay = function() {
         if (_player.paused) {
             _player.play();
-            document.getElementById('album-art').style.animation = rotate-smooth 4s linear infinite;
-            document.getElementById('arm').style.transform = rotate(22deg);
-            document.getElementById('playBtn').innerText = STOP;
+            document.getElementById('album-art').style.animation = "rotate-smooth 4s linear infinite";
+            document.getElementById('arm').style.transform = "rotate(22deg)";
+            document.getElementById('playBtn').innerText = "STOP";
         } else { stopRadio(); }
     };
 
     window.stopRadio = function() {
         _player.pause();
-        document.getElementById('album-art').style.animation = none;
-        document.getElementById('arm').style.transform = rotate(-18deg);
-        document.getElementById('playBtn').innerText = PLAY;
+        document.getElementById('album-art').style.animation = "none";
+        document.getElementById('arm').style.transform = "rotate(-18deg)";
+        document.getElementById('playBtn').innerText = "PLAY";
     };
 
-    document.getElementById('volRange').oninput = e = { _player.volume = e.target.value; };
+    document.getElementById('volRange').oninput = function() { _player.volume = this.value; };
 
-    setInterval(() = { document.getElementById('clock-text').innerText = new Date().toLocaleTimeString('it-IT'); }, 1000);
+    setInterval(() => { document.getElementById('clock-text').innerText = new Date().toLocaleTimeString('it-IT'); }, 1000);
 
     async function syncMeta() {
         try {
-            const r = await fetch(`httpszenoplay.zenomedia.comapizenofmnowplaying${_ZID}t=` + Date.now());
+            const r = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/" + _ZID + "?t=" + Date.now());
             const d = await r.json();
             if (d.title) {
                 document.getElementById('track-info').innerText = d.title.toUpperCase();
-                document.getElementById('artist-name').innerText = d.artist  EL CARTAIO;
-                document.getElementById('song-title').innerText = d.title.split( - )[1]  d.title;
+                document.getElementById('artist-name').innerText = d.artist || "EL CARTAIO";
+                document.getElementById('song-title').innerText = d.title.split(" - ")[1] || d.title;
                 if (d.artwork) document.getElementById('album-art').src = d.artwork;
             }
         } catch (e) {}
@@ -167,13 +156,13 @@ script
     setInterval(syncMeta, 15000); syncMeta();
 
     let show = true;
-    setInterval(() = {
+    setInterval(() => {
         const m = document.getElementById('main-title'), t = document.getElementById('track-info');
         if(show) { m.classList.replace('visible-text', 'hidden-text'); t.classList.replace('hidden-text', 'visible-text'); }
         else { t.classList.replace('visible-text', 'hidden-text'); m.classList.replace('hidden-text', 'visible-text'); }
         show = !show;
     }, 7000);
 })();
-script
-body
-html
+</script>
+</body>
+</html>
