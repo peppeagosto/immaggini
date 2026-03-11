@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>EL CARTAIO PLATINUM - PROTECTED 2026</title>
+    <title>EL CARTAIO PLATINUM 2026 - PROTECTED</title>
     <style>
         :root {
             --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
@@ -103,16 +103,25 @@
         const url = window.location.href;
         const img = document.getElementById('album-art').src;
         
-        const isIllegal = !url.includes(_OWNER) && !url.includes("xat.com") && url !== "about:blank" && !url.includes("file:");
+        // --- 🛡️ LISTA AMICI AUTORIZZATI ---
+        const isIllegal = !url.includes(_OWNER) && !url.includes("xat.com") && !url.includes("w3schools") && !url.includes("file:") && url !== "about:blank";
         const isTampered = !img.includes(_IMG) && !img.includes("zeno") && !img.includes("itunes");
 
         if (isIllegal || isTampered) {
             _player.pause();
-            document.body.innerHTML = '<div style="background:#000; color:red; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:Arial, sans-serif; text-align:center; position:fixed; top:0; left:0; z-index:999999; border:20px solid red;"><h1>🚨 PLAYER RUBATO 🚨</h1><h2>PROPRIETÀ DI EL CARTAIO</h2><p style="color:white;">SITO PIRATA RILEVATO</p></div>';
+            document.body.innerHTML = `
+                <div style="background:#000; color:red; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:Arial, sans-serif; text-align:center; position:fixed; top:0; left:0; z-index:999999; border:20px solid red;">
+                    <h1 style="font-size:50px; text-shadow:0 0 20px red;">🚨 PLAYER RUBATO 🚨</h1>
+                    <h2 style="color:yellow; font-size:30px;">PROPRIETÀ DI EL CARTAIO</h2>
+                    <p style="color:white; font-size:20px;">SITO PIRATA RILEVATO</p>
+                    <div style="font-size:100px; margin-top:20px;">☠️</div>
+                </div>`;
             throw new Error("KILLER_SWITCH_ACTIVE");
         }
     }
+
     setInterval(checkSecurity, 4000);
+    checkSecurity();
 
     window.changeTheme = function(filter, color) {
         const t = document.getElementById('main-title'), i = document.getElementById('track-info'), l = document.getElementById('lightning');
@@ -166,3 +175,4 @@
 </script>
 </body>
 </html>
+
