@@ -1,4 +1,4 @@
-dy<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -6,9 +6,21 @@ dy<!DOCTYPE html>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     :root { --rainbow: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #ff00ff, #ff0000); }
-    body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+    
+    /* CAMBIATO ALLINEAMENTO PER SPINGERE IN BASSO */
+    body { 
+        background: transparent; 
+        margin: 0; 
+        font-family: 'Arial Black', sans-serif; 
+        display: flex; 
+        justify-content: center; 
+        align-items: flex-end; /* Spinge tutto in fondo */
+        height: 100vh; 
+        overflow: hidden; 
+        padding-bottom: 20px; /* Distanza dal bordo inferiore */
+        box-sizing: border-box;
+    }
 
-    /* RETTANGOLO PICCOLO E COMPATTO */
     .mini-card {
         width: 500px; 
         background: rgba(0, 0, 0, 0.95);
@@ -29,7 +41,6 @@ dy<!DOCTYPE html>
         100% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
     }
 
-    /* TITOLO CENTRALE AGGIORNATO */
     .p89-title {
         text-align: center;
         background: var(--rainbow);
@@ -41,7 +52,6 @@ dy<!DOCTYPE html>
         letter-spacing: 2px;
     }
 
-    /* AREA GIORNO (MODIFICABILE) */
     .day-selector {
         text-align: center;
         border-bottom: 2px solid #333;
@@ -59,7 +69,6 @@ dy<!DOCTYPE html>
         text-transform: uppercase;
     }
 
-    /* GRIGLIA ORARI 19-24 */
     .slots-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -91,7 +100,6 @@ dy<!DOCTYPE html>
     }
     .nick-in:focus { color: #fff; }
 
-    /* TASTO SALVA */
     .btn-save {
         background: #000;
         border: 2px solid #00ff00;
