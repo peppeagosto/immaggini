@@ -41,7 +41,7 @@
         100% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
     }
 
-    .p89-title {
+      .title {
         text-align: center;
         background: var(--rainbow);
         -webkit-background-clip: text;
@@ -57,7 +57,7 @@
         border-bottom: 2px solid #333;
         padding-bottom: 5px;
     }
-    .edit-day {
+     .edit-day {
         background: transparent;
         border: none;
         color: #00ffff;
@@ -118,10 +118,10 @@
 <body>
 
 <div class="mini-card">
-    <div class="p89-title">PALINSESTO</div>
+    <div class="-title">PALINSESTO</div>
 
     <div class="day-selector">
-        <input type="text" id="current-day" class="edit-day" value="LUNEDÌ (Edit)" title="Cambia Giorno">
+        <input type="text" id="current-day" class="edit-day" value="LUNEDÌ" title="Cambia Giorno">
     </div>
 
     <div class="slots-container">
@@ -153,7 +153,7 @@
             data['nick'+index] = $(this).val().toUpperCase();
         });
         localStorage.setItem('p89_mini_hub', JSON.stringify(data));
-        alert("P89: PALINSESTO GIORNALIERO SALVATO!");
+        alert("PALINSESTO GIORNALIERO SALVATO!");
     }
 
     $(document).ready(load);
