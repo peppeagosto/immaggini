@@ -20,7 +20,7 @@
         box-sizing: border-box;
     }
 
-    /* IL PULSANTE INIZIALE (TRIANGOLINO/TAB) */
+    /* IL PULSANTE INIZIALE (TAB) */
     .trigger-tab {
         background: #000;
         border: 2px solid #fff;
@@ -38,9 +38,9 @@
     
     .trigger-tab:hover { transform: scale(1.1); }
 
-    /* IL RETTANGOLO (NASCOSTO DI DEFAULT) */
+    /* IL RETTANGOLO */
     .mini-card {
-        display: none; /* Nasconde all'inizio */
+        display: none;
         width: 500px; 
         background: rgba(0, 0, 0, 0.98);
         border: 4px solid #fff;
@@ -60,15 +60,31 @@
         100% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
     }
 
-    .title {
+    /* NUOVA INTESTAZIONE DOPPIA */
+    .header-titles {
         text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .main-text {
         background: var(--rainbow);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 26px;
+        font-size: 22px;
         text-transform: uppercase;
         margin: 0;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
+    }
+
+    .sub-text {
+        background: var(--rainbow);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 30px;
+        text-transform: uppercase;
+        margin: 0;
+        letter-spacing: 3px;
+        line-height: 1;
     }
 
     .day-selector { text-align: center; border-bottom: 2px solid #333; padding-bottom: 5px; }
@@ -98,10 +114,11 @@
     .btn-save {
         background: #990000; border: 2px solid #ff0000; color: #fff;
         border-radius: 12px; padding: 10px; font-family: 'Arial Black';
-        font-size: 12px; cursor: pointer; text-transform: uppercase;
+        font-size: 14px; cursor: pointer; text-transform: uppercase;
+        transition: 0.3s;
     }
+    .btn-save:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; }
 
-    /* TESTO ARCOBALENO PER IL PULSANTE */
     .rainbow-text {
         background: var(--rainbow);
         -webkit-background-clip: text;
@@ -117,17 +134,21 @@
 </head>
 <body>
 
-    <div class="trigger-tab" id="p89-open">
+    <div class="trigger-tab" id="p-open">
         <span class="rainbow-text">I MIEI DJ ❤️</span>
         <i class="fas fa-chevron-up" style="color: #00ffff;"></i>
     </div>
 
-    <div class="mini-card" id="p89-card">
-        <i class="fas fa-times-circle close-btn" id="p89-close"></i>
-        <div class="title">PALINSESTO</div>
+    <div class="mini-card" id="p-card">
+        <i class="fas fa-times-circle close-btn" id="p-close"></i>
+        
+        <div class="header-titles">
+            <div class="main-text">I MIEI DJ</div>
+            <div class="sub-text">PALINSESTO</div>
+        </div>
 
         <div class="day-selector">
-            <input type="text" id="current-day" class="edit-day" value="DOMENICA">
+            <input type="text" id="current-day" class="edit-day" value="SABATO">
         </div>
 
         <div class="slots-container">
@@ -139,23 +160,22 @@
             <div class="slot"><span class="time">24:00</span><input type="text" class="nick-in" value="ANNA DJ"></div>
         </div>
 
-        <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> SALVA I MIEI DJ</button>
+        <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> I DJ DEL CARTAIO</button>
     </div>
 
 <script>
-    // Funzioni per Aprire e Chiudere
-    $('#p89-open').click(function() {
+    $('#p-open').click(function() {
         $(this).hide();
-        $('#p89-card').css('display', 'flex');
+        $('#p-card').css('display', 'flex');
     });
 
-    $('#p89-close').click(function() {
-        $('#p89-card').hide();
-        $('#p89-open').show();
+    $('#p-close').click(function() {
+        $('#p-card').hide();
+        $('#p-open').show();
     });
 
     function load() {
-        const saved = JSON.parse(localStorage.getItem('p89_mini_hub')) || {};
+        const saved = JSON.parse(localStorage.getItem('user_pal_v1')) || {};
         if(saved.day) $('#current-day').val(saved.day);
         $('.nick-in').each(function(index) {
             if(saved['nick'+index]) $(this).val(saved['nick'+index]);
@@ -167,7 +187,7 @@
         $('.nick-in').each(function(index) {
             data['nick'+index] = $(this).val().toUpperCase();
         });
-        localStorage.setItem('p89_mini_hub', JSON.stringify(data));
+        localStorage.setItem('user_pal_v1', JSON.stringify(data));
         alert("GRAZIE DELLA VISITA!");
     }
 
