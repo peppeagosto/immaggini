@@ -14,29 +14,43 @@
         overflow: hidden; 
     }
 
-    /* IL PULSANTE INIZIALE - POSIZIONATO FISSO IN BASSO A DX */
-    .trigger-tab {
+    /* LOCANDINA IN ALTO A DESTRA */
+    .locandina-trigger {
         position: fixed;
-        bottom: 20px;
+        top: 20px;
         right: 20px;
+        width: 180px;
+        height: 60px;
         background: #000;
-        border: 2px solid #fff;
-        border-radius: 15px 15px 0 15px;
-        padding: 10px 20px;
-        color: #fff;
+        border: 3px solid #fff;
+        border-radius: 15px;
         cursor: pointer;
         animation: neonGlow 6s infinite linear;
         display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 10px;
-        z-index: 9999;
+        z-index: 99999;
+        transition: 0.4s;
     }
     
-    /* IL RETTANGOLO - POSIZIONATO FISSO IN BASSO A DX */
+    .locandina-trigger:hover { transform: scale(1.05); border-color: #00ffff; }
+
+    .locandina-text {
+        background: var(--rainbow);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 14px;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    /* IL RETTANGOLO PALINSESTO */
     .mini-card {
         display: none;
         position: fixed;
-        bottom: 20px;
+        top: 20px;
         right: 20px;
         width: 500px; 
         background: rgba(0, 0, 0, 0.98);
@@ -47,19 +61,19 @@
         flex-direction: column;
         gap: 10px;
         box-sizing: border-box;
-        z-index: 9999;
+        z-index: 999999;
     }
 
     @keyframes neonGlow {
-        0% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
-        33% { border-color: #00ff00; box-shadow: 0 0 20px #00ff00; }
-        66% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
-        100% { border-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
+        0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+        33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
+        66% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+        100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
     }
 
     .header-titles { text-align: center; margin-bottom: 5px; }
-    .main-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 22px; text-transform: uppercase; margin: 0; }
-    .sub-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 30px; text-transform: uppercase; margin: 0; line-height: 1; }
+    .main-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 20px; text-transform: uppercase; margin: 0; }
+    .sub-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 28px; text-transform: uppercase; margin: 0; line-height: 1; }
 
     .day-selector { text-align: center; border-bottom: 2px solid #333; padding-bottom: 5px; }
     .edit-day { background: transparent; border: none; color: #00ffff; font-family: 'Arial Black'; font-size: 18px; text-align: center; width: 100%; outline: none; text-transform: uppercase; }
@@ -69,27 +83,31 @@
     .time { color: #ffff00; font-size: 11px; font-weight: bold; width: 45px; }
     .nick-in { background: transparent; border: none; color: #ff00ff; font-family: 'Arial'; font-weight: 900; font-size: 13px; text-align: right; outline: none; width: 100%; }
 
-    .btn-save { background: #990000; border: 2px solid #ff0000; color: #fff; border-radius: 12px; padding: 10px; font-family: 'Arial Black'; font-size: 14px; cursor: pointer; text-transform: uppercase; }
-    .rainbow-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-weight: bold; }
-    .close-btn { position: absolute; top: 10px; right: 15px; color: #ff0000; cursor: pointer; font-size: 20px; }
+    .btn-save { background: #990000; border: 2px solid #ff0000; color: #fff; border-radius: 12px; padding: 10px; font-family: 'Arial Black'; font-size: 14px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+    .btn-save:hover { background: #ff0000; }
+
+    .close-btn { position: absolute; top: 10px; right: 15px; color: #ff0000; cursor: pointer; font-size: 20px; z-index: 10; }
 </style>
 </head>
 <body>
 
-    <div class="trigger-tab" id="p-open">
-        <span class="rainbow-text">I MIEI DJ ❤️</span>
-        <i class="fas fa-chevron-up" style="color: #00ffff;"></i>
+    <div class="locandina-trigger" id="p-open">
+        <div class="locandina-text">I MIEI DJ ❤️</div>
+        <div style="font-size: 10px; color: #00ffff; font-weight: bold;">CLICCA PER INFO</div>
     </div>
 
     <div class="mini-card" id="p-card">
         <i class="fas fa-times-circle close-btn" id="p-close"></i>
+        
         <div class="header-titles">
             <div class="main-text">I MIEI DJ</div>
             <div class="sub-text">PALINSESTO</div>
         </div>
+
         <div class="day-selector">
-            <input type="text" id="current-day" class="edit-day" value="SABATO">
+            <input type="text" id="current-day" class="edit-day" value="DOMENICA">
         </div>
+
         <div class="slots-container">
             <div class="slot"><span class="time">19:00</span><input type="text" class="nick-in" value="GIOVANNA DJ"></div>
             <div class="slot"><span class="time">20:00</span><input type="text" class="nick-in" value="MARIELLA DJ"></div>
@@ -98,6 +116,7 @@
             <div class="slot"><span class="time">23:00</span><input type="text" class="nick-in" value="ROBERTA DJ"></div>
             <div class="slot"><span class="time">24:00</span><input type="text" class="nick-in" value="ANNA DJ"></div>
         </div>
+
         <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> I DJ DEL CARTAIO</button>
     </div>
 
