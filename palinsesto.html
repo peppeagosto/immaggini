@@ -133,7 +133,7 @@
         <div class="slot"><span class="time">24:00</span><input type="text" class="nick-in" value="ANNA DJ"></div>
     </div>
 
-    <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> SALVA PALINSESTO GIORNALIERO</button>
+    <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></I>  MIEI  DJ</button>
 </div>
 
 <script>
@@ -153,7 +153,7 @@
             data['nick'+index] = $(this).val().toUpperCase();
         });
         localStorage.setItem('p89_mini_hub', JSON.stringify(data));
-        alert("PALINSESTO GIORNALIERO SALVATO!");
+        alert("GRAZIE  DELLA VISITA!");
     }
 
     $(document).ready(load);
