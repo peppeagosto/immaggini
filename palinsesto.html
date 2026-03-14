@@ -41,20 +41,20 @@
         margin: 0;
     }
 
-    /* IL RETTANGOLO: ORA STRETTO (300px) E LUNGO */
+    /* IL RETTANGOLO: SETTATO A 270PX */
     .mini-card {
         display: none;
         position: fixed;
-        top: 45px; /* Parte dall'alto vicino alla locandina */
+        top: 45px;
         right: 20px;
-        width: 300px; /* <--- STRETTO */
+        width: 270px; /* <--- LARGHEZZA OTTIMIZZATA */
         background: rgba(0, 0, 0, 0.98);
         border: 4px solid #fff;
         border-radius: 25px;
-        padding: 20px;
+        padding: 15px;
         animation: neonGlow 6s infinite linear;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         box-sizing: border-box;
         z-index: 999999;
     }
@@ -67,21 +67,19 @@
     }
 
     .header-titles { text-align: center; margin-bottom: 5px; }
-    .main-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 18px; text-transform: uppercase; margin: 0; }
+    .main-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 16px; text-transform: uppercase; margin: 0; }
     .sub-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 24px; text-transform: uppercase; margin: 0; line-height: 1; }
 
     .day-selector { text-align: center; border-bottom: 2px solid #333; padding-bottom: 5px; }
     .edit-day { background: transparent; border: none; color: #00ffff; font-family: 'Arial Black'; font-size: 16px; text-align: center; width: 100%; outline: none; text-transform: uppercase; }
 
-    /* GRIGLIA A COLONNA SINGOLA PER ALLUNGARE */
     .slots-container { display: flex; flex-direction: column; gap: 6px; }
-    .slot { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; justify-content: space-between; }
-    .time { color: #ffff00; font-size: 11px; font-weight: bold; width: 45px; }
-    .nick-in { background: transparent; border: none; color: #ff00ff; font-family: 'Arial'; font-weight: 900; font-size: 13px; text-align: right; outline: none; width: 100%; }
+    .slot { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 10px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; }
+    .time { color: #ffff00; font-size: 10px; font-weight: bold; width: 40px; }
+    .nick-in { background: transparent; border: none; color: #ff00ff; font-family: 'Arial'; font-weight: 900; font-size: 12px; text-align: right; outline: none; width: 100%; }
 
-    .btn-save { background: #990000; border: 2px solid #ff0000; color: #fff; border-radius: 12px; padding: 10px; font-family: 'Arial Black'; font-size: 14px; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
+    .btn-save { background: #990000; border: 2px solid #ff0000; color: #fff; border-radius: 12px; padding: 10px; font-family: 'Arial Black'; font-size: 13px; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
     
-    /* TASTO RIAVVIA */
     .btn-refresh {
         background: #444;
         color: #fff;
@@ -123,7 +121,6 @@
         </div>
 
         <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> I DJ DEL CARTAIO</button>
-        
         <button class="btn-refresh" onclick="location.reload()">RIAVVIA</button>
     </div>
 
