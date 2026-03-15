@@ -58,20 +58,18 @@
             <div class="sub-text">PALINSESTO</div>
         </div>
 
-        <div class="display-day" id="day-box">DOMENICA</div>
+        <div class="display-day" id="day-box">---</div>
 
-        <div class="slots-container" id="dj-list">
-            </div>
+        <div class="slots-container" id="dj-list"></div>
         
-        <div style="text-align:center; font-size:9px; color:#555; margin-top:10px;">EDIT BY GITHUB</div>
+        <div style="text-align:center; font-size:9px; color:#555; margin-top:10px;">AUTO-UPDATE DAY</div>
     </div>
 
 <script>
     // ==========================================
-    // 👇 CONFIGURAZIONE DJ (MODIFICA QUI DA GITHUB) 👇
+    // 👇 I TUOI DJ ORIGINALI 👇
     // ==========================================
     const palinsesto = {
-        giorno: "DOMENICA", // <--- Scrivi il Giorno
         djs: [
             { ora: "19:00", nick: "GIOVANNA DJ", foto: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
             { ora: "20:00", nick: "MARIELLA DJ", foto: "https://xatimg.com/image/QeD4LZvpYajs.jpg" },
@@ -84,7 +82,12 @@
     // ==========================================
 
     function buildPalinsesto() {
-        $('#day-box').text(palinsesto.giorno);
+        // --- LOGICA GIORNO AUTOMATICO ---
+        const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
+        const oggi = giorni[new Date().getDay()];
+        $('#day-box').text(oggi);
+        // --------------------------------
+
         const container = $('#dj-list');
         container.empty();
 
