@@ -6,7 +6,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     :root { --rainbow: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #ff00ff, #ff0000); }
-    
     body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; }
 
     .locandina-trigger {
@@ -34,30 +33,23 @@
     .main-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 14px; text-transform: uppercase; }
     .sub-text { background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-size: 22px; text-transform: uppercase; line-height: 1; }
 
-    .edit-day { background: transparent; border: none; color: #00ffff; font-family: 'Arial Black'; font-size: 16px; text-align: center; width: 100%; outline: none; text-transform: uppercase; border-bottom: 1px solid #333; }
+    .display-day { color: #00ffff; font-size: 18px; text-align: center; width: 100%; text-transform: uppercase; border-bottom: 2px solid #333; padding-bottom: 5px; margin-bottom: 5px; }
 
-    .slots-container { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
-    .slot { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 50px 15px 15px 50px; padding: 5px; display: flex; align-items: center; gap: 10px; position: relative; }
+    .slots-container { display: flex; flex-direction: column; gap: 8px; }
+    .slot { background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 50px 15px 15px 50px; padding: 5px; display: flex; align-items: center; gap: 10px; }
     
-    .time { color: #ffff00; font-size: 9px; font-weight: bold; width: 35px; text-align: center; }
+    .time { color: #ffff00; font-size: 10px; font-weight: bold; width: 40px; text-align: center; }
     
-    /* FOTO DJ CLICCABILE */
-    .dj-photo {
-        width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff;
-        object-fit: cover; background: #222; cursor: pointer; transition: 0.3s;
-    }
-    .dj-photo:hover { transform: scale(1.1); border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+    .dj-photo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; background: #222; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
 
-    .nick-in { background: transparent; border: none; color: #ff00ff; font-family: 'Arial'; font-weight: 900; font-size: 13px; outline: none; flex-grow: 1; text-transform: uppercase; }
-
-    .btn-save { background: #990000; border: 2px solid #ff0000; color: #fff; border-radius: 12px; padding: 10px; font-family: 'Arial Black'; font-size: 13px; cursor: pointer; text-transform: uppercase; margin-top: 5px; }
+    .nick-display { color: #ff00ff; font-family: 'Arial'; font-weight: 900; font-size: 14px; text-transform: uppercase; flex-grow: 1; }
 </style>
 </head>
 <body>
 
     <div class="locandina-trigger" id="p-open">
         <div style="background: var(--rainbow); -webkit-background-clip: text; color: transparent; font-weight: 900;">I MIEI DJ ❤️</div>
-        <div style="font-size: 9px; color: #fff;">CLICCA PER CAMBIARE</div>
+        <div style="font-size: 9px; color: #fff;">CLICCA PER IL PALINSESTO</div>
     </div>
 
     <div class="mini-card" id="p-card">
@@ -66,66 +58,54 @@
             <div class="sub-text">PALINSESTO</div>
         </div>
 
-        <input type="text" id="current-day" class="edit-day" value="SABATO">
+        <div class="display-day" id="day-box">DOMENICA</div>
 
-        <div class="slots-container">
-            <script>
-                // Generiamo i 6 slot dinamicamente per pulizia codice
-                const orari = ["19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
-                orari.forEach((ora, i) => {
-                    document.write(`
-                        <div class="slot">
-                            <span class="time">${ora}</span>
-                            <img class="dj-photo" id="img-${i}" src="https://via.placeholder.com/40" onclick="changeImg(${i})" title="Clicca per cambiare foto">
-                            <input type="text" class="nick-in" id="n-${i}" value="DJ NOME">
-                        </div>
-                    `);
-                });
-            </script>
-        </div>
-
-        <button class="btn-save" onclick="saveData()"><i class="fas fa-save"></i> SALVA TUTTO</button>
+        <div class="slots-container" id="dj-list">
+            </div>
+        
+        <div style="text-align:center; font-size:9px; color:#555; margin-top:10px;">EDIT BY GITHUB</div>
     </div>
 
 <script>
+    // ==========================================
+    // 👇 CONFIGURAZIONE DJ (MODIFICA QUI DA GITHUB) 👇
+    // ==========================================
+    const palinsesto = {
+        giorno: "DOMENICA", // <--- Scrivi il Giorno
+        djs: [
+            { ora: "19:00", nick: "GIOVANNA DJ", foto: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
+            { ora: "20:00", nick: "MARIELLA DJ", foto: "https://xatimg.com/image/QeD4LZvpYajs.jpg" },
+            { ora: "21:00", nick: "FRANCESCA DJ", foto: "https://xatimg.com/image/VrVJ173zmGwe.jpg" },
+            { ora: "22:00", nick: "ROSA DJ",      foto: "https://xatimg.com/image/OZzX6RTVnL9q.jpg" },
+            { ora: "23:00", nick: "ROBERTA DJ",   foto: "https://xatimg.com/image/CaYs0bVsHDCJ.jpg" },
+            { ora: "24:00", nick: "ANNA DJ",      foto: "https://xatimg.com/image/RK5PS6wShTcO.png" }
+        ]
+    };
+    // ==========================================
+
+    function buildPalinsesto() {
+        $('#day-box').text(palinsesto.giorno);
+        const container = $('#dj-list');
+        container.empty();
+
+        palinsesto.djs.forEach(dj => {
+            container.append(`
+                <div class="slot">
+                    <span class="time">${dj.ora}</span>
+                    <img class="dj-photo" src="${dj.foto}">
+                    <span class="nick-display">${dj.nick}</span>
+                </div>
+            `);
+        });
+    }
+
     $('#p-open').on('click', function() {
         $(this).hide();
         $('#p-card').fadeIn().css('display', 'flex');
     });
 
-    // FUNZIONE PER CAMBIARE FOTO AL CLIC
-    function changeImg(id) {
-        const currentUrl = $('#img-' + id).attr('src');
-        const newUrl = prompt("Incolla il link della nuova foto per questo DJ:", currentUrl);
-        if (newUrl && newUrl.trim() !== "") {
-            $('#img-' + id).attr('src', newUrl);
-        }
-    }
-
-    function load() {
-        const saved = JSON.parse(localStorage.getItem('palinsesto_foto_v1')) || {};
-        if(saved.day) $('#current-day').val(saved.day);
-        for(let i=0; i<6; i++) {
-            if(saved['nick'+i]) $('#n-'+i).val(saved['nick'+i]);
-            if(saved['url'+i]) $('#img-'+i).attr('src', saved['url'+i]);
-        }
-    }
-
-    function saveData() {
-        let data = { day: $('#current-day').val().toUpperCase() };
-        for(let i=0; i<6; i++) {
-            data['nick'+i] = $('#n-'+i).val().toUpperCase();
-            data['url'+i] = $('#img-'+i).attr('src');
-        }
-        localStorage.setItem('palinsesto_foto_v1', JSON.stringify(data));
-        alert("MODIFICHE SALVATE CON SUCCESSO!");
-    }
-
-    $(document).ready(load);
+    $(document).ready(buildPalinsesto);
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
