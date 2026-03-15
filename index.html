@@ -2,52 +2,53 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>IL CARTAIO - SUBWOOFER EDITION</title>
+    <title>IL CARTAIO - COMPACT 650 EDITION</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --main-color: #ff0000; --beat-scale: 1; }
         body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Arial Black', sans-serif; overflow: hidden; user-select: none; }
         
-        .system-container { position: relative; width: 750px; height: 700px; display: flex; justify-content: center; align-items: center; }
+        /* 📏 MISURA COMPATTA 650x650 */
+        .system-container { position: relative; width: 650px; height: 650px; display: flex; justify-content: center; align-items: center; }
         
-        /* 🎲 DADO 3D - RIDOTTO A 240PX PER EVITARE COLLISIONI 🎲 */
+        /* 🎲 DADO 3D - RIDOTTO PER 650px */
         .cube-station { 
-            position: absolute; width: 240px; height: 240px; perspective: 1200px; z-index: 10; 
+            position: absolute; width: 180px; height: 180px; perspective: 1000px; z-index: 10; 
             top: 50%; left: 50%; transform: translate(-50%, -50%) scale(var(--beat-scale)); 
             transition: transform 0.05s linear;
         }
         .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: rotateCube 15s linear infinite; }
-        .face { position: absolute; width: 240px; height: 240px; background: #000; border: 4px solid #fff; box-shadow: 0 0 calc(40px * var(--beat-scale)) var(--main-color), inset 0 0 20px var(--main-color); }
+        .face { position: absolute; width: 180px; height: 180px; background: #000; border: 3px solid #fff; box-shadow: 0 0 calc(30px * var(--beat-scale)) var(--main-color), inset 0 0 15px var(--main-color); }
         .face img { width: 100%; height: 100%; object-fit: cover; }
         
         @keyframes rotateCube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
-        .front { transform: rotateY(0deg) translateZ(120px); } .back { transform: rotateY(180deg) translateZ(120px); }
-        .right { transform: rotateY(90deg) translateZ(120px); } .left { transform: rotateY(-90deg) translateZ(120px); }
-        .top { transform: rotateX(90deg) translateZ(120px); } .bottom { transform: rotateX(-90deg) translateZ(120px); }
+        .front { transform: rotateY(0deg) translateZ(90px); } .back { transform: rotateY(180deg) translateZ(90px); }
+        .right { transform: rotateY(90deg) translateZ(90px); } .left { transform: rotateY(-90deg) translateZ(90px); }
+        .top { transform: rotateX(90deg) translateZ(90px); } .bottom { transform: rotateX(-90deg) translateZ(90px); }
 
-        /* 🎡 ORBITA EQ 🎡 */
+        /* 🎡 ORBITA COMPATTA */
         .orbit-wrapper { position: absolute; width: 100%; height: 100%; animation: rotateOrbit 45s linear infinite; z-index: 20; }
         @keyframes rotateOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .satellite-orbit { position: absolute; width: 105px; height: 105px; top: 50%; left: 50%; margin-top: -52.5px; margin-left: -52.5px; cursor: pointer; transition: transform 0.05s linear; }
+        .satellite-orbit { position: absolute; width: 85px; height: 85px; top: 50%; left: 50%; margin-top: -42.5px; margin-left: -42.5px; cursor: pointer; transition: transform 0.05s linear; }
         
         .beat-pulse { 
-            width: 100%; height: 100%; border-radius: 50%; border: 3px solid #fff; 
+            width: 100%; height: 100%; border-radius: 50%; border: 2px solid #fff; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             color: #fff; text-align: center; 
             background: radial-gradient(circle, var(--main-color) 0%, rgba(0,0,0,1) 85%);
-            box-shadow: 0 0 calc(25px * var(--beat-scale)) var(--main-color), inset 0 0 10px var(--main-color);
+            box-shadow: 0 0 calc(15px * var(--beat-scale)) var(--main-color);
         }
-        .beat-pulse span { font-size: 10px; font-weight: 900; animation: counterRotate 45s linear infinite; text-transform: uppercase; }
+        .beat-pulse span { font-size: 9px; font-weight: 900; animation: counterRotate 45s linear infinite; text-transform: uppercase; }
         @keyframes counterRotate { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
         
-        /* Satelliti distanziati */
-        .sat-1 { transform: rotate(0deg) translate(315px); } .sat-2 { transform: rotate(45deg) translate(315px); } 
-        .sat-3 { transform: rotate(90deg) translate(315px); } .sat-4 { transform: rotate(135deg) translate(315px); }
-        .sat-5 { transform: rotate(180deg) translate(315px); } .sat-6 { transform: rotate(225deg) translate(315px); } 
-        .sat-7 { transform: rotate(270deg) translate(315px); } .sat-8 { transform: rotate(315deg) translate(315px); }
+        /* Satelliti distanziati su raggio 250px (totale 500px diametro) */
+        .sat-1 { transform: rotate(0deg) translate(250px); } .sat-2 { transform: rotate(45deg) translate(250px); } 
+        .sat-3 { transform: rotate(90deg) translate(250px); } .sat-4 { transform: rotate(135deg) translate(250px); }
+        .sat-5 { transform: rotate(180deg) translate(250px); } .sat-6 { transform: rotate(225deg) translate(250px); } 
+        .sat-7 { transform: rotate(270deg) translate(250px); } .sat-8 { transform: rotate(315deg) translate(250px); }
 
-        #overlay-display { position: absolute; bottom: 10px; width: 660px; height: 80px; background: rgba(0,0,0,0.95); border: 2px solid var(--main-color); border-radius: 15px; z-index: 100; color: #fff; display: none; align-items: center; justify-content: center; font-size: 15px; box-shadow: 0 0 30px var(--main-color); padding: 0 20px; text-align: center; font-weight: bold; }
+        #overlay-display { position: absolute; bottom: 10px; width: 500px; height: 60px; background: rgba(0,0,0,0.95); border: 2px solid var(--main-color); border-radius: 15px; z-index: 100; color: #fff; display: none; align-items: center; justify-content: center; font-size: 13px; box-shadow: 0 0 20px var(--main-color); padding: 0 15px; text-align: center; font-weight: bold; }
         #trap-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000 url('https://xatimg.com/image/gEdhe045MGxO.png') no-repeat center; background-size: contain; z-index: 9999; display: none; }
     </style>
 </head>
@@ -106,9 +107,9 @@
         if (!isPlaying) return;
         analyser.getByteFrequencyData(dataArray);
         let bass = dataArray[1] || 0; 
-        let scale = 1 + (bass / 255) * 0.45; // Impulso potenziato
+        let scale = 1 + (bass / 255) * 0.40; 
         document.documentElement.style.setProperty('--beat-scale', scale);
-        let dist = 315 + (bass / 4);
+        let dist = 250 + (bass / 5);
         $('.satellite-orbit').each(function(i) {
             let angle = i * 45;
             $(this).css('transform', `rotate(${angle}deg) translate(${dist}px)`);
@@ -162,20 +163,20 @@
         const now = new Date();
         let txt = "";
 
-        if(tipo === 'data') txt = "📅 DATA: " + now.toLocaleDateString('it-IT', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase();
+        if(tipo === 'data') txt = "📅 " + now.toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
         if(tipo === 'ora') txt = "⏰ ORA: " + now.toLocaleTimeString('it-IT');
-        if(tipo === 'ascolti') txt = "🎧 ASCOLTATORI: " + ($('#listeners_val').val() || "0");
+        if(tipo === 'ascolti') txt = "🎧 ASCOLTI: " + ($('#listeners_val').val() || "0");
         if(tipo === 'meteo') {
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
-                txt = "🌍 METEO " + data.city.toUpperCase() + ": 24°C - LUNA PIENA";
-            } catch(e) { txt = "🌍 METEO: CLIMA CALDO AL CARTAIO"; }
+                txt = "🌍 METEO " + data.city.toUpperCase() + ": 24°C";
+            } catch(e) { txt = "🌍 METEO DISPONIBILE"; }
         }
         if(tipo === 'oroscopo') {
             const signs = ["CAPRICORNO", "ACQUARIO", "PESCI", "ARIETE", "TORO", "GEMELLI", "CANCRO", "LEONE", "VERGINE", "BILANCIA", "SCORPIONE", "SAGITTARIO"];
             const sign = (now.getDate() > [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21][now.getMonth()]) ? signs[(now.getMonth() + 1) % 12] : signs[now.getMonth()];
-            txt = "✨ OROSCOPO [" + sign + "]: MOMENTO DI MASSIMA ENERGIA!";
+            txt = "✨ OROSCOPO [" + sign + "]: ENERGIA AL TOP!";
         }
         display.text(txt);
     }
