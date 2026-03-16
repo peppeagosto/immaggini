@@ -17,13 +17,13 @@
         overflow: hidden; 
     }
 
-    /* IL TASTO RETTANGOLINO FISSO A DESTRA */
+    /* TASTO RETTANGOLINO STRETTO */
     #btn-pali {
         position: fixed;
         right: 20px;
         top: 50px;
-        width: 180px;
-        height: 45px;
+        width: 170px; /* Più corto */
+        height: 40px;
         background: #000;
         border: 2px solid #fff;
         border-radius: 8px;
@@ -41,22 +41,22 @@
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 900;
         text-transform: uppercase;
     }
 
-    /* LA LOCANDINA CHE SI APRE SOTTO IL TASTO */
+    /* LOCANDINA STRETTA (260px) */
     #locandina {
         display: none;
         position: fixed;
         right: 20px;
-        top: 105px; /* Spostata sotto il tasto */
-        width: 340px;
+        top: 100px;
+        width: 240px; /* MISURA STRETTA */
         background: #000;
         border: 3px solid #333;
-        border-radius: 15px;
-        padding: 15px;
+        border-radius: 12px;
+        padding: 12px;
         box-shadow: 0 0 40px #000;
         z-index: 9998;
     }
@@ -64,13 +64,13 @@
     .header {
         text-align: center;
         border-bottom: 2px solid #222;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         padding-bottom: 8px;
     }
 
     #giorno-live {
         color: #ffff00;
-        font-size: 16px;
+        font-size: 14px;
         text-transform: uppercase;
         display: block;
     }
@@ -79,25 +79,25 @@
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 900;
     }
 
-    /* LISTA DJ */
+    /* LISTA DJ COMPATTA */
     .slot { 
         background: #0a0a0a; 
         border: 1px solid #222; 
-        border-radius: 40px 10px 10px 40px; 
-        margin-bottom: 8px;
-        padding: 5px; 
+        border-radius: 30px 10px 10px 30px; 
+        margin-bottom: 6px;
+        padding: 4px; 
         display: flex; 
         align-items: center; 
-        gap: 12px; 
+        gap: 10px; 
     }
 
-    .ora { color: #0ff; font-size: 10px; width: 40px; text-align: center; font-weight: bold; }
-    .foto { width: 42px; height: 42px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
-    .nome { color: #ff00ff; font-size: 12px; text-transform: uppercase; font-weight: 900; }
+    .ora { color: #0ff; font-size: 9px; width: 35px; text-align: center; font-weight: bold; }
+    .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; }
 
 </style>
 </head>
@@ -110,11 +110,10 @@
     <div id="locandina">
         <div class="header">
             <span id="giorno-live">---</span>
-            <div class="titolo">IL CARTAIO PALINSESTO</div>
+            <div class="titolo">CARTAIO PALINSESTO</div>
         </div>
 
-        <div id="lista-dj">
-            </div>
+        <div id="lista-dj"></div>
     </div>
 
 <script>
@@ -158,7 +157,6 @@
         });
     }
 
-    // Toggle locandina
     $('#btn-pali').click(function() {
         $('#locandina').fadeToggle();
     });
