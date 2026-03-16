@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,118 +6,118 @@
 <style>
     :root { 
         --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); 
-        --neon: #0f4;
     }
     
     body { 
         background: transparent; 
         margin: 0; 
-        height: 600px; 
-        width: 450px; 
+        height: 650px; 
+        width: 100%; 
         font-family: 'Arial Black', sans-serif; 
         overflow: hidden; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: flex-start; 
-        padding-top: 20px; 
     }
 
-    /* MONITOR PALINSESTO PIÙ GRANDE */
-    .pali-box {
-        width: 350px; 
-        background: #000; 
-        border: 3px solid #fff; 
-        border-radius: 15px;
-        padding: 20px; 
-        box-shadow: 0 0 25px rgba(255,255,255,0.1);
-        position: relative;
+    /* IL TASTO RETTANGOLINO FISSO A DESTRA */
+    #btn-pali {
+        position: fixed;
+        right: 20px;
+        top: 50px;
+        width: 180px;
+        height: 45px;
+        background: #000;
+        border: 2px solid #fff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        transition: 0.3s;
     }
-
-    /* TESTATA: GIORNO REALE + TITOLO */
-    .pali-header {
-        text-align: center;
-        border-bottom: 2px solid #333;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-    }
-
-    #giorno-reale {
-        color: #ffff00; /* Giallo acceso per il giorno */
-        font-size: 18px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .titolo-fix {
+    #btn-pali:hover { border-color: #0f4; transform: scale(1.05); }
+    
+    .btn-text {
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 22px;
+        font-size: 12px;
         font-weight: 900;
         text-transform: uppercase;
     }
 
-    /* LISTA DJ */
-    .dj-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    /* LA LOCANDINA CHE SI APRE SOTTO IL TASTO */
+    #locandina {
+        display: none;
+        position: fixed;
+        right: 20px;
+        top: 105px; /* Spostata sotto il tasto */
+        width: 340px;
+        background: #000;
+        border: 3px solid #333;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 0 40px #000;
+        z-index: 9998;
     }
 
+    .header {
+        text-align: center;
+        border-bottom: 2px solid #222;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+    }
+
+    #giorno-live {
+        color: #ffff00;
+        font-size: 16px;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    .titolo {
+        background: var(--rb);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    /* LISTA DJ */
     .slot { 
         background: #0a0a0a; 
         border: 1px solid #222; 
         border-radius: 40px 10px 10px 40px; 
-        padding: 6px; 
+        margin-bottom: 8px;
+        padding: 5px; 
         display: flex; 
         align-items: center; 
-        gap: 15px; 
-        transition: 0.3s;
+        gap: 12px; 
     }
-    .slot:hover { border-color: var(--neon); background: #111; }
 
-    .ora { 
-        color: #0ff; 
-        font-size: 11px; 
-        width: 45px; 
-        text-align: center; 
-        font-weight: bold; 
-    }
-    
-    .foto { 
-        width: 45px; 
-        height: 45px; 
-        border-radius: 50%; 
-        border: 2px solid #fff; 
-        object-fit: cover; 
-    }
-    
-    .nome { 
-        color: #ff00ff; 
-        font-size: 13px; 
-        text-transform: uppercase; 
-        font-weight: 900; 
-    }
+    .ora { color: #0ff; font-size: 10px; width: 40px; text-align: center; font-weight: bold; }
+    .foto { width: 42px; height: 42px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .nome { color: #ff00ff; font-size: 12px; text-transform: uppercase; font-weight: 900; }
 
 </style>
 </head>
 <body>
 
-    <div class="pali-box">
-        <div class="pali-header">
-            <span id="giorno-reale">---</span>
-            <div class="titolo-fix">I MIEI DJ</div>
+    <div id="btn-pali">
+        <div class="btn-text">I MIEI DJ DI OGGI</div>
+    </div>
+
+    <div id="locandina">
+        <div class="header">
+            <span id="giorno-live">---</span>
+            <div class="titolo">IL CARTAIO PALINSESTO</div>
         </div>
 
-        <div id="lista-dj" class="dj-list">
+        <div id="lista-dj">
             </div>
     </div>
 
 <script>
-    // DATABASE SETTIMANALE COMPLETO
     const database = {
         "LUNEDÌ": [
             { h: "19:00", n: "GIOVANNA DJ", f: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
@@ -130,31 +129,22 @@
         ],
         "MARTEDÌ": [
             { h: "19:00", n: "ROBERTA DJ", f: "https://xatimg.com/image/CaYs0bVsHDCJ.jpg" },
-            { h: "20:00", n: "FRANCESCA DJ", f: "https://xatimg.com/image/VrVJ173zmGwe.jpg" },
+            { h: "20:00", n: "GIOVANNA DJ", f: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
             { h: "21:00", n: "MARIELLA DJ", f: "https://xatimg.com/image/QeD4LZvpYajs.jpg" },
-            { h: "22:00", n: "GIOVANNA DJ", f: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
+            { h: "22:00", n: "FRANCESCA DJ", f: "https://xatimg.com/image/VrVJ173zmGwe.jpg" },
             { h: "23:00", n: "ROSA DJ", f: "https://xatimg.com/image/OZzX6RTVnL9q.jpg" },
             { h: "24:00", n: "DJ DIABLO", f: "https://xatimg.com/image/RK5PS6wShTcO.png" }
         ],
-        "MERCOLEDÌ": [ /* Aggiungi qui i DJ del Mercoledì */ ],
-        "GIOVEDÌ": [ /* Aggiungi qui i DJ del Giovedì */ ],
-        "VENERDÌ": [ /* Aggiungi qui i DJ del Venerdì */ ],
-        "SABATO": [ /* Aggiungi qui i DJ del Sabato */ ],
-        "DOMENICA": [ /* Aggiungi qui i DJ della Domenica */ ]
+        "MERCOLEDÌ": [], "GIOVEDÌ": [], "VENERDÌ": [], "SABATO": [], "DOMENICA": []
     };
 
-    // Prendi i dati del Lunedì se gli altri giorni sono vuoti (per test)
-    function getDjs(giorno) {
-        return database[giorno] && database[giorno].length > 0 ? database[giorno] : database["LUNEDÌ"];
-    }
-
-    function scriviPalinsesto() {
+    function aggiornaPalinsesto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const oggi = giorni[new Date().getDay()];
         
-        $('#giorno-reale').text(oggi);
+        $('#giorno-live').text(oggi);
 
-        const djs = getDjs(oggi);
+        const djs = (database[oggi] && database[oggi].length > 0) ? database[oggi] : database["LUNEDÌ"];
         const container = $('#lista-dj').empty();
 
         djs.forEach(dj => {
@@ -168,7 +158,12 @@
         });
     }
 
-    $(document).ready(scriviPalinsesto);
+    // Toggle locandina
+    $('#btn-pali').click(function() {
+        $('#locandina').fadeToggle();
+    });
+
+    $(document).ready(aggiornaPalinsesto);
 </script>
 </body>
 </html>
