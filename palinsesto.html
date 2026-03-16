@@ -11,23 +11,24 @@
     body { 
         background: transparent; 
         margin: 0; 
-        height: 650px; 
+        height: 800px; 
         width: 100%; 
         font-family: 'Arial Black', sans-serif; 
         overflow: hidden; 
     }
 
-    /* TASTO RETTANGOLINO STRETTO */
+    /* TASTO RETTANGOLINO SPOSTATO PIÙ GIÙ */
     #btn-pali {
         position: fixed;
         right: 20px;
-        top: 50px;
-        width: 170px; /* Più corto */
-        height: 40px;
+        top: 120px; /* SCESO PIÙ GIÙ */
+        width: 170px;
+        height: 55px; /* Leggermente più alto per far stare il giorno */
         background: #000;
         border: 2px solid #fff;
         border-radius: 8px;
         display: flex;
+        flex-direction: column; /* Giorno sopra, testo sotto */
         align-items: center;
         justify-content: center;
         cursor: pointer;
@@ -37,22 +38,29 @@
     }
     #btn-pali:hover { border-color: #0f4; transform: scale(1.05); }
     
+    .giorno-tasto {
+        color: #ffff00;
+        font-size: 10px;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
     .btn-text {
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 17px;
+        font-size: 11px;
         font-weight: 900;
         text-transform: uppercase;
     }
 
-    /* LOCANDINA STRETTA (260px) */
+    /* LOCANDINA SOTTO IL TASTO */
     #locandina {
         display: none;
         position: fixed;
         right: 20px;
-        top: 100px;
-        width: 240px; /* MISURA STRETTA */
+        top: 185px; /* SEGUE IL TASTO PIÙ GIÙ */
+        width: 260px;
         background: #000;
         border: 3px solid #333;
         border-radius: 12px;
@@ -83,7 +91,6 @@
         font-weight: 900;
     }
 
-    /* LISTA DJ COMPATTA */
     .slot { 
         background: #0a0a0a; 
         border: 1px solid #222; 
@@ -104,7 +111,8 @@
 <body>
 
     <div id="btn-pali">
-        <div class="btn-text">I MIEI DJ DI OGGI</div>
+        <div id="tasto-giorno" class="giorno-tasto">---</div>
+        <div class="btn-text">I MIEI DJ</div>
     </div>
 
     <div id="locandina">
@@ -112,7 +120,6 @@
             <span id="giorno-live">---</span>
             <div class="titolo">CARTAIO PALINSESTO</div>
         </div>
-
         <div id="lista-dj"></div>
     </div>
 
@@ -137,12 +144,15 @@
         "MERCOLEDÌ": [], "GIOVEDÌ": [], "VENERDÌ": [], "SABATO": [], "DOMENICA": []
     };
 
-    function aggiornaPalinsesto() {
+    function aggiornaTutto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const oggi = giorni[new Date().getDay()];
         
+        // Aggiorna il giorno sul tasto piccolo e sulla locandina
+        $('#tasto-giorno').text(oggi);
         $('#giorno-live').text(oggi);
 
+        // Carica i DJ
         const djs = (database[oggi] && database[oggi].length > 0) ? database[oggi] : database["LUNEDÌ"];
         const container = $('#lista-dj').empty();
 
@@ -161,7 +171,7 @@
         $('#locandina').fadeToggle();
     });
 
-    $(document).ready(aggiornaPalinsesto);
+    $(document).ready(aggiornaTutto);
 </script>
 </body>
 </html>
