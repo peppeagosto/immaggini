@@ -11,18 +11,18 @@
     body { 
         background: transparent; 
         margin: 0; 
-        height: 1000px; /* Aumentato per sicurezza */
+        height: 1000px; 
         width: 100%; 
         font-family: 'Arial Black', sans-serif; 
         overflow: hidden; 
-        pointer-events: none; /* Rende il corpo trasparente ai click... */
+        pointer-events: none; 
     }
 
-    /* TASTO RETTANGOLINO - CLICCABILE SEMPRE */
+    /* TASTO RETTANGOLINO - POSIZIONE AGGIORNATA */
     #btn-pali {
         position: fixed;
         right: 20px;
-        top: 16px; 
+        top: 60px; /* SCESO PIÙ GIÙ */
         width: 150px;
         height: 55px;
         background: #000;
@@ -33,10 +33,10 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        z-index: 999999 !important; /* Forza il livello più alto */
+        z-index: 999999 !important;
         box-shadow: 0 0 15px rgba(255,255,255,0.3);
         transition: 0.3s;
-        pointer-events: auto; /* ...ma riattiva i click solo sul tasto */
+        pointer-events: auto;
     }
     
     #btn-pali:hover { border-color: #0f4; transform: scale(1.05); }
@@ -59,33 +59,33 @@
         pointer-events: none;
     }
 
-    /* LOCANDINA */
+    /* LOCANDINA - PIÙ STRETTA E PIÙ A DESTRA */
     #locandina {
         display: none;
         position: fixed;
-        right: 20px;
+        right: 10px; /* PIÙ A DESTRA */
         top: 150px; 
-        width: 260px;
+        width: 220px; /* MENO LARGA */
         background: #000;
         border: 3px solid #333;
         border-radius: 12px;
-        padding: 12px;
+        padding: 10px;
         box-shadow: 0 0 50px #000;
         z-index: 999998 !important;
-        pointer-events: auto; /* Riattiva i click sulla locandina */
+        pointer-events: auto;
     }
 
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; display: block; }
-    .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 15px; font-weight: 900; }
+    .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
 
     .slot { 
         background: #0a0a0a; border: 1px solid #222; border-radius: 30px; 
-        margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 10px; 
+        margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 8px; 
     }
-    .ora { color: #0ff; font-size: 9px; width: 35px; text-align: center; font-weight: bold; }
-    .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
-    .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; }
+    .ora { color: #0ff; font-size: 8px; width: 30px; text-align: center; font-weight: bold; }
+    .foto { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; }
 
 </style>
 </head>
@@ -128,25 +128,27 @@
     function aggiornaTutto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const oggi = giorni[new Date().getDay()];
+        
+        // Aggiorna i testi del giorno
         $('#tasto-giorno').text(oggi);
         $('#giorno-live').text(oggi);
 
-        const djs = (database[oggi] && database[oggi].length > 0) ? database[oggi] : database["LUNEDÌ"];
+        // Prende i DJ di oggi o un default se vuoto
+        const djs = (database[oggi] && database[oggi].length > 0) ? database[oggi] : [];
         const container = $('#lista-dj').empty();
 
-        djs.forEach(dj => {
-            container.append(`<div class="slot"><span class="ora">${dj.h}</span><img class="foto" src="${dj.f}"><span class="nome">${dj.n}</span></div>`);
-        });
+        if (djs.length > 0) {
+            djs.forEach(dj => {
+                container.append(`<div class="slot"><span class="ora">${dj.h}</span><img class="foto" src="${dj.f}"><span class="nome">${dj.n}</span></div>`);
+            });
+        } else {
+            container.append('<div style="color:white; font-size:10px; text-align:center;">NESSUN DJ OGGI</div>');
+        }
     }
 
-    // Usiamo Javascript puro per il click per evitare conflitti
     document.getElementById('btn-pali').onclick = function() {
         var loc = document.getElementById('locandina');
-        if (loc.style.display === "block") {
-            loc.style.display = "none";
-        } else {
-            loc.style.display = "block";
-        }
+        loc.style.display = (loc.style.display === "block") ? "none" : "block";
     };
 
     window.onload = aggiornaTutto;
