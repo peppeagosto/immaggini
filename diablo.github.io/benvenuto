@@ -1,0 +1,12 @@
+<div style="width:100%; overflow:hidden; background:#000; border:2px solid #f00; padding:10px; box-sizing:border-box;">
+    <div style="display:inline-block; white-space:nowrap; color:#f00; font-family:monospace; font-size:20px; font-weight:bold; animation: diabloMove 15s linear infinite;">
+        ☠️ BENVENUTI E BUON ASCOLTO DAL CARTAIO ☠️ RADIO CUORECRIK & CROK ☠️ IL SISTEMA È OPERATIVO ☠️ 
+    </div>
+</div>
+
+<style>
+    @keyframes diabloMove {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
