@@ -87,7 +87,7 @@
     .giorno-label { color: #ffff00; font-size: 7px; text-transform: uppercase; }
     .ora { color: #0ff; font-size: 8px; font-weight: bold; }
     .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
-    .nome { color: #ff00ff; font-size: 8px; text-transform: uppercase; font-weight: 900; }
+    .nome { color: #ff4d6d; font-size: 8px; text-transform: uppercase; font-weight: 900; }
 </style>
 </head>
 <body>
@@ -107,7 +107,7 @@
                 <img class="foto" src="https://xatimg.com/image/2gSKS392WGsA.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΔΕΥΤΕΡΑ</span>
-                    <span class="nome">DJ ΜΑΝΟΥΕΛΑ</span>
+                    <span class="nome">ROSALIA</span>
                 </div>
             </div>
             <div class="slot">
@@ -115,7 +115,7 @@
                 <img class="foto" src="https://xatimg.com/image/TIRy1ncyBLxs.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΤΡΙΤΗ</span>
-                    <span class="nome">DJ ΧΡΙΣΤΙΝΑ</span>
+                    <span class="nome">MANUELA</span>
                 </div>
             </div>
             <div class="slot">
@@ -123,7 +123,7 @@
                 <img class="foto" src="https://xatimg.com/image/o9IvXbicXLLE.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΤΕΤΑΡΤΗ</span>
-                    <span class="nome">DJ ΡΟΜΠΕΡΤΑ</span>
+                    <span class="nome">LUNA</span>
                 </div>
             </div>
             <div class="slot">
@@ -131,7 +131,7 @@
                 <img class="foto" src="https://xatimg.com/image/zYqnr0Jjlv7u.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΠΕΜΠΤΗ</span>
-                    <span class="nome">DJ ΕΛΕΝΗ</span>
+                    <span class="nome">AURORA</span>
                 </div>
             </div>
             <div class="slot">
@@ -139,7 +139,7 @@
                 <img class="foto" src="https://xatimg.com/image/x0gkWvMK3nvh.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΠΑΡΑΣΚΕΥΗ</span>
-                    <span class="nome">DJ ΣΟΦΙΑ</span>
+                    <span class="nome">VALENTINA</span>
                 </div>
             </div>
             <div class="slot">
@@ -147,7 +147,7 @@
                 <img class="foto" src="https://xatimg.com/image/q6LHVczfFBeZ.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΣΑΒΒΑΤΟ</span>
-                    <span class="nome">DJ ΖΩΗ</span>
+                    <span class="nome">GIADA</span>
                 </div>
             </div>
             <div class="slot">
@@ -155,7 +155,7 @@
                 <img class="foto" src="https://xatimg.com/image/xseLcaaxCvVJ.jpg">
                 <div class="info-box">
                     <span class="giorno-label">ΚΥΡΙΑΚΗ</span>
-                    <span class="nome">DJ ΔΑΦΝΗ</span>
+                    <span class="nome">ELISA</span>
                 </div>
             </div>
         </div>
