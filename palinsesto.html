@@ -102,27 +102,49 @@
     </div>
 
 <script>
-    const database = {
-        "MERCOLEDÌ": [
-            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/H2g4i2unP4dj.gif" },
-            { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/J93zgIDJY1mD.gif" },
-            { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/p96cisI7kEmr.gif" }
+    // 🚀 I TUOI 9 DJ DIVISI IN 3 TURNI CHE SI ALTERNANO OGNI SETTIMANA
+    const turniMercoledi = [
+        [ // TURNO A
+            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+            { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
         ],
-        // Lasciamo gli altri vuoti per oggi
-        "LUNEDÌ": [], "MARTEDÌ": [], "GIOVEDÌ": [], "VENERDÌ": [], "SABATO": [], "DOMENICA": []
-    };
+        [ // TURNO B
+            { h: "19:00", n: "DJ TONINA", f: "https://xatimg.com/image/H2g4i2unP4dj.gif" },
+            { h: "21:00", n: "DJ DENNY", f: "https://xatimg.com/image/J93zgIDJY1mD.gif" },
+            { h: "22:00", n: "DJ SALVO", f: "https://xatimg.com/image/p96cisI7kEmr.gif" }
+        ],
+        [ // TURNO C
+            { h: "19:00", n: "SALVATORE DJ", f: "https://xatimg.com/image/Glx6RAXZSiSw.gif" },
+            { h: "21:00", n: "ENZO MASTER", f: "https://xatimg.com/image/oZvuhCNZkrXo.gif" },
+            { h: "22:00", n: "WJ MICHELE", f: "https://xatimg.com/image/lBp538yhby3h.gif" }
+        ]
+    ];
+
+    function getWeekNumber(d) {
+        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+        var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        return weekNo;
+    }
 
     function aggiornaTutto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-        const oggi = giorni[new Date().getDay()];
+        const d = new Date();
+        const oggi = giorni[d.getDay()];
         
         $('#tasto-giorno').text(oggi);
         $('#giorno-live').text(oggi);
 
-        const djs = database[oggi] || [];
         const container = $('#lista-dj').empty();
 
-        if (djs.length > 0) {
+        if (oggi === "MERCOLEDÌ") {
+            // Calcola quale turno mostrare (A, B o C) in base alla settimana attuale
+            const numeroSettimana = getWeekNumber(d);
+            const indiceTurno = numeroSettimana % 3; // Risultato sarà 0, 1 o 2
+            const djs = turniMercoledi[indiceTurno];
+
             djs.forEach(dj => {
                 container.append(`<div class="slot"><span class="ora">${dj.h}</span><img class="foto" src="${dj.f}"><span class="nome">${dj.n}</span></div>`);
             });
