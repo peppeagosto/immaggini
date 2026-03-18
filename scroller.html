@@ -14,7 +14,7 @@
 
     .lory-marquee-container {
         width: 100%;
-        padding: 10px 0;
+        padding: 20px 0; /* Aumentato il padding verticale per ospitare elementi più grandi */
         overflow: hidden;
         position: relative;
         background: transparent;
@@ -33,29 +33,29 @@
         display: flex;
         align-items: center;
         flex-shrink: 0;
-        margin-left: 50px; /* Spazio tra la fine del giro e la nuova macchina */
+        margin-left: 60px; /* Spazio tra la fine del giro e la nuova macchina, aumentato */
     }
 
     .driver-card img {
-        width: 130px; 
-        height: 100px;
-        border-radius: 10px;
-        border: 2px solid #fff;
+        width: 180px; /* Aumentata la larghezza della GIF (prima era 130px) */
+        height: 140px; /* Aumentata l'altezza della GIF (prima era 100px) */
+        border-radius: 15px; /* Angoli leggermente più arrotondati */
+        border: 3px solid #fff; /* Bordo leggermente più spesso */
         object-fit: cover;
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Ombra più pronunciata */
     }
 
     .rope {
-        width: 45px; 
-        height: 1px;
-        background: rgba(255, 255, 255, 0.7);
-        box-shadow: 0 0 3px white;
+        width: 60px; /* Lunghezza della corda aumentata (prima era 45px) */
+        height: 2px; /* Spessore della corda aumentato (prima era 1px) */
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 4px white;
         flex-shrink: 0;
     }
 
     .card-dj {
-        width: 110px;
-        margin: 0 12px;
+        width: 150px; /* Larghezza della card aumentata (prima era 110px) */
+        margin: 0 15px; /* Spazio tra le card aumentato */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -63,19 +63,20 @@
     }
 
     .card-dj img {
-        width: 80px;
-        height: 80px;
+        width: 120px; /* Diametro delle foto DJ aumentato (prima era 80px) */
+        height: 120px; /* Altezza delle foto DJ aumentata */
         border-radius: 50%;
-        border: 2px solid #fff;
+        border: 3px solid #fff; /* Bordo più spesso */
         object-fit: cover;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Aggiunta ombra alle foto */
     }
 
     .card-dj span {
-        font-size: 11px;
+        font-size: 14px; /* Dimensione del font aumentata (prima era 11px) */
         font-family: 'Arial Black', sans-serif;
         font-weight: 900;
         text-transform: uppercase;
-        margin-top: 5px;
+        margin-top: 8px; /* Spazio sopra il nome aumentato */
         background: linear-gradient(90deg, #ff0000, #fffb00, #00ffd5, #7a00ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
