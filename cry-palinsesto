@@ -41,14 +41,6 @@
     
     #btn-pali:hover { border-color: #f00; transform: scale(1.05); }
     
-    .giorno-tasto {
-        color: #ffff00;
-        font-size: 10px;
-        text-transform: uppercase;
-        margin-bottom: 2px;
-        pointer-events: none;
-    }
-
     .btn-text {
         background: var(--rb);
         -webkit-background-clip: text;
@@ -56,10 +48,9 @@
         font-size: 11px;
         font-weight: 900;
         text-transform: uppercase;
-        pointer-events: none;
     }
 
-    /* LOCANDINA STRETTA (230px) */
+    /* LOCANDINA */
     #locandina {
         display: none;
         position: fixed;
@@ -78,23 +69,21 @@
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
 
-    /* SLOT DJ CON ORA, FOTO E GIORNO */
     .slot { 
         background: #0a0a0a; border: 1px solid #222; border-radius: 30px; 
         margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 8px; 
     }
     .info-box { display: flex; flex-direction: column; flex-grow: 1; }
-    .giorno-label { color: #ffff00; font-size: 7px; text-transform: uppercase; }
-    .ora { color: #0ff; font-size: 8px; font-weight: bold; }
+    .ora { color: #0ff; font-size: 9px; font-weight: bold; width: 40px; text-align: center; }
     .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
-    .nome { color: #ff4d6d; font-size: 8px; text-transform: uppercase; font-weight: 900; }
+    .nome { color: #ff4d6d; font-size: 9px; text-transform: uppercase; font-weight: 900; }
 </style>
 </head>
 <body>
 
     <div id="btn-pali">
-        <div id="tasto-giorno" class="giorno-tasto">ΟΙ DJ ΜΟΥ</div>
-        <div class="btn-text">ΠΡΟΓΡΑΜΜΑ</div> 
+        <div class="btn-text">ΟΙ DJ ΜΟΥ</div> 
+        <div style="color:yellow; font-size:9px;">ΠΡΟΓΡΑΜΜΑ</div>
     </div>
 
     <div id="locandina">
@@ -102,70 +91,68 @@
             <div class="titolo">ΠΡΟΓΡΑΜΜΑ DJ 7/7</div> 
         </div>
         <div id="lista-dj">
-            <div class="slot">
-                <span class="ora">14:00</span>
-                <img class="foto" src="https://xatimg.com/image/2gSKS392WGsA.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΔΕΥΤΕΡΑ</span>
-                    <span class="nome">ROSALIA</span>
-                </div>
             </div>
-            <div class="slot">
-                <span class="ora">15:00</span>
-                <img class="foto" src="https://xatimg.com/image/TIRy1ncyBLxs.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΤΡΙΤΗ</span>
-                    <span class="nome">MANUELA</span>
-                </div>
-            </div>
-            <div class="slot">
-                <span class="ora">16:00</span>
-                <img class="foto" src="https://xatimg.com/image/o9IvXbicXLLE.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΤΕΤΑΡΤΗ</span>
-                    <span class="nome">LUNA</span>
-                </div>
-            </div>
-            <div class="slot">
-                <span class="ora">17:00</span>
-                <img class="foto" src="https://xatimg.com/image/zYqnr0Jjlv7u.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΠΕΜΠΤΗ</span>
-                    <span class="nome">AURORA</span>
-                </div>
-            </div>
-            <div class="slot">
-                <span class="ora">18:00</span>
-                <img class="foto" src="https://xatimg.com/image/x0gkWvMK3nvh.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΠΑΡΑΣΚΕΥΗ</span>
-                    <span class="nome">VALENTINA</span>
-                </div>
-            </div>
-            <div class="slot">
-                <span class="ora">19:00</span>
-                <img class="foto" src="https://xatimg.com/image/q6LHVczfFBeZ.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΣΑΒΒΑΤΟ</span>
-                    <span class="nome">GIADA</span>
-                </div>
-            </div>
-            <div class="slot">
-                <span class="ora">20:00</span>
-                <img class="foto" src="https://xatimg.com/image/xseLcaaxCvVJ.jpg">
-                <div class="info-box">
-                    <span class="giorno-label">ΚΥΡΙΑΚΗ</span>
-                    <span class="nome">ELISA</span>
-                </div>
-            </div>
-        </div>
     </div>
 
 <script>
+    // 1. Lista originale delle DJ
+    const djSquad = [
+        { n: "ROSALIA", f: "https://xatimg.com/image/2gSKS392WGsA.jpg" },
+        { n: "MANUELA", f: "https://xatimg.com/image/TIRy1ncyBLxs.jpg" },
+        { n: "LUNA", f: "https://xatimg.com/image/o9IvXbicXLLE.jpg" },
+        { n: "AURORA", f: "https://xatimg.com/image/zYqnr0Jjlv7u.jpg" },
+        { n: "VALENTINA", f: "https://xatimg.com/image/x0gkWvMK3nvh.jpg" },
+        { n: "GIADA", f: "https://xatimg.com/image/q6LHVczfFBeZ.jpg" },
+        { n: "ELISA", f: "https://xatimg.com/image/xseLcaaxCvVJ.jpg" }
+    ];
+
+    // 2. Orari fissi (si assegnano in ordine dopo il rimescolamento)
+    const orari = ["14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+
+    // 3. Funzione per rimescolare in base alla data (Zero manutenzione)
+    function shuffleByDate(array) {
+        const date = new Date();
+        // Usiamo giorno + mese come seme per il rimescolamento
+        let seed = date.getDate() + date.getMonth(); 
+        let currentIndex = array.length, temporaryValue, randomIndex;
+
+        while (0 !== currentIndex) {
+            // Generatore di numeri "casuali" ma fissi per oggi
+            seed = (seed * 9301 + 49297) % 233280;
+            randomIndex = Math.floor((seed / 233280) * currentIndex);
+            currentIndex -= 1;
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        return array;
+    }
+
+    function generaPalinsesto() {
+        const container = $('#lista-dj');
+        // Rimescoliamo una copia della lista
+        const rimescolate = shuffleByDate([...djSquad]);
+
+        rimescolate.forEach((dj, index) => {
+            const html = `
+                <div class="slot">
+                    <span class="ora">${orari[index]}</span>
+                    <img class="foto" src="${dj.f}">
+                    <div class="info-box">
+                        <span class="nome">${dj.n}</span>
+                    </div>
+                </div>`;
+            container.append(html);
+        });
+    }
+
+    // Gestione apertura locandina
     document.getElementById('btn-pali').onclick = function() {
         var loc = document.getElementById('locandina');
         loc.style.display = (loc.style.display === "block") ? "none" : "block";
     };
+
+    window.onload = generaPalinsesto;
 </script>
 </body>
 </html>
