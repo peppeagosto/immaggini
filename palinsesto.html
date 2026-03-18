@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,7 +18,7 @@
         pointer-events: none; 
     }
 
-    /* TASTO APERTURA - LARGO PER IL NOME DI LORY */
+    /* TASTO APERTURA - MODIFICATO CON "PALINSESTO" */
     #btn-pali {
         position: fixed;
         right: 20px;
@@ -46,7 +45,7 @@
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 10px;
+        font-size: 11px; /* Leggermente più grande per farlo risaltare */
         font-weight: 900;
         text-transform: uppercase;
         text-align: center;
@@ -83,47 +82,69 @@
 <body>
 
     <div id="btn-pali">
-        <div class="btn-text">I MIEI DJ DI LORYCUORESTELLARE</div>
-        <div style="color:yellow; font-size:9px;">PROGRAMMA MERCOLEDÌ</div>
+        <div class="btn-text">PALINSESTO DI LORYCUORESTELLARE</div>
+        <div id="on-air-text" style="color:yellow; font-size:9px; font-weight:bold;">ON AIR ---</div>
     </div>
 
     <div id="locandina">
         <div class="header">
-            <span id="giorno-live">MERCOLEDÌ</span>
+            <span id="giorno-live">---</span>
             <div class="titolo">CARTAIO PALINSESTO</div>
         </div>
         <div id="lista-dj"></div>
     </div>
 
 <script>
-    // DATABASE ORIGINALE FISSO PER MERCOLEDÌ
-    const turniMercoledi = [
-        { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-        { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-        { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
-    ];
+    const giorniSettimana = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    function caricaPalinsesto() {
-        const container = $('#lista-dj');
-        container.empty();
+    // DATABASE TURNI (Puoi aggiungere i nomi per ogni giorno qui dentro)
+    const databaseTurni = {
+        "MERCOLEDÌ": [
+            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+            { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
+        ],
+        "GIOVEDÌ": [],
+        "VENERDÌ": [],
+        "SABATO": [],
+        "DOMENICA": [],
+        "LUNEDÌ": [],
+        "MARTEDÌ": []
+    };
 
-        turniMercoledi.forEach(dj => {
-            container.append(`
-                <div class="slot">
-                    <span class="ora">${dj.h}</span>
-                    <img class="foto" src="${dj.f}">
-                    <span class="nome">${dj.n}</span>
-                </div>
-            `);
-        });
+    function aggiornaLive() {
+        const d = new Date();
+        const oggi = giorniSettimana[d.getDay()];
+        
+        // Imposta il testo dinamico nel tasto e nella locandina
+        $('#on-air-text').text("ON AIR " + oggi);
+        $('#giorno-live').text(oggi);
+
+        const container = $('#lista-dj').empty();
+        const djsOggi = databaseTurni[oggi];
+
+        if (djsOggi && djsOggi.length > 0) {
+            djsOggi.forEach(dj => {
+                container.append(`
+                    <div class="slot">
+                        <span class="ora">${dj.h}</span>
+                        <img class="foto" src="${dj.f}">
+                        <span class="nome">${dj.n}</span>
+                    </div>
+                `);
+            });
+        } else {
+            container.append('<div style="color:white; font-size:10px; text-align:center; padding:10px;">IN ATTESA DI PROGRAMMAZIONE</div>');
+        }
     }
 
+    // Gestione apertura/chiusura
     document.getElementById('btn-pali').onclick = function() {
         var loc = document.getElementById('locandina');
         loc.style.display = (loc.style.display === "block") ? "none" : "block";
     };
 
-    window.onload = caricaPalinsesto;
+    window.onload = aggiornaLive;
 </script>
 </body>
 </html>
