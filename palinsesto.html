@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -18,15 +19,16 @@
         pointer-events: none; 
     }
 
+    /* TASTO APERTURA - LARGO PER IL NOME DI LORY */
     #btn-pali {
         position: fixed;
         right: 20px;
         top: 60px;
-        width: 150px;
-        height: 55px;
+        width: 250px;
+        height: 60px;
         background: #000;
         border: 2px solid #fff;
-        border-radius: 8px;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -40,22 +42,14 @@
     
     #btn-pali:hover { border-color: #0f4; transform: scale(1.05); }
     
-    .giorno-tasto {
-        color: #ffff00;
-        font-size: 10px;
-        text-transform: uppercase;
-        margin-bottom: 2px;
-        pointer-events: none;
-    }
-
     .btn-text {
         background: var(--rb);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 900;
         text-transform: uppercase;
-        pointer-events: none;
+        text-align: center;
     }
 
     #locandina {
@@ -63,7 +57,7 @@
         position: fixed;
         right: 10px;
         top: 150px; 
-        width: 220px;
+        width: 260px;
         background: #000;
         border: 3px solid #333;
         border-radius: 12px;
@@ -82,79 +76,46 @@
         margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 8px; 
     }
     .ora { color: #0ff; font-size: 8px; width: 35px; text-align: center; font-weight: bold; }
-    .foto { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
     .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; }
 </style>
 </head>
 <body>
 
     <div id="btn-pali">
-        <div id="tasto-giorno" class="giorno-tasto">---</div>
-        <div class="btn-text">I MIEI DJ</div>
+        <div class="btn-text">I MIEI DJ DI LORYCUORESTELLARE</div>
+        <div style="color:yellow; font-size:9px;">PROGRAMMA MERCOLEDÌ</div>
     </div>
 
     <div id="locandina">
         <div class="header">
-            <span id="giorno-live">---</span>
+            <span id="giorno-live">MERCOLEDÌ</span>
             <div class="titolo">CARTAIO PALINSESTO</div>
         </div>
         <div id="lista-dj"></div>
     </div>
 
 <script>
-    // 🗂️ LA TUA SQUADRA DI DJ
-    const djSquad = [
-        { n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-        { n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-        { n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
+    // DATABASE ORIGINALE FISSO PER MERCOLEDÌ
+    const turniMercoledi = [
+        { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+        { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+        { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
     ];
 
-    // Orari fissi per la diretta
-    const orariFissi = ["19:00", "21:00", "22:00"];
+    function caricaPalinsesto() {
+        const container = $('#lista-dj');
+        container.empty();
 
-    // Funzione "Shuffle" intelligente basata sul giorno
-    function shuffleDaily(array) {
-        const d = new Date();
-        let seed = d.getDate() + d.getMonth() + d.getFullYear();
-        let current = array.length, temp, random;
-
-        while (0 !== current) {
-            seed = (seed * 9301 + 49297) % 233280;
-            random = Math.floor((seed / 233280) * current);
-            current -= 1;
-            temp = array[current];
-            array[current] = array[random];
-            array[random] = temp;
-        }
-        return array;
-    }
-
-    function aggiornaTutto() {
-        const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-        const d = new Date();
-        const oggi = giorni[d.getDay()];
-        
-        $('#tasto-giorno').text(oggi);
-        $('#giorno-live').text(oggi);
-
-        const container = $('#lista-dj').empty();
-
-        // Se è Weekend
-        if (oggi === "SABATO" || oggi === "DOMENICA") {
-            container.append('<div style="color:#ff0000; font-size:10px; text-align:center; font-weight:900;">WEEKEND - NESSUNA DIRETTA</div>');
-        } else {
-            // Rimescola i DJ ogni giorno dal lunedì al venerdì
-            const rotazioneOggi = shuffleDaily([...djSquad]);
-            
-            rotazioneOggi.forEach((dj, i) => {
-                container.append(`
-                    <div class="slot">
-                        <span class="ora">${orariFissi[i]}</span>
-                        <img class="foto" src="${dj.f}">
-                        <span class="nome">${dj.n}</span>
-                    </div>`);
-            });
-        }
+        turniMercoledi.forEach(dj => {
+            container.append(`
+                <div class="slot">
+                    <span class="ora">${dj.h}</span>
+                    <img class="foto" src="${dj.f}">
+                    <span class="nome">${dj.n}</span>
+                </div>
+            `);
+        });
     }
 
     document.getElementById('btn-pali').onclick = function() {
@@ -162,7 +123,7 @@
         loc.style.display = (loc.style.display === "block") ? "none" : "block";
     };
 
-    window.onload = aggiornaTutto;
+    window.onload = caricaPalinsesto;
 </script>
 </body>
 </html>
