@@ -82,7 +82,7 @@
 <body>
 
     <div id="btn-pali">
-        <div class="btn-text">ΟΙ DJ ΜΟΥ</div> 
+        <div class="btn-text">DJ ΧΡΙΣΤΙΝΑ</div> 
         <div style="color:yellow; font-size:9px;">ΠΡΟΓΡΑΜΜΑ</div>
     </div>
 
@@ -90,34 +90,29 @@
         <div class="header">
             <div class="titolo">ΠΡΟΓΡΑΜΜΑ DJ 7/7</div> 
         </div>
-        <div id="lista-dj">
-            </div>
+        <div id="lista-dj"></div>
     </div>
 
 <script>
-    // 1. Lista originale delle DJ
+    // 1. LISTA DJ IN GRECO (Niente italiano qui)
     const djSquad = [
-        { n: "ROSALIA", f: "https://xatimg.com/image/2gSKS392WGsA.jpg" },
-        { n: "MANUELA", f: "https://xatimg.com/image/TIRy1ncyBLxs.jpg" },
-        { n: "LUNA", f: "https://xatimg.com/image/o9IvXbicXLLE.jpg" },
-        { n: "AURORA", f: "https://xatimg.com/image/zYqnr0Jjlv7u.jpg" },
-        { n: "VALENTINA", f: "https://xatimg.com/image/x0gkWvMK3nvh.jpg" },
-        { n: "GIADA", f: "https://xatimg.com/image/q6LHVczfFBeZ.jpg" },
-        { n: "ELISA", f: "https://xatimg.com/image/xseLcaaxCvVJ.jpg" }
+        { n: "ΡΟΖΑΛΙΑ", f: "https://xatimg.com/image/2gSKS392WGsA.jpg" },
+        { n: "ΜΑΝΟΥΕΛΑ", f: "https://xatimg.com/image/TIRy1ncyBLxs.jpg" },
+        { n: "ΛΟΥΝΑ", f: "https://xatimg.com/image/o9IvXbicXLLE.jpg" },
+        { n: "ΑΟΥΡΟΡΑ", f: "https://xatimg.com/image/zYqnr0Jjlv7u.jpg" },
+        { n: "ΒΑΛΕΝΤΙΝΑ", f: "https://xatimg.com/image/x0gkWvMK3nvh.jpg" },
+        { n: "ΤΖΙΑΝΤΑ", f: "https://xatimg.com/image/q6LHVczfFBeZ.jpg" },
+        { n: "ΕΛΙΖΑ", f: "https://xatimg.com/image/xseLcaaxCvVJ.jpg" }
     ];
 
-    // 2. Orari fissi (si assegnano in ordine dopo il rimescolamento)
     const orari = ["14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
 
-    // 3. Funzione per rimescolare in base alla data (Zero manutenzione)
     function shuffleByDate(array) {
         const date = new Date();
-        // Usiamo giorno + mese come seme per il rimescolamento
-        let seed = date.getDate() + date.getMonth(); 
+        let seed = date.getDate() + date.getMonth() + date.getFullYear(); 
         let currentIndex = array.length, temporaryValue, randomIndex;
 
         while (0 !== currentIndex) {
-            // Generatore di numeri "casuali" ma fissi per oggi
             seed = (seed * 9301 + 49297) % 233280;
             randomIndex = Math.floor((seed / 233280) * currentIndex);
             currentIndex -= 1;
@@ -130,7 +125,6 @@
 
     function generaPalinsesto() {
         const container = $('#lista-dj');
-        // Rimescoliamo una copia della lista
         const rimescolate = shuffleByDate([...djSquad]);
 
         rimescolate.forEach((dj, index) => {
@@ -146,7 +140,6 @@
         });
     }
 
-    // Gestione apertura locandina
     document.getElementById('btn-pali').onclick = function() {
         var loc = document.getElementById('locandina');
         loc.style.display = (loc.style.display === "block") ? "none" : "block";
