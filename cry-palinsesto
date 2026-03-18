@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    :root { 
+        --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); 
+    }
+    
+    body { 
+        background: transparent; 
+        margin: 0; 
+        height: 1000px; 
+        width: 100%; 
+        font-family: 'Arial Black', sans-serif; 
+        overflow: hidden; 
+        pointer-events: none; 
+    }
+
+    /* TASTO APERTURA */
+    #btn-pali {
+        position: fixed;
+        right: 20px;
+        top: 60px;
+        width: 150px;
+        height: 55px;
+        background: #000;
+        border: 2px solid #fff;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 999999 !important;
+        box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        transition: 0.3s;
+        pointer-events: auto;
+    }
+    
+    #btn-pali:hover { border-color: #f00; transform: scale(1.05); }
+    
+    .giorno-tasto {
+        color: #ffff00;
+        font-size: 10px;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        pointer-events: none;
+    }
+
+    .btn-text {
+        background: var(--rb);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        pointer-events: none;
+    }
+
+    /* LOCANDINA STRETTA (230px) */
+    #locandina {
+        display: none;
+        position: fixed;
+        right: 10px;
+        top: 150px; 
+        width: 230px;
+        background: #000;
+        border: 3px solid #333;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 0 50px #000;
+        z-index: 999998 !important;
+        pointer-events: auto;
+    }
+
+    .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
+    .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
+
+    /* SLOT DJ CON ORA, FOTO E GIORNO */
+    .slot { 
+        background: #0a0a0a; border: 1px solid #222; border-radius: 30px; 
+        margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 8px; 
+    }
+    .info-box { display: flex; flex-direction: column; flex-grow: 1; }
+    .giorno-label { color: #ffff00; font-size: 7px; text-transform: uppercase; }
+    .ora { color: #0ff; font-size: 8px; font-weight: bold; }
+    .foto { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .nome { color: #ff00ff; font-size: 8px; text-transform: uppercase; font-weight: 900; }
+</style>
+</head>
+<body>
+
+    <div id="btn-pali">
+        <div id="tasto-giorno" class="giorno-tasto">ΟΙ DJ ΜΟΥ</div>
+        <div class="btn-text">ΠΡΟΓΡΑΜΜΑ</div> 
+    </div>
+
+    <div id="locandina">
+        <div class="header">
+            <div class="titolo">ΠΡΟΓΡΑΜΜΑ DJ 7/7</div> 
+        </div>
+        <div id="lista-dj">
+            <div class="slot">
+                <span class="ora">14:00</span>
+                <img class="foto" src="https://xatimg.com/image/2gSKS392WGsA.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΔΕΥΤΕΡΑ</span>
+                    <span class="nome">DJ ΜΑΝΟΥΕΛΑ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">15:00</span>
+                <img class="foto" src="https://xatimg.com/image/TIRy1ncyBLxs.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΤΡΙΤΗ</span>
+                    <span class="nome">DJ ΧΡΙΣΤΙΝΑ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">16:00</span>
+                <img class="foto" src="https://xatimg.com/image/o9IvXbicXLLE.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΤΕΤΑΡΤΗ</span>
+                    <span class="nome">DJ ΡΟΜΠΕΡΤΑ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">17:00</span>
+                <img class="foto" src="https://xatimg.com/image/zYqnr0Jjlv7u.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΠΕΜΠΤΗ</span>
+                    <span class="nome">DJ ΕΛΕΝΗ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">18:00</span>
+                <img class="foto" src="https://xatimg.com/image/x0gkWvMK3nvh.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΠΑΡΑΣΚΕΥΗ</span>
+                    <span class="nome">DJ ΣΟΦΙΑ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">19:00</span>
+                <img class="foto" src="https://xatimg.com/image/q6LHVczfFBeZ.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΣΑΒΒΑΤΟ</span>
+                    <span class="nome">DJ ΖΩΗ</span>
+                </div>
+            </div>
+            <div class="slot">
+                <span class="ora">20:00</span>
+                <img class="foto" src="https://xatimg.com/image/xseLcaaxCvVJ.jpg">
+                <div class="info-box">
+                    <span class="giorno-label">ΚΥΡΙΑΚΗ</span>
+                    <span class="nome">DJ ΔΑΦΝΗ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById('btn-pali').onclick = function() {
+        var loc = document.getElementById('locandina');
+        loc.style.display = (loc.style.display === "block") ? "none" : "block";
+    };
+</script>
+</body>
+</html>
