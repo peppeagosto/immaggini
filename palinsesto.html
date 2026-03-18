@@ -18,11 +18,10 @@
         pointer-events: none; 
     }
 
-    /* TASTO RETTANGOLINO - POSIZIONE AGGIORNATA */
     #btn-pali {
         position: fixed;
         right: 20px;
-        top: 60px; /* SCESO PIÙ GIÙ */
+        top: 60px;
         width: 150px;
         height: 55px;
         background: #000;
@@ -59,13 +58,12 @@
         pointer-events: none;
     }
 
-    /* LOCANDINA - PIÙ STRETTA E PIÙ A DESTRA */
     #locandina {
         display: none;
         position: fixed;
-        right: 10px; /* PIÙ A DESTRA */
+        right: 10px;
         top: 150px; 
-        width: 220px; /* MENO LARGA */
+        width: 220px;
         background: #000;
         border: 3px solid #333;
         border-radius: 12px;
@@ -83,10 +81,9 @@
         background: #0a0a0a; border: 1px solid #222; border-radius: 30px; 
         margin-bottom: 6px; padding: 4px; display: flex; align-items: center; gap: 8px; 
     }
-    .ora { color: #0ff; font-size: 8px; width: 30px; text-align: center; font-weight: bold; }
+    .ora { color: #0ff; font-size: 8px; width: 35px; text-align: center; font-weight: bold; }
     .foto { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
     .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; }
-
 </style>
 </head>
 <body>
@@ -106,35 +103,23 @@
 
 <script>
     const database = {
-        "LUNEDÌ": [
-            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: "20:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-            { h: "21:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif " },
-            { h: "22:00", n: "ROSA DJ", f: "nessun dj" },
-            { h: "23:00", n: "ROBERTA DJ", f: "nessun dj" },
-            { h: "24:00", n: "DJ DIABLO", f: "nessun dj" }
+        "MERCOLEDÌ": [
+            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/H2g4i2unP4dj.gif" },
+            { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/J93zgIDJY1mD.gif" },
+            { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/p96cisI7kEmr.gif" }
         ],
-        "MARTEDÌ": [
-            { h: "19:00", n: "ROBERTA DJ", f: "https://xatimg.com/image/CaYs0bVsHDCJ.jpg" },
-            { h: "20:00", n: "GIOVANNA DJ", f: "https://xatimg.com/image/B5I7efB9ycKn.jpg" },
-            { h: "21:00", n: "MARIELLA DJ", f: "https://xatimg.com/image/QeD4LZvpYajs.jpg" },
-            { h: "22:00", n: "FRANCESCA DJ", f: "https://xatimg.com/image/VrVJ173zmGwe.jpg" },
-            { h: "23:00", n: "ROSA DJ", f: "https://xatimg.com/image/OZzX6RTVnL9q.jpg" },
-            { h: "24:00", n: "DJ DIABLO", f: "https://xatimg.com/image/RK5PS6wShTcO.png" }
-        ],
-        "MERCOLEDÌ": [], "GIOVEDÌ": [], "VENERDÌ": [], "SABATO": [], "DOMENICA": []
+        // Lasciamo gli altri vuoti per oggi
+        "LUNEDÌ": [], "MARTEDÌ": [], "GIOVEDÌ": [], "VENERDÌ": [], "SABATO": [], "DOMENICA": []
     };
 
     function aggiornaTutto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const oggi = giorni[new Date().getDay()];
         
-        // Aggiorna i testi del giorno
         $('#tasto-giorno').text(oggi);
         $('#giorno-live').text(oggi);
 
-        // Prende i DJ di oggi o un default se vuoto
-        const djs = (database[oggi] && database[oggi].length > 0) ? database[oggi] : [];
+        const djs = database[oggi] || [];
         const container = $('#lista-dj').empty();
 
         if (djs.length > 0) {
@@ -142,7 +127,7 @@
                 container.append(`<div class="slot"><span class="ora">${dj.h}</span><img class="foto" src="${dj.f}"><span class="nome">${dj.n}</span></div>`);
             });
         } else {
-            container.append('<div style="color:white; font-size:10px; text-align:center;">NESSUN DJ OGGI</div>');
+            container.append('<div style="color:white; font-size:10px; text-align:center;">NESSUN DJ IN PROGRAMMA</div>');
         }
     }
 
