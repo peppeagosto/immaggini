@@ -102,20 +102,32 @@
     </div>
 
 <script>
-    // 🗂️ DATABASE TURNI AGGIORNATO (LUNEDÌ -> VENERDÌ)
-    const database = {
-        "LUNEDÌ": [],
-        "MARTEDÌ": [],
-        "MERCOLEDÌ": [
-            { h: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: "21:00", n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-            { h: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
-        ],
-        "GIOVEDÌ": [], // In attesa dei tuoi DJ
-        "VENERDÌ": [], // In attesa dei tuoi DJ
-        "SABATO": null,   // NESSUNA DIRETTA
-        "DOMENICA": null  // NESSUNA DIRETTA
-    };
+    // 🗂️ LA TUA SQUADRA DI DJ
+    const djSquad = [
+        { n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+        { n: "SPEACHER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+        { n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
+    ];
+
+    // Orari fissi per la diretta
+    const orariFissi = ["19:00", "21:00", "22:00"];
+
+    // Funzione "Shuffle" intelligente basata sul giorno
+    function shuffleDaily(array) {
+        const d = new Date();
+        let seed = d.getDate() + d.getMonth() + d.getFullYear();
+        let current = array.length, temp, random;
+
+        while (0 !== current) {
+            seed = (seed * 9301 + 49297) % 233280;
+            random = Math.floor((seed / 233280) * current);
+            current -= 1;
+            temp = array[current];
+            array[current] = array[random];
+            array[random] = temp;
+        }
+        return array;
+    }
 
     function aggiornaTutto() {
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
@@ -126,17 +138,22 @@
         $('#giorno-live').text(oggi);
 
         const container = $('#lista-dj').empty();
-        const djs = database[oggi];
 
-        if (djs === null) {
-            // Messaggio per il Sabato e la Domenica
+        // Se è Weekend
+        if (oggi === "SABATO" || oggi === "DOMENICA") {
             container.append('<div style="color:#ff0000; font-size:10px; text-align:center; font-weight:900;">WEEKEND - NESSUNA DIRETTA</div>');
-        } else if (djs && djs.length > 0) {
-            djs.forEach(dj => {
-                container.append(`<div class="slot"><span class="ora">${dj.h}</span><img class="foto" src="${dj.f}"><span class="nome">${dj.n}</span></div>`);
-            });
         } else {
-            container.append('<div style="color:white; font-size:10px; text-align:center;">IN ATTESA DI PROGRAMMAZIONE</div>');
+            // Rimescola i DJ ogni giorno dal lunedì al venerdì
+            const rotazioneOggi = shuffleDaily([...djSquad]);
+            
+            rotazioneOggi.forEach((dj, i) => {
+                container.append(`
+                    <div class="slot">
+                        <span class="ora">${orariFissi[i]}</span>
+                        <img class="foto" src="${dj.f}">
+                        <span class="nome">${dj.n}</span>
+                    </div>`);
+            });
         }
     }
 
