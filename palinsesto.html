@@ -23,14 +23,14 @@
 
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* LED VERDE LAMPEGGIANTE (In onda ora) */
+    /* LED VERDE LAMPEGGIANTE */
     .led-verde {
         width: 10px; height: 10px; background-color: #0f0; border-radius: 50%;
         display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0;
         animation: blink 0.8s infinite;
     }
 
-    /* LED ROSSO FISSO (Turno passato) */
+    /* LED ROSSO FISSO */
     .led-rosso {
         width: 10px; height: 10px; background-color: #f00; border-radius: 50%;
         display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00;
@@ -72,12 +72,12 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    // DATABASE TURNI (H indica l'ora di inizio)
+    // TURNI AGGIORNATI: Gabry ore 20, Lory ore 21
     const databaseTurni = {
         "MERCOLEDÌ": [
             { h: 19, label: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 21, label: "21:00", n: "SPEAKER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-            { h: 22, label: "22:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
+            { h: 20, label: "20:00", n: "SPEAKER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+            { h: 21, label: "21:00", n: "DJ LORY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
         ]
     };
 
@@ -93,15 +93,12 @@
         const djsOggi = databaseTurni[oggi] || [];
 
         if (djsOggi.length > 0) {
-            djsOggi.forEach((dj, index) => {
+            djsOggi.forEach((dj) => {
                 let statusLed = '';
                 
-                // Logica LED:
-                // Se l'ora attuale è uguale all'ora del DJ -> VERDE LAMPEGGIANTE
                 if (oraAttuale === dj.h) {
                     statusLed = '<span class="led-verde"></span>';
                 } 
-                // Se l'ora attuale è maggiore dell'ora del DJ -> ROSSO FISSO
                 else if (oraAttuale > dj.h) {
                     statusLed = '<span class="led-rosso"></span>';
                 }
@@ -124,7 +121,7 @@
         loc.style.display = (loc.style.display === "block") ? "none" : "block";
     };
 
-    setInterval(aggiornaLive, 30000); // Controlla ogni 30 secondi
+    setInterval(aggiornaLive, 30000);
     window.onload = aggiornaLive;
 </script>
 </body>
