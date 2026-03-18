@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root { --rainbow: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #ff00ff, #ff0000); }
+        body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; }
+        
+        @keyframes neonGlow {
+            0%   { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; }
+            33%  { border-color: #00ff00; box-shadow: 0 0 12px #00ff00; }
+            66%  { border-color: #00ffff; box-shadow: 0 0 12px #00ffff; }
+            100% { border-color: #ff0000; box-shadow: 0 0 12px #ff0000; }
+        }
+
+        #btn-tv {
+            position: fixed; top: 45px; right: 20px;
+            width: 210px; height: 55px;
+            background: #000; border: 3px solid #fff; border-radius: 15px;
+            cursor: pointer; animation: neonGlow 6s infinite linear;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 99999;
+        }
+
+        .btn-label {
+            background: var(--rainbow); -webkit-background-clip: text; color: transparent;
+            font-weight: 900; font-size: 13px; text-transform: uppercase;
+        }
+
+        #video-panel {
+            display: none;
+            position: fixed; top: 55px; right: 20px;
+            width: 320px; /* Stessa misura del palinsesto */
+            background: #000; border: 3px solid #fff; border-radius: 15px;
+            overflow: hidden; animation: neonGlow 6s infinite linear;
+            z-index: 99999;
+        }
+
+        .tv-bar {
+            background: #111; display: flex; align-items: center;
+            padding: 8px; justify-content: space-between;
+        }
+        
+        .tv-btn {
+            background: #222; border: 1px solid #444; border-radius: 5px;
+            color: #fff; font-size: 10px; cursor: pointer; padding: 5px 10px;
+        }
+
+        /* Video nativo senza iframe per evitare aperture esterne */
+        #main-video {
+            width: 100%; height: 180px; background: #000; display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="btn-tv">
+        <div class="btn-label">📺 GUARDA LIVE</div>
+    </div>
+
+    <div id="video-panel">
+        <div class="tv-bar">
+            <button class="tv-btn" id="close-tv">CHIUDI</button>
+            <div style="color:#0f0; font-size:9px; font-weight:bold;">CANALE LIVE</div>
+            <button class="tv-btn" id="btn-mute">🔇 MUTE</button>
+        </div>
+
+        <video id="main-video" autoplay muted playsinline></video>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    // Questo link è un test di video natura/animali ultra-stabile
+    var VIDEO_SOURCE = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
+    var video = document.getElementById('main-video');
+    var panel = document.getElementById('video-panel');
+    var btn = document.getElementById('btn-tv');
+    var hls = null;
+
+    function playVideo() {
+        if (Hls.isSupported()) {
+            hls = new Hls();
+            hls.loadSource(VIDEO_SOURCE);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = VIDEO_SOURCE;
+            video.play();
+        }
+    }
+
+    btn.onclick = function() {
+        btn.style.display = 'none';
+        panel.style.display = 'block';
+        playVideo();
+    };
+
+    document.getElementById('close-tv').onclick = function() {
+        if(hls) { hls.destroy(); hls = null; }
+        video.pause();
+        video.src = "";
+        panel.style.display = 'none';
+        btn.style.display = 'flex';
+    };
+
+    document.getElementById('btn-mute').onclick = function() {
+        video.muted = !video.muted;
+        this.textContent = video.muted ? '🔇 MUTE' : '🔊 AUDIO';
+    };
+</script>
+</body>
+</html>
