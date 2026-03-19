@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,7 +10,16 @@
         --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); 
     }
     
-    body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; pointer-events: none; }
+    body { 
+        background: transparent; 
+        margin: 0; 
+        font-family: 'Arial Black', sans-serif; 
+        overflow: hidden; 
+        display: flex; 
+        justify-content: center; 
+        align-items: flex-start;
+        pointer-events: none; 
+    }
 
     #btn-pali {
         position: fixed; right: 20px; top: 60px; width: 250px; height: 60px;
@@ -48,20 +59,14 @@
 
     .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
     .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
-    .foto { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
+    .foto { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; background: #222; }
     .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
 
     .testo-lama {
-        font-size: 14px;
-        font-weight: 900;
-        text-align: center;
-        padding: 15px 5px;
+        font-size: 14px; font-weight: 900; text-align: center; padding: 15px 5px;
         background: linear-gradient(to bottom, #ffd700 50%, #00ffff 50%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: block;
-        letter-spacing: 1px;
-        line-height: 1.2;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        display: block; letter-spacing: 1px; line-height: 1.2;
     }
 </style>
 </head>
@@ -83,33 +88,44 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
+    // 🔥 DATABASE FOTO AGGIORNATO 🔥
+    const imgLory = "https://xatimg.com/image/T7dqsK3EyHMz.gif";
+    const imgGabry = "https://xatimg.com/image/sREfmFFsu3cq.gif";
+    const imgTonina = "https://xatimg.com/image/H2g4i2unP4dj.gif";
+    const imgDenny = "https://xatimg.com/image/J93zgIDJY1mD.gif";
+    const imgTerry = "https://xatimg.com/image/6LCkmBbnRq6Z.gif";
+    const imgSalvo = "https://xatimg.com/image/p96cisI7kEmr.gif";
+    const imgSalvatore = "https://xatimg.com/image/Glx6RAXZSiSw.gif";
+    const imgEnzo = "https://xatimg.com/image/Glx6RAXZSiSw.gif";
+    const imgMichele = "https://xatimg.com/image/Glx6RAXZSiSw.gif";
+
     const databaseTurni = {
         "LUNEDÌ": [
-            { h: 19, label: "19:00", n: "SALVATORE DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "DJ SALVO", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 21, label: "21:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+            { h: 19, label: "19:00", n: "SALVATORE DJ", f: imgSalvatore },
+            { h: 20, label: "20:00", n: "DJ SALVO", f: imgSalvo },
+            { h: 21, label: "21:00", n: "DJ TERRY", f: imgTerry }
         ],
         "MARTEDÌ": [
-            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "WJ MICHELE", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 21, label: "21:00", n: "DJ TONINA", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: imgEnzo },
+            { h: 20, label: "20:00", n: "WJ MICHELE", f: imgMichele },
+            { h: 21, label: "21:00", n: "DJ TONINA", f: imgTonina }
         ],
         "MERCOLEDÌ": [
-            { h: 19, label: "19:00", n: "TERRY DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "GABRY SPEAKER", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-            { h: 21, label: "21:00", n: "DJ LORY", f: "https://xatimg.com/image/xd7fBgfYBPUK.gif" }
+            { h: 19, label: "19:00", n: "TERRY DJ", f: imgTerry },
+            { h: 20, label: "20:00", n: "GABRY SPEAKER", f: imgGabry },
+            { h: 21, label: "21:00", n: "DJ LORY", f: imgLory }
         ],
         "GIOVEDÌ": [
-            { h: 19, label: "19:00", n: "SALVATORE DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 21, label: "21:00", n: "DJ TONINA", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+            { h: 19, label: "19:00", n: "SALVATORE DJ", f: imgSalvatore },
+            { h: 20, label: "20:00", n: "TERRY DJ", f: imgTerry },
+            { h: 21, label: "21:00", n: "DJ TONINA", f: imgTonina }
         ],
-        "VENERDI": [
-            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "WJ MICHELE", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 21, label: "21:00", n: "DJ SALVO", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+        "VENERDÌ": [
+            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: imgEnzo },
+            { h: 20, label: "20:00", n: "WJ MICHELE", f: imgMichele },
+            { h: 21, label: "21:00", n: "DJ SALVO", f: imgSalvo }
         ],
-        "SABATO": "WEEKEND"
+        "SABATO": "LORY VI AUGURA BUON WEEKEND"
     };
 
     function aggiornaLive() {
