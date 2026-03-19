@@ -23,14 +23,12 @@
 
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* LED VERDE LAMPEGGIANTE */
     .led-verde {
         width: 10px; height: 10px; background-color: #0f0; border-radius: 50%;
         display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0;
         animation: blink 0.8s infinite;
     }
 
-    /* LED ROSSO FISSO */
     .led-rosso {
         width: 10px; height: 10px; background-color: #f00; border-radius: 50%;
         display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00;
@@ -46,12 +44,29 @@
 
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
+    
+    /* TITOLO PULITO SENZA "CARTAIO" */
     .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
 
     .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
     .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
     .foto { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
     .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
+
+    /* EFFETTO LAMA ORO/NEON ORIZZONTALE */
+    .testo-lama {
+        font-size: 12px;
+        font-weight: 900;
+        text-align: center;
+        padding: 15px 5px;
+        background: linear-gradient(to bottom, 
+            #ffd700 0%, #ffd700 50%, 
+            #00ffff 50%, #00ffff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block;
+        letter-spacing: 1px;
+    }
 </style>
 </head>
 <body>
@@ -64,7 +79,7 @@
     <div id="locandina">
         <div class="header">
             <span id="giorno-live">---</span>
-            <div class="titolo">CARTAIO PALINSESTO</div>
+            <div class="titolo">DIRETTE RADIO LIVE</div>
         </div>
         <div id="lista-dj"></div>
     </div>
@@ -72,7 +87,6 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    // TURNI AGGIORNATI: Gabry ore 20, Lory ore 21
     const databaseTurni = {
         "MERCOLEDÌ": [
             { h: 19, label: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
@@ -95,14 +109,12 @@
         if (djsOggi.length > 0) {
             djsOggi.forEach((dj) => {
                 let statusLed = '';
-                
                 if (oraAttuale === dj.h) {
                     statusLed = '<span class="led-verde"></span>';
                 } 
                 else if (oraAttuale > dj.h) {
                     statusLed = '<span class="led-rosso"></span>';
                 }
-
                 container.append(`
                     <div class="slot">
                         <span class="ora">${dj.label}</span>
@@ -112,7 +124,7 @@
                 `);
             });
         } else {
-            container.append('<div style="color:white; font-size:10px; text-align:center; padding:10px;">IN ATTESA DI PROGRAMMAZIONE</div>');
+            container.append('<div class="testo-lama">IN ATTESA DI PROGRAMMAZIONE</div>');
         }
     }
 
