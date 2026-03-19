@@ -44,8 +44,6 @@
 
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
-    
-    /* TITOLO PULITO SENZA "CARTAIO" */
     .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
 
     .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
@@ -53,19 +51,17 @@
     .foto { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; }
     .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
 
-    /* EFFETTO LAMA ORO/NEON ORIZZONTALE */
     .testo-lama {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 900;
         text-align: center;
         padding: 15px 5px;
-        background: linear-gradient(to bottom, 
-            #ffd700 0%, #ffd700 50%, 
-            #00ffff 50%, #00ffff 100%);
+        background: linear-gradient(to bottom, #ffd700 50%, #00ffff 50%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         display: block;
         letter-spacing: 1px;
+        line-height: 1.2;
     }
 </style>
 </head>
@@ -88,11 +84,32 @@
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
     const databaseTurni = {
+        "LUNEDÌ": [
+            { h: 19, label: "19:00", n: "SALVATORE DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 20, label: "20:00", n: "DJ SALVO", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 21, label: "21:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+        ],
+        "MARTEDÌ": [
+            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 20, label: "20:00", n: "WJ MICHELE", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 21, label: "21:00", n: "DJ TONINA", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+        ],
         "MERCOLEDÌ": [
-            { h: 19, label: "19:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
-            { h: 20, label: "20:00", n: "SPEAKER GABRY", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
-            { h: 21, label: "21:00", n: "DENNY", f: "https://xatimg.com/image/T7dqsK3EyHMz.gif" }
-        ]
+            { h: 19, label: "19:00", n: "TERRY DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 20, label: "20:00", n: "GABRY SPEAKER", f: "https://xatimg.com/image/sREfmFFsu3cq.gif" },
+            { h: 21, label: "21:00", n: "DJ LORY", f: "https://xatimg.com/image/xd7fBgfYBPUK.gif" }
+        ],
+        "GIOVEDÌ": [
+            { h: 19, label: "19:00", n: "SALVATORE DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 20, label: "20:00", n: "DJ TERRY", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 21, label: "21:00", n: "DJ TONINA", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+        ],
+        "VENERDI": [
+            { h: 19, label: "19:00", n: "ENZO MASTER DJ", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 20, label: "20:00", n: "WJ MICHELE", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" },
+            { h: 21, label: "21:00", n: "DJ SALVO", f: "https://xatimg.com/image/6LCkmBbnRq6Z.gif" }
+        ],
+        "SABATO": "WEEKEND"
     };
 
     function aggiornaLive() {
@@ -104,15 +121,16 @@
         $('#giorno-live').text(oggi);
 
         const container = $('#lista-dj').empty();
-        const djsOggi = databaseTurni[oggi] || [];
+        const djsOggi = databaseTurni[oggi];
 
-        if (djsOggi.length > 0) {
+        if (oggi === "SABATO") {
+            container.append('<div class="testo-lama">LORYCUORESTELLARE VI AUGURA BUON WEEK END</div>');
+        } else if (Array.isArray(djsOggi) && djsOggi.length > 0) {
             djsOggi.forEach((dj) => {
                 let statusLed = '';
                 if (oraAttuale === dj.h) {
                     statusLed = '<span class="led-verde"></span>';
-                } 
-                else if (oraAttuale > dj.h) {
+                } else if (oraAttuale > dj.h) {
                     statusLed = '<span class="led-rosso"></span>';
                 }
                 container.append(`
@@ -124,7 +142,7 @@
                 `);
             });
         } else {
-            container.append('<div class="testo-lama">IN ATTESA DI PROGRAMMAZIONE</div>');
+            container.append('<div class="testo-lama">RADIO AUTOMATICA 24H</div>');
         }
     }
 
@@ -134,7 +152,7 @@
     };
 
     setInterval(aggiornaLive, 30000);
-    window.onload = aggiornaLive;
+    aggiornaLive();
 </script>
 </body>
 </html>
