@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco di Lavoro Diablo Builder</title>
+<style>
+    /* STILE FONDAMENTALE PER LA COPERTURA TOTALE */
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden; /* Evita barre di scorrimento fastidiose */
+        background-color: #000; /* Colore di base nero */
+    }
+
+    body { 
+        /* Impostazioni per far coprire la pagina perfettamente */
+        background-size: cover; 
+        background-position: center; 
+        background-attachment: fixed; 
+        background-repeat: no-repeat;
+        /* Effetto sfumato nel cambio sfondo */
+        transition: background-image 0.5s ease-in-out;
+        
+        font-family: 'Arial Black', sans-serif;
+    }
+
+    /* PANNELLO DI CONTROLLO LATERALE */
+    #selettore-diablo {
+        position: fixed;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 110px;
+        background: rgba(0, 0, 0, 0.9); /* Sfondo scuro semitrasparente */
+        border: 2px solid #f00; /* Bordo rosso Diablo */
+        border-radius: 15px;
+        padding: 10px;
+        z-index: 999999; /* Sempre in primo piano */
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        pointer-events: auto; /* Rende il pannello cliccabile */
+        text-align: center;
+    }
+
+    .titolo-lab {
+        color: #ff0; /* Giallo Neon */
+        font-size: 10px;
+        font-weight: 900;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* STILE MINIATURE SFONDI */
+    .mini-bg {
+        width: 90px;
+        height: 60px;
+        margin: 8px auto;
+        border: 2px solid #333;
+        border-radius: 8px;
+        cursor: pointer;
+        display: block;
+        transition: all 0.3s ease;
+        object-fit: cover; /* Mantiene le proporzioni dell'immagine */
+    }
+
+    /* Effetto al passaggio del mouse */
+    .mini-bg:hover {
+        border-color: #0f0; /* Verde Neon */
+        transform: scale(1.1);
+        box-shadow: 0 0 15px #0f0;
+    }
+
+    /* STILE FIRMA */
+    .firma {
+        color: #666;
+        font-size: 8px;
+        margin-top: 12px;
+        font-weight: normal;
+    }
+</style>
+</head>
+<body id="banco-lavoro">
+
+    <div id="selettore-diablo">
+        <div class="titolo-lab">LAB DIABLO</div>
+        
+        <img class="mini-bg" src="image_0.png" onclick="cambiaSfondo('image_0.png')" title="Luce Neon">
+        
+        <img class="mini-bg" src="image_1.png" onclick="cambiaSfondo('image_1.png')" title="DJ Spaziale">
+        
+        <img class="mini-bg" src="image_2.png" onclick="cambiaSfondo('image_2.png')" title="Bolle d'Aria">
+        
+        <img class="mini-bg" src="image_3.png" onclick="cambiaSfondo('image_3.png')" title="Lollipop Rosso">
+        
+        <img class="mini-bg" src="image_4.png" onclick="cambiaSfondo('image_4.png')" title="Tatuaggio Collo">
+        
+        <img class="mini-bg" src="image_5.png" onclick="cambiaSfondo('image_5.png')" title="Sguardo Intenso">
+        
+        <img class="mini-bg" src="image_6.png" onclick="cambiaSfondo('image_6.png')" title="Vortice di Colori">
+
+        <div class="firma">DIABLO BUILDER</div>
+    </div>
+
+<script>
+    // Funzione JavaScript per cambiare lo sfondo
+    function cambiaSfondo(url) {
+        // Applica l'immagine al body per coprire tutta la pagina
+        document.getElementById('banco-lavoro').style.backgroundImage = "url('" + url + "')";
+    }
+    
+    // Imposta il primo sfondo come predefinito all'apertura
+    window.onload = function() {
+        cambiaSfondo('image_0.png');
+    };
+</script>
+
+</body>
+</html>
