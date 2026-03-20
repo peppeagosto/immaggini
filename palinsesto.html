@@ -8,20 +8,47 @@
 <style>
     :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
     body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; }
+    
     #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
     .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+    
     #on-air-text { color: yellow; font-size: 9px; font-weight: bold; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    
     .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
     .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    
     #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; }
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
     .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
+    
     .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
     .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
-    .foto { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #fff; object-fit: cover; background: #222; }
+    
+    /* STILE BASE FOTO */
+    .foto { 
+        width: 40px; 
+        height: 40px; 
+        border-radius: 50%; 
+        border: 2px solid #fff; 
+        object-fit: cover; 
+        background: #222; 
+    }
+
+    /* CLASSE ANIMAZIONE (SOLO PER CHI È LIVE) */
+    .ruota-disco {
+        animation: rotate-disco 3s linear infinite;
+        border-color: #0f0; /* Opzionale: bordo verde mentre gira */
+        box-shadow: 0 0 10px #0f0;
+    }
+
+    @keyframes rotate-disco {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
     .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
     .testo-lama { font-size: 14px; font-weight: 900; text-align: center; padding: 15px 5px; background: linear-gradient(to bottom, #ffd700 50%, #00ffff 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; letter-spacing: 1px; }
 </style>
@@ -44,7 +71,6 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    // 🔥 DATABASE FOTO BLINDATO 🔥
     const imgLory = "https://xatimg.com/image/T7dqsK3EyHMz.gif";
     const imgGabry = "https://xatimg.com/image/sREfmFFsu3cq.gif";
     const imgTonina = "https://xatimg.com/image/H2g4i2unP4dj.gif";
@@ -81,7 +107,8 @@
             { h: 20, label: "20:00", n: "WJ MICHELE", f: imgMichele },
             { h: 21, label: "21:00", n: "DJ SALVO", f: imgSalvo }
         ],
-        "SABATO": "WEEKEND"
+        "SABATO": "WEEKEND",
+        "DOMENICA": "WEEKEND"
     };
 
     function aggiornaLive() {
@@ -93,12 +120,17 @@
         const container = $('#lista-dj').empty();
         const djsOggi = databaseTurni[oggi];
 
-        if (oggi === "SABATO") {
+        if (oggi === "SABATO" || oggi === "DOMENICA") {
             container.append('<div class="testo-lama">LORYCUORESTELLARE VI AUGURA BUON WEEK END</div>');
         } else if (Array.isArray(djsOggi)) {
             djsOggi.forEach((dj) => {
-                let statusLed = (oraAttuale === dj.h) ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
-                container.append(`<div class="slot"><span class="ora">${dj.label}</span><img class="foto" src="${dj.f}"><div class="nome">${dj.n} ${statusLed}</div></div>`);
+                // CONTROLLO: Se è l'ora attuale, aggiungo la classe 'ruota-disco'
+                let èLive = (oraAttuale === dj.h);
+                let classeAnimazione = èLive ? "ruota-disco" : "";
+                
+                let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
+                
+                container.append(`<div class="slot"><span class="ora">${dj.label}</span><img class="foto ${classeAnimazione}" src="${dj.f}"><div class="nome">${dj.n} ${statusLed}</div></div>`);
             });
         }
     }
@@ -111,5 +143,7 @@
     setInterval(aggiornaLive, 30000);
     aggiornaLive();
 </script>
+</body>
+</html>
 </body>
 </html>
