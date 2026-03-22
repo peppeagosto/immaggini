@@ -8,10 +8,24 @@
     body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; }
     
     #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
-    .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 11px; font-weight: 900; text-transform: uppercase; }
     
-    #on-air-text { color: yellow; font-size: 9px; font-weight: bold; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .btn-text, #clicca-qui-text { 
+        background: var(--rb); 
+        -webkit-background-clip: text; 
+        color: transparent; 
+        text-transform: uppercase; 
+        font-weight: 900;
+    }
+    
+    .btn-text { font-size: 11px; }
+    #clicca-qui-text { 
+        font-size: 14px; 
+        animation: pulse 1.5s infinite; 
+        letter-spacing: 2px;
+        margin-top: 2px;
+    }
+    
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
     
     .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
     .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00; }
@@ -20,14 +34,20 @@
     #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; }
     .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
     #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
-    .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; }
+    
+    .titolo, .testo-lama { 
+        background: var(--rb); 
+        -webkit-background-clip: text; 
+        color: transparent; 
+        font-weight: 900; 
+        text-transform: uppercase;
+    }
+    .titolo { font-size: 13px; }
     
     .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
     .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
-    
     .foto { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; background: #222; }
 
-    /* CLASSE ANIMAZIONE PER CHI È LIVE */
     .ruota-disco {
         animation: rotate-disco 3s linear infinite !important;
         border-color: #0f0 !important;
@@ -40,20 +60,30 @@
     }
 
     .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
-    .testo-lama { font-size: 14px; font-weight: 900; text-align: center; padding: 15px 5px; background: linear-gradient(to bottom, #ffd700 50%, #00ffff 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; letter-spacing: 1px; }
+    
+    /* Stile testo lama piccolo per non uscire fuori */
+    .testo-lama { 
+        font-size: 13px; 
+        text-align: center; 
+        padding: 20px 5px; 
+        display: block; 
+        letter-spacing: 0.5px;
+        line-height: 1.4;
+        max-width: 100%;
+    }
 </style>
 </head>
 <body>
 
     <div id="btn-pali">
         <div class="btn-text">PALINSESTO DI LORYCUORESTELLARE</div>
-        <div id="on-air-text">ON AIR ---</div>
+        <div id="clicca-qui-text">CLICCA QUI</div>
     </div>
 
     <div id="locandina">
         <div class="header">
             <span id="giorno-live">---</span>
-            <div class="titolo">DIRETTE RADIO LIVE</div>
+            <div class="titolo" id="titolo-locandina">DIRETTE RADIO LIVE</div>
         </div>
         <div id="lista-dj"></div>
     </div>
@@ -77,7 +107,7 @@
         "GIOVEDÌ": [{ h: 19, label: "19:00", n: "SALVATORE DJ", f: imgSalvatore }, { h: 20, label: "20:00", n: "DJ TERRY", f: imgTerry }, { h: 21, label: "21:00", n: "DJ TONINA", f: imgTonina }],
         "VENERDÌ": [{ h: 19, label: "19:00", n: "ENZO MASTER DJ", f: imgEnzo }, { h: 20, label: "20:00", n: "WJ MICHELE", f: imgMichele }, { h: 21, label: "21:00", n: "DJ SALVO", f: imgSalvo }],
         "SABATO": "WEEKEND",
-        "DOMENICA": "WEEKEND"
+        "DOMENICA": "DOMENICA"
     };
 
     function aggiornaLive() {
@@ -85,25 +115,34 @@
         const oggi = giorni[d.getDay()];
         const oraAttuale = d.getHours();
         
-        $('#on-air-text').text("ON AIR " + oggi);
         $('#giorno-live').text(oggi);
         const container = $('#lista-dj').empty();
         const djsOggi = databaseTurni[oggi];
+        const titoloLoc = $('#titolo-locandina');
 
-        if (oggi === "SABATO" || oggi === "DOMENICA") {
-            container.append('<div class="testo-lama">LORYCUORESTELLARE VI AUGURA BUON WEEK END</div>');
-        } else if (Array.isArray(djsOggi)) {
-            djsOggi.forEach((dj) => {
-                let èLive = (oraAttuale === dj.h);
-                let classeGira = èLive ? "ruota-disco" : "";
-                let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
-                
-                container.append(`<div class="slot"><span class="ora">${dj.label}</span><img class="foto ${classeGira}" src="${dj.f}"><div class="nome">${dj.n} ${statusLed}</div></div>`);
-            });
+        if (oggi === "DOMENICA") {
+            // Nasconde il titolo fisso e mette il messaggio corretto
+            titoloLoc.hide();
+            container.append('<div class="testo-lama">BUONA DOMENICA DA<br>LORYCUORESTELLARE</div>');
+        } else if (oggi === "SABATO") {
+            titoloLoc.show();
+            titoloLoc.text("DIRETTE RADIO LIVE");
+            container.append('<div class="testo-lama">LORYCUORESTELLARE</div>');
+        } else {
+            titoloLoc.show();
+            titoloLoc.text("DIRETTE RADIO LIVE");
+            if (Array.isArray(djsOggi)) {
+                djsOggi.forEach((dj) => {
+                    let èLive = (oraAttuale === dj.h);
+                    let classeGira = èLive ? "ruota-disco" : "";
+                    let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
+                    
+                    container.append(`<div class="slot"><span class="ora">${dj.label}</span><img class="foto ${classeGira}" src="${dj.f}"><div class="nome">${dj.n} ${statusLed}</div></div>`);
+                });
+            }
         }
     }
 
-    // Funzione click riparata
     $('#btn-pali').on('click', function() {
         $('#locandina').toggle();
     });
