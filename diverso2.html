@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /* Sfondo trasparente e rimuovo margini che spostano il testo */
+  body { 
+    background: transparent; 
+    overflow: hidden; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Courier New', Courier, monospace; 
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Attaccato a sinistra */
+    height: auto; /* Non prende più tutta l'altezza dello schermo */
+    padding: 10px 0 0 10px; /* 10px dall'alto e 10px da sinistra */
+    animation: apparition 12s infinite; 
+  }
+
+  .logo { width: 40px; height: auto; margin-right: 10px; }
+
+  .text-3d {
+    font-size: 28px; 
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    gap: 2px;
+  }
+
+  /* Colori e Ombre */
+  .l1 { color: #FF0000; text-shadow: 1px 1px #550000; }
+  .l2 { color: #00FF00; text-shadow: 1px 1px #005500; }
+  .l3 { color: #00FFFF; text-shadow: 1px 1px #005555; }
+  .l4 { color: #FFFF00; text-shadow: 1px 1px #555500; }
+  .l5 { color: #FF00FF; text-shadow: 1px 1px #550055; }
+  .l6 { color: #FFA500; text-shadow: 1px 1px #884400; }
+
+  /* Sparisce per 5 secondi (totale ciclo 12s) */
+  @keyframes apparition {
+    0%, 58% { opacity: 1; } 
+    60%, 100% { opacity: 0; }
+  }
+
+  /* Effetto Macchina da scrivere */
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid white;
+    width: 0;
+    animation: typing 4s steps(40, end) forwards, blink-caret .75s step-end infinite;
+  }
+
+  @keyframes typing { from { width: 0 } to { width: 100% } }
+  @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: white } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img src="https://tuo-link-immagine.png" class="logo" alt="L">
+
+  <div class="text-3d typewriter">
+    <span class="l1">B</span><span class="l2">U</span><span class="l3">O</span><span class="l4">N</span>
+    <span>&nbsp;</span>
+    <span class="l6">A</span><span class="l1">S</span><span class="l2">C</span><span class="l3">O</span><span class="l4">L</span><span class="l5">T</span><span class="l6">O</span>
+    <span>&nbsp;</span>
+    <span class="l2">D</span><span class="l3">A</span><span class="l4">L</span>
+    <span>&nbsp;</span>
+    <span class="l6">C</span><span class="l1">A</span><span class="l2">R</span><span class="l3">T</span><span class="l4">A</span><span class="l5">I</span><span class="l6">O</span>
+  </div>
+</div>
+
+</body>
+</html>
