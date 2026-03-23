@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>miei faretti2025</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+/* CONTENITORE GENERALE */
+.container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+    background: transparent;
+}
+
+/* VIDEO LATERALI */
+.video-wrapper {
+    position: absolute;
+    width: 290px;
+    height: 486px;
+    overflow: hidden; /* Impedisce al testo di uscire dal rettangolo */
+    border-radius: 12px;
+    z-index: 2;
+}
+
+video.side-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.left-video-wrapper { left: 10px; top: 0; }
+.right-video-wrapper { right: 10px; top: 0; }
+
+/* TESTI SUI VIDEO LATERALI */
+.video-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px; /* Leggermente più grande per visibilità */
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 4;
+    color: gold;
+    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff8800;
+    opacity: 0; /* Nascosto all'inizio */
+    animation: flashHeartbeat 10s infinite; /* Ciclo più breve per vederlo a fine video */
+}
+
+/* ANIMAZIONE: APPARE A FINE CICLO DENTRO IL RETTANGOLO */
+@keyframes flashHeartbeat {
+    0%, 70% {
+        opacity: 0;
+        bottom: 20px;
+        transform: translateX(-50%) scale(0.8);
+    }
+    80% {
+        opacity: 1;
+        bottom: 50px; /* Posizione visibile dentro il rettangolo */
+        transform: translateX(-50%) scale(1.2); /* Effetto battito */
+    }
+    90%, 100% {
+        opacity: 1;
+        bottom: 50px;
+        transform: translateX(-50%) scale(1);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="video-wrapper left-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/lu.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL DIABLO</div>
+  </div>
+
+  <div class="video-wrapper right-video-wrapper">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/lu.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL CARTAIO</div>
+  </div>
+
+</div>
+
+</body>
+</html>
