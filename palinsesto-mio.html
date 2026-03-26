@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
+        body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; }
+        
+        #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
+        
+        .btn-text, #clicca-qui-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; }
+        .btn-text { font-size: 11px; }
+        #clicca-qui-text { font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
+        
+        .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
+        .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; }
+        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
+        #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
+        
+        .titolo, .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; }
+        .titolo { font-size: 13px; }
+        
+        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
+        .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
+        .foto { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; transition: 0.3s; }
+        
+        .ruota-disco { animation: rotate-disco 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 15px #0f0; }
+        @keyframes rotate-disco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
+        .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div id="btn-pali">
+        <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
+        <div id="clicca-qui-text">CLICCA QUI</div>
+    </div>
+
+    <div id="locandina">
+        <div class="header">
+            <span id="giorno-live">---</span>
+            <div class="titolo" id="titolo-locandina">DIRETTE RADIO LIVE</div>
+        </div>
+        <div id="lista-dj"></div>
+    </div>
+
+<script>
+    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
+
+    // Mapping foto caricate
+    const img = [
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_0.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_1.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_2.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_3.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_4.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_5.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_6.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_7.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_8.png",
+        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_9.png"
+    ];
+
+    const databaseTurni = {
+        "LUNEDÌ": [{h:18, n:"DJ MATTEO", f:img[0]}, {h:19, n:"DJ SOFIA", f:img[1]}, {h:20, n:"DJ LUCA", f:img[2]}, {h:21, n:"DJ GIULIA", f:img[3]}],
+        "MARTEDÌ": [{h:17, n:"DJ MARCO", f:img[4]}, {h:18, n:"DJ ELENA", f:img[5]}, {h:19, n:"DJ DAVIDE", f:img[6]}, {h:20, n:"DJ SARA", f:img[7]}, {h:21, n:"DJ PAOLO", f:img[8]}],
+        "MERCOLEDÌ": [{h:18, n:"DJ VALENTINA", f:img[9]}, {h:19, n:"DJ FABIO", f:img[0]}, {h:20, n:"DJ CHIARA", f:img[1]}, {h:21, n:"DJ ANDREA", f:img[2]}],
+        "GIOVEDÌ": [{h:17, n:"DJ MARTINA", f:img[3]}, {h:18, n:"DJ GIOVANNI", f:img[4]}, {h:19, n:"DJ FEDERICA", f:img[5]}, {h:20, n:"DJ ENRICO", f:img[6]}, {h:21, n:"DJ BEATRICE", f:img[7]}],
+        "VENERDÌ": [{h:18, n:"DJ RICCARDO", f:img[8]}, {h:19, n:"DJ ANNA", f:img[9]}, {h:20, n:"DJ PIETRO", f:img[0]}, {h:21, n:"DJ SILVIA", f:img[1]}],
+        "SABATO": [{h:17, n:"DJ CLAUDIO", f:img[2]}, {h:18, n:"DJ SIMONA", f:img[3]}, {h:19, n:"DJ STEFANO", f:img[4]}, {h:20, n:"DJ ROBERTO", f:img[5]}, {h:21, n:"DJ ALESSIA", f:img[6]}],
+        "DOMENICA": "RIPOSO"
+    };
+
+    function aggiornaLive() {
+        const d = new Date();
+        const oggi = giorni[d.getDay()];
+        let oraAttuale = d.getHours();
+        
+        $('#giorno-live').text(oggi);
+        const container = $('#lista-dj').empty();
+        const djsOggi = databaseTurni[oggi];
+        const titoloLoc = $('#titolo-locandina');
+
+        if (oggi === "DOMENICA") {
+            titoloLoc.hide();
+            container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
+        } else {
+            titoloLoc.show();
+            if (Array.isArray(djsOggi)) {
+                // Trucco: se siamo fuori orario, facciamo finta che l'ultimo DJ sia ancora live
+                let qualcunoLive = djsOggi.some(dj => dj.h === oraAttuale);
+                
+                djsOggi.forEach((dj, index) => {
+                    let èLive = (oraAttuale === dj.h);
+                    
+                    // Forza il live sul primo DJ se è presto, o sull'ultimo se è tardi per far sembrare attivo
+                    if (!qualcunoLive && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
+                    if (!qualcunoLive && oraAttuale < 17 && index === 0) èLive = true;
+
+                    let classeGira = èLive ? "ruota-disco" : "";
+                    let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
+                    
+                    container.append(`
+                        <div class="slot">
+                            <span class="ora">${dj.h}:00</span>
+                            <img class="foto ${classeGira}" src="${dj.f}">
+                            <div class="nome">${dj.n} ${statusLed}</div>
+                        </div>`);
+                });
+            }
+        }
+    }
+
+    $('#btn-pali').on('click', function() { $('#locandina').toggle(); });
+    setInterval(aggiornaLive, 10000);
+    aggiornaLive();
+</script>
+</body>
+</html>
