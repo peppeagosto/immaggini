@@ -54,18 +54,12 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    // Inserisci qui i link diretti alle tue immagini (.jpg, .png)
     const img = [
-        "https://xatimg.com/image/iQgCyJrXx59k.jpg", // Foto 1
-        "https://xatimg.com/image/Pb7d1636URvg.jpg", // Foto 2
-        "https://xatimg.com/image/iVWjQe7TNoGD.jpg", // Foto 3
-        "https://xatimg.com/image/xownGDwnETzl.jpg", // Foto 4
-        "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", // Foto 5
-        "https://xatimg.com/image/D5nl0rwtzO5q.jpg", // Foto 6
-        "https://xatimg.com/image/ghXE2B3YgqbX.jpg", // Foto 7
-        "https://xatimg.com/image/Ewyzp0L90szv.jpg", // Foto 8
-        "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", // Foto 9
-        "https://xatimg.com/image/7gG8UEwtre1G.jpg"  // Foto 10
+        "https://xatimg.com/image/iQgCyJrXx59k.jpg", "https://xatimg.com/image/Pb7d1636URvg.jpg",
+        "https://xatimg.com/image/iVWjQe7TNoGD.jpg", "https://xatimg.com/image/xownGDwnETzl.jpg",
+        "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", "https://xatimg.com/image/D5nl0rwtzO5q.jpg",
+        "https://xatimg.com/image/ghXE2B3YgqbX.jpg", "https://xatimg.com/image/Ewyzp0L90szv.jpg",
+        "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", "https://xatimg.com/image/7gG8UEwtre1G.jpg"
     ];
 
     const databaseTurni = {
@@ -94,14 +88,10 @@
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
-                let qualcunoLive = djsOggi.some(dj => dj.h === oraAttuale);
-                
-                djsOggi.forEach((dj, index) => {
+                djsOggi.forEach((dj) => {
+                    // È LIVE SOLO se l'ora attuale spacca l'ora del turno
                     let èLive = (oraAttuale === dj.h);
                     
-                    if (!qualcunoLive && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
-                    if (!qualcunoLive && oraAttuale < 17 && index === 0) èLive = true;
-
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
                     
