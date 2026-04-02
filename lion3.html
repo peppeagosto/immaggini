@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>LION PLAYER 🜏 CODICE INFERNO</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --red: #ff0000; --blue: #00d4ff; --neon-thickness: 16px; }
+        body { background: ; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+
+        /* BOX ESTERNO 750PX */
+        .snake-box {
+            position: relative;
+            width: 750px; height: 750px;
+            background: #000;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+        }
+
+        /* SNAKE NEON ORIGINALE A 16PX E MULTICOLORE */
+        .snake-box::before {
+            content: "";
+            position: absolute;
+            width: 250%; height: 250%;
+            background: conic-gradient(from 0deg, 
+                transparent 55%, 
+                var(--red) 60%, #ff8800 64%, #ffff00 68%, #00ff00 72%, #00ffff 76%, var(--blue) 80%, #ff00ff 84%, var(--red) 90%, 
+                transparent 95%);
+            animation: rotate 3.5s linear infinite;
+            filter: blur(2px);
+        }
+
+        /* COPERTURA INTERNA PER SPESSORE 16PX */
+        .snake-box::after {
+            content: "";
+            position: absolute;
+            inset: var(--neon-thickness);
+            background: #000;
+            z-index: 1;
+            border-radius: 12px;
+        }
+
+        .player-wrap {
+            position: relative;
+            width: 710px; height: 710px; /* Ridotto leggermente per lo spessore da 16px */
+            z-index: 2;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #video-bg {
+            position: absolute;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* COVER 230PX CENTRATA */
+        #art-gambe {
+            position: absolute;
+            top: 245px; 
+            left: 34%;
+            transform: translateX(-50%);
+            width: 230px; height: 230px;
+            border-radius: 50%;
+            background-size: cover;
+            animation: spin 15s linear infinite paused;
+            box-shadow: inset 0 0 30px #000, 0 0 20px var(--blue);
+            z-index: 3;
+        }
+
+        /* TITOLI SULLA PERGAMENA */
+        .marquee-box {
+            position: absolute;
+            top: 555px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 310px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            z-index: 10;
+        }
+        
+        #title-gambe {
+            display: inline-block;
+            font-size: 20px; 
+            font-weight: 900;
+            letter-spacing: 1px;
+            animation: scroll 20s linear infinite, rainbow 3s linear infinite;
+            background: linear-gradient(to right, #f00, #ff0, #0ff, #f0f, #f00);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            background-size: 200%;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+        }
+
+        /* CONTROLLI SFUMATI */
+        .controls {
+            position: absolute;
+            top: 495px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+            z-index: 20;
+        }
+
+        .btn {
+            width: 54px; height: 54px; border-radius: 50%; 
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+        
+        .btn:hover { border-color: var(--blue); box-shadow: 0 0 15px var(--blue); }
+
+        .icon-stop { 
+            width: 16px; height: 16px; 
+            background: #fff; 
+            border-radius: 2px;
+            box-shadow: 0 0 10px #fff; 
+            opacity: 0.9;
+        }
+        
+        .vol { 
+            -webkit-appearance: none; 
+            width: 110px; 
+            height: 3px; 
+            background: rgba(255,255,255,0.2); 
+            border-radius: 10px; 
+            outline: none;
+        }
+
+        .vol::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px; height: 12px;
+            background: var(--blue);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--blue);
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        @keyframes rainbow { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+    </style>
+</head>
+<body>
+
+<div class="snake-box">
+    <div class="player-wrap">
+        <video id="video-bg" loop playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/lion3.mp4" type="video/mp4">
+        </video>
+
+        <div id="art-gambe"></div>
+        <div class="marquee-box"><div id="title-gambe">LION PLAYER - CLICCA PLAY...</div></div>
+        <div class="controls">
+            <button class="btn" onclick="ruggisciEParti()"><img src="https://xatimg.com/image/sdhqJPXsYTk6.gif" style="width:100%;height:100%;object-fit:cover"></button>
+            <input type="range" class="vol" min="0" max="1" step="0.1" value="0.5" oninput="v(this.value)">
+            <button class="btn" onclick="s()"><div class="icon-stop"></div></button>
+        </div>
+    </div>
+</div>
+
+<audio id="r"></audio>
+
+<script>
+    const r = document.getElementById('r'), d = document.getElementById('art-gambe'), vid = document.getElementById('video-bg');
+    const streamUrl = "https://stm2.srvif.com:7198/stream";
+    let introTimer;
+
+    function ruggisciEParti() {
+        clearTimeout(introTimer);
+        r.pause();
+        r.src = ""; 
+        r.load();
+        d.style.animationPlayState = "paused";
+
+        vid.currentTime = 0;
+        vid.muted = false; 
+        vid.volume = document.querySelector('.vol').value;
+        vid.play();
+
+        introTimer = setTimeout(function() {
+            vid.muted = true;
+            r.src = streamUrl;
+            const volSlider = document.querySelector('.vol').value;
+            r.volume = volSlider;
+            r.play();
+            d.style.animationPlayState = "running";
+        }, 6000); 
+    }
+
+    function s() {
+        clearTimeout(introTimer);
+        r.pause();
+        r.src = ""; 
+        vid.pause();
+        vid.muted = true;
+        d.style.animationPlayState = "paused";
+    }
+
+    function v(val) {
+        if (r.src !== "") r.volume = val;
+        if (!vid.muted) vid.volume = val;
+    }
+
+    function up() {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+            if (data.songtitle) {
+                const t = data.songtitle + " • ";
+                $('#title-gambe').text(t + t);
+                $.getJSON("https://itunes.apple.com/search?term="+encodeURIComponent(data.songtitle)+"&limit=1&callback=?", function(res) {
+                    const img = res.results[0] ? res.results[0].artworkUrl100.replace('100x100','600x600') : 'https://xatimg.com/image/bgXxdAXNQBW6.png';
+                    $(d).fadeOut(400, function() { $(this).css('background-image', 'url('+img+')').fadeIn(400); });
+                });
+            }
+        });
+    }
+    setInterval(up, 10000); up();
+</script>
+</body>
+</html>
