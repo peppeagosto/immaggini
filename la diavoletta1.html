@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>La Diavoletta Player - Protected Edition</title>
+    <style>
+        :root { 
+            --neon-blue: #00ffff;
+            --neon-magenta: #ff00ff;
+            --rainbow-grad: linear-gradient(to right, violet, blue, green, yellow, red);
+            --rainbow-grad-v: linear-gradient(to top, violet, blue, green, yellow, red);
+        }
+        
+        body { 
+            margin: 0; padding: 0; overflow: hidden; 
+            background: transparent; font-family: sans-serif; 
+            display: flex; justify-content: center;
+            /* Impedisce la selezione del testo */
+            user-select: none; 
+        }
+
+        .container {
+            position: relative;
+            width: 750px; height: 422px; 
+            overflow: hidden; background: #000;
+        }
+
+        /* WATERMARK DI PROTEZIONE */
+        .watermark {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            z-index: 20;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #video-bg { width: 750px; height: 100%; object-fit: cover; z-index: 1; }
+
+        .art-container {
+            position: absolute; background-size: cover; background-position: center;
+            z-index: 5; pointer-events: none; transition: all 0.5s ease; border: 2px solid;
+        }
+
+        .neon-blue { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
+        .neon-magenta { border-color: var(--neon-magenta); box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); }
+
+        #art-sx-alto { 
+            top: 42px; left: 65px; width: 195px; height: 77px; 
+            transform: perspective(1000px) rotateY(25deg) rotateX(-2deg) skewY(5deg);
+            transform-origin: left center;
+        }
+
+        #art-dx-alto { 
+            top: 61px; right: 50px; width: 165px; height: 75px; 
+            transform: perspective(1000px) rotateY(-13deg) rotateX(-13deg) skewY(-6deg); 
+        }
+
+        .control-bar {
+            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+            width: 90%; display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 15px; background: transparent; 
+            border-top: 3px solid; border-bottom: 3px solid;
+            border-image-source: var(--rainbow-grad); border-image-slice: 1; z-index: 10;
+        }
+
+        .btn-ui { 
+            font-weight: bold; background: var(--rainbow-grad-v);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.8)); transition: transform 0.2s;
+        }
+        .btn-ui:hover { transform: scale(1.1); }
+
+        .vol-section { flex: 1; display: flex; align-items: center; gap: 8px; }
+        .vol-label { background: var(--rainbow-grad-v); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 12px; font-weight: bold; }
+
+        input[type=range].vol { -webkit-appearance: none; width: 70px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 5px; outline: none; }
+        input[type=range].vol::-webkit-slider-runnable-track { background: var(--rainbow-grad); border-radius: 5px; }
+        input[type=range].vol::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: #fff; cursor: pointer; border-radius: 50%; margin-top: -3px; }
+
+        .eq-box { flex: 2; height: 40px; background: rgba(0,0,0,0.3); margin: 0 15px; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        #eq-canvas { width: 100%; height: 100%; display: block; }
+        .play-section { flex: 0; cursor: pointer; margin: 0 10px; }
+        .stop-section { flex: 1; display: flex; justify-content: flex-end; align-items: center; cursor: pointer; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body oncontextmenu="return false;"> <div class="container">
+        <div class="watermark">© Proprietà di [Tuo Nick] - Original Code</div>
+
+        <video id="video-bg" playsinline loop crossorigin="anonymous" oncontextmenu="return false;">
+            <source src="https://peppeagosto.github.io/immaggini/la diavoletta1.mp4" type="video/mp4">
+        </video>
+
+        <div id="art-sx-alto" class="art-container neon-blue"></div>
+        <div id="art-dx-alto" class="art-container neon-magenta"></div>
+
+        <div class="control-bar">
+            <div class="vol-section">
+                <span class="vol-label">VOL</span>
+                <input type="range" class="vol" min="0" max="1" step="0.01" value="0.5" oninput="v(this.value)">
+            </div>
+            <div class="eq-box"><canvas id="eq-canvas"></canvas></div>
+            <div class="play-section" onclick="ruggisciEParti()">
+                <div class="btn-ui" style="font-size: 35px;">▶</div>
+            </div>
+            <div class="stop-section" onclick="s()">
+                <div class="btn-ui" style="font-size: 14px;">STOP ■</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="r" crossorigin="anonymous"></audio>
+
+<script>
+    // BLOCCA TASTI DI ISPEZIONE (F12, Ctrl+Shift+I, etc.)
+    document.onkeydown = function(e) {
+        if(event.keyCode == 123) return false;
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+    }
+
+    const r = document.getElementById('r');
+    const vid = document.getElementById('video-bg');
+    const canvas = document.getElementById('eq-canvas');
+    const ctx = canvas.getContext('2d');
+    const streamUrl = "https://stm2.srvif.com:7198/stream";
+    
+    let audioCtx, analyser, sourceR, sourceV, dataArray, animationId, rainbowGradient;
+
+    function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        createGradient();
+    }
+
+    function createGradient() {
+        rainbowGradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
+        rainbowGradient.addColorStop(0, 'violet');
+        rainbowGradient.addColorStop(0.2, 'blue');
+        rainbowGradient.addColorStop(0.5, 'green');
+        rainbowGradient.addColorStop(0.8, 'yellow');
+        rainbowGradient.addColorStop(1, 'red');
+    }
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 64;
+            sourceR = audioCtx.createMediaElementSource(r);
+            sourceV = audioCtx.createMediaElementSource(vid);
+            sourceR.connect(analyser);
+            sourceV.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            resizeCanvas();
+            drawEQ();
+        }
+    }
+
+    function drawEQ() {
+        animationId = requestAnimationFrame(drawEQ);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = rainbowGradient;
+        const barWidth = (canvas.width / dataArray.length) * 1.2;
+        let x = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+            let barHeight = (dataArray[i] / 255) * canvas.height;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+            x += barWidth;
+        }
+    }
+
+    function ruggisciEParti() {
+        initAudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        r.pause(); r.src = "";
+        vid.currentTime = 0; vid.muted = false; vid.play();
+        setTimeout(() => {
+            vid.muted = true;
+            r.src = streamUrl;
+            r.play();
+        }, 6000); 
+    }
+
+    function s() { r.pause(); r.src = ""; vid.pause(); vid.muted = true; }
+    function v(val) { r.volume = val; if (!vid.muted) vid.volume = val; }
+
+    function up() {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+            if (data.songtitle) {
+                $.getJSON("https://itunes.apple.com/search?term="+encodeURIComponent(data.songtitle)+"&limit=1&callback=?", function(res) {
+                    const img = res.results[0] ? res.results[0].artworkUrl100.replace('100x100','600x600') : 'https://xatimg.com/image/bgXxdAXNQBW6.png';
+                    $('.art-container').fadeOut(400, function() { 
+                        $(this).css('background-image', 'url('+img+')').fadeIn(400); 
+                    });
+                });
+            }
+        });
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setInterval(up, 10000); up();
+</script>
+</body>
+</html>
