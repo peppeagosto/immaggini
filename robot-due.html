@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Radio 2026 - Manual Calibration Mode</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { background: #000; color: white; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        
+        :root {
+            --rainbow-gradient: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            --rainbow-gradient-v: linear-gradient(to bottom, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+        }
+
+        #main-pod { position: relative; width: 550px; display: flex; flex-direction: column; align-items: center; perspective: 1200px; }
+        #robot-container { width: 100%; height: 420px; position: relative; transform-style: preserve-3d; }
+        #video-bg { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
+
+        /* --- STILE WOOFER REALISTICI --- */
+        .woofer { 
+            width: 45px; height: 45px; border-radius: 50%; position: absolute; z-index: 3;
+            background: #111; border: 2px solid transparent;
+            background-image: linear-gradient(#000, #000), var(--rainbow-gradient-v);
+            background-origin: border-box; background-clip: content-box, border-box;
+            will-change: transform;
+        }
+        .woofer::before { content: ''; position: absolute; top: 15%; left: 10%; width: 40%; height: 40%; border-radius: 50%; background: radial-gradient(circle, #222 0%, #111 70%, #000 100%); }
+        .woofer::after { content: ''; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #444 0%, #111 60%, #000 100%); }
+
+        /* ============================================================
+           REGOLAZIONE POSIZIONE SINGOLA (Divertiti qui frate!)
+           ============================================================ */
+        
+        /* COLONNA SINISTRA (SX) */
+        #sx-top { left: 100px; top: 110px; } 
+        #sx-mid { left: 100px; top: 165px; } 
+        #sx-low { left: 97px; top: 230px; } 
+
+        /* COLONNA DESTRA (DX) */
+        #dx-top { right: 91px; top: 106px; } 
+        #dx-mid { right: 90px; top: 160px; } 
+        #dx-low { right: 90px; top: 230px; } 
+
+        /* ============================================================ */
+
+        /* COVER ART & CARTAIO */
+        #cartaio-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -58%); width: 150px; height: 150px; background: url('https://xatimg.com/image/fmUs6uEauy9J.png') no-repeat center; background-size: contain; z-index: 10; display: none; border-radius: 10px; }
+        #cover-art { position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%) scale(0.5); width: 185px; height: 105px; border-radius: 6px; z-index: 2; background-size: cover; background-position: center; border: 2px solid transparent; background-image: linear-gradient(#111, #111), var(--rainbow-gradient); background-origin: border-box; background-clip: content-box, border-box; opacity: 0; transition: opacity 0.2s ease-in, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #cover-art.show-cover { opacity: 1; transform: translate(-47%, -62%) scale(0.85); box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+        #cover-art.show-cover-small { opacity: 1; transform: translate(-50%, -52%) scale(0.85); box-shadow: 0 0 25px rgba(0, 255, 255, 0.5); }
+        
+        /* OSCILLOSCOPIO & UI */
+        #osc-canvas-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 320px; height: 50px; z-index: 5; display: flex; flex-direction: column; pointer-events: none; }
+        canvas { width: 100%; height: 25%; display: block; filter: blur(0.5px); }
+        #scroller-wrapper { width: 320px; overflow: hidden; margin-top: 2px; margin-bottom: 10px; background: #000; border: 1px solid #333; padding: 4px; border-bottom: 2px solid transparent; border-image: var(--rainbow-gradient) 1; }
+        #title-gambe { white-space: nowrap; display: inline-block; animation: scrollText 12s linear infinite; font-weight: bold; font-size: 12px; text-transform: uppercase; background: var(--rainbow-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes scrollText { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .controls { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 8px 20px; border-radius: 8px; border: 1px solid transparent; border-image: var(--rainbow-gradient) 1; }
+        button { background: #000; border: 1px solid transparent; color: white; width: 55px; height: 30px; cursor: pointer; font-weight: bold; border-image: var(--rainbow-gradient) 1; font-size: 10px; }
+        input[type=range] { cursor: pointer; accent-color: #9400d3; width: 120px; }
+    </style>
+</head>
+<body>
+
+<div id="main-pod">
+    <div id="robot-container">
+        <div id="cartaio-overlay"></div>
+        <video id="video-bg" playsinline><source src="https://peppeagosto.github.io/immaggini/robot-due.mp4" type="video/mp4"></video>
+        <div id="cover-art"></div>
+        <div id="osc-canvas-container">
+            <canvas id="canvas1"></canvas><canvas id="canvas2"></canvas><canvas id="canvas3"></canvas><canvas id="canvas4"></canvas>
+        </div>
+        
+        <div id="sx-top" class="woofer w-top"></div>
+        <div id="sx-mid" class="woofer w-mid"></div>
+        <div id="sx-low" class="woofer w-low"></div>
+        
+        <div id="dx-top" class="woofer w-top"></div>
+        <div id="dx-mid" class="woofer w-mid"></div>
+        <div id="dx-low" class="woofer w-low"></div>
+    </div>
+
+    <div id="scroller-wrapper"><div id="title-gambe">CALIBRAZIONE MANUALE ATTIVA...</div></div>
+    <div class="controls"><button id="btn-play" onclick="startShow()">PLAY</button><input type="range" min="0" max="1" step="0.1" value="1" oninput="changeVolume(this.value)"><button onclick="stopAll()">STOP</button></div>
+</div>
+
+<audio id="radio-stream" crossorigin="anonymous" src="https://stm2.srvif.com:7198/stream"></audio>
+
+<script>
+let audioCtx, analyser, dataArray, isInitialized = false, onAir = false;
+const video = document.getElementById('video-bg');
+const radio = document.getElementById('radio-stream');
+const cover = document.getElementById('cover-art');
+const overlay = document.getElementById('cartaio-overlay');
+const defaultImg = 'https://xatimg.com/image/ArHHBt7rnBEi.jpg';
+
+function startShow() {
+    if (!isInitialized) { initVisualizer(); }
+    overlay.style.display = "block";
+    video.muted = false; video.play();
+    document.getElementById('btn-play').innerText = "INTRO";
+}
+
+video.onended = function() {
+    overlay.style.display = "none";
+    video.muted = true; video.loop = true; video.play();
+    radio.play(); onAir = true;
+    document.getElementById('btn-play').innerText = "ON AIR";
+    updateInfo(); 
+};
+
+function stopAll() {
+    video.pause(); video.currentTime = 0; video.loop = false; video.muted = true;
+    radio.pause(); radio.currentTime = 0;
+    onAir = false; overlay.style.display = "none";
+    document.getElementById('btn-play').innerText = "PLAY";
+    cover.classList.remove('show-cover', 'show-cover-small');
+}
+
+function initVisualizer() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    const source = audioCtx.createMediaElementSource(radio);
+    source.connect(analyser); analyser.connect(audioCtx.destination);
+    analyser.fftSize = 128; dataArray = new Uint8Array(analyser.frequencyBinCount);
+    
+    const canvases = [{ id: 'canvas1', color: '#ff0000' },{ id: 'canvas2', color: '#ff7f00' },{ id: 'canvas3', color: '#00ff00' },{ id: 'canvas4', color: '#00ffff' }];
+    canvases.forEach(c => { const canvas = document.getElementById(c.id); c.ctx = canvas.getContext('2d'); canvas.width = 320; canvas.height = 12; });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        analyser.getByteTimeDomainData(dataArray);
+        
+        canvases.forEach((c, index) => {
+            const ctx = c.ctx; ctx.clearRect(0, 0, 320, 12); ctx.lineWidth = 1.5; ctx.strokeStyle = c.color; ctx.beginPath();
+            let sliceWidth = 320 / dataArray.length; let x = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                let v = dataArray[i] / 128.0; 
+                let y = (v * 12 / 2) + (Math.sin(i * 0.1) * (index * 0.5) * (onAir ? 1 : 0));
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); x += sliceWidth;
+            }
+            ctx.lineTo(320, 6); ctx.stroke();
+        });
+
+        if (onAir && !radio.paused) {
+            analyser.getByteFrequencyData(dataArray);
+            let power = dataArray[0] / 255;
+            document.querySelectorAll('.w-top').forEach(w => { w.style.transform = `translateZ(${power * 30}px) scale(${1 + power * 0.25})`; });
+            document.querySelectorAll('.w-mid').forEach(w => { w.style.transform = `translateZ(${power * 45}px) scale(${1 + power * 0.40})`; });
+            document.querySelectorAll('.w-low').forEach(w => { w.style.transform = `translateZ(${power * 65}px) scale(${1 + power * 0.60})`; });
+        }
+    }
+    animate();
+    isInitialized = true;
+}
+
+function updateInfo() {
+    if(!onAir) return;
+    $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+        if (data && data.songtitle) {
+            $('#title-gambe').text(data.songtitle);
+            $.getJSON("https://itunes.apple.com/search?term=" + encodeURIComponent(data.songtitle) + "&limit=1&callback=?", function(res) {
+                const img = (res.results && res.results.length > 0) ? res.results[0].artworkUrl100.replace('100x100', '600x600') : defaultImg;
+                $('#cover-art').css('background-image', 'url(' + img + ')');
+            }).fail(function() { $('#cover-art').css('background-image', 'url(' + defaultImg + ')'); });
+        }
+    });
+}
+setInterval(updateInfo, 10000);
+function changeVolume(val) { radio.volume = val; video.volume = val; }
+</script>
+</body>
+</html>
