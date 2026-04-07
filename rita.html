@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>IL CARTAIO - 3D CHROME & RAINBOW</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Arial Black', sans-serif;
+    }
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 484px;
+    }
+
+    /* ===== VIDEO LATERALI ===== */
+    .video-wrapper {
+      position: absolute;
+      width: 270px;
+      height: 484px;
+      z-index: 2;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .left { left: 0; }
+    .right { right: 0; }
+    .side-video { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ===== AREA CENTRALE ===== */
+    .center-area {
+      position: absolute;
+      left: 280px;
+      right: 280px;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    /* ===== TESTO 3D EXTREME ===== */
+    .mural-3d {
+      font-size: 105px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 5px;
+      
+      /* Applica il gradiente */
+      background: linear-gradient(90deg, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff, #ff0000);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      
+      /* Ombre 3D profonde */
+      text-shadow: 
+        0 1px 0 #d9d9d9, 0 2px 0 #d0d0d0, 0 3px 0 #c7c7c7, 
+        0 4px 0 #bebebe, 0 5px 0 #b5b5b5, 0 6px 0 #acacac, 
+        0 7px 0 #a3a3a3, 0 8px 15px rgba(0,0,0,0.8);
+
+      /* Animazioni: 
+         - rainbowFlow: fa girare i colori
+         - chromeToRainbow: gestisce 10s bianco e 10s colori
+         - fadeCycle: gestisce l'apparizione/sparizione totale (20s)
+      */
+      animation: 
+        rainbowFlow 3s linear infinite,
+        chromeToRainbow 20s steps(1) infinite,
+        fadeCycle 20s ease-in-out infinite;
+    }
+
+    /* Fa scorrere l'arcobaleno */
+    @keyframes rainbowFlow {
+      to { background-position: 200% center; }
+    }
+
+    /* Gestisce il cambio stile: 10s Bianco, 10s Arcobaleno */
+    @keyframes chromeToRainbow {
+      0%, 50% { 
+        filter: grayscale(1) brightness(1.5); /* Diventa Bianco Argento */
+      }
+      50.1%, 100% { 
+        filter: grayscale(0) brightness(1); /* Torna Arcobaleno */
+      }
+    }
+
+    /* Ciclo totale di 20 secondi (Appare, sta 20s, scompare) */
+    @keyframes fadeCycle {
+      0%, 5% { opacity: 0; transform: scale(0.9); }
+      10%, 90% { opacity: 1; transform: scale(1); }
+      95%, 100% { opacity: 0; transform: scale(1.1); }
+    }
+
+    .video-label {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 18px;
+      z-index: 5;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 5px #000;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="video-wrapper left">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/rita.mp4" type="video/mp4">
+    </video>
+    <div class="video-label">IL CARTAIO</div>
+  </div>
+
+  <div class="video-wrapper right">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/rita.mp4" type="video/mp4">
+    </video>
+    <div class="video-label">IL CARTAIO</div>
+  </div>
+
+  <div class="center-area">
+    <div class="mural-3d">IL CARTAIO</div>
+  </div>
+</div>
+
+</body>
+</html>
