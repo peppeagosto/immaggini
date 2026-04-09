@@ -15,8 +15,10 @@
             display: flex;
             justify-content: space-between; 
             align-items: flex-start;
-            padding: 20px;
+            /* Modificato: 60px sopra, 20px ai lati/sotto per abbassare i box */
+            padding: 60px 20px 20px 20px;
             pointer-events: none; 
+            box-sizing: border-box;
         }
 
         /* --- BOX SX: EFFETTI --- */
@@ -40,7 +42,7 @@
         /* TUO LOCANDINA ORIGINALE */
         #locandina { 
             width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; 
-            box-shadow: 0 0 50px #000; display: none; z-index: 9998;
+            box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
         }
 
         /* PARTICELLE */
@@ -144,7 +146,7 @@
         }
     });
 
-    // --- TUO CODICE PALINSESTO ORIGINALE (Turni e Immagini) ---
+    // --- TUO CODICE PALINSESTO ORIGINALE ---
     $('#btn-pali').on('click', function() { $('#locandina').fadeToggle(); });
 
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
