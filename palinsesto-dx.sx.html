@@ -20,24 +20,17 @@
             box-sizing: border-box;
         }
 
-        /* --- EFFETTO INVISIBILE AL MOUSE --- */
         .box-sx, .box-dx { 
             width: 250px; 
             pointer-events: auto; 
             display: flex; 
             flex-direction: column; 
             gap: 15px; 
-            /* Nascondo i box */
             opacity: 0; 
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Quando il mouse si avvicina (hover), diventano visibili */
-        .box-sx:hover, .box-dx:hover { 
-            opacity: 1; 
-        }
-
-        /* BOX DX: Allineamento a destra */
+        .box-sx:hover, .box-dx:hover { opacity: 1; }
         .box-dx { align-items: flex-end; }
 
         .btn-custom {
@@ -56,12 +49,30 @@
             box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
         }
 
-        .particle { position: fixed; bottom: -80px; z-index: 1; pointer-events: auto; cursor: pointer; }
-        .smile-img { object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 2px #000); }
+        /* --- STILE PARTICELLE AGGIORNATO --- */
+        .particle { 
+            position: fixed; 
+            bottom: -100px; 
+            z-index: 1; 
+            pointer-events: auto; 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .smile-img { 
+            object-fit: contain; 
+            border-radius: 50%;
+            /* Glow esterno per gli smile */
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+        }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
+            90% { opacity: 1; }
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
@@ -119,7 +130,9 @@
         "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp"
     ];
 
-    const heartColors = ["#ff0000", "#ff00ff", "#00ffff", "#ffff00", "#ff8800", "#00ff00"];
+    const colors = ["#ff0000", "#ff00ff", "#00ffff", "#ffff00", "#ff8800", "#00ff00", "#ffffff"];
+    const extras = ["❤", "⭐", "🎵", "✨"]; // Cuori, stelle, note, scintille
+    
     let active = false;
     let interval;
 
@@ -131,28 +144,32 @@
                 const rand = Math.random();
                 const p = document.createElement('div');
                 p.className = 'particle';
-                if (rand < 0.5) {
+                
+                const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+
+                if (rand < 0.4) { 
+                    // SMILE (PIU GRANDI)
                     const img = document.createElement('img');
                     img.src = smiles[Math.floor(Math.random() * smiles.length)];
-                    img.className = 'smile-img'; img.width = 55;
+                    img.className = 'smile-img'; 
+                    img.width = 70; // Ingranditi
                     p.appendChild(img);
-                } else if (rand < 0.8) {
-                    p.innerHTML = '❤';
-                    p.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                    p.style.fontSize = '40px';
-                    p.style.filter = `drop-shadow(0 0 8px #000) drop-shadow(0 0 10px ${p.style.color})`;
                 } else {
-                    const b = document.createElement('div');
-                    b.className = 'bubble-effect';
-                    let s = Math.random()*25+25+'px';
-                    b.style.width = s; b.style.height = s;
-                    p.appendChild(b);
+                    // EXTRA (CUORI, STELLE, NOTE)
+                    const symbol = extras[Math.floor(Math.random() * extras.length)];
+                    p.innerHTML = symbol;
+                    p.style.color = chosenColor;
+                    p.style.fontSize = '50px'; // Belli grandi
+                    // Glow neon del colore del simbolo
+                    p.style.filter = `drop-shadow(0 0 5px #000) drop-shadow(0 0 15px ${chosenColor})`;
                 }
+
                 p.style.left = Math.random() * 90 + 'vw';
                 p.style.animation = `floatUp ${Math.random()*3+4}s linear forwards`;
                 document.body.appendChild(p);
-                setTimeout(() => p.remove(), 7500);
-            }, 400);
+                
+                setTimeout(() => p.remove(), 7000);
+            }, 350); // Frequenza leggermente aumentata
         } else {
             $(this).find('.btn-sub').text('CLICCA QUI');
             clearInterval(interval);
