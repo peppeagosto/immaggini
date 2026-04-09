@@ -21,42 +21,30 @@
         }
 
         /* --- BOX SX: EFFETTI --- */
-        .box-sx { width: 300px; pointer-events: auto; display: flex; flex-direction: column; gap: 15px; }
+        .box-sx { width: 250px; pointer-events: auto; display: flex; flex-direction: column; gap: 15px; }
 
         /* --- BOX DX: TUO PALINSESTO --- */
-        .box-dx { width: 300px; pointer-events: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+        .box-dx { width: 250px; pointer-events: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
 
         .btn-custom {
-            width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px;
+            width: 220px; height: 55px; background: #000; border: 2px solid #fff; border-radius: 10px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.3); z-index: 9999;
         }
 
-        .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 11px; }
-        #clicca-qui-text, .btn-sub { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; }
+        .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 10px; }
+        #clicca-qui-text, .btn-sub { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 13px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
         
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
+        /* MODIFICATO: Larghezza ridotta a 230px */
         #locandina { 
-            width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; 
+            width: 230px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 8px; 
             box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
         }
 
-        /* PARTICELLE AGGIORNATE */
         .particle { position: fixed; bottom: -80px; z-index: 1; pointer-events: auto; cursor: pointer; }
-        
-        /* Effetto per rendere gli smile super visibili */
-        .smile-img { 
-            object-fit: contain; 
-            /* Ombra scura per staccare dallo sfondo */
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 2px #000); 
-        }
-
-        .bubble-effect { 
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(0, 255, 255, 0.2));
-            border: 2px solid #fff; border-radius: 50%; backdrop-filter: blur(1px);
-            box-shadow: 0 0 10px rgba(255,255,255,0.8);
-        }
+        .smile-img { object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 2px #000); }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
@@ -64,18 +52,22 @@
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
-        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
-        #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; text-align: center; display: block; }
-        .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 13px; text-align: center; }
-        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
-        .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
-        .foto { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
-        .ruota-disco { animation: rotate-disco 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 15px #0f0; }
+        /* STILI SLOT PIÙ COMPATTI */
+        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 10px; padding-bottom: 5px; }
+        #giorno-live { color: #ffff00; font-size: 12px; text-transform: uppercase; text-align: center; display: block; }
+        .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 11px; text-align: center; }
+        
+        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 25px; margin-bottom: 5px; padding: 4px; display: flex; align-items: center; gap: 6px; }
+        .ora { color: #0ff; font-size: 9px; width: 35px; text-align: center; font-weight: bold; }
+        .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
+        
+        .ruota-disco { animation: rotate-disco 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 10px #0f0; }
         @keyframes rotate-disco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
-        .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
+        
+        .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
+        .led-verde { width: 8px; height: 8px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 5px; box-shadow: 0 0 8px #0f0; animation: blink 0.8s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 13px; text-align: center; padding: 20px 5px; display: block; }
+        .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 11px; text-align: center; padding: 15px 5px; display: block; }
     </style>
 </head>
 <body>
@@ -103,17 +95,16 @@
     </div>
 
 <script>
-    // --- LISTA SMILE AGGIORNATA CON COLORI FORTI ---
     const smiles = [
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(maniac)_80.webp", // Maniac (Giallo forte)
-        "https://xat.com/images/smoticons/u/crazypianist.png", // Pazzo (Colorato)
-        "https://xat.com/images/smoticons/u/getlucky.png", // Trifoglio (Verde acceso)
-        "https://xat.com/images/smoticons/u/goldstar.png", // Stella (Oro)
-        "https://xat.com/images/smoticons/u/彈.png", // Bomba (Nero/Rosso)
-        "https://xat.com/images/smoticons/u/shades.png", // Figo (Giallo)
-        "https://xat.com/images/smoticons/u/fame.png", // Fuoco (Rosso/Arancio)
-        "https://xat.com/images/smoticons/u/heart.png", // Cuore Classico
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp" // Ciao
+        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(maniac)_80.webp",
+        "https://xat.com/images/smoticons/u/crazypianist.png",
+        "https://xat.com/images/smoticons/u/getlucky.png",
+        "https://xat.com/images/smoticons/u/goldstar.png",
+        "https://xat.com/images/smoticons/u/彈.png",
+        "https://xat.com/images/smoticons/u/shades.png",
+        "https://xat.com/images/smoticons/u/fame.png",
+        "https://xat.com/images/smoticons/u/heart.png",
+        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp"
     ];
 
     const heartColors = ["#ff0000", "#ff00ff", "#00ffff", "#ffff00", "#ff8800", "#00ff00"];
@@ -128,37 +119,34 @@
                 const rand = Math.random();
                 const p = document.createElement('div');
                 p.className = 'particle';
-                
-                if (rand < 0.5) { // Più probabilità per gli smile aggiornati
+                if (rand < 0.5) {
                     const img = document.createElement('img');
                     img.src = smiles[Math.floor(Math.random() * smiles.length)];
-                    img.className = 'smile-img'; 
-                    img.width = 60; // Leggermente più grandi
+                    img.className = 'smile-img'; img.width = 55;
                     p.appendChild(img);
                 } else if (rand < 0.8) {
                     p.innerHTML = '❤';
                     p.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                    p.style.fontSize = '45px';
-                    p.style.filter = `drop-shadow(0 0 8px #000) drop-shadow(0 0 12px ${p.style.color})`;
+                    p.style.fontSize = '40px';
+                    p.style.filter = `drop-shadow(0 0 8px #000) drop-shadow(0 0 10px ${p.style.color})`;
                 } else {
-                    p.className += ' bubble-effect';
-                    let s = Math.random()*30+30+'px';
-                    p.style.width = s; p.style.height = s;
+                    const b = document.createElement('div');
+                    b.className = 'bubble-effect';
+                    let s = Math.random()*25+25+'px';
+                    b.style.width = s; b.style.height = s;
+                    p.appendChild(b);
                 }
-                
                 p.style.left = Math.random() * 90 + 'vw';
                 p.style.animation = `floatUp ${Math.random()*3+4}s linear forwards`;
-                p.onclick = function() { $(this).remove(); };
                 document.body.appendChild(p);
                 setTimeout(() => p.remove(), 7500);
-            }, 400); // Frequenza leggermente aumentata
+            }, 400);
         } else {
             $(this).find('.btn-sub').text('CLICCA QUI');
             clearInterval(interval);
         }
     });
 
-    // --- CODICE PALINSESTO ---
     $('#btn-pali').on('click', function() { $('#locandina').fadeToggle(); });
 
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
