@@ -20,7 +20,7 @@
             box-sizing: border-box;
         }
 
-        /* I box rimangono invisibili (opacity 0) finché non ci passi sopra */
+        /* LOGICA FURBA: Box invisibili di base */
         .box-sx, .box-dx { 
             width: 250px; 
             pointer-events: auto; 
@@ -31,7 +31,7 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Appaiono solo al passaggio del mouse */
+        /* Appaiono solo quando ci passi sopra col mouse */
         .box-sx:hover, .box-dx:hover { opacity: 1; }
         .box-dx { align-items: flex-end; }
 
@@ -42,34 +42,28 @@
         }
 
         .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 10px; }
-        #clicca-qui-text, .btn-sub { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 13px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
+        .btn-sub, #clicca-qui-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 13px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
         
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
-        /* La locandina ora ha pointer-events auto per poter scrollare o interagire se serve */
         #locandina { 
             width: 230px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 8px; 
             box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
             pointer-events: auto;
         }
 
-        /* --- STILE PARTICELLE --- */
+        /* PARTICELLE */
         .particle { 
             position: fixed; 
             bottom: -100px; 
             z-index: 1; 
-            pointer-events: none; /* Le particelle non devono bloccare i click */
+            pointer-events: none; 
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
         }
 
-        .smile-img { 
-            object-fit: contain; 
-            border-radius: 50%;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-        }
+        .smile-img { object-fit: contain; border-radius: 50%; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
@@ -78,17 +72,15 @@
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
+        /* STILE PALINSESTO */
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 10px; padding-bottom: 5px; }
         #giorno-live { color: #ffff00; font-size: 12px; text-transform: uppercase; text-align: center; display: block; }
         .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 11px; text-align: center; }
-        
         .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 25px; margin-bottom: 5px; padding: 4px; display: flex; align-items: center; gap: 6px; }
         .ora { color: #0ff; font-size: 9px; width: 35px; text-align: center; font-weight: bold; }
         .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
-        
         .ruota-disco { animation: rotate-disco 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 10px #0f0; }
         @keyframes rotate-disco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
         .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
         .led-verde { width: 8px; height: 8px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 5px; box-shadow: 0 0 8px #0f0; animation: blink 0.8s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -100,7 +92,7 @@
     <div class="box-sx">
         <div id="btn-anim" class="btn-custom">
             <div class="btn-text">EFFETTI XAT</div>
-            <div class="btn-sub">CLICCA QUI</div>
+            <div class="btn-sub">EFFETTI: ON</div>
         </div>
     </div>
 
@@ -109,7 +101,6 @@
             <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
             <div id="clicca-qui-text">CLICCA QUI</div>
         </div>
-
         <div id="locandina">
             <div class="header">
                 <span id="giorno-live">---</span>
@@ -131,21 +122,28 @@
         "https://xat.com/images/smoticons/u/heart.png",
         "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp"
     ];
-
     const colors = ["#ff0000", "#ff00ff", "#00ffff", "#ffff00", "#ff8800", "#00ff00", "#ffffff"];
     const extras = ["❤", "⭐", "🎵", "✨"]; 
-    
-    let activeEffects = false;
+
+    let activeEffects = true; // PARTONO SUBITO
     let effectInterval;
 
-    // LOGICA EFFETTI: Clicca per attivare, clicca per disattivare
+    function startParticles() {
+        effectInterval = setInterval(generateParticle, 350);
+    }
+
+    // Avvio automatico
+    $(document).ready(function() {
+        startParticles();
+    });
+
     $('#btn-anim').click(function() {
         activeEffects = !activeEffects;
         if(activeEffects) {
-            $(this).find('.btn-sub').text('EFFETTI: ON').css('color', '#0f0');
-            effectInterval = setInterval(generateParticle, 350);
+            $(this).find('.btn-sub').text('EFFETTI: ON');
+            startParticles();
         } else {
-            $(this).find('.btn-sub').text('CLICCA QUI').css('color', 'transparent');
+            $(this).find('.btn-sub').text('EFFETTI: OFF');
             clearInterval(effectInterval);
         }
     });
@@ -155,12 +153,10 @@
         const p = document.createElement('div');
         p.className = 'particle';
         const chosenColor = colors[Math.floor(Math.random() * colors.length)];
-
         if (rand < 0.4) { 
             const img = document.createElement('img');
             img.src = smiles[Math.floor(Math.random() * smiles.length)];
-            img.className = 'smile-img'; 
-            img.width = 70;
+            img.className = 'smile-img'; img.width = 70;
             p.appendChild(img);
         } else {
             const symbol = extras[Math.floor(Math.random() * extras.length)];
@@ -169,65 +165,33 @@
             p.style.fontSize = '50px';
             p.style.filter = `drop-shadow(0 0 5px #000) drop-shadow(0 0 15px ${chosenColor})`;
         }
-
         p.style.left = Math.random() * 90 + 'vw';
         p.style.animation = `floatUp ${Math.random()*3+4}s linear forwards`;
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 7000);
     }
 
-    // LOGICA PALINSESTO: FadeToggle mantiene la visibilità anche se il mouse esce dal box
-    $('#btn-pali').on('click', function() { 
-        $('#locandina').stop().fadeToggle(); 
-    });
+    $('#btn-pali').on('click', function() { $('#locandina').fadeToggle(); });
 
-    // --- LOGICA DATABASE E ORARI ---
+    // DATABASE TURNI (Invariato)
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-    const imgSlots = [
-        "https://xatimg.com/image/iQgCyJrXx59k.jpg", "https://xatimg.com/image/Pb7d1636URvg.jpg",
-        "https://xatimg.com/image/iVWjQe7TNoGD.jpg", "https://xatimg.com/image/xownGDwnETzl.jpg",
-        "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", "https://xatimg.com/image/D5nl0rwtzO5q.jpg",
-        "https://xatimg.com/image/ghXE2B3YgqbX.jpg", "https://xatimg.com/image/Ewyzp0L90szv.jpg",
-        "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", "https://xatimg.com/image/7gG8UEwtre1G.jpg"
-    ];
-
-    const databaseTurni = {
-        "LUNEDÌ": [{h:18, n:"DJ CARLA", f:imgSlots[0]}, {h:19, n:"DJ SOFIA", f:imgSlots[1]}, {h:20, n:"DJ LUCIA", f:imgSlots[2]}, {h:21, n:"DJ GIULIA", f:imgSlots[3]}],
-        "MARTEDÌ": [{h:17, n:"DJ MARCO", f:imgSlots[4]}, {h:18, n:"DJ ELENA", f:imgSlots[5]}, {h:19, n:"DJ NELLY", f:imgSlots[6]}, {h:20, n:"DJ SARA", f:imgSlots[7]}, {h:21, n:"DJ PAOLA", f:imgSlots[8]}],
-        "MERCOLEDÌ": [{h:18, n:"DJ VALENTINA", f:imgSlots[9]}, {h:19, n:"DJ FABIO", f:imgSlots[0]}, {h:20, n:"DJ CHIARA", f:imgSlots[1]}, {h:21, n:"DJ MILENA", f:imgSlots[2]}],
-        "GIOVEDÌ": [{h:17, n:"DJ MARTINA", f:imgSlots[3]}, {h:18, n:"DJ GIOVANNI", f:imgSlots[4]}, {h:19, n:"DJ FEDERICA", f:imgSlots[5]}, {h:20, n:"DJ ORCHIDEA", f:imgSlots[6]}, {h:21, n:"DJ BEATRICE", f:imgSlots[7]}],
-        "VENERDÌ": [{h:18, n:"DJ CETTY", f:imgSlots[8]}, {h:19, n:"DJ ANNA", f:imgSlots[9]}, {h:20, n:"DJ PIERA", f:imgSlots[0]}, {h:21, n:"DJ SILVIA", f:imgSlots[1]}],
-        "SABATO": [{h:17, n:"DJ CLAUDIA", f:imgSlots[2]}, {h:18, n:"DJ SIMONA", f:imgSlots[3]}, {h:19, n:"DJ STEFANY", f:imgSlots[4]}, {h:20, n:"DJ ROBERTO", f:imgSlots[5]}, {h:21, n:"DJ ALESSIA", f:imgSlots[6]}],
-        "DOMENICA": "RIPOSO"
-    };
+    const imgSlots = ["https://xatimg.com/image/iQgCyJrXx59k.jpg", "https://xatimg.com/image/Pb7d1636URvg.jpg", "https://xatimg.com/image/iVWjQe7TNoGD.jpg", "https://xatimg.com/image/xownGDwnETzl.jpg", "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", "https://xatimg.com/image/D5nl0rwtzO5q.jpg", "https://xatimg.com/image/ghXE2B3YgqbX.jpg", "https://xatimg.com/image/Ewyzp0L90szv.jpg", "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", "https://xatimg.com/image/7gG8UEwtre1G.jpg"];
+    const databaseTurni = { "LUNEDÌ": [{h:18, n:"DJ CARLA", f:imgSlots[0]}, {h:19, n:"DJ SOFIA", f:imgSlots[1]}, {h:20, n:"DJ LUCIA", f:imgSlots[2]}, {h:21, n:"DJ GIULIA", f:imgSlots[3]}], "MARTEDÌ": [{h:17, n:"DJ MARCO", f:imgSlots[4]}, {h:18, n:"DJ ELENA", f:imgSlots[5]}, {h:19, n:"DJ NELLY", f:imgSlots[6]}, {h:20, n:"DJ SARA", f:imgSlots[7]}, {h:21, n:"DJ PAOLA", f:imgSlots[8]}], "MERCOLEDÌ": [{h:18, n:"DJ VALENTINA", f:imgSlots[9]}, {h:19, n:"DJ FABIO", f:imgSlots[0]}, {h:20, n:"DJ CHIARA", f:imgSlots[1]}, {h:21, n:"DJ MILENA", f:imgSlots[2]}], "GIOVEDÌ": [{h:17, n:"DJ MARTINA", f:imgSlots[3]}, {h:18, n:"DJ GIOVANNI", f:imgSlots[4]}, {h:19, n:"DJ FEDERICA", f:imgSlots[5]}, {h:20, n:"DJ ORCHIDEA", f:imgSlots[6]}, {h:21, n:"DJ BEATRICE", f:imgSlots[7]}], "VENERDÌ": [{h:18, n:"DJ CETTY", f:imgSlots[8]}, {h:19, n:"DJ ANNA", f:imgSlots[9]}, {h:20, n:"DJ PIERA", f:imgSlots[0]}, {h:21, n:"DJ SILVIA", f:imgSlots[1]}], "SABATO": [{h:17, n:"DJ CLAUDIA", f:imgSlots[2]}, {h:18, n:"DJ SIMONA", f:imgSlots[3]}, {h:19, n:"DJ STEFANY", f:imgSlots[4]}, {h:20, n:"DJ ROBERTO", f:imgSlots[5]}, {h:21, n:"DJ ALESSIA", f:imgSlots[6]}], "DOMENICA": "RIPOSO" };
 
     function aggiornaLive() {
-        const d = new Date();
-        const oggi = giorni[d.getDay()];
-        let oraAttuale = d.getHours();
-        $('#giorno-live').text(oggi);
-        const container = $('#lista-dj').empty();
-        const djsOggi = databaseTurni[oggi];
-        const titoloLoc = $('#titolo-locandina');
-
+        const d = new Date(); const oggi = giorni[d.getDay()]; let oraAttuale = d.getHours();
+        $('#giorno-live').text(oggi); const container = $('#lista-dj').empty();
+        const djsOggi = databaseTurni[oggi]; const titoloLoc = $('#titolo-locandina');
         if (oggi === "DOMENICA") {
-            titoloLoc.hide();
-            container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
-        } else {
+            titoloLoc.hide(); container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
+        } else if (Array.isArray(djsOggi)) {
             titoloLoc.show();
-            if (Array.isArray(djsOggi)) {
-                djsOggi.forEach((dj) => {
-                    let èLive = (oraAttuale === dj.h);
-                    let classeGira = èLive ? "ruota-disco" : "";
-                    let statusLed = èLive ? '<span class="led-verde"></span>' : '';
-                    container.append(`
-                        <div class="slot">
-                            <span class="ora">${dj.h}:00</span>
-                            <img class="foto ${classeGira}" src="${dj.f}">
-                            <div class="nome">${dj.n} ${statusLed}</div>
-                        </div>`);
-                });
-            }
+            djsOggi.forEach((dj) => {
+                let èLive = (oraAttuale === dj.h);
+                let classeGira = èLive ? "ruota-disco" : "";
+                let statusLed = èLive ? '<span class="led-verde"></span>' : '';
+                container.append(`<div class="slot"><span class="ora">${dj.h}:00</span><img class="foto ${classeGira}" src="${dj.f}"><div class="nome">${dj.n} ${statusLed}</div></div>`);
+            });
         }
     }
     setInterval(aggiornaLive, 10000);
