@@ -15,7 +15,6 @@
             display: flex;
             justify-content: space-between; 
             align-items: flex-start;
-            /* Modificato: 60px sopra, 20px ai lati/sotto per abbassare i box */
             padding: 60px 20px 20px 20px;
             pointer-events: none; 
             box-sizing: border-box;
@@ -27,7 +26,6 @@
         /* --- BOX DX: TUO PALINSESTO --- */
         .box-dx { width: 300px; pointer-events: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
 
-        /* TASTI STILE ORIGINALE */
         .btn-custom {
             width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -39,20 +37,26 @@
         
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
-        /* TUO LOCANDINA ORIGINALE */
         #locandina { 
             width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; 
             box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
         }
 
-        /* PARTICELLE */
+        /* PARTICELLE AGGIORNATE */
         .particle { position: fixed; bottom: -80px; z-index: 1; pointer-events: auto; cursor: pointer; }
-        .bubble-effect { 
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
-            border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 50%; backdrop-filter: blur(2px);
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+        
+        /* Effetto per rendere gli smile super visibili */
+        .smile-img { 
+            object-fit: contain; 
+            /* Ombra scura per staccare dallo sfondo */
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 2px #000); 
         }
-        .smile-img { object-fit: contain; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); }
+
+        .bubble-effect { 
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(0, 255, 255, 0.2));
+            border: 2px solid #fff; border-radius: 50%; backdrop-filter: blur(1px);
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
@@ -60,7 +64,6 @@
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
-        /* TUOI STILI SLOT */
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
         #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; text-align: center; display: block; }
         .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 13px; text-align: center; }
@@ -100,13 +103,19 @@
     </div>
 
 <script>
-    // --- LOGICA EFFETTI (SMILE E CUORI) ---
+    // --- LISTA SMILE AGGIORNATA CON COLORI FORTI ---
     const smiles = [
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(rolleye)_80.webp",
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp",
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(maniac)_80.webp",
-        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(ahhh)_80.webp"
+        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(maniac)_80.webp", // Maniac (Giallo forte)
+        "https://xat.com/images/smoticons/u/crazypianist.png", // Pazzo (Colorato)
+        "https://xat.com/images/smoticons/u/getlucky.png", // Trifoglio (Verde acceso)
+        "https://xat.com/images/smoticons/u/goldstar.png", // Stella (Oro)
+        "https://xat.com/images/smoticons/u/彈.png", // Bomba (Nero/Rosso)
+        "https://xat.com/images/smoticons/u/shades.png", // Figo (Giallo)
+        "https://xat.com/images/smoticons/u/fame.png", // Fuoco (Rosso/Arancio)
+        "https://xat.com/images/smoticons/u/heart.png", // Cuore Classico
+        "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/hi.webp" // Ciao
     ];
+
     const heartColors = ["#ff0000", "#ff00ff", "#00ffff", "#ffff00", "#ff8800", "#00ff00"];
     let active = false;
     let interval;
@@ -119,34 +128,37 @@
                 const rand = Math.random();
                 const p = document.createElement('div');
                 p.className = 'particle';
-                if (rand < 0.4) {
+                
+                if (rand < 0.5) { // Più probabilità per gli smile aggiornati
                     const img = document.createElement('img');
                     img.src = smiles[Math.floor(Math.random() * smiles.length)];
-                    img.className = 'smile-img'; img.width = 50;
+                    img.className = 'smile-img'; 
+                    img.width = 60; // Leggermente più grandi
                     p.appendChild(img);
-                } else if (rand < 0.7) {
+                } else if (rand < 0.8) {
                     p.innerHTML = '❤';
                     p.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                    p.style.fontSize = '40px';
-                    p.style.filter = `drop-shadow(0 0 10px ${p.style.color})`;
+                    p.style.fontSize = '45px';
+                    p.style.filter = `drop-shadow(0 0 8px #000) drop-shadow(0 0 12px ${p.style.color})`;
                 } else {
                     p.className += ' bubble-effect';
-                    let s = Math.random()*40+20+'px';
+                    let s = Math.random()*30+30+'px';
                     p.style.width = s; p.style.height = s;
                 }
-                p.style.left = Math.random() * 95 + 'vw';
-                p.style.animation = `floatUp ${Math.random()*4+4}s linear forwards`;
+                
+                p.style.left = Math.random() * 90 + 'vw';
+                p.style.animation = `floatUp ${Math.random()*3+4}s linear forwards`;
                 p.onclick = function() { $(this).remove(); };
                 document.body.appendChild(p);
-                setTimeout(() => p.remove(), 8000);
-            }, 450);
+                setTimeout(() => p.remove(), 7500);
+            }, 400); // Frequenza leggermente aumentata
         } else {
             $(this).find('.btn-sub').text('CLICCA QUI');
             clearInterval(interval);
         }
     });
 
-    // --- TUO CODICE PALINSESTO ORIGINALE ---
+    // --- CODICE PALINSESTO ---
     $('#btn-pali').on('click', function() { $('#locandina').fadeToggle(); });
 
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
