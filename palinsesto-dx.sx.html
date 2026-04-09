@@ -20,11 +20,25 @@
             box-sizing: border-box;
         }
 
-        /* --- BOX SX: EFFETTI --- */
-        .box-sx { width: 250px; pointer-events: auto; display: flex; flex-direction: column; gap: 15px; }
+        /* --- EFFETTO INVISIBILE AL MOUSE --- */
+        .box-sx, .box-dx { 
+            width: 250px; 
+            pointer-events: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            /* Nascondo i box */
+            opacity: 0; 
+            transition: opacity 0.5s ease-in-out;
+        }
 
-        /* --- BOX DX: TUO PALINSESTO --- */
-        .box-dx { width: 250px; pointer-events: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+        /* Quando il mouse si avvicina (hover), diventano visibili */
+        .box-sx:hover, .box-dx:hover { 
+            opacity: 1; 
+        }
+
+        /* BOX DX: Allineamento a destra */
+        .box-dx { align-items: flex-end; }
 
         .btn-custom {
             width: 220px; height: 55px; background: #000; border: 2px solid #fff; border-radius: 10px;
@@ -37,7 +51,6 @@
         
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
-        /* MODIFICATO: Larghezza ridotta a 230px */
         #locandina { 
             width: 230px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 8px; 
             box-shadow: 0 0 50px #000; display: none; z-index: 9998; margin-top: 10px;
@@ -52,7 +65,6 @@
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
-        /* STILI SLOT PIÙ COMPATTI */
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 10px; padding-bottom: 5px; }
         #giorno-live { color: #ffff00; font-size: 12px; text-transform: uppercase; text-align: center; display: block; }
         .titolo { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; font-size: 11px; text-align: center; }
