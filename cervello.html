@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Cartaio Radio - Final Atomic Stage</title>
+    <style>
+        :root {
+            --rb: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        }
+
+        /* IL CARTAIO */
+        body, html {
+            background-color: transparent !important;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* IL CARTAIO */
+        .snake-wrapper {
+            position: relative;
+            padding: 20px;
+            background: transparent;
+            border-radius: 40px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .snake-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(from 0deg, transparent 20%, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8);
+            animation: snake-rotate 4s linear infinite;
+        }
+
+        .snake-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 12px; 
+            background: #000;
+            border-radius: 30px;
+        }
+
+        @keyframes snake-rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* IL CARTAIO */
+        .master-layout {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px;
+        }
+
+        @keyframes rainbow-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .info-box {
+            width: 140px;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            position: relative;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar::before, .info-box::before, #player-container::before, .main-container::before, .btn-ctrl::before {
+            content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2px; 
+            background: var(--rb); background-size: 400% 400%; animation: rainbow-move 5s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out; mask-composite: exclude;
+        }
+
+        .sidebar { width: 40px; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px; position: relative; }
+
+        /* IL CARTAIO */
+        #player-container { width: 170px; height: 170px; border-radius: 50%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; position: relative;}
+        #video-content, #cover-art { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; position: absolute; z-index: 2; }
+        
+        .orbit { position: absolute; width: 210px; height: 210px; border: 1px solid rgba(255,255,255,0.05); border-radius: 50%; z-index: 1; }
+        .atom { position: absolute; width: 8px; height: 8px; background: var(--rb); border-radius: 50%; animation: orbit-rotate 3s linear infinite; }
+
+        @keyframes orbit-rotate {
+            from { transform: rotate(0deg) translateX(105px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(105px) rotate(-360deg); }
+        }
+
+        /* IL CARTAIO */
+        .main-container { width: 380px; padding: 15px; background: #0a0a0a; border-radius: 30px; text-align: center; position: relative;}
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 5px 0;
+            margin-bottom: 15px;
+        }
+
+        #m-text {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: marquee-scroll 10s linear infinite;
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .rainbow-text {
+            text-transform: uppercase; background: var(--rb);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: rainbow-move 3s linear infinite;
+        }
+
+        .btn-ctrl { background: #000; color: white; border: none; padding: 8px 18px; border-radius: 50px; font-weight: 900; cursor: pointer; font-size: 10px; position: relative;}
+        input[type="range"] { -webkit-appearance: none; width: 80px; height: 5px; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 0; box-shadow: -100px 0 0 100px #ff00c8; }
+        canvas { width: 100%; height: 45px; }
+
+        .vu-box { width: 12px; height: 160px; background: #111; border-radius: 6px; overflow: hidden; position: relative; border: 1px solid #333; }
+        .vu-fill { position: absolute; bottom: 0; width: 100%; background: var(--rb); transition: height 0.05s ease-out; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+
+        .box-title { font-size: 10px; margin-bottom: 8px; opacity: 0.8; }
+        .box-content { line-height: 1.3; color: #ccc; font-size: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="snake-wrapper">
+        <div class="master-layout">
+            <div class="info-box">
+                <div class="box-title rainbow-text">OROSCOPO REALE</div>
+                <div class="box-content">
+                    <span id="horoscope-sign" class="rainbow-text" style="font-size: 13px;">...</span><br>
+                    <span id="horoscope-text">Lettura...</span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="vu-box"><div id="vL" class="vu-fill"></div></div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div id="player-container">
+                    <div class="orbit"><div class="atom"></div></div>
+                    <div class="orbit" style="transform: rotate(120deg);"><div class="atom" style="animation-duration: 4s;"></div></div>
+                    <video id="video-content" playsinline><source src="https://peppeagosto.github.io/immaggini/gallina.mp4" type="video/mp4"></video>
+                    <img id="cover-art" src="" alt="Cover">
+                </div>
+
+                <div class="main-container">
+                    <div class="marquee-container">
+                        <div id="m-text" class="rainbow-text">IL CARTAIO RADIO • BENVENUTI SULLO STAGE</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                        <button class="btn-ctrl" id="playBtn">PLAY</button>
+                        <input type="range" id="volume" min="0" max="1" step="0.05" value="0.8">
+                        <button class="btn-ctrl" id="stopBtn">STOP</button>
+                    </div>
+                    <canvas id="canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="vu-box"><div id="vR" class="vu-fill"></div></div>
+            </div>
+
+            <div class="info-box">
+                <div class="box-title rainbow-text">HISTORY</div>
+                <div class="box-content" id="history" style="text-align: left;">IL CARTAIO...</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio" crossorigin="anonymous"></audio>
+
+    <script>
+        // IL CARTAIO
+        const audio = document.getElementById("audio");
+        const video = document.getElementById("video-content");
+        const coverArt = document.getElementById("cover-art");
+        const playBtn = document.getElementById("playBtn");
+        const mText = document.getElementById("m-text");
+        audio.src = "https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+
+        // IL CARTAIO
+        function updateHoroscope() {
+            const now = new Date(); const m = now.getMonth() + 1; const d = now.getDate();
+            let s = "", t = "";
+            if ((m == 3 && d >= 21) || (m == 4 && d <= 19)) { s = "ARIETE"; t = "Giornata elettrica, alza il volume!"; }
+            else if ((m == 4 && d >= 20) || (m == 5 && d <= 20)) { s = "TORO"; t = "Relax totale con i nostri beat."; }
+            else if ((m == 5 && d >= 21) || (m == 6 && d <= 20)) { s = "GEMELLI"; t = "Doppia energia in arrivo."; }
+            else if ((m == 6 && d >= 21) || (m == 7 && d <= 22)) { s = "CANCRO"; t = "Sintonizzati sulle emozioni."; }
+            else if ((m == 7 && d >= 23) || (m == 8 && d <= 22)) { s = "LEONE"; t = "Sei il protagonista dello show."; }
+            else if ((m == 8 && d >= 23) || (m == 9 && d <= 22)) { s = "VERGINE"; t = "Precisione sonora assoluta."; }
+            else if ((m == 9 && d >= 23) || (m == 10 && d <= 22)) { s = "BILANCIA"; t = "Equilibrio e armonia musicale."; }
+            else if ((m == 10 && d >= 23) || (m == 11 && d <= 21)) { s = "SCORPIONE"; t = "Ritmi magnetici oggi."; }
+            else if ((m == 11 && d >= 22) || (m == 12 && d <= 21)) { s = "SAGITTARIO"; t = "Esplora nuovi mondi sonori."; }
+            else if ((m == 12 && d >= 22) || (m == 1 && d <= 19)) { s = "CAPRICORNO"; t = "Costruisci il tuo successo."; }
+            else if ((m == 1 && d >= 20) || (m == 2 && d <= 18)) { s = "ACQUARIO"; t = "Innovazione ad ogni nota."; }
+            else { s = "PESCI"; t = "Sogna con lo streaming."; }
+            document.getElementById("horoscope-sign").innerText = s;
+            document.getElementById("horoscope-text").innerText = t;
+        }
+        updateHoroscope();
+
+        // IL CARTAIO
+        let ctx, waveAnalyser, isPlaying = false;
+        const cv = document.getElementById("canvas"), cx = cv.getContext("2d");
+
+        // IL CARTAIO
+        function initAudio() {
+            if (ctx) return;
+            ctx = new (window.AudioContext || window.webkitAudioContext)();
+            waveAnalyser = ctx.createAnalyser();
+            waveAnalyser.fftSize = 512;
+            waveAnalyser.smoothingTimeConstant = 0.5;
+            let source = ctx.createMediaElementSource(audio);
+            source.connect(waveAnalyser);
+            waveAnalyser.connect(ctx.destination);
+        }
+
+        // IL CARTAIO
+        function animate() {
+            if(!isPlaying) return;
+            requestAnimationFrame(animate);
+            const freqData = new Uint8Array(waveAnalyser.frequencyBinCount);
+            waveAnalyser.getByteFrequencyData(freqData);
+            const timeData = new Uint8Array(waveAnalyser.frequencyBinCount);
+            waveAnalyser.getByteTimeDomainData(timeData);
+            
+            cx.clearRect(0, 0, cv.width, cv.height);
+            cx.strokeStyle = "#00ffff"; cx.lineWidth = 3; cx.beginPath();
+            let sliceWidth = cv.width / timeData.length;
+            let x = 0;
+            for(let i=0; i<timeData.length; i++) {
+                let v = timeData[i] / 128.0; let y = v * cv.height / 2;
+                i===0 ? cx.moveTo(x,y) : cx.lineTo(x,y);
+                x += sliceWidth;
+            }
+            cx.stroke();
+
+            let lowFreqSum = 0;
+            for(let i=0; i<10; i++) { lowFreqSum += freqData[i]; }
+            let level = (lowFreqSum / 10) / 2.3; 
+            let finalH = Math.min(level + 5, 100); 
+            document.getElementById("vL").style.height = finalH + "%";
+            document.getElementById("vR").style.height = finalH + "%";
+        }
+
+        // IL CARTAIO
+        playBtn.onclick = async () => {
+            if(isPlaying) return;
+            video.volume = 1; video.play();
+            playBtn.innerText = "IL CARTAIO...";
+            playBtn.disabled = true;
+            setTimeout(async () => {
+                video.pause(); video.style.display = "none";
+                initAudio();
+                if (ctx.state === 'suspended') await ctx.resume();
+                audio.play(); isPlaying = true;
+                playBtn.disabled = false; playBtn.innerText = "ON AIR";
+                animate(); updateTrackInfo();
+            }, 7000);
+        };
+
+        // IL CARTAIO
+        async function updateTrackInfo() {
+            if(!isPlaying) return;
+            try {
+                const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+                const data = await res.json();
+                const track = data.currentTrack || data;
+                const title = (track.title || "IL CARTAIO RADIO").toUpperCase();
+                mText.innerText = title + " • " + title;
+
+                if (track.art) {
+                    coverArt.src = track.art; coverArt.style.display = "block";
+                    video.style.display = "none";
+                } else {
+                    coverArt.style.display = "none"; video.style.display = "block";
+                }
+
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const hBox = document.getElementById("history");
+                if(hBox.innerText.includes("IL CARTAIO")) hBox.innerHTML = "";
+                hBox.innerHTML = `<div>${time} - ${title}</div>` + hBox.innerHTML;
+            } catch (e) {}
+        }
+
+        // IL CARTAIO
+        setInterval(updateTrackInfo, 20000);
+        document.getElementById("stopBtn").onclick = () => location.reload();
+        document.getElementById("volume").oninput = (e) => audio.volume = e.target.value;
+        cv.width = 380; cv.height = 45;
+    </script>
+</body>
+</html>
