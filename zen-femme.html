@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IL CARTAIO - DISCO SPIN FIX</title>
+    <style>
+        body { background-color: ; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .player-box { width: 820px; height: 780px; background: #000; border-radius: 30px; padding: 10px; box-sizing: border-box; border: 2px solid #1a1a1a; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 0 50px rgba(0, 255, 255, 0.1); }
+        .screen-container { position: relative; width: 100%; height: 560px; background: #000; border-radius: 20px; overflow: hidden; display: flex; justify-content: center; align-items: center; border: 4px solid #111; }
+
+        .snake-border { position: absolute; inset: 0; z-index: 20; pointer-events: none; border: 8px solid transparent; border-radius: 18px; background: conic-gradient(from 0deg, #ff0000, #00ffff, #ff0000) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; animation: snake-spin 4s linear infinite; }
+        @keyframes snake-spin { 100% { background: conic-gradient(from 360deg, #ff0000, #00ffff, #ff0000) border-box; } }
+
+        #video-content { width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+
+        .hud-overlay { position: absolute; inset: 0; z-index: 25; display: flex; justify-content: space-between; padding: 30px 20px; pointer-events: none; }
+        .hud-column { display: flex; flex-direction: column; justify-content: space-between; width: 60px; height: 100%; }
+
+        .hud-box-vertical { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); width: 45px; height: 140px; border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(0, 255, 255, 0.3); }
+        
+        .eq-container { background: rgba(0, 0, 0, 0.9); width: 45px; height: 180px; border-radius: 10px; border: 1px solid #00ffff; display: flex; flex-direction: column-reverse; align-items: center; padding: 5px 0; gap: 3px; position: relative; }
+        .eq-bar { width: 30px; height: 13px; background: #111; border-radius: 2px; transition: background 0.05s; }
+        .eq-label { position: absolute; top: -18px; font-size: 9px; color: #00ffff; font-weight: bold; letter-spacing: 1px; }
+
+        .v-text { writing-mode: vertical-rl; text-transform: uppercase; font-size: 10px; font-weight: bold; color: #fff; transform: rotate(180deg); white-space: nowrap; }
+        .v-label { position: absolute; top: 8px; font-size: 7px; color: #00ffff; }
+
+        .marquee-bar { width: 100%; height: 40px; background: #0a0a0a; border-radius: 10px; margin: 5px 0; display: flex; align-items: center; overflow: hidden; border: 1px solid #222; }
+        .marquee-text { white-space: nowrap; display: inline-block; font-size: 22px; font-weight: 900; text-transform: uppercase; padding-left: 100%; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: marquee 12s linear infinite, rainbow-text 3s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        @keyframes rainbow-text { to { background-position: 200%; } }
+
+        /* COVER DISCO: 125px, Centrata e Ruotante */
+        #cover-art { 
+            position: absolute; 
+            width: 120px; 
+            height: 120px; 
+            z-index: 30; 
+            display: none; 
+            border-radius: 50%; 
+            border: 3px solid rgba(0, 255, 255, 0.5); 
+            box-shadow: 0 0 25px rgba(0,0,0,0.9), inset 0 0 10px #000; 
+            object-fit: cover;
+            left: 50%;
+            top: 70%;
+            /* Fix per centratura e animazione insieme */
+            margin-left: -62.5px;
+            margin-top: -62.5px;
+            animation: disk-spin 5s linear infinite;
+        }
+
+        @keyframes disk-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .bottom-bar { height: 100px; display: flex; align-items: center; justify-content: center; gap: 25px; background: #0d0d0d; border-radius: 20px; border: 1px solid #222; }
+        .round-btn { width: 65px; height: 65px; border-radius: 50%; border: 2px solid #00ffff; background: transparent; color: #00ffff; font-weight: bold; cursor: pointer; }
+        .volume-wrap { display: flex; flex-direction: column; align-items: center; width: 320px; }
+        input[type=range] { width: 100%; accent-color: #00ffff; cursor: pointer; }
+        canvas { position: absolute; bottom: 0; width: 100%; height: 60px; z-index: 8; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div class="player-box">
+    <div class="screen-container">
+        <div class="snake-border"></div>
+        <video id="video-content" loop muted playsinline crossorigin="anonymous">
+            <source src="https://i.imgur.com/d9R6aF3.mp4" type="video/mp4">
+        </video>
+
+        <div class="hud-overlay">
+            <div class="hud-column">
+                <div class="hud-box-vertical"><div class="v-label">LOC</div><div class="v-text" id="box-city">...</div></div>
+                <div class="eq-container" id="eq-left"><div class="eq-label">PWR</div></div>
+                <div class="hud-box-vertical"><div class="v-label">TME</div><div class="v-text" id="box-time">00:00</div></div>
+            </div>
+            
+            <img id="cover-art" src="https://xatimg.com/image/R1kSr5sDg26N.jpg" alt="Cover">
+
+            <div class="hud-column">
+                <div class="hud-box-vertical"><div class="v-label">ART</div><div class="v-text" id="box-artist">-</div></div>
+                <div class="eq-container" id="eq-right"><div class="eq-label">STR</div></div>
+                <div class="hud-box-vertical"><div class="v-label">TRK</div><div class="v-text" id="box-track">-</div></div>
+            </div>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="marquee-bar"><div class="marquee-text" id="m-text">...</div></div>
+
+    <div class="bottom-bar">
+        <button class="round-btn" id="playBtn">PLAY</button>
+        <div class="volume-wrap"><input type="range" id="volume" min="0" max="1" step="0.05" value="0.7"></div>
+        <button class="round-btn" id="stopBtn" style="border-color: #ff4444; color: #ff4444;">STOP</button>
+    </div>
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+    const audio = document.getElementById("audio");
+    const video = document.getElementById("video-content");
+    const playBtn = document.getElementById("playBtn");
+    const coverArt = document.getElementById("cover-art");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const mText = document.getElementById("m-text");
+
+    const eqLeft = document.getElementById("eq-left");
+    const eqRight = document.getElementById("eq-right");
+
+    // Mostra la cover caricata
+    coverArt.onload = () => coverArt.style.display = "block";
+    coverArt.src = "https://xatimg.com/image/R1kSr5sDg26N.jpg";
+
+    for(let i=0; i<10; i++) {
+        let bL = document.createElement("div"); bL.className = "eq-bar"; eqLeft.appendChild(bL);
+        let bR = document.createElement("div"); bR.className = "eq-bar"; eqRight.appendChild(bR);
+    }
+
+    audio.src = "https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+
+    let audioCtx, analyser, source, isPlaying = false;
+
+    function initAudio() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source = audioCtx.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        render();
+    }
+
+    function render() {
+        requestAnimationFrame(render);
+        let data = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(data);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "rgba(0, 255, 255, 0.6)"; ctx.lineWidth = 3; ctx.beginPath();
+        let slice = canvas.width / data.length; let x = 0;
+        for (let i = 0; i < data.length; i++) {
+            let v = data[i] / 128.0; let y = v * (canvas.height / 2);
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); x += slice;
+        }
+        ctx.stroke();
+
+        let valL = data[2]; 
+        let valR = data[4]; 
+        let numL = Math.min(10, Math.floor(valL / 16)); 
+        let numR = Math.min(10, Math.floor(valR / 16));
+
+        const barsL = eqLeft.getElementsByClassName("eq-bar");
+        const barsR = eqRight.getElementsByClassName("eq-bar");
+
+        for(let i=0; i<10; i++) {
+            let color = i < 6 ? "#00ffff" : (i < 8 ? "#ffff00" : "#ff0000");
+            barsL[i].style.background = i < numL ? color : "#111";
+            barsL[i].style.boxShadow = i < numL ? `0 0 10px ${color}` : "none";
+            barsR[i].style.background = i < numR ? color : "#111";
+            barsR[i].style.boxShadow = i < numR ? `0 0 10px ${color}` : "none";
+        }
+    }
+
+    playBtn.onclick = async () => {
+        if(isPlaying) return;
+        video.play();
+        audio.play();
+        initAudio();
+        if (audioCtx.state === 'suspended') await audioCtx.resume();
+        isPlaying = true;
+        playBtn.innerText = "LIVE";
+        updateMetadata();
+    };
+
+    function truncateText(text, limit) { return text.length > limit ? text.substring(0, limit) + ".." : text; }
+
+    async function updateMetadata() {
+        if (!isPlaying) return;
+        try {
+            const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+            const data = await res.json();
+            const track = data.currentTrack || data;
+            const fullTitle = (track.title || "IL CARTAIO").toUpperCase();
+            mText.innerText = fullTitle + " • " + fullTitle + " • ";
+            if(fullTitle.includes("-")) {
+                const p = fullTitle.split("-");
+                document.getElementById("box-artist").innerText = truncateText(p[0].trim(), 10);
+                document.getElementById("box-track").innerText = truncateText(p[1].trim(), 10);
+            } else { document.getElementById("box-track").innerText = truncateText(fullTitle, 10); }
+        } catch (err) {}
+    }
+
+    setInterval(() => { document.getElementById("box-time").innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); }, 1000);
+    async function getCity() { try { const res = await fetch('https://ipapi.co/json/'); const data = await res.json(); document.getElementById("box-city").innerText = data.city.toUpperCase(); } catch (e) { document.getElementById("box-city").innerText = "ONLINE"; } }
+    getCity(); 
+    setInterval(updateMetadata, 15000);
+    document.getElementById("stopBtn").onclick = () => location.reload();
+    document.getElementById("volume").oninput = (e) => audio.volume = e.target.value;
+    canvas.width = 820; canvas.height = 100;
+</script>
+</body>
+</html>
