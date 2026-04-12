@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -15,32 +15,35 @@
             pointer-events: none; box-sizing: border-box;
         }
 
-        /* WRAPPER CON LOGICA HOVER + CLICK */
+        /* WRAPPER - Quasi invisibile (0.1) ma rilevabile dal mouse */
         .wrapper { 
             display: flex; flex-direction: column; gap: 10px; 
             pointer-events: auto; z-index: 100; 
-            opacity: 0; /* Invisibile di base */
-            transition: opacity 0.3s ease-in-out;
+            opacity: 0.1; 
+            transition: opacity 0.4s ease-in-out, transform 0.2s;
             cursor: pointer;
         }
         
-        /* Appare quando ci passi sopra col mouse */
-        .wrapper:hover { opacity: 1; }
+        /* Al passaggio del mouse si vede bene */
+        .wrapper:hover { opacity: 0.8; transform: scale(1.02); }
         
-        /* Rimane visibile quando è attivo (cliccato) */
-        .wrapper.is-active { opacity: 1 !important; }
+        /* Quando è cliccato (attivo) resta visibile al massimo */
+        .wrapper.is-active { opacity: 1 !important; transform: scale(1); }
         
         .wrapper-dx { align-items: flex-end; }
 
         .btn-toggle {
-            width: 170px; height: 55px; background: #000; border: 2px solid #fff; border-radius: 10px;
+            width: 170px; height: 55px; background: #111; border: 2px solid #444; border-radius: 10px;
             display: flex; align-items: center; justify-content: space-between; padding: 0 12px;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            box-shadow: 0 0 10px rgba(255,255,255,0.05);
         }
 
-        .led { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #fff; }
-        .led-off { background: #f00; box-shadow: 0 0 10px #f00; }
-        .led-on { background: #0f0; box-shadow: 0 0 10px #0f0; }
+        /* Se attivo, il bordo diventa bianco brillante */
+        .is-active .btn-toggle { border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+
+        .led { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #000; }
+        .led-off { background: #500; box-shadow: inset 0 0 5px #000; } /* Rosso spento */
+        .led-on { background: #0f0; box-shadow: 0 0 10px #0f0; } /* Verde acceso */
 
         .btn-label { 
             background: var(--rb); -webkit-background-clip: text; color: transparent; 
@@ -92,7 +95,7 @@
 <script>
     let effettiAttivi = false;
 
-    // Logica Click Sinistra (Effetti)
+    // Logica Click Sinistra
     $('#wrap-sx').click(function() {
         effettiAttivi = !effettiAttivi;
         $(this).toggleClass('is-active');
@@ -100,13 +103,14 @@
         if(!effettiAttivi) $('.particle').remove();
     });
 
-    // Logica Click Destra (Palinsesto)
+    // Logica Click Destra
     $('#wrap-dx').click(function() {
         $(this).toggleClass('is-active');
         $('#led-pali').toggleClass('led-off led-on');
         $('#box-pali').fadeToggle();
     });
 
+    // Effetti grafici
     const smiles = ["clap", "hi", "hula", "hug", "mad", "cool", "confused", "redface", "tearhair", "hehe", "no"];
     const messaggi = ["LA MIA MUSICA", "IL CARTAIO"];
     const cuoriStelle = ["❤️", "🧡", "💛", "💚", "💙", "💜", "💖", "⭐", "🌟", "✨"];
@@ -144,6 +148,7 @@
 
     setInterval(generaEffetto, 650);
 
+    // Carica DJ
     const djs = [
         {h:18, n:"DJ CARLA", f:"https://xatimg.com/image/iQgCyJrXx59k.jpg"},
         {h:19, n:"DJ SOFIA", f:"https://xatimg.com/image/Pb7d1636URvg.jpg"},
