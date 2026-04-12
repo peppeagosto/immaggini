@@ -11,73 +11,79 @@
             margin: 0; font-family: 'Arial Black', sans-serif; 
             overflow: hidden; height: 100vh; display: flex;
             justify-content: space-between; align-items: flex-start;
-            padding: 20px; pointer-events: none; box-sizing: border-box;
+            padding: 120px 20px 20px 20px; 
+            pointer-events: none; box-sizing: border-box;
         }
 
-        /* WRAPPER VISIBILI */
+        /* WRAPPER CON LOGICA HOVER + CLICK */
         .wrapper { 
             display: flex; flex-direction: column; gap: 10px; 
             pointer-events: auto; z-index: 100; 
-            opacity: 1; /* Ora sono sempre visibili */
+            opacity: 0; /* Invisibile di base */
+            transition: opacity 0.3s ease-in-out;
+            cursor: pointer;
         }
+        
+        /* Appare quando ci passi sopra col mouse */
+        .wrapper:hover { opacity: 1; }
+        
+        /* Rimane visibile quando è attivo (cliccato) */
+        .wrapper.is-active { opacity: 1 !important; }
+        
         .wrapper-dx { align-items: flex-end; }
 
         .btn-toggle {
-            width: 160px; height: 50px; background: #000; border: 2px solid #fff; border-radius: 8px;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
-            cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            transition: transform 0.2s;
+            width: 170px; height: 55px; background: #000; border: 2px solid #fff; border-radius: 10px;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 12px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
-        .btn-toggle:hover { transform: scale(1.05); border-color: #0ff; }
 
-        .led { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #fff; }
+        .led { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #fff; }
         .led-off { background: #f00; box-shadow: 0 0 10px #f00; }
         .led-on { background: #0f0; box-shadow: 0 0 10px #0f0; }
 
         .btn-label { 
             background: var(--rb); -webkit-background-clip: text; color: transparent; 
-            font-size: 12px; font-weight: 900; text-transform: uppercase; 
+            font-size: 13px; font-weight: 900; text-transform: uppercase; 
         }
 
         #box-pali { 
-            width: 230px; display: none; background: #000; border: 3px solid #333; 
-            border-radius: 12px; padding: 12px; box-shadow: 0 0 50px #000; 
+            width: 240px; display: none; background: #000; border: 3px solid #333; 
+            border-radius: 12px; padding: 12px; box-shadow: 0 0 50px #000; margin-top: 10px;
         }
 
-        .slot { background: #050505; border: 1px solid #222; border-radius: 25px; margin-bottom: 5px; padding: 4px; display: flex; align-items: center; gap: 6px; }
-        .ora { color: #0ff; font-size: 9px; width: 30px; text-align: center; font-weight: bold; }
-        .foto { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
-        .nome { color: #ff00ff; font-size: 9px; text-transform: uppercase; font-weight: 900; }
+        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 25px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
+        .ora { color: #0ff; font-size: 10px; width: 35px; text-align: center; font-weight: bold; }
+        .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
+        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; }
 
         /* EFFETTI SPARSI */
         .particle { position: fixed; z-index: 1; pointer-events: none; text-align: center; }
-        
         .floating-text {
-            white-space: nowrap; font-size: 26px; font-weight: 900;
+            white-space: nowrap; font-size: 28px; font-weight: 900;
             background: var(--rb); -webkit-background-clip: text; color: transparent;
             text-transform: uppercase; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
         }
-
-        .symbol { font-size: 30px; filter: drop-shadow(0 0 8px currentColor); }
+        .symbol { font-size: 35px; filter: drop-shadow(0 0 10px currentColor); }
     </style>
 </head>
 <body>
 
-    <div class="wrapper wrapper-sx">
-        <div id="click-effetti" class="btn-toggle">
+    <div class="wrapper wrapper-sx" id="wrap-sx">
+        <div class="btn-toggle">
             <span class="btn-label">EFFETTI</span>
             <div id="led-effetti" class="led led-off"></div>
         </div>
     </div>
 
-    <div class="wrapper wrapper-dx">
-        <div id="click-pali" class="btn-toggle">
+    <div class="wrapper wrapper-dx" id="wrap-dx">
+        <div class="btn-toggle">
             <div id="led-pali" class="led led-off"></div>
             <span class="btn-label">PALINSESTO</span>
         </div>
         <div id="box-pali">
-            <div style="text-align:center; margin-bottom:10px; border-bottom: 1px solid #222; padding-bottom: 5px;">
-                <span style="background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 12px; font-weight: 900;">RADIO LIVE</span>
+            <div style="text-align:center; margin-bottom:12px; border-bottom: 1px solid #333; padding-bottom: 6px;">
+                <span style="background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900;">RADIO LIVE</span>
             </div>
             <div id="lista-dj"></div>
         </div>
@@ -86,18 +92,21 @@
 <script>
     let effettiAttivi = false;
 
-    $('#click-effetti').click(function() {
+    // Logica Click Sinistra (Effetti)
+    $('#wrap-sx').click(function() {
         effettiAttivi = !effettiAttivi;
+        $(this).toggleClass('is-active');
         $('#led-effetti').toggleClass('led-off led-on');
         if(!effettiAttivi) $('.particle').remove();
     });
 
-    $('#click-pali').click(function() {
+    // Logica Click Destra (Palinsesto)
+    $('#wrap-dx').click(function() {
+        $(this).toggleClass('is-active');
         $('#led-pali').toggleClass('led-off led-on');
         $('#box-pali').fadeToggle();
     });
 
-    // LISTE ELEMENTI
     const smiles = ["clap", "hi", "hula", "hug", "mad", "cool", "confused", "redface", "tearhair", "hehe", "no"];
     const messaggi = ["LA MIA MUSICA", "IL CARTAIO"];
     const cuoriStelle = ["❤️", "🧡", "💛", "💚", "💙", "💜", "💖", "⭐", "🌟", "✨"];
@@ -107,24 +116,20 @@
         if (!effettiAttivi) return;
         const p = document.createElement('div');
         p.className = 'particle';
-        
         const r = Math.random();
 
         if (r < 0.3) {
-            // TESTO ARCOBALENO
             p.innerHTML = `<div class="floating-text">${messaggi[Math.floor(Math.random() * messaggi.length)]}</div>`;
         } else if (r < 0.7) {
-            // CUORI E STELLE
             const simbolo = cuoriStelle[Math.floor(Math.random() * cuoriStelle.length)];
             const colore = coloriGlow[Math.floor(Math.random() * coloriGlow.length)];
             p.innerHTML = `<div class="symbol" style="color:${colore}">${simbolo}</div>`;
         } else {
-            // SMILE XAT
             const smileName = smiles[Math.floor(Math.random() * smiles.length)];
             const img = document.createElement('img');
             img.src = `https://xat.com/images/smoticons/u/${smileName}.png`;
-            img.width = 50;
-            img.style.filter = "drop-shadow(0 0 10px #fff)";
+            img.width = 55;
+            img.style.filter = "drop-shadow(0 0 12px #fff)";
             img.onerror = function() { this.parentElement.innerHTML = '✨'; };
             p.appendChild(img);
         }
@@ -132,14 +137,13 @@
         p.style.left = Math.random() * 90 + 'vw';
         p.style.top = Math.random() * 90 + 'vh';
 
-        $(p).css('opacity', 0).animate({ opacity: 1, top: "-=6vh" }, 1500)
-            .animate({ opacity: 0, top: "-=6vh" }, 1500, function() { $(this).remove(); });
+        $(p).css('opacity', 0).animate({ opacity: 1, top: "-=7vh" }, 1600)
+            .animate({ opacity: 0, top: "-=7vh" }, 1600, function() { $(this).remove(); });
         document.body.appendChild(p);
     }
 
-    setInterval(generaEffetto, 600); // Più veloce per avere tanti colori
+    setInterval(generaEffetto, 650);
 
-    // Palinsesto
     const djs = [
         {h:18, n:"DJ CARLA", f:"https://xatimg.com/image/iQgCyJrXx59k.jpg"},
         {h:19, n:"DJ SOFIA", f:"https://xatimg.com/image/Pb7d1636URvg.jpg"},
