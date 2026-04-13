@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinile Player Live</title>
+    <style>
+        body { margin: 0; background: #0f0f0f; color: #d2b48c; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .player-container, .main-wrapper { position: relative; display: flex; justify-content: center; align-items: center; }
+        .main-wrapper { width: 600px; height: 600px; }
+        #circular-text { position: absolute; width: 100%; height: 100%; z-index: 10; animation: rotateText 25s linear infinite; pointer-events: none; }
+        @keyframes rotateText { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #circular-text svg { width: 100%; height: 100%; overflow: visible; }
+        #circular-text text { fill: #ff4500; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 5px; transition: fill 1s, filter 1s; }
+        .vinyl-wrapper { position: relative; width: 450px; height: 450px; border-radius: 50%; border: 6px solid #ff4500; background: #000; z-index: 5; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: 1s; box-shadow: 0 0 20px #f00, 0 0 40px #ff4500, 0 0 80px #ff8c00, inset 0 0 60px #000; }
+        #v-source { position: absolute; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: saturate(1.5) contrast(1.2); opacity: 0.6; z-index: 1; }
+        #main-cover { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; border-radius: 50%; }
+        #woofer-container { position: relative; width: 180px; height: 180px; border-radius: 50%; z-index: 6; border: 3px solid #ff4500; background: url('https://xatimg.com/image/xz9DRzElS6Tk.png') center/140% no-repeat; box-shadow: inset 0 0 20px #000; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 20px; transition: transform 0.06s ease-out, border-color 1s; box-sizing: border-box; }
+        .controls { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
+        button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ff4500; background: rgba(0,0,0,.9); color: #fff; cursor: pointer; font-size: 6px; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: .3s; padding: 0; }
+        input[type="range"] { -webkit-appearance: none; width: 40px; height: 2px; background: #222; border: 1px solid #ff4500; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 8px; height: 8px; background: #fff; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="main-wrapper">
+            <div id="circular-text">
+                <svg viewBox="0 0 600 600">
+                    <path id="circlePath" d="M 300, 300 m -265, 0 a 265,265 0 1,1 530,0 a 265,265 0 1,1 -530,0" fill="transparent"/>
+                    <text><textPath href="#circlePath" id="track-name">🎵 CARICAMENTO... 🎵</textPath></text>
+                </svg>
+            </div>
+            <div class="vinyl-wrapper" id="glow-vinyl">
+                <div id="main-cover"></div>
+                <video id="v-source" loop playsinline muted><source src="https://peppeagosto.github.io/immaggini/vinile.mp4" type="video/mp4"></video>
+                <div id="woofer-container">
+                    <div class="controls">
+                        <button id="pBtn" class="dc">START</button>
+                        <input type="range" id="vol" class="dc" min="0" max="1" step="0.1" value="0.8">
+                        <button onclick="location.reload()" class="dc">OFF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <audio id="audio" crossorigin="anonymous"></audio>
+
+    <script>
+        const S_URL = "https://stm2.srvif.com:7198/;type=mp3", A_URL = "https://streaming.srvif.com/api-json/NzE5OCsw";
+        const aud = document.getElementById("audio"), vid = document.getElementById("v-source"), pBtn = document.getElementById("pBtn"), woofer = document.getElementById("woofer-container"), tName = document.getElementById("track-name"), mCov = document.getElementById("main-cover"), vinyl = document.getElementById("glow-vinyl");
+        let isP = false, aCtx, anls, dArr; aud.src = S_URL;
+
+        function rndC() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
+        function chgT() {
+            const c1 = rndC(), c2 = rndC(), c3 = rndC();
+            vinyl.style.borderColor = c1;
+            vinyl.style.boxShadow = `0 0 20px ${c1}, 0 0 40px ${c2}, 0 0 80px ${c3}, inset 0 0 60px #000`;
+            tName.style.fill = c1; tName.style.filter = `drop-shadow(0 0 5px ${c1})`;
+            woofer.style.borderColor = c1;
+            document.querySelectorAll('.dc').forEach(el => { el.style.borderColor = c1; if(el.tagName==='BUTTON') el.style.color = c1; });
+        }
+        setInterval(chgT, 5000);
+
+        async function upd() {
+            try {
+                const r = await fetch(A_URL), d = await r.json();
+                if(d.musica_atual) tName.textContent = "🎵 " + d.musica_atual.toUpperCase() + " • " + d.musica_atual.toUpperCase() + " • ";
+                mCov.style.backgroundImage = d.capa_musica ? `url('${d.capa_musica}')` : "url('https://xatimg.com/image/UsUZZz2AmIjH.jpg')";
+            } catch(e) { tName.textContent = "🎵 STREAMING LIVE 🎵 "; }
+        }
+
+        pBtn.onclick = async () => {
+            if(isP) { aud.pause(); vid.pause(); pBtn.innerText = "START"; isP = false; return; }
+            if(!aCtx) {
+                aCtx = new (window.AudioContext || window.webkitAudioContext)();
+                anls = aCtx.createAnalyser();
+                aCtx.createMediaElementSource(aud).connect(anls);
+                anls.connect(aCtx.destination); anls.fftSize = 64;
+                dArr = new Uint8Array(anls.frequencyBinCount);
+            }
+            await aud.play(); vid.play(); isP = true; pBtn.innerText = "LIVE"; render(); upd();
+        };
+
+        function render() {
+            if(!isP) return; requestAnimationFrame(render);
+            anls.getByteFrequencyData(dArr);
+            let sum = dArr.reduce((a,b)=>a+b,0), avg = sum/dArr.length;
+            woofer.style.transform = `scale(${1+(avg/240)})`;
+        }
+
+        document.getElementById("vol").oninput = (e) => aud.volume = e.target.value;
+        setInterval(() => { if(isP) upd(); }, 20000);
+        upd(); chgT();
+    </script>
+</body>
+</html>
