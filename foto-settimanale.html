@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAT DJ Panel - Auto Switch</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center; 
+            justify-content: flex-start; 
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            transition: background 1.5s ease-in-out;
+            overflow: hidden;
+        }
+
+        /* Box info: ora piccolo e invisibile (opacity 0) */
+        #info-sidebar {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 20px; /* Ridotto */
+            margin-left: 20px; /* Più a sinistra */
+            border-left: 5px solid #00ffcc; /* Più sottile */
+            border-radius: 0 10px 10px 0;
+            color: #fff;
+            opacity: 0; /* INVISIBILE DI BASE */
+            transition: opacity 0.5s ease-in-out; /* Effetto comparsa fluida */
+            cursor: default;
+        }
+
+        /* Quando passi il mouse sul lato sinistro della chat, appare */
+        body:hover #info-sidebar {
+            opacity: 1;
+        }
+
+        #clock {
+            font-size: 40px; /* Rimpicciolito (era 80) */
+            font-weight: 900;
+            line-height: 1;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #date-box {
+            font-size: 14px; /* Rimpicciolito (era 24) */
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .day-highlight {
+            color: #00ffcc;
+            font-weight: bold;
+            display: block;
+            margin-top: 2px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body id="main-bg">
+
+    <div id="info-sidebar">
+        <span id="clock">00:00</span>
+        <div id="date-box">
+            <span id="full-date">DATA</span>
+            <span id="day-name" class="day-highlight">GIORNO</span>
+        </div>
+    </div>
+
+    <script>
+        // Le tue foto salvate
+        const immaginiSettimana = {
+            0: "https://xatimg.com/image/6FpIXCb2IDAw.jpg",
+            1: "https://xatimg.com/image/7ghZcsgGdv1f.jpg",
+            2: "https://xatimg.com/image/JtOvWs65Pa37.jpg",
+            3: "https://xatimg.com/image/2Iec1rkg1cUD.jpg",
+            4: "https://xatimg.com/image/scHApwGURMbC.jpg",
+            5: "https://xatimg.com/image/Q3vladODfPxi.jpg",
+            6: "https://xatimg.com/image/ye6zEz06QaPS.jpg"
+        };
+
+        function updateDisplay() {
+            const oraAttuale = new Date();
+            const h = oraAttuale.getHours();
+            const m = String(oraAttuale.getMinutes()).padStart(2, '0');
+            
+            let giornoIndice = oraAttuale.getDay();
+            if (h < 7) {
+                giornoIndice = (giornoIndice === 0) ? 6 : giornoIndice - 1;
+            }
+
+            const bgElement = document.getElementById('main-bg');
+            bgElement.style.backgroundImage = `url('${immaginiSettimana[giornoIndice]}')`;
+
+            document.getElementById('clock').innerText = `${String(h).padStart(2, '0')}:${m}`;
+
+            const opzioniData = { day: 'numeric', month: 'long', year: 'numeric' };
+            const opzioniGiorno = { weekday: 'long' };
+            
+            document.getElementById('full-date').innerText = oraAttuale.toLocaleDateString('it-IT', opzioniData);
+            document.getElementById('day-name').innerText = oraAttuale.toLocaleDateString('it-IT', opzioniGiorno);
+        }
+
+        updateDisplay();
+        setInterval(updateDisplay, 60000);
+    </script>
+</body>
+</html>
