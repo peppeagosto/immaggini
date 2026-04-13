@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinile Player Live - Pro</title>
+    <style>
+        body { margin: 0; background-color: #0f0f0f; color: #d2b48c; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .player-container, .main-wrapper { display: flex; justify-content: center; align-items: center; position: relative; }
+        .main-wrapper { width: 600px; height: 600px; }
+        #circular-text { position: absolute; width: 100%; height: 100%; z-index: 10; animation: rotateText 25s linear infinite; pointer-events: none; }
+        @keyframes rotateText { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #circular-text svg { width: 100%; height: 100%; overflow: visible; }
+        #circular-text text { fill: #bd9662; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 5px; transition: fill 1.5s ease; }
+        .vinyl-wrapper { position: relative; width: 450px; height: 450px; border-radius: 50%; border: 6px solid #2a1b12; background: #000; z-index: 5; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: box-shadow 1.5s ease; box-shadow: 0 0 25px rgba(189, 150, 98, 0.6), inset 0 0 60px rgba(0,0,0,0.9); }
+        #v-source { position: absolute; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: saturate(1.2); }
+        #woofer-container { position: relative; width: 195px; height: 195px; border-radius: 50%; z-index: 6; border: 3px solid #3d2b1f; background: url('https://xatimg.com/image/rD3Y2TIrbSer.png') center/140% no-repeat; box-shadow: inset 0 0 20px #000; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 35px; transition: transform 0.06s ease-out; box-sizing: border-box; }
+        .controls { display: flex; gap: 8px; transform: scale(0.9); pointer-events: auto; }
+        button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid #bd9662; background: rgba(30, 20, 10, 0.9); color: #d2b48c; cursor: pointer; font-size: 7px; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        button:hover { background: #bd9662; color: #000; }
+        input[type="range"] { -webkit-appearance: none; width: 50px; height: 3px; background: #3d2b1f; border: 1px solid #bd9662; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #bd9662; border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <div class="main-wrapper">
+            <div id="circular-text">
+                <svg viewBox="0 0 600 600">
+                    <path id="circlePath" d="M 300, 300 m -265, 0 a 265,265 0 1,1 530,0 a 265,265 0 1,1 -530,0" fill="transparent"/>
+                    <text><textPath href="#circlePath" id="track-name"></textPath></text>
+                </svg>
+            </div>
+            <div class="vinyl-wrapper" id="vinyl">
+                <video id="v-source" loop playsinline muted></video>
+                <div id="woofer-container">
+                    <div class="controls">
+                        <button id="playBtn">START</button>
+                        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.8">
+                        <button onclick="location.reload()">OFF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio" crossorigin="anonymous"></audio>
+
+    <script>
+        const audio = document.getElementById("audio");
+        const video = document.getElementById("v-source");
+        const playBtn = document.getElementById("playBtn");
+        const woofer = document.getElementById("woofer-container");
+        const trackName = document.getElementById("track-name");
+        const vinyl = document.getElementById("vinyl");
+        const textEl = document.querySelector("#circular-text text");
+
+        // --- CAMUFFAMENTO LINK VIDEO ---
+        (function loadMedia() {
+            const h = "aHR0cHM6Ly9wZXBwZWFnb3N0by5naXRodWIuaW8v"; // Parte 1 (base64)
+            const p = "aW1tYWdnaW5pL3ZpbmlsZS5tcDQ="; // Parte 2 (base64)
+            video.src = atob(h) + atob(p);
+        })();
+
+        audio.src = "https://stream.zeno.fm/ylkruiq5e4fvv.aac";
+        let isPlaying = false, audioCtx, analyser, dataArray;
+
+        const colors = [
+            { t: "#bd9662", g: "rgba(189, 150, 98, 0.6)" },
+            { t: "#e63946", g: "rgba(230, 57, 70, 0.6)" },
+            { t: "#a8dadc", g: "rgba(168, 218, 220, 0.6)" },
+            { t: "#457b9d", g: "rgba(69, 123, 157, 0.6)" },
+            { t: "#9b59b6", g: "rgba(155, 89, 182, 0.6)" },
+            { t: "#2ecc71", g: "rgba(46, 204, 113, 0.6)" }
+        ];
+        let cIdx = 0;
+
+        function changeColors() {
+            cIdx = (cIdx + 1) % colors.length;
+            const c = colors[cIdx];
+            textEl.style.fill = c.t;
+            vinyl.style.boxShadow = `0 0 25px ${c.g}, 0 0 55px rgba(0,0,0,0.8), inset 0 0 60px rgba(0,0,0,0.9)`;
+        }
+        setInterval(changeColors, 5000);
+
+        playBtn.onclick = async () => {
+            if(isPlaying) return;
+            playBtn.innerText = "...";
+            video.play();
+            setTimeout(async () => {
+                try {
+                    if (!audioCtx) setup();
+                    await audio.play();
+                    isPlaying = true;
+                    playBtn.innerText = "LIVE";
+                    render();
+                    update();
+                } catch (err) { console.log(err); }
+            }, 7000);
+        };
+
+        function setup() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            audioCtx.createMediaElementSource(audio).connect(analyser);
+            analyser.connect(audioCtx.destination);
+            analyser.fftSize = 64;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+        }
+
+        function render() {
+            if (!isPlaying) return;
+            requestAnimationFrame(render);
+            analyser.getByteFrequencyData(dataArray);
+            let avg = dataArray.reduce((a,b) => a+b) / dataArray.length;
+            woofer.style.transform = `scale(${1 + (avg / 240)})`;
+        }
+
+        async function update() {
+            try {
+                const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+                const data = await res.json();
+                const info = (data.currentTrack?.title || "IL CARTAIO RADIO").toUpperCase();
+                trackName.textContent = info + " • " + info + " • ";
+            } catch (e) { trackName.textContent = "IL CARTAIO RADIO • "; }
+        }
+
+        document.getElementById("volume").oninput = (e) => audio.volume = e.target.value;
+        setInterval(update, 20000);
+    </script>
+</body>
+</html>
