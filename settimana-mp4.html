@@ -3,7 +3,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>XAT Video Mood - Toggle ON/OFF</title>
+    <title>XAT Video Mood - Right Side Rainbow</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -25,52 +25,64 @@
             z-index: 1;
         }
 
-        /* BOX DATARIO - ALTO A SINISTRA */
+        /* BOX DATARIO - SPOSTATO A DESTRA E ABBASSATO */
         #info-sidebar {
             position: absolute;
             z-index: 10;
-            top: 20px; 
-            left: 20px; 
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
+            top: 80px; /* Abbassato per non tagliare */
+            right: 20px; /* Spostato a destra */
+            background: rgba(0, 0, 0, 0.4); /* Interno trasparente scuro */
+            backdrop-filter: blur(8px);
             padding: 15px 25px;
-            border-left: 3px solid #00ffcc;
-            border-radius: 8px; 
+            border-radius: 12px; 
             color: #fff;
+            text-align: right;
             transition: opacity 0.5s ease;
             opacity: 1;
+
+            /* BOX SFUMATO ARCOBALENO (Bordo) */
+            border: 3px solid transparent;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                              linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            background-size: 200% 200%;
+            animation: rainbowBorder 4s linear infinite;
         }
 
-        /* ZONA DI COMANDO A DESTRA */
+        @keyframes rainbowBorder {
+            0% { background-position: 0% 50%, 0% 50%; }
+            50% { background-position: 0% 50%, 100% 50%; }
+            100% { background-position: 0% 50%, 0% 50%; }
+        }
+
+        /* ZONA DI COMANDO SOTTO IL DATARIO */
         #command-zone {
             position: absolute;
             z-index: 20;
-            top: 0;
-            right: 0;
-            width: 150px;
-            height: 100px;
+            top: 10px;
+            right: 20px;
+            width: 100px;
+            height: 60px;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
         }
 
-        /* TASTO DINAMICO ON/OFF */
         #toggle-button {
-            padding: 10px 25px;
+            padding: 5px 15px;
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid #00ffcc;
             color: #00ffcc;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            opacity: 0; /* Appare al passaggio del mouse in alto a dx */
             transition: all 0.3s ease;
-            /* Invisibile di base, appare solo al passaggio del mouse nella zona */
-            opacity: 0;
         }
 
-        /* Mostra il tasto quando il mouse entra nella zona destra */
         #command-zone:hover #toggle-button {
             opacity: 1;
         }
@@ -78,29 +90,23 @@
         #clock {
             font-size: 35px;
             font-weight: 900;
-            color: #00ffcc;
+            color: #fff;
             display: block;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         #date-box {
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            animation: blinkingText 2.5s infinite ease-in-out;
-        }
-
-        @keyframes blinkingText {
-            0% { opacity: 1; text-shadow: 0 0 5px #00ffcc; }
-            50% { opacity: 0.4; text-shadow: none; }
-            100% { opacity: 1; text-shadow: 0 0 5px #00ffcc; }
         }
 
         .day-highlight {
             font-weight: bold;
             display: block;
-            color: #00ffcc;
+            color: #00ffcc; /* Colore fluo per risaltare */
             font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -138,14 +144,12 @@
             const btn = document.getElementById('toggle-button');
 
             if (datarioVisibile) {
-                // SPEGNI
                 sidebar.style.opacity = '0';
                 btn.innerText = 'ON';
                 btn.style.borderColor = '#ff4d4d';
                 btn.style.color = '#ff4d4d';
                 datarioVisibile = false;
             } else {
-                // ACCENDI
                 sidebar.style.opacity = '1';
                 btn.innerText = 'OFF';
                 btn.style.borderColor = '#00ffcc';
