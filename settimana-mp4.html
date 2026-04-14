@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>XAT Video Mood - Posizione DX</title>
+    <title>XAT Video Mood - Hover Mode</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -24,24 +24,43 @@
             z-index: 1;
         }
 
+        /* SIDEBAR: Di base è invisibile (opacity: 0) */
         #info-sidebar {
             position: absolute;
             z-index: 10;
-            /* ALTEZZA: 35% come richiesto prima */
             top: 35%; 
-            /* SPOSTAMENTO A DESTRA: 40px dal bordo sinistro */
             left: 40px; 
             transform: translateY(-50%);
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
             padding: 20px;
-            /* Estetica: bordo luminoso su tutto il lato sinistro e angoli arrotondati */
             border-left: 5px solid #00ffcc;
             border-radius: 15px; 
             color: #fff;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            
+            /* EFFETTO INVISIBILE */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            pointer-events: none; /* Non blocca i click quando è invisibile */
+        }
+
+        /* MOSTRA SOLO AL PASSAGGIO DEL MOUSE */
+        /* Ho aggiunto un contenitore invisibile per facilitare l'hover */
+        #hover-trigger:hover #info-sidebar {
             opacity: 1;
-            transition: all 0.5s ease;
+            visibility: visible;
+        }
+
+        /* AREA DI ATTIVAZIONE: Una zona invisibile sul lato sinistro */
+        #hover-trigger {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px; /* Larghezza dell'area sensibile */
+            height: 100%;
+            z-index: 20;
         }
 
         #clock {
@@ -71,11 +90,13 @@
 
     <iframe id="bg-frame" src="about:blank"></iframe>
 
-    <div id="info-sidebar">
-        <span id="clock">00:00</span>
-        <div id="date-box">
-            <div id="full-date">DATA</div>
-            <div id="day-name" class="day-highlight">GIORNO</div>
+    <div id="hover-trigger">
+        <div id="info-sidebar">
+            <span id="clock">00:00</span>
+            <div id="date-box">
+                <div id="full-date">DATA</div>
+                <div id="day-name" class="day-highlight">GIORNO</div>
+            </div>
         </div>
     </div>
 
@@ -96,6 +117,7 @@
             const m = String(ora.getMinutes()).padStart(2, '0');
             let giorno = ora.getDay();
 
+            // Logica cambio palinsesto alle ore 07:00
             if (h < 7) {
                 giorno = (giorno === 0) ? 6 : giorno - 1;
             }
