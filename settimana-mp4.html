@@ -34,13 +34,12 @@
              backdrop-filter: blur(10px);
              padding: 20px;
              border-radius: 12px;
-             transition: opacity 0.5s ease;
+             transition: opacity 1s ease-in-out;
              opacity: 1;
              border: 1px solid rgba(255, 255, 255, 0.1);
              min-width: 280px;
          }
 
-         /* EFFETTO TESTO ARCOBALENO ANIMATO */
          .rainbow-text {
              background-image: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
              background-size: 200% auto;
@@ -110,7 +109,7 @@
      <iframe id="bg-frame" src="about:blank"></iframe>
 
      <div id="command-zone-left">
-         <button id="toggle-button" onclick="toggleDatario()">OFF</button>
+         <button id="toggle-button" onclick="toggleDatarioManual()">OFF</button>
      </div>
 
      <div id="info-sidebar">
@@ -134,54 +133,67 @@
              6: "https://peppeagosto.github.io/immaggini/faretti2025.html"
          };
 
-         let datarioVisibile = true;
+         let manualOverride = false;
 
-         function toggleDatario() {
+         function setDatario(show) {
              const sidebar = document.getElementById('info-sidebar');
              const btn = document.getElementById('toggle-button');
-             if (datarioVisibile) {
-                 sidebar.style.opacity = '0';
-                 btn.innerText = 'ON';
-                 btn.style.borderColor = '#ff4d4d';
-                 btn.style.color = '#ff4d4d';
-                 datarioVisibile = false;
-             } else {
+             if (show) {
                  sidebar.style.opacity = '1';
                  btn.innerText = 'OFF';
                  btn.style.borderColor = '#00ffcc';
                  btn.style.color = '#00ffcc';
-                 datarioVisibile = true;
+             } else {
+                 sidebar.style.opacity = '0';
+                 btn.innerText = 'ON';
+                 btn.style.borderColor = '#ff4d4d';
+                 btn.style.color = '#ff4d4d';
              }
+         }
+
+         function toggleDatarioManual() {
+             const sidebar = document.getElementById('info-sidebar');
+             const isVisible = sidebar.style.opacity !== '0';
+             setDatario(!isVisible);
+             manualOverride = true; 
+             // Dopo 30 secondi dal comando manuale, riprende l'automatismo
+             setTimeout(() => { manualOverride = false; }, 30000);
          }
 
          function updateUI() {
              const ora = new Date();
              const h = ora.getHours();
-             const m = String(ora.getMinutes()).padStart(2, '0');
-             
-             // LOGICA CAMBIO OGNI ORA:
-             // Usiamo il resto della divisione per 7 (numero video)
-             // Esempio: ore 14:00 -> 14 % 7 = 0 (Video 0)
-             // Esempio: ore 15:00 -> 15 % 7 = 1 (Video 1)
-             const videoIndex = h % 7;
+             const m = ora.getMinutes();
+             const s = ora.getSeconds();
 
+             // Aggiornamento Orologio e Video
+             document.getElementById('clock').innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+             const videoIndex = h % 7;
              const frame = document.getElementById('bg-frame');
              if (frame.src !== palinsesto[videoIndex]) {
                  frame.src = palinsesto[videoIndex];
              }
 
-             document.getElementById('clock').innerText = `${String(h).padStart(2, '0')}:${m}`;
-             
+             // Aggiornamento Data
              const opzioniData = { day: '2-digit', month: 'short', year: 'numeric' };
              document.getElementById('full-date').innerText = ora.toLocaleDateString('it-IT', opzioniData).replace('.', '');
-             
              const opzioniGiorno = { weekday: 'long' };
              document.getElementById('day-name').innerText = ora.toLocaleDateString('it-IT', opzioniGiorno).replace('.', '');
+
+             // LOGICA AUTOMATICA
+             if (!manualOverride) {
+                 // Appare solo per i primi 15 secondi ogni 5 minuti (es. 10:00, 10:05, 10:10...)
+                 if (m % 5 === 0 && s < 15) {
+                     setDatario(true);
+                 } else {
+                     setDatario(false);
+                 }
+             }
          }
 
+         // Esegui subito e poi ogni secondo per precisione
+         setInterval(updateUI, 1000);
          updateUI();
-         // Controlla ogni 30 secondi se l'ora è cambiata
-         setInterval(updateUI, 30000);
      </script>
 </body>
 </html>
