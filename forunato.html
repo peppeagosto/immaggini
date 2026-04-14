@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EL CARTAIO</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #000; /* sfondo nero pulito */
+    overflow: hidden; 
+    height: 100%;
+}
+
+/* CONTENITORI VIDEO */
+.video-box {
+    position: fixed;
+    width: 240px;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 20px;
+    
+    /* BORDO 14PX AZZURRINO */
+    border: 14px solid #add8e6; 
+    
+    /* APPLICAZIONE ANIMAZIONE PULSANTE */
+    animation: glowPulse 2s infinite alternate ease-in-out;
+    
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.video-left { left: 10px; }
+.video-right { right: 10px; }
+
+.video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.video-text {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #fff;
+    pointer-events: none;
+    animation: wave 3s ease-in-out infinite;
+}
+
+/* --- ANIMAZIONE GLOW PULSANTE --- */
+@keyframes glowPulse {
+    0% {
+        box-shadow: 0 0 10px #add8e6, 0 0 5px #add8e6 inset;
+    }
+    100% {
+        box-shadow: 0 0 35px #add8e6, 0 0 15px #add8e6 inset;
+    }
+}
+
+/* --- ANIMAZIONI PARTICELLE --- */
+.floating-emoji {
+    position: fixed;
+    bottom: -50px;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-110vh) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes wave {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(4px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="video-box video-left">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/fortunato.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">Fortunato</div>
+</div>
+
+<div class="video-box video-right">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/fortunato.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">Fortunato</div>
+</div>
+
+<script>
+    const emojis = ['🦋', '⭐', '❤️', '✨', '🌸'];
+
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'floating-emoji';
+        particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        particle.style.left = Math.random() * 100 + "vw";
+        const size = Math.random() * 20 + 15 + "px";
+        particle.style.fontSize = size;
+        const duration = Math.random() * 5 + 8;
+        particle.style.animationDuration = duration + "s";
+        particle.style.opacity = Math.random() * 0.7 + 0.3;
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, duration * 1000);
+    }
+
+    setInterval(createParticle, 400);
+</script>
+
+</body>
+</html>
