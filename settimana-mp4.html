@@ -30,76 +30,80 @@
             z-index: 10;
             top: 120px; 
             right: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.4); /* Sfondo scuro leggero */
+            backdrop-filter: blur(10px);
+            padding: 20px;
             border-radius: 12px; 
-            color: #fff;
-            text-align: right;
             transition: opacity 0.5s ease;
             opacity: 1;
-            border: 3px solid transparent;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                              linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            background-size: 200% 200%;
-            animation: rainbowBorder 4s linear infinite;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Bordo sottile quasi invisibile */
+            min-width: 280px;
         }
 
-        /* AREA PULSANTE A SINISTRA */
+        /* EFFETTO TESTO ARCOBALENO ANIMATO */
+        .rainbow-text {
+            background-image: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: rainbowShift 4s linear infinite;
+        }
+
+        @keyframes rainbowShift {
+            to { background-position: 200% center; }
+        }
+
+        /* LOGICA TABELLA INTERNA */
+        .date-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .date-table td {
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        #clock {
+            font-size: 50px;
+            font-weight: 900;
+            display: block;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        /* AREA PULSANTE IN BASSO A SINISTRA */
         #command-zone-left {
             position: absolute;
             z-index: 20;
-            top: 120px; /* Stessa altezza del datario */
-            left: 20px;
+            bottom: 30px; 
+            left: 20px;  
             padding: 10px;
         }
 
         #toggle-button {
-            padding: 10px 25px;
+            padding: 12px 30px;
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #00ffcc;
             color: #00ffcc;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-            transition: opacity 0.3s ease;
-            opacity: 0; /* Invisibile di default */
-        }
-
-        /* MOSTRA IL TASTO QUANDO PASSI IL MOUSE SULLA ZONA SINISTRA */
-        #command-zone-left:hover #toggle-button {
-            opacity: 1;
-        }
-
-        @keyframes rainbowBorder {
-            0% { background-position: 0% 50%, 0% 50%; }
-            50% { background-position: 0% 50%, 100% 50%; }
-            100% { background-position: 0% 50%, 0% 50%; }
-        }
-
-        #clock {
-            font-size: 35px;
-            font-weight: 900;
-            display: block;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-
-        #date-box {
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            opacity: 0; 
         }
 
-        .day-highlight {
-            font-weight: bold;
-            display: block;
-            color: #00ffcc;
-            font-size: 14px;
-            margin-top: 5px;
+        #command-zone-left:hover #toggle-button {
+            opacity: 1;
         }
     </style>
 </head>
@@ -112,11 +116,13 @@
     </div>
 
     <div id="info-sidebar">
-        <span id="clock">00:00</span>
-        <div id="date-box">
-            <div id="full-date">DATA</div>
-            <div id="day-name" class="day-highlight">GIORNO</div>
-        </div>
+        <span id="clock" class="rainbow-text">00:00</span>
+        <table class="date-table">
+            <tr>
+                <td id="day-name" class="rainbow-text">GIORNO</td>
+                <td id="full-date" class="rainbow-text">DATA</td>
+            </tr>
+        </table>
     </div>
 
     <script>
@@ -155,20 +161,24 @@
             const ora = new Date();
             const h = ora.getHours();
             const m = String(ora.getMinutes()).padStart(2, '0');
-            let giorno = ora.getDay();
+            let giornoIndex = ora.getDay();
 
             if (h < 7) {
-                giorno = (giorno === 0) ? 6 : giorno - 1;
+                giornoIndex = (giornoIndex === 0) ? 6 : giornoIndex - 1;
             }
 
             const frame = document.getElementById('bg-frame');
-            if (frame.src !== palinsesto[giorno]) {
-                frame.src = palinsesto[giorno];
+            if (frame.src !== palinsesto[giornoIndex]) {
+                frame.src = palinsesto[giornoIndex];
             }
 
             document.getElementById('clock').innerText = `${String(h).padStart(2, '0')}:${m}`;
-            document.getElementById('full-date').innerText = ora.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById('day-name').innerText = ora.toLocaleDateString('it-IT', { weekday: 'long' });
+            
+            const opzioniData = { day: '2-digit', month: 'short', year: 'numeric' };
+            document.getElementById('full-date').innerText = ora.toLocaleDateString('it-IT', opzioniData).replace('.', '');
+            
+            const opzioniGiorno = { weekday: 'long' };
+            document.getElementById('day-name').innerText = ora.toLocaleDateString('it-IT', opzioniGiorno).replace('.', '');
         }
 
         updateUI();
