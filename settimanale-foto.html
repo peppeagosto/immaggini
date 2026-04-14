@@ -1,3 +1,5 @@
+
+
 <html lang="it">
 <head>
   <meta charset="UTF-8">
@@ -51,29 +53,39 @@
       70% { transform: scale(1); }
     }
 
-    /* NUOVO TESTO SOPRA IN BLUNOTTE PULSANTE */
+    /* TESTO SOPRA */
     .testo-sopra-nuovo {
-      color: #191970; /* BluNotte */
+      color: #191970;
       font-family: 'Arial', sans-serif;
       font-weight: 900;
       font-size: 24px;
-      margin-bottom: 120px; /* Spazio dal datario */
+      margin-bottom: 40px;
       text-transform: uppercase;
       letter-spacing: 3px;
       animation: heart-beat 1.5s infinite ease-in-out;
     }
 
-    /* BOX DATARIO BLUNOTTE */
+    /* BOX ORARIO E DATARIO BLUNOTTE */
     .datario-box {
       text-align: center;
-      color: #191970; /* BluNotte */
+      color: #191970;
       font-family: 'Arial', sans-serif;
       font-weight: 900;
       text-transform: uppercase;
       animation: heart-beat 1.5s infinite ease-in-out;
     }
-    #giorno-nome { font-size: 32px; margin-bottom: 5px; }
-    #data-numerica { font-size: 24px; letter-spacing: 2px; }
+
+    #orario-corrente {
+      font-size: 48px;
+      margin-bottom: 10px;
+      display: block;
+      border-bottom: 2px solid #191970;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+
+    #giorno-nome { font-size: 28px; margin-bottom: 5px; }
+    #data-numerica { font-size: 22px; letter-spacing: 2px; }
 
     /* --- PANNELLO DESTRO --- */
     .right {
@@ -103,7 +115,6 @@
       background: transparent;
     }
 
-    /* IMMAGINE DESTRA */
     .side-img {
       width: 100%;
       height: 100%;
@@ -111,7 +122,6 @@
       opacity: 0.8;
     }
 
-    /* ETICHETTE NOSIFER */
     .label-text {
       position: absolute;
       bottom: 25px;
@@ -120,14 +130,8 @@
       z-index: 5;
     }
     
-    .left .label-text { 
-      color: #191970; /* BluNotte */
-      animation: heart-beat 1.5s infinite ease-in-out; 
-    }
-    .right .label-text { 
-      color: #ffffff; 
-      text-shadow: 0 0 15px rgba(255,255,255,0.8); 
-    }
+    .left .label-text { color: #191970; animation: heart-beat 1.5s infinite ease-in-out; }
+    .right .label-text { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.8); }
   </style>
 </head>
 <body>
@@ -138,6 +142,7 @@
     <div class="testo-sopra-nuovo">BluNotte</div>
     
     <div class="datario-box">
+      <div id="orario-corrente">00:00</div>
       <div id="giorno-nome"></div>
       <div id="data-numerica"></div>
     </div>
@@ -157,34 +162,39 @@
   function aggiornaTutto() {
     const oraLocale = new Date();
     
-    // Logica cambio ore 07:00
+    // Gestione Orario (Ore:Minuti)
+    const ore = oraLocale.getHours().toString().padStart(2, '0');
+    const minuti = oraLocale.getMinutes().toString().padStart(2, '0');
+    document.getElementById('orario-corrente').innerText = `${ore}:${minuti}`;
+
+    // Logica cambio foto ore 07:00
     const dataRiferimento = new Date(oraLocale.getTime() - (7 * 60 * 60 * 1000));
     const giornoSettimana = dataRiferimento.getDay(); 
 
-    // Aggiorna Datario (Sinistra)
+    // Aggiorna Datario
     const optionsGiorno = { weekday: 'long' };
     const optionsData = { day: '2-digit', month: '2-digit', year: 'numeric' };
     
     document.getElementById('giorno-nome').innerText = oraLocale.toLocaleDateString('it-IT', optionsGiorno);
     document.getElementById('data-numerica').innerText = oraLocale.toLocaleDateString('it-IT', optionsData);
 
-    // Aggiorna Foto (Destra)
+    // Aggiorna Foto
     const elencoFoto = [
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Domenica
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Lunedì
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Martedì
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Mercoledì
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Giovedì
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg", // Venerdì
-      "https://xatimg.com/image/tuy9wPMwNvwV.jpg"  // Sabato
+      "https://xatimg.com/image/jb99n1dmJZwj.jpg", // Domenica
+      "https://xatimg.com/image/8A5ee2dTPHYT.jpg", // Lunedì
+      "https://xatimg.com/image/a1b6rRpeHkbQ.jpg", // Martedì
+      "https://xatimg.com/image/a1b6rRpeHkbQ.jpg", // Mercoledì
+      "https://xatimg.com/image/uDyfs2sDDM3y.jpg", // Giovedì
+      "https://xatimg.com/image/fBl6YB8Ytt2T.jpg", // Venerdì
+      "https://xatimg.com/image/rUk4nTNgfk77.jpg"  // Sabato
     ];
 
     document.getElementById('img-settimanale').src = elencoFoto[giornoSettimana];
   }
 
-  // Esecuzione
+  // Esecuzione immediata e aggiornamento ogni secondo per precisione orologio
   aggiornaTutto();
-  setInterval(aggiornaTutto, 60000); 
+  setInterval(aggiornaTutto, 1000); 
 </script>
 
 </body>
