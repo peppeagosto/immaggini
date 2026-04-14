@@ -2,21 +2,20 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>XAT Video Mood - 7 Days</title>
+    <title>XAT Video Mood - Posizione DX</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body, html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: #000;
+        
+        body, html { 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #000; 
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        /* Sfondo: l'iframe che carica il video del giorno */
         #bg-frame {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -25,68 +24,63 @@
             z-index: 1;
         }
 
-        /* Box info: piccolo e invisibile, appare al passaggio del mouse */
         #info-sidebar {
             position: absolute;
             z-index: 10;
-            top: 50%;
+            /* ALTEZZA: 35% come richiesto prima */
+            top: 35%; 
+            /* SPOSTAMENTO A DESTRA: 40px dal bordo sinistro */
+            left: 40px; 
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            padding: 15px;
-            margin-left: 20px;
-            border-left: 4px solid #00ffcc;
-            border-radius: 0 10px 10px 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            /* Estetica: bordo luminoso su tutto il lato sinistro e angoli arrotondati */
+            border-left: 5px solid #00ffcc;
+            border-radius: 15px; 
             color: #fff;
-            opacity: 0; /* Invisibile */
-            transition: opacity 0.4s ease-in-out;
-            pointer-events: none;
-        }
-
-        /* Mostra il datario al passaggio del mouse ovunque sulla pagina */
-        body:hover #info-sidebar {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             opacity: 1;
+            transition: all 0.5s ease;
         }
 
         #clock {
-            font-size: 35px; /* Più piccolo */
-            font-weight: 900;
+            font-size: 40px;
+            font-weight: bold;
+            color: #00ffcc;
             display: block;
-            line-height: 1;
             margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
 
         #date-box {
-            font-size: 12px; /* Molto piccolo e pulito */
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .day-highlight {
-            color: #00ffcc;
             font-weight: bold;
             display: block;
-            font-size: 14px;
             margin-top: 2px;
+            color: #00ffcc;
         }
     </style>
 </head>
 <body>
 
-    <iframe id="bg-frame" src=""></iframe>
+    <iframe id="bg-frame" src="about:blank"></iframe>
 
     <div id="info-sidebar">
         <span id="clock">00:00</span>
         <div id="date-box">
-            <span id="full-date">DATA</span>
-            <span id="day-name" class="day-highlight">GIORNO</span>
+            <div id="full-date">DATA</div>
+            <div id="day-name" class="day-highlight">GIORNO</div>
         </div>
     </div>
 
     <script>
-        // Inserisci qui i link per ogni giorno della settimana
-        // Puoi usare link .html come quello che mi hai dato o link diretti .mp4
-        const palinsestoVideo = {
+        const palinsesto = {
             0: "https://peppeagosto.github.io/immaggini/sorriso2.html", 
             1: "https://peppeagosto.github.io/immaggini/fiori.html", 
             2: "https://peppeagosto.github.io/immaggini/acqua.html",
@@ -96,37 +90,28 @@
             6: "https://peppeagosto.github.io/immaggini/faretti2025.html"
         };
 
-        function updateContent() {
-            const oraAttuale = new Date();
-            const h = oraAttuale.getHours();
-            const m = String(oraAttuale.getMinutes()).padStart(2, '0');
-            
-            // Logica cambio alle 07:00 del mattino
-            let giornoIndice = oraAttuale.getDay();
+        function updateUI() {
+            const ora = new Date();
+            const h = ora.getHours();
+            const m = String(ora.getMinutes()).padStart(2, '0');
+            let giorno = ora.getDay();
+
             if (h < 7) {
-                giornoIndice = (giornoIndice === 0) ? 6 : giornoIndice - 1;
+                giorno = (giorno === 0) ? 6 : giorno - 1;
             }
 
-            // Aggiorna il link del frame solo se necessario
             const frame = document.getElementById('bg-frame');
-            const linkDelGiorno = palinsestoVideo[giornoIndice];
-            
-            if (frame.src !== linkDelGiorno) {
-                frame.src = linkDelGiorno;
+            if (frame.src !== palinsesto[giorno]) {
+                frame.src = palinsesto[giorno];
             }
 
-            // Aggiorna Orologio e Datario
             document.getElementById('clock').innerText = `${String(h).padStart(2, '0')}:${m}`;
-            const opzioniData = { day: 'numeric', month: 'long', year: 'numeric' };
-            const opzioniGiorno = { weekday: 'long' };
-            
-            document.getElementById('full-date').innerText = oraAttuale.toLocaleDateString('it-IT', opzioniData);
-            document.getElementById('day-name').innerText = oraAttuale.toLocaleDateString('it-IT', opzioniGiorno);
+            document.getElementById('full-date').innerText = ora.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('day-name').innerText = ora.toLocaleDateString('it-IT', { weekday: 'long' });
         }
 
-        // Controllo ogni 30 secondi per essere precisi con l'orario
-        setInterval(updateContent, 30000);
-        updateContent();
+        updateUI();
+        setInterval(updateUI, 30000);
     </script>
 </body>
 </html>
