@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EL CARTAIO</title>
+<title>fortunato</title>
 
 <style>
 html, body {
     margin: 0;
     padding: 0;
-    background: #000; /* sfondo nero pulito */
+    background: radial-gradient(circle, #1e90ff 0%, #00bfff 30%, #000000 100%);
     overflow: hidden; 
     height: 100%;
 }
 
-/* CONTENITORI VIDEO */
 .video-box {
     position: fixed;
     width: 240px;
@@ -22,13 +21,8 @@ html, body {
     top: 50%;
     transform: translateY(-50%);
     border-radius: 20px;
-    
-    /* BORDO 14PX AZZURRINO */
     border: 14px solid #add8e6; 
-    
-    /* APPLICAZIONE ANIMAZIONE PULSANTE */
     animation: glowPulse 2s infinite alternate ease-in-out;
-    
     overflow: hidden;
     z-index: 9999;
 }
@@ -45,55 +39,52 @@ html, body {
 
 .video-text {
     position: absolute;
-    bottom: 8px;
+    bottom: 12px;
     left: 0;
     width: 100%;
     text-align: center;
-    color: #fff;
-    font-size: 22px;
-    font-weight: bold;
-    text-shadow: 0 0 8px #fff;
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #fff, #add8e6, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: wave 3s ease-in-out infinite, shine 2s linear infinite;
     pointer-events: none;
-    animation: wave 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
 }
 
-/* --- ANIMAZIONE GLOW PULSANTE --- */
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+@keyframes wave {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(2deg); }
+}
+
 @keyframes glowPulse {
-    0% {
-        box-shadow: 0 0 10px #add8e6, 0 0 5px #add8e6 inset;
-    }
-    100% {
-        box-shadow: 0 0 35px #add8e6, 0 0 15px #add8e6 inset;
-    }
+    0% { box-shadow: 0 0 10px #add8e6, 0 0 5px #add8e6 inset; }
+    100% { box-shadow: 0 0 40px #00bfff, 0 0 20px #00bfff inset; }
 }
 
-/* --- ANIMAZIONI PARTICELLE --- */
 .floating-emoji {
     position: fixed;
     bottom: -50px;
     user-select: none;
     pointer-events: none;
     z-index: 1;
+    font-weight: bold;
     animation: floatUp linear forwards;
 }
 
 @keyframes floatUp {
-    0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-110vh) translateX(50px) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-@keyframes wave {
-    0% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-4px) rotate(-1deg); }
-    50% { transform: translateY(0) rotate(0deg); }
-    75% { transform: translateY(4px) rotate(1deg); }
-    100% { transform: translateY(0) rotate(0deg); }
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-110vh) translateX(40px) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
@@ -115,27 +106,30 @@ html, body {
 </div>
 
 <script>
-    const emojis = ['🦋', '⭐', '❤️', '✨', '🌸'];
+    const emojis = ['🎶', '🎵', '🎼', '⭐', '✨', '🎸', '🎹'];
+    const colors = ['#ff0000', '#ffff00', '#39ff14'];
 
     function createParticle() {
         const particle = document.createElement('div');
         particle.className = 'floating-emoji';
         particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.color = randomColor;
+        particle.style.filter = `drop-shadow(0 0 8px ${randomColor})`;
+        
         particle.style.left = Math.random() * 100 + "vw";
-        const size = Math.random() * 20 + 15 + "px";
+        const size = Math.random() * 25 + 20 + "px";
         particle.style.fontSize = size;
-        const duration = Math.random() * 5 + 8;
+        
+        const duration = Math.random() * 4 + 6;
         particle.style.animationDuration = duration + "s";
-        particle.style.opacity = Math.random() * 0.7 + 0.3;
 
         document.body.appendChild(particle);
-
-        setTimeout(() => {
-            particle.remove();
-        }, duration * 1000);
+        setTimeout(() => { particle.remove(); }, duration * 1000);
     }
 
-    setInterval(createParticle, 400);
+    setInterval(createParticle, 300);
 </script>
 
 </body>
