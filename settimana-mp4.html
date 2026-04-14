@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>XAT Video Mood - Hover Mode</title>
+    <title>XAT Video Mood - Toggle ON/OFF</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -24,65 +25,82 @@
             z-index: 1;
         }
 
-        /* SIDEBAR: Di base è invisibile (opacity: 0) */
+        /* BOX DATARIO - ALTO A SINISTRA */
         #info-sidebar {
             position: absolute;
             z-index: 10;
-            top: 35%; 
-            left: 40px; 
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-left: 5px solid #00ffcc;
-            border-radius: 15px; 
+            top: 20px; 
+            left: 20px; 
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 15px 25px;
+            border-left: 3px solid #00ffcc;
+            border-radius: 8px; 
             color: #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            
-            /* EFFETTO INVISIBILE */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-            pointer-events: none; /* Non blocca i click quando è invisibile */
-        }
-
-        /* MOSTRA SOLO AL PASSAGGIO DEL MOUSE */
-        /* Ho aggiunto un contenitore invisibile per facilitare l'hover */
-        #hover-trigger:hover #info-sidebar {
+            transition: opacity 0.5s ease;
             opacity: 1;
-            visibility: visible;
         }
 
-        /* AREA DI ATTIVAZIONE: Una zona invisibile sul lato sinistro */
-        #hover-trigger {
+        /* ZONA DI COMANDO A DESTRA */
+        #command-zone {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 300px; /* Larghezza dell'area sensibile */
-            height: 100%;
             z-index: 20;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* TASTO DINAMICO ON/OFF */
+        #toggle-button {
+            padding: 10px 25px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            /* Invisibile di base, appare solo al passaggio del mouse nella zona */
+            opacity: 0;
+        }
+
+        /* Mostra il tasto quando il mouse entra nella zona destra */
+        #command-zone:hover #toggle-button {
+            opacity: 1;
         }
 
         #clock {
-            font-size: 40px;
-            font-weight: bold;
+            font-size: 35px;
+            font-weight: 900;
             color: #00ffcc;
             display: block;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
         }
 
         #date-box {
-            font-size: 14px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            animation: blinkingText 2.5s infinite ease-in-out;
+        }
+
+        @keyframes blinkingText {
+            0% { opacity: 1; text-shadow: 0 0 5px #00ffcc; }
+            50% { opacity: 0.4; text-shadow: none; }
+            100% { opacity: 1; text-shadow: 0 0 5px #00ffcc; }
         }
 
         .day-highlight {
             font-weight: bold;
             display: block;
-            margin-top: 2px;
             color: #00ffcc;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -90,13 +108,15 @@
 
     <iframe id="bg-frame" src="about:blank"></iframe>
 
-    <div id="hover-trigger">
-        <div id="info-sidebar">
-            <span id="clock">00:00</span>
-            <div id="date-box">
-                <div id="full-date">DATA</div>
-                <div id="day-name" class="day-highlight">GIORNO</div>
-            </div>
+    <div id="command-zone">
+        <button id="toggle-button" onclick="toggleDatario()">OFF</button>
+    </div>
+
+    <div id="info-sidebar">
+        <span id="clock">00:00</span>
+        <div id="date-box">
+            <div id="full-date">DATA</div>
+            <div id="day-name" class="day-highlight">GIORNO</div>
         </div>
     </div>
 
@@ -111,13 +131,35 @@
             6: "https://peppeagosto.github.io/immaggini/faretti2025.html"
         };
 
+        let datarioVisibile = true;
+
+        function toggleDatario() {
+            const sidebar = document.getElementById('info-sidebar');
+            const btn = document.getElementById('toggle-button');
+
+            if (datarioVisibile) {
+                // SPEGNI
+                sidebar.style.opacity = '0';
+                btn.innerText = 'ON';
+                btn.style.borderColor = '#ff4d4d';
+                btn.style.color = '#ff4d4d';
+                datarioVisibile = false;
+            } else {
+                // ACCENDI
+                sidebar.style.opacity = '1';
+                btn.innerText = 'OFF';
+                btn.style.borderColor = '#00ffcc';
+                btn.style.color = '#00ffcc';
+                datarioVisibile = true;
+            }
+        }
+
         function updateUI() {
             const ora = new Date();
             const h = ora.getHours();
             const m = String(ora.getMinutes()).padStart(2, '0');
             let giorno = ora.getDay();
 
-            // Logica cambio palinsesto alle ore 07:00
             if (h < 7) {
                 giorno = (giorno === 0) ? 6 : giorno - 1;
             }
