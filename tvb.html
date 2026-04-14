@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EL CARTAIO - HEART EXPLOSION</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    height: 100vh;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+/* --- SFUMATURE CENTRALI --- */
+.center-gradient {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(25, 25, 112, 0.5) 0%, rgba(0, 206, 209, 0.1) 60%, transparent 80%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* --- CONTENITORE CUORE --- */
+#heart-stage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.flower {
+    position: absolute;
+    font-size: 25px;
+    transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+}
+
+/* Animazione pulsazione cuore prima dell'esplosione */
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.beating {
+    animation: heartBeat 0.8s infinite ease-in-out;
+}
+
+/* --- VIDEO LATERALI --- */
+.video-box {
+    position: fixed;
+    width: 240px;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 14px;
+    border: 2px solid #ff0000;
+    overflow: hidden;
+    z-index: 9999;
+}
+.video-left { left: 10px; }
+.video-right { right: 10px; }
+.video-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-text {
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="center-gradient"></div>
+<div id="heart-stage"></div>
+
+<div class="video-box video-left">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/sorriso3.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL DIABLO</div>
+</div>
+
+<div class="video-box video-right">
+    <video autoplay loop muted playsinline>
+        <source src="https://peppeagosto.github.io/immaggini/sorriso3.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">EL CARTAIO</div>
+</div>
+
+<script>
+    const stage = document.getElementById('heart-stage');
+    const flowersIcons = ['🌹', '🌸', '🌹', '🌺', '✨'];
+    const totalFlowers = 40; // Quanti fiori formano il cuore
+
+    function initHeart() {
+        stage.innerHTML = '';
+        stage.classList.remove('beating');
+        const flowerElements = [];
+
+        // 1. Crea i fiori in posizione centrale (nascosti)
+        for (let i = 0; i < totalFlowers; i++) {
+            const f = document.createElement('div');
+            f.className = 'flower';
+            f.innerText = flowersIcons[Math.floor(Math.random() * flowersIcons.length)];
+            f.style.left = '0px';
+            f.style.top = '0px';
+            stage.appendChild(f);
+            flowerElements.push(f);
+        }
+
+        // 2. Disponi i fiori a forma di CUORE
+        setTimeout(() => {
+            flowerElements.forEach((f, i) => {
+                const angle = (i / totalFlowers) * Math.PI * 2;
+                // Equazione parametrica del cuore
+                const x = 16 * Math.pow(Math.sin(angle), 3);
+                const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+                
+                const scale = 12; // Dimensione del cuore
+                f.style.transform = `translate(${x * scale}px, ${y * scale}px)`;
+                f.style.opacity = '1';
+            });
+        }, 100);
+
+        // 3. Inizia a pulsare
+        setTimeout(() => {
+            stage.classList.add('beating');
+        }, 1600);
+
+        // 4. ESPLOSIONE
+        setTimeout(() => {
+            stage.classList.remove('beating');
+            flowerElements.forEach((f) => {
+                const randX = (Math.random() - 0.5) * 1500;
+                const randY = (Math.random() - 0.5) * 1500;
+                f.style.transform = `translate(${randX}px, ${randY}px) scale(0.1) rotate(${Math.random() * 360}deg)`;
+                f.style.opacity = '0';
+                f.style.transition = 'all 1s ease-in';
+            });
+        }, 4500);
+
+        // 5. Ripeti il ciclo
+        setTimeout(initHeart, 6000);
+    }
+
+    // Avvia il ciclo infinito
+    initHeart();
+</script>
+
+</body>
+</html>
