@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xat Bubbles Dynamic - Fortunato</title>
+    <title>Xat Bubbles Dynamic - Scia Mouse</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +16,6 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* Transizione fluida per il colore di sfondo */
             transition: background 5s ease-in-out;
             background-color: #000;
             display: flex;
@@ -23,7 +23,6 @@
             align-items: center;
         }
 
-        /* STILE PER IL DEMONE GHOST */
         .ghost-container {
             position: absolute;
             z-index: 0; 
@@ -63,34 +62,29 @@
     const ctx = canvas.getContext('2d');
     const body = document.getElementById('bgBody');
 
-    // --- CONFIGURAZIONE SFONDI DYNAMICI ---
+    // --- CONFIGURAZIONE SFONDI ---
     const backgrounds = [
-        "radial-gradient(circle, #333 0%, #111 30%, #000 100%)",   // Nero/Grigio
-        "radial-gradient(circle, #ff4d4d 0%, #b30000 60%, #330000 100%)", // Rosso
-        "radial-gradient(circle, #ff944d 0%, #e65c00 60%, #4d1f00 100%)", // Arancione
-        "radial-gradient(circle, #ffff66 0%, #ffd700 60%, #665200 100%)", // Giallo
-        "radial-gradient(circle, #4d94ff 0%, #005ce6 60%, #002b80 100%)"  // Blu (aggiunto per varietà)
+        "radial-gradient(circle, #333 0%, #111 30%, #000 100%)",
+        "radial-gradient(circle, #ff4d4d 0%, #b30000 60%, #330000 100%)",
+        "radial-gradient(circle, #ff944d 0%, #e65c00 60%, #4d1f00 100%)",
+        "radial-gradient(circle, #ffff66 0%, #ffd700 60%, #665200 100%)",
+        "radial-gradient(circle, #4d94ff 0%, #005ce6 60%, #002b80 100%)"
     ];
     
     let currentBgIndex = 0;
-
     function updateBg() {
-        // Applichiamo il gradiente al background-image tramite la proprietà short-hand 'background'
         body.style.background = backgrounds[currentBgIndex];
         currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
     }
-
-    // Avvio immediato del primo colore
     updateBg();
-    
-    // Cambio ogni 10 secondi (puoi rimettere 600000 per 10 minuti)
     setInterval(updateBg, 10000); 
 
-    // --- LOGICA SMILE / BUBBLES ---
+    // --- LOGICA BOLLE E SCIA ---
     const emojis = ['😀', '😎', '🤩', '✨', '🔥', '🎶', '⭐', '🎸', '💎', '🚀'];
     const colors = ['#ffffff', '#add8e6', '#00bfff', '#ffff00', '#39ff14', '#ff00ff'];
-    let particles = [];
-    const particleCount = 65;
+    let bubbles = [];
+    let trail = []; // Array per la scia del mouse
+    const bubbleCount = 65;
 
     function resize() {
         canvas.width = window.innerWidth;
@@ -99,6 +93,7 @@
     window.addEventListener('resize', resize);
     resize();
 
+    // Classe per le bolle che risalgono
     class Bubble {
         constructor() { this.init(); }
         init() {
@@ -110,7 +105,7 @@
             this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
             this.color = colors[Math.floor(Math.random() * colors.length)];
             this.opacity = Math.random() * 0.5 + 0.5;
-            this.glowStrength = Math.random() * 15 + 10;
+            this.glow = Math.random() * 15 + 10;
         }
         update() {
             this.y -= this.speedY;
@@ -120,24 +115,81 @@
         draw() {
             ctx.save();
             ctx.globalAlpha = this.opacity;
-            ctx.shadowBlur = this.glowStrength;
+            ctx.shadowBlur = this.glow;
             ctx.shadowColor = this.color;
             ctx.font = `${this.size}px Arial`;
             ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
             ctx.fillText(this.emoji, this.x, this.y);
             ctx.restore();
         }
     }
 
+    // Classe per la scia del puntatore
+    class TrailParticle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.size = Math.random() * 8 + 2;
+            this.speedX = (Math.random() - 0.5) * 3;
+            this.speedY = (Math.random() - 0.5) * 3;
+            this.life = 1.0; // Vita della particella (da 1 a 0)
+            this.decay = Math.random() * 0.02 + 0.015;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.life -= this.decay;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.life;
+            ctx.fillStyle = this.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    // Evento movimento mouse
+    window.addEventListener('mousemove', (e) => {
+        for(let i=0; i<3; i++) { // Crea 3 particelle a ogni movimento
+            trail.push(new TrailParticle(e.clientX, e.clientY));
+        }
+    });
+
+    // Supporto Touch per mobile
+    window.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        for(let i=0; i<3; i++) {
+            trail.push(new TrailParticle(touch.clientX, touch.clientY));
+        }
+    });
+
     function setup() {
-        particles = [];
-        for (let i = 0; i < particleCount; i++) particles.push(new Bubble());
+        bubbles = [];
+        for (let i = 0; i < bubbleCount; i++) bubbles.push(new Bubble());
     }
 
     function loop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.update(); p.draw(); });
+        
+        // Disegna Bolle
+        bubbles.forEach(p => { p.update(); p.draw(); });
+
+        // Disegna e pulisci scia
+        for (let i = 0; i < trail.length; i++) {
+            trail[i].update();
+            trail[i].draw();
+            if (trail[i].life <= 0) {
+                trail.splice(i, 1);
+                i--;
+            }
+        }
+        
         requestAnimationFrame(loop);
     }
 
