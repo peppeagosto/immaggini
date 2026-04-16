@@ -1,0 +1,8 @@
+<div style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;">
+    <iframe srcdoc="<html><body style='margin:0;overflow:hidden;background:transparent;'><canvas id='c'></canvas><script>const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');let w,h,p=[];function rs(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}window.onresize=rs;rs();window.onmousemove=function(e){for(let i=0;i<5;i++)p.push({x:e.clientX,y:e.clientY,sx:(Math.random()-0.5)*3,sy:(Math.random()-0.5)*3,l:1,c:'hsl('+ (Math.random()*50+10)+',100%,70%)'})};function anim(){ctx.clearRect(0,0,w,h);for(let i=0;i<p.length;i++){let a=p[i];a.x+=a.sx;a.y+=a.sy;a.l-=0.02;ctx.globalAlpha=a.l;ctx.fillStyle=a.c;ctx.beginPath();ctx.arc(a.x,a.y,3,0,Math.PI*2);ctx.fill();if(a.l<=0){p.splice(i,1);i--}}requestAnimationFrame(anim)}anim();</script></body></html>" 
+    style="width:100%;height:100%;border:none;background:transparent;" allowtransparency="true"></iframe>
+</div>
+
+<div style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background:#000;">
+    <img src="https://xatimg.com/image/0NnjOulN3Caa.jpg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:600px;opacity:0.15;filter:grayscale(1) blur(2px);">
+</div>
