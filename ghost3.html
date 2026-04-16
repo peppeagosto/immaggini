@@ -15,7 +15,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* Transizione fluida di 5 secondi per il cambio colore */
+            /* Transizione fluida per il colore di sfondo */
             transition: background 5s ease-in-out;
             background-color: #000;
             display: flex;
@@ -27,13 +27,12 @@
         .ghost-container {
             position: absolute;
             z-index: 0; 
-            width: 80%; /* Più grande, occupa l'80% della larghezza */
-            max-width: 600px; /* Ma non esageriamo su PC */
-            opacity: 0.15; /* Pochissimo visibile, come acqua */
+            width: 80%; 
+            max-width: 600px; 
+            opacity: 0.15; 
             filter: grayscale(1) blur(2px);
             pointer-events: none;
             user-select: none;
-            transition: opacity 0.5s;
         }
 
         .ghost-container img {
@@ -64,30 +63,30 @@
     const ctx = canvas.getContext('2d');
     const body = document.getElementById('bgBody');
 
-    // CONFIGURAZIONE COLORI SFONDO
+    // --- CONFIGURAZIONE SFONDI DYNAMICI ---
     const backgrounds = [
-        "radial-gradient(circle, #333 0%, #111 30%, #000 100%)",   // Nero
+        "radial-gradient(circle, #333 0%, #111 30%, #000 100%)",   // Nero/Grigio
         "radial-gradient(circle, #ff4d4d 0%, #b30000 60%, #330000 100%)", // Rosso
         "radial-gradient(circle, #ff944d 0%, #e65c00 60%, #4d1f00 100%)", // Arancione
-        "radial-gradient(circle, #ffff66 0%, #ffd700 60%, #665200 100%)"  // Giallo
+        "radial-gradient(circle, #ffff66 0%, #ffd700 60%, #665200 100%)", // Giallo
+        "radial-gradient(circle, #4d94ff 0%, #005ce6 60%, #002b80 100%)"  // Blu (aggiunto per varietà)
     ];
     
     let currentBgIndex = 0;
 
     function updateBg() {
-        console.log("Cambio colore a index: " + currentBgIndex);
+        // Applichiamo il gradiente al background-image tramite la proprietà short-hand 'background'
         body.style.background = backgrounds[currentBgIndex];
         currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
     }
 
-    // Avvia subito
+    // Avvio immediato del primo colore
     updateBg();
     
-    // ORA IMPOSTATO A 10 SECONDI (10000ms) PER TESTARE
-    // Cambialo in 600000 per tornare a 10 minuti
+    // Cambio ogni 10 secondi (puoi rimettere 600000 per 10 minuti)
     setInterval(updateBg, 10000); 
 
-    // --- LOGICA SMILE (Invariata) ---
+    // --- LOGICA SMILE / BUBBLES ---
     const emojis = ['😀', '😎', '🤩', '✨', '🔥', '🎶', '⭐', '🎸', '💎', '🚀'];
     const colors = ['#ffffff', '#add8e6', '#00bfff', '#ffff00', '#39ff14', '#ff00ff'];
     let particles = [];
