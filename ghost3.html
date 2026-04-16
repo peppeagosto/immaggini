@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xat Bubbles Dynamic - Fortunato</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* Transizione fluida di 5 secondi per il cambio colore */
+            transition: background 5s ease-in-out;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* STILE PER IL DEMONE GHOST */
+        .ghost-container {
+            position: absolute;
+            z-index: 0; 
+            width: 80%; /* Più grande, occupa l'80% della larghezza */
+            max-width: 600px; /* Ma non esageriamo su PC */
+            opacity: 0.15; /* Pochissimo visibile, come acqua */
+            filter: grayscale(1) blur(2px);
+            pointer-events: none;
+            user-select: none;
+            transition: opacity 0.5s;
+        }
+
+        .ghost-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body id="bgBody">
+
+<div class="ghost-container">
+    <img src="https://xatimg.com/image/0NnjOulN3Caa.jpg" alt="Ghost Demon">
+</div>
+
+<canvas id="bubbleCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('bubbleCanvas');
+    const ctx = canvas.getContext('2d');
+    const body = document.getElementById('bgBody');
+
+    // CONFIGURAZIONE COLORI SFONDO
+    const backgrounds = [
+        "radial-gradient(circle, #333 0%, #111 30%, #000 100%)",   // Nero
+        "radial-gradient(circle, #ff4d4d 0%, #b30000 60%, #330000 100%)", // Rosso
+        "radial-gradient(circle, #ff944d 0%, #e65c00 60%, #4d1f00 100%)", // Arancione
+        "radial-gradient(circle, #ffff66 0%, #ffd700 60%, #665200 100%)"  // Giallo
+    ];
+    
+    let currentBgIndex = 0;
+
+    function updateBg() {
+        console.log("Cambio colore a index: " + currentBgIndex);
+        body.style.background = backgrounds[currentBgIndex];
+        currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+    }
+
+    // Avvia subito
+    updateBg();
+    
+    // ORA IMPOSTATO A 10 SECONDI (10000ms) PER TESTARE
+    // Cambialo in 600000 per tornare a 10 minuti
+    setInterval(updateBg, 10000); 
+
+    // --- LOGICA SMILE (Invariata) ---
+    const emojis = ['😀', '😎', '🤩', '✨', '🔥', '🎶', '⭐', '🎸', '💎', '🚀'];
+    const colors = ['#ffffff', '#add8e6', '#00bfff', '#ffff00', '#39ff14', '#ff00ff'];
+    let particles = [];
+    const particleCount = 65;
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Bubble {
+        constructor() { this.init(); }
+        init() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height + Math.random() * 200;
+            this.size = Math.random() * 30 + 15;
+            this.speedY = Math.random() * 1.2 + 0.6;
+            this.speedX = (Math.random() - 0.5) * 1;
+            this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.opacity = Math.random() * 0.5 + 0.5;
+            this.glowStrength = Math.random() * 15 + 10;
+        }
+        update() {
+            this.y -= this.speedY;
+            this.x += this.speedX;
+            if (this.y < -50) this.init();
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.opacity;
+            ctx.shadowBlur = this.glowStrength;
+            ctx.shadowColor = this.color;
+            ctx.font = `${this.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.emoji, this.x, this.y);
+            ctx.restore();
+        }
+    }
+
+    function setup() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) particles.push(new Bubble());
+    }
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(loop);
+    }
+
+    setup();
+    loop();
+</script>
+
+</body>
+</html>
