@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video con Rainbow Glow</title>
+<title>Video con Rainbow Glow - Centrato</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: #000; /* Nero per far risaltare il glow, cambia in transparent se serve */
+    background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,6 +20,8 @@
     position: relative;
     width: 1308px;
     height: 486px;
+    /* Opzionale: aggiungi un bordo rosso per vedere i limiti del contenitore durante i test */
+    /* border: 1px solid red; */
   }
 
   video.side-video {
@@ -28,17 +30,15 @@
     width: 290px;
     height: 486px;
     object-fit: cover;
-    border-radius: 12px; /* Arrotondati leggermente di più */
+    border-radius: 12px;
     z-index: 1;
     
     /* --- EFFETTO RAINBOW GLOW --- */
     border: 3px solid transparent;
-    /* Crea il bordo sfumato animato */
     background: 
       linear-gradient(black, black) padding-box, 
       linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8) border-box;
     
-    /* Il bagliore da 14px richiesto */
     box-shadow: 
       0 0 14px rgba(255, 0, 0, 0.6),
       0 0 20px rgba(0, 255, 213, 0.3);
@@ -46,19 +46,20 @@
     animation: rainbow-glow 5s linear infinite;
   }
 
-  /* Animazione che ruota i colori del bordo e del glow */
   @keyframes rainbow-glow {
     0% { filter: hue-rotate(0deg); }
     100% { filter: hue-rotate(360deg); }
   }
 
-  /* Posizionamento */
+  /* --- MODIFICA POSIZIONI --- */
   .left-video {
-    left: -40px;
+    /* Spostato verso l'interno (destra) */
+    left: 20px; 
   }
 
   .right-video {
-    right: -40px;
+    /* Spostato verso l'interno (sinistra) */
+    right: 20px;
   }
 
   img.center-image {
@@ -84,7 +85,8 @@
   <video class="side-video right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cenerentola.mp4" type="video/mp4" />
   </video>
-</div>
+  
+  </div>
 
 </body>
 </html>
