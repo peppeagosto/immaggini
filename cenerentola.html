@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video con Rainbow Glow</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #000; /* Nero per far risaltare il glow, cambia in transparent se serve */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+  }
+
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 290px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 12px; /* Arrotondati leggermente di più */
+    z-index: 1;
+    
+    /* --- EFFETTO RAINBOW GLOW --- */
+    border: 3px solid transparent;
+    /* Crea il bordo sfumato animato */
+    background: 
+      linear-gradient(black, black) padding-box, 
+      linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8) border-box;
+    
+    /* Il bagliore da 14px richiesto */
+    box-shadow: 
+      0 0 14px rgba(255, 0, 0, 0.6),
+      0 0 20px rgba(0, 255, 213, 0.3);
+    
+    animation: rainbow-glow 5s linear infinite;
+  }
+
+  /* Animazione che ruota i colori del bordo e del glow */
+  @keyframes rainbow-glow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+
+  /* Posizionamento */
+  .left-video {
+    left: -40px;
+  }
+
+  .right-video {
+    right: -40px;
+  }
+
+  img.center-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    height: 486px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/cenerentola.mp4" type="video/mp4" />
+  </video>
+
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/cenerentola.mp4" type="video/mp4" />
+  </video>
+</div>
+
+</body>
+</html>
