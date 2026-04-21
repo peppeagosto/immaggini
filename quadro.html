@@ -1,34 +1,168 @@
-<html><head>
-        <meta charset="utf-8">
-        <title>diablo video</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Codystar&amp;family=Lato:wght@300&amp;family=Oswald:wght@300&amp;family=Raleway+Dots&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <title>Diablo Video Chat - Fire & Glow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
 
+    <style>
+        /* Reset base */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Oswald', sans-serif;
+        }
 
-<style>
+        /* Video di sfondo */
+        .videobg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
 
-body {margin:0; padding:0;}
+        /* Overlay con tinta infernale */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: 2;
+        }
 
-.videobg {
-    width: 100%;
-    height:100vh;
-    object-fit: cover;
-    z-index: 99999;
-}
-.chat { position: absolute; width: 620px; height: 410px; z-index: 99999; left:1px; top:20px;}
+        /* Testo Centrale El Diablo */
+        .diablo-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            color: #ff3300;
+            font-size: 5rem;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-align: center;
+            pointer-events: none;
+            
+            /* Triple Glow Rosso Fuoco */
+            text-shadow: 
+                0 0 10px #ff0000, 
+                0 0 30px #ff4d00, 
+                0 0 60px #ff8800;
+            
+            animation: pulse-glow 2s infinite alternate ease-in-out;
+        }
 
-</style>
+        @keyframes pulse-glow {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+                text-shadow: 0 0 10px #ff0000, 0 0 30px #ff4d00, 0 0 60px #ff8800;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1.05);
+                text-shadow: 0 0 20px #ff0000, 0 0 50px #ff4d00, 0 0 100px #ff0000;
+            }
+        }
 
+        /* Container per le particelle */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
 
-    </head>
-    <body>
+        .particle {
+            position: absolute;
+            background: linear-gradient(to top, #ff0000, #ffec00);
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0;
+            animation: rise linear infinite;
+        }
 
+        /* Animazione particelle (salgono verso l'alto come fumo/scintille) */
+        @keyframes rise {
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(50px) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
 
-      <!-- Area Video Aghetto Server89.com-->
-          <video class="videobg" src="https://peppeagosto.github.io/immaggini/quadro.mp4" autoplay="" loop="" muted="">
+    <video class="videobg" autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/quadro.mp4" type="video/mp4">
-      </video>
+    </video>
 
+    <div class="overlay"></div>
 
+    <h1 class="diablo-text">El Diablo</h1>
 
-</body></html>
+    <div id="particle-container"></div>
+
+    <script>
+        function createParticle() {
+            const container = document.getElementById('particle-container');
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            // Dimensioni varie (2 a 6 pixel)
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+
+            // Posizione orizzontale random
+            particle.style.left = Math.random() * 100 + 'vw';
+
+            // Durata salita (più veloce o più lenta)
+            const duration = Math.random() * 3 + 4;
+            particle.style.animationDuration = duration + 's';
+
+            // Ritardo random
+            particle.style.animationDelay = Math.random() * 2 + 's';
+
+            // Leggero glow per ogni particella
+            particle.style.boxShadow = `0 0 ${size}px #ff4d00`;
+
+            container.appendChild(particle);
+
+            // Rimuove la particella
+            setTimeout(() => {
+                particle.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        // Aumentata la frequenza di generazione (una ogni 60ms)
+        setInterval(createParticle, 60);
+
+        // Popolamento iniziale
+        for(let i=0; i<40; i++) {
+            createParticle();
+        }
+    </script>
+
+</body>
+</html>
