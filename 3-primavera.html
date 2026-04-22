@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>3-primavera-final-fix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --dynamic-color: #ff0000; --fire: #ff6600; }
+        @keyframes snake-border { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes snake-text { 0% { transform: scale(1) rotate(0.5deg); } 50% { transform: scale(1.03) rotate(-0.5deg); } 100% { transform: scale(1) rotate(0.5deg); } }
+        @keyframes color-burn { 0% { color: var(--dynamic-color); text-shadow: 0 0 5px var(--dynamic-color); } 50% { color: var(--dynamic-color); text-shadow: 0 0 15px var(--dynamic-color); } 100% { color: var(--dynamic-color); text-shadow: 0 0 5px var(--dynamic-color); } }
+        
+        body { background: #000; color: #ff3333; font-family: 'Nosifer', cursive; margin: 0; display: flex; flex-direction: column; align-items: center; padding-top: 10px; height: 100vh; overflow: hidden; letter-spacing: 1px; }
+        
+        #view-a { position: fixed; inset: 0; z-index: 9999; background: url('https://xatimg.com/image/tHcRHcqJY2HT.png') no-repeat center; background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        #err-msg { display:none; position:absolute; top:20%; background:rgba(255, 0, 0, 0.8); color:white; padding:20px; border:3px solid white; text-align:center; width:80%; font-family:Arial; font-weight:bold; z-index:10001; }
+
+        .bar-x { width: 100%; background: rgba(0,0,0,0.8); padding: 25px; display: flex; justify-content: center; gap: 30px; z-index: 10000; border-top: 2px solid #333; margin-bottom: 20px; }
+        .btn-m { background: #2ecc71; color: white; border: none; padding: 15px 60px; font-weight: bold; border-radius: 5px; cursor: pointer; font-family: Arial, sans-serif; text-transform: uppercase; }
+
+        #view-b { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+        #main-c { width: 650px; background: #000; position: relative; overflow: hidden; border-radius: 12px; padding: 4px; display: flex; flex-direction: column; }
+        #main-c::before { content: ''; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent, var(--dynamic-color), var(--dynamic-color), transparent 30%); top: -25%; left: -25%; animation: snake-border 3s linear infinite; z-index: 0; }
+        #main-c::after { content: ''; position: absolute; inset: 14px; background: #1a0000; border-radius: 10px; z-index: 1; }
+        
+        #v-screen { width: 650px; height: 365px; background: #000; position: relative; z-index: 2; }
+        #v-src { width: 100%; height: 100%; object-fit: cover; filter: sepia(1) saturate(2.5) hue-rotate(-50deg); }
+        
+        .lyr { position: absolute; z-index: 5; opacity: 0; transition: 0.5s; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .on { opacity: 1; pointer-events: auto; }
+        .f-l { top: 65px; left: 60px; width: 220px; height: 260px; }
+        .f-r { top: 65px; right: 60px; width: 220px; height: 260px; }
+        
+        #typer, #clock-display, .info-label, #i-content, .nav-oro, .sigillo { animation: snake-text 3s infinite ease-in-out, color-burn 2s infinite; display: inline-block; transition: all 0.5s ease; }
+        
+        /* FIX COVER: Dimensioni bloccate e immagine adattata */
+        #lyr-1 { 
+            width: 140px; 
+            height: 140px; 
+            background-image: url('https://xatimg.com/image/3poKCP9SnWss.jpg'); 
+            background-size: cover; 
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid var(--dynamic-color); 
+            margin-left: 105px; 
+            opacity: 0.8;
+            box-sizing: border-box;
+        }
+
+        #typer { font-size: 0.70rem; width: 160px; word-wrap: break-word; text-transform: uppercase; margin-left: 130px; }
+        #lyr-3, #lyr-45 { margin-left: 75px; }
+        #lyr-6-c { margin-right: 75px; }
+        #v-bal { width: 120px; height: 160px; object-fit: cover; border: 1px solid var(--dynamic-color); }
+
+        .ctrl-btns { width: 650px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 12px; box-sizing: border-box; background: #0a0a0a; position: relative; z-index: 2; }
+        .sigillo { height: 55px; background: #1a0000; border: 1px solid #444; color: #555; cursor: not-allowed; font-size: 0.55rem; display: flex; align-items: center; justify-content: center; border-radius: 3px; font-family: 'Nosifer'; transition: all 0.5s ease; }
+        .sigillo.active { background: #300; border: 1px solid var(--dynamic-color); color: var(--dynamic-color); cursor: pointer; }
+        .nav-oro { cursor: pointer; color: white; padding: 5px; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+    <div id="err-msg">ERRORE DI CONNESSIONE...<br>RIPROVARE PIÙ TARDI</div>
+
+    <audio id="a-fr" src="https://broadcast.it-underground.fr/france_maghreb_2.mp3" preload="auto"></audio>
+    <audio id="a-st" crossorigin="anonymous"></audio>
+
+    <div id="view-a">
+        <div class="bar-x">
+            <button class="btn-m" onclick="cc()">PLAY</button>
+            <button class="btn-m" onclick="location.reload()" style="background:#e74c3c; opacity:0.7">STOP</button>
+        </div>
+    </div>
+    
+    <div id="view-b">
+        <div id="main-c">
+            <div id="v-screen">
+                <video id="v-src" playsinline muted><source src="https://peppeagosto.github.io/immaggini/potere.mp4"></video>
+                <div id="lyr-1-c" class="lyr f-l"><div id="lyr-1"></div></div>
+                <div id="lyr-2" class="lyr f-l"><div id="typer">STANDBY</div></div>
+                <div id="lyr-3" class="lyr f-l"><div id="clock-display"></div></div>
+                <div id="lyr-45" class="lyr f-l">
+                    <div id="i-label" class="info-label" style="font-size:0.8rem; margin-bottom:10px;">DATI</div>
+                    <div id="i-content">...</div>
+                    <div id="oro-nav" style="display:none; margin-top:10px;">
+                        <span class="nav-oro" onclick="cs(-1)">◀</span>
+                        <span class="nav-oro" onclick="cs(1)">▶</span>
+                    </div>
+                </div>
+                <div id="lyr-6-c" class="lyr f-r"><video id="v-bal" muted playsinline loop><source src="https://peppeagosto.github.io/immaggini/02.mp4"></video></div>
+            </div>
+            <div class="ctrl-btns">
+                <div class="sigillo" onclick="tl(1)">COVER</div>
+                <div class="sigillo" onclick="tl(2)">TITOLI</div>
+                <div class="sigillo" onclick="tl(3)">DATA</div>
+                <div class="sigillo" onclick="to()">ASTRO</div>
+                <div class="sigillo" onclick="tm()">METEO</div>
+                <div class="sigillo" onclick="tl(6)">VISUAL</div>
+                <div class="sigillo" id="exp-btn" onclick="gx()">INFO</div>
+                <div class="sigillo active" id="p-btn" onclick="toggleAudio()" style="background:#600; color:#fff;">START</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const S = "https://stm2.srvif.com:7198/;"; 
+        const ST = "https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";
+        const aud = document.getElementById("a-st"); 
+        const vM = document.getElementById("v-src");
+        const aFr = document.getElementById("a-fr");
+        let act = false, cC = 0, lC = 0, isPlaying = false, sI = 0, mod = "", exA = false, exI, cI = 0;
+        
+        const cls = ['#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff','#ff6600','#ffcc00','#cc00ff','#66ff66','#33ccff','#ff99cc','#ff3333','#ffffff','#44ff44'];
+        const sgn = ["Ariete", "Toro", "Gemelli", "Cancro", "Leone", "Vergine", "Bilancia", "Scorpione", "Sagittario", "Capricorno", "Acquario", "Pesci"];
+        const ors = ["Energia al top!","Sei il re!","Amore in arrivo.","Segui l'istinto.","Protagonista oggi.","Fai le tue scelte.","Cerca equilibrio.","Fascino magnetico.","Nuovi orizzonti.","Costanza premiata.","Osa adesso!","Segui il cuore."];
+
+        function cc() { 
+            const n = Date.now(); 
+            $("#err-msg").show(); 
+            if (n - lC < 500) cC++; else cC = 1; 
+            lC = n; 
+            if (cC >= 10) vb(); 
+        }
+
+        function vb() { 
+            $("#err-msg").hide(); $("#view-a").hide(); $("#view-b").css("display", "flex"); 
+            vM.muted = false; vM.play(); aFr.play(); 
+            setTimeout(() => { 
+                vM.muted = true; vM.pause(); aFr.pause(); act = true;
+                $(".sigillo").addClass("active");
+                tl(2); ui(); 
+                setInterval(ui, 10000); 
+            }, 8000); 
+        }
+
+        function ui() {
+            $.getJSON(ST, function(d) {
+                if (d.songtitle) {
+                    let song = d.songtitle.toUpperCase();
+                    $("#typer").text(song);
+                    $.getJSON("https://itunes.apple.com/search?term=" + encodeURIComponent(song) + "&limit=1&callback=?", function(r) {
+                        if(r.results[0]) {
+                            $("#lyr-1").css({
+                                "background-image": "url(" + r.results[0].artworkUrl100.replace('100x100','600x600') + ")",
+                                "opacity": "1"
+                            });
+                        } else {
+                            $("#lyr-1").css({
+                                "background-image": "url('https://xatimg.com/image/3poKCP9SnWss.jpg')",
+                                "opacity": "0.7"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function toggleAudio() {
+            if(!act) return;
+            if(!isPlaying) {
+                aud.src = S; aud.play(); vM.play(); isPlaying = true;
+                $("#p-btn").text("LIVE").css("background", "#006600");
+            } else {
+                aud.pause(); vM.pause(); isPlaying = false; 
+                $("#p-btn").text("START").css("background", "#600");
+            }
+        }
+
+        function tl(n) {
+            if(!act) return;
+            $(".lyr").removeClass("on");
+            if(n===1) $("#lyr-1-c").addClass("on");
+            if(n===2) $("#lyr-2").addClass("on");
+            if(n===3) { $("#lyr-3").addClass("on"); tk(); }
+            if(n===6) { $("#lyr-6-c").addClass("on"); document.getElementById('v-bal').play(); }
+        }
+
+        function tm() {
+            if(!act) return;
+            $(".lyr").removeClass("on"); mod = "m";
+            $("#i-label").text("METEO"); $("#oro-nav").hide();
+            $("#i-content").text("CARICAMENTO...");
+            $("#lyr-45").addClass("on");
+            $.getJSON("https://ipapi.co/json/", function(ip) {
+                $.getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${ip.latitude}&longitude=${ip.longitude}&current_weather=true`, function(w) {
+                    $("#i-content").html(ip.city.toUpperCase() + "<br>" + w.current_weather.temperature + "°C");
+                });
+            });
+        }
+
+        function to() {
+            if(!act) return;
+            $(".lyr").removeClass("on"); mod = "o";
+            $("#i-label").text("ASTRO"); $("#oro-nav").show();
+            $("#lyr-45").addClass("on");
+            ss();
+        }
+
+        function ss() { $("#i-content").html("<strong>" + sgn[sI].toUpperCase() + "</strong><br>" + ors[sI]); }
+        function cs(d) { sI = (sI + d + 12) % 12; ss(); }
+
+        function tk() {
+            const u = () => {
+                const d = new Date();
+                $("#clock-display").html(d.toLocaleDateString() + "<br>" + d.toLocaleTimeString());
+            };
+            u();
+        }
+
+        function gx() {
+            if(!act) return;
+            exA = !exA;
+            if (exA) {
+                exI = setInterval(() => {
+                    document.documentElement.style.setProperty('--dynamic-color', cls[cI]);
+                    cI = (cI + 1) % 15;
+                }, 3000);
+            } else {
+                clearInterval(exI);
+                document.documentElement.style.setProperty('--dynamic-color', '#ff0000');
+            }
+        }
+    </script>
+</body>
+</html>
