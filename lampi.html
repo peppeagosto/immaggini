@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>666CARTAIO - FIRE CONSOLE V13 FINAL</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --main-color: #ff4500; --glow-color: #ff0000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: transparent; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+
+        /* BORDO SNAKE 20PX */
+        .snake-wrapper {
+            position: relative;
+            width: 790px; height: 740px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 20px; overflow: hidden;
+            filter: drop-shadow(0 0 15px var(--glow-color));
+        }
+        .snake-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 150%; height: 150%;
+            background: conic-gradient(transparent, var(--glow-color), var(--main-color), var(--glow-color), transparent 40%);
+            animation: rotateSnake 3s linear infinite;
+        }
+        .snake-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            z-index: 1;
+        }
+        @keyframes rotateSnake { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        #xat-frame {
+            width: 750px; height: 700px; position: relative;
+            background: rgba(0, 0, 0, 0.95);
+            clip-path: polygon(15% 0%, 85% 0%, 100% 10%, 100% 80%, 85% 100%, 15% 100%, 0% 80%, 0% 10%);
+            z-index: 5;
+        }
+
+        .nav-bar { position: absolute; top: 20px; width: 100%; display: flex; justify-content: center; gap: 10px; z-index: 1000; }
+        .rect-btn { 
+            width: 92px; height: 35px; background: #111; border: 1px solid var(--main-color); 
+            color: var(--main-color); font-size: 8px; font-weight: bold; cursor: pointer; 
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; 
+        }
+
+        #video-window {
+            position: absolute; top: 75px; left: 55px; width: 640px; height: 340px;
+            background: #000; border: 2px solid #222; overflow: hidden;
+            clip-path: polygon(0 0, 100% 5%, 100% 95%, 0 100%); z-index: 10;
+        }
+
+        /* DISCO COVER (Nascosto di base) */
+        #art-disk {
+            position: absolute; top: 50%; left: 50%;
+            width: 260px; height: 260px;
+            margin-top: -130px; margin-left: -130px;
+            border-radius: 50%;
+            border: 8px solid var(--main-color);
+            background-image: url('https://xatimg.com/image/bgXxdAXNQBW6.png');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 40px var(--glow-color);
+            z-index: 20;
+            display: none; /* Nascondo inizialmente */
+        }
+
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* BOX TITOLI - SEMPRE VISIBILI */
+        .marquee-box { 
+            position: absolute; top: 430px; left: 75px; width: 600px; 
+            background: rgba(0, 0, 0, 0.8); 
+            border: 1px solid var(--main-color);
+            z-index: 9999; /* In primo piano assoluto */
+        }
+
+        #visual-container { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); width: 500px; height: 60px; z-index: 20; }
+        canvas { width: 100%; height: 100%; }
+
+        .controls-row { position: absolute; bottom: 35px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 1000; }
+        .round-btn { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--main-color); background: radial-gradient(circle, #ff8c00, #8b0000); color: #fff; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; z-index: 100; padding: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="snake-wrapper">
+    <div id="xat-frame">
+        <div class="nav-bar">
+            <button class="rect-btn" onclick="toggleCover()">COVER</button>
+            <button class="rect-btn" onclick="showOroscopo()">OROSCOPO</button>
+            <button class="rect-btn" onclick="showDatario()">DATARIO</button>
+            <button class="rect-btn" onclick="showCitta()">METEO</button>
+            <button class="rect-btn" onclick="goBum()">GLITCH</button>
+            <button class="rect-btn" onclick="showHistory()">HISTORY</button>
+            <button class="rect-btn" onclick="goBomba()">BOOM</button>
+        </div>
+
+        <div id="video-window">
+            <video id="v-player" loop muted playsinline><source src="https://peppeagosto.github.io/immaggini/lampi.mp4" type="video/mp4"></video>
+            <div id="art-disk"></div>
+            <div id="info-screen" class="info-overlay">
+                <h2 id="info-title" class="fire-text" style="font-size:28px; color: #fff;"></h2>
+                <div id="info-icon" style="font-size:50px; margin: 10px 0;"></div>
+                <p id="info-body" class="fire-text" style="font-size:20px; color: #fff;"></p>
+            </div>
+        </div>
+
+        <div class="marquee-box">
+            <marquee id="alien-marquee" scrollamount="6" style="color: #ff4500; font-weight: bold; font-size:18px; padding:8px; font-family: sans-serif;">>>> CARICAMENTO TITOLI... <<<</marquee>
+        </div>
+
+        <div id="visual-container"><canvas id="visualizer"></canvas></div>
+
+        <div class="controls-row">
+            <button class="round-btn" onclick="playAll()">PLAY</button>
+            <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.5" oninput="document.getElementById('radio-player').volume = this.value">
+            <button class="round-btn" onclick="stopAll()">STOP</button>
+        </div>
+
+        <audio id="radio-player" src="https://stm2.srvif.com:7198/stream" crossorigin="anonymous"></audio>
+    </div>
+</div>
+
+<script>
+    const radio = document.getElementById('radio-player'), vPlayer = document.getElementById('v-player'), disk = document.getElementById('art-disk'), canvas = document.getElementById('visualizer'), ctx = canvas.getContext('2d');
+    let audioCtx, analyser, source, dataArray, rotation = 0;
+
+    // Funzione specifica per il tasto COVER
+    function toggleCover() {
+        $(disk).fadeIn(500); // Mostra il disco
+        setTimeout(() => { $(disk).fadeOut(500); }, 5000); // Lo nasconde dopo 5 secondi
+    }
+
+    function runEffect(id, title, icon, body) {
+        $('#info-title').text(title); $('#info-icon').html(icon); $('#info-body').html(body);
+        $(id).fadeIn(300); setTimeout(() => $(id).fadeOut(500), 5000);
+    }
+
+    function playAll() { 
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        initAudio(); radio.play(); vPlayer.play();
+    }
+    function stopAll() { radio.pause(); vPlayer.pause(); }
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            source = audioCtx.createMediaElementSource(radio);
+            source.connect(analyser); analyser.connect(audioCtx.destination);
+            analyser.fftSize = 256;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            updateVisuals();
+        }
+    }
+
+    function updateVisuals() {
+        requestAnimationFrame(updateVisuals);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let x = 0; let barWidth = (canvas.width / dataArray.length) * 2;
+        for(let i = 0; i < dataArray.length; i++) {
+            let barHeight = dataArray[i]/2.5;
+            ctx.fillStyle = "rgba(255, 69, 0, 0.8)";
+            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth + 1;
+        }
+        if (!radio.paused) {
+            rotation += 1;
+            let bass = dataArray[0]; 
+            let scale = 1 + (bass / 255) * 0.2;
+            disk.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+        }
+    }
+
+    function updateMetadata() {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+            if (data.songtitle) {
+                const title = data.songtitle;
+                $('#alien-marquee').html(" >>> ON AIR: " + title.toUpperCase() + " <<< ");
+                $.getJSON("https://itunes.apple.com/search?term="+encodeURIComponent(title)+"&limit=1&callback=?", function(res) {
+                    const img = res.results[0] ? res.results[0].artworkUrl100.replace('100x100','600x600') : 'https://xatimg.com/image/bgXxdAXNQBW6.png';
+                    $(disk).css('background-image', 'url('+img+')');
+                });
+            }
+        });
+    }
+    setInterval(updateMetadata, 10000); updateMetadata();
+
+    function showOroscopo() { runEffect('#info-screen', 'OROSCOPO', '♈', 'Fiamme fortunate oggi!'); }
+    function showDatario() { const d = new Date(); runEffect('#info-screen', 'DATARIO', '⏰', d.toLocaleString()); }
+    function showCitta() { $.getJSON('https://ipapi.co/json/', (res) => { runEffect('#info-screen', res.city.toUpperCase(), '🌡️', 'Meteo Bollente'); }); }
+    function goBum() { vPlayer.style.filter = "hue-rotate(180deg) invert(1)"; setTimeout(() => vPlayer.style.filter="none", 2000); }
+    function showHistory() { runEffect('#info-screen', 'HISTORY', '📜', 'Brani passati cercati...'); }
+    function goBomba() {
+        $('#xat-frame').css({ 'transform': 'scale(1.05)', 'filter': 'invert(1)' });
+        setTimeout(() => {
+            $('#xat-frame').css({ 'transform': 'none', 'filter': 'none' });
+            runEffect('#info-screen', 'WARNING: 666CARTAIO', '☠️', 'SOLO LE TESTE SENZA CERVELLO COPIANO!');
+        }, 500);
+    }
+</script>
+</body>
+</html>
