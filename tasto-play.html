@@ -99,7 +99,7 @@
     </div>
 
     <div id="layout-container">
-        <div class="side-icons">
+        <div class="side-icons" id="side-left">
             <div class="icon-circle" onclick="apriLocandina('oroscopo')"><span class="rainbow-text">OROSCOPO</span></div>
             <div class="icon-circle" onclick="apriLocandina('meteo')"><span class="rainbow-text">METEO</span></div>
             <div class="icon-circle" onclick="apriLocandina('storia')"><span class="rainbow-text">HISTORIA</span></div>
@@ -108,7 +108,7 @@
         
         <div id="album-cover"></div>
         
-        <div class="side-icons">
+        <div class="side-icons" id="side-right">
             <div class="icon-circle" onclick="toggleEQ()"><span class="rainbow-text">EQ</span></div>
             <div class="icon-circle" onclick="boomColori()"><span class="rainbow-text">BOOM</span></div>
             <div class="icon-circle" onclick="cadutaNote()"><span class="rainbow-text">NOTE</span></div>
@@ -125,7 +125,7 @@
 
 <script>
     const radioHTML = 'https://stm2.srvif.com:7198/7.html';
-    const defaultImg = 'https://xatimg.com/image/u5vRnUexAvg9.jpg';
+    const defaultImg = 'https://xatimg.com/image/p9TX9DIpPPS5.png';
     let audio = new Audio('https://stm2.srvif.com:7198/7.aac');
     let video = document.getElementById('bgVideo');
     let cover = document.getElementById('album-cover');
@@ -137,30 +137,33 @@
             const response = await fetch(proxyUrl);
             const data = await response.text();
             const parts = data.split(',');
-            // Il titolo solitamente è al sesto indice (parts[6])
             let title = parts[6] ? parts[6].replace(/<[^>]+>/g, '').trim() : "Musica No Stop";
-            
             if(title === "" || title.length < 2) title = "Musica No Stop";
-            
             document.getElementById('titolo-reale').textContent = "🔴 LIVE: " + title;
 
-            // Cerca la cover su iTunes basandosi sul titolo trovato
-            fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title)}&limit=1`)
+            // Cerchiamo fino a 4 risultati per "dividere" le foto negli 8 cerchietti
+            fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title)}&limit=4`)
                 .then(res => res.json())
                 .then(json => {
                     if (json.results.length > 0) {
-                        const imgAlta = json.results[0].artworkUrl100.replace('100x100', '600x600');
-                        updateImages(imgAlta);
-                    } else { updateImages(defaultImg); }
-                }).catch(() => updateImages(defaultImg));
-        } catch (e) {
-            console.log("Errore sintonizzazione");
-        }
+                        const immagini = json.results.map(r => r.artworkUrl100.replace('100x100', '600x600'));
+                        updateImages(immagini);
+                    } else { updateImages([defaultImg]); }
+                }).catch(() => updateImages([defaultImg]));
+        } catch (e) { console.log("Errore sintonizzazione"); }
     }
 
-    function updateImages(url) {
-        cover.style.backgroundImage = `url('${url}')`;
-        document.querySelectorAll('.icon-circle').forEach(el => el.style.backgroundImage = `url('${url}')`);
+    function updateImages(listaUrl) {
+        // Al centro mettiamo sempre la prima (la più azzeccata)
+        cover.style.backgroundImage = `url('${listaUrl[0]}')`;
+        
+        // Distribuiamo le immagini trovate sugli 8 cerchietti
+        const cerchietti = document.querySelectorAll('.icon-circle');
+        cerchietti.forEach((el, index) => {
+            // Usa l'operatore modulo (%) per girare tra le immagini disponibili (se sono 3, le divide sugli 8)
+            const urlDaUsare = listaUrl[index % listaUrl.length];
+            el.style.backgroundImage = `url('${urlDaUsare}')`;
+        });
     }
 
     function apriLocandina(tipo) {
@@ -168,11 +171,42 @@
         const titolo = document.getElementById('locandina-titolo');
         const corpo = document.getElementById('locandina-corpo');
         overlay.classList.add('active');
+        const adesso = new Date();
+
         switch(tipo) {
-            case 'oroscopo': titolo.textContent = "OROSCOPO"; corpo.innerHTML = "✨ Le stelle dicono: Oggi brillerai!"; break;
-            case 'meteo': titolo.textContent = "METEO"; corpo.innerHTML = "☁️ Clima perfetto per ascoltare buona musica!"; break;
-            case 'storia': titolo.textContent = "HISTORIA"; corpo.innerHTML = "📜 Un tuffo nel passato attraverso le note."; break;
-            case 'data': titolo.textContent = "DATA"; corpo.innerHTML = "📅 Oggi è il " + new Date().toLocaleDateString(); break;
+            case 'oroscopo':
+                titolo.textContent = "OROSCOPO";
+                const g = adesso.getDate();
+                const m = adesso.getMonth() + 1;
+                let s = "";
+                // Logica esatta Segni Zodiacali
+                if ((m == 3 && g >= 21) || (m == 4 && g <= 19)) s = "Ariete ♈";
+                else if ((m == 4 && g >= 20) || (m == 5 && g <= 20)) s = "Toro ♉";
+                else if ((m == 5 && g >= 21) || (m == 6 && g <= 21)) s = "Gemelli ♊";
+                else if ((m == 6 && g >= 22) || (m == 7 && g <= 22)) s = "Cancro ♋";
+                else if ((m == 7 && g >= 23) || (m == 8 && g <= 22)) s = "Leone ♌";
+                else if ((m == 8 && g >= 23) || (m == 9 && g <= 22)) s = "Vergine ♍";
+                else if ((m == 9 && g >= 23) || (m == 10 && g <= 23)) s = "Bilancia ♎";
+                else if ((m == 10 && g >= 24) || (m == 11 && g <= 21)) s = "Scorpione ♏";
+                else if ((m == 11 && g >= 22) || (m == 12 && g <= 21)) s = "Sagittario ♐";
+                else if ((m == 12 && g >= 22) || (m == 1 && g <= 19)) s = "Capricorno ♑";
+                else if ((m == 1 && g >= 20) || (m == 2 && g <= 18)) s = "Acquario ♒";
+                else s = "Pesci ♓";
+                corpo.innerHTML = `✨ Oggi 26 Aprile è tempo del <b>${s}</b>.<br><br>Le stelle dicono: La musica è la tua guida oggi!`;
+                break;
+            case 'meteo':
+                titolo.textContent = "METEO LIVE";
+                corpo.innerHTML = "🛰️ Rilevamento in corso...";
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
+                        const d = await res.json();
+                        corpo.innerHTML = `📍 Località Rilevata<br><span style="font-size:45px;">🌡️ ${d.current_weather.temperature}°C</span><br>Sintonizzati sul relax!`;
+                    }, () => { corpo.innerHTML = "Attiva il GPS per il meteo reale!"; });
+                }
+                break;
+            case 'storia': titolo.textContent = "HISTORIA"; corpo.innerHTML = "📜 Ogni nota racconta una storia passata."; break;
+            case 'data': titolo.textContent = "DATA"; corpo.innerHTML = "📅 Oggi è il " + adesso.toLocaleDateString('it-IT'); break;
         }
     }
 
@@ -182,7 +216,7 @@
         document.querySelector('.left').classList.add('open');
         document.querySelector('.right').classList.add('open');
         video.play();
-        fetchTitle(); // Aggiorna al play
+        fetchTitle();
         setTimeout(() => {
             document.getElementById('video-container').classList.add('hidden');
             layout.classList.add('visible'); 
@@ -191,7 +225,6 @@
     }
 
     function stopShow() { location.reload(); }
-
     function toggleDisco() { cover.classList.toggle('rotating'); }
     function toggleEQ() {
         cover.style.transition = "0.1s";
@@ -218,10 +251,9 @@
         }
     }
 
-    // --- AVVIO AUTOMATICO TITOLO ---
-    updateImages(defaultImg);
-    fetchTitle(); // Carica il titolo appena apri la pagina
-    setInterval(fetchTitle, 15000); // Poi aggiorna ogni 15 secondi
+    updateImages([defaultImg]);
+    fetchTitle();
+    setInterval(fetchTitle, 15000);
 </script>
 </body>
 </html>
