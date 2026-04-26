@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>COPIATORI CESSI</title>
+  <title>Teatro Smart PRO - xat Edition</title>
   <style>
     body { margin: 0; background: transparent; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif; overflow: hidden; }
 
@@ -26,6 +26,16 @@
     .curtain.right { right: 0; background-image: url('https://xatimg.com/image/JKlA9H9jL0hY.png'); background-position: right; }
     .curtain.open.left { transform: translateX(-100%); }
     .curtain.open.right { transform: translateX(100%); }
+
+    #locandina-overlay {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+      width: 80%; height: 70%; background: rgba(0,0,0,0.95); border: 3px solid #0ff;
+      z-index: 400; border-radius: 15px; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: white; text-align: center; box-shadow: 0 0 50px #0ff;
+    }
+    #locandina-overlay.active { transform: translate(-50%, -50%) scale(1); }
+    .btn-close { position: absolute; top: 10px; right: 10px; color: red; cursor: pointer; font-weight: bold; font-size: 20px; border: 1px solid red; padding: 2px 8px; border-radius: 50%; }
 
     .rainbow-text, .btn-cmd span { 
       font-weight: 900; 
@@ -53,14 +63,15 @@
     .icon-circle { 
       width: 65px; height: 65px; border-radius: 50%; background-size: cover; background-position: center; 
       border: 2px solid #0ff; box-shadow: 0 0 15px #0ff; position: relative; animation: float 3s ease-in-out infinite;
+      cursor: pointer;
     }
-    .icon-circle span { position: absolute; bottom: -18px; width: 100%; text-align: center; font-size: 10px; font-weight: bold; }
+    .icon-circle span { position: absolute; bottom: -18px; width: 100%; text-align: center; font-size: 10px; font-weight: bold; pointer-events: none; }
 
     #album-cover { width: 260px; height: 260px; background-size: cover; background-position: center; border-radius: 20px; border: 4px solid #0ff; box-shadow: 0 0 25px #0ff; }
     .rotating { animation: rotateDisk 3s linear infinite; border-radius: 50% !important; }
     @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    .controls-panel { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 250; animation: float 4s ease-in-out infinite; }
+    .controls-panel { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 250; }
     .btn-cmd { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 10px 25px; border-radius: 30px; cursor: pointer; }
     #vol-slider { width: 150px; cursor: pointer; accent-color: #00ffff; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); height: 8px; border-radius: 5px; appearance: none; }
   </style>
@@ -68,11 +79,17 @@
 <body>
 
 <div class="stage" id="main-stage">
+    <div id="locandina-overlay">
+        <div class="btn-close" onclick="chiudiLocandina()">X</div>
+        <h2 id="locandina-titolo" class="rainbow-text">TITOLO</h2>
+        <div id="locandina-corpo" style="padding: 20px; font-size: 18px;"></div>
+    </div>
+
     <div class="curtain left"></div>
     <div class="curtain right"></div>
 
     <marquee style="position:absolute; top:25px; width:100%; z-index:301; pointer-events: none;">
-        <span class="rainbow-text" id="titolo-reale" style="font-size:26px;">🔴 LIVE: Caricamento...</span>
+        <span class="rainbow-text" id="titolo-reale" style="font-size:26px;">🔴 LIVE: Sintonizzazione...</span>
     </marquee>
 
     <div id="video-container">
@@ -83,12 +100,14 @@
 
     <div id="layout-container">
         <div class="side-icons">
-            <div class="icon-circle"><span class="rainbow-text">OROSCOPO</span></div>
-            <div class="icon-circle"><span class="rainbow-text">METEO</span></div>
-            <div class="icon-circle"><span class="rainbow-text">HISTORIA</span></div>
-            <div class="icon-circle"><span class="rainbow-text">DATA</span></div>
+            <div class="icon-circle" onclick="apriLocandina('oroscopo')"><span class="rainbow-text">OROSCOPO</span></div>
+            <div class="icon-circle" onclick="apriLocandina('meteo')"><span class="rainbow-text">METEO</span></div>
+            <div class="icon-circle" onclick="apriLocandina('storia')"><span class="rainbow-text">HISTORIA</span></div>
+            <div class="icon-circle" onclick="apriLocandina('data')"><span class="rainbow-text">DATA</span></div>
         </div>
+        
         <div id="album-cover"></div>
+        
         <div class="side-icons">
             <div class="icon-circle" onclick="toggleEQ()"><span class="rainbow-text">EQ</span></div>
             <div class="icon-circle" onclick="boomColori()"><span class="rainbow-text">BOOM</span></div>
@@ -112,32 +131,30 @@
     let cover = document.getElementById('album-cover');
     let layout = document.getElementById('layout-container');
 
-    // Funzione ultra veloce per i titoli
     async function fetchTitle() {
-        // Proviamo con un proxy alternativo per velocità
         const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(radioHTML) + '&t=' + Date.now();
-        
         try {
             const response = await fetch(proxyUrl);
             const data = await response.text();
             const parts = data.split(',');
+            // Il titolo solitamente è al sesto indice (parts[6])
             let title = parts[6] ? parts[6].replace(/<[^>]+>/g, '').trim() : "Musica No Stop";
+            
+            if(title === "" || title.length < 2) title = "Musica No Stop";
             
             document.getElementById('titolo-reale').textContent = "🔴 LIVE: " + title;
 
-            // iTunes search rapida
+            // Cerca la cover su iTunes basandosi sul titolo trovato
             fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title)}&limit=1`)
                 .then(res => res.json())
                 .then(json => {
                     if (json.results.length > 0) {
                         const imgAlta = json.results[0].artworkUrl100.replace('100x100', '600x600');
                         updateImages(imgAlta);
-                    } else {
-                        updateImages(defaultImg);
-                    }
+                    } else { updateImages(defaultImg); }
                 }).catch(() => updateImages(defaultImg));
         } catch (e) {
-            document.getElementById('titolo-reale').textContent = "🔴 LIVE: Sintonizzazione...";
+            console.log("Errore sintonizzazione");
         }
     }
 
@@ -146,17 +163,26 @@
         document.querySelectorAll('.icon-circle').forEach(el => el.style.backgroundImage = `url('${url}')`);
     }
 
-    // AVVIO IMMEDIATO
-    updateImages(defaultImg);
-    fetchTitle(); 
-    // Secondo tentativo dopo 1 secondo se il primo è lento
-    setTimeout(fetchTitle, 1000);
+    function apriLocandina(tipo) {
+        const overlay = document.getElementById('locandina-overlay');
+        const titolo = document.getElementById('locandina-titolo');
+        const corpo = document.getElementById('locandina-corpo');
+        overlay.classList.add('active');
+        switch(tipo) {
+            case 'oroscopo': titolo.textContent = "OROSCOPO"; corpo.innerHTML = "✨ Le stelle dicono: Oggi brillerai!"; break;
+            case 'meteo': titolo.textContent = "METEO"; corpo.innerHTML = "☁️ Clima perfetto per ascoltare buona musica!"; break;
+            case 'storia': titolo.textContent = "HISTORIA"; corpo.innerHTML = "📜 Un tuffo nel passato attraverso le note."; break;
+            case 'data': titolo.textContent = "DATA"; corpo.innerHTML = "📅 Oggi è il " + new Date().toLocaleDateString(); break;
+        }
+    }
+
+    function chiudiLocandina() { document.getElementById('locandina-overlay').classList.remove('active'); }
 
     function startShow() {
         document.querySelector('.left').classList.add('open');
         document.querySelector('.right').classList.add('open');
         video.play();
-        fetchTitle();
+        fetchTitle(); // Aggiorna al play
         setTimeout(() => {
             document.getElementById('video-container').classList.add('hidden');
             layout.classList.add('visible'); 
@@ -166,15 +192,25 @@
 
     function stopShow() { location.reload(); }
 
+    function toggleDisco() { cover.classList.toggle('rotating'); }
+    function toggleEQ() {
+        cover.style.transition = "0.1s";
+        let pulse = setInterval(() => { cover.style.transform = `scale(${1 + Math.random()*0.05})`; }, 100);
+        setTimeout(() => { clearInterval(pulse); cover.style.transform = "scale(1)"; }, 2000);
+    }
+    function boomColori() {
+        document.querySelectorAll('.icon-circle').forEach(c => {
+            const col = `hsl(${Math.random()*360}, 100%, 50%)`;
+            c.style.borderColor = col; c.style.boxShadow = `0 0 25px ${col}`;
+        });
+    }
     function cadutaNote() {
         const stage = document.getElementById('main-stage');
         for(let i=0; i<15; i++) {
             setTimeout(() => {
                 const n = document.createElement('div');
-                n.className = 'falling-note';
-                n.innerHTML = '♪';
-                n.style.left = Math.random() * 700 + 'px';
-                n.style.top = '-30px';
+                n.className = 'falling-note'; n.innerHTML = '♪';
+                n.style.left = Math.random() * 700 + 'px'; n.style.top = '-30px';
                 n.style.color = `hsl(${Math.random()*360}, 100%, 50%)`;
                 stage.appendChild(n);
                 setTimeout(() => n.remove(), 4000);
@@ -182,15 +218,10 @@
         }
     }
 
-    function toggleDisco() { cover.classList.toggle('rotating'); }
-    function boomColori() {
-        document.querySelectorAll('.icon-circle').forEach(c => {
-            const col = `hsl(${Math.random()*360}, 100%, 50%)`;
-            c.style.borderColor = col; c.style.boxShadow = `0 0 20px ${col}`;
-        });
-    }
-
-    setInterval(fetchTitle, 10000);
+    // --- AVVIO AUTOMATICO TITOLO ---
+    updateImages(defaultImg);
+    fetchTitle(); // Carica il titolo appena apri la pagina
+    setInterval(fetchTitle, 15000); // Poi aggiorna ogni 15 secondi
 </script>
 </body>
 </html>
