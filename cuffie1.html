@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video Party Glow Ultra + Disco Lights</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+  }
+
+  /* --- ANIMAZIONE PARTY (FASCI DI LUCE) --- */
+  .disco-light {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 1000px;
+    z-index: 0;
+    pointer-events: none;
+    transform-origin: top center;
+    animation: discoRotate 2s linear infinite;
+    filter: blur(3px);
+    opacity: 0.7;
+  }
+
+  @keyframes discoRotate {
+    0% { transform: rotate(0deg) translateX(-50%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
+  }
+
+  /* --- VIDEO CUFFIE --- */
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 290px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 15px;
+    z-index: 2; /* Sopra le luci disco */
+    
+    border: 6px solid transparent;
+    background: 
+      linear-gradient(#000, #000) padding-box, 
+      linear-gradient(var(--angle), #ff0000, #00ff00, #00ffff, #ff00ff, #ff0000) border-box;
+    
+    animation: 
+      rotateGradient 1.5s linear infinite, 
+      party-glow 0.5s linear infinite;
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotateGradient {
+    to { --angle: 360deg; }
+  }
+
+  @keyframes party-glow {
+    0%, 100% { 
+      box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000; 
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00; 
+      transform: scale(1.03);
+    }
+  }
+
+  .left-video { left: -40px; }
+  .right-video { right: -40px; }
+
+  img.center-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 728px;
+    height: 486px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="party-container">
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/cuffie2.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
+
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/cuffie2.mp4" type="video/mp4" />
+    Il tuo browser non supporta il video.
+  </video>
+</div>
+
+<script>
+  // Script per generare le luci party in automatico
+  function createLights() {
+    const container = document.getElementById('party-container');
+    const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ff0000', '#ffff00'];
+    
+    setInterval(() => {
+      const light = document.createElement('div');
+      light.className = 'disco-light';
+      
+      // Posizione casuale vicino ai video
+      const randomX = Math.random() * 100;
+      light.style.left = randomX + "%";
+      
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      light.style.background = `linear-gradient(to bottom, transparent, ${color}, transparent)`;
+      light.style.boxShadow = `0 0 20px ${color}`;
+      
+      container.appendChild(light);
+      
+      // Rimuovi dopo l'animazione per non appesantire il browser
+      setTimeout(() => {
+        light.remove();
+      }, 2000);
+    }, 150);
+  }
+
+  createLights();
+</script>
+
+</body>
+</html>
