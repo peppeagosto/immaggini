@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* SFONDO ESTERNO TRASPARENTE */
+        body { margin: 0; background: transparent; color: #fff; font: 900 13px sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; cursor: none; }
+        
+        #main-container {
+            position: relative;
+            width: 550px; height: 600px; 
+            background: #000; /* NERO DENTRO */
+            display: flex; flex-direction: column;
+            border: 4px solid transparent;
+            border-image: linear-gradient(45deg, red, white, red, white) 1;
+            border-radius: 15px; /* SFUMATO ANGOLI */
+            overflow: hidden;
+            animation: borderRotate 4s linear infinite;
+            transition: 0.2s;
+            /* DOPPIO GLOW */
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes borderRotate {
+            0% { border-image-source: linear-gradient(0deg, red, white, red, white); }
+            100% { border-image-source: linear-gradient(360deg, red, white, red, white); }
+        }
+
+        .header { width: 100%; height: 110px; background: #000; display: flex; align-items: center; justify-content: space-around; border-bottom: 3px solid red; z-index: 10; transition: 0.2s; }
+        .blade-text { font: 2.2rem 'Arial Black'; text-transform: uppercase; background: linear-gradient(to bottom, #f00 50%, #fff 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: 0.2s; }
+        
+        .rw { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #111; animation: s 1.2s linear infinite; position: relative; background: #000; transition: 0.2s; }
+        .rw::before { content:''; position:absolute; top:10%; left:10%; width:80%; height:80%; background: conic-gradient(#444 20deg, transparent 20deg 72deg, #444 92deg, transparent 92deg); border-radius:50%; }
+        @keyframes s { to { transform: rotate(360deg); } }
+
+        .content-area { flex-grow: 1; position: relative; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.8); overflow: hidden; }
+        #v { width: 100%; height: 100%; object-fit: cover; display: none; }
+        #c { width: 190px; height: 190px; border-radius: 50%; border: 8px solid #111; background-size: cover; background-position: center; display: none; z-index: 20; box-shadow: 0 0 40px red; transition: transform 0.1s ease-out, border-color 0.2s; }
+
+        #party-canvas { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 15; display: none; }
+
+        .footer { width: 100%; height: 110px; background: #000; display: flex; align-items: center; justify-content: center; gap: 10px; border-top: 3px solid red; z-index: 10; transition: 0.2s; }
+        .r { width: 52px; height: 52px; border-radius: 50%; background: #050505; border: 3px solid #222; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative; }
+        .r::after { content:'🐎'; position:absolute; top:75%; left:50%; transform:translate(-50%,-50%); background:#ff0; border-radius:50%; font-size:6px; padding:1px; z-index:2; border: 1px solid #000; }
+        .r.on { border-color: red; box-shadow: 0 0 20px red; transform: scale(1.1); }
+        .r i { font-size: 18px; color: #fff; z-index: 3; transition: 0.2s; }
+
+        .vol-slider { -webkit-appearance: slider-vertical; width: 10px; height: 60px; cursor: pointer; background: #222; border-radius: 5px; }
+
+        .t { position: fixed; pointer-events: none; z-index: 1000; display: flex; align-items: center; background: rgba(220, 0, 0, 0.95); padding: 4px 10px; border: 1px solid #fff; border-radius: 4px; animation: slideText 0.6s forwards; }
+        .t span { color: #fff; font-size: 11px; font-weight: 900; letter-spacing: 2px; }
+        @keyframes slideText { 0% { transform: translate(5px, 5px); opacity: 1; } 100% { transform: translate(5px, -25px); opacity: 0; } }
+
+        #l { position: absolute; bottom: 130px; background: rgba(0,0,0,1); border: 2px solid red; padding: 15px; border-radius: 10px; display: none; z-index: 100; text-align: center; width: 300px; font-size: 14px; border-left: 8px solid red; transition: 0.2s; }
+        #start-screen { position: absolute; inset: 0; background: #000; z-index: 500; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="main-container">
+    <div id="start-screen" onclick="p()"></div>
+    <div class="header">
+        <div class="rw"></div>
+        <div style="width: 350px; overflow: hidden;">
+            <marquee scrollamount="10"><span id="track-title" class="blade-text">EL DIABLO STREAMING LIVE...</span></marquee>
+        </div>
+        <div class="rw"></div>
+    </div>
+    <div class="content-area">
+        <canvas id="party-canvas" width="550" height="550"></canvas>
+        <video id="v" src="https://peppeagosto.github.io/immaggini/ferrari.mp4"></video>
+        <div id="c"></div>
+        <div id="l"></div>
+    </div>
+    <div class="footer">
+        <div class="r" onclick="o('w')" title="DISCO"><i class="fas fa-compact-disc"></i></div>
+        <div class="r" onclick="o('p')" title="PARTY"><i class="fas fa-bolt"></i></div>
+        <div class="r" onclick="o('bum')" title="BUM!"><i class="fas fa-bomb"></i></div>
+        <div class="r" onclick="o('m')" title="METEO"><i class="fas fa-cloud-sun"></i></div>
+        <div class="r" onclick="o('o')" title="OROSCOPO"><i class="fas fa-star"></i></div>
+        <div class="r" onclick="o('h')" title="STORICO"><i class="fas fa-history"></i></div>
+        <div class="r" onclick="stopAudio()" title="STOP"><i class="fas fa-stop-circle"></i></div>
+        <input type="range" class="vol-slider" id="v-range" min="0" max="1" step="0.01" value="1" oninput="setVol(this.value)">
+    </div>
+</div>
+
+<audio id="a" crossorigin="anonymous"></audio>
+
+<script>
+    let lv=0, st={w:0, p:0, bum:0}, historySongs = [];
+    let aud, an, da, bumInterval;
+    const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffffff", "#ff8800", "#88ff00", "#0088ff"];
+
+    document.onmousemove = e => {
+        let box = document.createElement('div'); box.className = 't';
+        box.innerHTML = lv ? '<span>EL DIABLO</span>' : '<span>CLICCA QUI</span>';
+        box.style.left = e.clientX + 'px'; box.style.top = e.clientY + 'px';
+        document.body.appendChild(box); setTimeout(() => box.remove(), 550);
+    };
+
+    function h(t){ $('#l').html(t).fadeIn(300).delay(5000).fadeOut(300); }
+
+    function p(){
+        if(!lv){
+            lv=1; $('#start-screen').fadeOut(); 
+            let v = document.getElementById('v');
+            v.style.display='block'; v.play();
+            setTimeout(()=>{
+                $(v).fadeOut(1000, function() {
+                    let a = document.getElementById('a');
+                    a.src='https://stm2.srvif.com:7198/7.aac';
+                    a.play();
+                    setupVisualizer();
+                });
+            }, 8000);
+        }
+    }
+
+    function setupVisualizer() {
+        aud = new (window.AudioContext || window.webkitAudioContext)();
+        an = aud.createAnalyser();
+        const src = aud.createMediaElementSource(document.getElementById('a'));
+        src.connect(an); an.connect(aud.destination);
+        an.fftSize = 256; da = new Uint8Array(an.frequencyBinCount);
+        render();
+    }
+
+    function render() {
+        requestAnimationFrame(render);
+        an.getByteFrequencyData(da);
+        let vol = da.reduce((a, b) => a + b) / da.length;
+        if(st.w) $('#c').css('transform', `scale(${1 + (vol / 200)})`);
+        if(st.p) {
+            const canvas = document.getElementById('party-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,550,550);
+            for(let i=0; i<24; i++) {
+                let angle = (i/24) * Math.PI * 2 + (Date.now() * 0.002);
+                ctx.beginPath(); ctx.moveTo(275,275);
+                ctx.lineTo(275 + Math.cos(angle)*(110 + vol), 275 + Math.sin(angle)*(110 + vol));
+                ctx.strokeStyle = colors[i % colors.length];
+                ctx.lineWidth = 5; ctx.stroke();
+            }
+        }
+    }
+
+    function toggleBum() {
+        if(st.bum) {
+            bumInterval = setInterval(() => {
+                let c = colors[Math.floor(Math.random()*colors.length)];
+                $('#main-container').css('border-color', c);
+                $('.header, .footer').css('border-color', c);
+                $('.blade-text').css({'background': `linear-gradient(to bottom, ${c} 50%, #fff 50%)`, '-webkit-background-clip': 'text', 'filter': `drop-shadow(0 0 10px ${c})`});
+                $('.r, .rw').css('border-color', c);
+                $('.r i, #l').css('color', c);
+                $('#l').css('border-color', c);
+                $('#v-range').css('background', c);
+            }, 150);
+        } else {
+            clearInterval(bumInterval);
+            $('*').removeAttr('style');
+        }
+    }
+
+    function getOroscopoAuto() {
+        const d = new Date(); const m = d.getMonth() + 1; const g = d.getDate();
+        let s = "";
+        if((m==3 && g>=21)||(m==4 && g<=19)) s="ARIETE";
+        else if((m==4 && g>=20)||(m==5 && g<=20)) s="TORO";
+        else if((m==5 && g>=21)||(m==6 && g<=20)) s="GEMELLI";
+        else if((m==6 && g>=21)||(m==7 && g<=22)) s="CANCRO";
+        else if((m==7 && g>=23)||(m==8 && g<=22)) s="LEONE";
+        else if((m==8 && g>=23)||(m==9 && g<=22)) s="VERGINE";
+        else if((m==9 && g>=23)||(m==10 && g<=22)) s="BILANCIA";
+        else if((m==10 && g>=23)||(m==11 && g<=21)) s="SCORPIONE";
+        else if((m==11 && g>=22)||(m==12 && g<=21)) s="SAGITTARIO";
+        else if((m==12 && g>=22)||(m==1 && g<=19)) s="CAPRICORNO";
+        else if((m==1 && g>=20)||(m==2 && g<=18)) s="ACQUARIO";
+        else s="PESCI";
+        const mesi = ["GENNAIO","FEBBRAIO","MARZO","APRILE","MAGGIO","GIUGNO","LUGLIO","AGOSTO","SETTEMBRE","OTTOBRE","NOVEMBRE","DICEMBRE"];
+        h(`<span style="color:red;font-size:10px;">OROSCOPO ${mesi[d.getMonth()]}</span><br><strong style="color:yellow;font-size:16px;">${s}</strong><br><span>⭐⭐⭐⭐⭐</span><br><small>SEI AL TOP!</small>`);
+    }
+
+    function o(t){
+        st[t]=!st[t]; $(event.currentTarget).toggleClass('on', st[t]);
+        if(t=='w') $('#c').fadeToggle();
+        if(t=='p') $('#party-canvas').fadeToggle();
+        if(t=='bum') toggleBum();
+        if(t=='m') getMeteo();
+        if(t=='o') getOroscopoAuto();
+        if(t=='h') h("ULTIME:<br><small>"+(historySongs.slice(0,4).join("<br>") || "---")+"</small>");
+    }
+
+    function setVol(v) { document.getElementById('a').volume = v; }
+    function stopAudio() { document.getElementById('a').pause(); h("ENGINE OFF"); }
+
+    async function getMeteo() {
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            h(`<i class="fas fa-map-marker-alt"></i> ${data.city.toUpperCase()}<br>TEMP: ${Math.floor(Math.random()*4+22)}°C`);
+        } catch(e) { h("METEO NON DISPONIBILE"); }
+    }
+
+    function updateStats(){
+        $.getJSON('https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?', function(d) {
+            if(d && d.songtitle){
+                let title = d.songtitle;
+                if(title !== $('#track-title').text()){
+                    $('#track-title').text(title);
+                    if(!historySongs.includes(title)) historySongs.unshift(title);
+                    $.getJSON("https://itunes.apple.com/search?term="+encodeURIComponent(title)+"&limit=1&callback=?", function(res){
+                        let img = (res.results && res.results.length > 0) ? res.results[0].artworkUrl100.replace('100x100','600x600') : "https://xatimg.com/image/fSAO2rrk7IfU.gif";
+                        $('#c').css('background-image', `url(${img})`);
+                    });
+                }
+            }
+        });
+    }
+    setInterval(updateStats, 10000); updateStats();
+</script>
+</body>
+</html>
