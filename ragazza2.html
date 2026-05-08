@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --glow: #ff0000; --neon: #00f2ff; }
+        body { margin: 0; background: #000; overflow: hidden; }
+        
+        #xat-container { 
+            position: relative; width: 100%; height: 600px; 
+            background: #000; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        #video-bg { 
+            position: absolute; width: 100%; height: 100%; 
+            object-fit: contain; z-index: 0; 
+        }
+        
+        .scene { 
+            width: 100%; height: 100%; 
+            perspective: 2000px; 
+            display: flex; justify-content: center; align-items: center; z-index: 1;
+        }
+
+        .carousel { 
+            width: 100px; height: 100px; position: relative; 
+            transform-style: preserve-3d; 
+            transform: rotateX(75deg); 
+        }
+
+        .item {
+            position: absolute; width: 75px; height: 75px; 
+            background: rgba(255, 0, 0, 0.05); 
+            border: 1px solid var(--neon);
+            box-shadow: 0 0 15px var(--neon), inset 0 0 10px rgba(0, 242, 255, 0.2);
+            backdrop-filter: blur(2px); border-radius: 50%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; font-size: 9px; color: #fff; text-align: center; font-weight: bold;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: auto; cursor: pointer;
+            transform: rotateZ(var(--rz)) translateY(0px) rotateX(-75deg) scale(0);
+            text-shadow: 0 0 5px var(--neon);
+        }
+
+        /* Effetto Orbita Attiva */
+        .item.active { 
+            opacity: 1; 
+            transform: rotateZ(var(--rz)) translateY(-240px) rotateX(-75deg) scale(1); 
+        }
+
+        .item:hover {
+            box-shadow: 0 0 30px var(--neon);
+            background: rgba(0, 242, 255, 0.2);
+            transform: rotateZ(var(--rz)) translateY(-260px) rotateX(-75deg) scale(1.2);
+            z-index: 100;
+        }
+
+        @keyframes rot { 
+            from { transform: rotateX(75deg) rotateZ(0deg); } 
+            to { transform: rotateX(75deg) rotateZ(360deg); } 
+        }
+        
+        #btn-start {
+            position: absolute; z-index: 10; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            border: 1px solid var(--neon); color: var(--neon); padding: 15px 30px; cursor: pointer; 
+            background: rgba(0,0,0,0.8); box-shadow: 0 0 20px var(--neon); text-align: center;
+            font-family: 'Courier New', monospace; letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="xat-container">
+    <div id="btn-start" onclick="start()">INITIALIZE CORE RED</div>
+    
+    <video id="video-bg" loop muted playsinline crossorigin="anonymous">
+        <source src="https://peppeagosto.github.io/immaggini/ragazza2.mp4" type="video/mp4">
+    </video>
+
+    <div class="scene">
+        <div class="carousel" id="main-ring">
+            <div class="item" style="--rz: 0deg">MUSIC</div>
+            <div class="item" style="--rz: 45deg">HOROSCOPE</div>
+            <div class="item" style="--rz: 90deg">SYSTEM</div>
+            <div class="item" style="--rz: 135deg">TIME<br><span id="c"></span></div>
+            <div class="item" style="--rz: 180deg">METEO</div>
+            <div class="item" style="--rz: 225deg">CALENDAR</div>
+            <div class="item" style="--rz: 270deg">SIGNAL</div>
+            <div class="item" style="--rz: 315deg">AUDIO</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const v = document.getElementById("video-bg");
+    const ring = document.getElementById("main-ring");
+    const stream = new Audio("https://stm2.srvif.com:7198/;");
+    stream.crossOrigin = "anonymous";
+    let launched = [false, false, false, false];
+
+    function start() {
+        $("#btn-start").fadeOut();
+        v.play();
+    }
+
+    v.ontimeupdate = function() {
+        let t = v.currentTime;
+        const items = $(".item");
+
+        // Sincronizzazione Lancio
+        if(t > 1.0 && !launched[0]) { $(items[0]).addClass("active"); $(items[1]).addClass("active"); launched[0]=true; }
+        if(t > 2.8 && !launched[1]) { $(items[2]).addClass("active"); $(items[3]).addClass("active"); launched[1]=true; }
+        if(t > 4.5 && !launched[2]) { $(items[4]).addClass("active"); $(items[5]).addClass("active"); launched[2]=true; }
+        if(t > 6.2 && !launched[3]) { 
+            $(items[6]).addClass("active"); 
+            $(items[7]).addClass("active"); 
+            launched[3]=true; 
+            
+            setTimeout(() => {
+                ring.style.animation = "rot 25s infinite linear";
+                stream.play(); 
+            }, 1000);
+        }
+
+        // Reset per il loop del video
+        if (t < 0.5 && launched[3]) {
+            $(".item").removeClass("active");
+            ring.style.animation = "none";
+            launched = [false, false, false, false];
+        }
+    };
+
+    setInterval(() => {
+        const d = new Date();
+        $("#c").text(d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+    }, 1000);
+</script>
+
+</body>
+</html>
