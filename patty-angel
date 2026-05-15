@@ -100,8 +100,9 @@ body{
   position:relative;
   width:420px;
   max-width:90%;
-  animation: fadeLoop 6s ease-in-out infinite;
   filter:drop-shadow(0 0 25px rgba(255,0,0,.4));
+  /* Aggiunta animazione fadeLoop */
+  animation: fadeLoop 5s linear infinite;
 }
 
 .center-box img{
@@ -132,13 +133,10 @@ body{
   pointer-events:none;
 }
 
-/* ===== FADE LOOP ===== */
+/* ===== FADE LOOP (modificato per sparire ogni 5s) ===== */
 @keyframes fadeLoop{
-  0%{opacity:0}
-  20%{opacity:0}
-  50%{opacity:1}
-  80%{opacity:0}
-  100%{opacity:0}
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 </style>
 </head>
@@ -159,17 +157,19 @@ body{
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4">
     </video>
-    <div class="video-text">el cartaio</div>
+    <div class="video-text">PATTY</div>
   </div>
 
   <!-- CENTRO FOTO + TESTO -->
   <div class="center-area">
     <div class="center-box">
-      <img src="gif " alt="center">
-      <div class="center-title">TEMPIO DELLA  MUSICA/div>
+      <!-- Inserimento dell'immagine richiesta -->
+      <img src="https://xatimg.com/image/lwVGx7c3n5P8.jpg" alt="Foto Centrale">
+      <div class="center-title"></div>
     </div>
   </div>
 
 </div>
 
 </body>
+</html>
