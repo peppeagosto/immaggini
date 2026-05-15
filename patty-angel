@@ -149,15 +149,15 @@ body{
   <!-- VIDEO SINISTRO -->
   <div class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="gif">
+      <source src="https://peppeagosto.github.io/immaggini/ribelle">
     </video>
-    <div class="video-text">el diablo</div>
+    <div class="video-text">ANGEL</div>
   </div>
 
   <!-- VIDEO DESTRO -->
   <div class="video-wrapper right">
     <video class="side-video" autoplay loop muted playsinline>
-      <source src="">
+      <source src="https://peppeagosto.github.io/immaggini/ribelle">
     </video>
     <div class="video-text">el cartaio</div>
   </div>
@@ -166,7 +166,7 @@ body{
   <div class="center-area">
     <div class="center-box">
       <img src="gif " alt="center">
-      <div class="center-title">el diablo</div>
+      <div class="center-title">PATTY</div>
     </div>
   </div>
 
