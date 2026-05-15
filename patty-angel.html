@@ -15,48 +15,48 @@ body{
 }
 .container{
   position:relative;
-  width:1308px;
-  height:550px; 
+  width:1308px; [cite: 1]
+  height:550px; [cite: 2]
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ===== VIDEO LATERALI - ALLARGATI A 320PX ===== */
+/* ===== VIDEO LATERALI - AGGIORNATI (SCESI PIÙ GIÙ) ===== */
 .video-wrapper{
   position:absolute;
-  top: 15px; /* Rimane abbassato poco poco */
-  width:320px; /* ALLARGATI: Prima era 270px */
+  top: 45px; /* Modificato da 15px a 45px per non tagliare l'inizio  */
+  width:320px; /* Larghezza allargata  */
   height:520px; 
   z-index:2;
   border-radius:20px;
-  box-sizing: border-box;
+  box-sizing: border-box; [cite: 4]
   border: 8px solid transparent;
   background: 
     linear-gradient(black, black) padding-box, 
-    conic-gradient(red, orange, yellow, lime, cyan, blue, violet, red) border-box;
+    conic-gradient(red, orange, yellow, lime, cyan, blue, violet, red) border-box; [cite: 4]
 }
-.left{ left: 20px; }  /* Bilanciato per la nuova larghezza */
-.right{ right: 20px; } /* Bilanciato per la nuova larghezza */
+.left{ left: 20px; }  [cite: 5]
+.right{ right: 20px; } [cite: 6]
 
 .side-video{
   width:100%;
   height:100%;
   object-fit:cover;
   border-radius:12px;
-  display: block;
+  display: block; [cite: 7]
 }
 
 /* ===== AREA CENTRALE ===== */
 .center-area{
   position:absolute;
-  left:340px; /* Adattato per non toccare i video più larghi */
-  right:340px; /* Adattato per non toccare i video più larghi */
+  left:340px; [cite: 8]
+  right:340px; [cite: 8]
   top:0;
   bottom:0;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:center; [cite: 9]
 }
 
 /* ===== BOX CENTRALE - SNAKE 25PX + DOPPIO GLOW ===== */
@@ -64,33 +64,33 @@ body{
   position: relative;
   width: 420px;
   border-radius: 20px;
-  padding: 25px; 
+  padding: 25px; [cite: 10]
   filter: drop-shadow(0 0 20px rgba(0, 206, 209, 0.9)) 
-          drop-shadow(0 0 40px rgba(135, 206, 235, 0.7));
+          drop-shadow(0 0 40px rgba(135, 206, 235, 0.7)); [cite: 10]
   overflow: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; [cite: 11]
 }
 
 /* Immagine xat abbassata per la testa */
 .center-box img {
   width: 100%;
-  display: block;
+  display: block; [cite: 12]
   border-radius: 10px;
   position: relative;
   z-index: 5;
-  transform: translateY(12px); 
+  transform: translateY(12px); [cite: 12]
 }
 
 /* Animazione Snake Turchese/Celestino */
 .center-box::before {
   content: "";
-  position: absolute;
+  position: absolute; [cite: 13]
   width: 150%;
   height: 150%;
-  background: conic-gradient(transparent, #00ced1, #87ceeb, transparent 25%);
-  animation: rotateSnake 3s linear infinite;
+  background: conic-gradient(transparent, #00ced1, #87ceeb, transparent 25%); [cite: 13]
+  animation: rotateSnake 3s linear infinite; [cite: 13]
 }
 
 .center-box::after {
@@ -98,43 +98,43 @@ body{
   position: absolute;
   width: 150%;
   height: 150%;
-  background: conic-gradient(transparent, #87ceeb, #00ced1, transparent 25%);
+  background: conic-gradient(transparent, #87ceeb, #00ced1, transparent 25%); [cite: 14]
   animation: rotateSnake 3s linear infinite;
-  animation-delay: -1.5s;
+  animation-delay: -1.5s; [cite: 15]
 }
 
 .inner-mask {
   position: absolute;
-  inset: 25px;
+  inset: 25px; [cite: 16]
   background: black;
   border-radius: 10px;
   z-index: 2;
 }
 
 @keyframes rotateSnake {
-  100% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); } [cite: 16]
 }
 
 /* TESTO VIDEO */
 .video-text{
   position:absolute;
-  bottom:15px;
+  bottom:15px; [cite: 17]
   left:50%;
   transform:translateX(-50%);
   font-size:25px;
   font-family:Trebuchet MS;
-  font-weight:bold;
+  font-weight:bold; [cite: 17]
   z-index:10;
-  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red);
+  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red); [cite: 17]
   background-size:400% 100%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation: rainbowText 3s linear infinite;
+  animation: rainbowText 3s linear infinite; [cite: 18]
 }
 
 @keyframes rainbowText{
   0%{background-position:0%}
-  100%{background-position:100%}
+  100%{background-position:100%} [cite: 18]
 }
 </style>
 </head>
