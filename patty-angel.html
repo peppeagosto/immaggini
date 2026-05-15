@@ -1,166 +1,117 @@
-<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>EL DIABLO - Vertical Stretch</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IL CARTAIO DIAVOLETTE</title>
 <style>
-body{
-  margin:0;
-  background:transparent;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
-}
-.container{
-  position:relative;
-  width:1308px;
-  height:550px; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-/* ===== VIDEO LATERALI - ALLARGATI A 320PX ===== */
-.video-wrapper{
-  position:absolute;
-  top: 15px; /* Rimane abbassato poco poco */
-  width:320px; /* ALLARGATI: Prima era 270px */
-  height:520px; 
-  z-index:2;
-  border-radius:20px;
-  box-sizing: border-box;
-  border: 8px solid transparent;
-  background: 
-    linear-gradient(black, black) padding-box, 
-    conic-gradient(red, orange, yellow, lime, cyan, blue, violet, red) border-box;
-}
-.left{ left: 20px; }  /* Bilanciato per la nuova larghezza */
-.right{ right: 20px; } /* Bilanciato per la nuova larghezza */
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 486px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.side-video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:12px;
-  display: block;
-}
+  /* VIDEO LATERALI - PULITI SENZA BORDO PESANTE */
+  video.side-video {
+    position: absolute;
+    top: 0;
+    width: 280px;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    z-index: 1;
+    opacity: 0.8;
+  }
 
-/* ===== AREA CENTRALE ===== */
-.center-area{
-  position:absolute;
-  left:340px; /* Adattato per non toccare i video più larghi */
-  right:340px; /* Adattato per non toccare i video più larghi */
-  top: 70px;
-  bottom:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+  .left-video { left: 0; }
+  .right-video { right: 0; }
 
-/* ===== BOX CENTRALE - SNAKE 25PX + DOPPIO GLOW ===== */
-.center-box {
-  position: relative;
-  width: 440px;
-  border-radius: 20px;
-  padding: 25px; 
-  filter: drop-shadow(0 0 20px rgba(0, 206, 209, 0.9)) 
-          drop-shadow(0 0 40px rgba(135, 206, 235, 0.7));
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  /* VIDEO CENTRALE - BORDO 8PX E DOPPIO GLOW */
+  .center-video-wrapper {
+    position: absolute;
+    width: 728px;
+    height: 486px;
+    z-index: 10;
+    /* Bordo 8px richiesto */
+    border: 8px solid #00f2ff;
+    border-radius: 15px;
+    box-sizing: border-box;
+    /* DOPPIO GLOW: uno esterno forte e uno interno */
+    box-shadow: 
+      0 0 40px rgba(0, 242, 255, 0.9), 
+      0 0 80px rgba(0, 100, 255, 0.7),
+      inset 0 0 30px rgba(0, 242, 255, 0.6);
+    overflow: hidden;
+    animation: doubleGlowPulse 3s infinite alternate ease-in-out;
+  }
 
-/* Immagine xat abbassata per la testa */
-.center-box img {
-  width: 100%;
-  display: block;
-  border-radius: 10px;
-  position: relative;
-  z-index: 5;
-  transform: translateY(12px); 
-}
+  .center-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-/* Animazione Snake Turchese/Celestino */
-.center-box::before {
-  content: "";
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: conic-gradient(transparent, #00ced1, #87ceeb, transparent 25%);
-  animation: rotateSnake 3s linear infinite;
-}
+  @keyframes doubleGlowPulse {
+    0% {
+      box-shadow: 0 0 30px rgba(0, 242, 255, 0.7), 0 0 60px rgba(0, 100, 255, 0.5), inset 0 0 20px rgba(0, 242, 255, 0.4);
+      border-color: #00d9ff;
+    }
+    100% {
+      box-shadow: 0 0 60px rgba(0, 242, 255, 1), 0 0 120px rgba(0, 100, 255, 0.9), inset 0 0 40px rgba(0, 242, 255, 0.8);
+      border-color: #00ffff;
+    }
+  }
 
-.center-box::after {
-  content: "";
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: conic-gradient(transparent, #87ceeb, #00ced1, transparent 25%);
-  animation: rotateSnake 3s linear infinite;
-  animation-delay: -1.5s;
-}
+  /* GHOST IMAGE SOPRA IL VIDEO CENTRALE */
+  img.center-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 11;
+    animation: ghostFade 5s infinite ease-in-out;
+  }
 
-.inner-mask {
-  position: absolute;
-  inset: 25px;
-  background: black;
-  border-radius: 10px;
-  z-index: 2;
-}
-
-@keyframes rotateSnake {
-  100% { transform: rotate(360deg); }
-}
-
-/* TESTO VIDEO */
-.video-text{
-  position:absolute;
-  bottom:15px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:25px;
-  font-family:Trebuchet MS;
-  font-weight:bold;
-  z-index:10;
-  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red);
-  background-size:400% 100%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation: rainbowText 3s linear infinite;
-}
-
-@keyframes rainbowText{
-  0%{background-position:0%}
-  100%{background-position:100%}
-}
+  @keyframes ghostFade {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.6; }
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="video-wrapper left">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4">
+  <video class="side-video left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4" type="video/mp4" />
+  </video>
+
+  <div class="center-video-wrapper">
+    <video autoplay loop muted playsinline>
+       <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4" type="video/mp4" />
     </video>
-    <div class="video-text">ANGEL</div>
+    <img class="center-image" src="https://xatimg.com/image/yWO6Q0ABtylV.jpg" alt="Ghost" />
   </div>
 
-  <div class="video-wrapper right">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4">
-    </video>
-    <div class="video-text">PATTY</div>
-  </div>
-
-  <div class="center-area">
-    <div class="center-box">
-      <div class="inner-mask"></div>
-      <img src="https://xatimg.com/image/lwVGx7c3n5P8.jpg" alt="Foto Centrale">
-    </div>
-  </div>
+  <video class="side-video right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/ribelle.mp4" type="video/mp4" />
+  </video>
 </div>
 
 </body>
