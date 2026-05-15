@@ -16,17 +16,18 @@ body{
 .container{
   position:relative;
   width:1308px;
-  height:550px; /* Aumentato per ospitare i video più alti */
+  height:550px; 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ===== VIDEO LATERALI - ALTEZZA ALLUNGATA A 520PX ===== */
+/* ===== VIDEO LATERALI - ALLARGATI A 320PX ===== */
 .video-wrapper{
   position:absolute;
-  width:270px;
-  height:520px; /* Altezza allungata come richiesto */
+  top: 15px; /* Rimane abbassato poco poco */
+  width:320px; /* ALLARGATI: Prima era 270px */
+  height:520px; 
   z-index:2;
   border-radius:20px;
   box-sizing: border-box;
@@ -35,8 +36,8 @@ body{
     linear-gradient(black, black) padding-box, 
     conic-gradient(red, orange, yellow, lime, cyan, blue, violet, red) border-box;
 }
-.left{left:0}
-.right{right:0}
+.left{ left: 20px; }  /* Bilanciato per la nuova larghezza */
+.right{ right: 20px; } /* Bilanciato per la nuova larghezza */
 
 .side-video{
   width:100%;
@@ -49,8 +50,8 @@ body{
 /* ===== AREA CENTRALE ===== */
 .center-area{
   position:absolute;
-  left:280px;
-  right:280px;
+  left:340px; /* Adattato per non toccare i video più larghi */
+  right:340px; /* Adattato per non toccare i video più larghi */
   top:0;
   bottom:0;
   display:flex;
@@ -72,12 +73,14 @@ body{
   align-items: center;
 }
 
+/* Immagine xat abbassata per la testa */
 .center-box img {
   width: 100%;
   display: block;
   border-radius: 10px;
   position: relative;
   z-index: 5;
+  transform: translateY(12px); 
 }
 
 /* Animazione Snake Turchese/Celestino */
