@@ -19,7 +19,7 @@ body{
   height:484px;
 }
 
-/* ===== CONTENITORE VIDEO ===== */
+/* ===== CONTENITORE VIDEO (270px) ===== */
 .video-wrapper{
   position:absolute;
   width:270px;
@@ -32,26 +32,20 @@ body{
 .left{left:0}
 .right{right:0}
 
-/* ===== BORDI ===== */
 .video-wrapper::before{
   content:"";
   position:absolute;
   inset:0;
   padding:4px;
   border-radius:20px;
-  background:conic-gradient(
-    red,orange,yellow,lime,cyan,blue,violet,red
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;
   mask-composite:exclude;
   filter:drop-shadow(0 0 10px rgba(255,0,255,.7));
   pointer-events:none;
 }
 
-/* ===== VIDEO ===== */
 .side-video{
   width:100%;
   height:100%;
@@ -59,7 +53,7 @@ body{
   border-radius:16px;
 }
 
-/* ===== TESTO ARCOBALENO VIDEO ===== */
+/* TESTO VIDEO LATERALE */
 .video-text{
   position:absolute;
   bottom:8px;
@@ -84,61 +78,62 @@ body{
 /* ===== AREA CENTRALE ===== */
 .center-area{
   position:absolute;
-  left:280px;
-  right:280px;
+  left:270px;
+  right:270px;
   top:0;
   bottom:0;
   display:flex;
   justify-content:center;
   align-items:center;
-  pointer-events:none;
   z-index:0;
 }
 
-/* ===== CONTENITORE FOTO + TESTO ===== */
 .center-box{
   position:relative;
-  width:420px;
-  max-width:90%;
+  width:300px; 
+  text-align: center;
   animation: fadeLoop 6s ease-in-out infinite;
-  filter:drop-shadow(0 0 25px rgba(255,0,0,.4));
+  filter:drop-shadow(0 0 20px rgba(255,0,0,0.6));
 }
 
 .center-box img{
   width:100%;
+  height: auto;
   display:block;
-  border-radius:12px;
+  border-radius:20px;
+  border: 2px solid rgba(255,255,255,0.15);
 }
 
-/* ===== TESTO JAGUARO 3D ARGENTO ===== */
+/* ===== TESTO EL DIABLO CON COLORI FOTO + 3D ===== */
 .center-title{
   position:absolute;
-  bottom:12px;
+  bottom:15px;
   left:50%;
   transform:translateX(-50%);
-  font-size:38px;
+  width: 100%;
+  font-size:35px;
   font-family:Trebuchet MS;
   font-weight:900;
-  letter-spacing:3px;
-  color:#d8d8d8;
+  letter-spacing:1px;
+  
+  /* Gradiente basato sui colori della foto (Rosso/Arancio/Giallo) */
+  background: linear-gradient(to bottom, #ff0000, #ff8c00, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
-  text-shadow:
-    0 1px 0 #fff,
-    0 2px 0 #cfcfcf,
-    0 3px 0 #b5b5b5,
-    0 4px 0 #9b9b9b,
-    0 6px 10px rgba(0,0,0,.8);
-
+  /* Effetto 3D Argento come contorno */
+  filter: drop-shadow(0 1px 0 #fff) 
+          drop-shadow(0 2px 0 #9b9b9b)
+          drop-shadow(0 4px 5px rgba(0,0,0,0.8));
+  
   pointer-events:none;
 }
 
-/* ===== FADE LOOP ===== */
 @keyframes fadeLoop{
-  0%{opacity:0}
-  20%{opacity:0}
-  50%{opacity:1}
-  80%{opacity:0}
-  100%{opacity:0}
+  0%{opacity:0; transform: scale(0.98);}
+  20%{opacity:1; transform: scale(1);}
+  80%{opacity:1; transform: scale(1);}
+  100%{opacity:0; transform: scale(0.98);}
 }
 </style>
 </head>
@@ -146,20 +141,25 @@ body{
 
 <div class="container">
 
-  <!-- VIDEO SINISTRO (Sistemato con le classi CSS corrette) -->
   <div class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/cuffie2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">DinamicFM</div>
+    <div class="video-text">ELCARTAIO</div>
   </div>
 
-  <!-- VIDEO DESTRO (Sistemato con le classi CSS corrette) -->
+  <div class="center-area">
+    <div class="center-box">
+       <img src="https://xatimg.com/image/2FGZ5Q2ZNHc5.jpg" alt="Logo">
+       <div class="center-title">ANONYMOUS</div>
+    </div>
+  </div>
+
   <div class="video-wrapper right">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/cuffie2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">DinamicFM</div>
+    <div class="video-text">EL DIABLO
   </div>
   
 </div>
