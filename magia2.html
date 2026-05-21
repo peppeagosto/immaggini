@@ -18,26 +18,31 @@
     overflow: hidden;
     font-family: sans-serif;
   }
+  
   .container {
     position: relative;
     width: 1308px; /* Layout originale mantenuto */
     height: 486px;
   }
+  
   video {
     position: absolute;
-    /* Spostati più in basso modificando top (prima era 0) */
+    /* Spostati più in basso modificando top */
     top: 50px; 
-    height: 486px;
+    /* Ridotto l'altezza a 436px (436px + 50px di top = 486px totali della sbarra) */
+    height: 436px;
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
   }
+  
   /* SINISTRA */
   .left-video {
     left: -40px;
     width: 290px;
     z-index: 1;
   }
+  
   /* DESTRA */
   .right-video {
     right: -40px;
@@ -48,7 +53,8 @@
   /* --- TESTI AGGIUNTI AI LATI DEI VIDEO (ANIMATI) --- */
   .side-text {
     position: absolute;
-    bottom: -70px; /* Posizionati quasi a fine video */
+    /* Adesso calcolato in base alla nuova altezza dei video */
+    bottom: 10px; 
     font-size: 28px;
     font-weight: 900;
     letter-spacing: 1px;
@@ -59,13 +65,15 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: colorIntermission 0.5s infinite steps(1); 
+    animation: colorIntermission 0.5s infinite steps(1);   
   }
+  
   .left-text {
     left: -40px;
     width: 290px;
     text-align: center;
   }
+  
   .right-text {
     right: -40px;
     width: 290px;
@@ -89,9 +97,9 @@
   }
 
   @keyframes fadeLoopPhoto {
-    0%, 50% { opacity: 1; pointer-events: auto; }  /* Da 0 a 10 secondi: Visibile al 100% (50% di 20s = 10s) */
-    75% { opacity: 0; pointer-events: none; }       /* Da 10 a 15 secondi: Si dissolve (75% di 20s = 15s) */
-    100% { opacity: 0; pointer-events: none; }      /* Da 15 a 20 secondi: Resta invisibile, poi si resetta e riappare */
+    0%, 50% { opacity: 1; pointer-events: auto; }  /* Da 0 a 10 secondi: Visibile al 100% */
+    75% { opacity: 0; pointer-events: none; }       /* Da 10 a 15 secondi: Si dissolve */
+    100% { opacity: 0; pointer-events: none; }      /* Da 15 a 20 secondi: Resta invisibile */
   }
 
   /* --- ELEMENTI FLUTTUANTI (SOLO SMILE E NOTE) --- */
@@ -118,13 +126,13 @@
   }
 
   /* Posizioni, ritardi e colori differenziati per gli smile e le note */
-  .smile:nth-child(1) { left: 10%; color: #ff00ff; animation-delay: 0s; font-size: 28px; }   
-  .smile:nth-child(2) { left: 25%; color: #00ffff; animation-delay: 0.8s; }                 
+  .smile:nth-child(1) { left: 10%; color: #ff00ff; animation-delay: 0s; font-size: 28px; } 
+  .smile:nth-child(2) { left: 25%; color: #00ffff; animation-delay: 0.8s; }               
   .smile:nth-child(3) { left: 45%; color: #00ff00; animation-delay: 1.5s; font-size: 36px; } 
-  .smile:nth-child(4) { left: 60%; color: #ff9900; animation-delay: 2.2s; }                 
+  .smile:nth-child(4) { left: 60%; color: #ff9900; animation-delay: 2.2s; }               
   .smile:nth-child(5) { left: 75%; color: #ff0055; animation-delay: 2.8s; font-size: 30px; } 
-  .smile:nth-child(6) { left: 90%; color: #e600ff; animation-delay: 3.5s; }                 
-
+  .smile:nth-child(6) { left: 90%; color: #e600ff; animation-delay: 3.5s; }             
+  
   @keyframes floatSmile {
     0% {
       transform: translateY(0) scale(0.7) rotate(0deg);
@@ -153,7 +161,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: colorIntermission 0.5s infinite steps(1); 
+    animation: colorIntermission 0.5s infinite steps(1);   
   }
 
   @keyframes colorIntermission {
@@ -173,11 +181,11 @@
 <body>
 
 <div class="container">
-  <!-- SINISTRA originale (Abbassato) -->
+  <!-- SINISTRA originale (Abbassato e ridimensionato) -->
   <video class="left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
   </video>
-  <!-- Testo animato quasi a fine video SX -->
+  <!-- Testo animato dentro il video SX -->
   <div class="side-text left-text">MAGIA MUSICALE</div>
 
   <!-- FOTO AL CENTRO (Cicla all'infinito ogni 20 secondi) -->
@@ -191,13 +199,13 @@
     <div class="smile">🎶</div>
     <div class="smile">😜</div>
     <div class="smile">😀</div>
-  </div>
- 
-  <!-- DESTRA originale (Abbassato) -->
+  </div> 
+
+  <!-- DESTRA originale (Abbassato e ridimensionato) -->
   <video class="right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
   </video>
-  <!-- Testo animato quasi a fine video DX -->
+  <!-- Testo animato dentro il video DX -->
   <div class="side-text right-text">MAGIA MUSICALE</div>
 </div>
 
