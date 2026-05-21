@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -24,23 +25,51 @@
   }
   video {
     position: absolute;
-    top: 0;
+    /* Spostati più in basso modificando top (prima era 0) */
+    top: 50px; 
     height: 486px;
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
   }
-  /* SINISTRA - ORIGINALE */
+  /* SINISTRA */
   .left-video {
     left: -40px;
     width: 290px;
     z-index: 1;
   }
-  /* DESTRA - ORIGINALE */
+  /* DESTRA */
   .right-video {
     right: -40px;
     width: 290px;
     z-index: 1;
+  }
+
+  /* --- TESTI AGGIUNTI AI LATI DEI VIDEO (ANIMATI) --- */
+  .side-text {
+    position: absolute;
+    bottom: -70px; /* Posizionati quasi a fine video */
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 10;
+    /* Stesso stile di colore intermittente tagliato a coltello */
+    background: linear-gradient(to bottom, #ff0000 50%, #00d2ff 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: colorIntermission 0.5s infinite steps(1); 
+  }
+  .left-text {
+    left: -40px;
+    width: 290px;
+    text-align: center;
+  }
+  .right-text {
+    right: -40px;
+    width: 290px;
+    text-align: center;
   }
 
   /* --- FOTO CENTRALE CON ANIMAZIONE CICLICA CONTINUA (20 SECONDI) --- */
@@ -144,10 +173,12 @@
 <body>
 
 <div class="container">
-  <!-- SINISTRA originale -->
+  <!-- SINISTRA originale (Abbassato) -->
   <video class="left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
   </video>
+  <!-- Testo animato quasi a fine video SX -->
+  <div class="side-text left-text">MAGIA MUSICALE</div>
 
   <!-- FOTO AL CENTRO (Cicla all'infinito ogni 20 secondi) -->
   <img class="center-photo" src="https://xatimg.com/image/xF7k28gxDzRE.jpg" alt="Foto Centro">
@@ -162,10 +193,12 @@
     <div class="smile">😀</div>
   </div>
  
-  <!-- DESTRA originale -->
+  <!-- DESTRA originale (Abbassato) -->
   <video class="right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
   </video>
+  <!-- Testo animato quasi a fine video DX -->
+  <div class="side-text right-text">MAGIA MUSICALE</div>
 </div>
 
 <!-- TESTO A FINE CODICE -->
