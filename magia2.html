@@ -1,0 +1,175 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video DX SX e Centro</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    /* --- SFUMATURA GOLD LEGGERA E MORBIDA --- */
+    background: radial-gradient(circle, #ffe699 0%, #d4af37 60%, #aa8010 100%);
+    display: flex;
+    flex-direction: column; /* Tiene il testo sotto */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
+  .container {
+    position: relative;
+    width: 1308px; /* Layout originale mantenuto */
+    height: 486px;
+  }
+  video {
+    position: absolute;
+    top: 0;
+    height: 486px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  }
+  /* SINISTRA - ORIGINALE */
+  .left-video {
+    left: -40px;
+    width: 290px;
+    z-index: 1;
+  }
+  /* DESTRA - ORIGINALE */
+  .right-video {
+    right: -40px;
+    width: 290px;
+    z-index: 1;
+  }
+
+  /* --- FOTO CENTRALE CON ANIMAZIONE CICLICA CONTINUA (20 SECONDI) --- */
+  .center-photo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;  
+    height: 480px; 
+    object-fit: contain; 
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.5);
+    z-index: 5;
+    /* EDIT: Messo 'infinite' così riappare e ricomincia ogni 20 secondi */
+    animation: fadeLoopPhoto 20s infinite;
+  }
+
+  @keyframes fadeLoopPhoto {
+    0%, 50% { opacity: 1; pointer-events: auto; }  /* Da 0 a 10 secondi: Visibile al 100% (50% di 20s = 10s) */
+    75% { opacity: 0; pointer-events: none; }       /* Da 10 a 15 secondi: Si dissolve (75% di 20s = 15s) */
+    100% { opacity: 0; pointer-events: none; }      /* Da 15 a 20 secondi: Resta invisibile, poi si resetta e riappare */
+  }
+
+  /* --- ELEMENTI FLUTTUANTI (SOLO SMILE E NOTE) --- */
+  .smile-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; 
+    height: 350px;
+    pointer-events: none;
+    z-index: 6;
+    overflow: hidden;
+  }
+
+  .smile {
+    position: absolute;
+    bottom: 0;
+    font-size: 32px;
+    opacity: 0;
+    animation: floatSmile 4.5s infinite ease-in-out;
+    /* Forte contorno nero per massima visibilità sul gold */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+
+  /* Posizioni, ritardi e colori differenziati per gli smile e le note */
+  .smile:nth-child(1) { left: 10%; color: #ff00ff; animation-delay: 0s; font-size: 28px; }   
+  .smile:nth-child(2) { left: 25%; color: #00ffff; animation-delay: 0.8s; }                 
+  .smile:nth-child(3) { left: 45%; color: #00ff00; animation-delay: 1.5s; font-size: 36px; } 
+  .smile:nth-child(4) { left: 60%; color: #ff9900; animation-delay: 2.2s; }                 
+  .smile:nth-child(5) { left: 75%; color: #ff0055; animation-delay: 2.8s; font-size: 30px; } 
+  .smile:nth-child(6) { left: 90%; color: #e600ff; animation-delay: 3.5s; }                 
+
+  @keyframes floatSmile {
+    0% {
+      transform: translateY(0) scale(0.7) rotate(0deg);
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-250px) scale(1.1) rotate(15deg);
+      opacity: 0;
+    }
+  }
+
+  /* TESTO SOTTO: MAGIA MUSICALE CON COLORI INTERMITTENTI TAGLIATI A COLTELLO */
+  .magia-testo {
+    margin-top: 30px;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #ff0000 50%, #00d2ff 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: colorIntermission 0.5s infinite steps(1); 
+  }
+
+  @keyframes colorIntermission {
+    0%, 100% {
+      background: linear-gradient(to bottom, #ff0000 50%, #00d2ff 50%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    50% {
+      background: linear-gradient(to bottom, #00d2ff 50%, #00d2ff 50%, #ff0000 50%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- SINISTRA originale -->
+  <video class="left-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
+  </video>
+
+  <!-- FOTO AL CENTRO (Cicla all'infinito ogni 20 secondi) -->
+  <img class="center-photo" src="https://xatimg.com/image/xF7k28gxDzRE.jpg" alt="Foto Centro">
+
+  <!-- CONTENITORE CON SOLO SMILE E NOTE MUSICALE -->
+  <div class="smile-container">
+    <div class="smile">😎</div>
+    <div class="smile">🎵</div>
+    <div class="smile">😂</div>
+    <div class="smile">🎶</div>
+    <div class="smile">😜</div>
+    <div class="smile">😀</div>
+  </div>
+ 
+  <!-- DESTRA originale -->
+  <video class="right-video" autoplay loop muted playsinline>
+    <source src="https://peppeagosto.github.io/immaggini/magia.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- TESTO A FINE CODICE -->
+<div class="magia-testo">MAGIA MUSICALE</div>
+
+</body>
+</html>
