@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Syncopate:wght@400;700&display=swap');
+        :root { --toxic: #ff0000; --cyan: #00ffff; --red: #ff0000; }
+        body { background: #000; margin: 0; padding: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #intro-container { width: 750px; height: 750px; background: #000; position: relative; border-radius: 50px; overflow: hidden; z-index: 99999; }
+        #demone-bg { width: 100%; height: 100%; background: url('https://xatimg.com/image/roYyXoT7hCWL.gif') no-repeat center; background-size: cover; opacity: 0.6; }
+        #pen-writer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; text-align: center; font-family: 'Creepster', cursive; font-size: 45px; color: var(--toxic); text-shadow: 0 0 20px #000; }
+        #player-master { display: none; opacity: 0; transition: opacity 1.5s ease; }
+        .radio-body { width: 750px; height: 750px; background-color: #111; border-radius: 50px; position: relative; overflow: hidden; font-family: 'Syncopate', sans-serif; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9); }
+        .snake-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .snake-piece { position: absolute; width: 180px; height: 180px; filter: blur(35px); opacity: 0.7; border-radius: 50%; }
+        .red-snake { background: var(--red); box-shadow: 0 0 60px var(--red); }
+        .turq-snake { background: var(--cyan); box-shadow: 0 0 60px var(--cyan); }
+        @keyframes snakeMove750 { 0% { top: -90px; left: -90px; } 25% { top: -90px; left: 660px; } 50% { top: 660px; left: 660px; } 75% { top: 660px; left: -90px; } 100% { top: -90px; left: -90px; } }
+        .s1 { animation: snakeMove750 8s linear infinite 0s; }
+        .s2 { animation: snakeMove750 8s linear infinite -1.3s; }
+        .s3 { animation: snakeMove750 8s linear infinite -2.6s; }
+        .s4 { animation: snakeMove750 8s linear infinite -3.9s; }
+        .s5 { animation: snakeMove750 8s linear infinite -5.2s; }
+        .s6 { animation: snakeMove750 8s linear infinite -6.5s; }
+        .cover-wrapper { width: 380px; height: 380px; margin: 30px auto 10px; position: relative; z-index: 10; }
+        .main-art { width: 100%; height: 100%; border-radius: 40px; background-image: url('https://xatimg.com/image/roYyXoT7hCWL.gif'); background-size: cover; background-position: center; border: 3px solid rgba(255, 255, 255, 0.1); }
+        .real-visualizer { display: block; margin: 10px auto; width: 550px; height: 80px; position: relative; z-index: 10; }
+        .btn-diablo { background: #ff0000; color: #000; border: none; padding: 10px 25px; font-family: 'Creepster', cursive; font-size: 20px; cursor: pointer; border-radius: 8px; box-shadow: 0 0 15px #ff0000; }
+        .gradient-text { background: linear-gradient(90deg, #fff, var(--cyan), var(--red), #fff); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; font-size: 22px; font-weight: bold; }
+        @keyframes shine { to { background-position: 200% center; } }
+    </style>
+</head>
+<body>
+<div id="intro-container"><div id="demone-bg"></div><div id="pen-writer"></div></div>
+<div id="player-master">
+    <div class="radio-body">
+        <div class="snake-container"><div class="snake-piece red-snake s1"></div><div class="snake-piece turq-snake s2"></div><div class="snake-piece red-snake s3"></div><div class="snake-piece turq-snake s4"></div><div class="snake-piece red-snake s5"></div><div class="snake-piece turq-snake s6"></div></div>
+        <div class="cover-wrapper"><div id="art-gambe" class="main-art"></div></div>
+        <canvas id="visualizer" class="real-visualizer" width="550" height="80"></canvas>
+        <div style="text-align: center; padding: 0 40px; position: relative; z-index: 10;">
+            <div style="width: 100%; background: rgba(0,0,0,0.6); padding: 10px 0; border-radius: 15px; overflow: hidden;"><marquee behavior="scroll" direction="left" scrollamount="6"><span id="title-gambe" class="gradient-text">CUORE E GAMBE IN ASCOLTO...</span></marquee></div>
+            <div style="display:flex; justify-content:center; gap:20px; margin-top:15px;"><button class="btn-diablo" onclick="toggleRadio()">PLAY</button><button class="btn-diablo" onclick="location.reload()" style="background:#444; color:#fff;">OFF</button></div>
+            <p style="font-size: 11px; color: #ff0000; letter-spacing: 2px; margin-top: 15px; font-weight: bold;">CREATO DAL CARTAIO - EL DIABLO</p>
+        </div>
+        <audio id="radio-stream" crossorigin="anonymous"><source src="https://stm2.srvif.com:7198/;" type="audio/mpeg"></audio>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const introDiv = document.getElementById('intro-container'), playerDiv = document.getElementById('player-master'), audio = document.getElementById('radio-stream'), canvas = document.getElementById('visualizer'), ctx = canvas.getContext('2d'), penWriter = document.getElementById('pen-writer'), msg = "IL CARTAIO VI AUGURA BUON ASCOLTO.";
+    let audioCtx, analyser, source, dataArray, charIndex = 0, isPlaying = false;
+    function typeEffect() { if (charIndex < msg.length) { penWriter.textContent += msg.charAt(charIndex); charIndex++; setTimeout(typeEffect, 120); } else { setTimeout(startEverything, 1500); } }
+    function startEverything() { $(introDiv).fadeOut(800, function() { $(playerDiv).show().css('opacity', '1'); }); }
+    function toggleRadio() { if (!isPlaying) { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); analyser = audioCtx.createAnalyser(); source = audioCtx.createMediaElementSource(audio); source.connect(analyser); analyser.connect(audioCtx.destination); analyser.fftSize = 128; dataArray = new Uint8Array(analyser.frequencyBinCount); } audio.play(); isPlaying = true; document.querySelector('.btn-diablo').textContent = "PAUSE"; draw(); } else { audio.pause(); isPlaying = false; document.querySelector('.btn-diablo').textContent = "PLAY"; } }
+    function draw() { if(!isPlaying) return; requestAnimationFrame(draw); analyser.getByteFrequencyData(dataArray); ctx.clearRect(0, 0, canvas.width, canvas.height); const barCount = dataArray.length / 1.5, barWidth = (canvas.width / barCount); let x = 0; for (let i = 0; i < barCount; i++) { let barHeight = (dataArray[i] / 255) * canvas.height; ctx.fillStyle = barHeight > 60 ? '#ff0000' : '#00ffff'; ctx.fillRect(x, canvas.height - barHeight, barWidth - 3, barHeight); x += barWidth; } }
+    function updateInfo() { $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) { if (data.songtitle) { const title = data.songtitle.toUpperCase(); $('#title-gambe').text(title); $.getJSON("https://itunes.apple.com/search?term=" + encodeURIComponent(title) + "&limit=1&callback=?", function(res) { const img = res.results[0] ? res.results[0].artworkUrl100.replace('100x100', '600x600') : 'https://xatimg.com/image/roYyXoT7hCWL.gif'; $('#art-gambe').css('background-image', 'url(' + img + ')'); }); } }); }
+    window.onload = typeEffect; updateInfo(); setInterval(updateInfo, 10000);
+</script>
+</body>
+</html>
