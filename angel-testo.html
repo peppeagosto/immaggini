@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARENA DELLA MUSICA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+        }
+
+        /* Il canvas ora è sovrapposto e non sposta gli altri elementi */
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 1; /* Rimane sotto altri elementi se metti z-index superiore a loro */
+            pointer-events: none; /* Opzionale: permette di cliccare ciò che sta "sotto" */
+        }
+
+        /* Esempio di contenitore che NON viene spinto giù */
+        .content-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="content-overlay">
+    </div>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    let cw = canvas.width = window.innerWidth; [cite: 5]
+    let ch = canvas.height = window.innerHeight; [cite: 5]
+
+    const lines = ["BENVENUTI", "IN ARENA", "DELLA MUSICA"];
+    let particles = []; [cite: 6]
+    let fontSize = Math.min(cw * 0.07, 70);
+
+    const mouse = {
+        x: null, [cite: 7]
+        y: null, [cite: 7]
+        radius: 150 [cite: 7]
+    };
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX; [cite: 8]
+        mouse.y = e.clientY; [cite: 8]
+    });
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = Math.random() * cw; [cite: 10]
+            this.y = Math.random() * ch; [cite: 11]
+            this.baseX = x; [cite: 11]
+            this.baseY = y; [cite: 11]
+            this.size = 2;
+            this.color = color; [cite: 11]
+            this.vx = 0; [cite: 11]
+            this.vy = 0; [cite: 12]
+            this.friction = 0.9; [cite: 12]
+            this.ease = 0.15; [cite: 12]
+        }
+
+        draw() {
+            ctx.fillStyle = this.color; [cite: 13]
+            ctx.beginPath(); [cite: 14]
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); [cite: 14]
+            ctx.fill(); [cite: 14]
+        }
+
+        update() {
+            let dx = mouse.x - this.x; [cite: 14]
+            let dy = mouse.y - this.y; [cite: 15]
+            let distance = Math.sqrt(dx * dx + dy * dy); [cite: 15]
+
+            if (distance < mouse.radius) { [cite: 16]
+                let forceDirectionX = dx / distance; [cite: 16]
+                let forceDirectionY = dy / distance; [cite: 17]
+                let force = (mouse.radius - distance) / mouse.radius; [cite: 17]
+                this.vx -= forceDirectionX * force * 15; [cite: 19]
+                this.vy -= forceDirectionY * force * 15; [cite: 19]
+            }
+
+            this.vx += (this.baseX - this.x) * this.ease; [cite: 19]
+            this.vy += (this.baseY - this.y) * this.ease; [cite: 20]
+            this.vx *= this.friction; [cite: 20]
+            this.vy *= this.friction; [cite: 20]
+            this.x += this.vx; [cite: 20]
+            this.y += this.vy; [cite: 20]
+        }
+    }
+
+    function init() {
+        particles = []; [cite: 21]
+        ctx.font = `900 ${fontSize}px Orbitron`; [cite: 22]
+        ctx.textAlign = 'center'; [cite: 22]
+        ctx.textBaseline = 'middle'; [cite: 22]
+        
+        lines.forEach((line, index) => {
+            let yOffset = (index - (lines.length - 1) / 2) * (fontSize * 1.2);
+            ctx.fillText(line, cw / 2, ch / 2 + yOffset); [cite: 22]
+        });
+
+        const pixels = ctx.getImageData(0, 0, cw, ch).data; [cite: 23]
+        ctx.clearRect(0, 0, cw, ch); [cite: 23]
+
+        for (let y = 0; y < ch; y += 4) { [cite: 24]
+            for (let x = 0; x < cw; x += 4) { [cite: 24]
+                const index = (y * cw + x) * 4; [cite: 24]
+                const alpha = pixels[index + 3]; [cite: 25]
+                if (alpha > 128) { [cite: 25]
+                    let hue = (x / cw) * 360; [cite: 25]
+                    let color = `hsl(${hue}, 100%, 60%)`; [cite: 26]
+                    particles.push(new Particle(x, y, color)); [cite: 26]
+                }
+            }
+        }
+    }
+
+    function animate() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; [cite: 27]
+        ctx.fillRect(0, 0, cw, ch); [cite: 28]
+
+        for (let i = 0; i < particles.length; i++) { [cite: 28]
+            particles[i].update(); [cite: 29]
+            particles[i].draw(); [cite: 29]
+        }
+        requestAnimationFrame(animate); [cite: 29]
+    }
+
+    window.addEventListener('resize', () => {
+        cw = canvas.width = window.innerWidth; [cite: 30]
+        ch = canvas.height = window.innerHeight; [cite: 30]
+        fontSize = Math.min(cw * 0.07, 70); [cite: 30]
+        init(); [cite: 30]
+    });
+
+    init(); [cite: 31]
+    animate(); [cite: 31]
+</script>
+
+</body>
+</html>
