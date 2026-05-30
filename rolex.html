@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daytona Luxury - Meteo & Extra System</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root { --gold: #d4af37; --gold-bright: #f9e29c; --gold-dark: #a67c00; }
+        
+        body { margin: 0; padding: 0; background: transparent; font-family: 'Segoe UI', sans-serif;
+        display: flex; justify-content: center; align-items: center; height: 100vh; user-select: none; overflow: hidden; }
+
+        /* --- BOX 15PX ORO ANIMATO --- */
+        #player-wrapper { 
+            display: flex; flex-direction: column; width: 750px; height: 540px; 
+            background: rgba(10, 10, 10, 0.98); border-radius: 20px; 
+            border: 15px solid var(--gold); box-shadow: 0 0 60px rgba(0,0,0,1); 
+            overflow: hidden; position: relative; z-index: 10;
+            animation: gold-pulse 3s infinite alternate;
+        }
+        @keyframes gold-pulse {
+            0% { border-color: var(--gold-dark); box-shadow: 0 0 20px var(--gold-dark); }
+            100% { border-color: var(--gold-bright); box-shadow: 0 0 50px var(--gold-bright); }
+        }
+
+        /* --- ROLEX DAYTONA --- */
+        #woofer-container { width: 185px; height: 185px; border-radius: 50%; border: 5px solid var(--gold); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px var(--gold-dark); overflow: hidden; position: relative; background: #000; }
+        #rolex-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        #main-cover { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; z-index: 2; border-radius: 50%; }
+        .clock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; z-index: 11; }
+        .hour { width: 6px; height: 42px; background: var(--gold); border-radius: 3px; }
+        .min { width: 4px; height: 65px; background: var(--gold); border-radius: 2px; }
+        .sec { width: 1px; height: 75px; background: #ff0000; }
+        #date-box { position: absolute; right: 32px; top: 50%; transform: translateY(-50%); background: #000; border: 1px solid var(--gold); color: var(--gold); font-size: 13px; font-weight: 900; width: 26px; z-index: 12; text-align: center; }
+
+        /* --- VIDEO & ZOOM --- */
+        .right-panel { width: 55%; background: #000; position: relative; overflow: hidden; border-left: 1px solid var(--gold-dark); }
+        #v-source { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.5s; }
+        #v-source.zoomed { transform: scale(1.5); }
+
+        /* --- EQ --- */
+        #eq-container { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 90%; height: 40px; display: flex; align-items: flex-end; gap: 2px; z-index: 20; }
+        .bar { flex: 1; background: var(--gold); min-height: 2px; transition: height 0.05s ease; border-radius: 1px 1px 0 0; opacity: 0.8; }
+
+        /* --- BOTTONI --- */
+        .controls-row { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; margin-top: 10px; }
+        .round-btn { width: 55px; height: 55px; border-radius: 50%; border: 3px solid var(--gold); background: radial-gradient(circle, var(--gold-bright), var(--gold-dark)); color: #000; font-weight: 900; cursor: pointer; font-size: 10px; }
+        .bottom-bar { display: flex; gap: 4px; width: 100%; height: 70px; background: rgba(0,0,0,0.9); border-top: 15px solid var(--gold-dark); padding: 5px; box-sizing: border-box; }
+        .rect-btn { flex: 1; height: 100%; border: 1px solid var(--gold); border-radius: 4px; color: var(--gold); font-size: 8px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; }
+
+        #internal-notify { position: absolute; top: -150px; left: 50%; transform: translateX(-50%); width: 80%; background: rgba(0,0,0,0.95); border: 2px solid var(--gold); padding: 12px; border-radius: 10px; text-align: center; z-index: 2000; transition: 0.5s; opacity: 0; color: var(--gold); font-weight: 900; }
+        #internal-notify.show { top: 90px; opacity: 1; }
+        .top-bar { display: flex; align-items: center; justify-content: center; height: 80px; background: rgba(0,0,0,0.7); border-bottom: 2px solid var(--gold-dark); }
+        .marquee-box { width: 90%; height: 45px; overflow: hidden; border: 2px solid var(--gold); background: #000; display: flex; align-items: center; position: relative; }
+        #track-name { position: absolute; white-space: nowrap; color: var(--gold); font-weight: bold; animation: scroll 12s linear infinite; padding-left: 100%; font-size: 16px; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .main-content { display: flex; height: 390px; }
+        .left-panel { width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<div id="player-wrapper">
+    <div id="internal-notify"></div>
+    <div class="top-bar">
+        <div class="marquee-box"><div id="track-name">✨ IL CARTAIO TI AUGURA BUON ASCOLTO 🎧... ✨ IL CARTAIO TI AUGURA BUON ASCOLTO 🎧... ✨</div></div>
+    </div>
+
+    <div class="main-content">
+        <div class="left-panel">
+            <div id="woofer-container">
+                <img id="rolex-bg" src="https://xatimg.com/image/SrTeaszogzqV.png">
+                <img id="main-cover" src="">
+                <div class="clock-overlay">
+                    <div id="date-box">30</div>
+                    <div id="h-hand" class="hand hour"></div>
+                    <div id="m-hand" class="hand min"></div>
+                    <div id="s-hand" class="hand sec"></div>
+                </div>
+            </div>
+            <div class="controls-row">
+                <button class="round-btn" onclick="startSystem()">PLAY</button>
+                <input type="range" id="vol" min="0" max="1" step="0.01" value="0.5" oninput="setVol(this.value)">
+                <button class="round-btn" onclick="stopSystem()">STOP</button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <video id="v-source" loop playsinline muted autoplay>
+                <source src="https://peppeagosto.github.io/immaggini/sorriso3.mp4" type="video/mp4">
+            </video>
+            <div id="eq-container"></div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="rect-btn" onclick="getWeather()">METEO</div>
+        <div class="rect-btn" onclick="getOroscopo()">OROSCOPO</div>
+        <div class="rect-btn" onclick="getCity()">CITTÀ</div>
+        <div class="rect-btn" onclick="getFullDate()">DATARIO</div>
+        <div class="rect-btn" onclick="toggleZoom()">VIDEO ZOOM</div>
+        <div class="rect-btn" id="btnTitles" onclick="toggleTitles()">TITOLI OFF</div>
+        <div class="rect-btn" onclick="extraSystem()">EXTRA</div>
+    </div>
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+
+<script>
+    const aud = document.getElementById("audio"), vid = document.getElementById("v-source"), notify = document.getElementById("internal-notify"), mCover = document.getElementById("main-cover"), rBg = document.getElementById("rolex-bg"), eqCont = document.getElementById("eq-container");
+    let isP = false, titlesActive = false, aCtx, anls, dArr, currentTrack = "", countdownTimer;
+    const S_URL = "https://stm2.srvif.com:7198/;type=mp3";
+
+    for(let i=0; i<30; i++) { let b = document.createElement('div'); b.className = 'bar'; eqCont.appendChild(b); }
+    const bars = document.querySelectorAll('.bar');
+
+    function sysMsg(t, keep = false) { notify.innerHTML = t; notify.classList.add("show"); if(!keep) setTimeout(() => notify.classList.remove("show"), 4500); }
+
+    // METEO DINAMICO PERFETTO
+    function getWeather() {
+        sysMsg("🌤️ CONNESSIONE SATELLITARE...");
+        $.getJSON('https://ipapi.co/jsonp/?callback=?', function(loc) {
+            $.getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&current_weather=true`, function(w) {
+                const temp = Math.round(w.current_weather.temperature);
+                const code = w.current_weather.weathercode;
+                let sky = code < 3 ? "☀️ SOLE" : code < 50 ? "☁️ NUVOLOSO" : "🌧️ PIOGGIA";
+                sysMsg(`📺 METEO ${loc.city.toUpperCase()}<br>${sky} - 🌡️ TEMP: ${temp}°C`);
+            });
+        });
+    }
+
+    // EXTRA SYSTEM
+    function extraSystem() {
+        sysMsg("👑 CARTAIO ENGINE: ONLINE<br>⭐ COVER DB: ACTIVE<br>⭐ ROLEX SYNC: OK");
+    }
+
+    function toggleZoom() { 
+        vid.classList.add("zoomed"); 
+        sysMsg("🔍 ZOOM VIDEO ATTIVO (4s)");
+        setTimeout(() => vid.classList.remove("zoomed"), 4000);
+    }
+
+    function toggleTitles() {
+        titlesActive = !titlesActive;
+        document.getElementById("btnTitles").innerText = titlesActive ? "TITOLI ON" : "TITOLI OFF";
+        if(titlesActive) updateMetadata(true); else notify.classList.remove("show");
+    }
+
+    async function startSystem() {
+        if (isP) return; isP = true;
+        vid.muted = false; vid.play();
+        sysMsg("🚀 CARICAMENTO... 7s");
+        countdownTimer = setTimeout(async () => {
+            if (!isP) return;
+            vid.muted = true;
+            try {
+                if (!aCtx) {
+                    aCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    anls = aCtx.createAnalyser(); anls.fftSize = 128;
+                    const s = aCtx.createMediaElementSource(aud); s.connect(anls); anls.connect(aCtx.destination);
+                    dArr = new Uint8Array(anls.frequencyBinCount);
+                }
+                if (aCtx.state === 'suspended') await aCtx.resume();
+                aud.src = S_URL; aud.volume = document.getElementById("vol").value;
+                await aud.play(); render(); updateMetadata();
+                sysMsg("🎵 RADIO ON AIR");
+            } catch (e) { isP = false; sysMsg("❌ ERRORE STREAM"); }
+        }, 7000);
+    }
+
+    function stopSystem() {
+        isP = false; clearTimeout(countdownTimer); aud.pause(); aud.src = "";
+        vid.pause(); vid.muted = true; mCover.style.opacity = "0"; rBg.style.opacity = "1";
+        sysMsg("⏹️ STANDBY"); bars.forEach(b => b.style.height = '2px');
+    }
+
+    function setVol(v) { if(aud) aud.volume = v; }
+
+    function render() {
+        if (!isP) return; requestAnimationFrame(render);
+        anls.getByteFrequencyData(dArr);
+        let avg = dArr.reduce((a, b) => a + b, 0) / dArr.length;
+        document.getElementById("woofer-container").style.transform = `scale(${1 + (avg / 250)})`;
+        bars.forEach((b, i) => { let h = dArr[i] / 4; b.style.height = (h < 2 ? 2 : h) + 'px'; });
+    }
+
+    function updateMetadata(force = false) {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+            if (data.songtitle) {
+                const title = data.songtitle.toUpperCase();
+                if (titlesActive || force) sysMsg("🎵 IN ONDA:<br>" + title, true);
+                if (currentTrack !== title) {
+                    currentTrack = title;
+                    $.getJSON("https://itunes.apple.com/search?term="+encodeURIComponent(title)+"&limit=1&callback=?", function(res) {
+                        if (res.results && res.results[0]) {
+                            mCover.src = res.results[0].artworkUrl100.replace('100x100', '600x600');
+                            mCover.style.opacity = "0.7"; rBg.style.opacity = "0.3";
+                        } else { mCover.style.opacity = "0"; rBg.style.opacity = "1"; }
+                    });
+                }
+            }
+        });
+    }
+    
+    function updateClock() {
+        const d = new Date();
+        document.getElementById("h-hand").style.transform = `translateX(-50%) rotate(${(d.getHours() % 12) * 30 + (d.getMinutes() / 2)}deg)`;
+        document.getElementById("m-hand").style.transform = `translateX(-50%) rotate(${d.getMinutes() * 6}deg)`;
+        document.getElementById("s-hand").style.transform = `translateX(-50%) rotate(${d.getSeconds() * 6}deg)`;
+        document.getElementById("date-box").innerText = d.getDate();
+    }
+    setInterval(updateClock, 1000); updateClock();
+    setInterval(() => { if(isP) updateMetadata(); }, 15000);
+
+    function getOroscopo() { sysMsg("🔮 GEMELLI: Fortuna Oro dal Cartaio!"); }
+    function getCity() { $.getJSON('https://ipapi.co/jsonp/?callback=?', l => sysMsg(`📍 CITTÀ: ${l.city.toUpperCase()}`)); }
+    function getFullDate() { sysMsg(`📅 ${new Date().toLocaleDateString('it-IT', {weekday:'long', day:'numeric', month:'long'}).toUpperCase()}`); }
+</script>
+</body>
+</html>
