@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palinsesto & Color Matrix</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* --- PANNELLI A SCOMPARSA (HOVER SUI BORDI) --- */
+        .panel {
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            width: 320px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(10px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Sinistro (Colori) */
+        #panel-left {
+            left: 0;
+            transform: translateX(-95%); /* Lascia solo un piccolissimo bordo visibile */
+            border-right: 3px solid #ff3366;
+            box-shadow: 5px 0 25px rgba(255, 51, 102, 0.2);
+        }
+
+        #panel-left:hover {
+            transform: translateX(0);
+        }
+
+        /* Destro (Video) */
+        #panel-right {
+            right: 0;
+            transform: translateX(95%);
+            border-left: 3px solid #00f0ff;
+            box-shadow: -5px 0 25px rgba(0, 240, 255, 0.2);
+        }
+
+        #panel-right:hover {
+            transform: translateX(0);
+        }
+
+        /* Titoli dei Pannelli */
+        .panel-title {
+            color: #fff;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        /* --- CONTENUTO SINISTRO: 15 PALLINE --- */
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .ball {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .ball:hover {
+            transform: scale(1.15);
+        }
+
+        .ball:active {
+            transform: scale(0.95);
+        }
+
+        /* --- CONTENUTO DESTRO: VIDEO PALINSESTO --- */
+        .video-wrapper {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        .video-info {
+            margin-top: 15px;
+            color: #888;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* Centro Area di Test (opzionale) */
+        .center-notice {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #444;
+            text-align: center;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="center-notice">
+        ← Avvicinati ai bordi per aprire i pannelli →
+    </div>
+
+    <!-- PANNELLO SINISTRO: COLORI CALDI -->
+    <div id="panel-left" class="panel">
+        <div class="panel-title">Color Matrix</div>
+        <div class="matrix-container" id="ball-container">
+            <!-- Generate via JS -->
+        </div>
+    </div>
+
+    <!-- PANNELLO DESTRO: VIDEO 24 ORE -->
+    <div id="panel-right" class="panel">
+        <div class="panel-title">Palinsesto 24h</div>
+        <div class="video-wrapper">
+            <video id="daily-video" controls autoplay muted loop>
+                <source src="" type="video/mp4">
+                Il tuo browser non supporta i video.
+            </video>
+        </div>
+        <div class="video-info" id="video-status">Aggiornamento automatico ogni 24h</div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURAZIONE VIDEO (Metti i tuoi link qua)
+        // ==========================================
+        const videoPlaylist = [
+            "https://www.w3schools.com/html/mov_bbb.mp4", // Video Giorno 1
+            "https://www.w3schools.com/html/movie.mp4",   // Video Giorno 2
+            // Aggiungi tutti i video che vuoi, gira in automatico
+        ];
+
+        // ==========================================
+        // LOGICA PALINSESTO 24 ORE
+        // ==========================================
+        function loadDailyVideo() {
+            const videoElement = document.getElementById('daily-video');
+            
+            // Calcolo del giorno dell'anno corrente (da 0 a 365)
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            // Seleziona il video usando il modulo per evitare di andare fuori dall'array
+            const videoIndex = dayOfYear % videoPlaylist.length;
+            
+            videoElement.src = videoPlaylist[videoIndex];
+            videoElement.load();
+        }
+
+        // ==========================================
+        // LOGICA 15 PALLINE COLORI VIVI / CALDI
+        // ==========================================
+        // Palette iniziale di base (Colori caldi e vivi)
+        const initialWarmColors = [
+            "#ff0055", "#ff3300", "#ff6600", "#ffaa00", "#ffcc00",
+            "#ff00aa", "#d400ff", "#ff0077", "#ff4444", "#ff5500",
+            "#e60067", "#ff1a1a", "#ff8800", "#ff2a6d", "#ff5e00"
+        ];
+
+        // Funzione per generare un singolo colore vivo/caldo random al click
+        function getRandomWarmColor() {
+            const h = Math.floor(Math.random() * 40) + 340; // Spettro tra rosso, fucsia e arancio (340° a 20°)
+            const s = Math.floor(Math.random() * 20) + 80;  // Saturazione alta (80% - 100%)
+            const l = Math.floor(Math.random() * 20) + 50;  // Luminosità viva (50% - 70%)
+            return `hsl(${h % 360}, ${s}%, ${l}%)`;
+        }
+
+        function createColorMatrix() {
+            const container = document.getElementById('ball-container');
+            
+            for (let i = 0; i < 15; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                
+                // Setta colore iniziale
+                ball.style.backgroundColor = initialWarmColors[i];
+                ball.style.boxShadow = `0 4px 14px ${initialWarmColors[i]}66`;
+                
+                // Evento click cambia colore
+                ball.addEventListener('click', function() {
+                    const newColor = getRandomWarmColor();
+                    ball.style.backgroundColor = newColor;
+                    ball.style.boxShadow = `0 6px 20px ${newColor}`;
+                    
+                    // Effetto colpo al click
+                    ball.style.transform = 'scale(0.85)';
+                    setTimeout(() => {
+                        ball.style.transform = '';
+                    }, 150);
+                });
+                
+                container.appendChild(ball);
+            }
+        }
+
+        // Inizializza tutto al caricamento della pagina
+        window.onload = function() {
+            loadDailyVideo();
+            createColorMatrix();
+        };
+    </script>
+</body>
+</html>
