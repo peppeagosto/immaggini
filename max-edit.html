@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Centrato</title>
+    <title>Video Centrato xat</title>
     <style>
-        /* Reset totale per garantire la massima trasparenza */
+        /* Reset totale per garantire la trasparenza su xat */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: transparent !important; /* Rende la pagina trasparente */
-            overflow: hidden; /* Elimina eventuali barre di scorrimento */
-            display: flex;
-            justify-content: center; /* Centra orizzontalmente */
-            align-items: center;     /* Centra verticalmente */
+            background-color: transparent !important;
+            overflow: hidden;
         }
 
-        /* Container del video con le tue modifiche applicate */
+        /* Container calibrato per la inner box di xat */
         .video-container {
             width: 100%;
-            max-width: 700px; /* Sostituito 800px con i tuoi 700px */
-            height: 780px;    /* Aggiunta l'altezza richiesta */
-            margin: 0 auto;   /* Centratura orizzontale di sicurezza */
+            max-width: 728px; /* Larghezza standard xat */
+            height: 480px;    /* Altezza precisa per lo sfondo piccolo */
+            margin: 0 auto;   /* Centra perfettamente in orizzontale */
+            
+            /* Spinge il video verso il basso per saltare la barra superiore di xat */
+            margin-top: 54px; 
+            
             display: flex;
             justify-content: center;
             align-items: center;
             background: transparent;
+            position: relative;
         }
 
-        /* Stile del video */
+        /* Stile del video (mantiene le proporzioni della ragazza) */
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Mantiene il video proporzionato dentro i 780px di altezza senza distorcerlo */
+            object-fit: cover; /* Taglia i lati senza distorcere l'immagine */
             display: block;
             background: transparent;
         }
@@ -43,11 +45,22 @@
 <body>
 
     <div class="video-container">
-        <video autoplay loop muted playsinline>
-            <source src="https://peppeagosto.github.io/immaggini/roberta.mp4" type="video/mp4">
+        <video id="xat-video" autoplay loop muted playsinline>
+            <source src="https://i.imgur.com/Fay5uFe.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var video = document.getElementById('xat-video');
+            if (video) {
+                video.play().catch(function(error) {
+                    console.log("Autoplay assistito avviato per xat.");
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
