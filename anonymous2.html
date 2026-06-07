@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Centrato</title>
+    <style>
+        /* Reset totale per garantire la massima trasparenza */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent !important; /* Rende la pagina trasparente */
+            overflow: hidden; /* Elimina eventuali barre di scorrimento */
+            display: flex;
+            justify-content: center; /* Centra orizzontalmente */
+            align-items: center;     /* Centra verticalmente */
+        }
+
+        /* Container del video con le tue modifiche applicate */
+        .video-container {
+            width: 100%;
+            max-width: 700px; /* Sostituito 800px con i tuoi 700px */
+            height: 780px;    /* Aggiunta l'altezza richiesta */
+            margin: 0 auto;   /* Centratura orizzontale di sicurezza */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+
+        /* Stile del video */
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mantiene il video proporzionato dentro i 780px di altezza senza distorcerlo */
+            display: block;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <video autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/anonymous2.mp4" type="video/mp4">
+            Il tuo browser non supporta il tag video.
+        </video>
+    </div>
+
+</body>
+</html>
