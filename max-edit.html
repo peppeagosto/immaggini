@@ -29,14 +29,13 @@
             justify-content: center;
             align-items: center;
             background: transparent;
-            position: relative;
         }
 
         /* Stile del video (mantiene le proporzioni della ragazza) */
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Taglia i lati senza distorcere l'immagine */
+            object-fit: cover; /* Taglia i lati senza distorcere o allungare l'immagine */
             display: block;
             background: transparent;
         }
@@ -45,22 +44,11 @@
 <body>
 
     <div class="video-container">
-        <video id="xat-video" autoplay loop muted playsinline>
-            <source src="https://i.imgur.com/Fay5uFe.mp4" type="video/mp4">
+        <video autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/roberta.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var video = document.getElementById('xat-video');
-            if (video) {
-                video.play().catch(function(error) {
-                    console.log("Autoplay assistito avviato per xat.");
-                });
-            }
-        });
-    </script>
 
 </body>
 </html>
