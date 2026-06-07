@@ -18,10 +18,12 @@
             align-items: center;     /* Centra verticalmente */
         }
 
-        /* Container del video */
+        /* Container del video con le tue modifiche applicate */
         .video-container {
             width: 100%;
-            max-width: 800px; /* Puoi modificare la larghezza massima come preferisci */
+            max-width: 700px; /* Sostituito 800px con i tuoi 700px */
+            height: 780px;    /* Aggiunta l'altezza richiesta */
+            margin: 0 auto;   /* Centratura orizzontale di sicurezza */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,7 +33,8 @@
         /* Stile del video */
         video {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover; /* Mantiene il video proporzionato dentro i 780px di altezza senza distorcerlo */
             display: block;
             background: transparent;
         }
@@ -40,7 +43,6 @@
 <body>
 
     <div class="video-container">
-        <!-- Unico video centrale impostato in loop e autoplay -->
         <video autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/roberta.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
