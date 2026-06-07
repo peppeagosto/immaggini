@@ -1,50 +1,48 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Centrato</title>
-    <style>
-        /* Reset totale per garantire la massima trasparenza */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: transparent !important; /* Rende la pagina trasparente */
-            overflow: hidden; /* Elimina eventuali barre di scorrimento */
-            display: flex;
-            justify-content: center; /* Centra orizzontalmente */
-            align-items: center;     /* Centra verticalmente */
+<!DOCTYPE html><html lang="it">
+<head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Video Centrato</title>    
+    <style>        
+        /* Reset totale per garantire la massima trasparenza */        
+        html, body {            
+            margin: 0;            
+            padding: 0;            
+            width: 100%;            
+            height: 100%;            
+            background-color: transparent !important; /* Rende la pagina trasparente */            
+            overflow: hidden; /* Elimina eventuali barre di scorrimento */            
+            display: flex;            
+            justify-content: center; /* Centra orizzontalmente */            
+            align-items: center;     /* Centra verticalmente */        
         }
-
-        /* Container del video */
-        .video-container {
-            width: 100%;
-            max-width: 800px; /* Puoi modificare la larghezza massima come preferisci */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: transparent;
+        
+        /* Container del video */        
+        .video-container {            
+            width: 100%;            
+            max-width: 800px; /* Puoi modificare la larghezza massima come preferisci */            
+            display: flex;            
+            justify-content: center;            
+            align-items: center;            
+            background: transparent;        
         }
-
-        /* Stile del video */
-        video {
-            width: 100%;
-            height: auto;
-            display: block;
-            background: transparent;
-        }
+        
+        /* Stile del video */        
+        video {            
+            width: 100%;            
+            height: auto;            
+            display: block;            
+            background: transparent;        
+        }    
     </style>
 </head>
 <body>
 
-    <div class="video-container">
-        <!-- Unico video centrale impostato in loop e autoplay -->
-        <video autoplay loop muted playsinline>
-            <source src="https://peppeagosto.github.io/immaggini/roberta.mp4" type="video/mp4">
-            Il tuo browser non supporta il tag video.
-        </video>
+    <div class="video-container">        
+        <video autoplay loop muted playsinline>            
+            <source src="https://peppeagosto.github.io/immaggini/roberta.mp4" type="video/mp4">            
+            Il tuo browser non supporta il tag video.        
+        </video>    
     </div>
 
 </body>
