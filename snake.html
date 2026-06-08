@@ -1,0 +1,117 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>IL CARTAIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+<style>
+/* Sfondo totale a tutto schermo con l'animazione arcobaleno */
+body {    
+    margin: 0;    
+    background: #0a0a0c;    
+    display: flex;    
+    justify-content: center;    
+    align-items: center;    
+    height: 100vh;    
+    overflow: hidden;
+    position: relative;
+}
+
+/* IL MOTORE DELLO SFONDO GRANDE: riempie tutta la pagina di colori animati */
+body::before {
+    content: "";
+    position: absolute;
+    width: 150vw; /* Più grande dello schermo per far girare il gradiente senza angoli vuoti */
+    height: 150vh;
+    top: -25vh;
+    left: -25vw;
+    background: conic-gradient(red, orange, yellow, lime, cyan, blue, purple, magenta, red);
+    animation: spinCompleto 12s linear infinite;
+    z-index: -2;
+    opacity: 0.65; /* Regola l'intensità dei colori sullo sfondo da qui */
+}
+
+/* Effetto di sfocatura e oscuramento per non accecare e far risaltare la chat */
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 30%, rgba(10,10,12,0.85) 90%);
+    backdrop-filter: blur(40px); /* Sfoca l'arcobaleno rendendolo un super glow morbido */
+    z-index: -1;
+}
+
+@keyframes spinCompleto {
+    to { transform: rotate(360deg); }
+}
+
+/* IL CONTENITORE PRINCIPALE (Centrato) */
+.container {    
+    position: relative;    
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* LA CHAT DA 480PX (Resta ferma e bloccata qui) */
+.chat-area-480 {    
+    width: 480px;    
+    height: 500px; /* Puoi cambiare l'altezza della chat come preferisci */
+    position: relative;
+    z-index: 2;    
+    display: flex;    
+    justify-content: center;    
+    align-items: center;      
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.85); /* Sfondo scuro dentro la chat per leggere bene */
+    box-shadow: 
+        0 0 30px rgba(250, 0, 0, 0.6),
+        0 0 60px rgba(255, 0, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 0, 76, 0.8);
+    animation: pulse 4s infinite alternate;
+}
+
+@keyframes pulse {    
+    from { transform: scale(1); box-shadow: 0 0 30px rgba(250, 0, 0, 0.6), 0 0 60px rgba(255, 0, 255, 0.4); }    
+    to   { transform: scale(1.015); box-shadow: 0 0 45px rgba(0, 243, 255, 0.8), 0 0 90px rgba(255, 0, 255, 0.6); }
+}
+
+/* IL TESTO NOSIFER (Fluttua sopra la chat o lo sfondo) */
+.cartaio-text {    
+    font-family: 'Nosifer', cursive;    
+    font-size: 55px;    
+    color: #ff004c;    
+    letter-spacing: 8px;    
+    z-index: 3;    
+    margin-bottom: 30px; /* Spazio tra il testo e la chat sotto */
+    text-shadow:        
+        0 0 25px red,        
+        0 0 50px orange,        
+        0 0 75px magenta;    
+    animation: float 5s infinite ease-in-out;
+}
+
+@keyframes float {    
+    0%, 100% { transform: translateY(0); }    
+    50%      { transform: translateY(-12px); }}
+</style>
+</head>
+<body>
+
+<div class="container">    
+    <!-- TESTO CORNICE -->
+    <div class="cartaio-text">IL CARTAIO</div>
+
+    <!-- BOX CHAT FISSO A 480PX -->
+    <div class="chat-area-480">
+        <!-- Incolla il codice dell'iframe di xat o l'embed qui dentro -->
+        <span style="color: #666; font-family: sans-serif;">[ CHAT DI XAT DA 480PX QUI ]</span>
+    </div>  
+</div>
+
+</body>
+</html>
