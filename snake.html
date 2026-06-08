@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Solo Effetto Snake per Xat</title>
+<title>Solo Effetto Snake per Xat - Bordi Allineati</title>
 <style>
 /* Sfondo della pagina totale */
 body {    
@@ -21,12 +21,12 @@ body {
     box-sizing: border-box;
 }
 
-/* Bagliore soft arcobaleno di sfondo (Lontano dietro la chat) */
+/* Bagliore soft arcobaleno di sfondo */
 body::before {
     content: "";
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 140vw;
+    height: 140vh;
     background: conic-gradient(from 0deg, red, orange, yellow, lime, cyan, blue, purple, magenta, red);
     animation: rotazioneSfondo 25s linear infinite;
     z-index: -2;
@@ -38,16 +38,14 @@ body::before {
     to { transform: rotate(360deg); }
 }
 
-/* CONTENITORE PRINCIPALE (Mantiene la chat e lo snake allineati) */
+/* CONTENITORE PRINCIPALE (Mantiene la chat e lo snake perfettamente sovrapposti) */
 .xat-container-layout {
     position: relative;
-    width: 645px;
-    height: 431px;
+    width: 845px;
+    height: 531px;
 }
 
-/* QUI VA IL TUO CODICE DELLA CHAT REALE DI XAT 
-   (Sia esso un iframe, un object o il div dell'applicazione)
-*/
+/* Iframe o Chat Reale di Xat */
 .xat-container-layout iframe, 
 .xat-container-layout object, 
 .xat-container-layout embed {
@@ -57,18 +55,18 @@ body::before {
     width: 845px !important;
     height: 531px !important;
     border: none;
-    z-index: 1; /* Sta sotto all'effetto snake */
+    z-index: 1; 
 }
 
-/* MASCHERA TRASPARENTE SVG SOVRAPPOSTA (Prende le misure esatte di Xat) */
+/* MASCHERA TRASPARENTE SVG SOVRAPPOSTA (Bordi precisi 845x531) */
 .snake-svg-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 845px;
     height: 531px;
-    z-index: 10; /* Sta sopra alla chat grigia di default */
-    pointer-events: none; /* Rende lo snake invisibile ai click per farti usare la chat liberamente */
+    z-index: 10; 
+    pointer-events: none; /* Rende lo snake cliccabile e trasparente per usare la chat */
 }
 
 /* Stile dei serpenti al neon */
@@ -77,13 +75,14 @@ body::before {
     stroke-width: 4px;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-dasharray: 220 650; 
-    animation: snakeMoveInterno 4s linear infinite;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+    /* Creato un loop armonioso lungo il perimetro totale di ~2750px */
+    stroke-dasharray: 400 900; 
+    animation: snakeMoveInterno 6s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
 }
 
 @keyframes snakeMoveInterno {
-    0% { stroke-dashoffset: 1300; }
+    0% { stroke-dashoffset: 2600; }
     100% { stroke-dashoffset: 0; }
 }
 
@@ -137,31 +136,10 @@ body::before {
         </defs>
 
         <path class="snake-line rainbow-grad" 
-              d="M 12 11 
-                 L 46 11 L 56 22 L 234 22 L 244 11 L 614 11 
-                 A 10 10 0 0 1 624 21 
-                 L 624 352 L 588 352 L 588 381 L 168 381 L 168 355 L 12 355 
-                 A 6 6 0 0 1 6 349 L 6 17 A 6 6 0 0 1 12 11 Z" />
+              d="M 2 2 L 843 2 L 843 529 L 2 529 Z" />
 
-        <path class="snake-line rainbow-grad" style="animation-delay: -1.3s;"
-              d="M 638 11 
-                 L 833 11 
-                 A 10 10 0 0 1 843 21 
-                 L 843 355 L 795 355 L 795 381 L 638 381 
-                 A 6 6 0 0 1 632 375 L 632 17 A 6 6 0 0 1 638 11 Z" />
-
-        <path class="snake-line rainbow-grad" style="animation-delay: -2.6s;"
-              d="M 4 412
-                 L 567 412
-                 A 6 6 0 0 1 573 418
-                 L 573 506
-                 A 6 6 0 0 1 567 512
-                 L 395 512
-                 L 383 500
-                 L 56 500
-                 L 44 512
-                 L 4 512
-                 Z" />
+        <path class="snake-line rainbow-grad" style="animation-delay: -3s;"
+              d="M 2 2 L 843 2 L 843 529 L 2 529 Z" />
     </svg>
 </div>
 
