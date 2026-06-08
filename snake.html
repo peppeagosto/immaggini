@@ -1,116 +1,194 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>IL CARTAIO</title>
-<link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+<title>IL CARTAIO - MEGA SNAKE 30PX</title>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Poppins:wght@900&display=swap" rel="stylesheet">
 <style>
-/* Sfondo totale a tutto schermo con l'animazione arcobaleno */
+/* SFONDO TOTALE */
 body {    
     margin: 0;    
-    background: #0a0a0c;    
+    background: #050507;    
     display: flex;    
     justify-content: center;    
     align-items: center;    
     height: 100vh;    
     overflow: hidden;
     position: relative;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* IL MOTORE DELLO SFONDO GRANDE: riempie tutta la pagina di colori animati */
+/* Bagliore soft arcobaleno nel grande */
 body::before {
     content: "";
     position: absolute;
-    width: 150vw; /* Più grande dello schermo per far girare il gradiente senza angoli vuoti */
-    height: 150vh;
-    top: -25vh;
-    left: -25vw;
-    background: conic-gradient(red, orange, yellow, lime, cyan, blue, purple, magenta, red);
-    animation: spinCompleto 12s linear infinite;
+    width: 140vw;
+    height: 140vh;
+    background: conic-gradient(from 0deg, red, orange, yellow, lime, cyan, blue, purple, magenta, red);
+    animation: rotazioneSfondo 25s linear infinite;
     z-index: -2;
-    opacity: 0.65; /* Regola l'intensità dei colori sullo sfondo da qui */
+    filter: blur(90px);
+    opacity: 0.25;
 }
 
-/* Effetto di sfocatura e oscuramento per non accecare e far risaltare la chat */
-body::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(0,0,0,0.2) 30%, rgba(10,10,12,0.85) 90%);
-    backdrop-filter: blur(40px); /* Sfoca l'arcobaleno rendendolo un super glow morbido */
-    z-index: -1;
-}
-
-@keyframes spinCompleto {
+@keyframes rotazioneSfondo {
     to { transform: rotate(360deg); }
 }
 
-/* IL CONTENITORE PRINCIPALE (Centrato) */
+/* CONTENITORE GENERALE */
 .container {    
     position: relative;    
-    width: 100%;
-    max-width: 1200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     height: 100vh;
+    z-index: 2;
 }
 
-/* LA CHAT DA 480PX (Resta ferma e bloccata qui) */
-.chat-area-480 {    
-    width: 480px;    
-    height: 500px; /* Puoi cambiare l'altezza della chat come preferisci */
+/* =======================================================
+   IL CONTENITORE CON IL BORDO SNAKE DA 30PX
+   ======================================================= */
+.snake-border-box {
     position: relative;
-    z-index: 2;    
-    display: flex;    
-    justify-content: center;    
-    align-items: center;      
-    border-radius: 22px;
-    background: rgba(0, 0, 0, 0.85); /* Sfondo scuro dentro la chat per leggere bene */
-    box-shadow: 
-        0 0 30px rgba(250, 0, 0, 0.6),
-        0 0 60px rgba(255, 0, 255, 0.4),
-        inset 0 0 20px rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 0, 76, 0.8);
-    animation: pulse 4s infinite alternate;
+    width: 480px;  /* Larghezza fissa xat */
+    height: 480px; /* Altezza fissa xat */
+    border-radius: 28px;
+    overflow: hidden; 
+    
+    /* ABBIAMO MESSO 30PX DI SPESSORE PER IL BORDO */
+    padding: 30px; 
+    
+    box-shadow: 0 0 50px rgba(255, 0, 100, 0.5);
+    background: rgba(0, 0, 0, 0.5);
 }
 
-@keyframes pulse {    
-    from { transform: scale(1); box-shadow: 0 0 30px rgba(250, 0, 0, 0.6), 0 0 60px rgba(255, 0, 255, 0.4); }    
-    to   { transform: scale(1.015); box-shadow: 0 0 45px rgba(0, 243, 255, 0.8), 0 0 90px rgba(255, 0, 255, 0.6); }
+/* Il Serpente Arcobaleno che gira dietro (Spessore 30px visibile) */
+.snake-border-box::before {
+    content: "";
+    position: absolute;
+    width: 250%;
+    height: 250%;
+    top: -75%;
+    left: -75%;
+    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+    animation: snakeMove 2.5s linear infinite; /* Velocità del serpente */
+    z-index: 1;
 }
 
-/* IL TESTO NOSIFER (Fluttua sopra la chat o lo sfondo) */
+@keyframes snakeMove {
+    100% { transform: rotate(360deg); }
+}
+
+/* L'area interna protetta dove carichi l'immagine o la chat */
+.inner-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #0b0b0f; 
+    border-radius: 14px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.inner-content img, .inner-content iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+/* =======================================================
+   TESTI CHE CAMBIANO COLORE (CARTAIO E DIABLO)
+   ======================================================= */
+
+/* Testo Alto - IL CARTAIO */
 .cartaio-text {    
     font-family: 'Nosifer', cursive;    
-    font-size: 55px;    
-    color: #ff004c;    
-    letter-spacing: 8px;    
-    z-index: 3;    
-    margin-bottom: 30px; /* Spazio tra il testo e la chat sotto */
-    text-shadow:        
-        0 0 25px red,        
-        0 0 50px orange,        
-        0 0 75px magenta;    
-    animation: float 5s infinite ease-in-out;
+    font-size: 52px;    
+    letter-spacing: 6px;    
+    margin-bottom: 20px;
+    animation: fluttua 4s infinite ease-in-out, cambioColoreTesto 8s linear infinite;
 }
 
-@keyframes float {    
+/* Testo Basso - DIABLO */
+.diablo-text {
+    font-family: 'Nosifer', cursive;
+    font-size: 45px;
+    letter-spacing: 6px;
+    margin-top: 20px;
+    animation: fluttua 4s infinite ease-in-out reverse, cambioColoreTesto 8s linear infinite calc(-4s); /* Sfalsato */
+}
+
+/* Animazione unica per far cambiare colore ai testi continuamente */
+@keyframes cambioColoreTesto {
+    0% { color: #ff004c; text-shadow: 0 0 20px #ff004c, 0 0 40px #ff004c; }
+    25% { color: #00ffff; text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff; }
+    50% { color: #9d00ff; text-shadow: 0 0 20px #9d00ff, 0 0 40px #9d00ff; }
+    75% { color: #00ff22; text-shadow: 0 0 20px #00ff22, 0 0 40px #00ff22; }
+    100% { color: #ff004c; text-shadow: 0 0 20px #ff004c, 0 0 40px #ff004c; }
+}
+
+@keyframes fluttua {    
     0%, 100% { transform: translateY(0); }    
-    50%      { transform: translateY(-12px); }}
+    50%      { transform: translateY(-10px); }
+}
+
+/* =======================================================
+   SMILE DI XAT DI DECORAZIONE
+   ======================================================= */
+.xat-smile {
+    position: absolute;
+    font-size: 50px;
+    user-select: none;
+    z-index: 1;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+}
+
+/* Posizioni degli smile attorno al centro */
+.smile-fuoco { top: 12%; left: 12%; animation: gira 7s linear infinite; }
+.smile-diavolo { top: 15%; right: 12%; animation: molleggia 4s infinite ease-in-out; }
+.smile-bomba { bottom: 18%; left: 10%; animation: molleggia 5s infinite ease-in-out; }
+.smile-teschio { bottom: 15%; right: 10%; animation: gira 6s linear infinite reverse; }
+.smile-dollaro { top: 45%; left: 8%; animation: gira 9s linear infinite; }
+
+@keyframes gira {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes molleggia {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.15) translateY(-12px); }
+}
 </style>
 </head>
 <body>
 
+<!-- SMILE TRADIZIONALI XAT -->
+<div class="xat-smile smile-fuoco">🔥</div>
+<div class="xat-smile smile-diavolo">😈</div>
+<div class="xat-smile smile-bomba">💣</div>
+<div class="xat-smile smile-teschio">💀</div>
+<div class="xat-smile smile-dollaro">💵</div>
+
 <div class="container">    
-    <!-- TESTO CORNICE -->
+    <!-- TESTO IN ALTO -->
     <div class="cartaio-text">IL CARTAIO</div>
 
-    <!-- BOX CHAT FISSO A 480PX -->
-    <div class="chat-area-480">
-        <!-- Incolla il codice dell'iframe di xat o l'embed qui dentro -->
-        <span style="color: #666; font-family: sans-serif;">[ CHAT DI XAT DA 480PX QUI ]</span>
+    <!-- IL RETTANGOLO CON IL BORDO SNAKE DA 30PX -->
+    <div class="snake-border-box">
+        <div class="inner-content">
+            <!-- Qui dentro l'immagine o l'iframe occuperanno perfettamente lo spazio da 480px -->
+            <!-- Se vuoi testare con un'immagine inserisci il tag qui -->
+            <span style="color: #fff; font-weight: bold; font-size: 18px; letter-spacing: 1px;">[ CHAT / IMG 480PX ]</span>
+        </div>
     </div>  
+
+    <!-- TESTO IN BASSO -->
+    <div class="diablo-text">DIABLO</div>
 </div>
 
 </body>
