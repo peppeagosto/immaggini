@@ -2,10 +2,9 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>snake</title>
-<link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Poppins:wght@900&display=swap" rel="stylesheet">
+<title>Solo Effetto Snake per Xat</title>
 <style>
-/* SFONDO TOTALE */
+/* Sfondo della pagina totale */
 body {    
     margin: 0;    
     background: #050507;    
@@ -15,16 +14,14 @@ body {
     height: 100vh;    
     overflow: hidden;
     position: relative;
-    font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
 
-/* Applica il box-sizing corretto a tutto per evitare che il padding sballi le misure */
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
-/* Bagliore soft arcobaleno nel grande */
+/* Bagliore soft arcobaleno di sfondo (Lontano dietro la chat) */
 body::before {
     content: "";
     position: absolute;
@@ -34,118 +31,73 @@ body::before {
     animation: rotazioneSfondo 25s linear infinite;
     z-index: -2;
     filter: blur(90px);
-    opacity: 0.25;
+    opacity: 0.2;
 }
 
 @keyframes rotazioneSfondo {
     to { transform: rotate(360deg); }
 }
 
-/* CONTENITORE GENERALE */
-.container {    
-    position: relative;    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    z-index: 2;
-}
-
-/* =======================================================
-   IL CONTENITORE CON IL BORDO SNAKE DA 30PX (MISURE FIX XAT)
-   ======================================================= */
-.snake-border-box {
+/* CONTENITORE PRINCIPALE (Mantiene la chat e lo snake allineati) */
+.xat-container-layout {
     position: relative;
-    width: 788px;  /* 728px (chat) + 60px (30px di padding per lato) */
-    height: 546px; /* 486px (chat) + 60px (30px di padding per lato) */
-    border-radius: 28px;
-    overflow: hidden; 
-    padding: 30px; /* Spessore del serpente */
-    box-shadow: 0 0 50px rgba(255, 0, 100, 0.5);
-    background: rgba(0, 0, 0, 0.5);
+    width: 845px;
+    height: 531px;
 }
 
-/* Il Serpente Arcobaleno che gira dietro */
-.snake-border-box::before {
-    content: "";
+/* QUI VA IL TUO CODICE DELLA CHAT REALE DI XAT 
+   (Sia esso un iframe, un object o il div dell'applicazione)
+*/
+.xat-container-layout iframe, 
+.xat-container-layout object, 
+.xat-container-layout embed {
     position: absolute;
-    width: 250%;
-    height: 250%;
-    top: -75%;
-    left: -75%;
-    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
-    animation: snakeMove 2.5s linear infinite;
-    z-index: 1;
-}
-
-@keyframes snakeMove {
-    100% { transform: rotate(360deg); }
-}
-
-/* L'area interna protetta dove inserisci la chat xat da 728x486 */
-.inner-content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: #0b0b0f; 
-    border-radius: 14px;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.inner-content img, .inner-content iframe {
-    width: 728px !important;
-    height: 486px !important;
+    top: 0;
+    left: 0;
+    width: 845px !important;
+    height: 531px !important;
     border: none;
-    border-radius: 14px;
+    z-index: 1; /* Sta sotto all'effetto snake */
 }
 
-/* =======================================================
-   TESTI CHE CAMBIANO COLORE (CARTAIO E DIABLO)
-   ======================================================= */
-
-.cartaio-text {    
-    font-family: 'Nosifer', cursive;    
-    font-size: 52px;    
-    letter-spacing: 6px;    
-    margin-bottom: 20px;
-    animation: fluttua 4s infinite ease-in-out, cambioColoreTesto 8s linear infinite;
+/* MASCHERA TRASPARENTE SVG SOVRAPPOSTA (Prende le misure esatte di Xat) */
+.snake-svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 845px;
+    height: 531px;
+    z-index: 10; /* Sta sopra alla chat grigia di default */
+    pointer-events: none; /* Rende lo snake invisibile ai click per farti usare la chat liberamente */
 }
 
-.diablo-text {
-    font-family: 'Nosifer', cursive;
-    font-size: 45px;
-    letter-spacing: 6px;
-    margin-top: 20px;
-    animation: fluttua 4s infinite ease-in-out reverse, cambioColoreTesto 8s linear infinite calc(-4s);
+/* Stile dei serpenti al neon */
+.snake-line {
+    fill: none;
+    stroke-width: 4px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 220 650; 
+    animation: snakeMoveInterno 4s linear infinite;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
 }
 
-@keyframes cambioColoreTesto {
-    0% { color: #ff004c; text-shadow: 0 0 20px #ff004c, 0 0 40px #ff004c; }
-    25% { color: #00ffff; text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff; }
-    50% { color: #9d00ff; text-shadow: 0 0 20px #9d00ff, 0 0 40px #9d00ff; }
-    75% { color: #00ff22; text-shadow: 0 0 20px #00ff22, 0 0 40px #00ff22; }
-    100% { color: #ff004c; text-shadow: 0 0 20px #ff004c, 0 0 40px #ff004c; }
+@keyframes snakeMoveInterno {
+    0% { stroke-dashoffset: 1300; }
+    100% { stroke-dashoffset: 0; }
 }
 
-@keyframes fluttua {    
-    0%, 100% { transform: translateY(0); }    
-    50%      { transform: translateY(-10px); }
+/* Applica il colore arcobaleno continuo */
+.rainbow-grad {
+    stroke: url(#snakeRainbow);
 }
 
-/* =======================================================
-   SMILE DI XAT DI DECORAZIONE
-   ======================================================= */
+/* SMILE DECORATIVI ESTERNI ALLA CHAT */
 .xat-smile {
     position: absolute;
     font-size: 50px;
     user-select: none;
-    z-index: 1;
+    z-index: -1;
     filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
 }
 
@@ -155,10 +107,7 @@ body::before {
 .smile-teschio { bottom: 15%; right: 10%; animation: gira 6s linear infinite reverse; }
 .smile-dollaro { top: 45%; left: 8%; animation: gira 9s linear infinite; }
 
-@keyframes gira {
-    to { transform: rotate(360deg); }
-}
-
+@keyframes gira { to { transform: rotate(360deg); } }
 @keyframes molleggia {
     0%, 100% { transform: scale(1) translateY(0); }
     50% { transform: scale(1.15) translateY(-12px); }
@@ -173,16 +122,47 @@ body::before {
 <div class="xat-smile smile-teschio">💀</div>
 <div class="xat-smile smile-dollaro">💵</div>
 
-<div class="container">    
-    <div class="cartaio-text">IL CARTAIO</div>
+<div class="xat-container-layout">
 
-    <div class="snake-border-box">
-        <div class="inner-content">
-            <span style="color: #fff; font-weight: bold; font-size: 18px; letter-spacing: 1px;">[ CHAT / IMG DA 728x486 PX ]</span>
-        </div>
-    </div>  
+    <svg class="snake-svg-overlay" viewBox="0 0 845 531" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="snakeRainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff0000" />
+                <stop offset="20%" stop-color="#ffcc00" />
+                <stop offset="40%" stop-color="#00ff00" />
+                <stop offset="60%" stop-color="#00ffff" />
+                <stop offset="80%" stop-color="#0000ff" />
+                <stop offset="100%" stop-color="#ff00ff" />
+            </linearGradient>
+        </defs>
 
-    <div class="diablo-text">DIABLO</div>
+        <path class="snake-line rainbow-grad" 
+              d="M 12 11 
+                 L 46 11 L 56 22 L 234 22 L 244 11 L 614 11 
+                 A 10 10 0 0 1 624 21 
+                 L 624 352 L 588 352 L 588 381 L 168 381 L 168 355 L 12 355 
+                 A 6 6 0 0 1 6 349 L 6 17 A 6 6 0 0 1 12 11 Z" />
+
+        <path class="snake-line rainbow-grad" style="animation-delay: -1.3s;"
+              d="M 638 11 
+                 L 833 11 
+                 A 10 10 0 0 1 843 21 
+                 L 843 355 L 795 355 L 795 381 L 638 381 
+                 A 6 6 0 0 1 632 375 L 632 17 A 6 6 0 0 1 638 11 Z" />
+
+        <path class="snake-line rainbow-grad" style="animation-delay: -2.6s;"
+              d="M 4 412
+                 L 567 412
+                 A 6 6 0 0 1 573 418
+                 L 573 506
+                 A 6 6 0 0 1 567 512
+                 L 395 512
+                 L 383 500
+                 L 56 500
+                 L 44 512
+                 L 4 512
+                 Z" />
+    </svg>
 </div>
 
 </body>
