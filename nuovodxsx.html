@@ -16,14 +16,14 @@
       font-family: sans-serif;
     }
 
-    /* CONTENITORE PRINCIPALE (Usa Flexbox per allineare dx, centro e sx) */
+    /* CONTENITORE PRINCIPALE */
     .container {
       display: flex;
-      justify-content: center;
+      justify-content: space-between; /* <-- Spinge gli elementi ai bordi estremi */
       align-items: center;
-      gap: 40px; /* Spazio tra i 3 riquadri */
       width: 100%;
-      max-width: 1400px;
+      padding: 0 15px; /* <-- Lascia giusto "un filo" di spazio (15px) dai bordi del monitor */
+      box-sizing: border-box; /* Evita che il padding crei barre di scorrimento */
     }
 
     /* STILE BASE PER TUTTI I VIDEO */
@@ -139,18 +139,15 @@
 
     <div class="video-wrapper center">
       <video class="side-video" autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/center.mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/dx.mp4" type="video/mp4">
       </video>
     </div>
 
     <div class="video-wrapper right">
       <video class="side-video" autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/dx.mp4" type="video/mp4">
+        <source src="https://peppeagosto.github.io/immaggini/sx1.mp4" type="video/mp4">
       </video>
       <div class="video-text">CARTAIO</div>
     </div>
 
   </div>
-
-</body>
-</html>
