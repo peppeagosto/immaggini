@@ -34,7 +34,22 @@
     
     /* COMANDI */
     .comandi-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 9999; pointer-events: auto; }
-    .btn-ascolta { background: rgba(0, 0, 0, 0.7); border: 2px solid #fff; border-radius: 12px; padding: 10px 20px; color: white; font-weight: bold; cursor: pointer; pointer-events: auto; text-transform: uppercase; }
+    
+    .btn-ascolta { 
+      background: rgba(0, 0, 0, 0.7); 
+      border: 2px solid #fff; 
+      border-radius: 12px; 
+      padding: 10px 20px; 
+      color: white; 
+      font-weight: bold; 
+      cursor: pointer; 
+      pointer-events: auto; 
+      text-transform: uppercase;
+      /* REGOLE AGGIUNTE PER FORZARE IL CLICK */
+      position: relative;
+      z-index: 9999 !important;
+    }
+    
     .label-text { position: absolute; bottom: 25px; font-family: 'Arial', sans-serif; font-size: 20px; font-weight: bold; text-transform: uppercase; }
   </style>
 </head>
