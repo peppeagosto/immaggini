@@ -9,7 +9,6 @@
 
     /* ANIMAZIONI */
     @keyframes rainbow-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
 
     /* BORDO ARCOBALENO */
     .wrapper::after {
@@ -25,23 +24,26 @@
     .left { left: -20px; background: radial-gradient(circle, #2a2a2a 0%, #050505 100%); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
     .right { right: -20px; background: linear-gradient(145deg, #1a1a1a, #000000); display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-    /* STILE SX */
-    .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; }
-    .data-info { font-family: 'Arial', sans-serif; font-size: 16px; color: #fff; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+    /* STILE TESTI E VIDEO */
+    .saluto-testo { font-family: 'Arial Black', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+    .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; line-height: 1; }
+    .data-info { font-family: 'Arial', sans-serif; font-size: 16px; color: #fff; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
     .citta-box { font-weight: bold; color: #00ffff; margin-top: 5px; }
 
     .side-video { width: 90%; height: 80%; object-fit: cover; opacity: 0.85; padding: 9px; border-radius: 22px; z-index: 2; }
     
     /* COMANDI */
-    .comandi-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 20; }
-    .btn-ascolta { background: rgba(0, 0, 0, 0.7); border: 2px solid #fff; border-radius: 12px; padding: 10px 20px; color: white; font-weight: bold; cursor: pointer; }
+    .comandi-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 9999; pointer-events: auto; }
+    .btn-ascolta { background: rgba(0, 0, 0, 0.7); border: 2px solid #fff; border-radius: 12px; padding: 10px 20px; color: white; font-weight: bold; cursor: pointer; pointer-events: auto; text-transform: uppercase; }
     .label-text { position: absolute; bottom: 25px; font-family: 'Arial', sans-serif; font-size: 20px; font-weight: bold; text-transform: uppercase; }
   </style>
 </head>
 <body>
 
 <div class="container">
+  
   <div class="wrapper left">
+    <div id="saluto-dinamico" class="saluto-testo testo-arcobaleno">BUONGIORNO</div>
     <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
     <div class="data-info">
       <div id="data-estesa">...</div>
@@ -51,32 +53,71 @@
   </div>
 
   <div class="wrapper right">
-    <video id="video-ragazze" class="side-video" autoplay loop  playsinline>
-      <source src="https://i.imgur.com/iikk9At.mp4" type="video/mp4">
+    <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
+      <source id="video-source" src="" type="video/mp4">
     </video>
+  </div>
+
+  <div class="comandi-container">
+    <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
   </div>
 </div>
 
-<div class="comandi-container">
-  <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
-</div>
-
 <script>
-  // AGGIORNAMENTO DATI
+  const videoRagazze = document.getElementById('video-ragazze');
+  const videoSource = document.getElementById('video-source');
+
   function updateData() {
     const now = new Date();
-    // Ora
+    const hour = now.getHours();
+    
+    // ==============================================================
+    // LOGICA DINAMICA ORARI E VIDEO
+    // ==============================================================
+
+    // 1. VIDEO DELLA NOTTE (default: copre dalle 00:00 alle 05:59)
+    let saluto = "BUONANOTTE";
+    let prossimoVideo = "INSERISCI_QUI_VIDEO_NOTTE.mp4"; 
+
+    if (hour >= 6 && hour < 12) {
+      // 2. VIDEO DEL MATTINO (dalle 06:00 alle 11:59)
+      saluto = "BUONGIORNO";
+      prossimoVideo = "https://i.imgur.com/ybUBxzW.mp4"; 
+
+    } else if (hour >= 12 && hour < 18) {
+      // 3. VIDEO DEL POMERIGGIO (dalle 12:00 alle 17:59)
+      saluto = "BUON POMERIGGIO";
+      prossimoVideo = "https://i.imgur.com/EeEhEd9.mp4"; 
+
+    } else if (hour >= 18 && hour <= 23) {
+      // 4. VIDEO DELLA SERA (dalle 18:00 alle 23:59)
+      saluto = "BUONASERA";
+      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4"; 
+    }
+    
+    // ==============================================================
+
+    // Aggiorna la scritta del saluto
+    document.getElementById('saluto-dinamico').innerText = saluto;
+
+    // Se il video impostato è diverso da quello attuale nel player, lo sostituisce e lo avvia
+    if (videoSource.getAttribute('src') !== prossimoVideo) {
+      videoSource.src = prossimoVideo;
+      videoRagazze.load(); 
+    }
+
+    // Aggiorna l'orologio e la data
     document.getElementById('orario-grande').innerText = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-    // Data
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('data-estesa').innerText = now.toLocaleDateString('it-IT', options);
   }
   
+  // Fa scattare il controllo ogni secondo
   setInterval(updateData, 1000);
+  // Avvia la funzione subito appena si apre la pagina
   updateData();
 
-  // AUDIO LOGIC
-  const videoRagazze = document.getElementById('video-ragazze');
+  // TASTO AUDIO
   const tastoAudio = document.getElementById('tasto-audio');
   tastoAudio.addEventListener('click', () => {
     videoRagazze.muted = !videoRagazze.muted;
