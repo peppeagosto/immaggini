@@ -5,7 +5,7 @@
   <title>2 OFFICIAL - Button Top Outside</title>
   <style>
     body { 
-      margin: 0; 
+      margin: 0;
       background: transparent; 
       display: flex; 
       justify-content: center; 
@@ -17,18 +17,15 @@
     
     .container { 
       position: relative; 
-      display: flex; 
+      display: flex;
       justify-content: space-between; 
-      /* TRUCCO: Spinge i rettangoli verso il basso dello schermo */
-      align-items: flex-end; 
+      align-items: flex-end;
       width: 100%; 
       height: 100vh; 
-      /* Lascia 20px di respiro dal fondo per non farli sbattere al limite */
-      padding: 0 20px 20px 20px; 
+      padding: 0 20px 20px 20px;
       box-sizing: border-box;
     }
     
-    /* NUOVE COLONNE PER SEPARARE IL BOTTONE DAL RETTANGOLO */
     .colonna-sx {
       display: flex;
       flex-direction: column;
@@ -39,51 +36,53 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* Spazio vuoto tra il bottone e il rettangolo */
-      gap: 15px; 
+      gap: 15px;
       z-index: 99999;
     }
 
     .wrapper { 
       position: relative; 
       overflow: hidden; 
-      border-radius: 22px; 
+      border-radius: 22px;
       width: 270px; 
       height: 484px; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
 
-    /* ANIMAZIONI E BORDI */
     @keyframes rainbow-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
     @keyframes pulsante { 0% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.7; } }
     .pulsing { animation: pulsante 2s ease-in-out infinite; }
 
     .wrapper::after {
-      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px;
+      content: ""; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px;
       background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box;
-      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
       mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; z-index: 10; pointer-events: none;
     }
 
     .testo-arcobaleno { background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ffaa, #00aaff, #aa00ff, #ff0000); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-bg 3s linear infinite; }
 
-    /* PANNELLI INTERNI */
-    .left { background: radial-gradient(circle, #2a2a2a 0%, #050505 100%); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .left { 
+      background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg');
+      background-size: cover; 
+      background-position: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    }
     .right { background: linear-gradient(145deg, #1a1a1a, #000000); display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-    /* STILE TESTI E VIDEO */
     .saluto-testo { font-family: 'Arial Black', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
     .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; }
     .testo-dinamico-video { margin-top: 15px; font-family: 'Arial Black', sans-serif; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
     
     .side-video { width: 90%; height: 75%; object-fit: cover; opacity: 0.85; padding: 9px; border-radius: 22px; z-index: 2; pointer-events: auto; }
     
-    /* BOTTONE AUDIO TOTALMENTE FUORI DAL RETTANGOLO */
     .btn-ascolta { 
       background: rgba(0, 0, 0, 0.9); border: 2px solid #00ffff; border-radius: 12px; padding: 12px 25px;
       color: white; font-family: 'Arial Black', sans-serif; font-size: 15px; cursor: pointer; text-transform: uppercase; 
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); transition: all 0.3s ease; 
-      pointer-events: auto;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); transition: all 0.3s ease; pointer-events: auto;
+      margin-top: 25px; /* Tasto leggermente abbassato per non tagliarlo in alto */
     }
     .btn-ascolta:hover { background: rgba(0, 255, 255, 0.2); transform: scale(1.05); }
   </style>
@@ -91,10 +90,9 @@
 <body>
 
 <div class="container">
-  
   <div class="colonna-sx">
     <div class="wrapper left">
-      <div id="saluto-fisso" class="saluto-testo testo-arcobaleno">BENVENUTO</div>
+      <div id="saluto-fisso" class="saluto-testo testo-arcobaleno">...</div>
       <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
       <div class="data-info" style="color:#fff">
         <div id="data-estesa">...</div>
@@ -104,17 +102,14 @@
   </div>
 
   <div class="colonna-dx">
-    
     <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
-    
     <div class="wrapper right">
-      <video id="video-ragazze" class="side-video" autoplay loop playsinline>
+      <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
         <source id="video-source" src="" type="video/mp4">
       </video>
       <div id="testo-sotto-video" class="testo-dinamico-video pulsing">...</div>
     </div>
   </div>
-
 </div>
 
 <script>
@@ -124,70 +119,75 @@
   const tastoAudio = document.getElementById('tasto-audio');
   
   let lastSaluto = "";
-  let muteTimeout; // Variabile per tenere traccia del timer dei 15 secondi
+  let timerSigla;
 
   function updateData() {
     const now = new Date();
     const hour = now.getHours();
-    let saluto = ""; let testoVisivo = ""; let prossimoVideo = "";
+    
+    document.getElementById('orario-grande').innerText = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+    document.getElementById('data-estesa').innerText = now.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+    let saluto = "";
+    let testoVisivo = ""; 
+    let prossimoVideo = "";
+
+    // LOGICA IN BASE ALL'ORARIO REALE (Vale per tutti e 3 i video)
     if (hour >= 6 && hour < 12) {
-      saluto = "BUONGIORNO"; testoVisivo = "BUONGIORNO!"; prossimoVideo = "https://i.imgur.com/ybUBxzW.mp4";
+      saluto = "BUONGIORNO";
+      testoVisivo = "BUONGIORNO!"; 
+      prossimoVideo = "https://i.imgur.com/ybUBxzW.mp4";
     } else if (hour >= 12 && hour < 18) {
-      saluto = "BUON POMERIGGIO"; testoVisivo = "BUON POMERIGGIO!"; prossimoVideo = "https://i.imgur.com/EeEhEd9.mp4";
+      saluto = "BUON POMERIGGIO";
+      testoVisivo = "BUON POMERIGGIO!"; 
+      prossimoVideo = "https://i.imgur.com/EeEhEd9.mp4";
     } else {
-      saluto = "BUONASERA"; testoVisivo = "BUONASERA!"; prossimoVideo = "https://i.imgur.com/M44McxJ.mp4";
+      saluto = "BUONASERA";
+      testoVisivo = "BUONASERA!"; 
+      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4";
     }
     
     if (saluto !== lastSaluto) {
-      testoSottoVideo.innerText = testoVisivo;
       document.getElementById('saluto-fisso').innerText = saluto;
+      testoSottoVideo.innerText = testoVisivo;
       lastSaluto = saluto;
-    }
 
-    if (videoSource.getAttribute('src') !== prossimoVideo) {
-      videoSource.src = prossimoVideo;
-      videoRagazze.load(); 
-      
-      // Impostiamo l'audio sbloccato per la sigla
-      videoRagazze.muted = false;
-      tastoAudio.innerText = "OFF AUDIO"; // Audio in riproduzione, mostra OFF
-      
-      videoRagazze.play().then(() => {
-        // Se il browser permette l'autoplay con audio, avvia il timer di 15 secondi
-        if (muteTimeout) clearTimeout(muteTimeout);
+      if (videoSource.getAttribute('src') !== prossimoVideo) {
+        videoSource.src = prossimoVideo;
+        videoRagazze.load(); 
+        videoRagazze.currentTime = 0; 
         
-        muteTimeout = setTimeout(() => {
-          videoRagazze.muted = true; // Muta dopo 15 secondi
-          tastoAudio.innerText = "ON AUDIO"; // Audio mutato, mostra ON
-        }, 15000);
+        // Appena scocca l'ora, il video parte con AUDIO ON 
+        videoRagazze.muted = false;
+        tastoAudio.innerText = "OFF AUDIO";
         
-      }).catch(e => {
-        // Fallback: se il browser blocca l'autoplay con audio (perché l'utente non ha ancora cliccato)
-        // lo facciamo partire mutato per evitare che si blocchi il video.
-        videoRagazze.muted = true;
-        tastoAudio.innerText = "ON AUDIO";
-        videoRagazze.play().catch(err => console.log("Autoplay in attesa di interazione"));
-      });
+        // Controllo se il browser blocca l'audio automatico
+        videoRagazze.play().catch(e => {
+          console.log("Il browser ha bloccato l'audio in autoplay. Avvio in muto.");
+          videoRagazze.muted = true;
+          tastoAudio.innerText = "ON AUDIO";
+          videoRagazze.play();
+        });
+        
+        // TIMER DI 20 SECONDI ESATTI
+        clearTimeout(timerSigla); 
+        
+        timerSigla = setTimeout(() => {
+          // Dopo 20 secondi il video CONTINUA a girare ma rientra in MUTED
+          videoRagazze.muted = true; 
+          tastoAudio.innerText = "ON AUDIO";
+        }, 20000); // 20000 = 20 secondi
+      }
     }
-
-    document.getElementById('orario-grande').innerText = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('data-estesa').innerText = now.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   }
   
-  setInterval(updateData, 1000);
   updateData();
-
-  // Logica per il pulsante manuale
+  setInterval(updateData, 1000);
+  
+  // Tasto per gestire l'audio manualmente in ogni momento
   tastoAudio.addEventListener('click', () => {
     videoRagazze.muted = !videoRagazze.muted;
-    // Se è mutato mostra "ON AUDIO" per invogliare ad accenderlo, altrimenti "OFF AUDIO"
     tastoAudio.innerText = videoRagazze.muted ? "ON AUDIO" : "OFF AUDIO";
-    
-    // Se clicchi il pulsante manualmente, fermiamo il timer dei 15 secondi per non interferire
-    if (muteTimeout) {
-      clearTimeout(muteTimeout);
-    }
   });
 </script>
 </body>
