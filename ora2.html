@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>2 OFFICIAL - xatframe Safe Button</title>
+  <title>2 OFFICIAL - Button Top Outside</title>
   <style>
     body { 
       margin: 0; 
@@ -15,18 +16,35 @@
       font-family: Arial, sans-serif;
     }
     
-    /* IL LAYOUT CHE FUNZIONA ALLA PERFEZIONE */
     .container { 
       position: relative; 
       display: flex; 
       justify-content: space-between; 
-      align-items: center;
+      /* TRUCCO: Spinge i rettangoli verso il basso dello schermo */
+      align-items: flex-end; 
       width: 100%; 
       height: 100vh; 
-      padding: 0 20px; 
+      /* Lascia 20px di respiro dal fondo per non farli sbattere al limite */
+      padding: 0 20px 20px 20px; 
       box-sizing: border-box;
     }
     
+    /* NUOVE COLONNE PER SEPARARE IL BOTTONE DAL RETTANGOLO */
+    .colonna-sx {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    
+    .colonna-dx {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Spazio vuoto tra il bottone e il rettangolo */
+      gap: 15px; 
+      z-index: 99999;
+    }
+
     .wrapper { 
       position: relative; 
       overflow: hidden; 
@@ -42,8 +60,7 @@
     .pulsing { animation: pulsante 2s ease-in-out infinite; }
 
     .wrapper::after {
-      content: "";
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px;
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px;
       background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box;
       -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out;
       mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; z-index: 10; pointer-events: none;
@@ -51,23 +68,23 @@
 
     .testo-arcobaleno { background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ffaa, #00aaff, #aa00ff, #ff0000); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-bg 3s linear infinite; }
 
-    /* PANNELLI */
+    /* PANNELLI INTERNI */
     .left { background: radial-gradient(circle, #2a2a2a 0%, #050505 100%); backdrop-filter: blur(15px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
     .right { background: linear-gradient(145deg, #1a1a1a, #000000); display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-    /* STILE TESTI */
+    /* STILE TESTI E VIDEO */
     .saluto-testo { font-family: 'Arial Black', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
     .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; }
-    .testo-dinamico-video { margin-top: 10px; font-family: 'Arial Black', sans-serif; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    .testo-dinamico-video { margin-top: 15px; font-family: 'Arial Black', sans-serif; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
     
-    /* VIDEO RIDIMENSIONATO LEGGERMENTE PER FAR SPAZIO AL BOTTONE */
-    .side-video { width: 90%; height: 65%; object-fit: cover; opacity: 0.85; padding: 9px; border-radius: 22px; z-index: 2; pointer-events: auto; }
+    .side-video { width: 90%; height: 75%; object-fit: cover; opacity: 0.85; padding: 9px; border-radius: 22px; z-index: 2; pointer-events: auto; }
     
-    /* NUOVO BOTTONE INTEGRATO NEL PANNELLO */
+    /* BOTTONE AUDIO TOTALMENTE FUORI DAL RETTANGOLO */
     .btn-ascolta { 
-      background: rgba(0, 0, 0, 0.9); border: 2px solid #00ffff; border-radius: 12px; padding: 8px 18px;
-      color: white; font-family: 'Arial Black', sans-serif; font-size: 13px; cursor: pointer; text-transform: uppercase; 
-      box-shadow: 0 0 10px rgba(0, 255, 255, 0.4); transition: all 0.3s ease; margin-top: 10px; z-index: 999; position: relative;
+      background: rgba(0, 0, 0, 0.9); border: 2px solid #00ffff; border-radius: 12px; padding: 12px 25px;
+      color: white; font-family: 'Arial Black', sans-serif; font-size: 15px; cursor: pointer; text-transform: uppercase; 
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); transition: all 0.3s ease; 
+      pointer-events: auto;
     }
     .btn-ascolta:hover { background: rgba(0, 255, 255, 0.2); transform: scale(1.05); }
   </style>
@@ -75,22 +92,30 @@
 <body>
 
 <div class="container">
-  <div class="wrapper left">
-    <div id="saluto-fisso" class="saluto-testo testo-arcobaleno">BENVENUTO</div>
-    <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
-    <div class="data-info" style="color:#fff">
-      <div id="data-estesa">...</div>
-      <div class="citta-box" style="color:#00ffff; font-weight:bold;">Torino, IT</div>
+  
+  <div class="colonna-sx">
+    <div class="wrapper left">
+      <div id="saluto-fisso" class="saluto-testo testo-arcobaleno">BENVENUTO</div>
+      <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
+      <div class="data-info" style="color:#fff">
+        <div id="data-estesa">...</div>
+        <div class="citta-box" style="color:#00ffff; font-weight:bold;">Torino, IT</div>
+      </div>
     </div>
   </div>
 
-  <div class="wrapper right">
-    <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
-      <source id="video-source" src="" type="video/mp4">
-    </video>
-    <div id="testo-sotto-video" class="testo-dinamico-video pulsing">...</div>
+  <div class="colonna-dx">
+    
     <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
+    
+    <div class="wrapper right">
+      <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
+        <source id="video-source" src="" type="video/mp4">
+      </video>
+      <div id="testo-sotto-video" class="testo-dinamico-video pulsing">...</div>
+    </div>
   </div>
+
 </div>
 
 <script>
@@ -131,7 +156,6 @@
   setInterval(updateData, 1000);
   updateData();
 
-  // Logica click audio invariata
   const tastoAudio = document.getElementById('tasto-audio');
   tastoAudio.addEventListener('click', () => {
     videoRagazze.muted = !videoRagazze.muted;
