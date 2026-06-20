@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -109,7 +108,7 @@
     <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
     
     <div class="wrapper right">
-      <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
+      <video id="video-ragazze" class="side-video" autoplay loop playsinline>
         <source id="video-source" src="" type="video/mp4">
       </video>
       <div id="testo-sotto-video" class="testo-dinamico-video pulsing">...</div>
@@ -122,7 +121,10 @@
   const videoRagazze = document.getElementById('video-ragazze');
   const videoSource = document.getElementById('video-source');
   const testoSottoVideo = document.getElementById('testo-sotto-video');
+  const tastoAudio = document.getElementById('tasto-audio');
+  
   let lastSaluto = "";
+  let muteTimeout; // Variabile per tenere traccia del timer dei 15 secondi
 
   function updateData() {
     const now = new Date();
@@ -146,7 +148,27 @@
     if (videoSource.getAttribute('src') !== prossimoVideo) {
       videoSource.src = prossimoVideo;
       videoRagazze.load(); 
-      videoRagazze.play().catch(e => console.log("Autoplay in attesa"));
+      
+      // Impostiamo l'audio sbloccato per la sigla
+      videoRagazze.muted = false;
+      tastoAudio.innerText = "OFF AUDIO"; // Audio in riproduzione, mostra OFF
+      
+      videoRagazze.play().then(() => {
+        // Se il browser permette l'autoplay con audio, avvia il timer di 15 secondi
+        if (muteTimeout) clearTimeout(muteTimeout);
+        
+        muteTimeout = setTimeout(() => {
+          videoRagazze.muted = true; // Muta dopo 15 secondi
+          tastoAudio.innerText = "ON AUDIO"; // Audio mutato, mostra ON
+        }, 15000);
+        
+      }).catch(e => {
+        // Fallback: se il browser blocca l'autoplay con audio (perché l'utente non ha ancora cliccato)
+        // lo facciamo partire mutato per evitare che si blocchi il video.
+        videoRagazze.muted = true;
+        tastoAudio.innerText = "ON AUDIO";
+        videoRagazze.play().catch(err => console.log("Autoplay in attesa di interazione"));
+      });
     }
 
     document.getElementById('orario-grande').innerText = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
@@ -156,10 +178,16 @@
   setInterval(updateData, 1000);
   updateData();
 
-  const tastoAudio = document.getElementById('tasto-audio');
+  // Logica per il pulsante manuale
   tastoAudio.addEventListener('click', () => {
     videoRagazze.muted = !videoRagazze.muted;
+    // Se è mutato mostra "ON AUDIO" per invogliare ad accenderlo, altrimenti "OFF AUDIO"
     tastoAudio.innerText = videoRagazze.muted ? "ON AUDIO" : "OFF AUDIO";
+    
+    // Se clicchi il pulsante manualmente, fermiamo il timer dei 15 secondi per non interferire
+    if (muteTimeout) {
+      clearTimeout(muteTimeout);
+    }
   });
 </script>
 </body>
