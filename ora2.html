@@ -26,19 +26,18 @@
       box-sizing: border-box;
     }
     
-    .colonna-sx {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .colonna-dx {
-      position: relative; 
+    /* MODIFICATO: Aggiunto margin-top per abbassare leggermente entrambe le colonne */
+    .colonna-sx, .colonna-dx {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 99999;
+      margin-top: 10px; /* <--- Abbassato di un 'filo di capelli' */
+    }
+    
+    .colonna-dx {
+      position: relative; 
     }
 
     .wrapper { 
@@ -114,7 +113,7 @@
     
     .btn-ascolta { 
       position: absolute; 
-      top: -35px; 
+      top: -15px; /* Mantenuto per il posizionamento del pulsante rispetto alla colonna dx */
       background: rgba(0, 0, 0, 0.9); 
       border: 2px solid #00ffff; 
       border-radius: 8px; 
@@ -164,9 +163,8 @@
   const cittaVisitatore = document.getElementById('citta-visitatore');
   
   let lastSaluto = "";
-  let timerSigla; // Ripristinato il timer ma ora è super intelligente
+  let timerSigla; 
 
-  // --- API CITTÀ ---
   function rilevaCitta() {
     fetch('https://get.geojs.io/v1/ip/geo.json')
       .then(response => response.json())
@@ -185,7 +183,6 @@
 
   rilevaCitta();
 
-  // --- LOGICHE ORARIO E CALCOLATORE AUTOMATICO 3 GIRI ---
   function updateData() {
     const now = new Date();
     const hour = now.getHours();
@@ -212,7 +209,7 @@
     } else {
       saluto = "BUONANOTTE";
       testoVisivo = "DOLCE NOTTE A TUTTI I VISITATORI"; 
-      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4"; // Cambialo quando fai il video nuovo
+      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4"; 
     }
     
     if (saluto !== lastSaluto) {
@@ -235,21 +232,18 @@
           videoRagazze.play();
         });
         
-        // --- LA MAGIA: LEGGE LA DURATA E MOLTIPLICA PER 3 ---
         videoRagazze.onloadedmetadata = () => {
           let durataSingola = videoRagazze.duration; 
           
-          // Se per qualche motivo strano il browser non legge la durata, si fissa a 15 secondi di sicurezza
           if (!durataSingola || isNaN(durataSingola)) {
             durataSingola = 15;
           }
 
-          let tempoTreGiri = (durataSingola * 3) * 1000; // I secondi esatti trasformati in millisecondi per 3 giri
+          let tempoTreGiri = (durataSingola * 3) * 1000; 
 
           clearTimeout(timerSigla); 
           
           timerSigla = setTimeout(() => {
-            // Esattamente alla fine del terzo giro, entra in muto. Il video continua fluido.
             videoRagazze.muted = true; 
             tastoAudio.innerText = "ON AUDIO";
           }, tempoTreGiri); 
