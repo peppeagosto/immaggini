@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>2 OFFICIAL - Button Top Outside</title>
+  <title>2 OFFICIAL - Smart Auto-Timer 3 Loops</title>
   <style>
     body { 
       margin: 0;
@@ -19,24 +19,25 @@
       position: relative; 
       display: flex;
       justify-content: space-between; 
-      align-items: flex-end;
+      align-items: center; 
       width: 100%; 
       height: 100vh; 
-      padding: 0 20px 20px 20px;
+      padding: 0 20px; 
       box-sizing: border-box;
     }
     
     .colonna-sx {
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
     }
     
     .colonna-dx {
+      position: relative; 
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      justify-content: center;
       z-index: 99999;
     }
 
@@ -70,19 +71,62 @@
       background-position: center;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
     }
-    .right { background: linear-gradient(145deg, #1a1a1a, #000000); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    
+    .right { 
+      background: transparent; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: flex-end; 
+      align-items: center; 
+    }
 
     .saluto-testo { font-family: 'Arial Black', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
     .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; }
-    .testo-dinamico-video { margin-top: 15px; font-family: 'Arial Black', sans-serif; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
     
-    .side-video { width: 90%; height: 75%; object-fit: cover; opacity: 0.85; padding: 9px; border-radius: 22px; z-index: 2; pointer-events: auto; }
+    .testo-dinamico-video { 
+      margin-bottom: 25px; 
+      font-family: 'Arial Black', sans-serif; 
+      font-size: 16px; 
+      color: #fff; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      z-index: 5; 
+      background: rgba(0, 0, 0, 0.5); 
+      padding: 10px 20px;
+      border-radius: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+      box-shadow: 0 0 15px rgba(0,0,0,0.5); 
+    }
+    
+    .side-video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      opacity: 1; 
+      padding: 0; 
+      border-radius: 22px; 
+      z-index: 1; 
+      position: absolute; 
+      top: 0; 
+      left: 0;
+      pointer-events: auto; 
+    }
     
     .btn-ascolta { 
-      background: rgba(0, 0, 0, 0.9); border: 2px solid #00ffff; border-radius: 12px; padding: 12px 25px;
-      color: white; font-family: 'Arial Black', sans-serif; font-size: 15px; cursor: pointer; text-transform: uppercase; 
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); transition: all 0.3s ease; pointer-events: auto;
-      margin-top: 25px; /* Tasto leggermente abbassato per non tagliarlo in alto */
+      position: absolute; 
+      top: -35px; 
+      background: rgba(0, 0, 0, 0.9); 
+      border: 2px solid #00ffff; 
+      border-radius: 8px; 
+      padding: 6px 14px; 
+      color: white; 
+      font-family: 'Arial Black', sans-serif; 
+      font-size: 12px; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.4); 
+      transition: all 0.3s ease; 
+      pointer-events: auto;
     }
     .btn-ascolta:hover { background: rgba(0, 255, 255, 0.2); transform: scale(1.05); }
   </style>
@@ -96,7 +140,7 @@
       <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
       <div class="data-info" style="color:#fff">
         <div id="data-estesa">...</div>
-        <div class="citta-box" style="color:#00ffff; font-weight:bold;">Torino, IT</div>
+        <div id="citta-visitatore" class="citta-box" style="color:#00ffff; font-weight:bold;">Caricamento città...</div>
       </div>
     </div>
   </div>
@@ -117,10 +161,31 @@
   const videoSource = document.getElementById('video-source');
   const testoSottoVideo = document.getElementById('testo-sotto-video');
   const tastoAudio = document.getElementById('tasto-audio');
+  const cittaVisitatore = document.getElementById('citta-visitatore');
   
   let lastSaluto = "";
-  let timerSigla;
+  let timerSigla; // Ripristinato il timer ma ora è super intelligente
 
+  // --- API CITTÀ ---
+  function rilevaCitta() {
+    fetch('https://get.geojs.io/v1/ip/geo.json')
+      .then(response => response.json())
+      .then(data => {
+        if (data.city && data.country) {
+          cittaVisitatore.innerText = data.city + ", " + data.country;
+        } else {
+          cittaVisitatore.innerText = "Città non trovata";
+        }
+      })
+      .catch(error => {
+        console.log("Errore API città:", error);
+        cittaVisitatore.innerText = "Ospite Online"; 
+      });
+  }
+
+  rilevaCitta();
+
+  // --- LOGICHE ORARIO E CALCOLATORE AUTOMATICO 3 GIRI ---
   function updateData() {
     const now = new Date();
     const hour = now.getHours();
@@ -132,7 +197,6 @@
     let testoVisivo = ""; 
     let prossimoVideo = "";
 
-    // LOGICA IN BASE ALL'ORARIO REALE (Vale per tutti e 3 i video)
     if (hour >= 6 && hour < 12) {
       saluto = "BUONGIORNO";
       testoVisivo = "BUONGIORNO!"; 
@@ -141,10 +205,14 @@
       saluto = "BUON POMERIGGIO";
       testoVisivo = "BUON POMERIGGIO!"; 
       prossimoVideo = "https://i.imgur.com/EeEhEd9.mp4";
-    } else {
+    } else if (hour >= 18 && hour <= 23) {
       saluto = "BUONASERA";
       testoVisivo = "BUONASERA!"; 
       prossimoVideo = "https://i.imgur.com/M44McxJ.mp4";
+    } else {
+      saluto = "BUONANOTTE";
+      testoVisivo = "DOLCE NOTTE A TUTTI I VISITATORI"; 
+      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4"; // Cambialo quando fai il video nuovo
     }
     
     if (saluto !== lastSaluto) {
@@ -157,26 +225,35 @@
         videoRagazze.load(); 
         videoRagazze.currentTime = 0; 
         
-        // Appena scocca l'ora, il video parte con AUDIO ON 
         videoRagazze.muted = false;
         tastoAudio.innerText = "OFF AUDIO";
         
-        // Controllo se il browser blocca l'audio automatico
         videoRagazze.play().catch(e => {
-          console.log("Il browser ha bloccato l'audio in autoplay. Avvio in muto.");
+          console.log("Autoplay bloccato.");
           videoRagazze.muted = true;
           tastoAudio.innerText = "ON AUDIO";
           videoRagazze.play();
         });
         
-        // TIMER DI 20 SECONDI ESATTI
-        clearTimeout(timerSigla); 
-        
-        timerSigla = setTimeout(() => {
-          // Dopo 20 secondi il video CONTINUA a girare ma rientra in MUTED
-          videoRagazze.muted = true; 
-          tastoAudio.innerText = "ON AUDIO";
-        }, 20000); // 20000 = 20 secondi
+        // --- LA MAGIA: LEGGE LA DURATA E MOLTIPLICA PER 3 ---
+        videoRagazze.onloadedmetadata = () => {
+          let durataSingola = videoRagazze.duration; 
+          
+          // Se per qualche motivo strano il browser non legge la durata, si fissa a 15 secondi di sicurezza
+          if (!durataSingola || isNaN(durataSingola)) {
+            durataSingola = 15;
+          }
+
+          let tempoTreGiri = (durataSingola * 3) * 1000; // I secondi esatti trasformati in millisecondi per 3 giri
+
+          clearTimeout(timerSigla); 
+          
+          timerSigla = setTimeout(() => {
+            // Esattamente alla fine del terzo giro, entra in muto. Il video continua fluido.
+            videoRagazze.muted = true; 
+            tastoAudio.innerText = "ON AUDIO";
+          }, tempoTreGiri); 
+        };
       }
     }
   }
@@ -184,7 +261,6 @@
   updateData();
   setInterval(updateData, 1000);
   
-  // Tasto per gestire l'audio manualmente in ogni momento
   tastoAudio.addEventListener('click', () => {
     videoRagazze.muted = !videoRagazze.muted;
     tastoAudio.innerText = videoRagazze.muted ? "ON AUDIO" : "OFF AUDIO";
