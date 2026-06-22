@@ -2,132 +2,22 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>2 OFFICIAL - Smart Auto-Timer 3 Loops</title>
+  <title>2 OFFICIAL - Smart Auto-Timer</title>
   <style>
-    body { 
-      margin: 0;
-      background: transparent; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      height: 100vh; 
-      overflow: hidden; 
-      font-family: Arial, sans-serif;
-    }
+    body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
+    .container { position: relative; display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100vh; padding: 0 20px; box-sizing: border-box; }
+    .colonna-sx, .colonna-dx { display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; margin-top: 80px; }
+    .wrapper { position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
     
-    .container { 
-      position: relative; 
-      display: flex;
-      justify-content: space-between; 
-      align-items: center; 
-      width: 100%; 
-      height: 100vh; 
-      padding: 0 20px; 
-      box-sizing: border-box;
-    }
+    #overlay-start { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; cursor: pointer; text-align: center; }
     
-    /* MODIFICATO: Aggiunto margin-top per abbassare leggermente entrambe le colonne */
-    .colonna-sx, .colonna-dx {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      margin-top: 80px; /* <--- Abbassato di un 'filo di capelli' */
-    }
-    
-    .colonna-dx {
-      position: relative; 
-    }
-
-    .wrapper { 
-      position: relative; 
-      overflow: hidden; 
-      border-radius: 22px;
-      width: 270px; 
-      height: 484px; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    }
-
+    .wrapper::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px; background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; z-index: 10; pointer-events: none; }
     @keyframes rainbow-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-    @keyframes pulsante { 0% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.7; } }
-    .pulsing { animation: pulsante 2s ease-in-out infinite; }
-
-    .wrapper::after {
-      content: ""; position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px;
-      background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box;
-      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; z-index: 10; pointer-events: none;
-    }
-
-    .testo-arcobaleno { background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ffaa, #00aaff, #aa00ff, #ff0000); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow-bg 3s linear infinite; }
-
-    .left { 
-      background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg');
-      background-size: cover; 
-      background-position: center;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-    }
     
-    .right { 
-      background: transparent; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: flex-end; 
-      align-items: center; 
-    }
-
-    .saluto-testo { font-family: 'Arial Black', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
-    .orario-grande { font-family: 'Arial Black', sans-serif; font-size: 55px; font-weight: 900; margin-bottom: 5px; }
-    
-    .testo-dinamico-video { 
-      margin-bottom: 25px; 
-      font-family: 'Arial Black', sans-serif; 
-      font-size: 16px; 
-      color: #fff; 
-      text-transform: uppercase; 
-      letter-spacing: 2px; 
-      z-index: 5; 
-      background: rgba(0, 0, 0, 0.5); 
-      padding: 10px 20px;
-      border-radius: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
-      box-shadow: 0 0 15px rgba(0,0,0,0.5); 
-    }
-    
-    .side-video { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      opacity: 1; 
-      padding: 0; 
-      border-radius: 22px; 
-      z-index: 1; 
-      position: absolute; 
-      top: 0; 
-      left: 0;
-      pointer-events: auto; 
-    }
-    
-    .btn-ascolta { 
-      position: absolute; 
-      top: -45px; /* Mantenuto per il posizionamento del pulsante rispetto alla colonna dx */
-      background: rgba(0, 0, 0, 0.9); 
-      border: 2px solid #00ffff; 
-      border-radius: 8px; 
-      padding: 6px 14px; 
-      color: white; 
-      font-family: 'Arial Black', sans-serif; 
-      font-size: 12px; 
-      cursor: pointer; 
-      text-transform: uppercase; 
-      box-shadow: 0 0 10px rgba(0, 255, 255, 0.4); 
-      transition: all 0.3s ease; 
-      pointer-events: auto;
-    }
-    .btn-ascolta:hover { background: rgba(0, 255, 255, 0.2); transform: scale(1.05); }
+    .left { background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .right { background: #000; position: relative; }
+    .side-video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
+    .testo-dinamico-video { position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 15px; color: #fff; text-align: center; font-size: 14px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -135,130 +25,81 @@
 <div class="container">
   <div class="colonna-sx">
     <div class="wrapper left">
-      <div id="saluto-fisso" class="saluto-testo testo-arcobaleno">...</div>
-      <div id="orario-grande" class="orario-grande testo-arcobaleno">00:00</div>
-      <div class="data-info" style="color:#fff">
-        <div id="data-estesa">...</div>
-        <div id="citta-visitatore" class="citta-box" style="color:#00ffff; font-weight:bold;">Caricamento città...</div>
-      </div>
+      <div id="saluto-fisso" style="color:white; font-size:20px; font-weight:900;">...</div>
+      <div id="orario-grande" style="color:white; font-size:55px; font-weight:900;">00:00</div>
+      <div id="citta-visitatore" style="color:#00ffff; font-weight:bold; margin-top:10px;"></div>
     </div>
   </div>
 
   <div class="colonna-dx">
-    <button id="tasto-audio" class="btn-ascolta">ON AUDIO</button>
     <div class="wrapper right">
-      <video id="video-ragazze" class="side-video" autoplay loop playsinline muted>
+      <div id="overlay-start">
+        <h3>CLICCA PER ENTRARE</h3>
+      </div>
+      <video id="video-ragazze" class="side-video" loop playsinline>
         <source id="video-source" src="" type="video/mp4">
       </video>
-      <div id="testo-sotto-video" class="testo-dinamico-video pulsing">...</div>
+      <div id="testo-sotto-video" class="testo-dinamico-video">BENVENUTO A BORDO!</div>
     </div>
   </div>
 </div>
 
 <script>
-  const videoRagazze = document.getElementById('video-ragazze');
-  const videoSource = document.getElementById('video-source');
-  const testoSottoVideo = document.getElementById('testo-sotto-video');
-  const tastoAudio = document.getElementById('tasto-audio');
-  const cittaVisitatore = document.getElementById('citta-visitatore');
-  
-  let lastSaluto = "";
-  let timerSigla; 
+  const video = document.getElementById('video-ragazze');
+  const overlay = document.getElementById('overlay-start');
+  const source = document.getElementById('video-source');
+  const cittaEl = document.getElementById('citta-visitatore');
+  const salutoEl = document.getElementById('saluto-fisso');
+  const testoEl = document.getElementById('testo-sotto-video');
 
-  function rilevaCitta() {
-    fetch('https://get.geojs.io/v1/ip/geo.json')
-      .then(response => response.json())
-      .then(data => {
-        if (data.city && data.country) {
-          cittaVisitatore.innerText = data.city + ", " + data.country;
-        } else {
-          cittaVisitatore.innerText = "Città non trovata";
-        }
-      })
-      .catch(error => {
-        console.log("Errore API città:", error);
-        cittaVisitatore.innerText = "Ospite Online"; 
-      });
+  let citta = "CARO AMICO";
+
+  // Funzione per la sintesi vocale
+  function parlaCitta() {
+    const sintesi = new SpeechSynthesisUtterance("Sei di " + citta);
+    sintesi.lang = 'it-IT';
+    window.speechSynthesis.speak(sintesi);
   }
 
-  rilevaCitta();
+  fetch('https://get.geojs.io/v1/ip/geo.json')
+    .then(r => r.json())
+    .then(d => { citta = d.city; cittaEl.innerText = "DA " + citta.toUpperCase(); });
 
-  function updateData() {
-    const now = new Date();
-    const hour = now.getHours();
+  overlay.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    video.muted = false;
+    video.play();
     
-    document.getElementById('orario-grande').innerText = now.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('data-estesa').innerText = now.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    let saluto = "";
-    let testoVisivo = ""; 
-    let prossimoVideo = "";
-
-    if (hour >= 6 && hour < 12) {
-      saluto = "BUONGIORNO";
-      testoVisivo = "BUONGIORNO!"; 
-      prossimoVideo = "https://i.imgur.com/ybUBxzW.mp4";
-    } else if (hour >= 12 && hour < 18) {
-      saluto = "BUON POMERIGGIO";
-      testoVisivo = "BUON POMERIGGIO!"; 
-      prossimoVideo = "https://i.imgur.com/EeEhEd9.mp4";
-    } else if (hour >= 18 && hour <= 23) {
-      saluto = "BUONASERA";
-      testoVisivo = "BUONASERA!"; 
-      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4";
-    } else {
-      saluto = "BUONANOTTE";
-      testoVisivo = "DOLCE NOTTE A TUTTI I VISITATORI"; 
-      prossimoVideo = "https://i.imgur.com/M44McxJ.mp4"; 
-    }
+    // Dopo 4 secondi dice la città
+    setTimeout(parlaCitta, 4000);
     
-    if (saluto !== lastSaluto) {
-      document.getElementById('saluto-fisso').innerText = saluto;
-      testoSottoVideo.innerText = testoVisivo;
-      lastSaluto = saluto;
-
-      if (videoSource.getAttribute('src') !== prossimoVideo) {
-        videoSource.src = prossimoVideo;
-        videoRagazze.load(); 
-        videoRagazze.currentTime = 0; 
-        
-        videoRagazze.muted = false;
-        tastoAudio.innerText = "OFF AUDIO";
-        
-        videoRagazze.play().catch(e => {
-          console.log("Autoplay bloccato.");
-          videoRagazze.muted = true;
-          tastoAudio.innerText = "ON AUDIO";
-          videoRagazze.play();
-        });
-        
-        videoRagazze.onloadedmetadata = () => {
-          let durataSingola = videoRagazze.duration; 
-          
-          if (!durataSingola || isNaN(durataSingola)) {
-            durataSingola = 15;
-          }
-
-          let tempoTreGiri = (durataSingola * 3) * 1000; 
-
-          clearTimeout(timerSigla); 
-          
-          timerSigla = setTimeout(() => {
-            videoRagazze.muted = true; 
-            tastoAudio.innerText = "ON AUDIO";
-          }, tempoTreGiri); 
-        };
-      }
-    }
-  }
-  
-  updateData();
-  setInterval(updateData, 1000);
-  
-  tastoAudio.addEventListener('click', () => {
-    videoRagazze.muted = !videoRagazze.muted;
-    tastoAudio.innerText = videoRagazze.muted ? "ON AUDIO" : "OFF AUDIO";
+    // Dopo 9 secondi esatti mette in MUTE
+    setTimeout(() => {
+        video.muted = true;
+    }, 9000);
   });
+
+  function update() {
+    const h = new Date().getHours();
+    let msg = "", vid = "";
+    if (h >= 6 && h < 13) { msg = "BUONGIORNO"; vid = "https://i.imgur.com/ybUBxzW.mp4"; }
+    else if (h >= 13 && h < 18) { msg = "BUON POMERIGGIO"; vid = "https://i.imgur.com/EeEhEd9.mp4"; }
+    else if (h >= 18 && h < 23) { msg = "BUONASERA"; vid = "https://i.imgur.com/M44McxJ.mp4"; }
+    else { msg = "BUONANOTTE"; vid = "https://i.imgur.com/8tUlXYU.mp4"; }
+
+    salutoEl.innerText = msg;
+    testoEl.innerText = "CIAO DA " + citta.toUpperCase() + ", " + msg;
+    
+    if (source.src !== vid) {
+      source.src = vid;
+      video.load();
+      video.play().catch(() => {});
+    }
+    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+  }
+
+  setInterval(update, 1000);
+  update();
 </script>
 </body>
 </html>
