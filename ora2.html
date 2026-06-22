@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -5,42 +6,37 @@
   <title>2 OFFICIAL - Smart Auto-Timer</title>
   <style>
     body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
-    .container { position: relative; display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100vh; padding: 0 20px; box-sizing: border-box; }
-    .colonna-sx, .colonna-dx { display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; margin-top: 80px; }
-    .wrapper { position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
     
-    #overlay-start { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; cursor: pointer; text-align: center; }
+    /* Container che spinge i rettangoli ai lati */
+    .container { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 50px; box-sizing: border-box; }
     
-    .wrapper::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px; background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; z-index: 10; pointer-events: none; }
+    .wrapper { position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    
+    #overlay-start { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; font-weight: bold; }
+    
+    .wrapper::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px; background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; pointer-events: none; }
     @keyframes rainbow-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
     
-    .left { background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-    .right { background: #000; position: relative; }
-    .side-video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
-    .testo-dinamico-video { position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 15px; color: #fff; text-align: center; font-size: 14px; font-weight: bold; }
+    .left { background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); background-size: cover; background-position: center; }
+    .side-video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+    .testo-dinamico { position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="colonna-sx">
-    <div class="wrapper left">
-      <div id="saluto-fisso" style="color:white; font-size:20px; font-weight:900;">...</div>
-      <div id="orario-grande" style="color:white; font-size:55px; font-weight:900;">00:00</div>
-      <div id="citta-visitatore" style="color:#00ffff; font-weight:bold; margin-top:10px;"></div>
-    </div>
+  <div class="wrapper left">
+    <div id="saluto-fisso" style="color:white; font-size:20px; font-weight:900;">...</div>
+    <div id="orario-grande" style="color:white; font-size:55px; font-weight:900;">00:00</div>
+    <div id="citta-visitatore" style="color:#00ffff; font-weight:bold; margin-top:10px;">CARICAMENTO...</div>
   </div>
 
-  <div class="colonna-dx">
-    <div class="wrapper right">
-      <div id="overlay-start">
-        <h3>CLICCA PER ENTRARE</h3>
-      </div>
-      <video id="video-ragazze" class="side-video" loop playsinline>
-        <source id="video-source" src="" type="video/mp4">
-      </video>
-      <div id="testo-sotto-video" class="testo-dinamico-video">BENVENUTO A BORDO!</div>
-    </div>
+  <div class="wrapper" style="background:#000;">
+    <div id="overlay-start">CLICCA PER ATTIVARE</div>
+    <video id="video-ragazze" class="side-video" loop playsinline>
+      <source id="video-source" src="" type="video/mp4">
+    </video>
+    <div id="testo-sotto-video" class="testo-dinamico">BENVENUTO!</div>
   </div>
 </div>
 
@@ -52,40 +48,36 @@
   const salutoEl = document.getElementById('saluto-fisso');
   const testoEl = document.getElementById('testo-sotto-video');
 
-  let citta = "CARO AMICO";
-
-  // Funzione per la sintesi vocale
-  function parlaCitta() {
-    const sintesi = new SpeechSynthesisUtterance("Sei di " + citta);
-    sintesi.lang = 'it-IT';
-    window.speechSynthesis.speak(sintesi);
-  }
+  let citta = "AMICO";
 
   fetch('https://get.geojs.io/v1/ip/geo.json')
     .then(r => r.json())
-    .then(d => { citta = d.city; cittaEl.innerText = "DA " + citta.toUpperCase(); });
+    .then(d => { 
+        citta = d.city || "AMICO"; 
+        cittaEl.innerText = "DA " + citta.toUpperCase();
+        update(); 
+    });
 
-  overlay.addEventListener('click', () => {
+  overlay.onclick = function() {
     overlay.style.display = 'none';
     video.muted = false;
     video.play();
+    // Logica: Parla dopo 4 secondi, Muta dopo 9 secondi
+    setTimeout(() => {
+        const sintesi = new SpeechSynthesisUtterance("Sei di " + citta);
+        sintesi.lang = 'it-IT';
+        window.speechSynthesis.speak(sintesi);
+    }, 4000);
     
-    // Dopo 4 secondi dice la città
-    setTimeout(parlaCitta, 4000);
-    
-    // Dopo 9 secondi esatti mette in MUTE
     setTimeout(() => {
         video.muted = true;
     }, 9000);
-  });
+  };
 
   function update() {
     const h = new Date().getHours();
-    let msg = "", vid = "";
-    if (h >= 6 && h < 13) { msg = "BUONGIORNO"; vid = "https://i.imgur.com/ybUBxzW.mp4"; }
-    else if (h >= 13 && h < 18) { msg = "BUON POMERIGGIO"; vid = "https://i.imgur.com/EeEhEd9.mp4"; }
-    else if (h >= 18 && h < 23) { msg = "BUONASERA"; vid = "https://i.imgur.com/M44McxJ.mp4"; }
-    else { msg = "BUONANOTTE"; vid = "https://i.imgur.com/8tUlXYU.mp4"; }
+    let msg = h >= 6 && h < 13 ? "BUONGIORNO" : h >= 13 && h < 18 ? "BUON POMERIGGIO" : h >= 18 && h < 23 ? "BUONASERA" : "BUONANOTTE";
+    let vid = h >= 6 && h < 13 ? "https://i.imgur.com/ybUBxzW.mp4" : h >= 13 && h < 18 ? "https://i.imgur.com/EeEhEd9.mp4" : h >= 18 && h < 23 ? "https://i.imgur.com/M44McxJ.mp4" : "https://i.imgur.com/8tUlXYU.mp4";
 
     salutoEl.innerText = msg;
     testoEl.innerText = "CIAO DA " + citta.toUpperCase() + ", " + msg;
