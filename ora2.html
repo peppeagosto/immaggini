@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -131,62 +132,49 @@
   const video = document.getElementById('video-ragazze');
   const source = document.getElementById('video-source');
   const cittaEl = document.getElementById('citta-visitatore');
+  const saludoEl = document.getElementById('saluto-fixed'); // Nota: corretto un piccolo ID sotto per uniformità
   const salutoFissoEl = document.getElementById('saluto-fisso');
   const testoEl = document.getElementById('testo-sotto-video');
   let citta = "AMICO";
-  
-  let audioAttivato = false;
-  let tempoScaduto = false;
 
-  // 1. Il video parte subito mutato all'apertura della pagina
-  function avviaVideoMuto() {
+  // FUNZIONE DI AVVIO AUTOMATICO SILENZIOSO (Esegui all'apertura)
+  function autoPlayMuted() {
     video.muted = true;
     video.volume = 0.0;
-    video.play().catch(err => console.log("Attesa interazione utente..."));
-
-    // Fissa la finestra temporale di 10 secondi per l'interazione automatica
-    setTimeout(() => {
-      tempoScaduto = true;
-      // Se dopo 10 secondi non ha interagito e l'audio non è partito, spegne il video dopo i 20 secondi totali stabiliti
-      if (!audioAttivato) {
-        setTimeout(() => {
-          video.pause();
-          video.currentTime = 0;
-        }, 10000); 
-      }
-    }, 10000);
-  }
-
-  // 2. Cattura l'interazione naturale dell'utente (un clic ovunque) nei primi 10 secondi
-  window.addEventListener('click', () => {
-    // Se l'utente clicca nei primi 10 secondi ed l'audio non è ancora attivo, lo sblocca!
-    if (!tempoScaduto && !audioAttivato) {
-      attivaAudioSigla();
-    }
-  });
-
-  // Funzione centrale che avvia l'audio e la voce guida
-  function attivaAudioSigla() {
-    audioAttivato = true;
-    video.muted = false; 
-    video.volume = 1.0;
     
-    // Parte subito la voce digitale
-    const messaggio = "Ciao da " + citta + ", " + salutoFissoEl.innerText;
-    const sintesi = new SpeechSynthesisUtterance(messaggio);
-    sintesi.lang = 'it-IT';
-    window.speechSynthesis.speak(sintesi);
+    let playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        console.log("Autoplay Muted avviato con successo.");
+        
+        // MODIFICATO QUI: Dopo 10 secondi esatti azzera/mantiene il volume e avvia la sintesi vocale
+        setTimeout(() => {
+            video.muted = true;
+            video.volume = 0.0; 
+            
+            const messaggio = "Ciao da " + citta + ", " + salutoFissoEl.innerText;
+            const sintesi = new SpeechSynthesisUtterance(messaggio);
+            sintesi.lang = 'it-IT';
+            window.speechSynthesis.speak(sintesi);
+        }, 10000); // <-- Gestione dei 10 secondi richiesti
+        
+        // Dopo 20 secondi totali ferma e resetta il video
+        setTimeout(() => {
+            video.pause();
+            video.currentTime = 0;
+        }, 20000);
 
-    // Il video si stopperà dopo 20 secondi dall'attivazione dell'audio
-    setTimeout(() => {
-        video.pause();
-        video.currentTime = 0;
-    }, 20000);
+      }).catch(err => {
+        console.log("Autoplay iniziale bloccato dal browser, attesa interazione:", err);
+      });
+    }
   }
 
-  // Controllo manuale tramite il tasto GIF (Funziona sempre, scavalca i timer)
+  // FUNZIONE MANUALE (Se premono il tasto GIF GIF)
   function videoControl() {
-    attivaAudioSigla();
+    video.muted = false; 
+    video.volume = 1.0; 
+    video.play();
   }
 
   fetch('https://get.geojs.io/v1/ip/geo.json')
@@ -195,7 +183,8 @@
         citta = d.city || "AMICO"; 
         cittaEl.innerText = "DA " + citta.toUpperCase();
         update(); 
-        avviaVideoMuto();
+        // Avvia l'autoplay non appena i dati della geolocalizzazione e i video sono pronti
+        autoPlayMuted();
     });
 
   function update() {
