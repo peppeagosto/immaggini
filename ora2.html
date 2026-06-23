@@ -19,7 +19,7 @@
       display: flex; 
       justify-content: space-between; 
       width: 100vw; 
-      padding: 100px 20px 30px; /* Rettangoli scesi giù */
+      padding: 100px 20px 30px; 
       box-sizing: border-box; 
     }
     
@@ -59,14 +59,15 @@
       padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
     }
 
-    /* CLASSE GIF PLAY: DENTRO IL VIDEO, IN ALTO A DESTRA */
+    /* CLASSE GIF PLAY: Z-INDEX MAXATO E POINTER-EVENTS FORZATO */
     .play-btn {
       position: absolute;
       top: 10px;
       right: 10px;
       width: 60px;
       cursor: pointer;
-      z-index: 20;
+      z-index: 9999; /* Sparato al massimo per superare ogni blocco del sito */
+      pointer-events: auto !important; /* Forza la ricezione del click */
       transition: transform 0.2s;
     }
     
@@ -74,7 +75,6 @@
       transform: scale(1.1); 
     }
 
-    /* CLASSE TASTO ON/OFF: FUORI DAL RETTANGOLO E SOTTO */
     .on-off-btn {
       margin-top: 15px;
       padding: 8px 16px;
@@ -93,7 +93,6 @@
       color: #000;
     }
 
-    /* CLASSE PER IL TESTO ARCOBALENO PULSANTE */
     .testo-arcobaleno {
       background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
       background-size: 200% auto;
@@ -170,7 +169,6 @@
             window.speechSynthesis.speak(sintesi);
         }, 5000); 
         
-        // Logica dei 20 secondi attiva prima di rimettere in pausa/azzerare
         setTimeout(() => {
             video.pause();
             video.currentTime = 0;
