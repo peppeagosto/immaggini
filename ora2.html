@@ -19,7 +19,7 @@
       display: flex; 
       justify-content: space-between; 
       width: 100vw; 
-      padding: 30px 20px; 
+      padding: 100px 20px 30px; /* Rettangoli scesi giù */
       box-sizing: border-box; 
     }
     
@@ -59,19 +59,38 @@
       padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
     }
 
-    /* CLASSE MODIFICATA: PIÙ PICCOLA E NELL'ANGOLO PERFETTO */
+    /* CLASSE GIF PLAY: DENTRO IL VIDEO, IN ALTO A DESTRA */
     .play-btn {
       position: absolute;
-      top: 10px;   /* Avvicinato al bordo superiore */
-      right: 10px; /* Avvicinato al bordo destro */
-      width: 60px; /* Ridotta larghezza da 80px a 60px */
+      top: 10px;
+      right: 10px;
+      width: 60px;
       cursor: pointer;
-      z-index: 20; /* Sopra il video */
+      z-index: 20;
       transition: transform 0.2s;
     }
     
     .play-btn:hover {
       transform: scale(1.1); 
+    }
+
+    /* CLASSE TASTO ON/OFF: FUORI DAL RETTANGOLO E SOTTO */
+    .on-off-btn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .on-off-btn:hover {
+      background-color: #fff;
+      color: #000;
     }
 
     /* CLASSE PER IL TESTO ARCOBALENO PULSANTE */
@@ -116,8 +135,11 @@
         <source id="video-source" src="" type="video/mp4">
       </video>
       <div id="testo-sotto-video" class="testo-dinamico testo-arcobaleno">BENVENUTO!</div>
-      <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="ON" class="play-btn" onclick="videoControl()">
+      
+      <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="PLAY" class="play-btn" onclick="videoControl()">
     </div>
+    
+    <button class="on-off-btn" onclick="videoControl()">ON / OFF</button>
   </div>
 
 </div>
@@ -148,6 +170,7 @@
             window.speechSynthesis.speak(sintesi);
         }, 5000); 
         
+        // Logica dei 20 secondi attiva prima di rimettere in pausa/azzerare
         setTimeout(() => {
             video.pause();
             video.currentTime = 0;
@@ -179,11 +202,4 @@
       source.src = vid; 
       video.load(); 
     }
-    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-  }
-
-  setInterval(update, 1000);
-  update();
-</script>
-</body>
-</html>
+    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString(
