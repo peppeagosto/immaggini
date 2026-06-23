@@ -4,45 +4,103 @@
   <meta charset="UTF-8">
   <title>2 OFFICIAL - Smart Auto-Timer</title>
   <style>
-    body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
+    body { 
+      margin: 0; 
+      background: transparent; 
+      display: flex; 
+      justify-content: center; 
+      align-items: flex-start; 
+      height: 100vh; 
+      overflow: hidden; 
+      font-family: Arial, sans-serif; 
+    }
     
-    .container { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 50px; box-sizing: border-box; }
+    .container { 
+      display: flex; 
+      justify-content: space-between; 
+      width: 100vw; 
+      padding: 30px 50px; 
+      box-sizing: border-box; 
+    }
     
-    .wrapper { position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .colonna {
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+    }
+
+    .spazio-vuoto {
+      height: 80px;
+      margin-bottom: 25px;
+    }
+
+    .wrapper { 
+      position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; 
+      justify-content: center; align-items: center; text-align: center; 
+    }
     
-    .controls-container { display: flex; justify-content: center; width: 100%; margin-bottom: 25px; }
-    .controls-container img { width: 80px; cursor: pointer; transition: transform 0.2s; }
-    .controls-container img:hover { transform: scale(1.1); }
+    .controls-container { 
+      display: flex; justify-content: center; width: 100%; height: 80px; margin-bottom: 25px; 
+      position: relative; 
+      z-index: 999; 
+    }
+    .controls-container img { 
+      width: 80px; cursor: pointer; transition: transform 0.2s; 
+    }
+    .controls-container img:hover { 
+      transform: scale(1.1); 
+    }
     
-    .wrapper::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-sizing: border-box; border: 9px solid transparent; border-radius: 22px; background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box; -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; background-size: 200%; animation: rainbow-bg 3s linear infinite; pointer-events: none; }
+    .wrapper::after { 
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+      box-sizing: border-box; border: 9px solid transparent; border-radius: 22px; 
+      background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000) border-box; 
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); 
+      -webkit-mask-composite: destination-out; mask-composite: exclude; 
+      background-size: 200%; animation: rainbow-bg 3s linear infinite; pointer-events: none; 
+    }
     @keyframes rainbow-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
     
-    .left { background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); background-size: cover; background-position: center; }
-    .side-video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
-    .testo-dinamico { position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; }
+    .left { 
+      background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); 
+      background-size: cover; background-position: center; 
+    }
+    .side-video { 
+      width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; 
+    }
+    .testo-dinamico { 
+      position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); 
+      padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="wrapper left">
-    <div id="saluto-fisso" style="color:white; font-size:20px; font-weight:900;">...</div>
-    <div id="orario-grande" style="color:white; font-size:55px; font-weight:900;">00:00</div>
-    <div id="citta-visitatore" style="color:#00ffff; font-weight:bold; margin-top:10px;">CARICAMENTO...</div>
+  
+  <div class="colonna">
+    <div class="spazio-vuoto"></div>
+    <div class="wrapper left">
+      <div id="saluto-fisso" style="color:white; font-size:20px; font-weight:900;">...</div>
+      <div id="orario-grande" style="color:white; font-size:55px; font-weight:900;">00:00</div>
+      <div id="citta-visitatore" style="color:#00ffff; font-weight:bold; margin-top:10px;">CARICAMENTO...</div>
+    </div>
   </div>
 
-  <div class="right-side">
+  <div class="colonna">
     <div class="controls-container">
       <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="ON" onclick="videoControl()">
     </div>
     
     <div class="wrapper" style="background:#000;">
-      <video id="video-ragazze" class="side-video" loop playsinline muted>
+      <video id="video-ragazze" class="side-video" loop playsinline>
         <source id="video-source" src="" type="video/mp4">
       </video>
       <div id="testo-sotto-video" class="testo-dinamico">BENVENUTO!</div>
     </div>
   </div>
+
 </div>
 
 <script>
@@ -54,26 +112,37 @@
   let citta = "AMICO";
 
   function videoControl() {
-    // 1. Reset video e avvio in muto
-    video.currentTime = 0;
-    video.muted = true;
-    video.play();
+    // 1. Facciamo partire SUBITO il video mp4 a TUTTO VOLUME
+    video.muted = false; 
+    video.volume = 1.0; 
     
-    // 2. Parla SUBITO (città e saluto) per i primi 4 secondi
-    const messaggio = "Ciao da " + citta + ", " + salutoEl.innerText;
-    const sintesi = new SpeechSynthesisUtterance(messaggio);
-    sintesi.lang = 'it-IT';
-    window.speechSynthesis.speak(sintesi);
+    let playPromise = video.play();
     
-    // 3. Dopo 4 secondi, togli il Muted per far sentire la sigla
-    setTimeout(() => {
-        video.muted = false;
-    }, 4000);
-    
-    // 4. Dopo 9 secondi totali, muta tutto
-    setTimeout(() => {
-        video.muted = true;
-    }, 9000);
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        
+        // 2. Dopo 5 secondi, azzeriamo il volume dell'MP4 e facciamo partire la voce
+        setTimeout(() => {
+            video.volume = 0.0; // Ammutolisce la sigla MP4
+            
+            // Lancia la voce generata
+            const messaggio = "Ciao da " + citta + ", " + salutoEl.innerText;
+            const sintesi = new SpeechSynthesisUtterance(messaggio);
+            sintesi.lang = 'it-IT';
+            window.speechSynthesis.speak(sintesi);
+        }, 5000); // Scatta al 5° secondo
+        
+        // 3. La voce dura circa 4 secondi, quindi al secondo 9 finirà da sola.
+        // Il video continua a girare muto. Al 20° secondo chiudiamo del tutto l'intro.
+        setTimeout(() => {
+            video.pause();
+            video.currentTime = 0;
+        }, 20000);
+
+      }).catch(err => {
+        console.log("Autoplay bloccato:", err);
+      });
+    }
   }
 
   fetch('https://get.geojs.io/v1/ip/geo.json')
