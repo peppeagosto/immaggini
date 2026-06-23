@@ -6,7 +6,7 @@
   <style>
     body { 
       margin: 0; 
-      background: trasparent; /* <-- MODIFICATO QUI: Sfondo nero invece che trasparente */
+      background: transparent; 
       display: flex; 
       justify-content: center; 
       align-items: flex-start; 
@@ -95,7 +95,6 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.08); } 
     }
-
   </style>
 </head>
 <body>
@@ -115,7 +114,7 @@
     <div style="position: relative;">
       
       <div class="wrapper" style="background:#000;">
-        <video id="video-ragazze" class="side-video" loop playsinline>
+        <video id="video-ragazze" class="side-video" loop playsinline autoplay muted>
           <source id="video-source" src="" type="video/mp4">
         </video>
         <div id="testo-sotto-video" class="testo-dinamico testo-arcobaleno">BENVENUTO!</div>
@@ -132,37 +131,62 @@
   const video = document.getElementById('video-ragazze');
   const source = document.getElementById('video-source');
   const cittaEl = document.getElementById('citta-visitatore');
-  const salutoEl = document.getElementById('saluto-fisso');
+  const salutoFissoEl = document.getElementById('saluto-fisso');
   const testoEl = document.getElementById('testo-sotto-video');
   let citta = "AMICO";
+  
+  let audioAttivato = false;
+  let tempoScaduto = false;
 
-  function videoControl() {
-    video.muted = false; 
-    video.volume = 1.0; 
-    
-    let playPromise = video.play();
-    
-    if (playPromise !== undefined) {
-      playPromise.then(_ => {
-        
-        setTimeout(() => {
-            video.volume = 0.0; 
-            
-            const messaggio = "Ciao da " + citta + ", " + salutoEl.innerText;
-            const sintesi = new SpeechSynthesisUtterance(messaggio);
-            sintesi.lang = 'it-IT';
-            window.speechSynthesis.speak(sintesi);
-        }, 5000); 
-        
-        setTimeout(() => {
-            video.pause();
-            video.currentTime = 0;
-        }, 20000);
+  // 1. Il video parte subito mutato all'apertura della pagina
+  function avviaVideoMuto() {
+    video.muted = true;
+    video.volume = 0.0;
+    video.play().catch(err => console.log("Attesa interazione utente..."));
 
-      }).catch(err => {
-        console.log("Autoplay bloccato:", err);
-      });
+    // Fissa la finestra temporale di 10 secondi per l'interazione automatica
+    setTimeout(() => {
+      tempoScaduto = true;
+      // Se dopo 10 secondi non ha interagito e l'audio non è partito, spegne il video dopo i 20 secondi totali stabiliti
+      if (!audioAttivato) {
+        setTimeout(() => {
+          video.pause();
+          video.currentTime = 0;
+        }, 10000); 
+      }
+    }, 10000);
+  }
+
+  // 2. Cattura l'interazione naturale dell'utente (un clic ovunque) nei primi 10 secondi
+  window.addEventListener('click', () => {
+    // Se l'utente clicca nei primi 10 secondi ed l'audio non è ancora attivo, lo sblocca!
+    if (!tempoScaduto && !audioAttivato) {
+      attivaAudioSigla();
     }
+  });
+
+  // Funzione centrale che avvia l'audio e la voce guida
+  function attivaAudioSigla() {
+    audioAttivato = true;
+    video.muted = false; 
+    video.volume = 1.0;
+    
+    // Parte subito la voce digitale
+    const messaggio = "Ciao da " + citta + ", " + salutoFissoEl.innerText;
+    const sintesi = new SpeechSynthesisUtterance(messaggio);
+    sintesi.lang = 'it-IT';
+    window.speechSynthesis.speak(sintesi);
+
+    // Il video si stopperà dopo 20 secondi dall'attivazione dell'audio
+    setTimeout(() => {
+        video.pause();
+        video.currentTime = 0;
+    }, 20000);
+  }
+
+  // Controllo manuale tramite il tasto GIF (Funziona sempre, scavalca i timer)
+  function videoControl() {
+    attivaAudioSigla();
   }
 
   fetch('https://get.geojs.io/v1/ip/geo.json')
@@ -171,6 +195,7 @@
         citta = d.city || "AMICO"; 
         cittaEl.innerText = "DA " + citta.toUpperCase();
         update(); 
+        avviaVideoMuto();
     });
 
   function update() {
@@ -178,7 +203,7 @@
     let msg = h >= 6 && h < 13 ? "BUONGIORNO" : h >= 13 && h < 18 ? "BUON POMERIGGIO" : h >= 18 && h < 23 ? "BUONASERA" : "BUONANOTTE";
     let vid = h >= 6 && h < 13 ? "https://i.imgur.com/ybUBxzW.mp4" : h >= 13 && h < 18 ? "https://i.imgur.com/EeEhEd9.mp4" : h >= 18 && h < 23 ? "https://i.imgur.com/M44McxJ.mp4" : "https://i.imgur.com/8tUlXYU.mp4";
 
-    salutoEl.innerText = msg;
+    salutoFissoEl.innerText = msg;
     testoEl.innerText = "CIAO DA " + citta.toUpperCase() + ", " + msg;
     
     if (source.src !== vid) { 
