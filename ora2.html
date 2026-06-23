@@ -202,4 +202,11 @@
       source.src = vid; 
       video.load(); 
     }
-    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString(
+    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+  }
+
+  setInterval(update, 1000);
+  update();
+</script>
+</body>
+</html>
