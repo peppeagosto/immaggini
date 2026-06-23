@@ -19,7 +19,8 @@
       display: flex; 
       justify-content: space-between; 
       width: 100vw; 
-      padding: 30px 50px; 
+      /* MODIFICATO QUI: da 50px a 20px per spingerli verso l'esterno */
+      padding: 30px 20px; 
       box-sizing: border-box; 
     }
     
@@ -185,11 +186,4 @@
       source.src = vid; 
       video.load(); 
     }
-    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-  }
-
-  setInterval(update, 1000);
-  update();
-</script>
-</body>
-</html>
+    document.getElementById('orario-grande').innerText = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})
