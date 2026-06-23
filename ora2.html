@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,7 +20,7 @@
       display: flex; 
       justify-content: space-between; 
       width: 100vw; 
-      padding: 100px 20px 30px; 
+      padding: 100px 20px 30px; /* Rettangoli scesi giù */
       box-sizing: border-box; 
     }
     
@@ -59,15 +60,14 @@
       padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
     }
 
-    /* CLASSE GIF PLAY: Z-INDEX MAXATO E POINTER-EVENTS FORZATO */
+    /* CLASSE GIF PLAY: FUORI DAL WRAPPER MA ANCORATA IN ALTO A DESTRA */
     .play-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: -68px;   /* Alzato un altro po' (prima era -15px) */
+      right:  100px; /* Spostato più a destra (prima era -15px) */
       width: 60px;
       cursor: pointer;
-      z-index: 9999; /* Sparato al massimo per superare ogni blocco del sito */
-      pointer-events: auto !important; /* Forza la ricezione del click */
+      z-index: 290;
       transition: transform 0.2s;
     }
     
@@ -75,6 +75,7 @@
       transform: scale(1.1); 
     }
 
+    /* CLASSE TASTO ON/OFF: FUORI DAL RETTANGOLO E SOTTO */
     .on-off-btn {
       margin-top: 15px;
       padding: 8px 16px;
@@ -93,6 +94,7 @@
       color: #000;
     }
 
+    /* CLASSE PER IL TESTO ARCOBALENO PULSANTE */
     .testo-arcobaleno {
       background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
       background-size: 200% auto;
@@ -129,15 +131,19 @@
   </div>
 
   <div class="colonna">
-    <div class="wrapper" style="background:#000;">
-      <video id="video-ragazze" class="side-video" loop playsinline>
-        <source id="video-source" src="" type="video/mp4">
-      </video>
-      <div id="testo-sotto-video" class="testo-dinamico testo-arcobaleno">BENVENUTO!</div>
+    
+    <div style="position: relative;">
+      
+      <div class="wrapper" style="background:#000;">
+        <video id="video-ragazze" class="side-video" loop playsinline>
+          <source id="video-source" src="" type="video/mp4">
+        </video>
+        <div id="testo-sotto-video" class="testo-dinamico testo-arcobaleno">BENVENUTO!</div>
+      </div>
       
       <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="PLAY" class="play-btn" onclick="videoControl()">
+      
     </div>
-    
     <button class="on-off-btn" onclick="videoControl()">ON / OFF</button>
   </div>
 
@@ -169,6 +175,7 @@
             window.speechSynthesis.speak(sintesi);
         }, 5000); 
         
+        // Logica dei 20 secondi attiva prima di rimettere in pausa/azzerare
         setTimeout(() => {
             video.pause();
             video.currentTime = 0;
