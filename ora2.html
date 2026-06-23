@@ -19,7 +19,6 @@
       display: flex; 
       justify-content: space-between; 
       width: 100vw; 
-      /* MODIFICATO QUI: da 50px a 20px per spingerli verso l'esterno */
       padding: 30px 20px; 
       box-sizing: border-box; 
     }
@@ -47,7 +46,11 @@
       z-index: 999; 
     }
     .controls-container img { 
-      width: 80px; cursor: pointer; transition: transform 0.2s; 
+      width: 80px; 
+      cursor: pointer; 
+      transition: transform 0.2s; 
+      /* MODIFICATO QUI: aggiunto margin-top per abbassare il tasto play di poco */
+      margin-top: 15px; 
     }
     .controls-container img:hover { 
       transform: scale(1.1); 
@@ -72,7 +75,7 @@
     }
     .testo-dinamico { 
       position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); 
-      padding: 10px; border-radius: 25px; color: #fff; font-size: 14px; font-weight: bold; 
+      padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
     }
 
     /* NUOVA CLASSE PER IL TESTO ARCOBALENO PULSANTE */
