@@ -29,31 +29,10 @@
       align-items: center;
     }
 
-    .spazio-vuoto {
-      height: 80px;
-      margin-bottom: 25px;
-    }
-
     .wrapper { 
       position: relative; overflow: hidden; border-radius: 22px; width: 270px; height: 484px; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; 
       justify-content: center; align-items: center; text-align: center; 
-    }
-    
-    .controls-container { 
-      display: flex; justify-content: center; width: 100%; height: 80px; margin-bottom: 25px; 
-      position: relative; 
-      z-index: 999; 
-    }
-    .controls-container img { 
-      width: 80px; 
-      cursor: pointer; 
-      transition: transform 0.2s; 
-      /* MODIFICATO QUI: aggiunto margin-top per abbassare il tasto play di poco */
-      margin-top: 15px; 
-    }
-    .controls-container img:hover { 
-      transform: scale(1.1); 
     }
     
     .wrapper::after { 
@@ -70,15 +49,32 @@
       background-image: url('https://xatimg.com/image/Vpj4ZaEINzqz.jpg'); 
       background-size: cover; background-position: center; 
     }
+    
     .side-video { 
       width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; 
     }
+    
     .testo-dinamico { 
       position: absolute; bottom: 20px; width: 80%; z-index: 5; background: rgba(0, 0, 0, 0.6); 
       padding: 10px; border-radius: 15px; color: #fff; font-size: 14px; font-weight: bold; 
     }
 
-    /* NUOVA CLASSE PER IL TESTO ARCOBALENO PULSANTE */
+    /* CLASSE MODIFICATA: PIÙ PICCOLA E NELL'ANGOLO PERFETTO */
+    .play-btn {
+      position: absolute;
+      top: 10px;   /* Avvicinato al bordo superiore */
+      right: 10px; /* Avvicinato al bordo destro */
+      width: 60px; /* Ridotta larghezza da 80px a 60px */
+      cursor: pointer;
+      z-index: 20; /* Sopra il video */
+      transition: transform 0.2s;
+    }
+    
+    .play-btn:hover {
+      transform: scale(1.1); 
+    }
+
+    /* CLASSE PER IL TESTO ARCOBALENO PULSANTE */
     .testo-arcobaleno {
       background: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
       background-size: 200% auto;
@@ -86,20 +82,18 @@
       -webkit-background-clip: text !important;
       background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
-      display: inline-block; /* Necessario per far funzionare bene la pulsazione */
+      display: inline-block; 
       animation: scorri-colori 3s linear infinite, pulsa-testo 1.5s ease-in-out infinite;
     }
 
-    /* Animazione scorrimento colori */
     @keyframes scorri-colori {
       0% { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
 
-    /* Animazione pulsazione (effetto respiro) */
     @keyframes pulsa-testo {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); } /* Aumenta leggermente la grandezza */
+      50% { transform: scale(1.08); } 
     }
 
   </style>
@@ -109,7 +103,6 @@
 <div class="container">
   
   <div class="colonna">
-    <div class="spazio-vuoto"></div>
     <div class="wrapper left">
       <div id="saluto-fisso" class="testo-arcobaleno" style="font-size:20px; font-weight:900;">...</div>
       <div id="orario-grande" class="testo-arcobaleno" style="font-size:55px; font-weight:900; margin: 10px 0;">00:00</div>
@@ -118,15 +111,12 @@
   </div>
 
   <div class="colonna">
-    <div class="controls-container">
-      <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="ON" onclick="videoControl()">
-    </div>
-    
     <div class="wrapper" style="background:#000;">
       <video id="video-ragazze" class="side-video" loop playsinline>
         <source id="video-source" src="" type="video/mp4">
       </video>
       <div id="testo-sotto-video" class="testo-dinamico testo-arcobaleno">BENVENUTO!</div>
+      <img src="https://xatimg.com/image/6gunJFri4oTA.gif" alt="ON" class="play-btn" onclick="videoControl()">
     </div>
   </div>
 
