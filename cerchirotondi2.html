@@ -50,8 +50,8 @@
             width: 828px; 
             height: 486px;
             margin-top: 39px;
-            margin-left: 20px;  /* Spazio tra video sinistro e stage */
-            margin-right: 20px; /* Spazio tra stage e video destro */
+            margin-left: 120px;  /* Spazio tra video sinistro e stage */
+            margin-right: 120px; /* Spazio tra stage e video destro */
             background: rgba(0, 0, 0, 0.05); /* Solo per test */
             pointer-events: auto; 
         }
@@ -95,7 +95,7 @@
 
     <div class="main-scaler">
         
-        <video class="side-video" autoplay loop muted playsinline>
+        <video id="video-dx" class="side-video" autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/baby.mp4" type="video/mp4">
             Il tuo browser non supporta i video.
         </video>
@@ -118,7 +118,7 @@
 
         </div>
 
-        <video class="side-video" autoplay loop muted playsinline>
+        <video id="video-sx" class="side-video" autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/baby.mp4" type="video/mp4">
             Il tuo browser non supporta i video.
         </video>
