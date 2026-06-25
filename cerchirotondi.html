@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>fmusic:</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    
+    <style type="text/css">
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding-top: 60px; 
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            transition: background 0.4s ease-in-out; 
+            background: #fff; 
+        }
+
+        .main-scaler {
+            transform: scale(min(1, calc(100vw / 1580), calc(100vh / 950)));
+            transform-origin: top center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            width: 1580px; 
+        }
+
+        /* Il tuo rettangolo centrale */
+        .stage-area {
+            position: relative;
+            width: 728px;
+            height: 486px;
+            margin-top: 39px;
+            background: rgba(0, 0, 0, 0.05); /* Solo per vedere l'area di prova */
+        }
+
+        /* Colonne verticali per i cerchietti ai lati dello stage-area */
+        .theme-nav-vertical {
+            position: absolute;
+            top: 0;
+            height: 100%; /* Copre tutta l'altezza dello stage-area */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Spaziatura perfetta dall'inizio alla fine */
+            align-items: center;
+            z-index: 9999;
+            width: 30px; /* Larghezza della colonna */
+        }
+
+        /* Posizionamento millimetrico a sinistra e destra esterni */
+        .left-side {
+            left: -40px; /* Distanza dal bordo sinistro dello stage */
+        }
+
+        .right-side {
+            right: -40px; /* Distanza dal bordo destro dello stage */
+        }
+
+        /* Stile originale dei tuoi cerchietti */
+        .theme-nav-vertical span {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 -2px 5px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        /* Effetto visivo originale */
+        .theme-nav-vertical span:hover {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onselectstart="return false;">
+
+    <div class="main-scaler">
+        <div class="stage-area">
+            
+            <div class="theme-nav-vertical left-side">
+                <span style="--c1:#00ff00; --c2:#004400;" onclick="changeBg('#00ff00')"></span> 
+                <span style="--c1:#0000ff; --c2:#000033;" onclick="changeBg('#0000ff')"></span> 
+                <span style="--c1:#ff0000; --c2:#440000;" onclick="changeBg('#ff0000')"></span> 
+                <span style="--c1:#00ffff; --c2:#004444;" onclick="changeBg('#00ffff')"></span> 
+                <span style="--c1:#ff00ff; --c2:#440044;" onclick="changeBg('#ff00ff')"></span> 
+            </div>
+
+            <div class="theme-nav-vertical right-side">
+                <span style="--c1:#ffff00; --c2:#444400;" onclick="changeBg('#ffff00')"></span>
+                <span style="--c1:#ffffff; --c2:#333333;" onclick="changeBg('#ffffff')"></span>
+                <span style="--c1:#ff8800; --c2:#442200;" onclick="changeBg('#ff8800')"></span>
+                <span style="--c1:#8800ff; --c2:#220044;" onclick="changeBg('#8800ff')"></span>
+                <span style="--c1:#00ff88; --c2:#004422;" onclick="changeBg('#00ff88')"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Funzione originale per cambiare lo sfondo
+        function changeBg(color) {
+            document.body.style.background = color;
+        }
+    </script>
+
+</body>
+</html>
