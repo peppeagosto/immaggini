@@ -27,12 +27,22 @@
             transform: scale(min(1, calc(100vw / 1580), calc(100vh / 950)));
             transform-origin: top center;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; /* Allinea gli elementi al centro del flex */
+            align-items: center;     /* Allinea verticalmente i video e lo stage */
             z-index: 10;
             width: 1580px; 
             height: auto;
             pointer-events: none;
+        }
+
+        /* STILE PER I VIDEO AI LATI */
+        .side-video {
+            width: 350px;       /* Puoi cambiare la larghezza dei video qui */
+            height: 486px;      /* Stessa altezza dello stage-area per simmetria */
+            object-fit: cover;  /* Ritaglia il video per riempire l'area senza deformarsi */
+            pointer-events: auto; /* Permette di interagire se serve, o lascialo attivo */
+            border-radius: 8px;  /* Opzionale: arrotonda leggermente i bordi dei video */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* Opzionale: un po' di ombra */
         }
 
         .stage-area {
@@ -40,26 +50,27 @@
             width: 828px; 
             height: 486px;
             margin-top: 39px;
+            margin-left: 20px;  /* Spazio tra video sinistro e stage */
+            margin-right: 20px; /* Spazio tra stage e video destro */
             background: rgba(0, 0, 0, 0.05); /* Solo per test */
             pointer-events: auto; 
         }
 
-        /* Nuovo contenitore orizzontale posizionato in alto */
+        /* Contenitore orizzontale bottoni */
         .theme-nav-horizontal {
             position: absolute;
-            top: -45px; /* Distanza dal bordo superiore, uguale a quella che c'era prima ai lati */
+            top: -45px; 
             left: 10px;
             right: 10px;
             height: 30px; 
             display: flex;
             flex-direction: row;
-            justify-content: space-between; /* Distribuisce i 10 cerchietti con la stessa logica proporzionale */
+            justify-content: space-between; 
             align-items: center;
             z-index: 999999; 
             pointer-events: auto; 
         }
 
-        /* Stile dei cerchietti (invariato) */
         .theme-nav-horizontal span {
             width: 24px;
             height: 24px;
@@ -83,6 +94,12 @@
 <body oncontextmenu="return false;">
 
     <div class="main-scaler">
+        
+        <video class="side-video" autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/baby.html" type="video/mp4">
+            Il tuo browser non supporta i video.
+        </video>
+
         <div class="stage-area">
             
             <div class="theme-nav-horizontal">
@@ -100,6 +117,12 @@
             </div>
 
         </div>
+
+        <video class="side-video" autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/baby.html" type="video/mp4">
+            Il tuo browser non supporta i video.
+        </video>
+
     </div>
 
     <script>
