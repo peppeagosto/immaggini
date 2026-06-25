@@ -24,7 +24,7 @@
         }
 
         .main-scaler {
-            position: relative; /* Importante per il posizionamento dei figli */
+            position: relative;
             transform: scale(min(1, calc(100vw / 1580), calc(100vh / 950)));
             transform-origin: top center;
             display: flex;
@@ -33,42 +33,35 @@
             z-index: 10;
             width: 1580px; 
             height: auto;
+            pointer-events: none;
         }
 
-        /* Il tuo rettangolo centrale */
         .stage-area {
             position: relative;
-            width: 728px;
+            width: 828px; 
             height: 486px;
             margin-top: 39px;
-            background: rgba(0, 0, 0, 0.05); /* Solo per vedere l'area di prova */
+            background: rgba(0, 0, 0, 0.05); /* Solo per test */
+            pointer-events: auto; 
         }
 
-        /* Colonne verticali per i cerchietti ai lati dello stage-area */
-        .theme-nav-vertical {
+        /* Nuovo contenitore orizzontale posizionato in alto */
+        .theme-nav-horizontal {
             position: absolute;
-            top: 0;
-            height: 100%; /* Copre tutta l'altezza dello stage-area */
+            top: 10px; /* Distanza dal bordo superiore, uguale a quella che c'era prima ai lati */
+            left: 10px;
+            right: 10px;
+            height: 30px; 
             display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Spaziatura perfetta dall'inizio alla fine */
+            flex-direction: row;
+            justify-content: space-between; /* Distribuisce i 10 cerchietti con la stessa logica proporzionale */
             align-items: center;
-            z-index: 99999; /* Portato in primissimo piano per i click */
-            width: 30px; /* Larghezza della colonna */
-            pointer-events: all; /* Forza la reattività del mouse */
+            z-index: 999999; 
+            pointer-events: auto; 
         }
 
-        /* Posizionamento millimetrico a sinistra e destra esterni */
-        .left-side {
-            left: -40px; /* Distanza dal bordo sinistro dello stage */
-        }
-
-        .right-side {
-            right: -40px; /* Distanza dal bordo destro dello stage */
-        }
-
-        /* Stile dei cerchietti */
-        .theme-nav-vertical span {
+        /* Stile dei cerchietti (invariato) */
+        .theme-nav-horizontal span {
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -80,10 +73,10 @@
             flex-shrink: 0;
             user-select: none;
             -webkit-user-select: none;
+            pointer-events: auto; 
         }
 
-        /* Effetto visivo al passaggio del mouse */
-        .theme-nav-vertical span:hover {
+        .theme-nav-horizontal span:hover {
             transform: scale(1.15);
         }
     </style>
@@ -93,15 +86,13 @@
     <div class="main-scaler">
         <div class="stage-area">
             
-            <div class="theme-nav-vertical left-side">
+            <div class="theme-nav-horizontal">
                 <span style="--c1:#00ff00; --c2:#004400;" onclick="changeBg('#00ff00')"></span> 
                 <span style="--c1:#0000ff; --c2:#000033;" onclick="changeBg('#0000ff')"></span> 
-                <span style="--c1:#ff0000; --c2:#440000;" onclick="changeBg('#ff0000')"></span> 
+                <span style="--c1:#ff0000; --c2:#440044;" onclick="changeBg('#ff0000')"></span> 
                 <span style="--c1:#00ffff; --c2:#004444;" onclick="changeBg('#00ffff')"></span> 
                 <span style="--c1:#ff00ff; --c2:#440044;" onclick="changeBg('#ff00ff')"></span> 
-            </div>
-
-            <div class="theme-nav-vertical right-side">
+                
                 <span style="--c1:#ffff00; --c2:#444400;" onclick="changeBg('#ffff00')"></span>
                 <span style="--c1:#ffffff; --c2:#333333;" onclick="changeBg('#ffffff')"></span>
                 <span style="--c1:#ff8800; --c2:#442200;" onclick="changeBg('#ff8800')"></span>
@@ -113,7 +104,6 @@
     </div>
 
     <script>
-        // Funzione per cambiare lo sfondo del body
         function changeBg(color) {
             document.body.style.background = color;
         }
