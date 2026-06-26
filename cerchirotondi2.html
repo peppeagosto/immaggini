@@ -27,8 +27,8 @@
             transform: scale(min(1, calc(100vw / 1580), calc(100vh / 950)));
             transform-origin: top center;
             display: flex;
-            justify-content: center; /* Allinea gli elementi al centro del flex */
-            align-items: center;     /* Allinea verticalmente i video e lo stage */
+            justify-content: center; 
+            align-items: center;     
             z-index: 10;
             width: 1580px; 
             height: auto;
@@ -37,12 +37,12 @@
 
         /* STILE PER I VIDEO AI LATI */
         .side-video {
-            width: 380px;       /* Puoi cambiare la larghezza dei video qui */
-            height: 486px;      /* Stessa altezza dello stage-area per simmetria */
-            object-fit: cover;  /* Ritaglia il video per riempire l'area senza deformarsi */
-            pointer-events: auto; /* Permette di interagire se serve, o lascialo attivo */
-            border-radius: 18px;  /* Opzionale: arrotonda leggermente i bordi dei video */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* Opzionale: un po' di ombra */
+            width: 380px;       
+            height: 486px;      
+            object-fit: cover;  
+            pointer-events: auto; 
+            border-radius: 18px;  
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
         }
 
         .stage-area {
@@ -50,25 +50,34 @@
             width: 828px; 
             height: 486px;
             margin-top: 39px;
-            margin-left: 180px;  /* Spazio tra video sinistro e stage */
-            margin-right: 180px; /* Spazio tra stage e video destro */
-            background: rgba(0, 0, 0, 0.05); /* Solo per test */
+            margin-left: 180px;  
+            margin-right: 180px; 
+            background: rgba(0, 0, 0, 0.05); 
             pointer-events: auto; 
         }
 
-        /* Contenitore orizzontale bottoni */
+        /* Contenitore orizzontale bottoni (Invisibile di base) */
         .theme-nav-horizontal {
             position: absolute;
             top: -45px; 
             left: 10px;
             right: 10px;
-            height: 30px; 
+            height: 50px; /* Aumentato leggermente per facilitare il rilevamento del mouse */
             display: flex;
             flex-direction: row;
             justify-content: space-between; 
             align-items: center;
             z-index: 999999; 
             pointer-events: auto; 
+            
+            /* Effetto a scomparsa */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Mostra i cerchietti quando passi il mouse sopra il contenitore */
+        .theme-nav-horizontal:hover {
+            opacity: 1;
         }
 
         .theme-nav-horizontal span {
@@ -87,7 +96,7 @@
         }
 
         .theme-nav-horizontal span:hover {
-            transform: scale(1.15);
+            transform: scale(1.25); /* Un pizzico di zoom in più quando ci sei proprio sopra */
         }
     </style>
 </head>
