@@ -1,21 +1,17 @@
 
-<html lang="pt-PT"><head>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>il cartaio:</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     
     <style type="text/css">
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; 
-            padding-top: 60px; 
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Mantieni hidden per l'effetto scena, cambia in auto se necessario */
             background: transparent; 
             font-family: 'Segoe UI', Roboto, sans-serif;
             cursor: crosshair;
@@ -23,81 +19,62 @@
 
         .bg-overlay {
             position: fixed;
-            top: 0; left: 0; width: 200%; height: 200%;
-            background: linear-gradient(to bottom, rgba(0, 255, 0, 0.3) 0%, rgba(255, 255, 0, 0.2) 100%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 255, 0, 0.3) 0%, rgba(0, 50, 0, 0.7) 100%);
             z-index: 1;
             pointer-events: none;
             transition: 1.5s ease-in-out;
         }
 
-        .main-scaler {
-            transform: scale(min(4, calc(200vw / 2500), calc(200vh / 1950)));
-            transform-origin: top center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            width: 1580px; 
-        }
-
         .stage-area {
-            position: relative;
-            width: 728px;
-            height: 486px;
-            margin-top: 39px;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 10;
         }
 
         .theme-nav {
             position: absolute;
-            top: -35px; 
-            left: 0;
-            width: 100%;
+            top: 40px;
+            width: 90%;
+            max-width: 800px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
             z-index: 9999;
-            padding: 0 5px;
         }
 
         .theme-nav span {
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
             border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 -2px 5px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            flex-shrink: 0;
         }
 
         .theme-nav span:hover {
-            transform: scale(1.4) translateY(-3px);
-            box-shadow: 0 10px 25px var(--c1), inset 0 -2px 5px rgba(0,0,0,0.5);
-            border-color: #fff;
+            transform: scale(1.3) translateY(-5px);
         }
 
-        /* Testo Grande Centrale "IL CARTAIO" - Modificato per il Drag & Drop */
         .center-title {
-            font-size: 5.5rem;
+            font-size: 16vw; 
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -2px;
-            text-shadow: 0 8px 30px rgba(0,0,0,1);
+            text-shadow: 0 10px 20px rgba(0,0,0,1);
             white-space: nowrap;
-            z-index: 50; /* Alzato lo z-index per non finire dietro altre cose */
-            cursor: grab; /* Mette la manina aperta */
-            user-select: none; /* Evita che il testo si evidenzi di blu mentre lo trascini */
-            position: absolute; /* Necessario per farlo muovere liberamente */
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .center-title:active {
-            cursor: grabbing; /* Mette la manina chiusa mentre tieni premuto */
+            z-index: 50; 
+            cursor: grab; 
+            user-select: none; 
+            position: absolute; 
         }
 
         .rainbow {
@@ -110,16 +87,14 @@
 
         @keyframes rainbow-anim { to { background-position: 200% center; } }
 
-        /* EFFETTO SCIA LUMINOSA MOUSE */
         .scia-magica {
             position: fixed;
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%);
-            animation: dissolvenzaScia 0.5s linear forwards;
+            animation: dissolvenzaScia 0.6s linear forwards;
             mix-blend-mode: screen;
         }
 
@@ -128,25 +103,22 @@
             100% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
         }
 
-        /* EFFETTO PARTICELLE DI SFONDO */
         .particle {
             position: absolute;
             bottom: -20px;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.5);
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 50%;
-            box-shadow: 0 0 10px #fff;
             animation: rise linear infinite;
             z-index: 2;
             pointer-events: none;
-            opacity: 0;
         }
 
         @keyframes rise {
             0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(2); opacity: 0; }
         }
     </style>
 </head>
@@ -154,34 +126,20 @@
 
     <div class="bg-overlay" id="overlay"></div>
 
-    <div class="main-scaler">
-        <div class="stage-area">
-            
-            <div class="theme-nav">
-                <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,255,0,0.3)','rgba(0,50,0,0.7)', '#00ff00')"></span> 
-                <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,255,0.3)','rgba(0,0,50,0.7)', '#0000ff')"></span> 
-                <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(255,0,0,0.3)','rgba(50,0,0,0.7)', '#ff0000')"></span> 
-                <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,255,255,0.3)','rgba(0,50,50,0.7)', '#00ffff')"></span> 
-                <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(255,0,255,0.3)','rgba(50,0,50,0.7)', '#ff00ff')"></span> 
-                <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(255,255,0,0.3)','rgba(50,50,0,0.7)', '#ffff00')"></span>
-                <span style="--c1:#ffffff; --c2:#333333;" onclick="applyTheme('rgba(255,255,255,0.3)','rgba(50,50,50,0.4)', '#ffffff')"></span>
-                <span style="--c1:#ff8800; --c2:#442200;" onclick="applyTheme('rgba(255,136,0,0.3)','rgba(100,50,0,0.7)', '#ff8800')"></span>
-                <span style="--c1:#8800ff; --c2:#220044;" onclick="applyTheme('rgba(136,0,255,0.3)','rgba(50,0,100,0.7)', '#8800ff')"></span>
-                <span style="--c1:#00ff88; --c2:#004422;" onclick="applyTheme('rgba(0,255,136,0.3)','rgba(0,100,50,0.7)', '#00ff88')"></span>
-                <span style="--c1:#4b0082; --c2:#1a0033;" onclick="applyTheme('rgba(75,0,130,0.3)','rgba(0,0,0,0.8)', '#4b0082')"></span>
-                <span style="--c1:#adff2f; --c2:#223300;" onclick="applyTheme('rgba(173,255,47,0.3)','rgba(50,70,0,0.7)', '#adff2f')"></span>
-                <span style="--c1:#ffa07a; --c2:#441111;" onclick="applyTheme('rgba(255,160,122,0.3)','rgba(80,30,30,0.7)', '#ffa07a')"></span>
-                <span style="--c1:#7fffd4; --c2:#003322;" onclick="applyTheme('rgba(127,255,212,0.3)','rgba(30,80,60,0.7)', '#7fffd4')"></span>
-                <span style="--c1:#ffd700; --c2:#332200;" onclick="applyTheme('rgba(255,215,0,0.3)','rgba(0,0,0,0.8)', '#ffd700')"></span>
-            </div>
-
-            <div class="center-title rainbow" id="draggable-text">IL CARTAIO</div>
-
+    <div class="stage-area">
+        <div class="theme-nav">
+            <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,255,0,0.3)','rgba(0,50,0,0.7)', '#00ff00')"></span> 
+            <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,255,0.3)','rgba(0,0,50,0.7)', '#0000ff')"></span> 
+            <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(255,0,0,0.3)','rgba(50,0,0,0.7)', '#ff0000')"></span> 
+            <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,255,255,0.3)','rgba(0,50,50,0.7)', '#00ffff')"></span> 
+            <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(255,0,255,0.3)','rgba(50,0,50,0.7)', '#ff00ff')"></span> 
+            <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(255,255,0,0.3)','rgba(50,50,0,0.7)', '#ffff00')"></span>
         </div>
+
+        <div class="center-title rainbow" id="draggable-text">IL CARTAIO</div>
     </div>
 
     <script>
-        // -- GESTIONE COLORI E SCIA --
         let coloreSciaMouse = '#00ff00';
 
         function applyTheme(topColor, bottomColor, glowColor) {
@@ -190,67 +148,49 @@
             coloreSciaMouse = glowColor;
         }
 
+        // Effetto scia
         document.addEventListener('mousemove', function(e) {
             const scia = document.createElement('div');
             scia.className = 'scia-magica';
             scia.style.left = e.clientX + 'px';
             scia.style.top = e.clientY + 'px';
             scia.style.background = `radial-gradient(circle, #ffffff 10%, ${coloreSciaMouse} 60%, transparent 100%)`;
-            scia.style.boxShadow = `0 0 10px ${coloreSciaMouse}, 0 0 20px ${coloreSciaMouse}`;
-            
             document.body.appendChild(scia);
-            setTimeout(() => { scia.remove(); }, 500);
+            setTimeout(() => { scia.remove(); }, 600);
         });
 
-        // -- GESTIONE DRAG AND DROP DELLA SCRITTA --
+        // Logica trascinamento
         const testoDrag = document.getElementById('draggable-text');
-        let isDragging = false;
-        let offsetX = 0;
-        let offsetY = 0;
+        let isDragging = false, offsetX = 0, offsetY = 0;
 
         testoDrag.addEventListener('mousedown', function(e) {
             isDragging = true;
-            
-            // Calcola dove hai cliccato rispetto al bordo della scritta
             const rect = testoDrag.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
-            
-            // Sgancia l'elemento dalle sue posizioni originali per muoverlo liberamente
-            testoDrag.style.position = 'fixed';
-            testoDrag.style.transform = 'none'; // Rimuove il translate(-50%, -50%) per evitare scatti
-            testoDrag.style.left = rect.left + 'px';
-            testoDrag.style.top = rect.top + 'px';
         });
 
         document.addEventListener('mousemove', function(e) {
             if (isDragging) {
-                // Aggiorna la posizione in base a dove sposti il mouse
                 testoDrag.style.left = (e.clientX - offsetX) + 'px';
                 testoDrag.style.top = (e.clientY - offsetY) + 'px';
             }
         });
 
-        document.addEventListener('mouseup', function() {
-            isDragging = false;
-        });
+        document.addEventListener('mouseup', () => isDragging = false);
 
-        // -- GESTIONE PARTICELLE DI SFONDO --
+        // Particelle
         function createParticles() {
-            const particleCount = 30;
-            const body = document.querySelector('body');
-            
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 40; i++) {
                 let particle = document.createElement('div');
                 particle.classList.add('particle');
                 particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 3) + 's';
                 particle.style.animationDelay = Math.random() * 5 + 's';
-                body.appendChild(particle);
+                document.body.appendChild(particle);
             }
         }
         createParticles();
-    </script><div class="particle" style="left: 17.6388vw; animation-duration: 3.40765s; animation-delay: 2.4099s;"></div><div class="particle" style="left: 92.8989vw; animation-duration: 7.07672s; animation-delay: 2.98914s;"></div><div class="particle" style="left: 96.0029vw; animation-duration: 3.56611s; animation-delay: 2.106s;"></div><div class="particle" style="left: 29.2585vw; animation-duration: 4.10442s; animation-delay: 1.35656s;"></div><div class="particle" style="left: 39.2528vw; animation-duration: 7.53683s; animation-delay: 4.64493s;"></div><div class="particle" style="left: 34.417vw; animation-duration: 5.01012s; animation-delay: 4.16364s;"></div><div class="particle" style="left: 17.5983vw; animation-duration: 4.41867s; animation-delay: 3.39872s;"></div><div class="particle" style="left: 95.5717vw; animation-duration: 3.40596s; animation-delay: 3.92013s;"></div><div class="particle" style="left: 14.5177vw; animation-duration: 5.94668s; animation-delay: 2.15926s;"></div><div class="particle" style="left: 77.8206vw; animation-duration: 6.34655s; animation-delay: 3.40502s;"></div><div class="particle" style="left: 21.7752vw; animation-duration: 5.66033s; animation-delay: 4.33107s;"></div><div class="particle" style="left: 68.4886vw; animation-duration: 6.84923s; animation-delay: 2.92488s;"></div><div class="particle" style="left: 3.88958vw; animation-duration: 4.64684s; animation-delay: 2.09911s;"></div><div class="particle" style="left: 87.7938vw; animation-duration: 7.02301s; animation-delay: 2.52977s;"></div><div class="particle" style="left: 45.5568vw; animation-duration: 7.73398s; animation-delay: 3.40943s;"></div><div class="particle" style="left: 31.0544vw; animation-duration: 3.60147s; animation-delay: 0.416006s;"></div><div class="particle" style="left: 50.873vw; animation-duration: 4.75494s; animation-delay: 4.11592s;"></div><div class="particle" style="left: 83.7887vw; animation-duration: 3.88983s; animation-delay: 2.22552s;"></div><div class="particle" style="left: 16.582vw; animation-duration: 7.5358s; animation-delay: 0.306954s;"></div><div class="particle" style="left: 22.2678vw; animation-duration: 4.84755s; animation-delay: 3.34732s;"></div><div class="particle" style="left: 11.4597vw; animation-duration: 6.20232s; animation-delay: 3.71383s;"></div><div class="particle" style="left: 21.1263vw; animation-duration: 6.39123s; animation-delay: 0.932144s;"></div><div class="particle" style="left: 14.6388vw; animation-duration: 6.36951s; animation-delay: 4.54241s;"></div><div class="particle" style="left: 92.498vw; animation-duration: 3.33076s; animation-delay: 2.09866s;"></div><div class="particle" style="left: 14.9486vw; animation-duration: 4.69302s; animation-delay: 0.828646s;"></div><div class="particle" style="left: 52.5494vw; animation-duration: 6.49806s; animation-delay: 4.18558s;"></div><div class="particle" style="left: 82.9768vw; animation-duration: 3.85023s; animation-delay: 3.67892s;"></div><div class="particle" style="left: 9.4511vw; animation-duration: 3.03586s; animation-delay: 1.24552s;"></div><div class="particle" style="left: 70.0381vw; animation-duration: 3.63808s; animation-delay: 1.07541s;"></div><div class="particle" style="left: 24.1311vw; animation-duration: 3.11595s; animation-delay: 4.26057s;"></div>
-
-
-</body></html>
+    </script>
+</body>
+</html>
