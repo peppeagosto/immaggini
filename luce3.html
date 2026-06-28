@@ -1,0 +1,251 @@
+<html lang="pt-PT">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>fmusic:</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    
+    <style type="text/css">
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding-top: 60px; 
+            background: #000; 
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            cursor: crosshair;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 255, 0, 0.3) 0%, rgba(255, 255, 0, 0.2) 100%);
+            z-index: 1;
+            pointer-events: none;
+            transition: 1.5s ease-in-out;
+        }
+
+        /* MISURE SCALER ORIGINALI MANTENUTE */
+        .main-scaler {
+            transform: scale(min(1, calc(100vw / 1580), calc(100vh / 950)));
+            transform-origin: top center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            width: 1580px; 
+        }
+
+        /* MISURE STAGE ORIGINALI MANTENUTE */
+        .stage-area {
+            position: relative;
+            width: 728px;
+            height: 486px;
+            margin-top: 39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-nav {
+            position: absolute;
+            top: -35px; 
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 9999;
+            padding: 0 5px;
+        }
+
+        .theme-nav span {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 -2px 5px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+        }
+
+        .theme-nav span:hover {
+            transform: scale(1.4) translateY(-3px);
+            box-shadow: 0 10px 25px var(--c1), inset 0 -2px 5px rgba(0,0,0,0.5);
+            border-color: #fff;
+        }
+
+        /* SCRITTA IL CARTAIO */
+        .center-title {
+            font-size: 5.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            text-shadow: 0 8px 30px rgba(0,0,0,1);
+            white-space: nowrap;
+            z-index: 50;
+            cursor: grab;
+            user-select: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .center-title:active {
+            cursor: grabbing;
+        }
+
+        .rainbow {
+            background: linear-gradient(to right, #FF0000, #FF00FF, #0000FF, #00FFFF, #00FF00, #FFFF00, #FF0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-anim 4s linear infinite;
+        }
+
+        @keyframes rainbow-anim { to { background-position: 200% center; } }
+
+        /* SCIA DEL MOUSE */
+        .scia-magica {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            animation: dissolvenzaScia 0.5s linear forwards;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes dissolvenzaScia {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+        }
+
+        /* PARTICELLE DI SFONDO */
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            animation: rise linear infinite;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onselectstart="return false;">
+
+    <div class="bg-overlay" id="overlay"></div>
+
+    <div class="main-scaler">
+        <div class="stage-area">
+            
+            <div class="theme-nav">
+                <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,255,0,0.3)','rgba(0,50,0,0.7)', '#00ff00')"></span> 
+                <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,255,0.3)','rgba(0,0,50,0.7)', '#0000ff')"></span> 
+                <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(255,0,0,0.3)','rgba(50,0,0,0.7)', '#ff0000')"></span> 
+                <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,255,255,0.3)','rgba(0,50,50,0.7)', '#00ffff')"></span> 
+                <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(255,0,255,0.3)','rgba(50,0,50,0.7)', '#ff00ff')"></span> 
+                <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(255,255,0,0.3)','rgba(50,50,0,0.7)', '#ffff00')"></span>
+                <span style="--c1:#ffffff; --c2:#333333;" onclick="applyTheme('rgba(255,255,255,0.3)','rgba(50,50,50,0.4)', '#ffffff')"></span>
+                <span style="--c1:#ff8800; --c2:#442200;" onclick="applyTheme('rgba(255,136,0,0.3)','rgba(100,50,0,0.7)', '#ff8800')"></span>
+                <span style="--c1:#8800ff; --c2:#220044;" onclick="applyTheme('rgba(136,0,255,0.3)','rgba(50,0,100,0.7)', '#8800ff')"></span>
+                <span style="--c1:#00ff88; --c2:#004422;" onclick="applyTheme('rgba(0,255,136,0.3)','rgba(0,100,50,0.7)', '#00ff88')"></span>
+                <span style="--c1:#4b0082; --c2:#1a0033;" onclick="applyTheme('rgba(75,0,130,0.3)','rgba(0,0,0,0.8)', '#4b0082')"></span>
+                <span style="--c1:#adff2f; --c2:#223300;" onclick="applyTheme('rgba(173,255,47,0.3)','rgba(50,70,0,0.7)', '#adff2f')"></span>
+                <span style="--c1:#ffa07a; --c2:#441111;" onclick="applyTheme('rgba(255,160,122,0.3)','rgba(80,30,30,0.7)', '#ffa07a')"></span>
+                <span style="--c1:#7fffd4; --c2:#003322;" onclick="applyTheme('rgba(127,255,212,0.3)','rgba(30,80,60,0.7)', '#7fffd4')"></span>
+                <span style="--c1:#ffd700; --c2:#332200;" onclick="applyTheme('rgba(255,215,0,0.3)','rgba(0,0,0,0.8)', '#ffd700')"></span>
+            </div>
+
+            <div class="center-title rainbow" id="draggable-text">IL CARTAIO</div>
+
+        </div>
+    </div>
+
+    <script>
+        let coloreSciaMouse = '#00ff00';
+
+        function applyTheme(topColor, bottomColor, glowColor) {
+            const bg = document.getElementById('overlay');
+            bg.style.background = `linear-gradient(to bottom, ${topColor} 0%, ${bottomColor} 100%)`;
+            coloreSciaMouse = glowColor;
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            const scia = document.createElement('div');
+            scia.className = 'scia-magica';
+            scia.style.left = e.clientX + 'px';
+            scia.style.top = e.clientY + 'px';
+            scia.style.background = `radial-gradient(circle, #ffffff 10%, ${coloreSciaMouse} 60%, transparent 100%)`;
+            scia.style.boxShadow = `0 0 10px ${coloreSciaMouse}, 0 0 20px ${coloreSciaMouse}`;
+            
+            document.body.appendChild(scia);
+            setTimeout(() => { scia.remove(); }, 500);
+        });
+
+        const testoDrag = document.getElementById('draggable-text');
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        testoDrag.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            const rect = testoDrag.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
+            testoDrag.style.position = 'fixed';
+            testoDrag.style.transform = 'none';
+            testoDrag.style.left = rect.left + 'px';
+            testoDrag.style.top = rect.top + 'px';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                testoDrag.style.left = (e.clientX - offsetX) + 'px';
+                testoDrag.style.top = (e.clientY - offsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        function createParticles() {
+            const particleCount = 30;
+            const body = document.querySelector('body');
+            
+            for (let i = 0; i < particleCount; i++) {
+                let particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                body.appendChild(particle);
+            }
+        }
+        createParticles();
+    </script>
+
+</body>
+</html>
