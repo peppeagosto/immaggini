@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EL CARTAIO</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: transparent;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* WRAPPER VIDEO */
+.video-wrapper {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 14px;
+  z-index: 9999;
+}
+
+/* BORDO ARCOBALENO SOLO AI LATI */
+.video-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  border-radius: 20px;
+  pointer-events: none;
+  background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+  box-shadow:
+    0 0 15px red,
+    0 0 20px orange,
+    0 0 25px yellow,
+    0 0 30px green,
+    0 0 35px blue,
+    0 0 40px indigo,
+    0 0 45px violet;
+  z-index: 1;
+}
+
+/* VIDEO */
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+  position: relative;
+  z-index: 2; /* sopra il bordo */
+}
+
+/* POSIZIONE E DIMENSIONI VIDEO */
+.video-left { left: 10px; width: 240px; height: 520px; }
+.video-right { right: 10px; width: 240px; height: 520px; }
+
+/* STILE COMUNE PER TUTTI I TESTI ARCOBALENO */
+.rainbow-text {
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.9)); /* Ombra per renderli ben visibili */
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/* TESTO SUI VIDEO LATERALI (PROPRIO A FINE VIDEO) */
+.video-text {
+  position: absolute;
+  bottom: 5px; /* Posizionato proprio in basso, quasi dove finisce il video */
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  z-index: 3;
+  animation: wave 3s ease-in-out infinite;
+}
+
+/* TESTO CENTRALE GRANDE (Sparisce ogni 5 secondi) */
+.center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 75px; /* Dimensione grande e leggibile */
+  z-index: 10000;
+  animation: fade 5s ease-in-out infinite; /* Ciclo totale di 5 secondi */
+}
+
+/* ANIMAZIONE ONDA TESTO SUI VIDEO */
+@keyframes wave {
+  0%{transform:translateY(0) rotate(0deg);}
+  25%{transform:translateY(-4px) rotate(-1deg);}
+  50%{transform:translateY(0) rotate(0deg);}
+  75%{transform:translateY(4px) rotate(1deg);}
+  100%{transform:translateY(0) rotate(0deg);}
+}
+
+/* ANIMAZIONE OPACITÀ (Ciclo di 5s in cui appare e sparisce) */
+@keyframes fade {
+  0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  25%, 75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO SINISTRO (SX) - BUON ASCOLTO -->
+<div class="video-wrapper video-left">
+  <video autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/fTwDf2h.mp4" type="video/mp4">
+  </video>
+  <div class="video-text rainbow-text">Jó zenehallgatást</div>
+</div>
+
+<!-- TESTO CENTRALE (SENZA VIDEO) CON EFFETTO ARCOBALENO -->
+<div class="center-text rainbow-text">’̿️️ↁe͓̽l͓̽f͓̽i͓̽n͓̽</div>
+
+<!-- VIDEO DESTRO (DX) - BENVENUTI -->
+<div class="video-wrapper video-right">
+  <video autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/fTwDf2h.mp4" type="video/mp4">
+  </video>
+  <div class="video-text rainbow-text">Üdvözlünk</div>
+</div>
+
+</body>
+</html>
