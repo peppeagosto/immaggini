@@ -1,113 +1,190 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>CARTAIO-EDITION 2026</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --main-color: #ff0000; --beat-scale: 1; }
-        body { background: transparent; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Arial Black', sans-serif; overflow: hidden; user-select: none; }
-        .system-container { position: relative; width: 700px; height: 700px; display: flex; justify-content: center; align-items: center; }
-        
-        /* CUBO RIDOTTO */
-        .cube-station { position: absolute; width: 140px; height: 140px; perspective: 800px; z-index: 10; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(var(--beat-scale)); transition: 0.1s; }
-        .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: rotateCube 15s linear infinite; }
-        .face { position: absolute; width: 140px; height: 140px; background: #000; border: 3px solid #fff; box-shadow: 0 0 20px var(--main-color); overflow: hidden; }
-        .face img { width: 100%; height: 100%; object-fit: cover; }
-        @keyframes rotateCube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
-        .front { transform: rotateY(0deg) translateZ(70px); } .back { transform: rotateY(180deg) translateZ(70px); }
-        .right { transform: rotateY(90deg) translateZ(70px); } .left { transform: rotateY(-90deg) translateZ(70px); }
-        .top { transform: rotateX(90deg) translateZ(70px); } .bottom { transform: rotateX(-90deg) translateZ(70px); }
+<meta charset="UTF-8">
+<title>EL DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
 
-        /* STAGE DISCO - FORZATO NO OPACITY */
-        #stage-disco { position: absolute; width: 450px; height: 450px; border-radius: 50%; display: none; overflow: hidden; border: 5px solid #fff; box-shadow: 0 0 60px var(--main-color); z-index: 5; background: #000; }
-        .disco-video { width: 100%; height: 100%; object-fit: cover; opacity: 1 !important; }
-        
-        /* ORBITA */
-        .orbit-wrapper { position: absolute; width: 100%; height: 100%; animation: rotateOrbit 45s linear infinite; z-index: 20; pointer-events: none; }
-        @keyframes rotateOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .satellite-orbit { position: absolute; width: 100px; height: 100px; top: 50%; left: 50%; margin-top: -50px; margin-left: -50px; cursor: pointer; z-index: 30; pointer-events: auto; }
-        .beat-pulse { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-align: center; font-weight: 900; box-shadow: 0 0 20px var(--sat-color); background: radial-gradient(circle, var(--sat-color) 0%, #000 100%); }
-        .sat-label { font-size: 11px; animation: counterRotate 45s linear infinite; text-transform: uppercase; }
-        @keyframes counterRotate { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-        
-        .sat-1 { --sat-color: #ff0000; transform: rotate(0deg) translate(250px); } 
-        .sat-2 { --sat-color: #ffae00; transform: rotate(45deg) translate(250px); } 
-        .sat-3 { --sat-color: #00ff00; transform: rotate(90deg) translate(250px); } 
-        .sat-4 { --sat-color: #00f2ff; transform: rotate(135deg) translate(250px); }
-        .sat-5 { --sat-color: #004cff; transform: rotate(180deg) translate(250px); } 
-        .sat-6 { --sat-color: #bc00ff; transform: rotate(225deg) translate(250px); } 
-        .sat-7 { --sat-color: #ff00c8; transform: rotate(270deg) translate(250px); } 
-        .sat-8 { --sat-color: #ffffff; transform: rotate(315deg) translate(250px); }
-        #overlay-display { position: absolute; bottom: 10px; width: 620px; height: 85px; background: rgba(0,0,0,0.95); border: 4px solid var(--main-color); border-radius: 20px; z-index: 100; color: #fff; display: none; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; text-transform: uppercase; }
-    </style>
+/* ===== CONTENITORE VIDEO ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  overflow:hidden;
+  z-index:1;
+  background:transparent;
+  border-radius:20px;
+}
+.left{left:0}
+.right{right:0}
+
+/* ===== BORDI ===== */
+.video-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:4px;
+  border-radius:20px;
+  background:conic-gradient(
+    red,orange,yellow,lime,cyan,blue,violet,red
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 10px rgba(255,0,255,.7));
+  pointer-events:none;
+}
+
+/* ===== VIDEO ===== */
+.side-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:16px;
+}
+
+/* ===== TESTO ARCOBALENO VIDEO ===== */
+.video-text{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+  font-family:Trebuchet MS;
+  font-weight:bold;
+  z-index:2;
+  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red);
+  background-size:400% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes rainbowText{
+  0%{background-position:0%}
+  100%{background-position:100%}
+}
+
+/* ===== AREA CENTRALE ===== */
+.center-area{
+  position:absolute;
+  left:280px;
+  right:280px;
+  top:0;
+  bottom:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== TESTO CHE VOLA NEGLI ANGOLI (ORA ARCOBALENO) ===== */
+.corner-flying-text {
+  position: absolute;
+  font-family: 'Times New Roman', Times, serif; 
+  font-size: 40px;
+  font-weight: bold;
+  white-space: nowrap; 
+  opacity: 0; 
+  
+  /* Sfumatura Arcobaleno */
+  background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Filtro ombra compatibile con il testo clippato */
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); 
+
+  /* Gestione di entrambe le animazioni: movimento e transizione dei colori */
+  animation: 
+    flyAndFade 10s linear infinite,
+    rainbowText 3s linear infinite; 
+}
+
+/* ===== DEFINIZIONE DELL'ANIMAZIONE DI MOVIMENTO ===== */
+@keyframes flyAndFade {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1; 
+  }
+  10% {
+    top: 10px;
+    left: 10px;
+    transform: translate(0, 0);
+  }
+  25% {
+    top: 10px;
+    left: calc(100% - 10px);
+    transform: translate(-100%, 0);
+  }
+  40% {
+    top: calc(100% - 10px);
+    left: calc(100% - 10px);
+    transform: translate(-100%, -100%);
+  }
+  55% {
+    top: calc(100% - 10px);
+    left: 10px;
+    transform: translate(0, -100%);
+  }
+  65% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  70%, 100% {
+    opacity: 0;
+  }
+}
+</style>
 </head>
 <body>
 
-<div class="system-container">
-    <div id="stage-disco">
-        <video class="disco-video" src="https://i.imgur.com/VbtJxYc.mp4" autoplay loop muted playsinline></video>
-    </div>
+<div class="container">
 
-    <div class="orbit-wrapper">
-        <div class="satellite-orbit sat-1" onclick="triggerSatellite('musica')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-power-off"></i><br>ON/OFF</span></div></div>
-        <div class="satellite-orbit sat-2" onclick="triggerSatellite('esplosione')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-bomb"></i><br>CORES</span></div></div>
-        <div class="satellite-orbit sat-3" onclick="triggerSatellite('data')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-calendar-day"></i><br>DATA</span></div></div>
-        <div class="satellite-orbit sat-4" onclick="triggerSatellite('ora')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-clock"></i><br>HORA</span></div></div>
-        <div class="satellite-orbit sat-5" onclick="triggerSatellite('titolo')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-music"></i><br>MÚSICA</span></div></div>
-        <div class="satellite-orbit sat-6" onclick="triggerSatellite('oroscopo')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-skull"></i><br>ASTROS</span></div></div>
-        <div class="satellite-orbit sat-7" onclick="triggerSatellite('meteo')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-map-marker-alt"></i><br>CLIMA</span></div></div>
-        <div class="satellite-orbit sat-8" onclick="triggerSatellite('disco')"><div class="beat-pulse"><span class="sat-label"><i class="fas fa-compact-disc"></i><br>DISCO</span></div></div>
-    </div>
+  <div class="video-wrapper left">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/tCmDnQx.mp4">
+    </video>
+    <div class="video-text">DJ André Bola</div>
+  </div>
 
-    <div class="cube-station" id="cube-ui">
-        <div class="cube">
-            <div class="face front"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-            <div class="face back"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-            <div class="face right"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-            <div class="face left"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-            <div class="face top"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-            <div class="face bottom"><img class="coverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg"></div>
-        </div>
-    </div>
-    <div id="overlay-display"></div>
+  <div class="video-wrapper right">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/tCmDnQx.mp4">
+    </video>
+    <div class="video-text">DJ André Bola</div>
+  </div>
+
+  <div class="center-area">
+    <div class="corner-flying-text">Đ̲̲J 𝐴𝑛𝑑𝑟𝑒́ 𝐵𝑜𝑙𝑎</div>
+  </div>
+
 </div>
 
-<audio id="radio-stream" crossorigin="anonymous"></audio>
-
-<script>
-    let isPlaying = false, isDiscoMode = false;
-    let songData = { artist: "RÁDIO", title: "CARTAIO" };
-    var audio = document.getElementById('radio-stream');
-    audio.src = "https://s01.svrdedicado.org:7798/stream?icy=http";
-
-    function getSH() {
-        $.ajax({ dataType: 'jsonp', url: "https://s01.svrdedicado.org:7798/stats?sid=1&json=1&callback=?", success: function (result) {
-            var song = result.songtitle.split('-');
-            songData.artist = (song[0] || "RÁDIO").toUpperCase();
-            songData.title = (song[1] || "").toUpperCase();
-            $.ajax({ dataType: 'jsonp', url: "https://itunes.apple.com/search?term=" + encodeURIComponent(songData.artist + " " + songData.title) + "&limit=1", success: function (data) {
-                if (data.results.length > 0) $(".coverArt").attr('src', data.results[0].artworkUrl100.replace('100x100', '600x600'));
-            }});
-        }});
-    }
-    setInterval(getSH, 12000); getSH();
-
-    function triggerSatellite(tipo) {
-        if(tipo === 'musica') { if(!isPlaying) { audio.play(); isPlaying = true; } else { audio.pause(); audio.currentTime = 0; isPlaying = false; } }
-        if(tipo === 'disco') { isDiscoMode = !isDiscoMode; if(isDiscoMode) { $('#cube-ui').fadeOut(300); $('#stage-disco').fadeIn(500); } else { $('#stage-disco').fadeOut(300); $('#cube-ui').fadeIn(500); } }
-        updateOverlayContent(tipo);
-    }
-
-    function updateOverlayContent(tipo) {
-        const display = $('#overlay-display');
-        const now = new Date();
-        if(tipo === 'data') display.text("📅 DATA: " + now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' }).toUpperCase()).fadeIn(400).delay(3000).fadeOut(400);
-        if(tipo === 'ora') display.text("⏰ HORÁRIO: " + now.toLocaleTimeString('pt-BR')).fadeIn(400).delay(3000).fadeOut(400);
-        if(tipo === 'titolo') display.text("🎵 TOCANDO: " + songData.artist + " - " + songData.title).fadeIn(400).delay(3000).fadeOut(400);
-        if(tipo === 'oroscopo') display.text("✨ CÓPIAS IDIOTAS, VOCÊS SÃO UM NADA!").fadeIn(400).delay(3000).fadeOut(400);
-    }
-</script>
 </body>
 </html>
