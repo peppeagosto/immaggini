@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>EL DIABLO</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
+
+/* ===== CONTENITORE VIDEO ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  overflow:hidden;
+  z-index:1;
+  background:transparent;
+  border-radius:20px;
+}
+.left{left:0}
+.right{right:0}
+
+/* ===== BORDI ===== */
+.video-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:4px;
+  border-radius:20px;
+  background:conic-gradient(
+    red,orange,yellow,lime,cyan,blue,violet,red
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 10px rgba(255,0,255,.7));
+  pointer-events:none;
+}
+
+/* ===== VIDEO ===== */
+.side-video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:16px;
+}
+
+/* ===== TESTO ARCOBALENO VIDEO ===== */
+.video-text{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:25px;
+  font-family:Trebuchet MS;
+  font-weight:bold;
+  z-index:2;
+  background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red);
+  background-size:400% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes rainbowText{
+  0%{background-position:0%}
+  100%{background-position:100%}
+}
+
+/* ===== AREA CENTRALE ===== */
+.center-area{
+  position:absolute;
+  left:280px;
+  right:280px;
+  top:0;
+  bottom:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== TESTO CHE VOLA NEGLI ANGOLI (ORA ARCOBALENO) ===== */
+.corner-flying-text {
+  position: absolute;
+  font-family: 'Times New Roman', Times, serif; 
+  font-size: 40px;
+  font-weight: bold;
+  white-space: nowrap; 
+  opacity: 0; 
+  
+  /* Sfumatura Arcobaleno */
+  background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Filtro ombra compatibile con il testo clippato */
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); 
+
+  /* Gestione di entrambe le animazioni: movimento e transizione dei colori */
+  animation: 
+    flyAndFade 10s linear infinite,
+    rainbowText 3s linear infinite; 
+}
+
+/* ===== DEFINIZIONE DELL'ANIMAZIONE DI MOVIMENTO ===== */
+@keyframes flyAndFade {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1; 
+  }
+  10% {
+    top: 10px;
+    left: 10px;
+    transform: translate(0, 0);
+  }
+  25% {
+    top: 10px;
+    left: calc(100% - 10px);
+    transform: translate(-100%, 0);
+  }
+  40% {
+    top: calc(100% - 10px);
+    left: calc(100% - 10px);
+    transform: translate(-100%, -100%);
+  }
+  55% {
+    top: calc(100% - 10px);
+    left: 10px;
+    transform: translate(0, -100%);
+  }
+  65% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  70%, 100% {
+    opacity: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="video-wrapper left">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/tCmDnQx.mp4">
+    </video>
+    <div class="video-text">DJ André Bola</div>
+  </div>
+
+  <div class="video-wrapper right">
+    <video class="side-video" autoplay loop muted playsinline>
+      <source src="https://i.imgur.com/tCmDnQx.mp4">
+    </video>
+    <div class="video-text">DJ André Bola</div>
+  </div>
+
+  <div class="center-area">
+    <div class="corner-flying-text">Đ̲̲J 𝐴𝑛𝑑𝑟𝑒́ 𝐵𝑜𝑙𝑎</div>
+  </div>
+
+</div>
+
+</body>
+</html>
