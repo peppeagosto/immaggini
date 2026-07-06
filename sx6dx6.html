@@ -58,7 +58,7 @@
             height: 40px; 
             display: flex;
             flex-direction: row;
-            justify-content: space-between; /* Spinge i due gruppi ai lati */
+            justify-content: space-between; 
             align-items: center;
             z-index: 999999; 
             pointer-events: auto; 
@@ -66,7 +66,7 @@
 
         .nav-group {
             display: flex;
-            gap: 12px; /* Spazio uniforme tra i cerchietti dello stesso gruppo */
+            gap: 12px; 
         }
 
         /* Stile unico dei cerchietti */
@@ -118,7 +118,9 @@
 
                 <div class="nav-group">
                     <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/icUuwvTvLqrk.png');" onclick="changeBgPhoto('https://xatimg.com/image/icUuwvTvLqrk.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/icUuwvTvLqrk.png" onclick="changeBgPhoto('https://xatimg.com/image/icUuwvTvLqrk.png')"></span>
+                    
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/icUuwvTvLqrk.png');" onclick="changeBgPhoto('https://xatimg.com/image/icUuwvTvLqrk.png')"></span>
+                    
                     <span class="btn-photo" style="--bg-img: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=150');" onclick="changeBgPhoto('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200')"></span>
                     <span class="btn-photo" style="--bg-img: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=150');" onclick="changeBgPhoto('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1200')"></span>
                     <span class="btn-photo" style="--bg-img: url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=150');" onclick="changeBgPhoto('https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1200')"></span>
@@ -130,13 +132,11 @@
     </div>
 
     <script>
-        // Funzione per impostare un colore a tinta unita (cancella l'immagine precedente)
         function changeBgColor(color) {
             document.body.style.backgroundImage = "none";
             document.body.style.backgroundColor = color;
         }
 
-        // Funzione per impostare una foto di sfondo
         function changeBgPhoto(url) {
             document.body.style.backgroundImage = "url('" + url + "')";
         }
