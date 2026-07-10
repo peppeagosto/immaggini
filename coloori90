@@ -1,0 +1,224 @@
+<html lang="pt-PT">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>il cartaio:</title>
+    
+    <style type="text/css">
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: #000; 
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            cursor: crosshair;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 255, 0, 0.3) 0%, rgba(255, 255, 0, 0.2) 100%);
+            z-index: 1;
+            pointer-events: none;
+            transition: 1.5s ease-in-out;
+        }
+
+        .stage-area {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .theme-nav {
+            position: absolute;
+            top: 40px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 98%; 
+            display: flex;
+            justify-content: space-between;
+            z-index: 9999;
+            padding: 0 10px;
+        }
+
+        .theme-nav span {
+            width: 30px; 
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 -2px 5px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+        }
+
+        .theme-nav span:hover {
+            transform: scale(1.3) translateY(-5px);
+            box-shadow: 0 12px 30px var(--c1), inset 0 -2px 5px rgba(0,0,0,0.5);
+            border-color: #fff;
+        }
+
+        /* LA TUA FIRMA SEGRETA ANTI-COPIA */
+        .firma-segreta {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            font-size: 10px; /* Piccolissimo */
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #ffffff;
+            z-index: 99999;
+            user-select: none;
+            
+            /* Di base è invisibile e scompare subito se togli il mouse */
+            opacity: 0; 
+            transition: opacity 0.2s ease 0s; 
+        }
+
+        .firma-segreta:hover {
+            /* Appare a metà visibilità, ma SOLO dopo 5 secondi di attesa col mouse fermo */
+            opacity: 0.4; 
+            transition: opacity 0.5s ease 5s; 
+        }
+
+        /* CLASSE PER LE LETTERE ARCOBALENO DEL MOUSE */
+        .scia-testo {
+            position: fixed;
+            pointer-events: none;
+            font-size: 40px; 
+            font-weight: 900;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            animation: dissolvenzaLettere 4s cubic-bezier(0.25, 1, 0.5, 1) forwards, rainbow-anim 2s linear infinite;
+            white-space: pre; 
+            
+            background: linear-gradient(to right, #FF0000, #FF8000, #FFFF00, #00FF00, #00FFFF, #0000FF, #8000FF, #FF00FF, #FF0000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes rainbow-anim { to { background-position: 200% center; } }
+
+        @keyframes dissolvenzaLettere {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -150%) scale(0.3); }
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -20px;
+            width: 8px; 
+            height: 8px;
+            border-radius: 50%;
+            animation: rise linear infinite;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.9; }
+            100% { transform: translateY(-100vh) scale(2.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onselectstart="return false;">
+
+    <div class="bg-overlay" id="overlay"></div>
+
+    <div class="stage-area">
+        <div class="theme-nav">
+            <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,255,0,0.3)','rgba(0,50,0,0.7)', '#00ff00')"></span> 
+            <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,255,0.3)','rgba(0,0,50,0.7)', '#0000ff')"></span> 
+            <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(255,0,0,0.3)','rgba(50,0,0,0.7)', '#ff0000')"></span> 
+            <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,255,255,0.3)','rgba(0,50,50,0.7)', '#00ffff')"></span> 
+            <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(255,0,255,0.3)','rgba(50,0,50,0.7)', '#ff00ff')"></span> 
+            <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(255,255,0,0.3)','rgba(50,50,0,0.7)', '#ffff00')"></span>
+            <span style="--c1:#ffffff; --c2:#333333;" onclick="applyTheme('rgba(255,255,255,0.3)','rgba(50,50,50,0.4)', '#ffffff')"></span>
+            <span style="--c1:#ff8800; --c2:#442200;" onclick="applyTheme('rgba(255,136,0,0.3)','rgba(100,50,0,0.7)', '#ff8800')"></span>
+            <span style="--c1:#8800ff; --c2:#220044;" onclick="applyTheme('rgba(136,0,255,0.3)','rgba(50,0,100,0.7)', '#8800ff')"></span>
+            <span style="--c1:#00ff88; --c2:#004422;" onclick="applyTheme('rgba(0,255,136,0.3)','rgba(0,100,50,0.7)', '#00ff88')"></span>
+            <span style="--c1:#4b0082; --c2:#1a0033;" onclick="applyTheme('rgba(75,0,130,0.3)','rgba(0,0,0,0.8)', '#4b0082')"></span>
+            <span style="--c1:#adff2f; --c2:#223300;" onclick="applyTheme('rgba(173,255,47,0.3)','rgba(50,70,0,0.7)', '#adff2f')"></span>
+            <span style="--c1:#ffa07a; --c2:#441111;" onclick="applyTheme('rgba(255,160,122,0.3)','rgba(80,30,30,0.7)', '#ffa07a')"></span>
+            <span style="--c1:#7fffd4; --c2:#003322;" onclick="applyTheme('rgba(127,255,212,0.3)','rgba(30,80,60,0.7)', '#7fffd4')"></span>
+            <span style="--c1:#ffd700; --c2:#332200;" onclick="applyTheme('rgba(255,215,0,0.3)','rgba(0,0,0,0.8)', '#ffd700')"></span>
+        </div>
+    </div>
+
+    <!-- La trappola nell'angolo -->
+    <div class="firma-segreta">aghetto</div>
+
+    <script>
+        let coloreSciaMouse = '#00ff00';
+
+        function applyTheme(topColor, bottomColor, glowColor) {
+            const bg = document.getElementById('overlay');
+            bg.style.background = `linear-gradient(to bottom, ${topColor} 0%, ${bottomColor} 100%)`;
+            coloreSciaMouse = glowColor;
+        }
+
+        const fraseDaScrivere = "BUON ASCOLTO DAL CARTAIO   "; 
+        let indiceLettera = 0;
+        let lastX = 0;
+        let lastY = 0;
+        const sogliaDistanza = 30; 
+
+        document.addEventListener('mousemove', function(e) {
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            const distanza = Math.sqrt(dx * dx + dy * dy);
+
+            if (distanza > sogliaDistanza) {
+                const lettera = document.createElement('span');
+                lettera.className = 'scia-testo';
+                lettera.textContent = fraseDaScrivere[indiceLettera];
+                lettera.style.left = e.clientX + 'px';
+                lettera.style.top = e.clientY + 'px';
+                
+                lettera.style.filter = `drop-shadow(0 0 10px ${coloreSciaMouse})`;
+                
+                document.body.appendChild(lettera);
+                
+                lastX = e.clientX;
+                lastY = e.clientY;
+                indiceLettera = (indiceLettera + 1) % fraseDaScrivere.length;
+
+                setTimeout(() => { lettera.remove(); }, 4000);
+            }
+        });
+
+        function createParticles() {
+            const particleCount = 60; 
+            const body = document.querySelector('body');
+            const coloriParticelle = ['#00ff00', '#0000ff', '#ff0000', '#00ffff', '#ff00ff', '#ffff00', '#ff8800', '#8800ff', '#ff0088', '#ffffff'];
+            
+            for (let i = 0; i < particleCount; i++) {
+                let particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                let coloreCasuale = coloriParticelle[Math.floor(Math.random() * coloriParticelle.length)];
+                
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.background = coloreCasuale;
+                particle.style.boxShadow = `0 0 15px ${coloreCasuale}, 0 0 30px ${coloreCasuale}`;
+                
+                particle.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                body.appendChild(particle);
+            }
+        }
+        createParticles();
+    </script>
+
+</body>
+</html>
