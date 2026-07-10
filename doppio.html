@@ -19,7 +19,7 @@
             padding-top: 60px; 
             font-family: 'Segoe UI', Roboto, sans-serif;
             transition: background 0.4s ease-in-out, background-image 0.4s ease-in-out; 
-            background: #fff; 
+            background: #222; 
             background-size: cover;
             background-position: center;
         }
@@ -52,7 +52,7 @@
         /* Navigazione divisa in due gruppi (Colori a SX, Foto a DX) */
         .theme-nav-horizontal {
             position: absolute;
-            top: -48px; /* <--- MODIFICATO DA 10px A -38px PER SPOSTARLI PIÙ IN ALTO */
+            top: -48px; 
             left: 10px;
             right: 10px;
             height: 40px; 
@@ -83,12 +83,12 @@
             -webkit-user-select: none;
         }
 
-        /* Cerchietti Colore (Gradiente classico) */
+        /* Cerchietti Colore (Gradiente classico 3D) */
         .btn-color {
             background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
         }
 
-        /* Cerchietti Foto (Mostrano l'anteprima dell'immagine dentro la pallina) */
+        /* Cerchietti Foto (Anteprima immagine dentro la pallina) */
         .btn-photo {
             background-image: var(--bg-img);
             background-size: cover;
@@ -108,17 +108,22 @@
             
             <div class="theme-nav-horizontal">
                 <div class="nav-group">
-                   <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/pCva9lXFzFDR.png');" onclick="changeBgPhoto('https://xatimg.com/image/pCva9lXFzFDR.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/FFjFsTYY0nQs.png');" onclick="changeBgPhoto('https://xatimg.com/image/FFjFsTYY0nQs.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/hxszoz1usaKj.png');" onclick="changeBgPhoto('https://xatimg.com/image/hxszoz1usaKj.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/F6MK1q05ZVZF.png');" onclick="changeBgPhoto('https://xatimg.com/image/F6MK1q05ZVZF.png')"></span>
+                    <span class="btn-color" style="--c1: #ff416c; --c2: #ff4b2b;" onclick="changeBgColor('#ff416c')"></span>
+                    <span class="btn-color" style="--c1: #1fa2ff; --c2: #12d8fa;" onclick="changeBgColor('#1fa2ff')"></span>
+                    <span class="btn-color" style="--c1: #a8ff78; --c2: #78ffd6;" onclick="changeBgColor('#a8ff78')"></span>
+                    <span class="btn-color" style="--c1: #f12711; --c2: #f5af19;" onclick="changeBgColor('#f5af19')"></span>
+                    <span class="btn-color" style="--c1: #b92b27; --c2: #1565c0;" onclick="changeBgColor('#6441a5')"></span>
+                    <span class="btn-color" style="--c1: #ea00d9; --c2: #711c91;" onclick="changeBgColor('#ea00d9')"></span>
+                    <span class="btn-color" style="--c1: #0575e6; --c2: #00f260;" onclick="changeBgColor('#00f260')"></span>
+                    <span class="btn-color" style="--c1: #eef2f3; --c2: #8e9eab;" onclick="changeBgColor('#8e9eab')"></span>
                 </div>
 
                 <div class="nav-group">
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/JF0U2THlbfAJ.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/Da3FDQ9E7qyB.png')"></span>
-                    
-                    <span class="btn-photo" style="--bg-img: url('');" onclick="changeBgPhoto('')"></span>
-                    
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/pCva9lXFzFDR.png');" onclick="changeBgPhoto('https://xatimg.com/image/pCva9lXFzFDR.png')"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/FFjFsTYY0nQs.png');" onclick="changeBgPhoto('https://xatimg.com/image/FFjFsTYY0nQs.png')"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/hxszoz1usaKj.png');" onclick="changeBgPhoto('https://xatimg.com/image/hxszoz1usaKj.png')"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/F6MK1q05ZVZF.png');" onclick="changeBgPhoto('https://xatimg.com/image/F6MK1q05ZVZF.png')"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/JF0U2THlbfAJ.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/JF0U2THlbfAJ.jpg')"></span>
                     <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/iEi7ESI4RWfp.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/iEi7ESI4RWfp.jpg')"></span>
                     <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/vN0aaElHnepK.gif');" onclick="changeBgPhoto('https://xatimg.com/image/vN0aaElHnepK.gif')"></span>
                     <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/EqKDDZjW1RNm.png');" onclick="changeBgPhoto('https://xatimg.com/image/EqKDDZjW1RNm.png')"></span>
