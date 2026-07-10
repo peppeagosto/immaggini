@@ -36,7 +36,7 @@
 
         .theme-nav {
             position: absolute;
-            top: 110px; /* Abbassati da 40px a 110px */
+            top: 80px; 
             left: 50%;
             transform: translateX(-50%);
             width: 98%; 
@@ -84,13 +84,13 @@
             transition: opacity 0.5s ease 5s; 
         }
 
-        /* CLASSE PER LE LETTERE ARCOBALENO DEL MOUSE */
+        /* CLASSE PER LE LETTERE ARCOBALENO DEL MOUSE - PORTATO Z-INDEX AL MASSIMO PER XAT */
         .scia-testo {
             position: fixed;
             pointer-events: none;
             font-size: 40px; 
             font-weight: 900;
-            z-index: 10000;
+            z-index: 999999; /* <--- Forza il testo sopra i moduli di xat */
             transform: translate(-50%, -50%);
             animation: dissolvenzaLettere 4s cubic-bezier(0.25, 1, 0.5, 1) forwards, rainbow-anim 2s linear infinite;
             white-space: pre; 
@@ -167,7 +167,8 @@
         let lastY = 0;
         const sogliaDistanza = 30; 
 
-        document.addEventListener('mousemove', function(e) {
+        // Rileva il movimento su tutta la window per non bloccarsi su xat
+        window.addEventListener('mousemove', function(e) {
             const dx = e.clientX - lastX;
             const dy = e.clientY - lastY;
             const distanza = Math.sqrt(dx * dx + dy * dy);
