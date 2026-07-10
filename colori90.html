@@ -1,5 +1,4 @@
-<html lang="pt-PT">
-<head>
+<html lang="pt-PT"><head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>il cartaio:</title>
     
@@ -37,7 +36,7 @@
 
         .theme-nav {
             position: absolute;
-            top: 40px; 
+            top: 110px; /* Abbassati da 40px a 110px */
             left: 50%;
             transform: translateX(-50%);
             width: 98%; 
@@ -70,20 +69,17 @@
             position: absolute;
             right: 10px;
             bottom: 10px;
-            font-size: 10px; /* Piccolissimo */
+            font-size: 10px;
             font-weight: 900;
             letter-spacing: 1px;
             color: #ffffff;
             z-index: 99999;
             user-select: none;
-            
-            /* Di base è invisibile e scompare subito se togli il mouse */
             opacity: 0; 
             transition: opacity 0.2s ease 0s; 
         }
 
         .firma-segreta:hover {
-            /* Appare a metà visibilità, ma SOLO dopo 5 secondi di attesa col mouse fermo */
             opacity: 0.4; 
             transition: opacity 0.5s ease 5s; 
         }
@@ -98,7 +94,6 @@
             transform: translate(-50%, -50%);
             animation: dissolvenzaLettere 4s cubic-bezier(0.25, 1, 0.5, 1) forwards, rainbow-anim 2s linear infinite;
             white-space: pre; 
-            
             background: linear-gradient(to right, #FF0000, #FF8000, #FFFF00, #00FF00, #00FFFF, #0000FF, #8000FF, #FF00FF, #FF0000);
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -155,7 +150,6 @@
         </div>
     </div>
 
-    <!-- La trappola nell'angolo -->
     <div class="firma-segreta">aghetto</div>
 
     <script>
@@ -219,6 +213,4 @@
         }
         createParticles();
     </script>
-
-</body>
-</html>
+</body></html>
