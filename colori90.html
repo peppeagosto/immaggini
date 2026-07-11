@@ -17,7 +17,8 @@
         .bg-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0, 255, 0, 0.3) 0%, rgba(255, 255, 0, 0.2) 100%);
+            /* Modificato: Sfondo iniziale completamente trasparente */
+            background: transparent; 
             z-index: 1;
             pointer-events: none;
             transition: 1.5s ease-in-out;
@@ -126,27 +127,27 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false;" onselectstart="return false;">
+<body oncontextmenu="return false;" onselectstart="return false;" style="background: transparent;">
 
     <div class="bg-overlay" id="overlay"></div>
 
     <div class="stage-area">
         <div class="theme-nav">
-            <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,255,0,0.3)','rgba(0,50,0,0.7)', '#00ff00')"></span> 
-            <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,255,0.3)','rgba(0,0,50,0.7)', '#0000ff')"></span> 
-            <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(255,0,0,0.3)','rgba(50,0,0,0.7)', '#ff0000')"></span> 
-            <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,255,255,0.3)','rgba(0,50,50,0.7)', '#00ffff')"></span> 
-            <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(255,0,255,0.3)','rgba(50,0,50,0.7)', '#ff00ff')"></span> 
-            <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(255,255,0,0.3)','rgba(50,50,0,0.7)', '#ffff00')"></span>
-            <span style="--c1:#ffffff; --c2:#333333;" onclick="applyTheme('rgba(255,255,255,0.3)','rgba(50,50,50,0.4)', '#ffffff')"></span>
-            <span style="--c1:#ff8800; --c2:#442200;" onclick="applyTheme('rgba(255,136,0,0.3)','rgba(100,50,0,0.7)', '#ff8800')"></span>
-            <span style="--c1:#8800ff; --c2:#220044;" onclick="applyTheme('rgba(136,0,255,0.3)','rgba(50,0,100,0.7)', '#8800ff')"></span>
-            <span style="--c1:#00ff88; --c2:#004422;" onclick="applyTheme('rgba(0,255,136,0.3)','rgba(0,100,50,0.7)', '#00ff88')"></span>
-            <span style="--c1:#4b0082; --c2:#1a0033;" onclick="applyTheme('rgba(75,0,130,0.3)','rgba(0,0,0,0.8)', '#4b0082')"></span>
-            <span style="--c1:#adff2f; --c2:#223300;" onclick="applyTheme('rgba(173,255,47,0.3)','rgba(50,70,0,0.7)', '#adff2f')"></span>
-            <span style="--c1:#ffa07a; --c2:#441111;" onclick="applyTheme('rgba(255,160,122,0.3)','rgba(80,30,30,0.7)', '#ffa07a')"></span>
-            <span style="--c1:#7fffd4; --c2:#003322;" onclick="applyTheme('rgba(127,255,212,0.3)','rgba(30,80,60,0.7)', '#7fffd4')"></span>
-            <span style="--c1:#ffd700; --c2:#332200;" onclick="applyTheme('rgba(255,215,0,0.3)','rgba(0,0,0,0.8)', '#ffd700')"></span>
+            <span style="--c1:#00ff00; --c2:#004400;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#00ff00')"></span> 
+            <span style="--c1:#0000ff; --c2:#000033;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#0000ff')"></span> 
+            <span style="--c1:#ff0000; --c2:#440000;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ff0000')"></span> 
+            <span style="--c1:#00ffff; --c2:#004444;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#00ffff')"></span> 
+            <span style="--c1:#ff00ff; --c2:#440044;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ff00ff')"></span> 
+            <span style="--c1:#ffff00; --c2:#444400;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ffff00')"></span>
+            <span style="--c1:#ffffff; --c2:#333333;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ffffff')"></span>
+            <span style="--c1:#ff8800; --c2:#442200;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ff8800')"></span>
+            <span style="--c1:#8800ff; --c2:#220044;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#8800ff')"></span>
+            <span style="--c1:#00ff88; --c2:#004422;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#00ff88')"></span>
+            <span style="--c1:#4b0082; --c2:#1a0033;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#4b0082')"></span>
+            <span style="--c1:#adff2f; --c2:#223300;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#adff2f')"></span>
+            <span style="--c1:#ffa07a; --c2:#441111;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ffa07a')"></span>
+            <span style="--c1:#7fffd4; --c2:#003322;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#7fffd4')"></span>
+            <span style="--c1:#ffd700; --c2:#332200;" onclick="applyTheme('rgba(0,0,0,0)','rgba(0,0,0,0)', '#ffd700')"></span>
         </div>
     </div>
 
@@ -167,7 +168,6 @@
         let lastY = 0;
         const sogliaDistanza = 30; 
 
-        // Rileva il movimento su tutta la window per non bloccarsi su xat
         window.addEventListener('mousemove', function(e) {
             const dx = e.clientX - lastX;
             const dy = e.clientY - lastY;
