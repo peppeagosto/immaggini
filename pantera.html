@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<style>
+  body, html { margin: 0; padding: 0; height: 100vh; background: transparent; display: flex; justify-content: center; align-items: center; }
+  
+  .container { position: relative; width: 1308px; height: 486px; }
+
+  /* Wrapper semplice: nessuna animazione, nessun colore arcobaleno */
+  .video-wrapper {
+    position: absolute;
+    top: 0;
+    width: 290px;
+    height: 486px;
+    /* Puoi cambiare questo bordo come preferisci */
+    border: 3px solid #333; 
+    border-radius: 12px;
+    z-index: 1;
+    overflow: hidden; /* Assicura che il video non esca dai bordi */
+  }
+
+  /* Video al naturale */
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .left-video { left: 10px; }
+  .right-video { right: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="video-wrapper left-video">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/pantera.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="video-wrapper right-video">
+    <video autoplay loop muted playsinline>
+      <source src="https://peppeagosto.github.io/immaggini/pantera.mp4" type="video/mp4" />
+    </video>
+  </div>
+</div>
+
+</body>
+</html>
