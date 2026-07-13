@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
-<head>
+<html lang="pt-PT"><head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>EL DIABLO:</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +19,9 @@
             transition: background 0.4s ease-in-out, background-image 0.4s ease-in-out; 
             background: #222; 
             background-size: cover;
-            background-position: center;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         .main-scaler {
@@ -83,16 +83,16 @@
             -webkit-user-select: none;
         }
 
-        /* Cerchietti Colore (Gradiente classico 3D) */
+        /* Cerchietti Colore */
         .btn-color {
             background: radial-gradient(circle at 35% 35%, #fff 0%, var(--c1) 40%, var(--c2) 100%);
         }
 
-        /* Cerchietti Foto (Anteprima immagine dentro la pallina) */
+        /* Cerchietti Foto */
         .btn-photo {
             background-image: var(--bg-img);
             background-size: cover;
-            background-position: center;
+            background-position: center center;
         }
 
         .theme-nav-horizontal span:hover {
@@ -107,6 +107,7 @@
         <div class="stage-area">
             
             <div class="theme-nav-horizontal">
+                <!-- GRUPPO COLORI (A SINISTRA) -->
                 <div class="nav-group">
                     <span class="btn-color" style="--c1: #ff416c; --c2: #ff4b2b;" onclick="changeBgColor('#ff416c')"></span>
                     <span class="btn-color" style="--c1: #1fa2ff; --c2: #12d8fa;" onclick="changeBgColor('#1fa2ff')"></span>
@@ -118,16 +119,20 @@
                     <span class="btn-color" style="--c1: #eef2f3; --c2: #8e9eab;" onclick="changeBgColor('#8e9eab')"></span>
                 </div>
 
+                <!-- GRUPPO FOTO (A DESTRA) -->
                 <div class="nav-group">
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/pCva9lXFzFDR.png');" onclick="changeBgPhoto('https://xatimg.com/image/pCva9lXFzFDR.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/FFjFsTYY0nQs.png');" onclick="changeBgPhoto('https://xatimg.com/image/FFjFsTYY0nQs.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/hxszoz1usaKj.png');" onclick="changeBgPhoto('https://xatimg.com/image/hxszoz1usaKj.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/F6MK1q05ZVZF.png');" onclick="changeBgPhoto('https://xatimg.com/image/F6MK1q05ZVZF.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/JF0U2THlbfAJ.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/JF0U2THlbfAJ.jpg')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/iEi7ESI4RWfp.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/iEi7ESI4RWfp.jpg')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/vN0aaElHnepK.gif');" onclick="changeBgPhoto('https://xatimg.com/image/vN0aaElHnepK.gif')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/EqKDDZjW1RNm.png');" onclick="changeBgPhoto('https://xatimg.com/image/EqKDDZjW1RNm.png')"></span>
-                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/vkIYV1QhADmr.png');" onclick="changeBgPhoto('https://xatimg.com/image/vkIYV1QhADmr.png')"></span>
+                    <!-- Ecco la tua foto dell'angelo con il link ufficiale -->
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/j8m7QBK1StNz.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/j8m7QBK1StNz.jpg', true)"></span>
+                    
+                    <!-- Le altre foto a seguire -->
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/pCva9lXFzFDR.png');" onclick="changeBgPhoto('https://xatimg.com/image/pCva9lXFzFDR.png', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/lj1bP114p8eW.png');" onclick="changeBgPhoto('https://xatimg.com/image/lj1bP114p8eW.png', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/61zGRspzOLRu.png');" onclick="changeBgPhoto('https://xatimg.com/image/61zGRspzOLRu.png', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/F6MK1q05ZVZF.png');" onclick="changeBgPhoto('https://xatimg.com/image/F6MK1q05ZVZF.png', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/JF0U2THlbfAJ.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/JF0U2THlbfAJ.jpg', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/iEi7ESI4RWfp.jpg');" onclick="changeBgPhoto('https://xatimg.com/image/iEi7ESI4RWfp.jpg', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/vN0aaElHnepK.gif');" onclick="changeBgPhoto('https://xatimg.com/image/vN0aaElHnepK.gif', false)"></span>
+                    <span class="btn-photo" style="--bg-img: url('https://xatimg.com/image/EqKDDZjW1RNm.png');" onclick="changeBgPhoto('https://xatimg.com/image/EqKDDZjW1RNm.png', false)"></span>
                 </div>
             </div>
 
@@ -140,10 +145,17 @@
             document.body.style.backgroundColor = color;
         }
 
-        function changeBgPhoto(url) {
+        // Funzione aggiornata per calibrare lo sfondo in base al tipo di foto
+        function changeBgPhoto(url, isVertical) {
             document.body.style.backgroundImage = "url('" + url + "')";
+            if (isVertical) {
+                // Se è la tua foto verticale, la calibra partendo dall'alto
+                document.body.style.backgroundPosition = "center top";
+            } else {
+                // Per le altre foto mantiene la centratura classica
+                document.body.style.backgroundPosition = "center center";
+            }
         }
     </script>
 
-</body>
-</html>
+</body></html>
