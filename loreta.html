@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>EL DIABLO - Modificato</title>
+    <style>
+        body{ margin:0; background:transparent; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden;}
+        .container{ position:relative; width:1308px; height:484px; background: #000; /* Aggiunto sfondo nero per vedere i bordi */ border: 2px solid #fff;}
+        
+        /* ===== CONTENITORE VIDEO ===== */
+        .video-wrapper{ position:absolute; width:270px; height:484px; overflow:hidden; z-index:1; background:transparent; border-radius:20px;}
+        .left{left:0}
+        .right{right:0}
+        
+        /* ===== BORDI ===== */
+        .video-wrapper::before{ content:""; position:absolute; inset:0; padding:4px; border-radius:20px; background:conic-gradient( red,orange,yellow,lime,cyan,blue,violet,red ); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; filter:drop-shadow(0 0 10px rgba(255,0,255,.7)); pointer-events:none;}
+        
+        /* ===== VIDEO ===== */
+        .side-video{ width:100%; height:100%; object-fit:cover; border-radius:16px;}
+        
+        /* ===== TESTO ARCOBALENO VIDEO - MODIFICATO ===== */
+        .video-text{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:20px; /* Diminuito font per farci stare le scritte lunghe */ font-family:Trebuchet MS; font-weight:bold; z-index:2; background:linear-gradient(90deg,red,orange,yellow,lime,cyan,blue,violet,red); background-size:400% 100%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: rainbowText 3s linear infinite; text-transform: uppercase; white-space: nowrap;}
+        @keyframes rainbowText{ 0%{background-position:0%} 100%{background-position:100%}}
+        
+        /* ===== AREA CENTRALE DI GIOCO ===== */
+        .center-area{ position:absolute; left:280px; right:280px; top:0; bottom:0; display:flex; justify-content:center; align-items:center; z-index:0; }
+        
+        /* ===== CONTENITORE CUORE E TESTO SCORREVOLE ===== */
+        .center-box{ position:relative; width:420px; height:420px; display:flex; justify-content:center; align-items:center; filter:drop-shadow(0 0 25px rgba(255,0,0,.6)); }
+        
+        /* ===== IL CUORE ROSSO IN CSS ===== */
+        .css-heart { position: relative; width: 140px; height: 140px; background-color: #ff0000; transform: rotate(-45deg); animation: heartBeat 1.5s infinite ease-in-out; box-shadow: 0 0 30px #ff0000; }
+        .css-heart::before, .css-heart::after { content: ""; position: absolute; width: 140px; height: 140px; background-color: #ff0000; border-radius: 50%; }
+        .css-heart::before { top: -70px; left: 0; }
+        .css-heart::after { top: 0; left: 70px; }
+        
+        @keyframes heartBeat { 0%, 100% { transform: rotate(-45deg) scale(1); } 30% { transform: rotate(-45deg) scale(1.15); } 45% { transform: rotate(-45deg) scale(1.05); } 60% { transform: rotate(-45deg) scale(1.2); } }
+        
+        /* ===== SCRITTA CENTRALE CHE GIRA - MODIFICATA ===== */
+        .center-title{ position:absolute; font-size:24px; /* Diminuito font per farci stare la frase */ font-family:Trebuchet MS; font-weight:900; letter-spacing:1px; color:#ff1e1e; text-transform: none; /* Tolto uppercase per la frase */ text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 2px 5px rgba(0,0,0,0.9); pointer-events:none; white-space: nowrap; animation: moveFourSides 10s linear infinite; }
+        @keyframes moveFourSides { 0%, 100% { top: 10px; left: 10px; transform: translate(0, 0); } 25% { top: 10px; left: calc(100% - 300px); transform: translate(0, 0); } 50% { top: calc(100% - 50px); left: calc(100% - 300px); transform: translate(0, 0); } 75% { top: calc(100% - 50px); left: 10px; transform: translate(0, 0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LATO SINISTRO -->
+        <div class="video-wrapper left">
+            <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
+            <!-- Testo modificato: benvenuti -->
+            <div class="video-text">benvenuti</div>
+        </div>
+        
+        <!-- LATO DESTRO -->
+        <div class="video-wrapper right">
+            <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
+            <!-- Testo modificato: dianashpirti -->
+            <div class="video-text">dianashpirti</div>
+        </div>
+        
+        <!-- AREA CENTRALE -->
+        <div class="center-area">
+            <div class="center-box">
+                <div class="css-heart"></div>
+                <!-- Testo modificato: benvenuti romania -->
+                <div class="center-title">benvenuti romania</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
