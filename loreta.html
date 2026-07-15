@@ -2,73 +2,84 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>EL DIABLO - Arcobaleno</title>
+    <title>EL DIABLO - Sposini Innamorati</title>
     <style>
-        body{ margin:0; background:transparent; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden;}
-        .container{ position:relative; width:1308px; height:484px; }
+        body { margin:0; background:transparent; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family: 'Georgia', serif; }
+        .container { position:relative; width:1308px; height:484px; display:flex; align-items:center; justify-content: space-between; }
         
-        /* Video */
-        .video-wrapper{ position:absolute; width:270px; height:484px; overflow:hidden; z-index:1; border-radius:20px;}
-        .left{left:0}
-        .right{right:0}
-        .video-wrapper::before{ content:""; position:absolute; inset:0; padding:4px; border-radius:20px; background:conic-gradient( red,orange,yellow,lime,cyan,blue,violet,red ); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; filter:drop-shadow(0 0 10px rgba(255,0,255,.7)); pointer-events:none;}
-        .side-video{ width:100%; height:100%; object-fit:cover; border-radius:16px;}
-
-        /* TESTO ARCOBALENO */
-        .rainbow-text {
-            background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
-            background-size: 400% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbowText 4s linear infinite;
+        /* Video Laterali con Bordo Arcobaleno 10px + Doppio Glow */
+        .video-container { 
+            position:relative; width:270px; height:484px; 
+            filter: drop-shadow(0 0 10px rgba(255,0,255,0.8)) drop-shadow(0 0 30px rgba(0,212,255,0.6));
         }
-        @keyframes rainbowText{ 0%{background-position:0%} 100%{background-position:100%}}
+        .video-wrapper { 
+            position:relative; width:100%; height:100%; overflow:hidden; border-radius:20px; 
+            background: #000;
+        }
+        .video-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: -10px; /* Spessore 10px */
+            border-radius: 30px;
+            padding: 10px;
+            background: conic-gradient(red, orange, yellow, lime, cyan, blue, violet, red);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .side-video { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+        
+        /* Stile Testo Comune */
+        .text-style { font-weight:bold; text-transform: uppercase; color: #fff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #00d4ff; }
+        .video-text { position:absolute; bottom:15px; width:100%; text-align:center; font-size:25px; z-index:2; }
 
-        .video-text{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:25px; font-family: sans-serif; font-weight:bold; z-index:2; text-transform: uppercase; white-space: nowrap;}
-        
-        /* Area Centrale */
-        .center-area{ position:absolute; left:280px; right:280px; top:0; bottom:0; display:flex; justify-content:center; align-items:center; z-index:0; }
-        .center-box{ position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-        
-        /* Testo Centrale */
-        .text-main { font-size: 55px; font-family: 'Georgia', serif; font-weight: bold; margin: 0; }
-        .text-sub { font-size: 35px; font-family: 'Georgia', serif; font-weight: 600; margin: 0; }
+        /* Area Centrale (pulita) */
+        .center-area { flex: 1; display:flex; justify-content:center; align-items:center; position: relative; height: 100%; }
+        .center-box { position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 10; }
+        .text-main { font-size: 40px; margin-bottom: 10px; text-align: center; }
+        .text-sub { font-size: 25px; text-align: center; }
         
         /* Cuori */
-        .heart { position: absolute; width: 35px; height: 35px; background-color: #ff0000; transform: rotate(-45deg); box-shadow: 0 0 10px #ff0000; }
-        .heart::before, .heart::after { content: ""; position: absolute; width: 35px; height: 35px; background-color: #ff0000; border-radius: 50%; }
-        .heart::before { top: -17px; left: 0; }
-        .heart::after { top: 0; left: 17px; }
+        .heart-orbit { position: absolute; width: 400px; height: 400px; animation: rotateOrbit 8s linear infinite; pointer-events: none; }
+        @keyframes rotateOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .heart { position: absolute; width: 40px; height: 40px; background-color: #ff0000; transform: rotate(-45deg); box-shadow: 0 0 15px #ff0000; }
+        .heart::before, .heart::after { content: ""; position: absolute; width: 40px; height: 40px; background-color: #ff0000; border-radius: 50%; }
+        .heart::before { top: -20px; left: 0; }
+        .heart::after { top: 0; left: 20px; }
+        .h1 { top: -20px; left: 180px; }
+        .h2 { bottom: -20px; left: 180px; animation: kissPull 4s ease-in-out infinite; }
         
-        /* Orbite */
-        .orbit-wrapper { position: absolute; width: 450px; height: 450px; border-radius: 50%; }
-        .h-right { top: -18px; left: 220px; animation: rotateRight 10s linear infinite; transform-origin: -10px 243px; }
-        .h-left { top: -18px; left: 195px; animation: rotateLeft 10s linear infinite; transform-origin: 15px 243px; }
-        
-        @keyframes rotateRight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes rotateLeft { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+        @keyframes kissPull {
+            0%, 20%, 80%, 100% { transform: translateY(0) scale(1) rotate(-45deg); }
+            40%, 60% { transform: translateY(-60px) scale(1.4) rotate(-45deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="video-wrapper left">
-            <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
-            <div class="video-text rainbow-text">Dobrodošli</div>
-        </div>
-        
-        <div class="video-wrapper right">
-            <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
-            <div class="video-text rainbow-text">dianaduša</div>
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline></video>
+                <div class="video-text text-style">DOBRODOŠLI</div>
+            </div>
         </div>
         
         <div class="center-area">
-            <div class="orbit-wrapper">
-                <div class="heart h-right"></div>
-                <div class="heart h-left"></div>
+            <div class="heart-orbit">
+                <div class="heart h1"></div>
+                <div class="heart h2"></div>
             </div>
             <div class="center-box">
-                <div class="text-main rainbow-text">mora biti isti kao ovaj</div>
-                <div class="text-sub rainbow-text">dianaduša</div>
+                <div class="text-main text-style">Diana</div>
+                <div class="text-sub text-style">Diana Te Dua Shpirti</div>
+            </div>
+        </div>
+        
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline></video>
+                <div class="video-text text-style">DIANADUSA</div>
             </div>
         </div>
     </div>
