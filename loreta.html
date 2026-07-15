@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>EL DIABLO - Cuori Sposini</title>
+    <title>EL DIABLO - Arcobaleno</title>
     <style>
         body{ margin:0; background:transparent; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden;}
         .container{ position:relative; width:1308px; height:484px; }
@@ -13,15 +13,26 @@
         .right{right:0}
         .video-wrapper::before{ content:""; position:absolute; inset:0; padding:4px; border-radius:20px; background:conic-gradient( red,orange,yellow,lime,cyan,blue,violet,red ); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; filter:drop-shadow(0 0 10px rgba(255,0,255,.7)); pointer-events:none;}
         .side-video{ width:100%; height:100%; object-fit:cover; border-radius:16px;}
-        .video-text{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:25px; font-family: sans-serif; font-weight:bold; z-index:2; color: #fff; text-shadow: 0 0 10px #000; text-transform: uppercase; white-space: nowrap;}
+
+        /* TESTO ARCOBALENO */
+        .rainbow-text {
+            background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowText 4s linear infinite;
+        }
+        @keyframes rainbowText{ 0%{background-position:0%} 100%{background-position:100%}}
+
+        .video-text{ position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:25px; font-family: sans-serif; font-weight:bold; z-index:2; text-transform: uppercase; white-space: nowrap;}
         
         /* Area Centrale */
         .center-area{ position:absolute; left:280px; right:280px; top:0; bottom:0; display:flex; justify-content:center; align-items:center; z-index:0; }
         .center-box{ position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; }
         
-        /* Testo */
-        .text-main { font-size: 75px; font-family: 'Georgia', serif; font-weight: bold; color: #ffffff; text-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff; margin: 0; }
-        .text-sub { font-size: 45px; font-family: 'Georgia', serif; font-weight: 600; color: #ffffff; text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff; margin: 0; }
+        /* Testo Centrale */
+        .text-main { font-size: 55px; font-family: 'Georgia', serif; font-weight: bold; margin: 0; }
+        .text-sub { font-size: 35px; font-family: 'Georgia', serif; font-weight: 600; margin: 0; }
         
         /* Cuori */
         .heart { position: absolute; width: 35px; height: 35px; background-color: #ff0000; transform: rotate(-45deg); box-shadow: 0 0 10px #ff0000; }
@@ -29,32 +40,25 @@
         .heart::before { top: -17px; left: 0; }
         .heart::after { top: 0; left: 17px; }
         
-        /* Orbite separate */
+        /* Orbite */
         .orbit-wrapper { position: absolute; width: 450px; height: 450px; border-radius: 50%; }
-        
         .h-right { top: -18px; left: 220px; animation: rotateRight 10s linear infinite; transform-origin: -10px 243px; }
         .h-left { top: -18px; left: 195px; animation: rotateLeft 10s linear infinite; transform-origin: 15px 243px; }
         
-        @keyframes rotateRight {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes rotateLeft {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
-        }
+        @keyframes rotateRight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes rotateLeft { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="video-wrapper left">
             <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
-            <div class="video-text">Diana</div>
+            <div class="video-text rainbow-text">Dobrodošli</div>
         </div>
         
         <div class="video-wrapper right">
             <video class="side-video" src="https://i.imgur.com/0YNNxwt.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
-            <div class="video-text">Diana</div>
+            <div class="video-text rainbow-text">dianaduša</div>
         </div>
         
         <div class="center-area">
@@ -63,8 +67,8 @@
                 <div class="heart h-left"></div>
             </div>
             <div class="center-box">
-                <div class="text-main">Diana</div>
-                <div class="text-sub">Diana Te Dua Shpirti</div>
+                <div class="text-main rainbow-text">mora biti isti kao ovaj</div>
+                <div class="text-sub rainbow-text">dianaduša</div>
             </div>
         </div>
     </div>
