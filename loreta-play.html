@@ -1,0 +1,112 @@
+!DOCTYPE html>
+<html>
+<head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    * { box-sizing: border-box; }
+    body { background: transparent !important; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; font-family: 'Orbitron', sans-serif; }
+    
+    @keyframes rainbow { 
+        0% { border-color: red; color: red; } 20% { border-color: orange; color: orange; } 
+        40% { border-color: yellow; color: yellow; } 60% { border-color: green; color: green; } 
+        80% { border-color: blue; color: blue; } 100% { border-color: violet; color: violet; } 
+    }
+
+    #wrap { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 750px; height: 450px; }
+    
+    .nvidia-skin { width: 380px; height: 380px; background: transparent !important; border-radius: 50%; position: relative; transition: all 1s ease; display: flex; align-items: center; justify-content: center; z-index: 10; overflow: hidden; border: 3px solid; animation: rainbow 5s infinite; }
+    
+    /* Contenitore per il primo iframe (inizio) */
+    #intro-container { width: 380px; height: 380px; position: absolute; z-index: 5; top: 0; left: 0; border: none; }
+    #intro-container iframe { width: 100%; height: 100%; border: none; }
+
+    .active.nvidia-skin { width: 750px; height: 450px; border-radius: 20px; background: rgba(0,0,0,0.9) !important; border: 3px solid; animation: rainbow 5s infinite; }
+    .active-content { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 15px; }
+    .active .active-content { display: flex; }
+
+    .marquee-container { width: 85%; overflow: hidden; background: rgba(0,0,0,0.5); border: 2px solid; animation: rainbow 5s infinite; padding: 8px; border-radius: 5px; }
+    #track-title { display: inline-block; padding-left: 100%; animation: scroll-text 15s linear infinite; font-size: 20px; text-transform: uppercase; white-space: nowrap; background: linear-gradient(to right, red, orange, yellow, green, blue, violet); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    @keyframes scroll-text { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+    .center-media-box { width: 380px; height: 240px; border: 3px solid; animation: rainbow 5s infinite; border-radius: 10px; overflow: hidden; background: #000; margin-top: 15px; position: relative; }
+    
+    /* Contenitore per il secondo iframe (centro) */
+    #center-video-container { width: 100%; height: 100%; border: none; }
+    #center-video-container iframe { width: 100%; height: 100%; border: none; }
+    
+    #cover-art { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 2; display: none; }
+     
+    .social-circle { width: 60px; height: 60px; border-radius: 50%; position: absolute; cursor: pointer; background: rgba(0,0,0,0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid; animation: rainbow 5s infinite; font-size: 8px; color: #fff; text-decoration: none; }
+    .social-circle img { width: 20px; height: 20px; margin-bottom: 2px; }
+     
+    .s-sx1 { left: 40px; top: 100px; } .s-sx2 { left: 20px; top: 190px; } .s-sx3 { left: 40px; top: 280px; }
+    .s-dx1 { right: 40px; top: 100px; } .s-dx2 { right: 20px; top: 190px; } .s-dx3 { right: 40px; top: 280px; }
+
+    .btn-stop { width: 65px; height: 65px; border-radius: 50%; background: #000; color: #fff; border: 3px solid; animation: rainbow 5s infinite; cursor: pointer; font-size: 25px; margin-top: 10px; }
+    
+    #start { z-index: 100; margin-top: 20px; width: 380px; padding: 15px; background: #fff; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; border-radius: 5px; border: 3px solid; animation: rainbow 5s infinite; transition: transform 0.2s ease; }
+    #start:hover { transform: scale(1.05); }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+    <div class="nvidia-skin" id="skin">
+        <div id="intro-container">
+            <iframe src="https://peppeagosto.github.io/immaggini/ragazza-loreta1.html" allow="autoplay"></iframe>
+        </div>
+
+        <div class="active-content">
+            <a href="#" class="social-circle s-sx1"><img src="https://i.imgur.com/AfB7rCD.png">AKTIVIRAJ</a>
+            <a href="#" class="social-circle s-sx2"><img src="https://i.imgur.com/2YqSiNm.png">AKTIVIRAJ</a>
+            <a href="#" class="social-circle s-sx3"><img src="https://i.imgur.com/Ddk1KjP.png">AKTIVIRAJ</a>
+            <a href="#" class="social-circle s-dx1"><img src="https://i.imgur.com/L9I3njt.png">AKTIVIRAJ</a>
+            <a href="#" class="social-circle s-dx2"><img src="https://i.imgur.com/tGUTVe1.png">AKTIVIRAJ</a>
+            <div class="social-circle s-dx3"><img src="https://i.imgur.com/96DwReM.png">AKTIVIRAJ</div>
+
+            <div class="marquee-container">
+                <div id="track-title">UČITAVANJE...</div>
+            </div>
+             
+            <div class="center-media-box">
+                <div id="center-video-container">
+                    <iframe src="https://peppeagosto.github.io/immaggini/ragazza-loreta2.html" allow="autoplay"></iframe>
+                </div>
+                <img id="cover-art" src="">
+            </div>
+
+            <button class="btn-stop" onclick="document.getElementById('radio-stream').pause()">■</button>
+        </div>
+    </div>
+    <button id="start" onclick="go()">AKTIVIRAJ SISTEM</button>
+</div>
+
+<audio id="radio-stream" crossorigin="anonymous"><source src="https://stm2.srvif.com:7620/;" type="audio/mpeg"></audio>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function updateMetadata() {
+    $.getJSON('https://stm2.srvif.com:7620/stats?sid=1&json=1&callback=?', function(data) {
+        if (data && data.songtitle) {
+            $('#track-title').text(data.songtitle.toUpperCase());
+        }
+    });
+}
+
+function go() {
+    $('#start').hide();
+    // Nasconde il primo iframe dopo 2 secondi
+    setTimeout(() => {
+        $('#intro-container').remove(); 
+        $('#skin').addClass('active'); 
+        document.getElementById('radio-stream').play(); 
+        updateMetadata();
+        setInterval(updateMetadata, 15000);
+        
+        const cover = document.getElementById('cover-art');
+        if(cover.getAttribute('src') !== "") { cover.style.display = 'block'; }
+    }, 2000);
+}
+</script>
+</body>
+</html>
