@@ -70,27 +70,27 @@ body::before {
     100% { transform: rotate(-45deg) translateX(-1000px) scale(1); opacity: 0; }
 }
 
+/* Posizione corretta fin dall'inizio (58% meno metà altezza del box) */
 .video-box {
     position: fixed;
     width: 240px;
     height: 520px;
-    top: 50%;
+    top: calc(58% - 260px);
     border-radius: 20px;
     overflow: hidden;
     z-index: 9999;
     padding: 12px;
     background: linear-gradient(135deg, #00bfff, #ff00ff, #39ff14, #00bfff);
     background-size: 300% 300%;
-    animation: gradientBorder 4s ease infinite;
 }
 
 .video-left {
-    left: 10px;
+    left: 15px;
     animation: gradientBorder 4s ease infinite, floatLeft 6s ease-in-out infinite;
 }
 
 .video-right {
-    right: 10px;
+    right: 15px;
     animation: gradientBorder 4s ease infinite, floatRight 6s ease-in-out infinite;
     animation-delay: 1.5s;
 }
@@ -135,16 +135,17 @@ body::before {
     100% { background-position: 0% 50%; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
 }
 
+/* Animazioni semplificate e fluide senza sbalzi di posizione */
 @keyframes floatLeft {
-    0% { transform: translateY(-50%) translateY(0px); }
-    50% { transform: translateY(-50%) translateY(-15px); }
-    100% { transform: translateY(-50%) translateY(0px); }
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
 }
 
 @keyframes floatRight {
-    0% { transform: translateY(-50%) translateY(0px); }
-    50% { transform: translateY(-50%) translateY(15px); }
-    100% { transform: translateY(-50%) translateY(0px); }
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(15px); }
+    100% { transform: translateY(0px); }
 }
 
 @keyframes shine {
@@ -377,13 +378,14 @@ body::before {
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
 
+<!-- Video Sinistra con Nik "Oliveira" -->
 <div class="video-box video-left">
     <div class="video-box-inner">
         <video autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/portogallo1.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
-        <div class="video-text">𝐓í@𝐠𝟎</div>
+        <div class="video-text">Oliveira</div>
     </div>
 </div>
 
@@ -394,6 +396,7 @@ body::before {
     <div class="radio-title">RadioVieiraAmigosUnidosOficial</div>
 </div>
 
+<!-- Video Destra con Nik "An@bel@" -->
 <div class="video-box video-right">
     <div class="video-box-inner">
         <video autoplay loop muted playsinline>
@@ -406,7 +409,7 @@ body::before {
 
 <div id="ownerHeart" class="owner-heart">
     <div class="heart-shape"></div>
-    <div class="heart-text">Tí@g0</div>
+    <div class="heart-text">Oliveira</div>
 </div>
 
 <div id="kissGifContainer" class="kiss-gif-container">
