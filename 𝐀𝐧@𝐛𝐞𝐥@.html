@@ -5,20 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EL DIABLO</title>
 
-<!-- Importazione di un font perfetto per l'effetto macchina da scrivere -->
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght=700&display=swap" rel="stylesheet">
 
 <style>
 html, body {
     margin: 0;
     padding: 0;
-    background: transparent !important; /* Sfondo completamente trasparente per far vedere quello di xat */
+    background: transparent !important;
     overflow: hidden; 
     height: 100%;
     font-family: sans-serif;
 }
 
-/* Stelle di Sfondo Brillanti (rimangono visibili sopra lo sfondo di xat) */
 body::before {
     content: "";
     position: absolute;
@@ -40,7 +38,6 @@ body::before {
     to { transform: translateY(-100px); }
 }
 
-/* Stelle Cadenti Neon di Sfondo */
 .shooting-star {
     position: absolute;
     left: 50%;
@@ -73,22 +70,38 @@ body::before {
     100% { transform: rotate(-45deg) translateX(-1000px) scale(1); opacity: 0; }
 }
 
-/* Video Box Laterali */
 .video-box {
     position: fixed;
     width: 240px;
     height: 520px;
     top: 50%;
-    transform: translateY(-50%);
     border-radius: 20px;
-    border: 14px solid #add8e6; 
-    animation: glowPulse 2.5s infinite alternate ease-in-out;
     overflow: hidden;
     z-index: 9999;
+    padding: 12px;
+    background: linear-gradient(135deg, #00bfff, #ff00ff, #39ff14, #00bfff);
+    background-size: 300% 300%;
+    animation: gradientBorder 4s ease infinite;
 }
 
-.video-left { left: 10px; }
-.video-right { right: 10px; }
+.video-left {
+    left: 10px;
+    animation: gradientBorder 4s ease infinite, floatLeft 6s ease-in-out infinite;
+}
+
+.video-right {
+    right: 10px;
+    animation: gradientBorder 4s ease infinite, floatRight 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+.video-box-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
 
 .video-box video {
     width: 100%;
@@ -97,7 +110,6 @@ body::before {
     display: block;
 }
 
-/* Testo dei video (Sfumato) */
 .video-text {
     position: absolute;
     bottom: 12px;
@@ -108,13 +120,31 @@ body::before {
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 1px;
-    background: linear-gradient(90deg, #ffffff, #add8e6, #ffffff);
+    background: linear-gradient(90deg, #ff00ff, #00bfff, #39ff14, #ff00ff);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 2s linear infinite, wave 3s ease-in-out infinite;
     pointer-events: none;
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    filter: drop-shadow(0 0 5px rgba(0, 191, 255, 0.6));
+}
+
+@keyframes gradientBorder {
+    0% { background-position: 0% 50%; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
+    50% { background-position: 100% 50%; box-shadow: 0 0 30px rgba(255, 0, 255, 0.8); }
+    100% { background-position: 0% 50%; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
+}
+
+@keyframes floatLeft {
+    0% { transform: translateY(-50%) translateY(0px); }
+    50% { transform: translateY(-50%) translateY(-15px); }
+    100% { transform: translateY(-50%) translateY(0px); }
+}
+
+@keyframes floatRight {
+    0% { transform: translateY(-50%) translateY(0px); }
+    50% { transform: translateY(-50%) translateY(15px); }
+    100% { transform: translateY(-50%) translateY(0px); }
 }
 
 @keyframes shine {
@@ -126,12 +156,6 @@ body::before {
     50% { transform: translateY(-5px) rotate(2deg); }
 }
 
-@keyframes glowPulse {
-    0% { box-shadow: 0 0 15px #add8e6, 0 0 10px #add8e6 inset; border-color: #add8e6; }
-    100% { box-shadow: 0 0 45px #00bfff, 0 0 25px #00bfff inset; border-color: #00bfff; }
-}
-
-/* Area Centrale */
 .center-container {
     position: absolute;
     top: 50%;
@@ -145,10 +169,9 @@ body::before {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: transparent !important; /* Totalmente trasparente al centro */
+    background: transparent !important;
 }
 
-/* Il Benvenuto (gira in tondo toccando tutti gli angoli) */
 .orbit-zone {
     position: relative;
     width: 100%;
@@ -193,7 +216,6 @@ body::before {
     100% { transform: translate(0, 0) scale(1); }
 }
 
-/* Nome della Radio (Con effetto arcobaleno) */
 .radio-title {
     font-size: 32px;
     font-weight: 900;
@@ -212,10 +234,6 @@ body::before {
     0% { background-position: 0% center; }
     100% { background-position: 400% center; }
 }
-
-/* ========================================================= */
-/* CUORE E GIF CHE RIMBALZANO */
-/* ========================================================= */
 
 .owner-heart {
     position: fixed;
@@ -314,7 +332,6 @@ body::before {
     100% { transform: translateY(10px) scale(0.98) rotate(-3deg); }
 }
 
-/* Particelle della scia */
 .sparkle {
     position: fixed;
     pointer-events: none;
@@ -356,52 +373,48 @@ body::before {
 
 <body>
 
-<!-- Stelle Cadenti Sfondo -->
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
 
 <div class="video-box video-left">
-    <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/portogallo1.mp4" type="video/mp4">
-    </video>
+    <div class="video-box-inner">
+        <video autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/portogallo1.mp4" type="video/mp4">
+        </video>
+        <div class="video-text">𝐓í@𝐠𝟎</div>
+    </div>
 </div>
 
-<!-- Blocco Centrale (Trasparente) -->
 <div class="center-container">
     
-    <!-- Il Benvenuto che gira e si scrive a macchina via JS -->
     <div class="orbit-zone">
         <div id="typewriterText" class="welcome-orbit"></div>
     </div>
     
-    <!-- Nome della Radio -->
     <div class="radio-title">RadioVieiraAmigosUnidosOficial</div>
     
 </div>
 
 <div class="video-box video-right">
-    <video autoplay loop muted playsinline>
-        <source src="https://peppeagosto.github.io/immaggini/portogallo2.mp4" type="video/mp4">
-    </video>
-    <div class="video-text">𝐀𝐧@𝐛𝐞𝐥@</div>
+    <div class="video-box-inner">
+        <video autoplay loop muted playsinline>
+            <source src="https://peppeagosto.github.io/immaggini/portogallo2.mp4" type="video/mp4">
+        </video>
+        <div class="video-text">𝐀𝐧@𝐛𝐞𝐥@</div>
+    </div>
 </div>
 
-<!-- Cuore Mobile con il Nik -->
 <div id="ownerHeart" class="owner-heart">
     <div class="heart-shape"></div>
-    <div class="heart-text">An@bel@</div>
+    <div class="heart-text">Tí@g0</div>
 </div>
 
-<!-- Container per la GIF del bacio -->
 <div id="kissGifContainer" class="kiss-gif-container">
     <img src="https://xatimg.com/image/hLFxe1VhWLXu.gif" alt="Bacio">
 </div>
 
 <script>
-    // =========================================================
-    // EFFETTO MACCHINA DA SCRIVERE REALE (JS)
-    // =========================================================
     const textElement = document.getElementById('typewriterText');
     const textToType = "Deseja-vos uma boa escuta e agradece a vossa visita";
     let charIndex = 0;
@@ -428,9 +441,6 @@ body::before {
 
     typewriterEffect();
 
-    // =========================================================
-    // MOVIMENTO CUORE E GIF RIMBALZANTI
-    // =========================================================
     const heart = document.getElementById('ownerHeart');
     const kissGif = document.getElementById('kissGifContainer');
     
