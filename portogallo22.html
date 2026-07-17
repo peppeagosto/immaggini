@@ -70,7 +70,6 @@ body::before {
     100% { transform: rotate(-45deg) translateX(-1000px) scale(1); opacity: 0; }
 }
 
-/* Modificata la posizione di base (top: 58%) per scendere un po' giù */
 .video-box {
     position: fixed;
     width: 240px;
@@ -85,7 +84,6 @@ body::before {
     animation: gradientBorder 4s ease infinite;
 }
 
-/* Allineati perfettamente a 15px dai bordi laterali */
 .video-left {
     left: 15px;
     animation: gradientBorder 4s ease infinite, floatLeft 6s ease-in-out infinite;
@@ -137,7 +135,6 @@ body::before {
     100% { background-position: 0% 50%; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
 }
 
-/* Modificata l'oscillazione mantenendo l'altezza corretta */
 @keyframes floatLeft {
     0% { transform: translateY(-50%) translateY(0px); }
     50% { transform: translateY(-50%) translateY(-15px); }
@@ -380,13 +377,14 @@ body::before {
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
 
+<!-- Video Sinistra con Nik "Oliveira" -->
 <div class="video-box video-left">
     <div class="video-box-inner">
         <video autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/portogallo1.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
-        <div class="video-text"></div>
+        <div class="video-text">Oliveira</div>
     </div>
 </div>
 
@@ -397,13 +395,14 @@ body::before {
     <div class="radio-title">RadioVieiraAmigosUnidosOficial</div>
 </div>
 
+<!-- Video Destra con Nik "An@bel@" -->
 <div class="video-box video-right">
     <div class="video-box-inner">
         <video autoplay loop muted playsinline>
             <source src="https://peppeagosto.github.io/immaggini/portogallo2.mp4" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
-        <div class="video-text"></div>
+        <div class="video-text">𝐀𝐧@𝐛𝐞𝐥@</div>
     </div>
 </div>
 
