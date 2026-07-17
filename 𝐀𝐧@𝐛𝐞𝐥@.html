@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fortunato</title>
+<title>EL DIABLO</title>
 
 <!-- Importazione di un font perfetto per l'effetto macchina da scrivere -->
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
@@ -12,13 +12,13 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: radial-gradient(circle, #153e75 0%, #071a30 50%, #000000 100%);
+    background: transparent !important; /* Sfondo completamente trasparente per far vedere quello di xat */
     overflow: hidden; 
     height: 100%;
     font-family: sans-serif;
 }
 
-/* Stelle di Sfondo Brillanti */
+/* Stelle di Sfondo Brillanti (rimangono visibili sopra lo sfondo di xat) */
 body::before {
     content: "";
     position: absolute;
@@ -145,6 +145,7 @@ body::before {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: transparent !important; /* Totalmente trasparente al centro */
 }
 
 /* Il Benvenuto (gira in tondo toccando tutti gli angoli) */
@@ -158,15 +159,13 @@ body::before {
     position: absolute;
     width: 100%;
     left: 0;
-    /* Nuovo font per l'effetto macchina da scrivere, ora PIÙ GRANDE */
     font-family: 'Courier Prime', monospace;
-    font-size: 24px; /* Testo ingrandito come richiesto */
+    font-size: 24px; 
     font-weight: bold;
     text-transform: uppercase;
     text-align: center;
-    
-    border-right: 3px solid #ff00ff; /* Il cursore della macchina da scrivere */
-    white-space: normal; /* Permette il ritorno a capo se il testo è grande */
+    border-right: 3px solid #ff00ff; 
+    white-space: normal; 
     display: inline-block;
     
     background: linear-gradient(90deg, #ff9100, #ff00ff, #39ff14, #00bfff, #ff9100);
@@ -174,7 +173,6 @@ body::before {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     
-    /* Animazioni combinate (il movimento ad angoli + sfumatura lucida + lampeggio cursore) */
     animation: 
         shine 4s linear infinite, 
         rotateAround 8s linear infinite,
@@ -182,7 +180,6 @@ body::before {
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
-/* Lampeggio del cursore alla fine della scritta */
 @keyframes blinkCursor {
     from, to { border-color: transparent; }
     50% { border-color: #ff00ff; }
@@ -217,7 +214,7 @@ body::before {
 }
 
 /* ========================================================= */
-/* CUORE E GIF CHE RIMBALZANO (ELEMENTI DINAMICI) */
+/* CUORE E GIF CHE RIMBALZANO */
 /* ========================================================= */
 
 .owner-heart {
@@ -233,7 +230,6 @@ body::before {
     transition: transform 0.1s linear;
 }
 
-/* Forma del cuore realizzata in puro CSS */
 .heart-shape {
     position: absolute;
     width: 110px;
@@ -260,7 +256,6 @@ body::before {
 .heart-shape::before { top: -55px; left: 0; }
 .heart-shape::after { top: 0; left: 55px; }
 
-/* Testo dentro il cuore */
 .heart-text {
     position: relative;
     z-index: 2;
@@ -273,7 +268,6 @@ body::before {
     pointer-events: none;
 }
 
-/* Animazioni di transizione */
 .explode {
     animation: explosionEffect 0.5s forwards ease-out !important;
 }
@@ -293,7 +287,6 @@ body::before {
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Container per la GIF del bacio */
 .kiss-gif-container {
     position: fixed;
     z-index: 10000;
@@ -321,7 +314,7 @@ body::before {
     100% { transform: translateY(10px) scale(0.98) rotate(-3deg); }
 }
 
-/* Particelle della scia (Coda di Volpe Lunghissima e Densissima) */
+/* Particelle della scia */
 .sparkle {
     position: fixed;
     pointer-events: none;
@@ -345,7 +338,6 @@ body::before {
     }
 }
 
-/* Cuoricini extra sputati dalla GIF */
 .sparkle-heart {
     position: fixed;
     font-size: 25px;
@@ -375,7 +367,7 @@ body::before {
     </video>
 </div>
 
-<!-- Blocco Centrale -->
+<!-- Blocco Centrale (Trasparente) -->
 <div class="center-container">
     
     <!-- Il Benvenuto che gira e si scrive a macchina via JS -->
@@ -392,7 +384,7 @@ body::before {
     <video autoplay loop muted playsinline>
         <source src="https://peppeagosto.github.io/immaggini/portogallo2.mp4" type="video/mp4">
     </video>
-    <div class="video-text">nome da mulher</div>
+    <div class="video-text">𝐀𝐧@𝐛𝐞𝐥@</div>
 </div>
 
 <!-- Cuore Mobile con il Nik -->
@@ -417,28 +409,23 @@ body::before {
 
     function typewriterEffect() {
         if (!isDeleting && charIndex <= textToType.length) {
-            // Scrive una lettera alla volta
             textElement.textContent = textToType.substring(0, charIndex);
             charIndex++;
-            setTimeout(typewriterEffect, 100); // Velocità di scrittura (100ms a lettera)
+            setTimeout(typewriterEffect, 100);
         } else if (isDeleting && charIndex >= 0) {
-            // Cancella una lettera alla volta
             textElement.textContent = textToType.substring(0, charIndex);
             charIndex--;
-            setTimeout(typewriterEffect, 40); // Velocità di cancellazione (più veloce)
+            setTimeout(typewriterEffect, 40);
         } else if (charIndex > textToType.length) {
-            // Testo completato: aspetta 3 secondi prima di cancellare
             isDeleting = true;
             setTimeout(typewriterEffect, 3000);
         } else if (charIndex < 0) {
-            // Testo completamente cancellato: ricomincia a scrivere
             isDeleting = false;
             charIndex = 0;
             setTimeout(typewriterEffect, 500);
         }
     }
 
-    // Avvia l'effetto scrittura
     typewriterEffect();
 
     // =========================================================
@@ -447,11 +434,9 @@ body::before {
     const heart = document.getElementById('ownerHeart');
     const kissGif = document.getElementById('kissGifContainer');
     
-    // Posizione iniziale casuale
     let posX = Math.random() * (window.innerWidth - 180) + 15;
     let posY = Math.random() * (window.innerHeight - 180) + 15;
     
-    // Velocità di movimento
     let speedX = 3.3;
     let speedY = 3.3;
     
@@ -467,12 +452,10 @@ body::before {
         posX += speedX;
         posY += speedY;
 
-        // Rimbalzo bordi sinistro/destro
         if (posX <= 15 || posX >= (width - currentSize - 15)) {
             speedX = -speedX;
             posX = Math.max(15, Math.min(posX, width - currentSize - 15));
         }
-        // Rimbalzo bordi superiore/inferiore
         if (posY <= 15 || posY >= (height - currentSize - 15)) {
             speedY = -speedY;
             posY = Math.max(15, Math.min(posY, height - currentSize - 15));
@@ -481,7 +464,6 @@ body::before {
         activeElement.style.left = posX + 'px';
         activeElement.style.top = posY + 'px';
 
-        // Effetto Coda di Volpe (8 particelle per frame)
         const centerX = posX + (currentSize / 2);
         const centerY = posY + (currentSize / 2);
         for (let i = 0; i < 8; i++) {
@@ -491,10 +473,8 @@ body::before {
         requestAnimationFrame(moveElement);
     }
 
-    // Avvia il loop di movimento continuo
     requestAnimationFrame(moveElement);
 
-    // Gestione del Ciclo Infinito (Cuore <-> GIF Bacio)
     function runStateCycle() {
         isHeartActive = true;
         currentSize = 150;
@@ -507,7 +487,6 @@ body::before {
             clearInterval(heartSparkleInterval);
         }
 
-        // Dopo 5 secondi... fa scoppiare il cuore e attiva la GIF
         setTimeout(() => {
             heart.classList.remove('fade-in-heart');
             heart.classList.add('explode');
@@ -525,7 +504,6 @@ body::before {
                 
                 heartSparkleInterval = setInterval(createSparkleHeart, 500);
 
-                // Dopo 10 secondi torna al cuore
                 setTimeout(() => {
                     kissGif.style.display = 'none';
                     kissGif.classList.remove('floating-kiss');
@@ -538,7 +516,6 @@ body::before {
 
     runStateCycle();
 
-    // Scia Magica a Coda di Volpe
     function createSparkleTrail(x, y) {
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
@@ -569,7 +546,6 @@ body::before {
         setTimeout(() => { sparkle.remove(); }, 1800);
     }
 
-    // Cuoricini lanciati dalla GIF del bacio
     function createSparkleHeart() {
         if (isHeartActive) return;
         const heartSparkle = document.createElement('div');
