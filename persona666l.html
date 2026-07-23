@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>EL DIABLO - Background Horror & Mandorle</title>
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .container {
+    position: relative;
+    width: 1308px;
+    height: 484px;
+    /* Sfondo horror di supporto (colore scuro/plasma che non fa conflitto con gli occhi) */
+    background: radial-gradient(circle, #250303 0%, #080000 70%, #000000 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+  }
+
+  /* ===== SFONDO MULTIMEDIALE (GIF / VIDEO / FOTO) CON BASSA OPACITÀ ===== */
+  .bg-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35; /* Poca opacità per risaltare il contesto horror senza coprire il testo o gli occhi */
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: luminosity; /* Rende la GIF/sfondo in sintonia con le tonalità scure/horror */
+  }
+
+  /* ===== OCCHI A MANDORLA HORROR / ELEGANTI ===== */
+  .almond-eye-fixed {
+    position: absolute;
+    top: 25px;
+    width: 280px;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.9));
+  }
+  .eye-left-pos { left: 30px; }
+  .eye-right-pos { right: 30px; }
+
+  /* VERO TAGLIO A MANDORLA: Allungato, affusolato e leggermente inclinato */
+  .almond-eyeball {
+    position: relative;
+    width: 180px;
+    height: 60px;
+    background: radial-gradient(circle at center, #2a0000 0%, #0d0000 70%, #000000 100%);
+    border: 2px solid #ff1a1a;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    overflow: hidden;
+    box-shadow: inset 0 0 25px rgba(255, 0, 0, 0.9), inset 0 0 10px #ffea00;
+  }
+
+  .eye-left-pos .almond-eyeball {
+    transform: rotate(-6deg);
+  }
+  .eye-right-pos .almond-eyeball {
+    transform: rotate(6deg);
+  }
+
+  .almond-eyeball::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at center, transparent 35%, rgba(255,0,0,0.6) 45%, transparent 55%),
+      linear-gradient(90deg, transparent 20%, rgba(255,0,0,0.4) 50%, transparent 80%);
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .almond-iris {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    background: radial-gradient(circle, #ffff00 0%, #ff5500 50%, #880000 100%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px #ff3300, inset 0 0 8px #000;
+    overflow: hidden;
+  }
+
+  .almond-pupil {
+    position: absolute;
+    width: 20px;
+    height: 35px;
+    background: #000000;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px #000, inset 0 0 4px #ff0000;
+    transition: transform 0.05s ease-out, width 0.15s, height 0.15s;
+  }
+
+  .almond-pupil::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #fff;
+  }
+
+  body.clicked .almond-eyeball {
+    border-color: #ffffff;
+    box-shadow: inset 0 0 35px rgba(255, 255, 255, 0.9), 0 0 35px rgba(255, 0, 0, 1);
+  }
+  body.clicked .almond-iris {
+    background: radial-gradient(circle, #ffffff 0%, #ff0000 60%, #330000 100%);
+  }
+  body.clicked .almond-pupil {
+    width: 28px;
+    height: 28px;
+    background: #ff0000;
+  }
+
+  /* ===== AREA CENTRALE (TESTO DINAMICO CHE SEGUE IL MOUSE) ===== */
+  .center-area {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* ===== TESTO DIABLO 3D STILE INFERNALE ===== */
+  .center-title {
+    font-size: 80px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: 900;
+    letter-spacing: 8px;
+    color: #ff0022;
+    text-shadow: 
+      2px 2px 0px #8b0000, 
+      4px 4px 0px #4d0000, 
+      6px 6px 0px #1a0000, 
+      0 0 20px rgba(255, 0, 0, 0.9), 
+      0 0 40px rgba(255, 0, 0, 0.6),
+      0 0 60px rgba(0, 255, 0, 0.2);
+    pointer-events: none;
+    transition: transform 0.05s ease-out;
+    animation: argentoPulse 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes argentoPulse {
+    0% {
+      text-shadow: 2px 2px 0px #8b0000, 4px 4px 0px #4d0000, 6px 6px 0px #1a0000, 0 0 20px rgba(255, 0, 0, 0.9), 0 0 40px rgba(255, 0, 0, 0.6);
+      transform: scale(1);
+    }
+    100% {
+      text-shadow: 2px 2px 0px #8b0000, 4px 4px 0px #4d0000, 6px 6px 0px #1a0000, 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.9), 0 0 80px rgba(0, 255, 100, 0.3);
+      transform: scale(1.02);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- SFONDO MULTIMEDIALE (Inserisci qui sotto il link della GIF, Video o Foto) -->
+  <img src="https://xatimg.com/image/roYyXoT7hCWL.gif" class="bg-media" alt="Background Horror">
+  <!-- Se invece vuoi usare un video .mp4 al posto della gif, sostituisci il tag <img> con: -->
+  <!-- <video class="bg-media" autoplay loop muted playsinline><source src="TUTTO_IL_LINK_DEL_VIDEO.mp4" type="video/mp4"></video> -->
+
+  <!-- OCCHIO A MANDORLA SINISTRO -->
+  <div class="almond-eye-fixed eye-left-pos">
+    <div class="almond-eyeball">
+      <div class="almond-iris">
+        <div class="almond-pupil" id="pupil-left"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OCCHIO A MANDORLA DESTRO -->
+  <div class="almond-eye-fixed eye-right-pos">
+    <div class="almond-eyeball">
+      <div class="almond-iris">
+        <div class="almond-pupil" id="pupil-right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTO CENTRALE DIABLO 3D CHE SEGUE IL MOUSE -->
+  <div class="center-area">
+    <div class="center-title" id="diabloText">DIABLO</div>
+  </div>
+
+</div>
+
+<script>
+  const pupils = document.querySelectorAll('.almond-pupil');
+  const diabloText = document.getElementById('diabloText');
+
+  window.addEventListener('mousemove', (e) => {
+    // Muove le pupille seguendo il movimento del mouse
+    pupils.forEach(pupil => {
+      const eyeArea = pupil.parentElement.parentElement.getBoundingClientRect();
+      const eyeX = eyeArea.left + eyeArea.width / 2;
+      const eyeY = eyeArea.top + eyeArea.height / 2;
+      
+      const x = e.clientX - eyeX;
+      const y = e.clientY - eyeY;
+      const angle = Math.atan2(y, x);
+      
+      const maxDistance = 16; 
+      const distance = Math.min(Math.sqrt(x * x + y * y), maxDistance);
+
+      const moveX = Math.cos(angle) * distance;
+      const moveY = Math.sin(angle) * distance;
+
+      pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+    });
+
+    // Effetto parallasse sul testo
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const textMoveX = (e.clientX - centerX) / 30;
+    const textMoveY = (e.clientY - centerY) / 30;
+    diabloText.style.transform = `translate(${textMoveX}px, ${textMoveY}px)`;
+  });
+
+  window.addEventListener('mousedown', () => {
+    document.body.classList.add('clicked');
+  });
+  window.addEventListener('mouseup', () => {
+    document.body.classList.remove('clicked');
+  });
+</script>
+
+</body>
+</html>
