@@ -111,12 +111,10 @@
     </div>
 
 <script>
-    // URL DEL TUO PANNELLO ADMIN (JSON SALVATO)
-    const URL_PANNELLO = "INSERISCI_QUI_LINK_JSON_ADMIN_PANEL"; 
-    
+    // Foto di riserva se un link non funziona
     const defaultImg = "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=100&auto=format&fit=crop&q=80";
-    
-    // LOGICA EFFETTI XAT
+
+    // EFFETTI DI SFONDO XAT
     const smiles = [
         "https://raw.githubusercontent.com/eamxat/Images/refs/heads/main/a_(maniac)_80.webp",
         "https://xat.com/images/smoticons/u/crazypianist.png",
@@ -138,7 +136,7 @@
 
     $(document).ready(function() {
         startParticles();
-        caricaPalinsestoDalPannello();
+        aggiornaLive();
     });
 
     $('#btn-anim').click(function() {
@@ -177,19 +175,73 @@
 
     $('#btn-pali').on('click', function() { $('#locandina').fadeToggle(); });
 
-    // CARICAMENTO E SINCRONIZZAZIONE DAL PANNELLO
+    // ==============================================================================
+    // 1. LISTA FOTO DJ (Puoi cambiare o aggiungere link qui)
+    // ==============================================================================
+    const imgSlots = [
+        "https://xatimg.com/image/iQgCyJrXx59k.jpg", // Foto 0
+        "https://xatimg.com/image/Pb7d1636URvg.jpg", // Foto 1
+        "https://xatimg.com/image/iVWjQe7TNoGD.jpg", // Foto 2
+        "https://xatimg.com/image/xownGDwnETzl.jpg", // Foto 3
+        "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", // Foto 4
+        "https://xatimg.com/image/D5nl0rwtzO5q.jpg", // Foto 5
+        "https://xatimg.com/image/ghXE2B3YgqbX.jpg", // Foto 6
+        "https://xatimg.com/image/Ewyzp0L90szv.jpg", // Foto 7
+        "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", // Foto 8
+        "https://xatimg.com/image/7gG8UEwtre1G.jpg"  // Foto 9
+    ];
+
+    // ==============================================================================
+    // 2. PALINSESTO COMPLETO SETTIMANALE (Modifica qui orari "h", nomi "n" e foto "f")
+    // ==============================================================================
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-    let databaseTurni = {};
 
-    function caricaPalinsestoDalPannello() {
-        $.getJSON(URL_PANNELLO + '?t=' + new Date().getTime(), function(data) {
-            databaseTurni = data;
-            aggiornaLive();
-        }).fail(function() {
-            console.log("In attesa dei dati dal pannello Admin...");
-        });
-    }
+    const databaseTurni = { 
+        "LUNEDÌ": [
+            {h:18, n:"DJ EL DIABLO", f:imgSlots[0]}, 
+            {h:19, n:"DJ SOFIA", f:imgSlots[1]}, 
+            {h:20, n:"DJ LUCIA", f:imgSlots[2]}, 
+            {h:21, n:"DJ GIULIA", f:imgSlots[3]}
+        ], 
+        "MARTEDÌ": [
+            {h:17, n:"DJ MARCO", f:imgSlots[4]}, 
+            {h:18, n:"DJ ELENA", f:imgSlots[5]}, 
+            {h:19, n:"DJ NELLY", f:imgSlots[6]}, 
+            {h:20, n:"DJ SARA", f:imgSlots[7]}, 
+            {h:21, n:"DJ PAOLA", f:imgSlots[8]}
+        ], 
+        "MERCOLEDÌ": [
+            {h:18, n:"DJ VALENTINA", f:imgSlots[9]}, 
+            {h:19, n:"DJ FABIO", f:imgSlots[0]}, 
+            {h:20, n:"DJ CHIARA", f:imgSlots[1]}, 
+            {h:21, n:"DJ MILENA", f:imgSlots[2]}
+        ], 
+        "GIOVEDÌ": [
+            {h:17, n:"DJ MARTINA", f:imgSlots[3]}, 
+            {h:18, n:"DJ GIOVANNI", f:imgSlots[4]}, 
+            {h:19, n:"DJ FEDERICA", f:imgSlots[5]}, 
+            {h:20, n:"DJ ORCHIDEA", f:imgSlots[6]}, 
+            {h:21, n:"DJ BEATRICE", f:imgSlots[7]}
+        ], 
+        "VENERDÌ": [
+            {h:18, n:"DJ CETTY", f:imgSlots[8]}, 
+            {h:19, n:"DJ ANNA", f:imgSlots[9]}, 
+            {h:20, n:"DJ PIERA", f:imgSlots[0]}, 
+            {h:21, n:"DJ SILVIA", f:imgSlots[1]}
+        ], 
+        "SABATO": [
+            {h:17, n:"DJ CLAUDIA", f:imgSlots[2]}, 
+            {h:18, n:"DJ SIMONA", f:imgSlots[3]}, 
+            {h:19, n:"DJ STEFANY", f:imgSlots[4]}, 
+            {h:20, n:"DJ ROBERTO", f:imgSlots[5]}, 
+            {h:21, n:"DJ ALESSIA", f:imgSlots[6]}
+        ], 
+        "DOMENICA": "RIPOSO" 
+    };
 
+    // ==============================================================================
+    // 3. LOGICA CALCOLO ORARI E LED (VERDE = STREAMING, ROSSO = FINITO)
+    // ==============================================================================
     function aggiornaLive() {
         const d = new Date(); 
         const oggi = giorni[d.getDay()]; 
@@ -208,7 +260,10 @@
             djsOggi.forEach((dj) => {
                 let èLive = (oraAttuale === dj.h);
                 let classeGira = èLive ? "ruota-disco" : "";
+                
+                // VERDE se è l'ora esatta del turno, ROSSO se l'ora è già passata
                 let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
+                
                 let fotoUrl = dj.f ? dj.f : defaultImg;
 
                 container.append(`
@@ -221,8 +276,8 @@
         }
     }
 
-    // Controlla nuovi turni dal pannello ogni 10 secondi
-    setInterval(caricaPalinsestoDalPannello, 10000);
+    // Controllo automatico ogni 10 secondi
+    setInterval(aggiornaLive, 10000);
 </script>
 </body>
 </html>
