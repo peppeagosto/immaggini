@@ -6,7 +6,7 @@
 <style>
 body {
   margin: 0;
-  /* Sfondo colore mare */
+  /* Corretto in "transparent" */
   background: transparent;
   display: flex;
   justify-content: center;
@@ -20,7 +20,6 @@ body {
   width: 1308px;
   height: 484px;
 }
-
 
 .video-wrapper {
   position: absolute;
@@ -41,7 +40,7 @@ body {
   border-radius: 16px;
 }
 
-
+/* Ho lasciato il CSS centrale nel caso tu voglia aggiungerlo dopo */
 .center-area {
   position: absolute;
   left: 340px;  
@@ -65,7 +64,6 @@ body {
   height: 100%;
   object-fit: contain; 
   border-radius: 12px;
-  /* Sfondo del video colore mare anziché nero */
   background: #006994;
 }
 </style>
@@ -74,23 +72,16 @@ body {
 
 <div class="container">
 
- 
   <div class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/loirinha.mp4" type="video/mp4">
     </video>
   </div>
 
-
   <div class="video-wrapper right">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/loirinha.mp4" type="video/mp4">
     </video>
-  </div>
-
- 
-  
-
   </div>
 
 </div>
