@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Panel GitHub</title>
+    <style>
+        .stage-container * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        
+        body {
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .stage-container {
+            position: relative;
+            z-index: 10;
+            width: 850px;
+            height: 480px;
+            display: grid;
+            grid-template-columns: 140px 1fr 140px;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: url('https://xatimg.com/image/8lriUq1HR0fe.jpg') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0 auto;
+        }
+
+        .glass-3d {
+            position: relative;
+            background: rgba(255, 255, 255, 0.06); 
+            backdrop-filter: blur(6px); 
+            -webkit-backdrop-filter: blur(6px);
+            border-top: 1px solid rgba(255, 0, 255, 0.6);
+            border-left: 1px solid rgba(0, 229, 255, 0.5);
+            border-right: 1px solid rgba(255, 0, 255, 0.3);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2), inset 0 0 15px rgba(0, 229, 255, 0.2);
+            overflow: hidden;
+            animation: glassGlowPulse 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes glassGlowPulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 0, 255, 0.3), inset 0 0 10px rgba(0, 229, 255, 0.2);
+                border-top-color: rgba(255, 0, 255, 0.5);
+                border-left-color: rgba(0, 229, 255, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 25px rgba(255, 0, 255, 0.7), 0 0 40px rgba(0, 229, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.3);
+                border-top-color: rgba(0, 229, 255, 0.9);
+                border-left-color: rgba(255, 0, 255, 0.8);
+            }
+        }
+
+        .glass-3d::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 80%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-20deg);
+            pointer-events: none;
+            z-index: 1;
+            transition: 0.6s;
+        }
+        
+        .glass-3d:hover::before {
+            left: 150%;
+        }
+
+        .speaker-stack {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 430px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 10px;
+            z-index: 10;
+        }
+
+        .chicca-circle-large {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 170, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+            border: 2px solid #00ffaa;
+            box-shadow: 0 0 12px rgba(0, 255, 170, 0.8), inset 0 0 8px rgba(0, 229, 255, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 900;
+            color: #00ffaa;
+            cursor: pointer;
+            transition: all 0.25s ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chicca-circle-large:hover, .chicca-circle-large.active-fx {
+            transform: scale(1.12);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px #00ffaa, inset 0 0 12px #ffffff;
+            color: #ffffff;
+            background: radial-gradient(circle, rgba(0, 255, 170, 0.6) 0%, rgba(0, 0, 0, 0.9) 100%);
+        }
+
+        .chicca-right-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .chicca-label-title {
+            font-size: 8px;
+            color: #ff9900;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px #ff9900;
+            text-transform: uppercase;
+        }
+
+        .chicca-circle-large-right {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 153, 0, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+            border: 2px solid #ff9900;
+            box-shadow: 0 0 12px rgba(255, 153, 0, 0.8), inset 0 0 8px rgba(255, 230, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 900;
+            color: #ff9900;
+            cursor: pointer;
+            transition: all 0.25s ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chicca-circle-large-right:hover {
+            transform: scale(1.12);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px #ff9900, inset 0 0 12px #ffffff;
+            color: #ffffff;
+        }
+
+        .woofer {
+            width: 70px; height: 70px;
+            background: 
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 1px, transparent 1px, transparent 4px),
+                repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 1px, transparent 1px, transparent 4px),
+                radial-gradient(circle, #333333 0%, #1a1a1a 18%, #444444 22%, #0d0d0d 45%, #555555 52%, #000000 75%, #222222 100%);
+            border: 3px solid #555;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.9), 
+                inset 0 2px 5px rgba(255, 255, 255, 0.5),
+                0 0 12px rgba(0,0,0,0.8);
+            transition: transform 0.04s ease-out, border-color 0.04s ease-out, box-shadow 0.04s ease-out;
+            will-change: transform;
+        }
+
+        .woofer::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px; height: 28px;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #b8c6db 25%, #434343 55%, #000000 100%);
+            border-radius: 50%;
+            border: 1px solid #777;
+            box-shadow: 
+                0 3px 6px rgba(0, 0, 0, 0.9),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.8),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+
+        .vertical-widget-stack {
+            display: none;
+            position: absolute;
+            top: 12px;
+            left: 5px;
+            width: 130px;
+            height: 350px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00e5ff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 4px;
+            z-index: 25;
+        }
+
+        .widget-header-title {
+            font-size: 9px;
+            color: #00e5ff;
+            text-shadow: 0 0 5px #00e5ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #00e5ff;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .vertical-counter-container {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .vertical-counter-container img {
+            max-width: 100%;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .center-matrix {
+            position: relative;
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .hud-top {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            font-size: 11px;
+            color: #00e5ff;
+            z-index: 5;
+            text-shadow: 0 0 5px #00e5ff;
+            position: relative;
+        }
+
+        .hud-left { text-align: left; position: relative; }
+        .hud-center { text-align: center; font-weight: 900; color: #ffffff; text-shadow: 0 0 8px #00e5ff; letter-spacing: 1px; }
+        .hud-right { text-align: right; position: relative; }
+
+        .center-video-box {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin: 6px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 6;
+        }
+
+        .center-video-box iframe, .center-video-box video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            object-fit: cover;
+        }
+
+        .bottom-spotlights-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 2px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 12;
+        }
+
+        .spot-bottom {
+            position: relative;
+            width: 32px;
+            height: 10px;
+            background: #111;
+            border: 1px solid #ff00ff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px #ff00ff;
+        }
+
+        .spot-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: -44px;
+            width: 120px;
+            height: 270px;
+            clip-path: polygon(42% 100%, 58% 100%, 100% 0%, 0% 0%);
+            pointer-events: none;
+            display: none;
+            transform-origin: bottom center;
+            mix-blend-mode: screen;
+        }
+
+        .spot-bottom:nth-child(1)::after {
+            background: linear-gradient(0deg, rgba(255, 0, 255, 0.75) 0%, rgba(255, 153, 0, 0.5) 50%, rgba(0, 229, 255, 0) 100%);
+        }
+        .spot-bottom:nth-child(2)::after {
+            background: linear-gradient(0deg, rgba(0, 229, 255, 0.75) 0%, rgba(153, 0, 255, 0.5) 50%, rgba(255, 0, 51, 0) 100%);
+        }
+        .spot-bottom:nth-child(3)::after {
+            background: linear-gradient(0deg, rgba(255, 230, 0, 0.75) 0%, rgba(0, 255, 136, 0.5) 50%, rgba(255, 0, 200, 0) 100%);
+        }
+        .spot-bottom:nth-child(4)::after {
+            background: linear-gradient(0deg, rgba(255, 0, 85, 0.75) 0%, rgba(0, 204, 255, 0.5) 50%, rgba(255, 200, 0, 0) 100%);
+        }
+
+        .fx-active .spot-bottom::after { display: block; }
+
+        .fx-active .spot-bottom:nth-child(1)::after { animation: bottomCross1 2.1s infinite alternate ease-in-out; }
+        .fx-active .spot-bottom:nth-child(2)::after { animation: bottomCross2 2.6s infinite alternate ease-in-out; }
+        .fx-active .spot-bottom:nth-child(3)::after { animation: bottomCross3 2.3s infinite alternate ease-in-out; }
+        .fx-active .spot-bottom:nth-child(4)::after { animation: bottomCross4 2.7s infinite alternate ease-in-out; }
+
+        @keyframes bottomCross1 { 0% { transform: rotate(-40deg) scaleY(0.9); opacity: 0.65; } 100% { transform: rotate(30deg) scaleY(1.15); opacity: 1; } }
+        @keyframes bottomCross2 { 0% { transform: rotate(25deg) scaleY(1.1); opacity: 1; } 100% { transform: rotate(-35deg) scaleY(0.9); opacity: 0.7; } }
+        @keyframes bottomCross3 { 0% { transform: rotate(-30deg) scaleY(0.95); opacity: 0.7; } 100% { transform: rotate(35deg) scaleY(1.2); opacity: 1; } }
+        @keyframes bottomCross4 { 0% { transform: rotate(35deg) scaleY(1.15); opacity: 1; } 100% { transform: rotate(-30deg) scaleY(0.95); opacity: 0.65; } }
+
+        #title-gambe {
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: #ffb3ff;
+            text-shadow: 0 0 10px #ff00ff;
+            z-index: 6;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            padding: 4px 0;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .engine-box {
+            width: 100%;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            position: relative;
+        }
+
+        .btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 0, 255, 0.5);
+            color: #ff00ff;
+            padding: 6px 15px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: 0.2s;
+            position: relative; z-index: 2;
+        }
+
+        .btn:hover, .btn-on {
+            background: #ff00ff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+        }
+
+        .vol-slider {
+            -webkit-appearance: none;
+            width: 80px; height: 6px; 
+            background: rgba(255,255,255,0.2); 
+            outline: none; 
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative; z-index: 2;
+        }
+        .vol-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 14px; height: 14px; border-radius: 50%; background: #ff00ff;
+            cursor: pointer; box-shadow: 0 0 8px #ff00ff;
+        }
+
+        .secret-hover-trigger {
+            position: absolute;
+            right: 5px;
+            bottom: 3px;
+            width: 80px;
+            height: 20px;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+        }
+
+        .ghost-input-box {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            border-bottom: 1px dashed rgba(0, 229, 255, 0.5);
+            color: #00e5ff;
+            font-size: 9px;
+            text-align: center;
+            outline: none;
+            opacity: 0.2;
+            transition: opacity 0.3s ease;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+
+        .secret-hover-trigger:hover .ghost-input-box,
+        .ghost-input-box:focus {
+            opacity: 1;
+            border-bottom: 1px solid #00e5ff;
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        #horror-full-screen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 9999;
+            background: #000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #ff0033;
+            box-shadow: inset 0 0 50px #ff0033;
+        }
+
+        .horror-full-gif {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .horror-full-text {
+            position: relative;
+            z-index: 2;
+            font-size: 50px;
+            font-weight: bold;
+            color: #ff0033;
+            text-shadow: 0 0 20px #ff0033, 0 0 40px #000;
+            letter-spacing: 6px;
+            animation: glitchFull 0.2s infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        .emergency-reset-box {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #ff0033;
+            box-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
+        }
+
+        .emergency-reset-box input {
+            width: 80px;
+            height: 28px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff0033;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 11px;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 0 10px #ff0033;
+        }
+
+        @keyframes glitchFull {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+            100% { transform: scale(1.1) rotate(-3deg); opacity: 1; text-shadow: 0 0 30px #ff0033; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="stage-container">
+    <div class="glass-3d speaker-stack" id="left-speaker-stack">
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+        <div class="woofer"></div>
+        <div class="chicca-circle-large" id="chicca-left" onclick="toggleDiscoSpotlights()">FX</div>
+    </div>
+
+    <div class="glass-3d center-matrix" id="main-center-matrix">
+        <div class="hud-top">
+            <div class="hud-left">
+                <span id="hud-time">--:--</span> | <span id="hud-date">--/--/----</span>
+            </div>
+
+            <div class="hud-center" id="hud-city-center">PALERMO</div>
+
+            <div class="hud-right">
+                <span id="weather-data">--°C</span>
+            </div>
+        </div>
+
+        <div class="center-video-box">
+            <iframe src="https://peppeagosto.github.io/immaggini/MrslBrV.html" allow="autoplay"></iframe>
+        </div>
+
+        <div class="bottom-spotlights-row">
+            <div class="spot-bottom"></div>
+            <div class="spot-bottom"></div>
+            <div class="spot-bottom"></div>
+            <div class="spot-bottom"></div>
+        </div>
+
+        <div id="title-gambe">
+            <marquee behavior="scroll" direction="left" scrollamount="4" id="track-title-marquee">NEOMELODICOMIX ALESSIA MAISTO</marquee>
+        </div>
+        
+        <div class="engine-box">
+            <audio id="radio-stream" crossorigin="anonymous" preload="none">
+                <source src="https://stm2.srvif.com:7198/;stream" type="audio/mpeg">
+            </audio>
+
+            <button id="btn-play" class="btn" onclick="togglePlayback()">PLAY</button>
+            
+            <div style="display:flex; align-items:center; gap:6px;">
+                <span style="color:#ff00ff; font-size:10px;">VOL</span>
+                <input type="range" class="vol-slider" id="volRange" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
+            </div>
+
+            <div class="secret-hover-trigger" id="ghost-trigger">
+                <input type="text" class="ghost-input-box" id="ghost-input" placeholder="..." maxlength="15" autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-3d speaker-stack" id="right-speaker-stack">
+        <div id="right-woofers-group" style="display:contents;">
+            <div class="woofer"></div>
+            <div class="woofer"></div>
+            <div class="woofer"></div>
+        </div>
+
+        <div class="vertical-widget-stack" id="secret-counter-stack">
+            <div class="widget-header-title">LIVE SYSTEM</div>
+            <div id="my-detected-city" style="font-size:8px; color:#00e5ff; margin-bottom:4px; text-align:center;">...</div>
+            <div class="vertical-counter-container" id="secure-counter-box"></div>
+        </div>
+
+        <div class="chicca-right-group">
+            <div class="chicca-label-title">UTENTI</div>
+            <div class="chicca-circle-large-right" id="chicca-right">--</div>
+        </div>
+    </div>
+
+    <div id="horror-full-screen">
+        <img src="https://xatimg.com/image/seyUrjUwSetN.gif" class="horror-full-gif" alt="Denied GIF">
+        <div class="horror-full-text">DENIED</div>
+        
+        <div class="emergency-reset-box">
+            <input type="password" id="emergency-reset-input" maxlength="10" placeholder="•••••" autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<script>
+    const _camoPassB64 = "NENtbA=="; 
+    const _counterIdB64 = "NENtbA=="; 
+    const _0xSecretB64 = "Y2lhbw=="; 
+    const THREE_HOURS_MS = 3 * 60 * 60 * 1000;
+
+    let ghostTimer = null;
+    let switchAudioTimer = null;
+    let counterDisplayTimer = null;
+    let isUnlocked = false;
+    let isTimerRunning = false;
+    let isPlaying = false;
+    let discoFxActive = false;
+    let lastSongTitle = '';
+
+    let audioCtx = null;
+    let analyser = null;
+    let sourceNode = null;
+    let animFrame = null;
+
+    function toggleDiscoSpotlights() {
+        discoFxActive = !discoFxActive;
+        const centerMatrix = document.getElementById('main-center-matrix');
+        const chiccaLeft = document.getElementById('chicca-left');
+        if (discoFxActive) {
+            centerMatrix.classList.add('fx-active');
+            chiccaLeft.classList.add('active-fx');
+        } else {
+            centerMatrix.classList.remove('fx-active');
+            chiccaLeft.classList.remove('active-fx');
+        }
+    }
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 64;
+
+            const audioEl = document.getElementById('radio-stream');
+            sourceNode = audioCtx.createMediaElementSource(audioEl);
+            sourceNode.connect(analyser);
+            analyser.connect(audioCtx.destination);
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function renderDynamicWoofers() {
+        const woofers = document.querySelectorAll('.woofer');
+        if (!isPlaying || !analyser) {
+            woofers.forEach(w => {
+                w.style.transform = 'scale(1)';
+                w.style.borderColor = '#555';
+                w.style.boxShadow = 'inset 0 0 12px rgba(0,0,0,0.9), inset 0 2px 5px rgba(255, 255, 255, 0.5), 0 0 12px rgba(0,0,0,0.8)';
+            });
+            return;
+        }
+
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyser.getByteFrequencyData(dataArray);
+
+        let bassSum = 0;
+        const bassRange = Math.floor(bufferLength * 0.25) || 1;
+        for (let i = 0; i < bassRange; i++) {
+            bassSum += dataArray[i];
+        }
+        const bassAvg = bassSum / bassRange;
+
+        const scaleVal = 1 + (bassAvg / 255) * 0.22; 
+        const glowVal = Math.floor((bassAvg / 255) * 30);
+        const borderGlow = Math.floor(100 + (bassAvg / 255) * 155);
+
+        woofers.forEach(w => {
+            w.style.transform = 'scale(' + scaleVal.toFixed(3) + ')';
+            w.style.borderColor = 'rgb(' + borderGlow + ',' + borderGlow + ',' + borderGlow + ')';
+            w.style.boxShadow = 'inset 0 0 12px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255, 255, 255, 0.9), 0 0 ' + glowVal + 'px rgba(255, 0, 255, 0.9)';
+        });
+
+        animFrame = requestAnimationFrame(renderDynamicWoofers);
+    }
+
+    function applyTrapBlock() {
+        isPlaying = false;
+        clearTimeout(switchAudioTimer);
+        clearTimeout(counterDisplayTimer);
+        cancelAnimationFrame(animFrame);
+        const audio = document.getElementById('radio-stream');
+        audio.pause();
+        audio.src = "";
+        
+        const btnPlay = document.getElementById('btn-play');
+        btnPlay.disabled = true;
+        btnPlay.innerText = 'PLAY';
+        btnPlay.classList.remove('btn-on');
+        
+        document.getElementById('volRange').disabled = true;
+        document.getElementById('ghost-input').disabled = true;
+        
+        const horrorScreen = document.getElementById('horror-full-screen');
+        horrorScreen.style.display = 'flex';
+        setTimeout(() => { document.getElementById('emergency-reset-input').focus(); }, 100);
+    }
+
+    function removeTrapBlock() {
+        localStorage.removeItem('trap_lockout_until');
+        isTimerRunning = false;
+        clearTimeout(ghostTimer);
+        clearTimeout(switchAudioTimer);
+        clearTimeout(counterDisplayTimer);
+
+        const audio = document.getElementById('radio-stream');
+        if (audio) {
+            audio.src = "https://stm2.srvif.com:7198/;stream";
+            audio.load();
+        }
+        
+        document.getElementById('horror-full-screen').style.display = 'none';
+        
+        const btnPlay = document.getElementById('btn-play');
+        btnPlay.disabled = false;
+        btnPlay.innerText = 'PLAY';
+        btnPlay.classList.remove('btn-on');
+        
+        document.getElementById('volRange').disabled = false;
+        const ghostInput = document.getElementById('ghost-input');
+        ghostInput.disabled = false;
+        ghostInput.value = '';
+        document.getElementById('emergency-reset-input').value = '';
+    }
+
+    function triggerFullTrap() {
+        isTimerRunning = false;
+        if (!isUnlocked) {
+            const lockUntil = Date.now() + THREE_HOURS_MS;
+            localStorage.setItem('trap_lockout_until', lockUntil);
+            applyTrapBlock();
+        }
+    }
+
+    function checkTrapStatus() {
+        const lockUntil = localStorage.getItem('trap_lockout_until');
+        const now = Date.now();
+        if (lockUntil && now < parseInt(lockUntil)) {
+            applyTrapBlock();
+        } else if (lockUntil && now >= parseInt(lockUntil)) {
+            localStorage.removeItem('trap_lockout_until');
+        }
+    }
+
+    function injectProtectedCounter() {
+        const container = document.getElementById('secure-counter-box');
+        if (container.querySelector('img')) return;
+        const _id = atob(_counterIdB64);
+        
+        const imgUrl = 'https://s01.flagcounter.com/count2/' + _id + '/bg_000000/txt_00E5FF/border_000000/columns_1/maxflags_12/viewers_0/labels_1/pageviews_1/flags_0/percent_0/';
+        
+        const a = document.createElement('a');
+        a.href = 'https://info.flagcounter.com/' + _id;
+        a.target = '_blank';
+        a.style.cursor = 'default';
+
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.alt = 'System Live';
+        img.style.border = '0';
+        
+        a.appendChild(img);
+        container.appendChild(a);
+    }
+
+    function togglePlayback() {
+        const lockUntil = localStorage.getItem('trap_lockout_until');
+        if (lockUntil && Date.now() < parseInt(lockUntil)) return;
+
+        const audio = document.getElementById('radio-stream');
+        const btn = document.getElementById('btn-play');
+        isPlaying = !isPlaying;
+
+        if (isPlaying) {
+            initAudioContext();
+            const currentSliderVal = parseFloat(document.getElementById('volRange').value);
+            audio.volume = currentSliderVal > 0 ? currentSliderVal : 0.8;
+            
+            audio.play().then(() => {
+                btn.innerText = "STOP";
+                btn.classList.add('btn-on');
+                renderDynamicWoofers();
+            }).catch(e => {
+                isPlaying = false;
+                audio.pause();
+                btn.innerText = "PLAY";
+                btn.classList.remove('btn-on');
+                cancelAnimationFrame(animFrame);
+            });
+        } else {
+            audio.pause();
+            btn.innerText = "PLAY";
+            btn.classList.remove('btn-on');
+            cancelAnimationFrame(animFrame);
+            renderDynamicWoofers();
+        }
+    }
+
+    function changeVolume(val) {
+        const audio = document.getElementById('radio-stream');
+        if (audio.volume > 0 || !isPlaying) {
+            audio.volume = parseFloat(val);
+        }
+    }
+
+    function getRealTimeData() {
+        fetch('https://stm2.srvif.com:7198/stats?sid=1&json=1')
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    if (data.currentlisteners !== undefined) {
+                        document.getElementById('chicca-right').innerText = data.currentlisteners;
+                    }
+                    if (data.songtitle && data.songtitle !== lastSongTitle) {
+                        lastSongTitle = data.songtitle;
+                        document.getElementById('track-title-marquee').innerText = data.songtitle.toUpperCase();
+                    }
+                }
+            }).catch(() => {});
+    }
+
+    function updateLocationAndWeather() {
+        fetch('https://get.geojs.io/v1/ip/geo.json')
+            .then(res => res.json())
+            .then(locData => {
+                if (locData && locData.city) {
+                    const userCity = locData.city.toUpperCase();
+                    const userCountry = (locData.country_code || locData.country).toUpperCase();
+                    
+                    document.getElementById('hud-city-center').innerText = userCity;
+                    document.getElementById('my-detected-city').innerText = userCity + ' (' + userCountry + ')';
+                    
+                    if (locData.latitude && locData.longitude) {
+                        fetch('https://api.open-meteo.com/v1/forecast?latitude='+locData.latitude+'&longitude='+locData.longitude+'&current_weather=true')
+                            .then(res => res.json())
+                            .then(weatherData => {
+                                if (weatherData && weatherData.current_weather) {
+                                    const temp = Math.round(weatherData.current_weather.temperature);
+                                    document.getElementById('weather-data').innerText = temp + '°C';
+                                }
+                            }).catch(() => {});
+                    }
+                }
+            }).catch(() => {});
+    }
+
+    function updateTimeAndDate() {
+        const d = new Date();
+        document.getElementById('hud-time').innerText = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+        document.getElementById('hud-date').innerText = d.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: 'numeric'});
+    }
+
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkTrapStatus();
+
+        setInterval(updateTimeAndDate, 1000);
+        updateTimeAndDate();
+
+        setInterval(getRealTimeData, 10000);
+        getRealTimeData();
+
+        setInterval(updateLocationAndWeather, 300000);
+        updateLocationAndWeather();
+
+        const triggerEl = document.getElementById('ghost-trigger');
+        const ghostInput = document.getElementById('ghost-input');
+
+        const startTimer = () => {
+            const lockUntil = localStorage.getItem('trap_lockout_until');
+            if (isUnlocked || isTimerRunning || (lockUntil && Date.now() < parseInt(lockUntil))) return;
+            isTimerRunning = true;
+            ghostTimer = setTimeout(() => {
+                if (!isUnlocked) triggerFullTrap();
+            }, 3000);
+        };
+
+        if (triggerEl) {
+            triggerEl.addEventListener('mouseenter', startTimer);
+        }
+        if (ghostInput) {
+            ghostInput.addEventListener('focus', startTimer);
+            ghostInput.addEventListener('input', function() {
+                let val = this.value.toLowerCase().trim();
+                
+                if (val === "xx" || val === "reset") {
+                    removeTrapBlock();
+                    return;
+                }
+
+                if (val === "7" || val === atob(_camoPassB64).toLowerCase() || val === atob(_0xSecretB64)) {
+                    isUnlocked = true;
+                    isTimerRunning = false;
+                    clearTimeout(ghostTimer);
+                    clearTimeout(counterDisplayTimer);
+                    localStorage.removeItem('trap_lockout_until');
+                    
+                    this.style.borderColor = '#00ff66';
+                    this.style.boxShadow = '0 0 8px #00ff66';
+                    this.value = '';
+                    
+                    injectProtectedCounter();
+
+                    const woofers = document.querySelectorAll('#right-speaker-stack .woofer');
+                    const secretStack = document.getElementById('secret-counter-stack');
+
+                    woofers.forEach(w => w.style.display = 'none');
+                    secretStack.style.display = 'flex';
+
+                    counterDisplayTimer = setTimeout(() => {
+                        secretStack.style.display = 'none';
+                        woofers.forEach(w => w.style.display = 'block');
+                        isUnlocked = false;
+                    }, 20000);
+                }
+            });
+        }
+
+        const emergencyInput = document.getElementById('emergency-reset-input');
+        if (emergencyInput) {
+            emergencyInput.addEventListener('input', function() {
+                let val = this.value.toLowerCase().trim();
+                if (val === "xx" || val === "reset" || val === "7") {
+                    removeTrapBlock();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
