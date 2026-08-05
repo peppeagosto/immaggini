@@ -2,11 +2,10 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Modificato con Sfondo Centrale Delicato</title>
+<title>Modificato - Senza Contenitore Esterno</title>
 <style>
 body{
   margin:0;
-  /* Lo sfondo del body rimane trasparente per permettere allo sfondo della container di vedersi */
   background:transparent;
   display:flex;
   justify-content:center;
@@ -15,24 +14,11 @@ body{
   overflow:hidden;
 }
 
+/* ===== CONTENITORE PRINCIPALE (Puro contenitore senza grafica) ===== */
 .container{
   position:relative;
   width:1308px;
   height:484px;
-  /* APPLICAZIONE DELLO SFONDO ACQUERELLO ALLA CONTAINER */
-  /* Questo copre tutto lo spazio *dietro* le immagini, eliminando il bianco */
-  /* Utilizziamo linear-gradient e background-blend-mode per schiarire l'immagine */
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), /* Sovrapposizione bianca semi-trasparente per schiarire */
-    url('https://xatimg.com/image/91B5sOjRzL8q.jpg'); /* L'immagine acquerello originale */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  /* blend-mode overlay per un effetto delicato */
-  background-blend-mode: overlay; 
-  
-  border-radius: 20px; /* Opzionale, per abbinare i bordi */
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Opzionale, per dare profondità */
 }
 
 /* ===== CONTENITORE IMMAGINI SIDE ===== */
@@ -40,15 +26,16 @@ body{
   position:absolute;
   width:270px;
   height:484px;
+  top: 30px;
   overflow:hidden;
-  z-index:1; /* Sopra lo sfondo della container */
+  z-index:1;
   background:transparent;
   border-radius:20px;
 }
 .left{left:0}
 .right{right:0}
 
-/* ===== BORDI ARCOBALENO (Invariati) ===== */
+/* ===== BORDI ARCOBALENO ===== */
 .video-wrapper::before{
   content:"";
   position:absolute;
@@ -67,7 +54,7 @@ body{
   pointer-events:none;
 }
 
-/* ===== IMMAGINI (Invariate) ===== */
+/* ===== IMMAGINI ===== */
 .side-image{
   width:100%;
   height:100%;
@@ -76,17 +63,27 @@ body{
   display:block;
 }
 
-/* ===== AREA CENTRALE (Invariata) ===== */
+/* ===== AREA CENTRALE CON SFONDO ACQUERELLO ===== */
 .center-area{
   position:absolute;
-  left:280px; /* Spazio per la foto sx + margine */
-  right:280px; /* Spazio per la foto dx + margine */
-  top:0;
-  bottom:0;
+  left:280px;
+  right:280px;
+  top:30px;
+  height:484px;
   display:flex;
   justify-content:center;
   align-items:center;
-  z-index:0; /* Sotto le foto side, ma lo sfondo è gestito dalla container */
+  z-index:0;
+  
+  /* Lo sfondo acquerello è applicato SOLO qui */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+    url('https://xatimg.com/image/91B5sOjRzL8q.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: overlay;
+  border-radius: 20px;
 }
 </style></head><body>
 <div class="container">
@@ -101,7 +98,7 @@ body{
     <img class="side-image" src="https://xatimg.com/image/RmhiTt7Guaug.jpg" alt="Foto Destra">
   </div>
 
-  <!-- Area centrale (ora mostra lo sfondo della container) -->
+  <!-- Area centrale (con lo sfondo acquerello) -->
   <div class="center-area">
     <!-- Puoi inserire testo o altri elementi qui se vuoi -->
   </div>
