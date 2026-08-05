@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>EL DIABLO - Particle Trail</title>
+    <title>EL DIABLO - Particle Trail MAX</title>
     
     <style type="text/css">
         /* RESET BASE */
@@ -12,54 +12,63 @@
             box-sizing: border-box; 
         }
 
-        /* Schermo intero, sfondo nero profondo */
+        /* --- FORZATURA TOTALE SCHERMO INTERO (Bypassa i 999px) --- */
         html, body {
             overflow: hidden !important;
+            /* Usiamo vw/vh e position fixed per ignorare i limiti dell'editor xat */
             width: 100vw !important;
             height: 100vh !important;
+            min-width: 100vw !important;
+            min-height: 100vh !important;
+            position: fixed !important; 
+            top: 0 !important;
+            left: 0 !important;
             background-color: #000 !important;
             margin: 0 !important;
             padding: 0 !important;
-            cursor: crosshair; /* Cursore a mirino per precisione */
+            cursor: crosshair;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            z-index: 999999 !important; /* Assicura che stia sopra tutto su xat */
         }
 
-        /* --- IL CANVAS PER LE PARTICELLE --- */
+        /* --- IL CANVAS PER LE PARTICELLE (Sfondo totale) --- */
         #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Sotto il testo */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1 !important;
         }
 
-        /* --- IL TESTO "EL DIABLO" (Stile Foto) --- */
+        /* --- IL TESTO "EL DIABLO" AGGRESSIVO E MASSICCIO --- */
         .main-title-container {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            z-index: 10; /* Sopra le particelle */
+            position: fixed !important;
+            left: 0 !important;
+            width: 100vw !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important; /* Centra anche verticalmente */
+            height: 100vh !important; /* Usa tutta l'altezza dello schermo */
+            top: 0 !important;
+            z-index: 10 !important;
+            pointer-events: none; /* Le particelle ignorano il testo e passano sotto */
             
-            /* --- REGOLAZIONE POSIZIONE QUI --- */
-            /* top: 50% sarebbe il centro perfetto. */
-            /* Aggiungiamo 'transform' per spostarlo poco più giù. */
-            top: 50%; 
-            transform: translateY(20%); /* Sposta verso il basso del 20% dell'altezza dello schermo */
-            /* Puoi cambiare 20% in 15% (meno giù) o 30% (più giù) */
+            /* --- POSIZIONAMENTO (Poco più giù) --- */
+            /* Ora che è centrato verticalmente con flex, usiamo translateY per abbassarlo */
+            transform: translateY(15%) !important; 
         }
 
         .diablo-text {
-            font-size: 8vw; /* Grande come nella foto */
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            white-space: nowrap;
-            user-select: none; /* Non selezionabile */
+            /* DIMENSIONE ESAGERATA (Aumentata da 8vw a 12vw) */
+            font-size: 12vw !important; 
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            letter-spacing: -10px !important; /* Lettere quasi sovrapposte per aggressività */
+            white-space: nowrap !important;
+            user-select: none !important;
 
-            /* --- EFFETTO RAINBOW/FIRE (Trasparenza testo) --- */
+            /* --- EFFETTO RAINBOW/FIRE (Ciclo colori) --- */
             background: linear-gradient(to right, 
                 #FF0000 0%,   /* Rosso */
                 #FF7F00 15%,  /* Arancione */
@@ -68,20 +77,20 @@
                 #0000FF 65%,  /* Blu */
                 #4B0082 80%,  /* Indaco */
                 #9400D3 100%  /* Viola */
-            );
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            ) !important;
+            background-size: 200% auto !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
             
-            /* Animazione del ciclo colori */
-            animation: rainbow-anim 5s linear infinite;
+            animation: rainbow-anim 4s linear infinite !important; /* Più veloce */
 
-            /* --- EFFETTO NEON GLOW (Bagliore) --- */
-            /* Più drop-shadow sovrapposti creano l'effetto neon intenso */
+            /* --- EFFETTO NEON GLOW VIOLENTO (Aura pompata) --- */
             filter: 
-                drop-shadow(0 0 10px rgba(255, 100, 0, 0.9))  /* Bagliore fuoco centrale */
-                drop-shadow(0 0 20px rgba(255, 0, 255, 0.7))  /* Bagliore magenta esterno */
-                drop-shadow(0 0 40px rgba(0, 255, 255, 0.5)); /* Bagliore cyan diffuso */
+                drop-shadow(0 0 5px #fff) /* Cuore bianco per intensità */
+                drop-shadow(0 0 15px rgba(255, 100, 0, 1))  /* Fuoco intenso */
+                drop-shadow(0 0 30px rgba(255, 0, 255, 1))  /* Magenta violento */
+                drop-shadow(0 0 60px rgba(0, 255, 255, 0.8)) /* Cyan diffuso esagerato */
+                drop-shadow(0 0 100px rgba(255, 0, 0, 0.5)) !important; /* Aura rossa finale */
         }
 
         /* Animazione per far scorrere il gradient rainbow */
@@ -92,6 +101,7 @@
 
     </style>
 </head>
+<!-- Blocchiamo click destro e selezione per un look più "app" -->
 <body oncontextmenu="return false;" onselectstart="return false;">
 
     <!-- Canvas per disegnare le particelle dello sfondo -->
@@ -99,25 +109,25 @@
 
     <!-- Contenitore fisserò per il testo -->
     <div class="main-title-container">
-        <!-- Il testo neon rainbow, tutto subito, fisserò poco più giù -->
+        <!-- Il testo neon rainbow, tutto subito, massiccio e pompato -->
         <h1 class="diablo-text">EL DIABLO</h1>
     </div>
 
     <script>
-        // --- LOGICA CANVAS E PARTICELLE MULTICOLORE (SCIA LUNGA) ---
+        // --- LOGICA CANVAS E PARTICELLE ESAGERATE (SCIA PESANTE) ---
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Imposta dimensioni canvas a schermo intero
+        // Imposta dimensioni canvas a schermo intero reale
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            // Opzionale: pulisci il canvas al resize
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas(); // Prima impostazione
+        window.addEventListener('load', resizeCanvas); // Forza il resize al caricamento
+        resizeCanvas(); 
 
         let particles = [];
         let hue = 0; // Per il ciclo dei colori HSL
@@ -126,25 +136,26 @@
             constructor(x, y, color) {
                 this.x = x;
                 this.y = y;
-                // Velocità casuale per l'espansione (movimento caotico foto)
-                this.vx = (Math.random() - 0.5) * 5; // Espansione orizzontale
-                this.vy = (Math.random() - 0.5) * 5; // Espansione verticale
-                this.radius = Math.random() * 4 + 1.5; // Dimensione particella casuale
+                // Velocità aumentata per espansione più rapida e caotica
+                this.vx = (Math.random() - 0.5) * 8; 
+                this.vy = (Math.random() - 0.5) * 8;
+                // DIMENSIONE MASSIMA AUMENTATA
+                this.radius = Math.random() * 6 + 2.5; 
                 this.color = color;
                 this.opacity = 1;
-                // Decay molto lento per mantenere la scia "lungissima"
-                this.decay = Math.random() * 0.008 + 0.003; 
+                // Decay leggermente più veloce per gestire l'aumento di particelle
+                this.decay = Math.random() * 0.012 + 0.005; 
             }
 
             draw() {
                 ctx.save();
-                ctx.globalAlpha = this.opacity; // Trasparenza della particella
+                ctx.globalAlpha = this.opacity; 
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 
-                // --- BAGLIORE SULLA SINGOLA PARTICELLA ---
-                ctx.shadowBlur = 15;
+                // --- BAGLIORE SULLA SINGOLA PARTICELLA POMPATO ---
+                ctx.shadowBlur = 25; // Molto più sfocato e luminoso
                 ctx.shadowColor = this.color;
                 
                 ctx.fill();
@@ -154,25 +165,24 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.opacity -= this.decay; // La particella sfuma lentamente
+                this.opacity -= this.decay; 
                 
-                // Rallenta leggermente nel tempo (attrito)
-                this.vx *= 0.98;
-                this.vy *= 0.98;
+                // Attrito ridotto per farle viaggiare più lontano
+                this.vx *= 0.985;
+                this.vy *= 0.985;
             }
         }
 
         function createTrail(x, y) {
-            // Crea un gruppo di particelle ad ogni movimento per densità
-            const density = 8; 
+            // DENSITÀ AUMENTATA (Più particelle per ogni movimento)
+            const density = 15;  
             for (let i = 0; i < density; i++) {
-                // Ciclo dei colori HSL per l'effetto multicolore della scia
-                hue = (hue + 0.5) % 360; 
-                const color = `hsl(${hue}, 100%, 65%)`; // HSL stabile e luminoso
+                hue = (hue + 0.8) % 360; 
+                const color = `hsl(${hue}, 100%, 70%)`; // Più luminose (70% leggerezza)
                 
-                // Posizione iniziale leggermente randomizzata intorno al cursore
-                const startX = x + (Math.random() - 0.5) * 10;
-                const startY = y + (Math.random() - 0.5) * 10;
+                // Area di spawn iniziale più grande intorno al cursore
+                const startX = x + (Math.random() - 0.5) * 15;
+                const startY = y + (Math.random() - 0.5) * 15;
 
                 particles.push(new Particle(startX, startY, color));
             }
@@ -182,39 +192,35 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // --- LOGICA CHIAVE PER LA SCIA LUNGA E PERSISTENTE ---
-            // Non puliamo il canvas, ma disegniamo un rettangolo nero semi-trasparente.
-            // Questo fa sì che le vecchie particelle rimangano visibili più a lungo svanendo lentamente.
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'; // Più basso questo valore, più lunga la scia
+            // --- LOGICA PERSISTENZA SCIA (Ancora più lunga) ---
+            // Abbassiamo l'opacità del rettangolo nero di sfondo per mantenere le scie più a lungo
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Disegna e aggiorna le particelle
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
 
-                // Rimuovi particelle quando diventano invisibili
                 if (particles[i].opacity <= 0) {
                     particles.splice(i, 1);
                     i--;
                 }
             }
             
-            // Limita il numero massimo di particelle per evitare lag
-            if (particles.length > 7000) {
-                particles.splice(0, 200);
+            // Limite particelle aumentato per gestire la densità maggiore
+            if (particles.length > 10000) {
+                particles.splice(0, 500);
             }
         }
-        animate(); // Avvia l'animazione
+        animate(); 
 
-        // --- CATTURA MOVIMENTO MOUSE ---
+        // --- CATTURA MOVIMENTO MOUSE SU BODY TOTALE ---
         document.body.addEventListener('mousemove', function(e) {
             createTrail(e.clientX, e.clientY);
         });
 
-        // --- SUPPORTO TOUCH PER MOBILE ---
+        // --- SUPPORTO TOUCH ESAGERATO ---
         document.body.addEventListener('touchmove', function(e) {
-            // e.preventDefault(); // Previene lo scroll su alcuni dispositivi
             const touch = e.touches[0];
             createTrail(touch.clientX, touch.clientY);
         });
