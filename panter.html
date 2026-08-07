@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout xat - Peppe</title>
+  <style>
+    /* RESET BASE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Evita barre di scorrimento nell'iframe */
+      background: transparent;
+      font-family: Arial, sans-serif;
+    }
+
+    /* CONTENITORE PRINCIPALE PARETI/PANNELLI */
+    .main-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* PANNELLO LATERALE SINISTRO (180px) */
+    .panel-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 180px !important;
+      max-width: 180px !important;
+      height: 100%;
+      z-index: 10;
+      /* Inserisci qui lo sfondo, gif o casse */
+    }
+
+    /* PANNELLO LATERALE DESTRO (180px) */
+    .panel-right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 180px !important;
+      max-width: 180px !important;
+      height: 100%;
+      z-index: 10;
+      /* Inserisci qui lo sfondo, gif o casse */
+    }
+
+    /* AREA CENTRALE (PLAYER / VIDEO / CHAT) */
+    .center-content {
+      position: absolute;
+      left: 180px; /* Spazio riservato al pannello SX */
+      right: 180px; /* Spazio riservato al pannello DX */
+      top: 0;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <!-- PANNELLO SINISTRO -->
+    <div class="panel-left">
+      <!-- Incolla qui il codice o le GIF del lato sinistro -->
+    </div>
+
+    <!-- CENTRO -->
+    <div class="center-content">
+      <!-- Incolla qui il tuo player o contenuto centrale -->
+    </div>
+
+    <!-- PANNELLO DESTRO -->
+    <div class="panel-right">
+      <!-- Incolla qui il codice o le GIF del lato destro -->
+    </div>
+  </div>
+
+</body>
+</html>
