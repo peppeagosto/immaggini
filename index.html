@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1Global - CARTAIO</title>
+        
+    <!-- Librerie 3D, OrbitControls e Firebase -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body, html {
+            width: 100%;
+            height: 100vh;
+            background-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radar-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .photo-container {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            z-index: 1000;
+        }
+
+        .embed-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #canvas-globe {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        
+        #canvas-globe:active {
+            cursor: grabbing;
+        }
+
+        /* 3 COLONNINE / RIQUADRI A DESTRA */
+        .right-sidebar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            width: 210px;
+        }
+
+        .sidebar-box {
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(214, 0, 54, 0.5);
+            padding: 10px 14px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            text-align: right;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* 1. Datario */
+        #time {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            color: #d60036;
+        }
+        
+        #date {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        /* 2. Tua Posizione */
+        .pos-box {
+            border-color: #09f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .pos-box:hover {
+            box-shadow: 0 0 12px rgba(0, 153, 255, 0.8);
+            border-color: #d60036;
+        }
+        .label-small {
+            font-size: 9px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .city-text {
+            color: #09f;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        /* 3. Connessi / Online */
+        .conn-box {
+            border-color: #d60036;
+        }
+        .vis-count {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ccc;
+        }
+        #visNum {
+            color: #d60036;
+            font-size: 15px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Modal Lista Visitatori Centrale */
+        ._0xL3 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            max-height: 400px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: 15px;
+            display: none;
+            overflow-y: auto;
+            z-index: 2000;
+            border: 2px solid #d60036;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        
+        .location-item {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .location-item img {
+            width: 24px;
+            border-radius: 2px;
+        }
+        
+        .location-tag {
+            position: absolute;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-shadow: 0px 2px 4px #000, 0px -2px 4px #000;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        
+        .location-tag img {
+            width: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="radar-box">
+        <!-- Spazio foto -->
+        <div class="photo-container" id="user-photo"></div>
+
+        <!-- 3 Colonnine a Destra -->
+        <div class="right-sidebar">
+            <!-- 1. Datario -->
+            <div class="sidebar-box">
+                <div id="time">--:--:--</div>
+                <div id="date">---</div>
+            </div>
+
+            <!-- 2. Tua Posizione -->
+            <div class="sidebar-box pos-box" id="trigList">
+                <div class="label-small">Tua Posizione</div>
+                <div class="city-text">
+                    <span id="my-city-lbl">Rilevamento...</span>
+                    <img src="" id="my-flag" style="display:none; width: 18px; border-radius: 2px;">
+                </div>
+            </div>
+
+            <!-- 3. Connessi -->
+            <div class="sidebar-box conn-box">
+                <div class="vis-count">ATTIVI ONLINE</div>
+                <div id="visNum">00</div>
+            </div>
+        </div>
+
+        <!-- Modal visitatori nascosto -->
+        <div class="_0xL3" id="locationData"></div>
+
+        <!-- Contenitore 3D nativo -->
+        <div class="embed-wrapper">
+            <div id="canvas-globe"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPT E LOGICA -->
+    <script>
+        // CONFIGURAZIONE FIREBASE
+        const _0xCf = {
+            apiKey: "AIzaSyB_gvIxFlHjDh3H81VAGW7byOfeGEEqU5o",
+            authDomain: "visitantes-xat.firebaseapp.com",
+            projectId: "visitantes-xat",
+            storageBucket: "visitantes-xat.firebasestorage.app",
+            messagingSenderId: "135883186280",
+            appId: "1:135883186280:web:3073baa0d238c09eaadbdd",
+            measurementId: "G-WKH36JPNHW"
+        };
+
+        firebase.initializeApp(_0xCf);
+        const db = firebase.firestore();
+        const myId = "M_" + Math.random().toString(36).substr(2, 7);
+
+        // Toggle Modal Lista
+        document.getElementById("trigList").onclick = function() {
+            const l = document.getElementById("locationData");
+            l.style.display = (l.style.display === "block") ? "none" : "block";
+        };
+
+        // Inizializzazione Scena 3D
+        const canvasCont = document.getElementById("canvas-globe");
+        let containerWidth = canvasCont.clientWidth;
+        let containerHeight = canvasCont.clientHeight;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setClearColor(0x000000, 0);
+        renderer.setSize(containerWidth, containerHeight);
+        canvasCont.appendChild(renderer.domElement);
+
+        // Sfera Globo 3D
+        const globeRadius = 0.85;
+        const globe = new THREE.Mesh(
+            new THREE.SphereGeometry(globeRadius, 64, 64),
+            new THREE.MeshPhongMaterial({
+                map: new THREE.TextureLoader().load("https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"),
+                emissive: new THREE.Color("#1db954"),
+                emissiveIntensity: 0.1,
+                transparent: true
+            })
+        );
+        scene.add(globe);
+        scene.add(new THREE.AmbientLight(0xffffff, 1.3));
+        camera.position.z = 3.6;
+
+        // Controlli Orbitali
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enablePan = false;
+        controls.enableZoom = true;
+        controls.minDistance = 1.5;
+        controls.maxDistance = 5.0;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 1.5;
+
+        let markers = [];
+
+        window.addEventListener('resize', () => {
+            containerWidth = canvasCont.clientWidth;
+            containerHeight = canvasCont.clientHeight;
+            camera.aspect = containerWidth / containerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(containerWidth, containerHeight);
+        });
+
+        // Connessione IP e salvataggio Firebase
+        async function connect() {
+            let cityStr = "Roma";
+            let countryStr = "Italia";
+            let codeStr = "it";
+            let lat = 41.9028;
+            let lng = 12.4964;
+
+            try {
+                let res = await fetch("https://ipapi.co/json/");
+                let d = await res.json();
+                if (!d.error && d.city) {
+                    cityStr = d.city;
+                    countryStr = d.country_name || "Mondo";
+                    codeStr = (d.country_code || "it").toLowerCase();
+                    lat = d.latitude;
+                    lng = d.longitude;
+                } else {
+                    throw new Error("Fallback ipapi");
+                }
+            } catch (err) {
+                try {
+                    let res2 = await fetch("https://ipwho.is/");
+                    let d2 = await res2.json();
+                    if (d2.success) {
+                        cityStr = d2.city;
+                        countryStr = d2.country;
+                        codeStr = d2.country_code.toLowerCase();
+                        lat = d2.latitude;
+                        lng = d2.longitude;
+                    }
+                } catch (e2) {
+                    console.log("Uso coordinate di default");
+                }
+            }
+
+            document.getElementById('my-city-lbl').innerText = cityStr;
+            const flagImg = document.getElementById('my-flag');
+            flagImg.src = `https://flagcdn.com/w20/${codeStr}.png`;
+            flagImg.style.display = "inline-block";
+
+            const ref = db.collection("visitantes-xat").doc(myId);
+            await ref.set({
+                city: cityStr,
+                country: countryStr,
+                code: codeStr,
+                lat: lat,
+                lng: lng,
+                t: Date.now()
+            });
+
+            window.onbeforeunload = () => ref.delete();
+            setInterval(() => ref.update({ t: Date.now() }), 10000);
+        }
+
+        // Ascolto in tempo reale Firebase
+        db.collection("visitantes-xat").onSnapshot(snap => {
+            const tot = snap.size < 10 ? "0" + snap.size : snap.size;
+            document.getElementById("visNum").innerText = tot;
+
+            const list = document.getElementById("locationData");
+            list.innerHTML = "";
+
+            markers.forEach(m => {
+                globe.remove(m.dot);
+                if (m.tag) m.tag.remove();
+            });
+            markers = [];
+
+            snap.forEach(doc => {
+                const u = doc.data();
+                if (Math.abs(Date.now() - u.t) < 300000) {
+                    const div = document.createElement("div");
+                    div.className = "location-item";
+                    div.innerHTML = `<img src="https://flagcdn.com/w40/${u.code}.png" onerror="this.style.display='none'"> <span>${u.city}, ${u.country}</span>`;
+                    list.appendChild(div);
+
+                    if (u.lat && u.lng) {
+                        const phi = (90 - u.lat) * (Math.PI / 180);
+                        const theta = (u.lng + 180) * (Math.PI / 180);
+                        const scalePos = globeRadius * 1.03;
+                        const pos = new THREE.Vector3(
+                            -scalePos * Math.sin(phi) * Math.cos(theta),
+                            scalePos * Math.cos(phi),
+                            scalePos * Math.sin(phi) * Math.sin(theta)
+                        );
+                        
+                        const dot = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.018, 12, 12),
+                            new THREE.MeshBasicMaterial({ color: 0xff0000 })
+                        );
+                        dot.position.copy(pos);
+                        globe.add(dot);
+
+                        const tag = document.createElement("div");
+                        tag.className = "location-tag";
+                        tag.innerHTML = `${u.city} <img src="https://flagcdn.com/w20/${u.code}.png" onerror="this.style.display='none'">`;
+                        canvasCont.appendChild(tag);
+                        
+                        markers.push({ dot, tag, pos });
+                    }
+                }
+            });
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); 
+
+            const camPos = camera.position.clone().normalize();
+
+            markers.forEach(m => {
+                const dotProduct = m.pos.clone().normalize().dot(camPos);
+                if (dotProduct > 0.1) {
+                    const v = m.pos.clone().project(camera);
+                    m.tag.style.display = "flex";
+                    m.tag.style.left = `${(v.x * 0.5 + 0.5) * containerWidth}px`;
+                    m.tag.style.top = `${(v.y * -0.5 + 0.5) * containerHeight}px`;
+                } else {
+                    m.tag.style.display = "none";
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Orologio
+        setInterval(() => {
+            const n = new Date();
+            document.getElementById("time").textContent = n.toLocaleTimeString("it-IT");
+            document.getElementById("date").textContent = n.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
+        }, 1000);
+
+        // =====================================================================
+        // CONTROLLO DI PROTEZIONE ANTI-COPIA AGGIORNATO PER XAT
+        // =====================================================================
+        (function() {
+            const dominiAutorizzati = ["xat.com", "firebaseapp.com", "localhost"];
+            const hostCorrente = window.location.href + " " + (document.referrer ? document.referrer : "");
+            
+            let autorizzato = false;
+            for (let i = 0; i < dominiAutorizzati.length; i++) {
+                if (hostCorrente.toLowerCase().includes(dominiAutorizzati[i].toLowerCase())) {
+                    autorizzato = true;
+                    break;
+                }
+            }
+
+            // Se non è autorizzato, mostra il messaggio di blocco
+            if (!autorizzato) {
+                const radar = document.querySelector('.radar-box');
+                if (radar) {
+                    radar.remove();
+                }
+                document.body.innerHTML = "<div style='color:#d60036; text-align:center; margin-top:20vh; font-family:sans-serif;'><h1>GLOBO PROTETTO DA IL CARTAIO</h1><p>Accesso consentito solo su xat.com/ITALIA_GHOST</p></div>";
+                throw new Error("Dominio non autorizzato.");
+            }
+        })();
+
+        // Avvio
+        connect();
+        animate();
+    </script>
+</body>
+</html>
