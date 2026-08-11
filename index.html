@@ -1,888 +1,133 @@
-<!DOCTYPE html>
-<html lang="it">
+!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Radio Player xat - v2.0</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <title>Radar XAT - Peppe</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <style>
-        :root {
-            --color-primary: #00f3ff;
-            --color-secondary: #ff00ff;
-            --color-glow: rgba(0, 243, 255, 0.25);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Orbitron', sans-serif;
-            color: #fff;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #matrix-canvas {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-            opacity: .85;
-        }
-
-        .main-box {
-            position: relative;
-            padding: 15px;
-            border-radius: 40px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 35px var(--color-glow);
-            transition: box-shadow .3s ease, transform .05s ease;
-            z-index: 1;
-        }
-
-        .main-box::before {
-            content: '';
-            position: absolute;
-            width: 160%;
-            height: 160%;
-            background: conic-gradient(from 0deg, transparent 0deg, var(--color-primary) 60deg, transparent 120deg, transparent 180deg, var(--color-secondary) 240deg, transparent 300deg);
-            animation: rotate-anim 4s linear infinite;
-        }
-
-        @keyframes rotate-anim {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .layout-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(10, 10, 20, .96);
-            padding: 20px 15px;
-            border-radius: 30px;
-            clip-path: polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 30px 100%, 0 calc(100% - 30px));
-            z-index: 2;
-            backdrop-filter: blur(10px);
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .control-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, .8);
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-            font-size: 8px;
-            cursor: pointer;
-            transition: all .3s ease;
-            box-shadow: 0 0 10px var(--color-primary);
-        }
-
-        .control-btn:hover {
-            border-color: var(--color-secondary);
-            color: var(--color-secondary);
-            transform: scale(1.12);
-            box-shadow: 0 0 18px var(--color-secondary);
-        }
-
-        .control-btn.active {
-            border-color: var(--color-secondary) !important;
-            color: #fff !important;
-            background: var(--color-secondary) !important;
-            box-shadow: 0 0 20px var(--color-secondary) !important;
-        }
-
-        .control-btn span:first-child { font-size: 14px; }
-        .control-btn span:last-child { margin-top: 2px; font-weight: 700; text-transform: uppercase; color: var(--color-primary); }
-        .control-btn.active span:last-child { color: #fff !important; }
-
-        /* --- PANNELLO COMPATTO PER FAR ENTRARE TUTTI E 4 I RECT --- */
-        .right-globe-panel {
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid var(--color-primary);
-            border-radius: 14px;
-            padding: 6px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            width: 125px;
-            box-shadow: 0 0 12px var(--color-glow);
-        }
-
-        /* GLOBO SPOSTATO A SINISTRA NEL TITOLO */
-        .panel-header-globe {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 6px;
-            padding: 2px 2px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            margin-bottom: 2px;
-        }
-
-        .globe-icon-btn {
-            font-size: 15px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            position: relative;
-            top: 1px;
-        }
-
-        .globe-icon-btn:hover {
-            transform: scale(1.3);
-        }
-
-        .panel-title {
-            font-size: 7px;
-            color: var(--color-primary);
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .mini-rect-card {
-            background: rgba(10, 10, 25, 0.85);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 6px;
-            padding: 3px 4px;
-            text-align: center;
-        }
-
-        .mini-rect-card.highlight {
-            border-color: var(--color-secondary);
-            box-shadow: 0 0 5px var(--color-secondary);
-        }
-
-        .mini-rect-label {
-            font-size: 6.5px;
-            color: var(--color-secondary);
-            text-transform: uppercase;
-            display: block;
-        }
-
-        .mini-rect-val {
-            font-size: 8.5px;
-            color: #fff;
-            font-weight: 700;
-            text-shadow: 0 0 4px var(--color-primary);
-        }
-
-        .center-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 380px;
-            position: relative;
-        }
-
-        .node-dot {
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #000;
-            border: 2px solid var(--color-secondary);
-            box-shadow: 0 0 8px var(--color-secondary);
-            z-index: 5;
-        }
-
-        .pos-top-left { top: 12px; left: 12px; }
-        .pos-top-right { top: 12px; right: 12px; }
-        .pos-bottom-left { bottom: 12px; left: 12px; }
-        .pos-bottom-right { bottom: 12px; right: 12px; }
-
-        .header-info {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: var(--color-primary);
-            margin-bottom: 8px;
-            text-shadow: 0 0 5px var(--color-primary);
-            padding: 0 10px;
-        }
-
-        .media-circle {
-            position: relative;
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            border: 4px solid var(--color-primary);
-            box-shadow: 0 0 20px var(--color-primary);
-            overflow: hidden;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #radar-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 320px;
-            height: 320px;
-            z-index: 2;
-            display: none;
-        }
-
-        #media-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 320px;
-            height: 320px;
-            z-index: 3;
-            background: #111;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #media-layer video, #media-layer img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .radar-controls {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            gap: 5px;
-            background: rgba(0, 0, 0, .8);
-            padding: 5px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--color-primary);
-        }
-
-        .radar-controls input {
-            background: #111;
-            border: 1px solid var(--color-primary);
-            color: #fff;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            outline: 0;
-            width: 120px;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .radar-controls button {
-            background: var(--color-primary);
-            color: #000;
-            border: none;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 9px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .laser-marker { position: relative; width: 24px; height: 24px; }
-        
-        .laser-core {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 12px;
-            height: 12px;
-            background: #d60036;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #d60036, 0 0 20px #d60036;
-        }
-
-        .laser-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 24px;
-            height: 24px;
-            border: 2px solid #d60036;
-            border-radius: 50%;
-            animation: pulse-ring 1.8s infinite ease-out;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(.5); opacity: 1; }
-            100% { transform: scale(2.6); opacity: 0; }
-        }
-
-        .marquee-box {
-            width: 100%;
-            margin-top: 10px;
-            margin-bottom: 6px;
-            background: rgba(0, 0, 0, .6);
-            border: 1px solid var(--color-secondary);
-            border-radius: 20px;
-            padding: 4px 12px;
-            overflow: hidden;
-            box-shadow: 0 0 8px var(--color-secondary);
-        }
-
-        .marquee-text {
-            white-space: nowrap;
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 700;
-            color: #fff;
-            text-shadow: 0 0 8px var(--color-secondary);
-            animation: scroll-text 10s linear infinite;
-        }
-
-        @keyframes scroll-text {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .execution-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: rgba(15, 15, 30, .8);
-            border: 1px solid var(--color-primary);
-            padding: 5px 12px;
-            border-radius: 30px;
-            box-shadow: 0 0 10px var(--color-primary);
-            box-sizing: border-box;
-        }
-
-        .btn-standard {
-            background: 0 0;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: .2s;
-            text-shadow: 0 0 5px var(--color-primary);
-        }
-
-        .btn-standard:hover {
-            background: var(--color-primary);
-            color: #000;
-        }
-
-        .btn-stop {
-            border-color: #ff3366;
-            color: #ff3366;
-            text-shadow: 0 0 5px #ff3366;
-        }
-
-        .btn-stop:hover {
-            background: #ff3366;
-            color: #000;
-        }
-
-        .btn-on {
-            background: var(--color-secondary) !important;
-            border-color: var(--color-secondary) !important;
-            color: #fff !important;
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .volume-slider {
-            -webkit-appearance: none;
-            width: 75px;
-            height: 5px;
-            background: #222;
-            border-radius: 3px;
-            border: 1px solid var(--color-secondary);
-            outline: 0;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--color-secondary);
-            cursor: pointer;
-            box-shadow: 0 0 8px var(--color-secondary);
-        }
-
-        .modal-dialog {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 75%;
-            background: rgba(5, 5, 15, .95);
-            border: 2px solid var(--color-secondary);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 0 20px var(--color-secondary);
-            z-index: 2000;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .footer-info {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 8px;
-            color: #666;
-            margin-top: 8px;
-        }
-
-        .signature {
-            color: rgba(255, 255, 255, .2);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all .3s ease;
-            letter-spacing: 1px;
-        }
-
-        .signature:hover {
-            color: #ff0055 !important;
-            text-shadow: 0 0 10px #ff0055, 0 0 20px red;
-            font-weight: 900;
-        }
-    </style>
 </head>
-<body>
-    <canvas id="matrix-canvas"></canvas>
-    
-    <div class="main-box" id="container-box">
-        <div class="layout-container">
-            <div class="node-dot pos-top-left"></div>
-            <div class="node-dot pos-top-right"></div>
-            <div class="node-dot pos-bottom-left"></div>
-            <div class="node-dot pos-bottom-right"></div>
-            
-            <!-- Sidebar Sinistra -->
-            <div class="sidebar">
-                <div class="control-btn" id="btn-radar" onclick="showRadar()">
-                    <span class="icon">&#128225;</span>
-                    <span>Radar</span>
-                </div>
-                <div class="control-btn active" id="btn-cover" onclick="showCover()">
-                    <span class="icon">&#128444;&#65039;</span>
-                    <span>Cover</span>
-                </div>
-                <div class="control-btn" onclick="openModal('DATARIO','&#128197; Data: '+new Date().toLocaleDateString('it-IT'))">
-                    <span class="icon">&#128197;</span>
-                    <span>Datario</span>
-                </div>
-                <div class="control-btn" onclick="openModal('OROSCOPO','&#128302; Vibrazioni al top!')">
-                    <span class="icon">&#128302;</span>
-                    <span>Oroscopo</span>
-                </div>
-                <div class="control-btn" onclick="showHistory()">
-                    <span class="icon">&#128220;</span>
-                    <span>History</span>
-                </div>
-            </div>
-            
-            <!-- Colonna Centrale -->
-            <div class="center-col">
-                <div class="header-info">
-                    <span id="time-display">00:00</span>
-                    <span id="weather-header" style="cursor:pointer;" onclick="showWeatherModal()">METEO LIVE</span>
-                    <span id="date-display">00/00/0000</span>
-                </div>
-                
-                <div class="media-circle">
-                    <!-- Radar Layer -->
-                    <div id="radar-layer">
-                        <div id="map" style="width:320px;height:320px;"></div>
-                        <div class="radar-controls" id="search-panel">
-                            <input type="text" id="city-input" placeholder="Citt&agrave;..." autocomplete="off"/>
-                            <button id="search-btn">Cerca</button>
-                        </div>
-                    </div>
-                    <!-- Media Layer -->
-                    <div id="media-layer">
-                        <video id="bg-video" src="https://i.imgur.com/JMWuNUK.mp4" playsinline></video>
-                        <img id="fallback-image" src="" alt="" style="display:none;"/>
-                    </div>
-                </div>
-                
-                <audio id="radio-audio" crossorigin="anonymous">
-                    <source src="https://stm2.srvif.com:7198/;stream" type="audio/mpeg">
-                </audio>
-                
-                <div class="marquee-box">
-                    <div id="status-text" class="marquee-text">STREAMING RADIO READY</div>
-                </div>
-                
-                <div class="execution-bar">
-                    <button id="play-btn" class="btn-standard" onclick="playMedia()">PLAY</button>
-                    <div class="volume-container">
-                        <span style="color:var(--color-secondary);font-size:9px;font-weight:700">VOL</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step=".01" value="1" oninput="setVolume(this.value)">
-                    </div>
-                    <button class="btn-standard btn-stop" onclick="stopMedia()">STOP</button>
-                </div>
-                
-                <div class="footer-info">
-                    <div>RADIO PLAYER IFRAME</div>
-                    <div class="signature">v2.0</div>
-                </div>
-            </div>
-            
-            <!-- Sidebar Destra (Con il Globo a SINISTRA nel titolo e i 4 Rettangoli) -->
-            <div class="sidebar">
-                
-                <div class="right-globe-panel">
-                    <div class="panel-header-globe">
-                        <span class="globe-icon-btn" title="Traffico Globale" onclick="showFlagsModal()">&#127757;</span>
-                        <span class="panel-title">LIVE INFO</span>
-                    </div>
-                    
-                    <!-- 1. Attivi -->
-                    <div class="mini-rect-card">
-                        <span class="mini-rect-label">1. Attivi</span>
-                        <span class="mini-rect-val" id="info-users">1 Online</span>
-                    </div>
-                    
-                    <!-- 2. Posizioni -->
-                    <div class="mini-rect-card">
-                        <span class="mini-rect-label">2. Posizioni</span>
-                        <span class="mini-rect-val" id="info-pos-status">GPS Attivo</span>
-                    </div>
-                    
-                    <!-- 3. Tua Posizione -->
-                    <div class="mini-rect-card">
-                        <span class="mini-rect-label">3. Tua Posizione</span>
-                        <span class="mini-rect-val" id="info-city">Torino</span>
-                    </div>
-                    
-                    <!-- 4. Temp Dinamica Reale -->
-                    <div class="mini-rect-card highlight">
-                        <span class="mini-rect-label">4. Temp Reale</span>
-                        <span class="mini-rect-val" id="info-temp">-- &deg;C</span>
-                    </div>
-                </div>
+<body style="margin:0; background:#111; overflow:hidden;">
 
-                <!-- Pulsanti Effetti -->
-                <div class="control-btn" id="btn-boom" onclick="toggleBoom()">
-                    <span class="icon">&#128169;</span>
-                    <span>Boom</span>
-                </div>
-                <div class="control-btn" id="btn-beat" onclick="toggleBeat()">
-                    <span class="icon">&#128147;</span>
-                    <span>Beat</span>
-                </div>
-                <div class="control-btn" id="btn-matrix" onclick="toggleMatrix()">
-                    <span class="icon">&#128994;</span>
-                    <span>Matrix</span>
-                </div>
-                <div class="control-btn" id="btn-glow" onclick="toggleGlow()">
-                    <span class="icon">&#9889;</span>
-                    <span>Glow</span>
-                </div>
-            </div>
-            
-            <!-- Modal Dialog -->
-            <div id="modal-dialog" class="modal-dialog">
-                <div id="modal-title" style="color:var(--color-primary);font-weight:700;margin-bottom:8px"></div>
-                <div id="modal-body"></div>
-                <button class="btn-standard" style="margin-top:10px;border-color:var(--color-secondary);color:var(--color-secondary)" onclick="closeModal()">CHIUDI</button>
-            </div>
+<div style="display: flex; width: 100vw; height: 100vh; background: #111; box-sizing: border-box; color: #00ffcc; font-family: monospace;">
+    <!-- Mappa (OCCUPA TUTTO LO SPAZIO POSSIBILE A SINISTRA) -->
+    <div style="flex: 1; height: 100%; position: relative;">
+        <div style="position: absolute; top: 8px; left: 8px; z-index: 1000; background: rgba(0,0,0,0.8); padding: 3px 8px; border-radius: 3px; color: #00ffcc; font-size: 11px; border: 1px solid #00ffcc55; width: 160px; overflow: hidden;">
+            <marquee scrollamount="3">>> RADAR ATTIVO >> RICERCA IN CORSO >></marquee>
         </div>
+        <div id="map" style="width: 100%; height: 100%;"></div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        let isPlaying = false;
-        let isPlayInProgress = false;
-        let beatActive = false;
-        
-        // Mappa Leaflet
-        const leafletMap = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView([45.0703, 7.6868], 13);
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMap);
-        let mapMarker = null;
+    <!-- Colonna Controlli a destra (Compatta e senza spazi neri vuoti) -->
+    <div style="width: 240px; height: 100%; display: flex; flex-direction: column; gap: 6px; background: #151515; padding: 6px; border-left: 1px solid #333; box-sizing: border-box;">
+        <!-- Player Radio Mini -->
+        <div style="background: #1c1c1c; padding: 6px; border-radius: 4px; border: 1px solid #00ffcc44;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <div id="art-gambe" style="width: 35px; height: 35px; background: #000 url('https://xatimg.com/image/bgXxdAXNQBW6.png') center/cover no-repeat; border-radius: 3px; flex-shrink: 0;"></div>
+                <div style="overflow: hidden; flex: 1;">
+                    <div style="font-size: 8px; color: #00ffcc;">IN ONDA:</div>
+                    <div id="title-gambe" style="font-size: 10px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold;">Caricamento...</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 4px; margin-top: 4px;">
+                <button id="playBtn" style="background:#007bff; color:#fff; border:none; padding: 3px 6px; border-radius:3px; cursor:pointer; font-size: 10px; font-weight:bold;">▶ PLAY</button>
+                <input type="range" id="volControl" min="0" max="1" step="0.05" value="0.8" style="flex:1; cursor:pointer; height: 14px;">
+            </div>
+        </div>
 
-        function updateMap(lat, lon, cityName) {
-            if (mapMarker) leafletMap.removeLayer(mapMarker);
-            
-            mapMarker = L.marker([lat, lon], {
-                icon: L.divIcon({
-                    className: 'laser-marker',
-                    html: '<div class="laser-core"></div><div class="laser-ring"></div>',
-                    iconSize: [24, 24],
-                    iconAnchor: [12, 12]
-                })
-            }).addTo(leafletMap).bindPopup('<b>' + cityName + '</b>');
-            
-            leafletMap.setView([lat, lon], 13);
-            $('#info-city').text(cityName);
-            updateWeather(lat, lon, cityName);
-        }
+        <!-- Modulo Cerca Località -->
+        <div style="display: flex; gap: 3px;">
+            <input type="text" id="searchInput" placeholder="Cerca località..." style="flex: 1; padding: 5px; border-radius: 3px; border: 1px solid #444; background: #222; color: #fff; font-size: 11px; outline: none;">
+            <button id="searchBtn" style="padding: 5px 8px; background: #007bff; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: bold;">Vai</button>
+        </div>
 
-        // Rilevamento IP
-        (async () => {
-            try {
-                const r = await fetch('https://ipapi.co/json/');
-                const d = await r.json();
-                if (d.latitude) {
-                    updateMap(d.latitude, d.longitude, d.city || 'Torino');
-                } else {
-                    updateMap(45.0703, 7.6868, 'Torino');
-                }
-            } catch (e) {
-                updateMap(45.0703, 7.6868, 'Torino');
+        <!-- Contatore Visite -->
+        <div style="background: #222; padding: 5px 8px; border-left: 3px solid #28a745; font-size: 11px;">VISITE: <span id="visitCount" style="font-weight: bold;">0</span></div>
+        
+        <!-- Lista Visitatori -->
+        <div id="visitorList" style="flex: 1; background: #1a1a1a; padding: 6px; border-radius: 3px; border: 1px solid #333; overflow-y: auto;">
+            <div style="font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 4px;">Ultimi Visitatori:</div>
+        </div>
+    </div>
+</div>
+
+<audio id="radio-stream" crossorigin="anonymous" src="https://stm2.srvif.com:7198/stream"></audio>
+
+<script>
+    var map = L.map('map').setView([41.9, 12.5], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM' }).addTo(map);
+
+    fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+            let citta = data.city || "Roma";
+            let lat = data.latitude || 41.9;
+            let lon = data.longitude || 12.5;
+            let bandiera = "🇮🇹";
+            if (data.country_code) {
+                bandiera = data.country_code.toUpperCase().replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt(0)));
             }
-        })();
+            let stringaVisitatore = citta + " " + bandiera;
 
-        // Ricerca Città
-        function searchCity(name) {
-            if (!name) return;
-            $.getJSON('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(name), d => {
-                if (d && d.length > 0) {
-                    updateMap(parseFloat(d[0].lat), parseFloat(d[0].lon), d[0].display_name.split(',')[0]);
-                }
-            });
-        }
-
-        $('#search-btn').on('click', () => searchCity($('#city-input').val()));
-        $('#city-input').on('keypress', e => {
-            if (e.key === 'Enter') searchCity($('#city-input').val());
+            let visitatori = JSON.parse(localStorage.getItem('xat_visitatori_salvati')) || [];
+            visitatori.unshift({ nome: stringaVisitatore, lat: lat, lon: lon });
+            if (visitatori.length > 10) visitatori = visitatori.slice(0, 10);
+            localStorage.setItem('xat_visitatori_salvati', JSON.stringify(visitatori));
+            aggiornaInterfaccia(visitatori);
+        })
+        .catch(() => {
+            let visitatori = JSON.parse(localStorage.getItem('xat_visitatori_salvati')) || [];
+            visitatori.unshift({ nome: "Roma 🇮🇹", lat: 41.9, lon: 12.5 });
+            if (visitatori.length > 10) visitatori = visitatori.slice(0, 10);
+            localStorage.setItem('xat_visitatori_salvati', JSON.stringify(visitatori));
+            aggiornaInterfaccia(visitatori);
         });
 
-        // Aggiornamento Meteo
-        function updateWeather(lat, lon, cityName) {
-            $.getJSON('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true', d => {
-                if (d && d.current_weather) {
-                    const tempVal = Math.round(d.current_weather.temperature) + '°C';
-                    
-                    window.lastWeatherInfo = {
-                        city: cityName,
-                        temp: d.current_weather.temperature,
-                        wind: d.current_weather.windspeed
-                    };
-                    
-                    $('#info-city').text(cityName + ' ' + tempVal);
-                    $('#info-temp').text(tempVal);
+    function aggiornaInterfaccia(lista) {
+        const listDiv = document.getElementById('visitorList');
+        listDiv.innerHTML = '<div style="font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 4px;">Ultimi Visitatori:</div>';
+        
+        lista.forEach((v, index) => {
+            listDiv.innerHTML += '<div style="color: #00ffcc; font-size: 11px; margin-bottom: 2px;">• ' + v.nome + '</div>';
+            if (v.lat && v.lon) {
+                L.marker([v.lat, v.lon]).addTo(map).bindPopup(v.nome);
+                if (index === 0) map.setView([v.lat, v.lon], 6);
+            }
+        });
+        document.getElementById('visitCount').innerText = lista.length;
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        var query = document.getElementById('searchInput').value;
+        if(!query) return;
+        
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query))
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.length > 0) {
+                    var lat = data[0].lat;
+                    var lon = data[0].lon;
+                    var nomeCitta = data[0].display_name.split(',')[0];
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map).bindPopup(nomeCitta).openPopup();
                 }
-            }).fail(() => {
-                $('#info-temp').text('N/D');
             });
-        }
+    });
 
-        function showWeatherModal() {
-            if (window.lastWeatherInfo) {
-                openModal('METEO LIVE', '&#127777; Citt&agrave;: <b>' + window.lastWeatherInfo.city + '</b><br>&#127777; Temperatura: <b>' + window.lastWeatherInfo.temp + '&deg;C</b><br>&#128168; Vento: <b>' + window.lastWeatherInfo.wind + ' km/h</b>');
-            } else {
-                openModal('METEO LIVE', 'Caricamento dati meteo...');
-            }
-        }
+    $('#playBtn').click(function() {
+        let audio = document.getElementById('radio-stream');
+        if (audio.paused) { audio.play(); $(this).text('❚❚'); } else { audio.pause(); $(this).text('▶'); }
+    });
 
-        function showFlagsModal() {
-            openModal('PROVENIENZA VISITATORI', '&#127471;&#127483; Italia: <b>65%</b><br>&#127468;&#127463; UK: <b>20%</b><br>&#127467;&#127479; Francia: <b>15%</b><br><br><span style="color:var(--color-secondary)">traffico globale rilevato.</span>');
-        }
-
-        function showRadar() {
-            $('#radar-layer').show();
-            $('#media-layer').hide();
-            $('#btn-radar').addClass('active');
-            $('#btn-cover').removeClass('active');
-            setTimeout(() => leafletMap.invalidateSize(), 200);
-        }
-
-        function showCover() {
-            $('#media-layer').show();
-            $('#radar-layer').hide();
-            $('#btn-cover').addClass('active');
-            $('#btn-radar').removeClass('active');
-        }
-
-        // Orologio
-        setInterval(() => {
-            const d = new Date();
-            const timeStr = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-            $('#time-display').text(timeStr);
-            $('#date-display').text(d.toLocaleDateString('it-IT'));
-        }, 1000);
-
-        // Media Player
-        function playMedia() {
-            const a = document.getElementById('radio-audio');
-            const v = document.getElementById('bg-video');
-            if (!isPlaying) {
-                isPlaying = true;
-                isPlayInProgress = true;
-                v.muted = true;
-                v.play().catch(() => {});
-                a.play().then(() => {
-                    $('#play-btn').addClass('btn-on');
-                }).catch(() => {
-                    isPlaying = false;
-                    isPlayInProgress = false;
-                });
-            }
-        }
-
-        function stopMedia() {
-            const a = document.getElementById('radio-audio');
-            const v = document.getElementById('bg-video');
-            a.pause();
-            a.currentTime = 0;
-            v.pause();
-            isPlaying = false;
-            isPlayInProgress = false;
-            $('#play-btn').removeClass('btn-on');
-            $('#status-text').text('STOPPED');
-        }
-
-        function setVolume(v) {
-            document.getElementById('radio-audio').volume = v;
-        }
-
-        // Effetti
-        function toggleBoom() {
-            const r = document.documentElement;
-            const b = getComputedStyle(r).getPropertyValue('--color-primary');
-            if (b.trim() === '#00f3ff') {
-                r.style.setProperty('--color-primary', '#ff3300');
-                r.style.setProperty('--color-secondary', '#ffd700');
-                $('#btn-boom').addClass('active');
-            } else {
-                r.style.setProperty('--color-primary', '#00f3ff');
-                r.style.setProperty('--color-secondary', '#ff00ff');
-                $('#btn-boom').removeClass('active');
-            }
-        }
-
-        function toggleBeat() {
-            beatActive = !beatActive;
-            if (beatActive) {
-                $('#container-box').css('transform', 'scale(1.03)');
-                $('#btn-beat').addClass('active');
-            } else {
-                $('#container-box').css('transform', 'scale(1)');
-                $('#btn-beat').removeClass('active');
-            }
-        }
-
-        function toggleMatrix() {
-            const c = document.getElementById('matrix-canvas');
-            if (c.style.display === 'block') {
-                c.style.display = 'none';
-                $('#btn-matrix').removeClass('active');
-            } else {
-                c.style.display = 'block';
-                $('#btn-matrix').addClass('active');
-                initMatrix();
-            }
-        }
-
-        function toggleGlow() {
-            const c = $('#container-box');
-            if (c.css('box-shadow').includes('50px')) {
-                c.css('box-shadow', '0 0 35px var(--color-glow)');
-                $('#btn-glow').removeClass('active');
-            } else {
-                c.css('box-shadow', '0 0 70px var(--color-primary), 0 0 100px var(--color-secondary)');
-                $('#btn-glow').addClass('active');
-            }
-        }
-
-        // Popup e Modali
-        function openModal(title, body) {
-            $('#modal-title').text(title);
-            $('#modal-body').html(body);
-            $('#modal-dialog').fadeIn();
-        }
-
-        function closeModal() {
-            $('#modal-dialog').fadeOut();
-        }
-
-        function showHistory() {
-            openModal('CRONOLOGIA', 'Nessun brano.');
-        }
-
-        // Matrix Effect
-        function initMatrix() {
-            const c = document.getElementById('matrix-canvas');
-            const x = c.getContext('2d');
-            c.width = window.innerWidth;
-            c.height = window.innerHeight;
-            
-            const letters = '01ABCDEF';
-            const fontSize = 14;
-            const columns = c.width / fontSize;
-            const drops = [];
-            
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            setInterval(() => {
-                if (c.style.display !== 'block') return;
-                
-                x.fillStyle = 'rgba(0,0,0,0.05)';
-                x.fillRect(0, 0, c.width, c.height);
-                x.fillStyle = '#00ff66';
-                x.font = fontSize + 'px monospace';
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                    x.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > c.height && Math.random() > .975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }, 33);
-        }
-    </script>
+    $('#volControl').on('input', function() {
+        document.getElementById('radio-stream').volume = $(this).val();
+    });
+    
+    setInterval(() => {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(data) {
+            $('#title-gambe').text(data.songtitle || "In linea");
+        });
+    }, 10000);
+</script>
 </body>
 </html>
