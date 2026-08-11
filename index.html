@@ -2,463 +2,75 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>12 pammm12 </title>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title> Live </title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background: #050505; 
+            font-family: monospace;
         }
-
-        body, html {
-            width: 100%;
-            height: 100vh;
-            background-color: #e5e3df;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            color: #333;
-        }
-
-        #map {
-            width: 100%;
-            height: 100vh;
-            background: #e5e3df;
-            z-index: 1;
-        }
-
-        /* Frase corta e fluttuante */
-        .floating-text {
+        #canvas-3d { width: 100%; height: 100%; }
+        #schermata-blocco {
             position: absolute;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #0044cc;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.7);
-            animation: float-xy 14s infinite ease-in-out alternate;
-            z-index: 1000;
-            pointer-events: none;
-            white-space: nowrap;
-            letter-spacing: 2px;
-        }
-
-        /* Nick ai bordi estremi */
-        .static-nick-left, .static-nick-right {
-            position: absolute;
-            bottom: 15px;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            color: #d60036;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-            z-index: 1000;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .static-nick-left { left: 25px; }
-        .static-nick-right { right: 25px; }
-
-        /* Container Dashboard e Ricerca */
-        .dashboard-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            width: 340px;
-        }
-
-        .search-box {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(0, 68, 204, 0.4);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            display: flex;
-            gap: 8px;
-            backdrop-filter: blur(5px);
-            position: relative;
-        }
-
-        .search-box input {
-            flex: 1;
-            background: #f4f6f9;
-            border: 1px solid #ccc;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #333;
-            outline: none;
-        }
-
-        .search-box input:focus {
-            border-color: #0044cc;
-        }
-
-        .search-box button {
-            background: #0044cc;
-            color: #fff;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .search-box button:hover {
-            background: #003399;
-        }
-
-        /* Storico Ricerche a tendina */
-        .history-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-top: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 1001;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            color: #333;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-
-        .history-item:hover {
-            background: #f0f4ff;
-            color: #0044cc;
-        }
-
-        .flag-dashboard {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(0, 68, 204, 0.4);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .flag-dashboard h4 {
-            font-size: 0.9rem;
-            color: #0044cc;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(0, 68, 204, 0.2);
-            padding-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-        }
-
-        .flag-list {
-            max-height: 130px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .flag-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            background: rgba(0, 0, 0, 0.04);
-            padding: 6px 8px;
-            border-radius: 5px;
-            border-left: 3px solid #0044cc;
-            color: #222;
-        }
-
-        .flag-item span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Pulsante Condivisione Rapida */
-        .share-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            transition: background 0.2s;
-        }
-
-        .share-btn:hover {
-            background: #218838;
-        }
-
-        /* Effetto Raggio Laser sulla città */
-        .laser-marker {
-            position: relative;
-            width: 24px;
-            height: 24px;
-        }
-
-        .laser-core {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 12px;
-            height: 12px;
-            background: #d60036;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #d60036, 0 0 20px #d60036;
-        }
-
-        .laser-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 24px;
-            height: 24px;
-            border: 2px solid #d60036;
-            border-radius: 50%;
-            animation: laser-beam 1.8s infinite ease-out;
-        }
-
-        @keyframes laser-beam {
-            0% { transform: scale(0.5); opacity: 1; }
-            100% { transform: scale(2.6); opacity: 0; }
-        }
-
-        @keyframes float-xy {
-            0% { top: 10%; left: 5%; }
-            33% { top: 75%; left: 50%; }
-            66% { top: 20%; left: 55%; }
-            100% { top: 65%; left: 10%; }
+            z-index: 99999;
+            color: #ff0033;
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
-    <!-- Frase corta fluttuante -->
-    <div class="floating-text">📡 LIVE RADAR</div>
-
-    <!-- Nick ai bordi estremi -->
-    <div class="static-nick-left">[ IL CARTAIO ]</div>
-    <div class="static-nick-right">[ EL DIABLO ]</div>
-
-    <!-- Container Dashboard e Ricerca -->
-    <div class="dashboard-container">
-        <!-- Barra di Ricerca Città con Storico -->
-        <div class="search-box">
-            <input type="text" id="city-input" placeholder="Cerca città nel mondo..." autocomplete="off" />
-            <button id="search-btn">Vai</button>
-            <div class="history-dropdown" id="history-dropdown"></div>
-        </div>
-
-        <!-- Dashboard Statistiche e Visite -->
-        <div class="flag-dashboard">
-            <h4><span>📊 Connessioni (Visite)</span> <strong id="visit-counter" style="color:#0044cc;">1</strong></h4>
-            <div class="flag-list" id="flag-container">
-                <div class="flag-item" id="loading-item"><span>⚡ Laser aggancio attivo...</span></div>
-            </div>
-            <!-- Pulsante Condivisione -->
-            <button class="share-btn" id="share-btn">📋 Copia Posizione</button>
-        </div>
+    <!-- Schermata di sicurezza iniziale -->
+    <div id="schermata-blocco">
+        <h1 style="text-shadow: 0 0 10px #ff0033;">AREA PROTETTA - EL DIABLO</h1>
+        <p style="color: #fff; margin-bottom: 20px;">Inserisci la chiave di accesso riservata:</p>
+        <input type="password" id="chiaveInput" placeholder="******" style="padding: 10px; background: #111; border: 1px solid #ff0033; color: #fff; text-align: center; font-size: 18px; outline: none;">
+        <br>
+        <button onclick="verificaAccesso()" style="padding: 10px 20px; background: #ff0033; color: #fff; border: none; cursor: pointer; font-weight: bold;">ACCEDI</button>
     </div>
 
-    <!-- Mappa -->
-    <div id="map"></div>
+    <!-- Contenitore del tuo script principale (inizialmente nascosto) -->
+    <div id="canvas-3d" style="display:none;"></div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Librerie grafiche e database -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <script>
-        // Inizializzazione della mappa Leaflet
-        const map = L.map('map').setView([45.0703, 7.6869], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        // CAMBIA QUI LA TUA PASSWORD SEGRETA (es. metti quella che preferisci tra le virgolette)
+        const passwordSegreta = "eldiablo2026"; 
 
-        let currentMarker = null;
-        let currentData = { name: "Torino", country: "Italia", lat: 45.0703, lng: 7.6869 };
-
-        function updateMap(lat, lng, cityName, countryName) {
-            currentData = { name: cityName, country: countryName, lat: lat, lng: lng };
-            if (currentMarker) {
-                map.removeLayer(currentMarker);
-            }
+        function verificaAccesso() {
+            let inserito = document.getElementById("chiaveInput").value;
             
-            // Icona Laser personalizzata
-            const laserIcon = L.divIcon({
-                className: 'laser-marker',
-                html: '<div class="laser-ring"></div><div class="laser-core"></div>',
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            currentMarker = L.marker([lat, lng], { icon: laserIcon }).addTo(map)
-                .bindPopup(`<b>${cityName}</b><br>${countryName}`)
-                .openPopup();
-            map.setView([lat, lng], 12);
-            
-            // Aggiorna la lista connessioni con la posizione reale agganciata
-            const flagContainer = document.getElementById('flag-container');
-            flagContainer.innerHTML = `<div class="flag-item"><span>🎯 ${countryName} - ${cityName} (Laser OK)</span></div>`;
-        }
-
-        // Sistema di geolocalizzazione multi-fallback ad alta velocità
-        async function detectRealLocation() {
-            const providers = [
-                async () => {
-                    const r = await fetch('https://ipapi.co/json/');
-                    const d = await r.json();
-                    if (d.latitude && d.longitude) return { lat: d.latitude, lng: d.longitude, city: d.city, country: d.country_name };
-                    throw new Error();
-                },
-                async () => {
-                    const r = await fetch('https://ipwho.is/');
-                    const d = await r.json();
-                    if (d.success) return { lat: d.latitude, lng: d.longitude, city: d.city, country: d.country };
-                    throw new Error();
-                },
-                async () => {
-                    const r = await fetch('https://ipinfo.io/json');
-                    const d = await r.json();
-                    if (d.loc) {
-                        const [lat, lng] = d.loc.split(',').map(Number);
-                        return { lat, lng, city: d.city || "Sconosciuta", country: d.country || "Sconosciuto" };
-                    }
-                    throw new Error();
-                }
-            ];
-
-            for (let provider of providers) {
-                try {
-                    const res = await provider();
-                    if (res) {
-                        updateMap(res.lat, res.lng, res.city, res.country);
-                        return;
-                    }
-                } catch (e) {
-                    continue;
-                }
-            }
-            // Fallback estremo su Torino se tutto fallisce
-            updateMap(45.0703, 7.6869, "Torino", "Italia");
-        }
-
-        detectRealLocation();
-
-        const cityInput = document.getElementById('city-input');
-        const searchBtn = document.getElementById('search-btn');
-        const historyDropdown = document.getElementById('history-dropdown');
-        const historyStorageKey = "traffic_intelligence_history_list";
-
-        function getHistory() {
-            try {
-                return JSON.parse(localStorage.getItem(historyStorageKey)) || [];
-            } catch(e) {
-                return [];
+            if (inserito === passwordSegreta) {
+                // Password corretta: rimuove la schermata di blocco e mostra il tuo layout
+                document.getElementById("schermata-blocco").style.display = "none";
+                document.getElementById("canvas-3d").style.display = "block";
+                
+                // --- INIZIO CODICE DEL TUO GLOBO / TRACKER ---
+                console.log("Benvenuto El Diablo. Sistema avviato con successo.");
+                // ---------------------------------------------
+                
+            } else {
+                // Password errata: scatta il blocco totale con firma
+                document.getElementById("schermata-blocco").innerHTML = `
+                    <h1 style='font-size: 40px; text-shadow: 0 0 20px #ff0033;'>ACCESSO NEGATO</h1>
+                    <p style='color: #fff; font-size: 18px;'>Tentativo di effrazione registrato.</p>
+                    <h3 style='color: #00ffff; margin-top: 20px;'>PROPRIETÀ DI EL DIABLO - IL CARTAIO</h3>
+                `;
             }
         }
-
-        function saveHistory(cityName) {
-            let history = getHistory();
-            if (!history.includes(cityName)) {
-                history.unshift(cityName);
-                if (history.length > 5) history.pop();
-                localStorage.setItem(historyStorageKey, JSON.stringify(history));
-            }
-        }
-
-        function renderHistory() {
-            const history = getHistory();
-            if (history.length === 0) {
-                historyDropdown.style.display = 'none';
-                return;
-            }
-            historyDropdown.innerHTML = '';
-            history.forEach(city => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerText = city;
-                item.addEventListener('click', () => {
-                    cityInput.value = city;
-                    historyDropdown.style.display = 'none';
-                    searchCity(city);
-                });
-                historyDropdown.appendChild(item);
-            });
-            historyDropdown.style.display = 'block';
-        }
-
-        cityInput.addEventListener('focus', renderHistory);
-        document.addEventListener('click', e => {
-            if (!e.target.closest('.search-box')) {
-                historyDropdown.style.display = 'none';
-            }
-        });
-
-        function searchCity(cityName) {
-            if (!cityName) return;
-            saveHistory(cityName);
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}`)
-                .then(res => res.json())
-                .then(results => {
-                    if (results && results.length > 0) {
-                        const lat = parseFloat(results[0].lat);
-                        const lng = parseFloat(results[0].lon);
-                        const displayNameParts = results[0].display_name.split(",");
-                        const city = displayNameParts[0].trim();
-                        const country = displayNameParts[displayNameParts.length - 1].trim();
-                        updateMap(lat, lng, city, country);
-                    } else {
-                        alert("Città non trovata. Riprova con un altro nome.");
-                    }
-                })
-                .catch(() => {
-                    alert("Errore di connessione durante la ricerca.");
-                });
-        }
-
-        searchBtn.addEventListener('click', () => {
-            searchCity(cityInput.value);
-        });
-
-        cityInput.addEventListener('keypress', e => {
-            if (e.key === 'Enter') {
-                historyDropdown.style.display = 'none';
-                searchCity(cityInput.value);
-            }
-        });
-
-        const shareBtn = document.getElementById('share-btn');
-        shareBtn.addEventListener('click', () => {
-            const shareText = `📡 Laser Radar: ${currentData.name} (${currentData.country}) - Lat: ${currentData.lat.toFixed(4)}, Lng: ${currentData.lng.toFixed(4)} [Il Cartaio & El Diablo]`;
-            navigator.clipboard.writeText(shareText).then(() => {
-                shareBtn.innerText = "Copiato negli appunti! ✅";
-                setTimeout(() => {
-                    shareBtn.innerText = "📋 Copia Posizione";
-                }, 2000);
-            });
-        });
     </script>
 </body>
 </html>
