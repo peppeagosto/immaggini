@@ -19,7 +19,6 @@ body {
   width: 100%;
   max-width: 1308px;
   height: 484px;
-  /* Sfumatura leggera di sfondo sul contenitore totale */
   background: radial-gradient(circle at center, rgba(255, 235, 238, 0.4) 0%, rgba(255, 205, 210, 0.15) 70%, transparent 100%);
   border-radius: 24px;
 }
@@ -61,7 +60,6 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
-  /* Maschera di sfumatura morbida ai bordi dell'immagine */
   -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 75%, rgba(0,0,0,0.3) 100%);
   mask-image: radial-gradient(circle, rgba(0,0,0,1) 75%, rgba(0,0,0,0.3) 100%);
 }
@@ -88,7 +86,6 @@ body {
   100% { background-position: 100%; }
 }
 
-/* --- AREA CENTRALE CON CUORE E TESTO MOBILE --- */
 .center-area {
   position: absolute;
   left: 280px;
@@ -108,7 +105,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Bagliore del cuore */
   filter: drop-shadow(0 0 25px rgba(255, 0, 0, .6));
 }
 
@@ -118,7 +114,6 @@ body {
   height: 140px;
   background-color: #ff0000;
   transform: rotate(-45deg);
-  /* Animazione pulsante */
   animation: heartBeat 1.5s infinite ease-in-out;
   box-shadow: 0 0 30px #ff0000;
 }
@@ -143,7 +138,6 @@ body {
   left: 70px;
 }
 
-/* Animazione Pulsazione Cuore */
 @keyframes heartBeat {
   0%, 100% { transform: rotate(-45deg) scale(1); }
   30% { transform: rotate(-45deg) scale(1.15); }
@@ -159,7 +153,6 @@ body {
   letter-spacing: 3px;
   color: #ff1e1e;
   text-transform: uppercase;
-  /* Effetto neon rosso */
   text-shadow:
     0 0 10px #ff0000,
     0 0 20px #ff0000,
@@ -167,11 +160,9 @@ body {
     0 2px 5px rgba(0, 0, 0, 0.9);
   pointer-events: none;
   white-space: nowrap;
-  /* Animazione movimento sui quattro lati */
   animation: moveFourSides 10s linear infinite;
 }
 
-/* Animazione Movimento Testo sui Quattro Lati */
 @keyframes moveFourSides {
   0%, 100% {
     top: 10px;
@@ -180,7 +171,7 @@ body {
   }
   25% {
     top: 10px;
-    left: calc(100% - 210px); /* Regola in base alla lunghezza del testo */
+    left: calc(100% - 210px);
     transform: translate(0, 0);
   }
   50% {
@@ -199,24 +190,19 @@ body {
 <body>
 
 <div class="container">
-    <!-- Immagine JPG Sinistra -->
     <div class="media-wrapper left">
         <img class="side-img" src="https://xatimg.com/image/jEX5p8xZ2vpb.jpg" alt="Foto Sinistra">
         <div class="video-text">amore2015</div>
     </div>
     
-    <!-- Immagine JPG Destra -->
     <div class="media-wrapper right">
         <img class="side-img" src="https://xatimg.com/image/UKvoJlJd4NuE.jpg" alt="Foto Destra">
         <div class="video-text">live</div>
     </div>
     
-    <!-- Area Centrale con CUORE e TESTO MOBILE -->
     <div class="center-area">
         <div class="center-box">
-            <!-- Il Cuore CSS -->
             <div class="css-heart"></div>
-            <!-- Il Testo Mobile -->
             <div class="center-title">amore 2015</div>
         </div>
     </div>
