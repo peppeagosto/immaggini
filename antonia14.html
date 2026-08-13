@@ -88,8 +88,8 @@ body {
 
 .center-area {
   position: absolute;
-  left: 280px;
-  right: 280px;
+  left: 270px;
+  right: 270px;
   top: 0;
   bottom: 0;
   display: flex;
@@ -100,8 +100,8 @@ body {
 
 .center-box {
   position: relative;
-  width: 420px;
-  height: 420px;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,23 +165,23 @@ body {
 
 @keyframes moveFourSides {
   0%, 100% {
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     transform: translate(0, 0);
   }
   25% {
-    top: 10px;
-    left: calc(100% - 210px);
+    top: 20px;
+    left: calc(100% - 220px);
     transform: translate(0, 0);
   }
   50% {
-    top: calc(100% - 50px);
-    left: calc(100% - 210px);
+    top: calc(100% - 60px);
+    left: calc(100% - 220px);
     transform: translate(0, 0);
   }
   75% {
-    top: calc(100% - 50px);
-    left: 10px;
+    top: calc(100% - 60px);
+    left: 20px;
     transform: translate(0, 0);
   }
 }
@@ -190,16 +190,19 @@ body {
 <body>
 
 <div class="container">
+    <!-- Foto Sinistra (15.jpg) -->
     <div class="media-wrapper left">
-        <img class="side-img" src="https://xatimg.com/image/jEX5p8xZ2vpb.jpg" alt="Foto Sinistra">
+        <img class="side-img" src="https://peppeagosto.github.io/immaggini/15.jpg" alt="Foto 15">
         <div class="video-text">amore2015</div>
     </div>
     
+    <!-- Foto Destra (14.jpg) -->
     <div class="media-wrapper right">
-        <img class="side-img" src="https://xatimg.com/image/UKvoJlJd4NuE.jpg" alt="Foto Destra">
+        <img class="side-img" src="https://peppeagosto.github.io/immaggini/14.jpg" alt="Foto 14">
         <div class="video-text">live</div>
     </div>
     
+    <!-- Area Centrale -->
     <div class="center-area">
         <div class="center-box">
             <div class="css-heart"></div>
