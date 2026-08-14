@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Modificato - Senza Contenitore Esterno</title>
+<style>
+body{
+  margin:0;
+  background:transparent;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* ===== CONTENITORE PRINCIPALE (Puro contenitore senza grafica) ===== */
+.container{
+  position:relative;
+  width:1308px;
+  height:484px;
+}
+
+/* ===== CONTENITORE IMMAGINI SIDE ===== */
+.video-wrapper{
+  position:absolute;
+  width:270px;
+  height:484px;
+  top: 30px;
+  overflow:hidden;
+  z-index:1;
+  background:transparent;
+  border-radius:20px;
+}
+.left{left:0}
+.right{right:0}
+
+/* ===== BORDI ARCOBALENO ===== */
+.video-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:4px;
+  border-radius:20px;
+  background:conic-gradient(
+    red,orange,yellow,lime,cyan,blue,violet,red
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 10px rgba(255,0,255,.7));
+  pointer-events:none;
+}
+
+/* ===== IMMAGINI ===== */
+.side-image{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  border-radius:16px;
+  display:block;
+}
+
+/* ===== AREA CENTRALE CON SFONDO ACQUERELLO ===== */
+.center-area{
+  position:absolute;
+  left:280px;
+  right:280px;
+  top:30px;
+  height:484px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:0;
+  
+  /* Lo sfondo acquerello è applicato SOLO qui */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+    url('https://xatimg.com/image/91B5sOjRzL8q.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: overlay;
+  border-radius: 20px;
+}
+</style></head><body>
+<div class="container">
+  
+  <!-- Foto Sinistra (sx) -->
+  <div class="video-wrapper left">
+    <img class="side-image" src="https://xatimg.com/image/L6NN18cxRcen.jpg" alt="Foto Sinistra">
+  </div>
+
+  <!-- Foto Destra (dx) -->
+  <div class="video-wrapper right">
+    <img class="side-image" src="https://xatimg.com/image/hRk42nTxhZj5.jpg" alt="Foto Destra">
+  </div>
+
+  <!-- Area centrale (con lo sfondo acquerello) -->
+  <div class="center-area">
+    <!-- Puoi inserire testo o altri elementi qui se vuoi -->
+  </div>
+</div>
+</body></html>
