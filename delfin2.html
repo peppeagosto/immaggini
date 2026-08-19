@@ -1,35 +1,58 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<style>
-  body, html { margin: 0; padding: 0; height: 100vh; background: transparent; display: flex; justify-content: center; align-items: center; }
-  
-  .container { position: relative; width: 1308px; height: 486px; }
+  <meta charset="UTF-8" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  /* Wrapper semplice: nessuna animazione, nessun colore arcobaleno */
-  .video-wrapper {
-    position: absolute;
-    top: 0;
-    width: 290px;
-    height: 486px;
-    /* Puoi cambiare questo bordo come preferisci */
-    border: 3px solid #333; 
-    border-radius: 12px;
-    z-index: 1;
-    overflow: hidden; /* Assicura che il video non esca dai bordi */
-  }
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 486px;
+    }
 
-  /* Video al naturale */
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+    /* Wrapper con cornice sfumata arcobaleno */
+    .video-wrapper {
+      position: absolute;
+      top: 15px; /* Spostato leggermente più in basso */
+      width: 290px;
+      height: 456px;
+      border-radius: 14px;
+      z-index: 1;
+      padding: 3px; /* Spessore del bordo */
+      background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); /* Effetto alone sfumato */
+      box-sizing: border-box;
+      overflow: hidden;
+    }
 
-  .left-video { left: 10px; }
-  .right-video { right: 10px; }
-</style>
+    /* Posizioni spostate più verso i bordi esterni */
+    .left-video {
+      left: 0px; /* Spostato più a sinistra */
+    }
+
+    .right-video {
+      right: 0px; /* Spostato più a destra */
+    }
+
+    /* Video centrato e spostato in alto nell'inquadratura per mostrare tutta la testa */
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top; /* Mostra la parte superiore evitando il taglio della testa */
+      border-radius: 10px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
