@@ -49,42 +49,42 @@
       100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
     }
 
-    /* --- NUOVA STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
+    /* --- STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
     .truss-horizontal {
       position: absolute;
-      width: 290px; /* Larghezza dell'MP4 */
-      height: 34px; /* Altezza della truss (era la width nella verticale) */
+      width: 290px;
+      height: 34px;
       background: 
         repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
         repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
-        linear-gradient(to bottom, #2a2a35, #111116, #2a2a35); /* Gradiente per orizzontale */
+        linear-gradient(to bottom, #2a2a35, #111116, #2a2a35);
       border-top: 3px solid #555;
       border-bottom: 3px solid #555;
       box-shadow: 0 0 15px rgba(0,0,0,0.9);
       z-index: 8;
       display: flex;
-      flex-direction: row; /* Layout orizzontale */
+      flex-direction: row;
       justify-content: space-around;
       align-items: center;
       padding: 0 10px;
     }
 
-    /* Posizionamento sopra i video (top del video è 40px, truss è 15px, quindi top 15px) */
+    /* Posizioni spostate verso l'esterno */
     .truss-left-top {
-      top: 15px; /* Casi sopra */
-      left: 75px; /* Allineato all'MP4 */
+      top: 15px;
+      left: 35px;
     }
 
     .truss-right-top {
-      top: 15px; /* Casi sopra */
-      right: 75px; /* Allineato all'MP4 */
+      top: 15px;
+      right: 35px;
     }
 
-    /* SINGOLO FARETTO - Adattato per layout orizzontale */
+    /* SINGOLO FARETTO */
     .spotlight-head {
       position: relative;
-      width: 38px; /* Era height */
-      height: 28px; /* Era width */
+      width: 38px;
+      height: 28px;
       background: linear-gradient(135deg, #444, #151515);
       border-radius: 6px;
       border: 2px solid #666;
@@ -102,63 +102,72 @@
       z-index: 2;
     }
 
-    /* COLORI FARETTI (4 COLORI) */
+    /* COLORI FARETTI */
     .c-cyan   { background: #00f2fe; box-shadow: 0 0 16px #00f2fe; }
     .c-pink   { background: #ff007f; box-shadow: 0 0 16px #ff007f; }
     .c-green  { background: #00ff88; box-shadow: 0 0 16px #00ff88; }
     .c-orange { background: #ffaa00; box-shadow: 0 0 16px #ffaa00; }
 
-    /* FASCI DI LUCE (BEAMS) - Modificati per sparare verso il basso */
+    /* FASCI DI LUCE (BEAMS) */
     .beam {
       position: absolute;
-      left: -3px; /* Era top */
-      width: 45px; /* Era width della trave */
-      height: 480px; /* Era width della trave, ora lunghezza del fascio verso il basso */
+      left: calc(50% - 25px);
+      top: 14px;
+      width: 50px;
+      height: 500px;
       pointer-events: none;
       z-index: 5;
       mix-blend-mode: screen;
-      filter: blur(5px);
+      filter: blur(4px);
       opacity: 0.85;
-    }
-
-    .spotlight-head .beam {
-      top: 20px; /* Origine sotto il faretto */
       transform-origin: top center;
-      clip-path: polygon(45% 0, 0 100%, 100% 100%, 55% 0); /* Clip per sparare verso il basso */
+      clip-path: polygon(48% 0, 0 100%, 100% 100%, 52% 0);
     }
 
-    /* Gradienti fascio per orizzontale (verso il basso) */
-    .beam-cyan   { background: linear-gradient(to bottom, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
-    .beam-pink   { background: linear-gradient(to bottom, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
-    .beam-green  { background: linear-gradient(to bottom, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
-    .beam-orange { background: linear-gradient(to bottom, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
+    .beam-cyan   { background: linear-gradient(to bottom, rgba(0,242,254,0.95), rgba(0,242,254,0.25) 60%, transparent); }
+    .beam-pink   { background: linear-gradient(to bottom, rgba(255,0,127,0.95), rgba(255,0,127,0.25) 60%, transparent); }
+    .beam-green  { background: linear-gradient(to bottom, rgba(0,255,136,0.95), rgba(0,255,136,0.25) 60%, transparent); }
+    .beam-orange { background: linear-gradient(to bottom, rgba(255,170,0,0.95), rgba(255,170,0,0.25) 60%, transparent); }
 
-    /* ANIMAZIONI MOVIMENTO FASCI (Sventolano SX/DX mentre sparano giù) */
-    .truss-left-top .beam-1 { animation: sweepDownLeft1 3s ease-in-out infinite alternate; }
-    .truss-left-top .beam-2 { animation: sweepDownLeft2 2.5s ease-in-out infinite alternate 0.3s; }
-    .truss-left-top .beam-3 { animation: sweepDownLeft3 3.2s ease-in-out infinite alternate 0.6s; }
-    .truss-left-top .beam-4 { animation: sweepDownLeft4 2.8s ease-in-out infinite alternate 0.2s; }
+    /* ANIMAZIONI MOVIMENTO OTTIMIZZATE (Movimenti ampi e organici) */
+    .truss-left-top .beam-1 { animation: sweepWave1 3.2s ease-in-out infinite alternate; }
+    .truss-left-top .beam-2 { animation: sweepWave2 2.7s ease-in-out infinite alternate 0.2s; }
+    .truss-left-top .beam-3 { animation: sweepWave3 3.6s ease-in-out infinite alternate 0.5s; }
+    .truss-left-top .beam-4 { animation: sweepWave4 2.9s ease-in-out infinite alternate 0.1s; }
 
-    .truss-right-top .beam-1 { animation: sweepDownRight1 3s ease-in-out infinite alternate 0.4s; }
-    .truss-right-top .beam-2 { animation: sweepDownRight2 2.7s ease-in-out infinite alternate; }
-    .truss-right-top .beam-3 { animation: sweepDownRight3 3.1s ease-in-out infinite alternate 0.5s; }
-    .truss-right-top .beam-4 { animation: sweepDownRight4 2.6s ease-in-out infinite alternate 0.1s; }
+    .truss-right-top .beam-1 { animation: sweepWave4 3.1s ease-in-out infinite alternate 0.3s; }
+    .truss-right-top .beam-2 { animation: sweepWave3 2.8s ease-in-out infinite alternate 0.6s; }
+    .truss-right-top .beam-3 { animation: sweepWave2 3.4s ease-in-out infinite alternate 0.1s; }
+    .truss-right-top .beam-4 { animation: sweepWave1 2.6s ease-in-out infinite alternate 0.4s; }
 
-    /* Animazioni per sparare verso il basso sventolando */
-    @keyframes sweepDownLeft1 { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
-    @keyframes sweepDownLeft2 { from { transform: rotate(-15deg); } to { transform: rotate(5deg); } }
-    @keyframes sweepDownLeft3 { from { transform: rotate(-5deg); } to { transform: rotate(15deg); } }
-    @keyframes sweepDownLeft4 { from { transform: rotate(-20deg); } to { transform: rotate(0deg); } }
+    @keyframes sweepWave1 {
+      0%   { transform: rotate(-32deg); }
+      50%  { transform: rotate(5deg); }
+      100% { transform: rotate(28deg); }
+    }
 
-    @keyframes sweepDownRight1 { from { transform: rotate(10deg); } to { transform: rotate(-10deg); } }
-    @keyframes sweepDownRight2 { from { transform: rotate(15deg); } to { transform: rotate(-5deg); } }
-    @keyframes sweepDownRight3 { from { transform: rotate(5deg); } to { transform: rotate(-15deg); } }
-    @keyframes sweepDownRight4 { from { transform: rotate(20deg); } to { transform: rotate(0deg); } }
+    @keyframes sweepWave2 {
+      0%   { transform: rotate(30deg); }
+      50%  { transform: rotate(-8deg); }
+      100% { transform: rotate(-26deg); }
+    }
 
-    /* --- VIDEO LATERALI CUFFIE --- */
+    @keyframes sweepWave3 {
+      0%   { transform: rotate(-24deg); }
+      50%  { transform: rotate(12deg); }
+      100% { transform: rotate(34deg); }
+    }
+
+    @keyframes sweepWave4 {
+      0%   { transform: rotate(28deg); }
+      50%  { transform: rotate(-15deg); }
+      100% { transform: rotate(-35deg); }
+    }
+
+    /* --- VIDEO LATERALI --- */
     video.side-video {
       position: absolute;
-      top: 40px; /* Top invariato */
+      top: 40px;
       width: 290px;
       height: 450px;
       object-fit: cover;
@@ -200,16 +209,16 @@
       }
     }
 
-    /* Video riposizionati per evitare accavallamenti (stesse posizioni) */
-    .left-video { left: 75px; } 
-    .right-video { right: 75px; } 
+    /* Posizioni MP4 spostate verso i bordi */
+    .left-video { left: 35px; } 
+    .right-video { right: 35px; } 
   </style>
 </head>
 <body>
 
 <div class="container" id="party-container">
 
-  <!-- FARETTI TRUSS ORIZZONTALE SINISTRA (Sopra MP4 SX) -->
+  <!-- FARETTI TRUSS SX -->
   <div class="truss-horizontal truss-left-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
@@ -229,19 +238,17 @@
     </div>
   </div>
 
-  <!-- VIDEO CUFFIE SX -->
+  <!-- VIDEO SX -->
   <video class="side-video left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
   </video>
 
-  <!-- VIDEO CUFFIE DX -->
+  <!-- VIDEO DX -->
   <video class="side-video right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
-    Il tuo browser non supporta il video.
   </video>
 
-  <!-- FARETTI TRUSS ORIZZONTALE DESTRA (Sopra MP4 DX) -->
+  <!-- FARETTI TRUSS DX -->
   <div class="truss-horizontal truss-right-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
@@ -291,4 +298,4 @@
 </script>
 
 </body>
-</html>```
+</html>
