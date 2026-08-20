@@ -52,7 +52,7 @@
     /* --- STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
     .truss-horizontal {
       position: absolute;
-      width: 290px;
+      width: 230px; /* Ridotta da 290px a 230px */
       height: 34px;
       background: 
         repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
@@ -66,25 +66,25 @@
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      padding: 0 10px;
+      padding: 0 6px;
     }
 
-    /* Posizioni spostate verso l'esterno */
+    /* Posizioni allineate ai video */
     .truss-left-top {
       top: 15px;
-      left: 35px;
+      left: 45px;
     }
 
     .truss-right-top {
       top: 15px;
-      right: 35px;
+      right: 45px;
     }
 
     /* SINGOLO FARETTO */
     .spotlight-head {
       position: relative;
-      width: 38px;
-      height: 28px;
+      width: 34px;
+      height: 26px;
       background: linear-gradient(135deg, #444, #151515);
       border-radius: 6px;
       border: 2px solid #666;
@@ -95,8 +95,8 @@
     }
 
     .spotlight-lens {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       position: relative;
       z-index: 2;
@@ -129,7 +129,7 @@
     .beam-green  { background: linear-gradient(to bottom, rgba(0,255,136,0.95), rgba(0,255,136,0.25) 60%, transparent); }
     .beam-orange { background: linear-gradient(to bottom, rgba(255,170,0,0.95), rgba(255,170,0,0.25) 60%, transparent); }
 
-    /* ANIMAZIONI MOVIMENTO OTTIMIZZATE (Movimenti ampi e organici) */
+    /* ANIMAZIONI MOVIMENTO */
     .truss-left-top .beam-1 { animation: sweepWave1 3.2s ease-in-out infinite alternate; }
     .truss-left-top .beam-2 { animation: sweepWave2 2.7s ease-in-out infinite alternate 0.2s; }
     .truss-left-top .beam-3 { animation: sweepWave3 3.6s ease-in-out infinite alternate 0.5s; }
@@ -164,11 +164,11 @@
       100% { transform: rotate(-35deg); }
     }
 
-    /* --- VIDEO LATERALI --- */
+    /* --- VIDEO LATERALI CUFFIE --- */
     video.side-video {
       position: absolute;
       top: 40px;
-      width: 290px;
+      width: 230px; /* Ridotta da 290px a 230px */
       height: 450px;
       object-fit: cover;
       border-radius: 20px;
@@ -209,16 +209,14 @@
       }
     }
 
-    /* Posizioni MP4 spostate verso i bordi */
-    .left-video { left: 35px; } 
-    .right-video { right: 35px; } 
+    .left-video { left: 45px; } 
+    .right-video { right: 45px; } 
   </style>
 </head>
 <body>
 
 <div class="container" id="party-container">
 
-  <!-- FARETTI TRUSS SX -->
   <div class="truss-horizontal truss-left-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
@@ -238,17 +236,14 @@
     </div>
   </div>
 
-  <!-- VIDEO SX -->
   <video class="side-video left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
   </video>
 
-  <!-- VIDEO DX -->
   <video class="side-video right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
   </video>
 
-  <!-- FARETTI TRUSS DX -->
   <div class="truss-horizontal truss-right-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
