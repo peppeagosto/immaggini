@@ -1,144 +1,292 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Video Party Glow Ultra + Disco Lights</title>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  .container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-  }
-
-  /* --- ANIMAZIONE PARTY (FASCI DI LUCE) --- */
-  .disco-light {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 4px;
-    height: 1000px;
-    z-index: 0;
-    pointer-events: none;
-    transform-origin: top center;
-    animation: discoRotate 2s linear infinite;
-    filter: blur(3px);
-    opacity: 0.7;
-  }
-
-  @keyframes discoRotate {
-    0% { transform: rotate(0deg) translateX(-50%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
-  }
-
-  /* --- VIDEO CUFFIE --- */
-  video.side-video {
-    position: absolute;
-    top: 0;
-    width: 290px;
-    height: 486px;
-    object-fit: cover;
-    border-radius: 15px;
-    z-index: 2; /* Sopra le luci disco */
-    
-    border: 6px solid transparent;
-    background: 
-      linear-gradient(#000, #000) padding-box, 
-      linear-gradient(var(--angle), #ff0000, #00ff00, #00ffff, #ff00ff, #ff0000) border-box;
-    
-    animation: 
-      rotateGradient 1.5s linear infinite, 
-      party-glow 0.5s linear infinite;
-  }
-
-  @property --angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false;
-  }
-
-  @keyframes rotateGradient {
-    to { --angle: 360deg; }
-  }
-
-  @keyframes party-glow {
-    0%, 100% { 
-      box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000; 
-      transform: scale(1);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video Party Glow Ultra + Stage Spotlights</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
-    50% { 
-      box-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00; 
-      transform: scale(1.03);
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: #040407;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-  }
 
-  .left-video { left: -40px; }
-  .right-video { right: -40px; }
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 520px;
+      background: radial-gradient(circle at 50% 30%, rgba(20, 15, 45, 0.7), #040407 80%);
+      border-radius: 20px;
+      overflow: hidden;
+    }
 
-  img.center-image {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    pointer-events: none;
-    user-select: none;
-    z-index: 10;
-  }
-</style>
+    /* --- FASCI DI LUCE GLOBALI DI SOTTOFONDO --- */
+    .disco-light {
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 900px;
+      z-index: 1;
+      pointer-events: none;
+      transform-origin: top center;
+      animation: discoRotate 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      filter: blur(4px);
+    }
+
+    @keyframes discoRotate {
+      0% { transform: rotate(0deg) translateX(-50%); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
+    }
+
+    /* --- STRUTTURE FARETTI (TRUSS LATERALI) --- */
+    .truss-tower {
+      position: absolute;
+      top: 15px;
+      bottom: 15px;
+      width: 44px;
+      background: 
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
+        repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
+        linear-gradient(to right, #2a2a35, #111116, #2a2a35);
+      border-left: 3px solid #555;
+      border-right: 3px solid #555;
+      box-shadow: 0 0 15px rgba(0,0,0,0.9);
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .truss-left { left: 10px; }
+    .truss-right { right: 10px; }
+
+    /* SINGOLO FARETTO */
+    .spotlight-head {
+      position: relative;
+      width: 32px;
+      height: 38px;
+      background: linear-gradient(135deg, #444, #151515);
+      border-radius: 6px;
+      border: 2px solid #666;
+      box-shadow: inset 0 0 6px #000, 0 3px 6px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spotlight-lens {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* COLORI FARETTI (4 COLORI) */
+    .c-cyan   { background: #00f2fe; box-shadow: 0 0 16px #00f2fe; }
+    .c-pink   { background: #ff007f; box-shadow: 0 0 16px #ff007f; }
+    .c-green  { background: #00ff88; box-shadow: 0 0 16px #00ff88; }
+    .c-orange { background: #ffaa00; box-shadow: 0 0 16px #ffaa00; }
+
+    /* FASCI DI LUCE (BEAMS) */
+    .beam {
+      position: absolute;
+      top: -3px;
+      width: 480px;
+      height: 45px;
+      pointer-events: none;
+      z-index: 5;
+      mix-blend-mode: screen;
+      filter: blur(5px);
+      opacity: 0.85;
+    }
+
+    /* --- FASCI SINISTRA (Sparano verso destra) --- */
+    .truss-left .beam {
+      left: 20px;
+      transform-origin: left center;
+      clip-path: polygon(0 45%, 100% 0, 100% 100%, 0 55%);
+    }
+
+    .truss-left .beam-cyan   { background: linear-gradient(to right, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
+    .truss-left .beam-pink   { background: linear-gradient(to right, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
+    .truss-left .beam-green  { background: linear-gradient(to right, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
+    .truss-left .beam-orange { background: linear-gradient(to right, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
+
+    .truss-left .beam-1 { animation: sweepLeft1 3s ease-in-out infinite alternate; }
+    .truss-left .beam-2 { animation: sweepLeft2 2.5s ease-in-out infinite alternate 0.3s; }
+    .truss-left .beam-3 { animation: sweepLeft3 3.2s ease-in-out infinite alternate 0.6s; }
+    .truss-left .beam-4 { animation: sweepLeft4 2.8s ease-in-out infinite alternate 0.2s; }
+
+    @keyframes sweepLeft1 { from { transform: rotate(-15deg); } to { transform: rotate(25deg); } }
+    @keyframes sweepLeft2 { from { transform: rotate(-25deg); } to { transform: rotate(15deg); } }
+    @keyframes sweepLeft3 { from { transform: rotate(-10deg); } to { transform: rotate(30deg); } }
+    @keyframes sweepLeft4 { from { transform: rotate(-35deg); } to { transform: rotate(5deg); } }
+
+    /* --- FASCI DESTRA (Sparano verso sinistra) --- */
+    .truss-right .beam {
+      right: 20px;
+      transform-origin: right center;
+      clip-path: polygon(100% 45%, 0 0, 0 100%, 100% 55%);
+    }
+
+    .truss-right .beam-cyan   { background: linear-gradient(to left, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
+    .truss-right .beam-pink   { background: linear-gradient(to left, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
+    .truss-right .beam-green  { background: linear-gradient(to left, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
+    .truss-right .beam-orange { background: linear-gradient(to left, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
+
+    .truss-right .beam-1 { animation: sweepRight1 3s ease-in-out infinite alternate 0.4s; }
+    .truss-right .beam-2 { animation: sweepRight2 2.7s ease-in-out infinite alternate; }
+    .truss-right .beam-3 { animation: sweepRight3 3.1s ease-in-out infinite alternate 0.5s; }
+    .truss-right .beam-4 { animation: sweepRight4 2.6s ease-in-out infinite alternate 0.1s; }
+
+    @keyframes sweepRight1 { from { transform: rotate(15deg); } to { transform: rotate(-25deg); } }
+    @keyframes sweepRight2 { from { transform: rotate(25deg); } to { transform: rotate(-15deg); } }
+    @keyframes sweepRight3 { from { transform: rotate(10deg); } to { transform: rotate(-30deg); } }
+    @keyframes sweepRight4 { from { transform: rotate(35deg); } to { transform: rotate(-5deg); } }
+
+    /* --- VIDEO LATERALI CUFFIE --- */
+    video.side-video {
+      position: absolute;
+      top: 40px;
+      width: 290px;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 20px;
+      z-index: 3;
+      border: 4px solid transparent;
+      background:
+        linear-gradient(#050508, #050508) padding-box,
+        linear-gradient(var(--angle), #00f2fe, #ff007f, #00ff88, #ffaa00, #00f2fe) border-box;
+      animation:
+        rotateGradient 3s linear infinite,
+        partyGlow 2s ease-in-out infinite alternate;
+    }
+
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes rotateGradient {
+      to { --angle: 360deg; }
+    }
+
+    @keyframes partyGlow {
+      0% {
+        box-shadow: 
+          0 0 15px rgba(0, 242, 254, 0.4),
+          0 0 35px rgba(255, 0, 127, 0.3),
+          0 0 65px rgba(0, 255, 136, 0.2);
+        transform: scale(1);
+      }
+      100% {
+        box-shadow: 
+          0 0 25px rgba(255, 0, 127, 0.6),
+          0 0 55px rgba(0, 242, 254, 0.5),
+          0 0 90px rgba(255, 170, 0, 0.4);
+        transform: scale(1.02);
+      }
+    }
+
+    .left-video { left: 75px; }
+    .right-video { right: 75px; }
+  </style>
 </head>
 <body>
 
 <div class="container" id="party-container">
+
+  <!-- FARETTI TRUSS SINISTRA -->
+  <div class="truss-tower truss-left">
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-cyan"></div>
+      <div class="beam beam-cyan beam-1"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-pink"></div>
+      <div class="beam beam-pink beam-2"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-green"></div>
+      <div class="beam beam-green beam-3"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-orange"></div>
+      <div class="beam beam-orange beam-4"></div>
+    </div>
+  </div>
+
+  <!-- VIDEO CUFFIE SX -->
   <video class="side-video left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
     Il tuo browser non supporta il video.
   </video>
 
+  <!-- VIDEO CUFFIE DX -->
   <video class="side-video right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
     Il tuo browser non supporta il video.
   </video>
+
+  <!-- FARETTI TRUSS DESTRA -->
+  <div class="truss-tower truss-right">
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-cyan"></div>
+      <div class="beam beam-cyan beam-1"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-pink"></div>
+      <div class="beam beam-pink beam-2"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-green"></div>
+      <div class="beam beam-green beam-3"></div>
+    </div>
+    <div class="spotlight-head">
+      <div class="spotlight-lens c-orange"></div>
+      <div class="beam beam-orange beam-4"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-  // Script per generare le luci party in automatico
   function createLights() {
     const container = document.getElementById('party-container');
-    const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ff0000', '#ffff00'];
-    
+    const colors = ['#00f2fe', '#ff007f', '#00ff88', '#ffaa00'];
+
     setInterval(() => {
       const light = document.createElement('div');
       light.className = 'disco-light';
-      
-      // Posizione casuale vicino ai video
+
       const randomX = Math.random() * 100;
-      light.style.left = randomX + "%";
-      
+      light.style.left = randomX + '%';
+
       const color = colors[Math.floor(Math.random() * colors.length)];
       light.style.background = `linear-gradient(to bottom, transparent, ${color}, transparent)`;
       light.style.boxShadow = `0 0 20px ${color}`;
-      
+
       container.appendChild(light);
-      
-      // Rimuovi dopo l'animazione per non appesantire il browser
+
       setTimeout(() => {
         light.remove();
-      }, 2000);
-    }, 150);
+      }, 2500);
+    }, 180);
   }
 
   createLights();
