@@ -49,36 +49,42 @@
       100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
     }
 
-    /* --- STRUTTURE FARETTI (TRUSS LATERALI) MODIFICATE --- */
-    .truss-tower {
+    /* --- NUOVA STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
+    .truss-horizontal {
       position: absolute;
-      top: 15px;
-      bottom: 15px;
-      width: 34px; /* Ristretto da 44px */
+      width: 290px; /* Larghezza dell'MP4 */
+      height: 34px; /* Altezza della truss (era la width nella verticale) */
       background: 
         repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
         repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
-        linear-gradient(to right, #2a2a35, #111116, #2a2a35);
-      border-left: 3px solid #555;
-      border-right: 3px solid #555;
+        linear-gradient(to bottom, #2a2a35, #111116, #2a2a35); /* Gradiente per orizzontale */
+      border-top: 3px solid #555;
+      border-bottom: 3px solid #555;
       box-shadow: 0 0 15px rgba(0,0,0,0.9);
       z-index: 8;
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* Layout orizzontale */
       justify-content: space-around;
       align-items: center;
-      padding: 10px 0;
+      padding: 0 10px;
     }
 
-    /* Spostati verso l'esterno di 10px (da 10px a 0px) */
-    .truss-left { left: 0px; }
-    .truss-right { right: 0px; }
+    /* Posizionamento sopra i video (top del video è 40px, truss è 15px, quindi top 15px) */
+    .truss-left-top {
+      top: 15px; /* Casi sopra */
+      left: 75px; /* Allineato all'MP4 */
+    }
 
-    /* SINGOLO FARETTO - Adattato per la torre più stretta */
+    .truss-right-top {
+      top: 15px; /* Casi sopra */
+      right: 75px; /* Allineato all'MP4 */
+    }
+
+    /* SINGOLO FARETTO - Adattato per layout orizzontale */
     .spotlight-head {
       position: relative;
-      width: 28px; /* Adattato da 32px */
-      height: 38px;
+      width: 38px; /* Era height */
+      height: 28px; /* Era width */
       background: linear-gradient(135deg, #444, #151515);
       border-radius: 6px;
       border: 2px solid #666;
@@ -89,8 +95,8 @@
     }
 
     .spotlight-lens {
-      width: 16px; /* Adattato da 18px */
-      height: 16px; /* Adattato da 18px */
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       position: relative;
       z-index: 2;
@@ -102,12 +108,12 @@
     .c-green  { background: #00ff88; box-shadow: 0 0 16px #00ff88; }
     .c-orange { background: #ffaa00; box-shadow: 0 0 16px #ffaa00; }
 
-    /* FASCI DI LUCE (BEAMS) */
+    /* FASCI DI LUCE (BEAMS) - Modificati per sparare verso il basso */
     .beam {
       position: absolute;
-      top: -3px;
-      width: 480px;
-      height: 45px;
+      left: -3px; /* Era top */
+      width: 45px; /* Era width della trave */
+      height: 480px; /* Era width della trave, ora lunghezza del fascio verso il basso */
       pointer-events: none;
       z-index: 5;
       mix-blend-mode: screen;
@@ -115,54 +121,44 @@
       opacity: 0.85;
     }
 
-    /* --- FASCI SINISTRA (Sparano verso destra) --- */
-    .truss-left .beam {
-      left: 20px;
-      transform-origin: left center;
-      clip-path: polygon(0 45%, 100% 0, 100% 100%, 0 55%);
+    .spotlight-head .beam {
+      top: 20px; /* Origine sotto il faretto */
+      transform-origin: top center;
+      clip-path: polygon(45% 0, 0 100%, 100% 100%, 55% 0); /* Clip per sparare verso il basso */
     }
 
-    .truss-left .beam-cyan   { background: linear-gradient(to right, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
-    .truss-left .beam-pink   { background: linear-gradient(to right, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
-    .truss-left .beam-green  { background: linear-gradient(to right, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
-    .truss-left .beam-orange { background: linear-gradient(to right, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
+    /* Gradienti fascio per orizzontale (verso il basso) */
+    .beam-cyan   { background: linear-gradient(to bottom, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
+    .beam-pink   { background: linear-gradient(to bottom, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
+    .beam-green  { background: linear-gradient(to bottom, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
+    .beam-orange { background: linear-gradient(to bottom, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
 
-    .truss-left .beam-1 { animation: sweepLeft1 3s ease-in-out infinite alternate; }
-    .truss-left .beam-2 { animation: sweepLeft2 2.5s ease-in-out infinite alternate 0.3s; }
-    .truss-left .beam-3 { animation: sweepLeft3 3.2s ease-in-out infinite alternate 0.6s; }
-    .truss-left .beam-4 { animation: sweepLeft4 2.8s ease-in-out infinite alternate 0.2s; }
+    /* ANIMAZIONI MOVIMENTO FASCI (Sventolano SX/DX mentre sparano giù) */
+    .truss-left-top .beam-1 { animation: sweepDownLeft1 3s ease-in-out infinite alternate; }
+    .truss-left-top .beam-2 { animation: sweepDownLeft2 2.5s ease-in-out infinite alternate 0.3s; }
+    .truss-left-top .beam-3 { animation: sweepDownLeft3 3.2s ease-in-out infinite alternate 0.6s; }
+    .truss-left-top .beam-4 { animation: sweepDownLeft4 2.8s ease-in-out infinite alternate 0.2s; }
 
-    @keyframes sweepLeft1 { from { transform: rotate(-15deg); } to { transform: rotate(25deg); } }
-    @keyframes sweepLeft2 { from { transform: rotate(-25deg); } to { transform: rotate(15deg); } }
-    @keyframes sweepLeft3 { from { transform: rotate(-10deg); } to { transform: rotate(30deg); } }
-    @keyframes sweepLeft4 { from { transform: rotate(-35deg); } to { transform: rotate(5deg); } }
+    .truss-right-top .beam-1 { animation: sweepDownRight1 3s ease-in-out infinite alternate 0.4s; }
+    .truss-right-top .beam-2 { animation: sweepDownRight2 2.7s ease-in-out infinite alternate; }
+    .truss-right-top .beam-3 { animation: sweepDownRight3 3.1s ease-in-out infinite alternate 0.5s; }
+    .truss-right-top .beam-4 { animation: sweepDownRight4 2.6s ease-in-out infinite alternate 0.1s; }
 
-    /* --- FASCI DESTRA (Sparano verso sinistra) --- */
-    .truss-right .beam {
-      right: 20px;
-      transform-origin: right center;
-      clip-path: polygon(100% 45%, 0 0, 0 100%, 100% 55%);
-    }
+    /* Animazioni per sparare verso il basso sventolando */
+    @keyframes sweepDownLeft1 { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+    @keyframes sweepDownLeft2 { from { transform: rotate(-15deg); } to { transform: rotate(5deg); } }
+    @keyframes sweepDownLeft3 { from { transform: rotate(-5deg); } to { transform: rotate(15deg); } }
+    @keyframes sweepDownLeft4 { from { transform: rotate(-20deg); } to { transform: rotate(0deg); } }
 
-    .truss-right .beam-cyan   { background: linear-gradient(to left, rgba(0,242,254,0.95), rgba(0,242,254,0.3) 60%, transparent); }
-    .truss-right .beam-pink   { background: linear-gradient(to left, rgba(255,0,127,0.95), rgba(255,0,127,0.3) 60%, transparent); }
-    .truss-right .beam-green  { background: linear-gradient(to left, rgba(0,255,136,0.95), rgba(0,255,136,0.3) 60%, transparent); }
-    .truss-right .beam-orange { background: linear-gradient(to left, rgba(255,170,0,0.95), rgba(255,170,0,0.3) 60%, transparent); }
-
-    .truss-right .beam-1 { animation: sweepRight1 3s ease-in-out infinite alternate 0.4s; }
-    .truss-right .beam-2 { animation: sweepRight2 2.7s ease-in-out infinite alternate; }
-    .truss-right .beam-3 { animation: sweepRight3 3.1s ease-in-out infinite alternate 0.5s; }
-    .truss-right .beam-4 { animation: sweepRight4 2.6s ease-in-out infinite alternate 0.1s; }
-
-    @keyframes sweepRight1 { from { transform: rotate(15deg); } to { transform: rotate(-25deg); } }
-    @keyframes sweepRight2 { from { transform: rotate(25deg); } to { transform: rotate(-15deg); } }
-    @keyframes sweepRight3 { from { transform: rotate(10deg); } to { transform: rotate(-30deg); } }
-    @keyframes sweepRight4 { from { transform: rotate(35deg); } to { transform: rotate(-5deg); } }
+    @keyframes sweepDownRight1 { from { transform: rotate(10deg); } to { transform: rotate(-10deg); } }
+    @keyframes sweepDownRight2 { from { transform: rotate(15deg); } to { transform: rotate(-5deg); } }
+    @keyframes sweepDownRight3 { from { transform: rotate(5deg); } to { transform: rotate(-15deg); } }
+    @keyframes sweepDownRight4 { from { transform: rotate(20deg); } to { transform: rotate(0deg); } }
 
     /* --- VIDEO LATERALI CUFFIE --- */
     video.side-video {
       position: absolute;
-      top: 40px;
+      top: 40px; /* Top invariato */
       width: 290px;
       height: 450px;
       object-fit: cover;
@@ -204,17 +200,17 @@
       }
     }
 
-    /* Video riposizionati per evitare accavallamenti */
-    .left-video { left: 45px; } /* Avvicinato alla torre SX ristretta */
-    .right-video { right: 45px; } /* Avvicinato alla torre DX ristretta */
+    /* Video riposizionati per evitare accavallamenti (stesse posizioni) */
+    .left-video { left: 75px; } 
+    .right-video { right: 75px; } 
   </style>
 </head>
 <body>
 
 <div class="container" id="party-container">
 
-  <!-- FARETTI TRUSS SINISTRA -->
-  <div class="truss-tower truss-left">
+  <!-- FARETTI TRUSS ORIZZONTALE SINISTRA (Sopra MP4 SX) -->
+  <div class="truss-horizontal truss-left-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
       <div class="beam beam-cyan beam-1"></div>
@@ -245,8 +241,8 @@
     Il tuo browser non supporta il video.
   </video>
 
-  <!-- FARETTI TRUSS DESTRA -->
-  <div class="truss-tower truss-right">
+  <!-- FARETTI TRUSS ORIZZONTALE DESTRA (Sopra MP4 DX) -->
+  <div class="truss-horizontal truss-right-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
       <div class="beam beam-cyan beam-1"></div>
@@ -295,4 +291,4 @@
 </script>
 
 </body>
-</html>
+</html>```
