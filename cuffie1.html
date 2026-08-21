@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,7 +8,6 @@
     * {
       box-sizing: border-box;
     }
-
     body, html {
       margin: 0;
       padding: 0;
@@ -21,7 +19,6 @@
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
     .container {
       position: relative;
       width: 1308px;
@@ -30,7 +27,6 @@
       border-radius: 20px;
       overflow: hidden;
     }
-
     /* --- FASCI DI LUCE GLOBALI DI SOTTOFONDO --- */
     .disco-light {
       position: absolute;
@@ -43,13 +39,11 @@
       animation: discoRotate 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       filter: blur(4px);
     }
-
     @keyframes discoRotate {
       0% { transform: rotate(0deg) translateX(-50%); opacity: 0; }
       50% { opacity: 0.7; }
       100% { transform: rotate(360deg) translateX(-50%); opacity: 0; }
     }
-
     /* --- STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
     .truss-horizontal {
       position: absolute;
@@ -69,18 +63,15 @@
       align-items: center;
       padding: 0 6px;
     }
-
-    /* Posizioni allineate ai video (abbassate) */
+    /* Faretti allineati più verso i bordi */
     .truss-left-top {
       top: 30px;
-      left: 45px;
+      left: 15px;
     }
-
     .truss-right-top {
       top: 30px;
-      right: 45px;
+      right: 15px;
     }
-
     /* SINGOLO FARETTO */
     .spotlight-head {
       position: relative;
@@ -94,7 +85,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .spotlight-lens {
       width: 14px;
       height: 14px;
@@ -102,13 +92,11 @@
       position: relative;
       z-index: 2;
     }
-
     /* COLORI FARETTI */
     .c-cyan   { background: #00f2fe; box-shadow: 0 0 16px #00f2fe; }
     .c-pink   { background: #ff007f; box-shadow: 0 0 16px #ff007f; }
     .c-green  { background: #00ff88; box-shadow: 0 0 16px #00ff88; }
     .c-orange { background: #ffaa00; box-shadow: 0 0 16px #ffaa00; }
-
     /* FASCI DI LUCE (BEAMS) */
     .beam {
       position: absolute;
@@ -124,53 +112,45 @@
       transform-origin: top center;
       clip-path: polygon(48% 0, 0 100%, 100% 100%, 52% 0);
     }
-
     .beam-cyan   { background: linear-gradient(to bottom, rgba(0,242,254,0.95), rgba(0,242,254,0.25) 60%, transparent); }
     .beam-pink   { background: linear-gradient(to bottom, rgba(255,0,127,0.95), rgba(255,0,127,0.25) 60%, transparent); }
     .beam-green  { background: linear-gradient(to bottom, rgba(0,255,136,0.95), rgba(0,255,136,0.25) 60%, transparent); }
     .beam-orange { background: linear-gradient(to bottom, rgba(255,170,0,0.95), rgba(255,170,0,0.25) 60%, transparent); }
-
     /* ANIMAZIONI MOVIMENTO */
     .truss-left-top .beam-1 { animation: sweepWave1 3.2s ease-in-out infinite alternate; }
     .truss-left-top .beam-2 { animation: sweepWave2 2.7s ease-in-out infinite alternate 0.2s; }
     .truss-left-top .beam-3 { animation: sweepWave3 3.6s ease-in-out infinite alternate 0.5s; }
     .truss-left-top .beam-4 { animation: sweepWave4 2.9s ease-in-out infinite alternate 0.1s; }
-
     .truss-right-top .beam-1 { animation: sweepWave4 3.1s ease-in-out infinite alternate 0.3s; }
     .truss-right-top .beam-2 { animation: sweepWave3 2.8s ease-in-out infinite alternate 0.6s; }
     .truss-right-top .beam-3 { animation: sweepWave2 3.4s ease-in-out infinite alternate 0.1s; }
     .truss-right-top .beam-4 { animation: sweepWave1 2.6s ease-in-out infinite alternate 0.4s; }
-
     @keyframes sweepWave1 {
       0%   { transform: rotate(-32deg); }
       50%  { transform: rotate(5deg); }
       100% { transform: rotate(28deg); }
     }
-
     @keyframes sweepWave2 {
       0%   { transform: rotate(30deg); }
       50%  { transform: rotate(-8deg); }
       100% { transform: rotate(-26deg); }
     }
-
     @keyframes sweepWave3 {
       0%   { transform: rotate(-24deg); }
       50%  { transform: rotate(12deg); }
       100% { transform: rotate(34deg); }
     }
-
     @keyframes sweepWave4 {
       0%   { transform: rotate(28deg); }
       50%  { transform: rotate(-15deg); }
       100% { transform: rotate(-35deg); }
     }
-
     /* --- VIDEO LATERALI CUFFIE --- */
     video.side-video {
       position: absolute;
-      top: 70px; /* Abbassato */
+      top: 70px;
       width: 230px;
-      height: 430px; /* Ridotto leggermente per rimanere dentro il frame */
+      height: 430px;
       object-fit: cover;
       border-radius: 20px;
       z-index: 3;
@@ -182,17 +162,14 @@
         rotateGradient 3s linear infinite,
         partyGlow 2s ease-in-out infinite alternate;
     }
-
     @property --angle {
       syntax: '<angle>';
       initial-value: 0deg;
       inherits: false;
     }
-
     @keyframes rotateGradient {
       to { --angle: 360deg; }
     }
-
     @keyframes partyGlow {
       0% {
         box-shadow: 
@@ -209,15 +186,13 @@
         transform: scale(1.02);
       }
     }
-
-    .left-video { left: 45px; } 
-    .right-video { right: 45px; } 
+    /* Video posizionati più all'esterno */
+    .left-video { left: 15px; }
+    .right-video { right: 15px; }
   </style>
 </head>
 <body>
-
 <div class="container" id="party-container">
-
   <div class="truss-horizontal truss-left-top">
     <div class="spotlight-head">
       <div class="spotlight-lens c-cyan"></div>
@@ -240,7 +215,6 @@
   <video class="side-video left-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
   </video>
-
   <video class="side-video right-video" autoplay loop muted playsinline>
     <source src="https://peppeagosto.github.io/immaggini/cuffie1.mp4" type="video/mp4" />
   </video>
@@ -263,9 +237,7 @@
       <div class="beam beam-orange beam-4"></div>
     </div>
   </div>
-
 </div>
-
 <script>
   function createLights() {
     const container = document.getElementById('party-container');
@@ -283,15 +255,12 @@
       light.style.boxShadow = `0 0 20px ${color}`;
 
       container.appendChild(light);
-
       setTimeout(() => {
         light.remove();
       }, 2500);
     }, 180);
   }
-
   createLights();
 </script>
-
 </body>
 </html>
