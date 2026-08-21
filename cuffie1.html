@@ -47,7 +47,7 @@
     /* --- STRUTTURA FARETTI ORIZZONTALE (TRUSS) --- */
     .truss-horizontal {
       position: absolute;
-      width: 230px;
+      width: 210px;
       height: 34px;
       background: 
         repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 12px),
@@ -61,21 +61,21 @@
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      padding: 0 6px;
+      padding: 0 4px;
     }
-    /* Faretti allineati più verso i bordi */
+    /* Faretti allineati più verso l'esterno */
     .truss-left-top {
       top: 30px;
-      left: 15px;
+      left: 8px;
     }
     .truss-right-top {
       top: 30px;
-      right: 15px;
+      right: 8px;
     }
     /* SINGOLO FARETTO */
     .spotlight-head {
       position: relative;
-      width: 34px;
+      width: 32px;
       height: 26px;
       background: linear-gradient(135deg, #444, #151515);
       border-radius: 6px;
@@ -149,7 +149,7 @@
     video.side-video {
       position: absolute;
       top: 70px;
-      width: 230px;
+      width: 210px;
       height: 430px;
       object-fit: cover;
       border-radius: 20px;
@@ -186,9 +186,9 @@
         transform: scale(1.02);
       }
     }
-    /* Video posizionati più all'esterno */
-    .left-video { left: 15px; }
-    .right-video { right: 15px; }
+    /* Video posizionati più verso l'esterno */
+    .left-video { left: 8px; }
+    .right-video { right: 8px; }
   </style>
 </head>
 <body>
