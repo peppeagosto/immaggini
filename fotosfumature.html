@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {        
+        /* Sfumatura iniziale animata */        
+        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        background-size: 400% 400%;
+        animation: gradientAnimation 10s ease infinite;
+        overflow: hidden;
+        height: 100vh;
+        margin: 0;
+    }
+    /* Animazione fluida delle sfumature */    
+    @keyframes gradientAnimation {        
+        0% { background-position: 0% 50%; }        
+        50% { background-position: 100% 50%; }        
+        100% { background-position: 0% 50%; }    
+    }
+    .but {        
+        z-index: 1000;        
+        position: absolute;        
+        background-color: #f0f0f0;        
+        padding: 20px 8px 8px 8px;        
+        border-radius: 6px;        
+        border: 1px solid #b0c4de;        
+        top: 6%;        
+        color: #333333;        
+        text-decoration: none;        
+        right: 1%;        
+        cursor: pointer;    }        
+    .but:hover {        
+        background-color: #ffffff;        
+        opacity: 0.8;    }
+    
+    /* Foto a sinistra (più larga) */
+    .foto-left {
+        position: absolute;
+        left: 2%;
+        top: 15%;
+        width: 180px;
+        height: 75vh;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border: 2px solid rgba(255,255,255,0.6);
+    }
+    .foto-left img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Foto a destra (più larga) */
+    .foto-right {
+        position: absolute;
+        right: 2%;
+        top: 15%;
+        width: 180px;
+        height: 75vh;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border: 2px solid rgba(255,255,255,0.6);
+    }
+    .foto-right img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+</head>
+<body>
+
+<a class="but" href="#" onclick="Bgs()">DIABLO..CAMBIA SFUMATURA</a>
+
+<!-- Foto a sinistra -->
+<div class="foto-left">
+    <img id="imgLeft" src="https://xatimg.com/image/NkskQ5K2bFgC.jpg" alt="Foto Sinistra">
+</div>
+
+<!-- Foto a destra -->
+<div class="foto-right">
+    <img id="imgRight" src="https://xatimg.com/image/NkskQ5K2bFgC.jpg" alt="Foto Destra">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>    
+    var count = 0;    
+    var n = 10; // 10 sfumature e foto pronte da ciclare!
+    
+    function Bgs() {        
+        var gradients = [            
+            'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+            'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+            'linear-gradient(135deg, #fdbf92 0%, #ffd1ff 100%)',
+            'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+            'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+            'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)',
+            'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+            'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+            'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
+            'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'
+        ];
+
+        // 10 foto che si vedranno contemporaneamente a sinistra e a destra ad ogni click
+        var photos = [
+            'https://xatimg.com/image/NkskQ5K2bFgC.jpg', // 1° click
+            'https://xatimg.com/image/Lj5b2p9KiHkc.jpg', // 2° click
+            'https://xatimg.com/image/YVcrffoMaPOl.jpg', // 3° click (la tua nuova foto)
+            'https://xatimg.com/image/NkskQ5K2bFgC.jpg', // 4° click (puoi cambiarlo)
+            'https://xatimg.com/image/Lj5b2p9KiHkc.jpg', // 5° click
+            'https://xatimg.com/image/YVcrffoMaPOl.jpg', // 6° click
+            'https://xatimg.com/image/NkskQ5K2bFgC.jpg', // 7° click
+            'https://xatimg.com/image/Lj5b2p9KiHkc.jpg', // 8° click
+            'https://xatimg.com/image/YVcrffoMaPOl.jpg', // 9° click
+            'https://xatimg.com/image/NkskQ5K2bFgC.jpg'  // 10° click
+        ];
+
+        // Applica la sfumatura corrente
+        $('body').css({            
+            'background': gradients[count],            
+            'background-size': '400% 400%',            
+            'animation': 'gradientAnimation 10s ease infinite'        
+        });
+
+        // Applica la stessa foto sia a sinistra che a destra
+        $('#imgLeft').attr('src', photos[count]);
+        $('#imgRight').attr('src', photos[count]);
+
+        count += 1;        
+        if (count === n) {            
+            count = 0;        
+        }    
+    }
+</script>
+</body>
