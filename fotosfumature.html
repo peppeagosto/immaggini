@@ -17,28 +17,46 @@
         50% { background-position: 100% 50%; }        
         100% { background-position: 0% 50%; }    
     }
+
+    /* Animazione speciale: lampeggio + battito (zoom) */
+    @keyframes specialPulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(1.08); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
     .but {        
         z-index: 1000;        
         position: absolute;        
-        background-color: #f0f0f0;        
-        padding: 20px 8px 8px 8px;        
-        border-radius: 6px;        
-        border: 1px solid #b0c4de;        
+        background: transparent; /* Sfondo completamente trasparente, niente bianco! */
+        padding: 12px 16px;        
+        border-radius: 8px;        
+        border: 2px solid #ff0033; /* Rosso rinforzato */
         top: 6%;        
-        color: #333333;        
+        color: #ff0033; /* Rosso rinforzato */
+        font-weight: bold;
+        font-size: 15px;
         text-decoration: none;        
         right: 1%;        
-        cursor: pointer;    }        
+        cursor: pointer;
+        animation: specialPulse 1.2s infinite ease-in-out; /* Animazione speciale attiva */
+        text-shadow: 0 0 8px rgba(255, 0, 51, 0.6);
+        box-shadow: 0 0 15px rgba(255, 0, 51, 0.4);
+    }        
     .but:hover {        
-        background-color: #ffffff;        
-        opacity: 0.8;    }
+        background-color: #ff0033;        
+        color: #ffffff;
+        opacity: 1;
+        animation: none; /* Si ferma e diventa pieno quando passi con il mouse */
+        box-shadow: 0 0 20px rgba(255, 0, 51, 0.9);
+    }
     
-    /* Foto a sinistra (più larga) */
+    /* Foto a sinistra (220px) */
     .foto-left {
         position: absolute;
         left: 2%;
         top: 15%;
-        width: 180px;
+        width: 220px;
         height: 75vh;
         border-radius: 8px;
         overflow: hidden;
@@ -51,12 +69,12 @@
         object-fit: cover;
     }
 
-    /* Foto a destra (più larga) */
+    /* Foto a destra (220px) */
     .foto-right {
         position: absolute;
         right: 2%;
         top: 15%;
-        width: 180px;
+        width: 220px;
         height: 75vh;
         border-radius: 8px;
         overflow: hidden;
@@ -72,16 +90,16 @@
 </head>
 <body>
 
-<a class="but" href="#" onclick="Bgs()">DIABLO..CAMBIA SFUMATURA</a>
+<a class="but" href="#" onclick="Bgs(); return false;">FOTO E SFUMATURE</a>
 
 <!-- Foto a sinistra -->
 <div class="foto-left">
-    <img id="imgLeft" src="https://xatimg.com/image/NkskQ5K2bFgC.jpg" alt="Foto Sinistra">
+    <img id="imgLeft" src="https://xatimg.com/image/e4wKBL5iGYsw.jpg" alt="Foto Sinistra">
 </div>
 
 <!-- Foto a destra -->
 <div class="foto-right">
-    <img id="imgRight" src="https://xatimg.com/image/NkskQ5K2bFgC.jpg" alt="Foto Destra">
+    <img id="imgRight" src="https://xatimg.com/image/e4wKBL5iGYsw.jpg" alt="Foto Destra">
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -103,12 +121,12 @@
             'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'
         ];
 
-        // 10 foto che si vedranno contemporaneamente a sinistra e a destra ad ogni click
+        // Le tue 10 foto inserite correttamente
         var photos = [
             'https://xatimg.com/image/e4wKBL5iGYsw.jpg', // 1° click
             'https://xatimg.com/image/6PGime4qoDDV.jpg', // 2° click
-            'https://xatimg.com/image/yXSQ4aWFPSFl.jpg', // 3° click (la tua nuova foto)
-            'https://xatimg.com/image/kwk8drEoyK86.jpg', // 4° click (puoi cambiarlo)
+            'https://xatimg.com/image/yXSQ4aWFPSFl.jpg', // 3° click
+            'https://xatimg.com/image/kwk8drEoyK86.jpg', // 4° click
             'https://xatimg.com/image/I3XNW4a24amm.jpg', // 5° click
             'https://xatimg.com/image/NbalEPGZd11r.jpg', // 6° click
             'https://xatimg.com/image/kTuQATkNAqqv.jpg', // 7° click
@@ -135,3 +153,4 @@
     }
 </script>
 </body>
+</html>
