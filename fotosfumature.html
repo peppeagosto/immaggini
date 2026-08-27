@@ -10,25 +10,35 @@
         overflow: hidden;
         height: 100vh;
         margin: 0;
+        position: relative;
     }
-    /* Animazione fluida delle sfumature */    
+    /* Animazione fluida delle sfumature di sfondo */    
     @keyframes gradientAnimation {        
         0% { background-position: 0% 50%; }        
         50% { background-position: 100% 50%; }        
         100% { background-position: 0% 50%; }    
     }
 
-    /* Animazione speciale: lampeggio + battito (zoom) */
+    /* Animazione speciale: lampeggio + battito (zoom) per il bottone */
     @keyframes specialPulse {
         0% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.4; transform: scale(1.08); }
         100% { opacity: 1; transform: scale(1); }
     }
 
+    /* Movimento ampio e fluido da destra a sinistra, in alto e in basso */
+    @keyframes moveGhostDarkWide {
+        0% { transform: translate(-50%, -50%) translate(0px, 0px); }
+        25% { transform: translate(-50%, -50%) translate(-180px, -70px); }
+        50% { transform: translate(-50%, -50%) translate(180px, 70px); }
+        75% { transform: translate(-50%, -50%) translate(-140px, 80px); }
+        100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    }
+
     .but {        
         z-index: 1000;        
         position: absolute;        
-        background: transparent; /* Sfondo completamente trasparente, niente bianco! */
+        background: transparent; /* Sfondo completamente trasparente */
         padding: 12px 16px;        
         border-radius: 8px;        
         border: 2px solid #ff0033; /* Rosso rinforzato */
@@ -39,7 +49,7 @@
         text-decoration: none;        
         right: 1%;        
         cursor: pointer;
-        animation: specialPulse 1.2s infinite ease-in-out; /* Animazione speciale attiva */
+        animation: specialPulse 1.2s infinite ease-in-out;
         text-shadow: 0 0 8px rgba(255, 0, 51, 0.6);
         box-shadow: 0 0 15px rgba(255, 0, 51, 0.4);
     }        
@@ -47,50 +57,88 @@
         background-color: #ff0033;        
         color: #ffffff;
         opacity: 1;
-        animation: none; /* Si ferma e diventa pieno quando passi con il mouse */
+        animation: none;
         box-shadow: 0 0 20px rgba(255, 0, 51, 0.9);
     }
     
-    /* Foto a sinistra (220px) */
+    /* Scritta centrale GHOST DARK ridotta, sfumata arcobaleno con movimento ampio dx/sx/alto/basso */
+    .ghost-dark-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 55px; /* Testo più piccolo e bilanciato */
+        font-weight: 900;
+        line-height: 1.1;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        z-index: 500;
+        pointer-events: none;
+        white-space: nowrap;
+        
+        /* Sfumatura arcobaleno sul testo */
+        background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        
+        /* Effetto scuro / ghost sfumato */
+        filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.7));
+        
+        /* Applica l'animazione di movimento ampio */
+        animation: moveGhostDarkWide 8s infinite ease-in-out;
+    }
+
+    /* Foto a sinistra (220px) con bordo arcobaleno da 13px */
     .foto-left {
         position: absolute;
         left: 2%;
         top: 15%;
         width: 220px;
         height: 75vh;
-        border-radius: 8px;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        border: 2px solid rgba(255,255,255,0.6);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        padding: 13px; /* Cornice arcobaleno da 13px */
+        background: linear-gradient(135deg, red, orange, yellow, green, cyan, blue, violet);
+        z-index: 600;
     }
     .foto-left img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 6px;
     }
 
-    /* Foto a destra (220px) */
+    /* Foto a destra (220px) con bordo arcobaleno da 13px */
     .foto-right {
         position: absolute;
         right: 2%;
         top: 15%;
         width: 220px;
         height: 75vh;
-        border-radius: 8px;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        border: 2px solid rgba(255,255,255,0.6);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        padding: 13px; /* Cornice arcobaleno da 13px */
+        background: linear-gradient(135deg, red, orange, yellow, green, cyan, blue, violet);
+        z-index: 600;
     }
     .foto-right img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 6px;
     }
 </style>
 </head>
 <body>
 
 <a class="but" href="#" onclick="Bgs(); return false;">FOTO E SFUMATURE</a>
+
+<!-- Scritta centrale animata GHOST DARK -->
+<div class="ghost-dark-center">
+    GHOST DARK
+</div>
 
 <!-- Foto a sinistra -->
 <div class="foto-left">
@@ -121,18 +169,17 @@
             'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'
         ];
 
-        // Le tue 10 foto inserite correttamente
         var photos = [
-            'https://xatimg.com/image/e4wKBL5iGYsw.jpg', // 1° click
-            'https://xatimg.com/image/6PGime4qoDDV.jpg', // 2° click
-            'https://xatimg.com/image/yXSQ4aWFPSFl.jpg', // 3° click
-            'https://xatimg.com/image/kwk8drEoyK86.jpg', // 4° click
-            'https://xatimg.com/image/I3XNW4a24amm.jpg', // 5° click
-            'https://xatimg.com/image/NbalEPGZd11r.jpg', // 6° click
-            'https://xatimg.com/image/kTuQATkNAqqv.jpg', // 7° click
-            'https://xatimg.com/image/SGPp9AtfPJc8.jpg', // 8° click
-            'https://xatimg.com/image/HA86TO7ADSfd.jpg', // 9° click
-            'https://xatimg.com/image/WhPiZVVAgCiM.jpg'  // 10° click
+            'https://xatimg.com/image/e4wKBL5iGYsw.jpg',
+            'https://xatimg.com/image/6PGime4qoDDV.jpg',
+            'https://xatimg.com/image/yXSQ4aWFPSFl.jpg',
+            'https://xatimg.com/image/kwk8drEoyK86.jpg',
+            'https://xatimg.com/image/I3XNW4a24amm.jpg',
+            'https://xatimg.com/image/NbalEPGZd11r.jpg',
+            'https://xatimg.com/image/kTuQATkNAqqv.jpg',
+            'https://xatimg.com/image/SGPp9AtfPJc8.jpg',
+            'https://xatimg.com/image/HA86TO7ADSfd.jpg',
+            'https://xatimg.com/image/WhPiZVVAgCiM.jpg'  
         ];
 
         // Applica la sfumatura corrente
