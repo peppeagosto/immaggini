@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>EDITION 2026 - ZENO LIVE</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        :root {
+            --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            --accent: #ff00c8;
+            --btn-grad: linear-gradient(to right, #ff00c8, #ff7300);
+            --rb-text: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00);
+        }
+        * { box-sizing: border-box; }
+        body {
+            background: transparent !important;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial Black', sans-serif;
+            overflow: hidden;
+        }
+        .main-chassis {
+            position: relative;
+            width: 730px;
+            height: 640px;
+            background: radial-gradient(circle at center, #1a1a20 0%, #050505 100%);
+            border-radius: 30px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 180px 1fr 180px;
+            gap: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px var(--accent), inset 0 0 50px #000;
+            z-index: 1;
+            transition: box-shadow 0.4s ease;
+        }
+        .main-chassis::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 33px;
+            padding: 3px;
+            background: var(--rainbow);
+            background-size: 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: rb-move 8s linear infinite;
+            z-index: -1;
+        }
+        .main-chassis.rainbow-mode {
+            box-shadow: 0 0 35px #ff00c8, 0 0 55px #00ffd5, inset 0 0 50px #000;
+        }
+        .main-chassis.rainbow-mode .display-top,
+        .main-chassis.rainbow-mode .box,
+        .main-chassis.rainbow-mode .control-bar,
+        .main-chassis.rainbow-mode .eq-container,
+        .main-chassis.rainbow-mode #locandina {
+            border-color: #00ffd5 !important;
+            box-shadow: 0 0 15px rgba(0, 255, 213, 0.5), inset 0 0 10px #000 !important;
+        }
+        .main-chassis.rainbow-mode .vinyl,
+        .main-chassis.rainbow-mode .woofer-pro {
+            box-shadow: 0 0 20px #ff7300, 0 0 30px #00ffd5 !important;
+        }
+        .display-top {
+            grid-column: 1 / 4;
+            height: 60px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .marquee-box { display: flex; width: 100%; white-space: nowrap; animation: bounce-scroll 10s ease-in-out infinite alternate; }
+        .rainbow-text {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: var(--rainbow);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rb-move 3s linear infinite;
+            padding: 0 50px;
+        }
+        @keyframes bounce-scroll { 0% { transform: translateX(40%); } 100% { transform: translateX(-40%); } }
+        .box {
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid var(--accent);
+            border-radius: 10px;
+            padding: 6px;
+            text-align: center;
+            height: 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s, border-color 0.4s ease;
+        }
+        .box h4 { margin: 0; font-size: 8px; color: #bf953f; text-transform: uppercase; letter-spacing: 1px; }
+        .box span { font-size: 11px; font-weight: bold; display: block; margin-top: 3px; color: #fff; text-shadow: 0 0 8px var(--accent); }
+        .copyable { cursor: pointer; }
+        .copyable:hover { transform: scale(1.03); border-color: #00ffd5; }
+        .turntable { position: relative; display: flex; justify-content: center; align-items: center; }
+        .vinyl { width: 270px; height: 270px; border-radius: 50%; border: 6px solid #0a0a0a; box-shadow: 0 0 30px var(--accent); overflow: hidden; background: #000; transition: box-shadow 0.4s ease; }
+        #album-art { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        
+        .arm {
+            position: absolute;
+            width: 110px;
+            height: 250px;
+            right: -50px;
+            top: 40px;
+            background: url('https://peppeagosto.github.io/braccetto.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform-origin: top right;
+            transform: rotate(-25deg);
+            transition: 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            z-index: 10;
+        }
+        .woofer-pro { 
+            width: 85px; 
+            height: 85px; 
+            border-radius: 50%; 
+            background: linear-gradient(145deg, #2a2a2a, #0a0a0a);
+            border: 3px solid #444; 
+            box-shadow: 0 0 15px var(--accent), inset 0 3px 8px #000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: transform 0.05s ease-out, box-shadow 0.4s ease;
+            position: relative;
+        }
+        .woofer-pro::before {
+            content: '';
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #222 0%, #050505 100%);
+            border: 1px solid #111;
+            box-shadow: inset 0 3px 4px rgba(255,255,255,0.15), inset 0 -3px 4px rgba(0,0,0,0.9);
+        }
+        .cone { 
+            position: relative;
+            width: 52px; 
+            height: 52px; 
+            border-radius: 50%; 
+            background: conic-gradient(from 0deg, #111, #222, #111, #222, #111);
+            box-shadow: inset 0 0 12px #000, 0 0 4px #000; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .dust-cap {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #555 0%, #1a1a1a 50%, #000 100%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+        .control-bar { grid-column: 1 / 4; display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.9); border-radius: 40px; padding: 6px 18px; border: 2px solid var(--accent); transition: border-color 0.4s ease, box-shadow 0.4s ease;}
+        .btn { background: var(--btn-grad); border: none; padding: 8px 16px; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 11px; color: #fff; text-shadow: 0 0 5px #000; box-shadow: 0 0 10px rgba(0, 242, 255, 0.5); user-select: none; }
+        .btn:active { transform: scale(0.95); }
+        input[type=range] { -webkit-appearance: none; width: 100px; height: 6px; background: var(--btn-grad); border-radius: 5px; }
+        .dot-box { display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.3s; }
+        .dot:hover { transform: scale(1.15); box-shadow: 0 0 8px #fff; }
+        .eq-container {
+            grid-column: 1 / 4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 6px;
+            height: 35px;
+            background: rgba(0,0,0,0.85);
+            border: 1.5px solid var(--accent);
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: inset 0 0 10px #000;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .eq-bar { width: 14px; height: 100%; background: rgba(255,255,255,0.05); border-radius: 3px; display: flex; flex-direction: column-reverse; gap: 2px; overflow: hidden; }
+        .eq-segment { width: 100%; height: 5px; background: #222; border-radius: 1px; transition: background-color 0.05s ease; }
+        .eq-segment.active-green { background: #00ff66; box-shadow: 0 0 5px #00ff66; }
+        .eq-segment.active-yellow { background: #fffb00; box-shadow: 0 0 5px #fffb00; }
+        .eq-segment.active-red { background: #ff0055; box-shadow: 0 0 5px #ff0055; }
+        #locandina { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 310px; background: rgba(10, 10, 15, 0.96); border: 3px solid var(--accent); border-radius: 20px; padding: 15px; box-shadow: 0 0 40px var(--accent), inset 0 0 20px #000; z-index: 99; box-sizing: border-box; transition: border-color 0.4s ease, box-shadow 0.4s ease;}
+        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 10px; padding-bottom: 6px; }
+        #giorno-live { color: #ffff00; font-size: 13px; text-transform: uppercase; font-weight: bold; }
+        .titolo { background: var(--rb-text); -webkit-background-clip: text; color: transparent; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 4px 8px; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+        .ora { color: #0ff; font-size: 10px; width: 40px; text-align: center; font-weight: bold; }
+        .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; }
+        .ruota-disco { animation: spin 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 12px #0f0; }
+        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
+        .led-verde { width: 8px; height: 8px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 8px; box-shadow: 0 0 8px #0f0; animation: blink 0.8s infinite; }
+        .led-rosso { width: 8px; height: 8px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 8px; box-shadow: 0 0 6px #f00; }
+        #close-pali { position: absolute; right: 12px; top: 10px; color: #fff; cursor: pointer; font-size: 13px; font-weight: bold; background: #f00; border-radius: 50%; width: 20px; height: 20px; text-align: center; line-height: 18px; }
+        @keyframes rb-move { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="main-chassis" id="player">
+    <div class="display-top">
+        <div class="marquee-box">
+            <span id="scroll-text" class="rainbow-text">DJ GHOST - LIVE STREAMING</span>
+        </div>
+    </div>
+    
+    <div class="side-panel" style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+        <div class="box"><h4>CLOCK</h4><span id="clock">00:00:00</span></div>
+        <div class="box copyable" onclick="copySongInfo()"><h4>SINGER</h4><span id="artist">DJ GHOST</span></div>
+        <div class="box copyable" onclick="copySongInfo()"><h4>SONG</h4><span id="song">ON AIR</span></div>
+    </div>
+    
+    <div class="turntable">
+        <div class="vinyl" id="v-box"><img id="album-art" src="https://xatimg.com/image/or3rbqD5I3rS.png"></div>
+        <div id="arm" class="arm"></div>
+    </div>
+    
+    <div style="display: flex; gap: 8px;">
+        <div class="side-panel" style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+            <div class="box"><h4>CITY / WEATHER</h4><span id="v_city">...</span></div>
+            <div class="box"><h4>USER IP</h4><span id="v_ip">...</span></div>
+            <div class="box"><h4>SHIELD</h4><span id="shield-text" style="color:#48ff00 !important; text-shadow: 0 0 10px #48ff00;">ENCRYPTED</span></div>
+        </div>
+        <div class="dot-box">
+            <div class="dot" style="background:#ff7300;" onclick="setT('#ff7300')"></div>
+            <div class="dot" style="background:#ff0000;" onclick="setT('#ff0000')"></div>
+            <div class="dot" style="background:#fffb00;" onclick="setT('#fffb00')"></div>
+            <div class="dot" style="background:#ff00c8;" onclick="setT('#ff00c8')"></div>
+            <div class="dot" style="background:var(--rainbow); background-size:200%;" onclick="setT('rb')"></div>
+        </div>
+    </div>
+    
+    <div class="control-bar">
+        <div class="woofer-pro" id="wl">
+            <div class="cone"><div class="dust-cap"></div></div>
+        </div>
+        <button class="btn" id="playBtn" onclick="playAudio()">PLAY</button>
+        <button class="btn" id="btn-pali">PALINSESTO</button>
+        <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8">
+        <button class="btn" onclick="stopAudio()">STOP</button>
+        <div class="woofer-pro" id="wr">
+            <div class="cone"><div class="dust-cap"></div></div>
+        </div>
+    </div>
+    
+    <div class="eq-container" id="eq-display"></div>
+    
+    <div id="locandina">
+        <div id="close-pali">×</div>
+        <div class="header">
+            <span id="giorno-live">---</span>
+            <div class="titolo" id="titolo-locandina">DIRETTE RADIO LIVE</div>
+        </div>
+        <div id="lista-dj"></div>
+    </div>
+</div>
+
+<script>
+    // MOTORE AUDIO
+    const audio = new Audio("https://stream.zeno.fm/ylkruiq5e4fvv");
+    audio.crossOrigin = "anonymous";
+    audio.volume = 0.8;
+    
+    let isPlaying = false;
+    let audioCtx, analyser, dataArray;
+    let animId;
+
+    // COSTRUZIONE EQUALIZZATORE UI (12 BARRE)
+    const eqContainer = document.getElementById('eq-display');
+    for(let i = 0; i < 12; i++) {
+        let bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        for(let j = 0; j < 5; j++) {
+            let seg = document.createElement('div');
+            seg.className = 'eq-segment';
+            bar.appendChild(seg);
+        }
+        eqContainer.appendChild(bar);
+    }
+
+    // PLAY
+    async function playAudio() {
+        if(!isPlaying){
+            await audio.play().catch(()=>{});
+            isPlaying = true;
+            document.getElementById('album-art').style.animation = "spin 4s linear infinite";
+            document.getElementById('arm').style.transform = "rotate(15deg)";
+            
+            if(!audioCtx){
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                const source = audioCtx.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+            }
+            if(audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            animaVisualizer();
+        }
+    }
+
+    // STOP
+    function stopAudio() {
+        if(isPlaying){
+            audio.pause();
+            audio.currentTime = 0;
+            isPlaying = false;
+            document.getElementById('album-art').style.animation = "none";
+            document.getElementById('arm').style.transform = "rotate(-25deg)";
+            if (animId) cancelAnimationFrame(animId);
+            resetVisualizer();
+        }
+    }
+
+    // VOLUME
+    document.getElementById("vol").oninput = e => { audio.volume = e.target.value; };
+
+    // ANIMAZIONE EQUALIZZATORE E WOOFER
+    function animaVisualizer() {
+        if (!isPlaying) return;
+        
+        analyser.getByteFrequencyData(dataArray);
+
+        let bass = (dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3]) / 4;
+        let scale = 1 + (bass / 255) * 0.18;
+        document.getElementById('wl').style.transform = `scale(${scale.toFixed(3)})`;
+        document.getElementById('wr').style.transform = `scale(${scale.toFixed(3)})`;
+
+        const bars = document.querySelectorAll('.eq-bar');
+        bars.forEach((bar, i) => {
+            let val = dataArray[i * 3] || 0; 
+            let activeLevel = Math.round((val / 255) * 5.5);
+
+            let segments = bar.querySelectorAll('.eq-segment');
+            segments.forEach((seg, sIdx) => {
+                seg.className = 'eq-segment';
+                if(sIdx < activeLevel) {
+                    if(sIdx < 3) seg.classList.add('active-green');
+                    else if(sIdx < 4) seg.classList.add('active-yellow');
+                    else seg.classList.add('active-red');
+                }
+            });
+        });
+
+        animId = requestAnimationFrame(animaVisualizer);
+    }
+
+    function resetVisualizer() {
+        document.getElementById('wl').style.transform = `scale(1)`;
+        document.getElementById('wr').style.transform = `scale(1)`;
+        document.querySelectorAll('.eq-segment').forEach(s => s.className = 'eq-segment');
+    }
+
+    // METADATI: GESTIONE FORMATO "DJ GHOST | %artist% - %title%"
+    async function updateTitleCover() {
+        try {
+            const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+            const data = await res.json();
+            const rawTitle = data.title ? data.title.trim() : "DJ GHOST | ON AIR";
+            
+            document.getElementById('scroll-text').innerText = rawTitle.toUpperCase();
+
+            let djName = "DJ GHOST";
+            let songInfo = rawTitle;
+
+            // Se c'è la barra pipe "|" divide DJ e brano
+            if (rawTitle.includes("|")) {
+                const pipeParts = rawTitle.split("|");
+                djName = pipeParts[0].trim();
+                songInfo = pipeParts.slice(1).join("|").trim();
+            }
+
+            let artista = djName;
+            let canzone = songInfo;
+
+            // Divide Artista - Canzone
+            if (songInfo.includes(" - ")) {
+                const dashParts = songInfo.split(" - ");
+                artista = dashParts[0].trim();
+                canzone = dashParts.slice(1).join(" - ").trim();
+            }
+
+            document.getElementById('artist').innerText = artista.toUpperCase();
+            document.getElementById('song').innerText = canzone.toUpperCase();
+
+            // Ricerca iTunes Cover
+            if (artista && canzone && canzone !== "ON AIR") {
+                const cleanArtist = encodeURIComponent(artista.replace(/\[.*?\]|\(.*?\)/g, "").trim());
+                const cleanSong = encodeURIComponent(canzone.replace(/\[.*?\]|\(.*?\)/g, "").trim());
+                
+                const itunesRes = await fetch(`https://itunes.apple.com/search?term=${cleanArtist}+${cleanSong}&media=music&limit=1`);
+                const itunesData = await itunesRes.json();
+                
+                if (itunesData.resultCount > 0) {
+                    document.getElementById('album-art').src = itunesData.results[0].artworkUrl100.replace("100x100bb", "600x600bb");
+                    return;
+                }
+            }
+            document.getElementById('album-art').src = "https://xatimg.com/image/or3rbqD5I3rS.png";
+        } catch(e) {
+            document.getElementById('scroll-text').innerText = "DJ GHOST - RADIO ON AIR";
+            document.getElementById('artist').innerText = "DJ GHOST";
+            document.getElementById('song').innerText = "ON AIR";
+            document.getElementById('album-art').src = "https://xatimg.com/image/or3rbqD5I3rS.png";
+        }
+    }
+    updateTitleCover();
+    setInterval(updateTitleCover, 10000);
+
+    // PALINSESTO
+    const giorni = ["DOMENICA", "LUNEDI", "MARTEDI", "MERCOLEDI", "GIOVEDI", "VENERDI", "SABATO"];
+    const giorniAccenti = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
+    
+    // Backup interno in caso GitHub non risponda
+    let databaseTurni = {
+        "LUNEDÌ": [{ "h": 14, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "MARTEDÌ": [{ "h": 15, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "MERCOLEDÌ": [{ "h": 16, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "GIOVEDÌ": [{ "h": 17, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "VENERDÌ": [{ "h": 21, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "SABATO": [{ "h": 22, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "DOMENICA": "RIPOSO"
+    };
+
+    function normalizzaNomeGiorno(str) {
+        return (str || "").toUpperCase()
+            .replace(/È|É/g, 'E')
+            .replace(/Ì|Í/g, 'I')
+            .replace(/Ò|Ó/g, 'O')
+            .replace(/Ù|Ú/g, 'U')
+            .replace(/À|Á/g, 'A');
+    }
+
+    function caricaPalinsestoRemoto() {
+        $.getJSON('https://peppeagosto.github.io/palinsesto.json?nocache=' + Date.now())
+            .done(function(data) {
+                if(data && typeof data === 'object') {
+                    databaseTurni = data;
+                }
+                aggiornaLive();
+            })
+            .fail(function() {
+                aggiornaLive();
+            });
+    }
+
+    function aggiornaLive() {
+        const d = new Date();
+        const indiceGiorno = d.getDay();
+        const nomeGiorno = giorni[indiceGiorno];
+        const nomeGiornoAccento = giorniAccenti[indiceGiorno];
+        const oraAttuale = d.getHours();
+
+        $('#giorno-live').text(nomeGiornoAccento);
+        const container = $('#lista-dj').empty();
+        const titoloLoc = $('#titolo-locandina');
+
+        let djsOggi = databaseTurni[nomeGiornoAccento] || databaseTurni[nomeGiorno];
+        if (!djsOggi) {
+            const giornoSenzaAccento = normalizzaNomeGiorno(nomeGiorno);
+            for (let k in databaseTurni) {
+                if (normalizzaNomeGiorno(k) === giornoSenzaAccento) {
+                    djsOggi = databaseTurni[k];
+                    break;
+                }
+            }
+        }
+
+        if (nomeGiorno === "DOMENICA" || djsOggi === "RIPOSO") {
+            titoloLoc.hide();
+            container.append('<div style="font-size:12px; text-align:center; color:#ff00c8; padding: 15px 0;">BUONA DOMENICA DA<br>DJ GHOST<br>DOMANI SI RIPARTE!</div>');
+            return;
+        }
+
+        titoloLoc.show();
+
+        if (Array.isArray(djsOggi) && djsOggi.length > 0) {
+            djsOggi.forEach((dj) => {
+                const djHour = parseInt(dj.h, 10);
+                const eLive = (oraAttuale === djHour);
+                const classeGira = eLive ? "ruota-disco" : "";
+                const statusLed = eLive ? '<span class="led-verde"></span>' : (oraAttuale > djHour ? '<span class="led-rosso"></span>' : '');
+                const fotoUrl = dj.f ? dj.f : 'https://via.placeholder.com/45/333/fff?text=DJ';
+
+                container.append(`
+                    <div class="slot" style="${eLive ? 'border-color: #0f0; background: rgba(0,255,0,0.08);' : ''}">
+                        <span class="ora">${djHour}:00</span>
+                        <img class="foto ${classeGira}" src="${fotoUrl}" onerror="this.src='https://via.placeholder.com/45/333/fff?text=DJ'">
+                        <div class="nome">${dj.n} ${statusLed}</div>
+                    </div>
+                `);
+            });
+        } else {
+            container.append('<div style="font-size:11px; text-align:center; color:#aaa; padding: 10px 0;">NESSUNA DIRETTA PROGRAMMATA</div>');
+        }
+    }
+
+    $("#btn-pali").off('click').on('click', function(){ 
+        caricaPalinsestoRemoto(); 
+        $("#locandina").fadeToggle(300); 
+    });
+
+    $("#close-pali").off('click').on('click', function(){ 
+        $("#locandina").fadeOut(300); 
+    });
+
+    // TEMI COLORI
+    function setT(c) {
+        const player = document.getElementById('player');
+        if(c === 'rb') { 
+            player.classList.add('rainbow-mode');
+        } else { 
+            player.classList.remove('rainbow-mode');
+            document.documentElement.style.setProperty('--accent', c); 
+        }
+    }
+
+    // COPIA TITOLO
+    function copySongInfo() {
+        let textToCopy = document.getElementById('artist').innerText + " - " + document.getElementById('song').innerText;
+        navigator.clipboard.writeText(textToCopy);
+        let origSong = document.getElementById('song').innerText;
+        document.getElementById('song').innerText = "COPIATO!";
+        document.getElementById('song').style.color = "#00ff66";
+        setTimeout(() => {
+            document.getElementById('song').innerText = origSong;
+            document.getElementById('song').style.color = "#fff";
+        }, 1500);
+    }
+
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('it-IT'); }, 1000);
+
+    // IP E METEO
+    function fetchInfoLocale() {
+        $.getJSON('https://ipwho.is/', function(data) {
+            if (data && data.success) {
+                document.getElementById('v_ip').innerText = data.ip;
+                let city = data.city ? data.city.toUpperCase() : "ONLINE";
+                let lat = data.latitude;
+                let lon = data.longitude;
+                
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+                    .then(r => r.json())
+                    .then(wData => {
+                        let temp = Math.round(wData.current_weather.temperature);
+                        document.getElementById('v_city').innerText = `${city} ${temp}°C ☀️`;
+                    })
+                    .catch(() => { document.getElementById('v_city').innerText = city; });
+            } else {
+                document.getElementById('v_ip').innerText = "127.0.0.1";
+                document.getElementById('v_city').innerText = "ONLINE ☀️";
+            }
+        }).fail(function() {
+            document.getElementById('v_ip').innerText = "127.0.0.1";
+            document.getElementById('v_city').innerText = "ONLINE ☀️";
+        });
+    }
+
+    fetchInfoLocale();
+    caricaPalinsestoRemoto();
+    setInterval(caricaPalinsestoRemoto, 30000);
+</script>
+</body>
+</html>
