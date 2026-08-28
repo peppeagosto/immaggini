@@ -1,33 +1,33 @@
 {
   "LUNEDÌ": [
     {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 20, "n": "DJ MANUELA", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ ANGELA", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "MARTEDÌ": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 19, "n": "DJ FRANCO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
+    {"h": 20, "n": "DJ GENNY", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ MIRIAM", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "MERCOLEDÌ": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 19, "n": "DJ MARCO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
+    {"h": 20, "n": "DJ DOLCE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ MARIA ", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "GIOVEDÌ": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 19, "n": "DJ PEPPE LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
+    {"h": 20, "n": "DJCATY", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ TERRY", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "VENERDÌ": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 19, "n": "DJ FAUSTOLIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
+    {"h": 20, "n": "DJ NIK", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ MAURO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "SABATO": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
-    {"h": 20, "n": "DJ OSPITE", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
-    {"h": 21, "n": "DJ NOTTURNO", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
+    {"h": 19, "n": "DJ CETTY LIVE", "f": "https://xatimg.com/image/iQgCyJrXx59k.jpg"},
+    {"h": 20, "n": "DJ PIERO", "f": "https://xatimg.com/image/Pb7d1636URvg.jpg"},
+    {"h": 21, "n": "DJ DARK", "f": "https://xatimg.com/image/iVWjQe7TNoGD.jpg"}
   ],
   "DOMENICA": "RIPOSO"
 }
