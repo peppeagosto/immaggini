@@ -272,6 +272,8 @@
 </div>
 
 <script>
+    const fallbackDjImg = "https://xatimg.com/image/or3rbqD5I3rS.png";
+
     const audio = new Audio("https://stream.zeno.fm/ylkruiq5e4fvv");
     audio.crossOrigin = "anonymous";
     audio.volume = 0.8;
@@ -364,19 +366,16 @@
         document.querySelectorAll('.eq-segment').forEach(s => s.className = 'eq-segment');
     }
 
-    const fallbackDjImg = "https://xatimg.com/image/or3rbqD5I3rS.png";
-
-    // PALINSESTO & ORARI
     const giorni = ["DOMENICA", "LUNEDI", "MARTEDI", "MERCOLEDI", "GIOVEDI", "VENERDI", "SABATO"];
     const giorniAccenti = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
     let databaseTurni = {
-        "LUNEDÌ": [{ "h": 14, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
-        "MARTEDÌ": [{ "h": 15, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
-        "MERCOLEDÌ": [{ "h": 16, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
-        "GIOVEDÌ": [{ "h": 17, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
-        "VENERDÌ": [{ "h": 21, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }, { "h": 22, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
-        "SABATO": [{ "h": 22, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
+        "LUNEDÌ": [{ "h": 14, "n": "DJ GHOST", "f": fallbackDjImg }],
+        "MARTEDÌ": [{ "h": 15, "n": "DJ GHOST", "f": fallbackDjImg }],
+        "MERCOLEDÌ": [{ "h": 16, "n": "DJ GHOST", "f": fallbackDjImg }],
+        "GIOVEDÌ": [{ "h": 17, "n": "DJ GHOST", "f": fallbackDjImg }],
+        "VENERDÌ": [{ "h": 21, "n": "DJ GHOST", "f": fallbackDjImg }, { "h": 22, "n": "DJ GHOST", "f": fallbackDjImg }],
+        "SABATO": [{ "h": 22, "n": "DJ GHOST", "f": fallbackDjImg }],
         "DOMENICA": "RIPOSO"
     };
 
@@ -389,47 +388,11 @@
             .replace(/À|Á/g, 'A');
     }
 
-    // CERCA LA FOTO DEL DJ IN DIRETTA
-    function getFotoDjInOnda(djNomeTitle) {
-        const d = new Date();
-        const indiceGiorno = d.getDay();
-        const nomeGiorno = giorni[indiceGiorno];
-        const nomeGiornoAccento = giorniAccenti[indiceGiorno];
-        const oraAttuale = d.getHours();
-
-        let djsOggi = databaseTurni[nomeGiornoAccento] || databaseTurni[nomeGiorno];
-        if (!djsOggi) {
-            const giornoSenzaAccento = normalizzaNomeGiorno(nomeGiorno);
-            for (let k in databaseTurni) {
-                if (normalizzaNomeGiorno(k) === giornoSenzaAccento) {
-                    djsOggi = databaseTurni[k];
-                    break;
-                }
-            }
-        }
-
-        if (Array.isArray(djsOggi)) {
-            // 1. Controllo per orario esatto nel palinsesto
-            const djPerOra = djsOggi.find(dj => parseInt(dj.h, 10) === oraAttuale);
-            if (djPerOra && djPerOra.f && djPerOra.f.trim() !== "") {
-                return djPerOra.f.trim();
-            }
-            // 2. Controllo per corrispondenza del nome del DJ trasmesso
-            if (djNomeTitle) {
-                const djPerNome = djsOggi.find(dj => dj.n && dj.n.toUpperCase().trim() === djNomeTitle.toUpperCase().trim());
-                if (djPerNome && djPerNome.f && djPerNome.f.trim() !== "") {
-                    return djPerNome.f.trim();
-                }
-            }
-        }
-        return null;
-    }
-
     async function updateTitleCover() {
         try {
-            const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+            const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv?nocache=" + Date.now());
             const data = await res.json();
-            const rawTitle = data.title ? data.title.trim() : "DJ GHOST | ON AIR";
+            const rawTitle = (data && data.title) ? data.title.trim() : "DJ GHOST | ON AIR";
             
             document.getElementById('scroll-text').innerText = rawTitle.toUpperCase();
 
@@ -454,14 +417,24 @@
             document.getElementById('artist').innerText = artista.toUpperCase();
             document.getElementById('song').innerText = canzone.toUpperCase();
 
-            // 1. SE C'È UN DJ IN DIRETTA, MOSTRA LA SUA FOTO SUL PIATTO VINILE
-            const fotoDjAttivo = getFotoDjInOnda(djName);
-            if (fotoDjAttivo) {
-                document.getElementById('album-art').src = fotoDjAttivo;
+            let fotoDj = null;
+            for (let g in databaseTurni) {
+                if (Array.isArray(databaseTurni[g])) {
+                    const match = databaseTurni[g].find(dj => 
+                        dj.n && (rawTitle.toUpperCase().includes(dj.n.toUpperCase()) || djName.toUpperCase().includes(dj.n.toUpperCase()))
+                    );
+                    if (match && match.f) {
+                        fotoDj = match.f;
+                        break;
+                    }
+                }
+            }
+
+            if (fotoDj) {
+                document.getElementById('album-art').src = fotoDj;
                 return;
             }
 
-            // 2. SE NON C'È UN DJ, CERCA LA COVER ITUNES DELLA CANZONE
             if (artista && canzone && canzone !== "ON AIR") {
                 const cleanArtist = encodeURIComponent(artista.replace(/\[.*?\]|\(.*?\)/g, "").trim());
                 const cleanSong = encodeURIComponent(canzone.replace(/\[.*?\]|\(.*?\)/g, "").trim());
@@ -475,7 +448,6 @@
                 }
             }
             
-            // 3. FOTO DEFAULT
             document.getElementById('album-art').src = fallbackDjImg;
         } catch(e) {
             document.getElementById('scroll-text').innerText = "DJ GHOST - RADIO ON AIR";
