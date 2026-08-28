@@ -1,33 +1,56 @@
-{
-  "LUNEDÌ": [
-    {"h": 19, "n": "DJ CARTAIO LIVE", "f": "https://xatimg.com/image/UOGaApko0IIV.jpg"},
-    {"h": 20, "n": "DJ MANUELA", "f": "https://xatimg.com/image/SIKuELpYqnkb.jpg"},
-    {"h": 21, "n": "DJ ANGELA", "f": "https://xatimg.com/image/IcOqYwIekKjn.jpg"}
-  ],
-  "MARTEDÌ": [
-    {"h": 19, "n": "DJ FRANCO LIVE", "f": "https://xatimg.com/image/ovDYwuoMqueK.jpg"},
-    {"h": 20, "n": "DJ GENNY", "f": "https://xatimg.com/image/Vybg969HhJSa.jpg"},
-    {"h": 21, "n": "DJ MIRIAM", "f": "https://xatimg.com/image/Ha7xGJPgxbft.jpg"}
-  ],
-  "MERCOLEDÌ": [
-    {"h": 19, "n": "DJ MARCO LIVE", "f": "https://xatimg.com/image/pvCRpksQ4alU.jpg"},
-    {"h": 20, "n": "DJ DOLCE", "f": "https://xatimg.com/image/oEXLRV8gfAN9.jpg"},
-    {"h": 21, "n": "DJ MARIA ", "f": "https://xatimg.com/image/Gh7vSMKc1PVG.jpg"}
-  ],
-  "GIOVEDÌ": [
-    {"h": 19, "n": "DJ PEPPE LIVE", "f": "https://xatimg.com/image/vccORrl5nmnH.jpg"},
-    {"h": 20, "n": "DJCATY", "f": "https://xatimg.com/image/ZVQLMp2vI9Zm.jpg"},
-    {"h": 21, "n": "DJ TERRY", "f": "https://xatimg.com/image/RU5MssohaGWp.jpg"}
-  ],
-  "VENERDÌ": [
-    {"h": 19, "n": "DJ FAUSTO LIVE", "f": "https://xatimg.com/image/7n8KB4bgh2Ca.jpg"},
-    {"h": 20, "n": "DJ NIK", "f": "https://xatimg.com/image/KEw2nGF0jXil.jpg"},
-    {"h": 21, "n": "DJ MAURO", "f": "https://xatimg.com/image/9x9gFRDA5DQZ.jpg"}
-  ],
-  "SABATO": [
-    {"h": 19, "n": "DJ CETTY LIVE", "f": "https://xatimg.com/image/KoUkfS0jgMY6.jpg"},
-    {"h": 20, "n": "DJ PIERO", "f": "https://xatimg.com/image/nTn6R4SkLdbV.jpg"},
-    {"h": 21, "n": "DJ DARK", "f": "https://xatimg.com/image/B4Yd4xQrgmCc.png"}
-  ],
-  "DOMENICA": "RIPOSO"
-}
+// GESTIONE METADATI CON FORMATO: DJ GHOST | %artist% - %title%
+    async function updateTitleCover() {
+        try {
+            const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
+            const data = await res.json();
+            const rawTitle = data.title ? data.title.trim() : "DJ GHOST | ON AIR";
+            
+            // Mostra la stringa completa nel display scorrevole
+            document.getElementById('scroll-text').innerText = rawTitle.toUpperCase();
+
+            let djName = "DJ GHOST";
+            let songInfo = rawTitle;
+
+            // Se è presente il separatore della pipe "|"
+            if (rawTitle.includes("|")) {
+                const pipeParts = rawTitle.split("|");
+                djName = pipeParts[0].trim();
+                songInfo = pipeParts.slice(1).join("|").trim();
+            }
+
+            let artista = djName;
+            let canzone = songInfo;
+
+            // Se la parte del brano contiene " - " divide Artista e Titolo
+            if (songInfo.includes(" - ")) {
+                const dashParts = songInfo.split(" - ");
+                artista = dashParts[0].trim();
+                canzone = dashParts.slice(1).join(" - ").trim();
+            }
+
+            document.getElementById('artist').innerText = artista.toUpperCase();
+            document.getElementById('song').innerText = canzone.toUpperCase();
+
+            // Ricerca cover su iTunes API
+            if (artista && canzone && canzone !== "ON AIR") {
+                const cleanArtist = encodeURIComponent(artista.replace(/\[.*?\]|\(.*?\)/g, "").trim());
+                const cleanSong = encodeURIComponent(canzone.replace(/\[.*?\]|\(.*?\)/g, "").trim());
+                
+                const itunesRes = await fetch(`https://itunes.apple.com/search?term=${cleanArtist}+${cleanSong}&media=music&limit=1`);
+                const itunesData = await itunesRes.json();
+                
+                if (itunesData.resultCount > 0) {
+                    document.getElementById('album-art').src = itunesData.results[0].artworkUrl100.replace("100x100bb", "600x600bb");
+                    return;
+                }
+            }
+            
+            // Immagine predefinita di fallback
+            document.getElementById('album-art').src = "https://xatimg.com/image/or3rbqD5I3rS.png";
+        } catch(e) {
+            document.getElementById('scroll-text').innerText = "DJ GHOST - RADIO ON AIR";
+            document.getElementById('artist').innerText = "DJ GHOST";
+            document.getElementById('song').innerText = "ON AIR";
+            document.getElementById('album-art').src = "https://xatimg.com/image/or3rbqD5I3rS.png";
+        }
+    }
