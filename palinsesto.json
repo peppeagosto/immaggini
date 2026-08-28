@@ -200,7 +200,7 @@
         .titolo { background: var(--rb-text); -webkit-background-clip: text; color: transparent; font-size: 12px; font-weight: 900; text-transform: uppercase; }
         .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 4px 8px; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
         .ora { color: #0ff; font-size: 10px; width: 40px; text-align: center; font-weight: bold; }
-        .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; }
+        .foto { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; display: block; }
         .ruota-disco { animation: spin 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 12px #0f0; }
         .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; }
         .led-verde { width: 8px; height: 8px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 8px; box-shadow: 0 0 8px #0f0; animation: blink 0.8s infinite; }
@@ -272,7 +272,6 @@
 </div>
 
 <script>
-    // MOTORE AUDIO
     const audio = new Audio("https://stream.zeno.fm/ylkruiq5e4fvv");
     audio.crossOrigin = "anonymous";
     audio.volume = 0.8;
@@ -281,7 +280,6 @@
     let audioCtx, analyser, dataArray;
     let animId;
 
-    // COSTRUZIONE EQUALIZZATORE UI (12 BARRE)
     const eqContainer = document.getElementById('eq-display');
     for(let i = 0; i < 12; i++) {
         let bar = document.createElement('div');
@@ -294,7 +292,6 @@
         eqContainer.appendChild(bar);
     }
 
-    // PLAY
     async function playAudio() {
         if(!isPlaying){
             await audio.play().catch(()=>{});
@@ -318,7 +315,6 @@
         }
     }
 
-    // STOP
     function stopAudio() {
         if(isPlaying){
             audio.pause();
@@ -331,10 +327,8 @@
         }
     }
 
-    // VOLUME
     document.getElementById("vol").oninput = e => { audio.volume = e.target.value; };
 
-    // ANIMAZIONE EQUALIZZATORE E WOOFER
     function animaVisualizer() {
         if (!isPlaying) return;
         
@@ -370,7 +364,6 @@
         document.querySelectorAll('.eq-segment').forEach(s => s.className = 'eq-segment');
     }
 
-    // METADATI: GESTIONE FORMATO "DJ GHOST | %artist% - %title%"
     async function updateTitleCover() {
         try {
             const res = await fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv");
@@ -382,7 +375,6 @@
             let djName = "DJ GHOST";
             let songInfo = rawTitle;
 
-            // Se c'è la barra pipe "|" divide DJ e brano
             if (rawTitle.includes("|")) {
                 const pipeParts = rawTitle.split("|");
                 djName = pipeParts[0].trim();
@@ -392,7 +384,6 @@
             let artista = djName;
             let canzone = songInfo;
 
-            // Divide Artista - Canzone
             if (songInfo.includes(" - ")) {
                 const dashParts = songInfo.split(" - ");
                 artista = dashParts[0].trim();
@@ -402,7 +393,6 @@
             document.getElementById('artist').innerText = artista.toUpperCase();
             document.getElementById('song').innerText = canzone.toUpperCase();
 
-            // Ricerca iTunes Cover
             if (artista && canzone && canzone !== "ON AIR") {
                 const cleanArtist = encodeURIComponent(artista.replace(/\[.*?\]|\(.*?\)/g, "").trim());
                 const cleanSong = encodeURIComponent(canzone.replace(/\[.*?\]|\(.*?\)/g, "").trim());
@@ -426,11 +416,9 @@
     updateTitleCover();
     setInterval(updateTitleCover, 10000);
 
-    // PALINSESTO
     const giorni = ["DOMENICA", "LUNEDI", "MARTEDI", "MERCOLEDI", "GIOVEDI", "VENERDI", "SABATO"];
     const giorniAccenti = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
-    // Backup interno in caso GitHub non risponda
     let databaseTurni = {
         "LUNEDÌ": [{ "h": 14, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
         "MARTEDÌ": [{ "h": 15, "n": "DJ GHOST", "f": "https://xatimg.com/image/or3rbqD5I3rS.png" }],
@@ -474,6 +462,8 @@
         const container = $('#lista-dj').empty();
         const titoloLoc = $('#titolo-locandina');
 
+        const fallbackImg = "https://xatimg.com/image/or3rbqD5I3rS.png";
+
         let djsOggi = databaseTurni[nomeGiornoAccento] || databaseTurni[nomeGiorno];
         if (!djsOggi) {
             const giornoSenzaAccento = normalizzaNomeGiorno(nomeGiorno);
@@ -499,12 +489,12 @@
                 const eLive = (oraAttuale === djHour);
                 const classeGira = eLive ? "ruota-disco" : "";
                 const statusLed = eLive ? '<span class="led-verde"></span>' : (oraAttuale > djHour ? '<span class="led-rosso"></span>' : '');
-                const fotoUrl = dj.f ? dj.f : 'https://via.placeholder.com/45/333/fff?text=DJ';
+                const fotoUrl = (dj.f && dj.f.trim() !== "") ? dj.f.trim() : fallbackImg;
 
                 container.append(`
                     <div class="slot" style="${eLive ? 'border-color: #0f0; background: rgba(0,255,0,0.08);' : ''}">
                         <span class="ora">${djHour}:00</span>
-                        <img class="foto ${classeGira}" src="${fotoUrl}" onerror="this.src='https://via.placeholder.com/45/333/fff?text=DJ'">
+                        <img class="foto ${classeGira}" src="${fotoUrl}" onerror="this.onerror=null; this.src='${fallbackImg}';" alt="DJ">
                         <div class="nome">${dj.n} ${statusLed}</div>
                     </div>
                 `);
@@ -523,7 +513,6 @@
         $("#locandina").fadeOut(300); 
     });
 
-    // TEMI COLORI
     function setT(c) {
         const player = document.getElementById('player');
         if(c === 'rb') { 
@@ -534,7 +523,6 @@
         }
     }
 
-    // COPIA TITOLO
     function copySongInfo() {
         let textToCopy = document.getElementById('artist').innerText + " - " + document.getElementById('song').innerText;
         navigator.clipboard.writeText(textToCopy);
@@ -549,7 +537,6 @@
 
     setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('it-IT'); }, 1000);
 
-    // IP E METEO
     function fetchInfoLocale() {
         $.getJSON('https://ipwho.is/', function(data) {
             if (data && data.success) {
