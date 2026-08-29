@@ -8,11 +8,11 @@
         /* Aggiunto il blocco per non far evidenziare il testo col mouse */
         body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         
-        #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
+        /* Modificato qui: larghezza 180px e altezza 40px per farlo più piccolo e a riga singola */
+        #btn-pali { position: fixed; right: 20px; top: 60px; width: 180px; height: 40px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
         
-        .btn-text, #clicca-qui-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; }
-        .btn-text { font-size: 11px; }
-        #clicca-qui-text { font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
+        /* Modificato: unico testo pulsante */
+        .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 14px; letter-spacing: 1px; animation: pulse 1.5s infinite; }
         
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
         
@@ -37,7 +37,6 @@
         .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px;}
         .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
         
-        /* Modificato ancora un po' a dx e giu (top 85px, left 75px) */
         #box-cover270 { 
             position: fixed; top: 85px; left: 75px; pointer-events: auto; display: none; text-align: center; z-index: 999999;
         }
@@ -56,9 +55,9 @@
         <div id="nome-cover270"></div>
     </div>
 
+    <!-- Modificato qui in riga singola -->
     <div id="btn-pali">
-        <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
-        <div id="clicca-qui-text">CLICCA QUI</div>
+        <div class="btn-text">PALINSESTO DJ</div>
     </div>
 
     <div id="locandina">
