@@ -2,269 +2,294 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Palinsesto & On Air DJ</title>
+    <title>Palinsesto De Il Cartaio</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 15px;
-            background: #111;
-            font-family: Arial, sans-serif;
-            color: #fff;
+        :root { 
+            --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); 
+        }
+        body { 
+            background: transparent; 
+            margin: 0; 
+            font-family: 'Arial Black', sans-serif; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            pointer-events: none; 
+        }
+        
+        #btn-pali { 
+            position: fixed; 
+            right: 20px; 
+            top: 60px; 
+            width: 250px; 
+            height: 60px; 
+            background: #000; 
+            border: 2px solid #fff; 
+            border-radius: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            z-index: 999999; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.3); 
+            pointer-events: auto; 
+        }
+        
+        .btn-text, #clicca-qui-text { 
+            background: var(--rb); 
+            -webkit-background-clip: text; 
+            color: transparent; 
+            text-transform: uppercase; 
+            font-weight: 900; 
+        }
+        .btn-text { font-size: 11px; }
+        #clicca-qui-text { 
+            font-size: 14px; 
+            animation: pulse 1.5s infinite; 
+            letter-spacing: 2px; 
+            margin-top: 2px; 
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; transform: scale(1); } 
+            50% { opacity: 0.7; transform: scale(0.95); } 
+        }
+        
+        .led-verde { 
+            width: 10px; 
+            height: 10px; 
+            background-color: #0f0; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-left: 10px; 
+            box-shadow: 0 0 10px #0f0; 
+            animation: blink 0.8s infinite; 
+        }
+        .led-rosso { 
+            width: 10px; 
+            height: 10px; 
+            background-color: #f00; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-left: 10px; 
+            box-shadow: 0 0 8px #f00; 
+        }
+        @keyframes blink { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0; } 
+        }
+        
+        #locandina { 
+            display: none; 
+            position: fixed; 
+            right: 10px; 
+            top: 130px; 
+            width: 290px; 
+            background: #000; 
+            border: 3px solid #333; 
+            border-radius: 12px; 
+            padding: 10px; 
+            box-shadow: 0 0 50px #000; 
+            z-index: 999998; 
+            pointer-events: auto; 
+        }
+        .header { 
+            text-align: center; 
+            border-bottom: 2px solid #222; 
+            margin-bottom: 12px; 
+            padding-bottom: 8px; 
+        }
+        #giorno-live { 
+            color: #ffff00; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+        }
+        
+        .titolo, .testo-lama { 
+            background: var(--rb); 
+            -webkit-background-clip: text; 
+            color: transparent; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+        }
+        .titolo { font-size: 13px; }
+        
+        .slot { 
+            background: #0a0a0a; 
+            border: 1px solid #222; 
+            border-radius: 30px; 
+            margin-bottom: 6px; 
+            padding: 5px 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .slot.live-active {
+            border-color: #0f0;
+            background: #061806;
         }
 
-        /* Contenitore principale */
-        .widget-container {
-            max-width: 480px;
-            margin: 0 auto;
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            border: 1px solid #2a2a2a;
+        .foto { 
+            width: 44px; 
+            height: 44px; 
+            min-width: 44px;
+            border-radius: 50%; 
+            border: 2px solid #444; 
+            object-fit: cover; 
+            background: #222; 
+        }
+        
+        .ruota-disco { 
+            animation: rotate-disco 3s linear infinite !important; 
+            border-color: #0f0 !important; 
+            box-shadow: 0 0 12px #0f0; 
+        }
+        @keyframes rotate-disco { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
         }
 
-        /* Sezione ON AIR in alto */
-        .on-air-box {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid #333;
-        }
-
-        /* Cover tonda che gira a sinistra */
-        .cover-rotante {
-            width: 85px;
-            height: 85px;
-            min-width: 85px;
-            border-radius: 50%;
-            border: 2px solid #ff0055;
-            object-fit: cover;
-            animation: giraCover 8s linear infinite;
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
-        }
-
-        @keyframes giraCover {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .dj-info {
+        .info-slot {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            flex-grow: 1;
         }
-
-        .badge-live {
-            display: inline-block;
-            background: #ff0055;
-            color: #fff;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 4px;
-            width: fit-content;
-            letter-spacing: 1px;
+        .ora { 
+            color: #0ff; 
+            font-size: 10px; 
+            font-weight: bold; 
         }
-
-        .dj-nome {
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .dj-orario {
-            font-size: 13px;
-            color: #aaa;
-        }
-
-        /* Sezione Locandina Palinsesto */
-        .palinsesto-box {
-            margin-top: 14px;
-        }
-
-        .palinsesto-titolo {
-            font-size: 14px;
-            font-weight: bold;
-            color: #00d2ff;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .turni-lista {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .turno-riga {
-            display: flex;
-            align-items: center;
+        .nome { 
+            color: #ff00ff; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            font-weight: 900; 
+            display: flex; 
+            align-items: center; 
             justify-content: space-between;
-            background: #242424;
-            padding: 7px 10px;
-            border-radius: 6px;
-            font-size: 13px;
         }
-
-        .turno-riga.in-onda {
-            background: #ff005522;
-            border: 1px solid #ff0055;
-            font-weight: bold;
-        }
-
-        .turno-ora {
-            color: #aaa;
-            font-weight: bold;
-        }
-
-        .turno-riga.in-onda .turno-ora {
-            color: #ff0055;
-        }
-
-        .turno-dj {
-            color: #fff;
+        .testo-lama { 
+            font-size: 13px; 
+            text-align: center; 
+            padding: 20px 5px; 
+            display: block; 
+            letter-spacing: 0.5px; 
+            line-height: 1.4; 
         }
     </style>
 </head>
 <body>
 
-<div class="widget-container">
-    <!-- Box In Onda con Cover Rotante a SX -->
-    <div class="on-air-box">
-        <img id="coverDJ" class="cover-rotante" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
-        <div class="dj-info">
-            <span class="badge-live" id="badgeStato">ON AIR</span>
-            <div id="nomeDJ" class="dj-nome">CARICAMENTO...</div>
-            <div id="orarioDJ" class="dj-orario">--:--</div>
-        </div>
+    <div id="btn-pali">
+        <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
+        <div id="clicca-qui-text">CLICCA QUI</div>
     </div>
 
-    <!-- Locandina Turni del Giorno -->
-    <div class="palinsesto-box">
-        <div class="palinsesto-titolo" id="titoloGiorno">PALINSESTO DI OGGI</div>
-        <div class="turni-lista" id="listaTurni">
-            <!-- I turni vengono inseriti in automatico dallo script -->
+    <div id="locandina">
+        <div class="header">
+            <span id="giorno-live">---</span>
+            <div class="titolo" id="titolo-locandina">DIRETTE RADIO LIVE</div>
         </div>
+        <div id="lista-dj"></div>
     </div>
-</div>
 
 <script>
-const turni = {
-    "LUNEDÌ": [
-        {"h": 19, "n": "DJ ROSY", "f": "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
-        {"h": 20, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-        {"h": 21, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-        {"h": 22, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-        {"h": 23, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"}
-    ],
-    "MARTEDÌ": [
-        {"h": 19, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-        {"h": 20, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-        {"h": 21, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-        {"h": 22, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"},
-        {"h": 23, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"}
-    ],
-    "MERCOLEDÌ": [
-        {"h": 19, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-        {"h": 20, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-        {"h": 21, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-        {"h": 22, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-        {"h": 23, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"}
-    ],
-    "GIOVEDÌ": [
-        {"h": 19, "n": "DJ ROSY", "f": "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
-        {"h": 20, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-        {"h": 21, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-        {"h": 22, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-        {"h": 23, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"}
-    ],
-    "VENERDÌ": [
-        {"h": 19, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-        {"h": 20, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-        {"h": 21, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-        {"h": 22, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-        {"h": 23, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"}
-    ],
-    "SABATO": [
-        {"h": 19, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-        {"h": 20, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-        {"h": 21, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"},
-        {"h": 22, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-        {"h": 23, "n": "DJ ROBERTA", "f": "https://xatimg.com/image/DYidsujYf2BT.jpg"}
-    ],
-    "DOMENICA": "RIPOSO"
-};
+    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-function aggiornaTutto() {
-    const giorniSettimana = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-    const now = new Date();
-    const giornoNome = giorniSettimana[now.getDay()];
-    const oraAttuale = now.getHours();
+    const turni = {
+        "LUNEDÌ": [
+            {h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
+            {h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+        ],
+        "MARTEDÌ": [
+            {h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
+            {h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg"},
+            {h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"}
+        ],
+        "MERCOLEDÌ": [
+            {h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+        ],
+        "GIOVEDÌ": [
+            {h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
+            {h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg"}
+        ],
+        "VENERDÌ": [
+            {h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
+            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+        ],
+        "SABATO": [
+            {h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
+            {h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"},
+            {h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg"}
+        ],
+        "DOMENICA": "RIPOSO"
+    };
 
-    const coverElem = document.getElementById("coverDJ");
-    const nomeElem = document.getElementById("nomeDJ");
-    const orarioElem = document.getElementById("orarioDJ");
-    const badgeElem = document.getElementById("badgeStato");
-    const titoloElem = document.getElementById("titoloGiorno");
-    const listaElem = document.getElementById("listaTurni");
+    function aggiornaLive() {
+        const d = new Date();
+        const oggi = giorni[d.getDay()];
+        let oraAttuale = d.getHours();
+        
+        $('#giorno-live').text(oggi);
+        const container = $('#lista-dj').empty();
+        const djsOggi = turni[oggi];
+        const titoloLoc = $('#titolo-locandina');
 
-    const defaultCover = "https://xatimg.com/image/RrNrzPFPVBwN.png";
-    const palinsestoOggi = turni[giornoNome];
-
-    titoloElem.innerText = `PROGRAMMAZIONE DI ${giornoNome}`;
-    listaElem.innerHTML = "";
-
-    if (Array.isArray(palinsestoOggi)) {
-        // Trova il DJ in onda ora
-        const inOnda = palinsestoOggi.find(t => t.h === oraAttuale);
-
-        if (inOnda) {
-            coverElem.src = inOnda.f;
-            nomeElem.innerText = inOnda.n;
-            orarioElem.innerText = `Dalle ${inOnda.h}:00 alle ${inOnda.h + 1}:00`;
-            badgeElem.innerText = "ON AIR";
-            badgeElem.style.background = "#ff0055";
+        if (oggi === "DOMENICA" || djsOggi === "RIPOSO") {
+            titoloLoc.hide();
+            container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
         } else {
-            coverElem.src = defaultCover;
-            nomeElem.innerText = "AUTO DJ - ROTAZIONE";
-            orarioElem.innerText = "Nessuna diretta al momento";
-            badgeElem.innerText = "NON STOP";
-            badgeElem.style.background = "#555";
+            titoloLoc.show();
+            if (Array.isArray(djsOggi)) {
+                djsOggi.forEach((dj) => {
+                    let eLive = (oraAttuale === dj.h);
+                    let classeGira = eLive ? "ruota-disco" : "";
+                    let classeSlot = eLive ? "slot live-active" : "slot";
+                    let statusLed = eLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
+                    
+                    container.append(`
+                        <div class="${classeSlot}">
+                            <img class="foto ${classeGira}" src="${dj.f}" onerror="this.src='https://xatimg.com/image/RrNrzPFPVBwN.png'">
+                            <div class="info-slot">
+                                <span class="ora">${dj.h}:00 - ${dj.h + 1}:00</span>
+                                <div class="nome">
+                                    <span>${dj.n}</span>
+                                    ${statusLed}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
         }
-
-        // Genera la locandina dei turni
-        palinsestoOggi.forEach(t => {
-            const isCurrent = (t.h === oraAttuale);
-            const riga = document.createElement("div");
-            riga.className = `turno-riga ${isCurrent ? 'in-onda' : ''}`;
-            riga.innerHTML = `
-                <span class="turno-ora">${t.h}:00 - ${t.h + 1}:00</span>
-                <span class="turno-dj">${t.n} ${isCurrent ? '🔴 LIVE' : ''}</span>
-            `;
-            listaElem.appendChild(riga);
-        });
-
-    } else {
-        // Giorno di riposo (Domenica)
-        coverElem.src = defaultCover;
-        nomeElem.innerText = "MUSICA NON STOP";
-        orarioElem.innerText = "Giorno di Riposo";
-        badgeElem.innerText = "AUTO DJ";
-        badgeElem.style.background = "#555";
-
-        listaElem.innerHTML = '<div class="turno-riga" style="justify-content: center; color: #888;">OGGI NESSUNA DIRETTA - ROTAZIONE CONTINUA</div>';
     }
-}
 
-// Avvio immediato e controllo ogni 30 secondi
-aggiornaTutto();
-setInterval(aggiornaTutto, 30000);
+    $('#btn-pali').on('click', function() { 
+        $('#locandina').fadeToggle(200); 
+    });
+
+    setInterval(aggiornaLive, 10000);
+    aggiornaLive();
 </script>
-
 </body>
 </html>
