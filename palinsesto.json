@@ -64,61 +64,63 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
+    // I 10 link perfetti
     const img = [
-        "https://xatimg.com/image/pORicTZi3lhE.jpg", // 0
-        "https://xatimg.com/image/9EUxzchBUN3A.jpg", // 1
-        "https://xatimg.com/image/zC9XQHm7xHte.jpg", // 2
-        "https://xatimg.com/image/HnHeYw6n4jj3.jpg", // 3
-        "https://xatimg.com/image/X7febOvNHs96.jpg", // 4
-        "https://xatimg.com/image/DYidsujYf2BT.jpg", // 5
-        "https://xatimg.com/image/DsFXMhIKnNDE.jpg", // 6
-        "https://xatimg.com/image/4Fa39NYJYZUF.jpg", // 7
-        "https://xatimg.com/image/5vCvkJiVlHWF.jpg", // 8
-        "https://xatimg.com/image/RrNrzPFPVBwN.png"  // 9
+        "https://xatimg.com/image/pORicTZi3lhE.jpg", // 0 = NIKITA
+        "https://xatimg.com/image/9EUxzchBUN3A.jpg", // 1 = TOTTI
+        "https://xatimg.com/image/zC9XQHm7xHte.jpg", // 2 = CLAUDIA
+        "https://xatimg.com/image/HnHeYw6n4jj3.jpg", // 3 = SIMONA
+        "https://xatimg.com/image/X7febOvNHs96.jpg", // 4 = STEFANY
+        "https://xatimg.com/image/DYidsujYf2BT.jpg", // 5 = ROBERTO
+        "https://xatimg.com/image/DsFXMhIKnNDE.jpg", // 6 = ALESSIA
+        "https://xatimg.com/image/4Fa39NYJYZUF.jpg", // 7 = GENNY
+        "https://xatimg.com/image/5vCvkJiVlHWF.jpg", // 8 = MERY
+        "https://xatimg.com/image/RrNrzPFPVBwN.png"  // 9 = CARTAIO
     ];
 
+    // Palinsesto con i 10 DJ che ruotano sui tuoi orari
     const databaseTurni = {
         "LUNEDÌ": [
-            {h:18, n:"DJ CARLA", f:"METTI_QUI_FOTO_CARLA"}, 
-            {h:19, n:"DJ SOFIA", f:"METTI_QUI_FOTO_SOFIA"}, 
-            {h:20, n:"DJ LUCIA", f:"METTI_QUI_FOTO_LUCIA"}, 
-            {h:21, n:"DJ GIULIA", f:"METTI_QUI_FOTO_GIULIA"}
+            {h:18, n:"DJ NIKITA",  f:img[0]}, 
+            {h:19, n:"DJ TOTTI",   f:img[1]}, 
+            {h:20, n:"DJ CLAUDIA", f:img[2]}, 
+            {h:21, n:"DJ SIMONA",  f:img[3]}
         ],
         "MARTEDÌ": [
-            {h:17, n:"DJ MARCO", f:"METTI_QUI_FOTO_MARCO"}, 
-            {h:18, n:"DJ ELENA", f:"METTI_QUI_FOTO_ELENA"}, 
-            {h:19, n:"DJ NELLY", f:"METTI_QUI_FOTO_NELLY"}, 
-            {h:20, n:"DJ SARA", f:"METTI_QUI_FOTO_SARA"}, 
-            {h:21, n:"DJ PAOLA", f:"METTI_QUI_FOTO_PAOLA"}
+            {h:17, n:"DJ STEFANY", f:img[4]}, 
+            {h:18, n:"DJ ROBERTO", f:img[5]}, 
+            {h:19, n:"DJ ALESSIA", f:img[6]}, 
+            {h:20, n:"DJ GENNY",   f:img[7]}, 
+            {h:21, n:"DJ MERY",    f:img[8]}
         ],
         "MERCOLEDÌ": [
-            {h:18, n:"DJ VALENTINA", f:"METTI_QUI_FOTO_VALENTINA"}, 
-            {h:19, n:"DJ FABIO", f:"METTI_QUI_FOTO_FABIO"}, 
-            {h:20, n:"DJ CHIARA", f:"METTI_QUI_FOTO_CHIARA"}, 
-            {h:21, n:"DJ MILENA", f:"METTI_QUI_FOTO_MILENA"}
+            {h:18, n:"DJ CARTAIO", f:img[9]}, 
+            {h:19, n:"DJ NIKITA",  f:img[0]}, 
+            {h:20, n:"DJ TOTTI",   f:img[1]}, 
+            {h:21, n:"DJ CLAUDIA", f:img[2]}
         ],
         "GIOVEDÌ": [
-            {h:17, n:"DJ MARTINA", f:"METTI_QUI_FOTO_MARTINA"}, 
-            {h:18, n:"DJ GIOVANNI", f:"METTI_QUI_FOTO_GIOVANNI"}, 
-            {h:19, n:"DJ FEDERICA", f:"METTI_QUI_FOTO_FEDERICA"}, 
-            {h:20, n:"DJ ORCHIDEA", f:"METTI_QUI_FOTO_ORCHIDEA"}, 
-            {h:21, n:"DJ BEATRICE", f:"METTI_QUI_FOTO_BEATRICE"}
+            {h:17, n:"DJ SIMONA",  f:img[3]}, 
+            {h:18, n:"DJ STEFANY", f:img[4]}, 
+            {h:19, n:"DJ ROBERTO", f:img[5]}, 
+            {h:20, n:"DJ ALESSIA", f:img[6]}, 
+            {h:21, n:"DJ GENNY",   f:img[7]}
         ],
         "VENERDÌ": [
-            {h:18, n:"DJ CETTY", f:"METTI_QUI_FOTO_CETTY"}, 
-            {h:19, n:"DJ ANNA", f:"METTI_QUI_FOTO_ANNA"}, 
-            {h:20, n:"DJ PIERA", f:"METTI_QUI_FOTO_PIERA"}, 
-            {h:21, n:"DJ SILVIA", f:"METTI_QUI_FOTO_SILVIA"}
+            {h:18, n:"DJ MERY",    f:img[8]}, 
+            {h:19, n:"DJ CARTAIO", f:img[9]}, 
+            {h:20, n:"DJ NIKITA",  f:img[0]}, 
+            {h:21, n:"DJ TOTTI",   f:img[1]}
         ],
         "SABATO": [
-            {h:10, n:"DJ NIKYTA",  f:"https://xatimg.com/image/IqDWKCvkbBqc.jpg"},
-            {h:11, n:"DJ MERY",    f:"https://xatimg.com/image/hKznM6ZtpZxW.png"},
-            {h:12, n:"DJ GENNY",   f:"https://xatimg.com/image/9fPNsTiq1w4d.jpg"},
-            {h:17, n:"DJ CLAUDIA", f:img[2]}, 
-            {h:18, n:"DJ SIMONA",  f:img[3]}, 
-            {h:19, n:"DJ STEFANY", f:img[4]}, 
-            {h:20, n:"DJ ROBERTO", f:img[5]}, 
-            {h:21, n:"DJ ALESSIA", f:img[6]}
+            {h:10, n:"DJ CLAUDIA", f:img[2]},
+            {h:11, n:"DJ SIMONA",  f:img[3]},
+            {h:12, n:"DJ STEFANY", f:img[4]},
+            {h:17, n:"DJ ROBERTO", f:img[5]}, 
+            {h:18, n:"DJ ALESSIA", f:img[6]}, 
+            {h:19, n:"DJ GENNY",   f:img[7]}, 
+            {h:20, n:"DJ MERY",    f:img[8]}, 
+            {h:21, n:"DJ CARTAIO", f:img[9]}
         ],
         "DOMENICA": "RIPOSO"
     };
