@@ -202,17 +202,17 @@
         .eq-segment.active-yellow { background: #fffb00; box-shadow: 0 0 5px #fffb00; }
         .eq-segment.active-red { background: #ff0055; box-shadow: 0 0 5px #ff0055; }
         
-        /* LOCANDINA INTEGRATA PALINSESTO */
+        /* LOCANDINA POPUP PALINSESTO */
         #locandina {
             display: none; 
             position: absolute; 
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            width: 330px; 
+            width: 340px; 
             max-height: 520px; 
             overflow-y: auto; 
-            background: rgba(10, 10, 15, 0.98); 
+            background: rgba(8, 8, 12, 0.98); 
             border: 3px solid var(--accent); 
             border-radius: 25px; 
             padding: 15px; 
@@ -234,7 +234,6 @@
             display: flex; 
             align-items: center; 
             gap: 10px;
-            transition: 0.3s ease;
         }
         .ora { color: #0ff; font-size: 11px; width: 45px; text-align: center; font-weight: bold; }
         .foto { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; }
@@ -265,6 +264,7 @@
         <div class="box copyable" onclick="copySongInfo()"><h4>SONG</h4><span id="song">STREAMING</span></div>
     </div>
     
+    <!-- VINILE CENTRALE DA 270PX DOVE RUOTA IL DJ IN ONDA -->
     <div class="turntable">
         <div class="vinyl" id="v-box"><img id="album-art" src="https://xatimg.com/image/or3rbqD5I3rS.png" alt="Cover"></div>
         <div id="arm" class="arm"></div>
@@ -300,7 +300,6 @@
     
     <div class="eq-container" id="eq-display"></div>
     
-    <!-- POPUP PALINSESTO -->
     <div id="locandina">
         <div class="header">
             <span id="close-pali">&times;</span>
@@ -321,7 +320,7 @@
     audio.preload = "none";
     let isPlaying = false;
 
-    // DATABASE FOTO E TURNI DJ
+    // FOTO DEI DJ
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     const img = [
         "https://xatimg.com/image/pORicTZi3lhE.jpg", // 0 = NIKITA
@@ -336,6 +335,7 @@
         "https://xatimg.com/image/RrNrzPFPVBwN.png"  // 9 = NIKA / CARTAIO
     ];
 
+    // TURNI DELLA SETTIMANA
     const databaseTurni = {
         "LUNEDÌ": [
             {h:18, n:"DJ NIKITA",  f:img[0]}, 
@@ -382,11 +382,9 @@
         "DOMENICA": "RIPOSO"
     };
 
-    // CONTROLLI PLAY / STOP
     function play() {
         audio.src = streamUrl;
         audio.load();
-        
         let p = audio.play();
         if (p !== undefined) {
             p.then(() => {
@@ -416,9 +414,7 @@
     }
 
     const volSlider = document.getElementById('vol');
-    volSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
-    });
+    volSlider.addEventListener('input', (e) => { audio.volume = e.target.value; });
 
     function setT(colore) {
         const chassis = document.getElementById('player');
@@ -482,7 +478,7 @@
         }, 80);
     }
 
-    // CONTROLLO DJ IN DIRETTA E COSTRUZIONE LOCANDINA
+    // CONTROLLO FOTO SUL VINILE E PALINSESTO
     function aggiornaLiveDj() {
         const d = new Date();
         const oggi = giorni[d.getDay()];
@@ -512,7 +508,7 @@
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
                     
-                    // Se c'è un DJ in diretta, imposta la sua foto sul vinile centrale
+                    // Se il DJ è in turno, la sua foto compare sul vinile da 270px
                     if (èLive) {
                         $('#album-art').attr('src', dj.f);
                         isDjLiveCurrently = true;
@@ -529,7 +525,7 @@
         }
     }
 
-    // LETTURA TITOLI STREAM E RECUPERO COVER ITUNES (SE NON C'È DJ IN DIRETTA)
+    // LETTURA METADATI
     function getRealTimeTitleAndCover() {
         $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(d) {
             if(d && d.songtitle) {
@@ -548,7 +544,7 @@
                         $('#song').text(currentTitle.toUpperCase());
                     }
 
-                    // Se non c'è un DJ in diretta, mostra la cover della canzone da iTunes
+                    // Se non c'è un DJ in onda in quella fascia oraria, carica la copertina del brano da iTunes
                     if (!isDjLiveCurrently) {
                         let searchQuery = encodeURIComponent(currentTitle);
                         $.getJSON(`https://itunes.apple.com/search?term=${searchQuery}&media=music&limit=1`, function(data) {
@@ -570,7 +566,6 @@
         });
     }
 
-    // METEO E LOCALITÀ
     function updateWeatherReal() {
         $.getJSON('https://get.geojs.io/v1/ip/geo.json', d => {
             if (d && d.ip) $('#v_ip').text(d.ip);
@@ -599,7 +594,6 @@
         }, 8000);
     });
 
-    // APERTURA / CHIUSURA LOCANDINA
     $('#btn-pali').on('click', function() { $('#locandina').fadeIn(200); });
     $('#close-pali').on('click', function() { $('#locandina').fadeOut(200); });
 
