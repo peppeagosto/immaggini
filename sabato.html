@@ -5,7 +5,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
-        body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        /* Aggiunto il blocco per non far evidenziare il testo col mouse */
+        body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         
         #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
         
@@ -36,8 +37,9 @@
         .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px;}
         .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
         
+        /* Modificato ancora un po' a dx e giu (top 85px, left 75px) */
         #box-cover270 { 
-            position: fixed; top: 70px; left: 65px; pointer-events: auto; display: none; text-align: center; z-index: 999999;
+            position: fixed; top: 85px; left: 75px; pointer-events: auto; display: none; text-align: center; z-index: 999999;
         }
         #cover270 { 
             width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #0f0; box-shadow: 0 0 15px #0f0; animation: rotate-disco 4s linear infinite; 
@@ -68,116 +70,7 @@
     </div>
 
 <script>
-    // IL LINK DELLA TUA RADIO SHOUTCAST
-    const URL_RADIO = "https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";
-
-    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-    
-    const djs = [
-        { nome: "DJ NIKITA",  foto: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, 
-        { nome: "DJ TOTTI",   foto: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, 
-        { nome: "DJ CLAUDIA", foto: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, 
-        { nome: "DJ SIMONA",  foto: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, 
-        { nome: "DJ STEFANY", foto: "https://xatimg.com/image/X7febOvNHs96.jpg" }, 
-        { nome: "DJ ROBERTO", foto: "https://xatimg.com/image/DYidsujYf2BT.jpg" }, 
-        { nome: "DJ ALESSIA", foto: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, 
-        { nome: "DJ GENNY",   foto: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, 
-        { nome: "DJ MERY",    foto: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, 
-        { nome: "DJ CARTAIO", foto: "https://xatimg.com/image/RrNrzPFPVBwN.png" }  
-    ];
-
-    const databaseTurni = {
-        "LUNEDÌ": [ {h:18, dj: djs[0]}, {h:19, dj: djs[1]}, {h:20, dj: djs[2]}, {h:21, dj: djs[3]} ],
-        "MARTEDÌ": [ {h:17, dj: djs[4]}, {h:18, dj: djs[5]}, {h:19, dj: djs[6]}, {h:20, dj: djs[7]}, {h:21, dj: djs[8]} ],
-        "MERCOLEDÌ": [ {h:18, dj: djs[9]}, {h:19, dj: djs[0]}, {h:20, dj: djs[1]}, {h:21, dj: djs[2]} ],
-        "GIOVEDÌ": [ {h:17, dj: djs[3]}, {h:18, dj: djs[4]}, {h:19, dj: djs[5]}, {h:20, dj: djs[6]}, {h:21, dj: djs[7]} ],
-        "VENERDÌ": [ {h:18, dj: djs[8]}, {h:19, dj: djs[9]}, {h:20, dj: djs[0]}, {h:21, dj: djs[1]} ],
-        "SABATO": [
-            {h:10, dj: djs[2]}, {h:11, dj: djs[3]}, {h:12, dj: djs[4]}, {h:13, dj: djs[0]}, 
-            {h:14, dj: djs[1]}, {h:17, dj: djs[5]}, {h:18, dj: djs[6]}, {h:19, dj: djs[7]}, 
-            {h:20, dj: djs[8]}, {h:21, dj: djs[9]}
-        ],
-        "DOMENICA": "RIPOSO"
-    };
-
-    function processaInterfaccia(djServerReale) {
-        const d = new Date();
-        const oggi = giorni[d.getDay()];
-        
-        $('#giorno-live').text(oggi);
-        const container = $('#lista-dj').empty();
-        const djsOggi = databaseTurni[oggi];
-        const titoloLoc = $('#titolo-locandina');
-        
-        let coverTrovata = false;
-
-        if (oggi === "DOMENICA" || djsOggi === "RIPOSO") {
-            titoloLoc.hide();
-            container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
-            $('#box-cover270').hide();
-        } else {
-            titoloLoc.show();
-            if (Array.isArray(djsOggi)) {
-                
-                djsOggi.forEach((turno) => {
-                    let èLive = false;
-
-                    // UNICA REGOLA: Si accende SOLO se il DJ è effettivamente letto dal server radio
-                    if (djServerReale && turno.dj.nome === djServerReale) {
-                        èLive = true;
-                    } 
-
-                    let classeGira = èLive ? "ruota-disco" : "";
-                    let statusLed = èLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
-                    
-                    if (èLive) {
-                        $('#cover270').attr('src', turno.dj.foto); 
-                        $('#nome-cover270').text(turno.dj.nome + " IN ONDA");
-                        $('#box-cover270').fadeIn();
-                        coverTrovata = true;
-                    }
-                    
-                    container.append(`
-                        <div class="slot">
-                            <span class="ora">${turno.h}:00</span>
-                            <img class="foto ${classeGira}" src="${turno.dj.foto}" onerror="this.src='https://xatimg.com/image/or3rbqD5I3rS.png'">
-                            <div class="nome"><span>${turno.dj.nome}</span> ${statusLed}</div>
-                        </div>`);
-                });
-                
-                // Se non c'è nessuna diretta reale in corso, nascondi la foto grande in alto
-                if(!coverTrovata) { 
-                    $('#box-cover270').hide();
-                }
-            }
-        }
-    }
-
-    function aggiornaLiveDaServer() {
-        $.getJSON(URL_RADIO, function(data) {
-            let infoServer = "";
-            let djReale = null;
-            
-            if(data.servertitle) infoServer += data.servertitle.toUpperCase() + " ";
-            if(data.songtitle) infoServer += data.songtitle.toUpperCase();
-
-            djs.forEach(dj => {
-                if (infoServer.includes(dj.nome)) {
-                    djReale = dj.nome;
-                }
-            });
-
-            processaInterfaccia(djReale);
-
-        }).fail(function() {
-            processaInterfaccia(null); // Server irraggiungibile = niente diretta mostrata
-        });
-    }
-
-    $('#btn-pali').on('click', function() { $('#locandina').toggle(); });
-    
-    setInterval(aggiornaLiveDaServer, 10000); 
-    aggiornaLiveDaServer();
+const URL_RADIO="https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";const giorni=["DOMENICA","LUNEDÌ","MARTEDÌ","MERCOLEDÌ","GIOVEDÌ","VENERDÌ","SABATO"];const djs=[{nome:"DJ NIKITA",foto:"https://xatimg.com/image/pORicTZi3lhE.jpg"},{nome:"DJ TOTTI",foto:"https://xatimg.com/image/9EUxzchBUN3A.jpg"},{nome:"DJ CLAUDIA",foto:"https://xatimg.com/image/zC9XQHm7xHte.jpg"},{nome:"DJ SIMONA",foto:"https://xatimg.com/image/HnHeYw6n4jj3.jpg"},{nome:"DJ STEFANY",foto:"https://xatimg.com/image/X7febOvNHs96.jpg"},{nome:"DJ ROBERTO",foto:"https://xatimg.com/image/DYidsujYf2BT.jpg"},{nome:"DJ ALESSIA",foto:"https://xatimg.com/image/DsFXMhIKnNDE.jpg"},{nome:"DJ GENNY",foto:"https://xatimg.com/image/4Fa39NYJYZUF.jpg"},{nome:"DJ MERY",foto:"https://xatimg.com/image/5vCvkJiVlHWF.jpg"},{nome:"DJ CARTAIO",foto:"https://xatimg.com/image/RrNrzPFPVBwN.png"}];const databaseTurni={"LUNEDÌ":[{h:18,dj:djs[0]},{h:19,dj:djs[1]},{h:20,dj:djs[2]},{h:21,dj:djs[3]}],"MARTEDÌ":[{h:17,dj:djs[4]},{h:18,dj:djs[5]},{h:19,dj:djs[6]},{h:20,dj:djs[7]},{h:21,dj:djs[8]}],"MERCOLEDÌ":[{h:18,dj:djs[9]},{h:19,dj:djs[0]},{h:20,dj:djs[1]},{h:21,dj:djs[2]}],"GIOVEDÌ":[{h:17,dj:djs[3]},{h:18,dj:djs[4]},{h:19,dj:djs[5]},{h:20,dj:djs[6]},{h:21,dj:djs[7]}],"VENERDÌ":[{h:18,dj:djs[8]},{h:19,dj:djs[9]},{h:20,dj:djs[0]},{h:21,dj:djs[1]}],"SABATO":[{h:10,dj:djs[2]},{h:11,dj:djs[3]},{h:12,dj:djs[4]},{h:13,dj:djs[0]},{h:14,dj:djs[1]},{h:17,dj:djs[5]},{h:18,dj:djs[6]},{h:19,dj:djs[7]},{h:20,dj:djs[8]},{h:21,dj:djs[9]}],"DOMENICA":"RIPOSO"};function processaInterfaccia(e){const o=new Date,t=giorni[o.getDay()];$("#giorno-live").text(t);const a=$("#lista-dj").empty(),s=databaseTurni[t],i=$("#titolo-locandina");let n=!1;if("DOMENICA"===t||"RIPOSO"===s){i.hide();a.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');$("#box-cover270").hide()}else{i.show();if(Array.isArray(s)){s.forEach((o=>{let t=!1;if(e&&o.dj.nome===e){t=!0}let s=t?"ruota-disco":"",i=t?'<span class="led-verde"></span>':'<span class="led-rosso"></span>';if(t){$("#cover270").attr("src",o.dj.foto);$("#nome-cover270").text(o.dj.nome+" IN ONDA");$("#box-cover270").fadeIn();n=!0}a.append(`<div class="slot"><span class="ora">${o.h}:00</span><img class="foto ${s}" src="${o.dj.foto}" onerror="this.src='https://xatimg.com/image/or3rbqD5I3rS.png'"><div class="nome"><span>${o.dj.nome}</span> ${i}</div></div>`)}));if(!n){$("#box-cover270").hide()}}}}function aggiornaLiveDaServer(){$.getJSON(URL_RADIO,(e=>{let o="",t=null;if(e.servertitle)o+=e.servertitle.toUpperCase()+" ";if(e.songtitle)o+=e.songtitle.toUpperCase();djs.forEach((e=>{if(o.includes(e.nome)){t=e.nome}}));processaInterfaccia(t)})).fail((function(){processaInterfaccia(null)}))}$("#btn-pali").on("click",(function(){$("#locandina").toggle()}));setInterval(aggiornaLiveDaServer,10000);aggiornaLiveDaServer();document.addEventListener("contextmenu",e=>e.preventDefault());document.onkeydown=function(e){if(123==e.keyCode)return!1;if(e.ctrlKey&&e.shiftKey&&e.keyCode=="I".charCodeAt(0))return!1;if(e.ctrlKey&&e.shiftKey&&e.keyCode=="C".charCodeAt(0))return!1;if(e.ctrlKey&&e.shiftKey&&e.keyCode=="J".charCodeAt(0))return!1;if(e.ctrlKey&&e.keyCode=="U".charCodeAt(0))return!1;if(e.ctrlKey&&e.keyCode=="S".charCodeAt(0))return!1};
 </script>
 </body>
 </html>
