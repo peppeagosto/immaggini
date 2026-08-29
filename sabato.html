@@ -39,8 +39,8 @@
         /* Stile per la Cover (In alto a sinistra per Xat) */
         #box-cover270 { 
             position: fixed;
-            top: 30px;  /* MODIFICATO: Spostato poco poco giù (prima era 20px) */
-            left: 45px; /* MODIFICATO: Spostato di poco a destra (prima era 20px) */
+            top: 30px;  
+            left: 45px; 
             pointer-events: auto; 
             display: none; 
             text-align: center; 
@@ -88,6 +88,9 @@
     </div>
 
 <script>
+    // Link della tua Radio Shoutcast
+    const URL_RADIO = "https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";
+
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
     const djs = [
@@ -134,7 +137,7 @@
         "DOMENICA": "RIPOSO"
     };
 
-    function aggiornaLive() {
+    function processaInterfaccia(djDalServer) {
         const d = new Date();
         const oggi = giorni[d.getDay()];
         let oraAttuale = d.getHours();
@@ -153,13 +156,21 @@
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
-                let qualcunoLive = djsOggi.some(turno => turno.h === oraAttuale);
+                let qualcunoLiveDaOrario = djsOggi.some(turno => turno.h === oraAttuale);
                 
                 djsOggi.forEach((turno, index) => {
-                    let èLive = (oraAttuale === turno.h);
-                    
-                    if (!qualcunoLive && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
-                    if (!qualcunoLive && oraAttuale < 9 && index === 0) èLive = true;
+                    let èLive = false;
+
+                    // 1. Controlla se il server radio trasmette il nome di questo DJ
+                    if (djDalServer && turno.dj.nome === djDalServer) {
+                        èLive = true;
+                    } 
+                    // 2. Se non c'è nessun nome dal server, usa l'orologio come piano B
+                    else if (!djDalServer) {
+                        if (oraAttuale === turno.h) èLive = true;
+                        if (!qualcunoLiveDaOrario && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
+                        if (!qualcunoLiveDaOrario && oraAttuale < 9 && index === 0) èLive = true;
+                    }
 
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
@@ -179,16 +190,43 @@
                         </div>`);
                 });
                 
-                if(!coverTrovata && oraAttuale >= 9 && oraAttuale <= 21) { 
+                if(!coverTrovata) { 
                     $('#box-cover270').hide();
                 }
             }
         }
     }
 
+    function controllaRadio() {
+        $.getJSON(URL_RADIO, function(data) {
+            let stringaServer = "";
+            let djReale = null;
+            
+            // Unisce il titolo della regia e il titolo della canzone
+            if(data.servertitle) stringaServer += data.servertitle.toUpperCase() + " ";
+            if(data.songtitle) stringaServer += data.songtitle.toUpperCase();
+
+            // Cerca se uno dei DJ è menzionato nel titolo
+            djs.forEach(dj => {
+                if (stringaServer.includes(dj.nome)) {
+                    djReale = dj.nome; // Trovato il DJ in onda!
+                }
+            });
+
+            // Aggiorna la grafica
+            processaInterfaccia(djReale);
+
+        }).fail(function() {
+            // Se la radio è spenta, usa l'orologio
+            processaInterfaccia(null);
+        });
+    }
+
     $('#btn-pali').on('click', function() { $('#locandina').toggle(); });
-    setInterval(aggiornaLive, 10000); 
-    aggiornaLive();
+    
+    // Controlla la radio ogni 10 secondi
+    setInterval(controllaRadio, 10000); 
+    controllaRadio();
 </script>
 </body>
 </html>
