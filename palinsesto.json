@@ -38,7 +38,7 @@
         .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
 
         /* Stile per la Cover 270 */
-        #box-cover270 { margin-top: 50px; pointer-events: auto; display: none; }
+        #box-cover270 { margin-top: 70px; pointer-events: auto; display: none; }
         #cover270 { width: 270px; height: 270px; object-fit: cover; border-radius: 15px; border: 3px solid #0f0; box-shadow: 0 0 20px #0f0; }
     </style>
 </head>
