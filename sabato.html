@@ -1,3 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Palinsesto & On Air DJ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+            background: #111;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        /* Contenitore principale */
+        .widget-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            border: 1px solid #2a2a2a;
+        }
+
+        /* Sezione ON AIR in alto */
+        .on-air-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #333;
+        }
+
+        /* Cover tonda che gira a sinistra */
+        .cover-rotante {
+            width: 85px;
+            height: 85px;
+            min-width: 85px;
+            border-radius: 50%;
+            border: 2px solid #ff0055;
+            object-fit: cover;
+            animation: giraCover 8s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+        }
+
+        @keyframes giraCover {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .dj-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .badge-live {
+            display: inline-block;
+            background: #ff0055;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
+            letter-spacing: 1px;
+        }
+
+        .dj-nome {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .dj-orario {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        /* Sezione Locandina Palinsesto */
+        .palinsesto-box {
+            margin-top: 14px;
+        }
+
+        .palinsesto-titolo {
+            font-size: 14px;
+            font-weight: bold;
+            color: #00d2ff;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .turni-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .turno-riga {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #242424;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .turno-riga.in-onda {
+            background: #ff005522;
+            border: 1px solid #ff0055;
+            font-weight: bold;
+        }
+
+        .turno-ora {
+            color: #aaa;
+            font-weight: bold;
+        }
+
+        .turno-riga.in-onda .turno-ora {
+            color: #ff0055;
+        }
+
+        .turno-dj {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="widget-container">
+    <!-- Box In Onda con Cover Rotante a SX -->
+    <div class="on-air-box">
+        <img id="coverDJ" class="cover-rotante" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
+        <div class="dj-info">
+            <span class="badge-live" id="badgeStato">ON AIR</span>
+            <div id="nomeDJ" class="dj-nome">CARICAMENTO...</div>
+            <div id="orarioDJ" class="dj-orario">--:--</div>
+        </div>
+    </div>
+
+    <!-- Locandina Turni del Giorno -->
+    <div class="palinsesto-box">
+        <div class="palinsesto-titolo" id="titoloGiorno">PALINSESTO DI OGGI</div>
+        <div class="turni-lista" id="listaTurni">
+            <!-- I turni vengono inseriti in automatico dallo script -->
+        </div>
+    </div>
+</div>
+
+<script>
 const turni = {
     "LUNEDÌ": [
         {"h": 19, "n": "DJ ROSY", "f": "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
@@ -44,37 +200,71 @@ const turni = {
     "DOMENICA": "RIPOSO"
 };
 
-function aggiornaPalinsesto() {
+function aggiornaTutto() {
     const giorniSettimana = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     const now = new Date();
     const giornoNome = giorniSettimana[now.getDay()];
     const oraAttuale = now.getHours();
 
-    const coverElement = document.getElementById("coverDJ"); // ID del tag <img> per la foto DJ
-    const nomeDJElement = document.getElementById("nomeDJ"); // ID dell'elemento per il nome
-    const defaultCover = "https://xatimg.com/image/RrNrzPFPVBwN.png"; // Immagine predefinita/Radio
+    const coverElem = document.getElementById("coverDJ");
+    const nomeElem = document.getElementById("nomeDJ");
+    const orarioElem = document.getElementById("orarioDJ");
+    const badgeElem = document.getElementById("badgeStato");
+    const titoloElem = document.getElementById("titoloGiorno");
+    const listaElem = document.getElementById("listaTurni");
 
-    const palinsestoGiorno = turni[giornoNome];
+    const defaultCover = "https://xatimg.com/image/RrNrzPFPVBwN.png";
+    const palinsestoOggi = turni[giornoNome];
 
-    if (Array.isArray(palinsestoGiorno)) {
-        // Cerca il DJ dell'ora corrente
-        const turnoAttuale = palinsestoGiorno.find(t => t.h === oraAttuale);
+    titoloElem.innerText = `PROGRAMMAZIONE DI ${giornoNome}`;
+    listaElem.innerHTML = "";
 
-        if (turnoAttuale) {
-            if (coverElement) coverElement.src = turnoAttuale.f;
-            if (nomeDJElement) nomeDJElement.innerText = turnoAttuale.n;
+    if (Array.isArray(palinsestoOggi)) {
+        // Trova il DJ in onda ora
+        const inOnda = palinsestoOggi.find(t => t.h === oraAttuale);
+
+        if (inOnda) {
+            coverElem.src = inOnda.f;
+            nomeElem.innerText = inOnda.n;
+            orarioElem.innerText = `Dalle ${inOnda.h}:00 alle ${inOnda.h + 1}:00`;
+            badgeElem.innerText = "ON AIR";
+            badgeElem.style.background = "#ff0055";
         } else {
-            // Fuori orario di diretta (es. mattina/pomeriggio)
-            if (coverElement) coverElement.src = defaultCover;
-            if (nomeDJElement) nomeDJElement.innerText = "AUTO DJ / ROTAZIONE";
+            coverElem.src = defaultCover;
+            nomeElem.innerText = "AUTO DJ - ROTAZIONE";
+            orarioElem.innerText = "Nessuna diretta al momento";
+            badgeElem.innerText = "NON STOP";
+            badgeElem.style.background = "#555";
         }
+
+        // Genera la locandina dei turni
+        palinsestoOggi.forEach(t => {
+            const isCurrent = (t.h === oraAttuale);
+            const riga = document.createElement("div");
+            riga.className = `turno-riga ${isCurrent ? 'in-onda' : ''}`;
+            riga.innerHTML = `
+                <span class="turno-ora">${t.h}:00 - ${t.h + 1}:00</span>
+                <span class="turno-dj">${t.n} ${isCurrent ? '🔴 LIVE' : ''}</span>
+            `;
+            listaElem.appendChild(riga);
+        });
+
     } else {
-        // Caso Domenica (RIPOSO)
-        if (coverElement) coverElement.src = defaultCover;
-        if (nomeDJElement) nomeDJElement.innerText = "RADIO IN ONDA - RIPOSO";
+        // Giorno di riposo (Domenica)
+        coverElem.src = defaultCover;
+        nomeElem.innerText = "MUSICA NON STOP";
+        orarioElem.innerText = "Giorno di Riposo";
+        badgeElem.innerText = "AUTO DJ";
+        badgeElem.style.background = "#555";
+
+        listaElem.innerHTML = '<div class="turno-riga" style="justify-content: center; color: #888;">OGGI NESSUNA DIRETTA - ROTAZIONE CONTINUA</div>';
     }
 }
 
-// Esegui subito e poi aggiorna ogni minuto
-aggiornaPalinsesto();
-setInterval(aggiornaPalinsesto, 60000);
+// Avvio immediato e controllo ogni 30 secondi
+aggiornaTutto();
+setInterval(aggiornaTutto, 30000);
+</script>
+
+</body>
+</html>
