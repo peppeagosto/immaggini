@@ -19,7 +19,7 @@
         .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         
-        #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; }
+        #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; max-height: 480px; overflow-y: auto; }
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
         #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
         
@@ -56,25 +56,62 @@
 
     // Mapping foto caricate
     const img = [
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_0.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_1.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_2.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_3.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_4.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_5.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_6.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_7.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_8.png",
-        "https://api.screenshotmachine.com/?key=ca3633&url=https://storage.googleapis.com/gen-at-content-ad7b-60600000/input_file_9.png"
+        "https://xatimg.com/image/iQgCyJrXx59k.jpg", // 0
+        "https://xatimg.com/image/Pb7d1636URvg.jpg", // 1
+        "https://xatimg.com/image/iVWjQe7TNoGD.jpg", // 2
+        "https://xatimg.com/image/xownGDwnETzl.jpg", // 3
+        "https://xatimg.com/image/nwY3C0hFQkVZ.jpg", // 4
+        "https://xatimg.com/image/D5nl0rwtzO5q.jpg", // 5
+        "https://xatimg.com/image/ghXE2B3YgqbX.jpg", // 6
+        "https://xatimg.com/image/Ewyzp0L90szv.jpg", // 7
+        "https://xatimg.com/image/Uv2xKPe2ySt1.jpg", // 8
+        "https://xatimg.com/image/7gG8UEwtre1G.jpg"  // 9
     ];
 
     const databaseTurni = {
-        "LUNEDÌ": [{h:18, n:"DJ MATTEO", f:img[0]}, {h:19, n:"DJ SOFIA", f:img[1]}, {h:20, n:"DJ LUCA", f:img[2]}, {h:21, n:"DJ GIULIA", f:img[3]}],
-        "MARTEDÌ": [{h:17, n:"DJ MARCO", f:img[4]}, {h:18, n:"DJ ELENA", f:img[5]}, {h:19, n:"DJ DAVIDE", f:img[6]}, {h:20, n:"DJ SARA", f:img[7]}, {h:21, n:"DJ PAOLO", f:img[8]}],
-        "MERCOLEDÌ": [{h:18, n:"DJ VALENTINA", f:img[9]}, {h:19, n:"DJ FABIO", f:img[0]}, {h:20, n:"DJ CHIARA", f:img[1]}, {h:21, n:"DJ ANDREA", f:img[2]}],
-        "GIOVEDÌ": [{h:17, n:"DJ MARTINA", f:img[3]}, {h:18, n:"DJ GIOVANNI", f:img[4]}, {h:19, n:"DJ FEDERICA", f:img[5]}, {h:20, n:"DJ ENRICO", f:img[6]}, {h:21, n:"DJ BEATRICE", f:img[7]}],
-        "VENERDÌ": [{h:18, n:"DJ RICCARDO", f:img[8]}, {h:19, n:"DJ ANNA", f:img[9]}, {h:20, n:"DJ PIETRO", f:img[0]}, {h:21, n:"DJ SILVIA", f:img[1]}],
-        "SABATO": [{h:9, n:"DJ NIKITA", f:"https://xatimg.com/image/IqDWKCvkbBqc.jpg"}, {h:17, n:"DJ CLAUDIO", f:img[2]}, {h:18, n:"DJ SIMONA", f:img[3]}, {h:19, n:"DJ STEFANO", f:img[4]}, {h:20, n:"DJ ROBERTO", f:img[5]}, {h:21, n:"DJ ALESSIA", f:img[6]}],
+        "LUNEDÌ": [
+            {h:18, n:"DJ CARLA", f:img[0]}, 
+            {h:19, n:"DJ SOFIA", f:img[1]}, 
+            {h:20, n:"DJ LUCIA", f:img[2]}, 
+            {h:21, n:"DJ GIULIA", f:img[3]}
+        ],
+        "MARTEDÌ": [
+            {h:17, n:"DJ MARCO", f:img[4]}, 
+            {h:18, n:"DJ ELENA", f:img[5]}, 
+            {h:19, n:"DJ NELLY", f:img[6]}, 
+            {h:20, n:"DJ SARA", f:img[7]}, 
+            {h:21, n:"DJ PAOLA", f:img[8]}
+        ],
+        "MERCOLEDÌ": [
+            {h:18, n:"DJ VALENTINA", f:img[9]}, 
+            {h:19, n:"DJ FABIO", f:img[0]}, 
+            {h:20, n:"DJ CHIARA", f:img[1]}, 
+            {h:21, n:"DJ MILENA", f:img[2]}
+        ],
+        "GIOVEDÌ": [
+            {h:17, n:"DJ MARTINA", f:img[3]}, 
+            {h:18, n:"DJ GIOVANNI", f:img[4]}, 
+            {h:19, n:"DJ FEDERICA", f:img[5]}, 
+            {h:20, n:"DJ ORCHIDEA", f:img[6]}, 
+            {h:21, n:"DJ BEATRICE", f:img[7]}
+        ],
+        "VENERDÌ": [
+            {h:18, n:"DJ CETTY", f:img[8]}, 
+            {h:19, n:"DJ ANNA", f:img[9]}, 
+            {h:20, n:"DJ PIERA", f:img[0]}, 
+            {h:21, n:"DJ SILVIA", f:img[1]}
+        ],
+        "SABATO": [
+            {h:9,  n:"DJ NIKITA",  f:"https://xatimg.com/image/IqDWKCvkbBqc.jpg"},
+            {h:10, n:"DJ MERY",    f:"https://xatimg.com/image/hKznM6ZtpZxW.png"},
+            {h:11, n:"DJ LIVE",    f:"https://xatimg.com/image/9fPNsTiq1w4d.jpg"},
+            {h:12, n:"DJ SPECIAL", f:img[1]},
+            {h:17, n:"DJ CLAUDIA", f:img[2]}, 
+            {h:18, n:"DJ SIMONA",  f:img[3]}, 
+            {h:19, n:"DJ STEFANY", f:img[4]}, 
+            {h:20, n:"DJ ROBERTO", f:img[5]}, 
+            {h:21, n:"DJ ALESSIA", f:img[6]}
+        ],
         "DOMENICA": "RIPOSO"
     };
 
@@ -88,7 +125,7 @@
         const djsOggi = databaseTurni[oggi];
         const titoloLoc = $('#titolo-locandina');
 
-        if (oggi === "DOMENICA") {
+        if (oggi === "DOMENICA" || djsOggi === "RIPOSO") {
             titoloLoc.hide();
             container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
         } else {
@@ -108,7 +145,7 @@
                     container.append(`
                         <div class="slot">
                             <span class="ora">${dj.h}:00</span>
-                            <img class="foto ${classeGira}" src="${dj.f}">
+                            <img class="foto ${classeGira}" src="${dj.f}" onerror="this.src='https://xatimg.com/image/or3rbqD5I3rS.png'">
                             <div class="nome">${dj.n} ${statusLed}</div>
                         </div>`);
                 });
