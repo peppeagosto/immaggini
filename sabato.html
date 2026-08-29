@@ -2,359 +2,320 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Palinsesto - Radio Cartaio</title>
+    <title>Palinsesto DJ Live</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --grad-colore: linear-gradient(135deg, #ff0055, #ff5500, #ffcc00);
         }
 
         body {
-            background: #0f1115;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
-        }
-
-        .main-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 820px;
-            padding: 20px;
-        }
-
-        /* Intestazione Palinsesto */
-        .top-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .top-header h1 {
-            font-size: 32px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        .top-header p {
-            color: #ff3344;
-            font-size: 15px;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        /* Card Principale */
-        .card-container {
-            background: #181a1f;
-            width: 100%;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            padding: 35px 40px;
-            gap: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 15px rgba(255, 0, 50, 0.1);
-            border: 1px solid #282b33;
-        }
-
-        /* SEZIONE SINISTRA: DISCO ROTANTE CON COVER */
-        .left-disc-section {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            min-width: 250px;
-            border-radius: 50%;
-            box-shadow: 0 0 35px rgba(255, 0, 60, 0.7);
-            border: 3px solid #ff1a40;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial Black', Arial, sans-serif;
             overflow: hidden;
-            background: #000;
         }
 
-        /* Foto/Vinile che gira */
-        .vinyl-cover {
-            width: 100%;
-            height: 100%;
+        /* 1. COVER 80x80 ROTANTE A SINISTRA */
+        #cover-box-sx {
+            position: fixed;
+            left: 20px;
+            top: 50px;
+            width: 80px;
+            height: 80px;
+            z-index: 999999;
+            pointer-events: auto;
+        }
+
+        .disco-cover {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
+            border: 3px solid #ff0055;
             object-fit: cover;
-            animation: rotateDisc 10s linear infinite;
+            background: #111;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.7);
+            animation: giraDisco 6s linear infinite;
         }
 
-        @keyframes rotateDisc {
+        @keyframes giraDisco {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* Testi fissi sovrapposti sopra al disco */
-        .disc-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 15px;
-            pointer-events: none;
-            background: rgba(0,0,0,0.35);
-            text-align: center;
-            border-radius: 50%;
-        }
-
-        .disc-top-title {
-            font-size: 18px;
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-        }
-
-        .disc-center-dot {
-            width: 12px;
-            height: 12px;
-            background: #ff1a40;
-            border-radius: 50%;
+        /* 2. RETTANGOLINO A DESTRA (PULSANTE) */
+        #btn-pali {
+            position: fixed;
+            right: 20px;
+            top: 50px;
+            width: 220px;
+            height: 55px;
+            background: #000;
             border: 2px solid #fff;
-            box-shadow: 0 0 8px #ff1a40;
-        }
-
-        .disc-bottom-info {
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999999;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            user-select: none;
         }
 
-        .disc-sub {
-            font-size: 11px;
-            font-weight: bold;
-            color: #ddd;
-            letter-spacing: 0.5px;
-        }
-
-        .disc-name-live {
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
-        }
-
-        .disc-tag {
-            font-size: 9px;
-            color: #ff3344;
+        .btn-main-txt {
+            background: var(--grad-colore);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 13px;
             font-weight: 900;
             letter-spacing: 1px;
-            margin-top: 2px;
+            text-transform: uppercase;
         }
 
-        /* SEZIONE DESTRA: INFORMAZIONI DIRETTA */
-        .right-info-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex-grow: 1;
-        }
-
-        .badge-onair {
-            color: #ff2233;
-            font-size: 14px;
-            font-weight: 900;
+        .btn-sub-txt {
+            color: #00ffff;
+            font-size: 11px;
             letter-spacing: 2px;
+            margin-top: 2px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.96); }
+        }
+
+        /* 3. LOCANDINA POPUP TURNI */
+        #locandina-popup {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 115px;
+            width: 260px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            z-index: 999998;
+        }
+
+        .header-pali {
+            text-align: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        #nome-giorno {
+            color: #ffff00;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 900;
+            display: block;
+        }
+
+        .sub-header {
+            color: #888;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* RIGHE TURNI */
+        .riga-turno {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #181818;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 7px 10px;
+            margin-bottom: 6px;
+        }
+
+        .riga-turno.on-air {
+            background: #250810;
+            border-color: #00ff66;
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+        }
+
+        .orario-txt {
+            color: #00ffff;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .nome-dj-txt {
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
             text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .main-live-title {
-            font-size: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #fff;
-            border-bottom: 1px solid #2c303a;
-            padding-bottom: 14px;
+        /* LED ROSSO E VERDE */
+        .led-verde {
+            width: 9px;
+            height: 9px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ff66;
+            animation: lampeggio 0.8s infinite;
         }
 
-        .info-group {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
+        .led-rosso {
+            width: 9px;
+            height: 9px;
+            background-color: #ff2200;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #ff2200;
         }
 
-        .info-label {
-            font-size: 11px;
-            color: #7b8294;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        @keyframes lampeggio {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
-        .info-val {
-            font-size: 15px;
-            font-weight: bold;
-            color: #eceff4;
-        }
-
-        .info-val.dj-highlight {
-            color: #fff;
-            font-size: 17px;
-            letter-spacing: 0.5px;
+        .messaggio-riposo {
+            color: #ffaa00;
+            text-align: center;
+            font-size: 12px;
+            padding: 15px 5px;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <!-- Header Palinsesto -->
-    <div class="top-header">
-        <h1>PALINSESTO</h1>
-        <p>On Air DJ</p>
+    <!-- COVER ROTANTE A SX -->
+    <div id="cover-box-sx">
+        <img id="imgCoverDJ" class="disco-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
     </div>
 
-    <!-- Container Card -->
-    <div class="card-container">
-        
-        <!-- SX: DISCO COVER ROTANTE -->
-        <div class="left-disc-section">
-            <img id="coverDJ" class="vinyl-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
-            <div class="disc-overlay">
-                <div class="disc-top-title" id="overlayTopDJ">DJ CARLA</div>
-                <div class="disc-center-dot"></div>
-                <div class="disc-bottom-info">
-                    <span class="disc-sub">IL CARTAIO PRESENTA:</span>
-                    <span class="disc-name-live" id="overlayBottomDJ">DJ CARLA</span>
-                    <span class="disc-tag">ON AIR NOW</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- DX: INFO PALINSESTO & ORARI -->
-        <div class="right-info-section">
-            <div class="badge-onair">● ON AIR</div>
-            <div class="main-live-title">RADIO CARTAIO - DIRETTA LIVE</div>
-
-            <div class="info-group">
-                <span class="info-label">PROGRAMMAZIONE</span>
-                <span class="info-val" id="giornoInfo">LUNEDÌ LIVE</span>
-            </div>
-
-            <div class="info-group">
-                <span class="info-label">DJ NOME</span>
-                <span class="info-val dj-highlight" id="nomeDJ">DJ CARLA</span>
-            </div>
-
-            <div class="info-group">
-                <span class="info-label">ORARIO</span>
-                <span class="info-val" id="orarioDJ">19:00 - 20:00</span>
-            </div>
-
-            <div class="info-group">
-                <span class="info-label">CONTATTI</span>
-                <span class="info-val">DIRETTA IN CHAT</span>
-            </div>
-        </div>
-
+    <!-- RETTANGOLO APRI/CHIUDI A DX -->
+    <div id="btn-pali">
+        <div class="btn-main-txt">PALINSESTO DJ</div>
+        <div class="btn-sub-txt">CLICCA QUI</div>
     </div>
-</div>
+
+    <!-- LOCANDINA DEI TURNI A SCOMPARSA -->
+    <div id="locandina-popup">
+        <div class="header-pali">
+            <span id="nome-giorno">LUNEDÌ</span>
+            <span class="sub-header">DIRETTE RADIO LIVE</span>
+        </div>
+        <div id="elenco-turni"></div>
+    </div>
 
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    const turni = {
+    // Turni divisi da Lunedì a Sabato dalle 19:00 alle 23:00 (ultimo turno finisce a mezzanotte)
+    const databaseTurni = {
         "LUNEDÌ": [
-            {h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
-            {h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-            {h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-            {h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+            { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" },
+            { h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
+            { h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
+            { h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
+            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
         ],
         "MARTEDÌ": [
-            {h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-            {h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-            {h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-            {h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg"},
-            {h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"}
+            { h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
+            { h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
+            { h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
+            { h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" },
+            { h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }
         ],
         "MERCOLEDÌ": [
-            {h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-            {h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-            {h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-            {h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+            { h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
+            { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
+            { h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
+            { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
+            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
         ],
         "GIOVEDÌ": [
-            {h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
-            {h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-            {h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-            {h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-            {h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg"}
+            { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" },
+            { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
+            { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
+            { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
+            { h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" }
         ],
         "VENERDÌ": [
-            {h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-            {h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg"},
-            {h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-            {h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-            {h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+            { h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
+            { h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
+            { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
+            { h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
+            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
         ],
         "SABATO": [
-            {h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-            {h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-            {h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png"},
-            {h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-            {h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg"}
+            { h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
+            { h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
+            { h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" },
+            { h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
+            { h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg" }
         ],
         "DOMENICA": "RIPOSO"
     };
 
-    function aggiornaWidget() {
+    function aggiornaPalinsesto() {
         const d = new Date();
         const oggi = giorni[d.getDay()];
-        let ora = d.getHours();
+        const oraAttuale = d.getHours();
+        const defaultFoto = "https://xatimg.com/image/RrNrzPFPVBwN.png";
 
-        const defaultCover = "https://xatimg.com/image/RrNrzPFPVBwN.png";
-        const palinsestoOggi = turni[oggi];
+        $('#nome-giorno').text(oggi);
+        const contenitore = $('#elenco-turni').empty();
+        const turniOggi = databaseTurni[oggi];
 
-        document.getElementById("giornoInfo").innerText = `${oggi} LIVE`;
+        if (oggi === "DOMENICA" || turniOggi === "RIPOSO") {
+            $('#imgCoverDJ').attr('src', defaultFoto);
+            contenitore.append('<div class="messaggio-riposo">BUONA DOMENICA DA<br><b>IL CARTAIO</b><br>NESSUNA DIRETTA OGGI!</div>');
+            return;
+        }
 
-        if (Array.isArray(palinsestoOggi)) {
-            // Cerca il DJ in onda all'ora esatta
-            const djLive = palinsestoOggi.find(item => item.h === ora);
+        let trovatoInOnda = false;
 
-            if (djLive) {
-                document.getElementById("coverDJ").src = djLive.f;
-                document.getElementById("overlayTopDJ").innerText = djLive.n;
-                document.getElementById("overlayBottomDJ").innerText = djLive.n;
-                document.getElementById("nomeDJ").innerText = djLive.n;
-                document.getElementById("orarioDJ").innerText = `${djLive.h}:00 - ${djLive.h + 1}:00`;
-            } else {
-                // Se non c'è diretta attiva ora
-                document.getElementById("coverDJ").src = defaultCover;
-                document.getElementById("overlayTopDJ").innerText = "RADIO LIVE";
-                document.getElementById("overlayBottomDJ").innerText = "AUTO DJ";
-                document.getElementById("nomeDJ").innerText = "ROTAZIONE MUSICALE";
-                document.getElementById("orarioDJ").innerText = "Non Stop Music";
+        turniOggi.forEach(turno => {
+            const inOndaOra = (turno.h === oraAttuale);
+            const classeRiga = inOndaOra ? "riga-turno on-air" : "riga-turno";
+            
+            // LED: Verde lampeggiante se in diretta, Rosso se non è la sua ora
+            const led = inOndaOra ? '<span class="led-verde" title="In Streaming"></span>' : '<span class="led-rosso" title="Non in streaming"></span>';
+
+            if (inOndaOra) {
+                $('#imgCoverDJ').attr('src', turno.f);
+                trovatoInOnda = true;
             }
-        } else {
-            // Domenica / Riposo
-            document.getElementById("coverDJ").src = defaultCover;
-            document.getElementById("overlayTopDJ").innerText = "BUONA DOMENICA";
-            document.getElementById("overlayBottomDJ").innerText = "IL CARTAIO";
-            document.getElementById("nomeDJ").innerText = "GIORNO DI RIPOSO";
-            document.getElementById("orarioDJ").innerText = "Si riparte Lunedì";
+
+            contenitore.append(`
+                <div class="${classeRiga}">
+                    <span class="orario-txt">${turno.h}:00 - ${turno.h + 1}:00</span>
+                    <span class="nome-dj-txt">
+                        ${turno.n}
+                        ${led}
+                    </span>
+                </div>
+            `);
+        });
+
+        // Se a quest'ora non c'è nessun DJ in diretta, rimetti la cover base
+        if (!trovatoInOnda) {
+            $('#imgCoverDJ').attr('src', defaultFoto);
         }
     }
 
-    aggiornaWidget();
-    setInterval(aggiornaWidget, 15000);
+    // Apertura e Chiusura al click sul tasto a DX
+    $('#btn-pali').on('click', function() {
+        $('#locandina-popup').fadeToggle(200);
+    });
+
+    // Controllo automatico ogni 15 secondi
+    aggiornaPalinsesto();
+    setInterval(aggiornaPalinsesto, 15000);
 </script>
 
 </body>
