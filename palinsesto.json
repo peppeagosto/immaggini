@@ -3,69 +3,327 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <title>EDITION 2026 - PANEL</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
-        body { background: transparent; margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        :root {
+            --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            --accent: #ff00c8;
+            --btn-grad: linear-gradient(to right, #ff00c8, #ff7300);
+            --rb-text: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00);
+        }
+        * { box-sizing: border-box; }
+        body {
+            background: transparent !important;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial Black', sans-serif;
+            overflow: hidden;
+        }
+        .main-chassis {
+            position: relative;
+            width: 730px;
+            height: 640px;
+            background: radial-gradient(circle at center, #1a1a20 0%, #050505 100%);
+            border-radius: 30px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 180px 1fr 180px;
+            gap: 10px;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px var(--accent), inset 0 0 50px #000;
+            z-index: 1;
+            transition: box-shadow 0.4s ease;
+        }
+        .main-chassis::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 33px;
+            padding: 3px;
+            background: var(--rainbow);
+            background-size: 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: rb-move 8s linear infinite;
+            z-index: -1;
+        }
+
+        .main-chassis.rainbow-mode {
+            box-shadow: 0 0 35px #ff00c8, 0 0 55px #00ffd5, inset 0 0 50px #000;
+        }
+        .main-chassis.rainbow-mode .display-top,
+        .main-chassis.rainbow-mode .box,
+        .main-chassis.rainbow-mode .control-bar,
+        .main-chassis.rainbow-mode .eq-container,
+        .main-chassis.rainbow-mode #locandina {
+            border-color: #00ffd5 !important;
+            box-shadow: 0 0 15px rgba(0, 255, 213, 0.5), inset 0 0 10px #000 !important;
+        }
+        .main-chassis.rainbow-mode .vinyl,
+        .main-chassis.rainbow-mode .woofer-pro {
+            box-shadow: 0 0 20px #ff7300, 0 0 30px #00ffd5 !important;
+        }
+
+        .display-top {
+            grid-column: 1 / 4;
+            height: 60px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .marquee-box { display: flex; width: 100%; white-space: nowrap; animation: bounce-scroll 10s ease-in-out infinite alternate; }
+        .rainbow-text {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: var(--rainbow);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rb-move 3s linear infinite;
+            padding: 0 50px;
+        }
+        @keyframes bounce-scroll { 0% { transform: translateX(40%); } 100% { transform: translateX(-40%); } }
         
-        #btn-pali { position: fixed; right: 20px; top: 60px; width: 250px; height: 60px; background: #000; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 999999; box-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: auto; }
+        .box {
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid var(--accent);
+            border-radius: 10px;
+            padding: 6px;
+            text-align: center;
+            height: 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s, border-color 0.4s ease;
+        }
+        .box h4 { margin: 0; font-size: 8px; color: #bf953f; text-transform: uppercase; letter-spacing: 1px; }
+        .box span { font-size: 11px; font-weight: bold; display: block; margin-top: 3px; color: #fff; text-shadow: 0 0 8px var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .copyable { cursor: pointer; }
+        .copyable:hover { transform: scale(1.03); border-color: #00ffd5; }
         
-        .btn-text, #clicca-qui-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; }
-        .btn-text { font-size: 11px; }
-        #clicca-qui-text { font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
+        .turntable { position: relative; display: flex; justify-content: center; align-items: center; }
+        .vinyl { width: 270px; height: 270px; border-radius: 50%; border: 6px solid #0a0a0a; box-shadow: 0 0 30px var(--accent); overflow: hidden; background: #000; transition: box-shadow 0.4s ease; }
+        #album-art { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
+        .arm {
+            position: absolute;
+            width: 110px;
+            height: 250px;
+            right: -50px;
+            top: 40px;
+            background: url('https://peppeagosto.github.io/braccetto.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform-origin: top right;
+            transform: rotate(-25deg);
+            transition: 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            z-index: 10;
+        }
         
-        .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
-        .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #f00; }
+        .woofer-pro { 
+            width: 85px; 
+            height: 85px; 
+            border-radius: 50%; 
+            background: linear-gradient(145deg, #2a2a2a, #0a0a0a); 
+            border: 3px solid #444; 
+            box-shadow: 0 0 15px var(--accent), inset 0 3px 8px #000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: transform 0.05s ease-out, box-shadow 0.4s ease; 
+            position: relative;
+        }
+        .woofer-pro::before {
+            content: '';
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #222 0%, #050505 100%);
+            border: 1px solid #111;
+            box-shadow: inset 0 3px 4px rgba(255,255,255,0.15), inset 0 -3px 4px rgba(0,0,0,0.9);
+        }
+        .cone { 
+            position: relative; 
+            width: 52px; 
+            height: 52px; 
+            border-radius: 50%; 
+            background: conic-gradient(from 0deg, #111, #222, #111, #222, #111); 
+            box-shadow: inset 0 0 12px #000, 0 0 4px #000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1;
+        }
+        .dust-cap {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #555 0%, #1a1a1a 50%, #000 100%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .control-bar { grid-column: 1 / 4; display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.9); border-radius: 40px; padding: 6px 18px; border: 2px solid var(--accent); transition: border-color 0.4s ease, box-shadow 0.4s ease;}
+        .btn { background: var(--btn-grad); border: none; padding: 8px 16px; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 11px; color: #fff; text-shadow: 0 0 5px #000; box-shadow: 0 0 10px rgba(0, 242, 255, 0.5); user-select: none; }
+        .btn:active { transform: scale(0.95); }
+        input[type=range] { -webkit-appearance: none; width: 100px; height: 6px; background: var(--btn-grad); border-radius: 5px; outline: none; }
+        .dot-box { display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.3s; }
+        .dot:hover { transform: scale(1.15); box-shadow: 0 0 8px #fff; }
+        
+        .eq-container {
+            grid-column: 1 / 4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 6px;
+            height: 35px;
+            background: rgba(0,0,0,0.85);
+            border: 1.5px solid var(--accent);
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: inset 0 0 10px #000;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .eq-bar { width: 14px; height: 100%; background: rgba(255,255,255,0.05); border-radius: 3px; display: flex; flex-direction: column-reverse; gap: 2px; overflow: hidden; }
+        .eq-segment { width: 100%; height: 5px; background: #222; border-radius: 1px; transition: background-color 0.05s ease; }
+        .eq-segment.active-green { background: #00ff66; box-shadow: 0 0 5px #00ff66; }
+        .eq-segment.active-yellow { background: #fffb00; box-shadow: 0 0 5px #fffb00; }
+        .eq-segment.active-red { background: #ff0055; box-shadow: 0 0 5px #ff0055; }
+        
+        /* LOCANDINA INTEGRATA PALINSESTO */
+        #locandina {
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 330px; 
+            max-height: 520px; 
+            overflow-y: auto; 
+            background: rgba(10, 10, 15, 0.98); 
+            border: 3px solid var(--accent); 
+            border-radius: 25px; 
+            padding: 15px; 
+            box-shadow: 0 0 40px var(--accent), inset 0 0 20px #000; 
+            z-index: 99; 
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 6px; }
+        #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; font-weight: bold; }
+        .titolo, .testo-lama { background: var(--rb-text); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; text-transform: uppercase; }
+        .testo-lama { text-align: center; padding: 20px 5px; display: block; line-height: 1.5; font-size: 12px; }
+        
+        .slot { 
+            background: #08080c; 
+            border: 1px solid #222; 
+            border-radius: 25px; 
+            margin-bottom: 8px; 
+            padding: 6px 10px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            transition: 0.3s ease;
+        }
+        .ora { color: #0ff; font-size: 11px; width: 45px; text-align: center; font-weight: bold; }
+        .foto { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; }
+        .nome { color: #ff00ff; font-size: 11px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; }
+        
+        .ruota-disco { animation: spin 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 12px #0f0; }
+        .led-verde { width: 10px; height: 10px; background-color: #0f0; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #0f0; animation: blink 0.8s infinite; }
+        .led-rosso { width: 10px; height: 10px; background-color: #f00; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #f00; }
+        #close-pali { position: absolute; right: 12px; top: 10px; color: #fff; cursor: pointer; font-size: 13px; font-weight: bold; background: #f00; border-radius: 50%; width: 22px; height: 22px; text-align: center; line-height: 20px; }
+        
+        @keyframes rb-move { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        
-        #locandina { display: none; position: fixed; right: 10px; top: 150px; width: 280px; background: #000; border: 3px solid #333; border-radius: 12px; padding: 10px; box-shadow: 0 0 50px #000; z-index: 999998; pointer-events: auto; max-height: 480px; overflow-y: auto; }
-        .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
-        #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
-        
-        .titolo, .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; }
-        .titolo { font-size: 13px; }
-        
-        .slot { background: #0a0a0a; border: 1px solid #222; border-radius: 30px; margin-bottom: 6px; padding: 5px; display: flex; align-items: center; gap: 8px; }
-        .ora { color: #0ff; font-size: 10px; width: 45px; text-align: center; font-weight: bold; }
-        .foto { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; object-fit: cover; background: #222; transition: 0.3s; }
-        
-        .ruota-disco { animation: rotate-disco 2s linear infinite !important; border-color: #0f0 !important; box-shadow: 0 0 15px #0f0; }
-        @keyframes rotate-disco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px;}
-        .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
-
-        /* Stile per la Cover 270 */
-        #box-cover270 { margin-top: 70px; pointer-events: auto; display: none; }
-        #cover270 { width: 270px; height: 270px; object-fit: cover; border-radius: 15px; border: 3px solid #0f0; box-shadow: 0 0 20px #0f0; }
     </style>
 </head>
 <body>
 
-    <!-- Box dove appare la foto del DJ in diretta -->
-    <div id="box-cover270">
-        <img id="cover270" src="" alt="DJ In Diretta">
+<div class="main-chassis" id="player">
+    <div class="display-top">
+        <div class="marquee-box">
+            <span id="scroll-text" class="rainbow-text">EL CARTAIO - STREAMING LIVE</span>
+        </div>
     </div>
-
-    <div id="btn-pali">
-        <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
-        <div id="clicca-qui-text">CLICCA QUI</div>
+    
+    <div class="side-panel" style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+        <div class="box"><h4>CLOCK</h4><span id="clock">00:00:00</span></div>
+        <div class="box copyable" onclick="copySongInfo()"><h4>SINGER</h4><span id="artist">ON AIR</span></div>
+        <div class="box copyable" onclick="copySongInfo()"><h4>SONG</h4><span id="song">STREAMING</span></div>
     </div>
-
+    
+    <div class="turntable">
+        <div class="vinyl" id="v-box"><img id="album-art" src="https://xatimg.com/image/or3rbqD5I3rS.png" alt="Cover"></div>
+        <div id="arm" class="arm"></div>
+    </div>
+    
+    <div style="display: flex; gap: 8px;">
+        <div class="side-panel" style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+            <div class="box"><h4>CITY / WEATHER</h4><span id="v_city">...</span></div>
+            <div class="box"><h4>USER IP</h4><span id="v_ip">...</span></div>
+            <div class="box"><h4>LISTENERS</h4><span id="v_listeners" style="color:#48ff00 !important; text-shadow: 0 0 10px #48ff00;">UTENTI: 0</span></div>
+        </div>
+        <div class="dot-box">
+            <div class="dot" style="background:#ff7300;" onclick="setT('#ff7300')"></div>
+            <div class="dot" style="background:#ff0000;" onclick="setT('#ff0000')"></div>
+            <div class="dot" style="background:#fffb00;" onclick="setT('#fffb00')"></div>
+            <div class="dot" style="background:#ff00c8;" onclick="setT('#ff00c8')"></div>
+            <div class="dot" style="background:var(--rainbow); background-size:200%;" onclick="setT('rb')"></div>
+        </div>
+    </div>
+    
+    <div class="control-bar">
+        <div class="woofer-pro" id="wl">
+            <div class="cone"><div class="dust-cap"></div></div>
+        </div>
+        <button class="btn" onclick="play()">PLAY</button>
+        <button class="btn" id="btn-pali">PALINSESTO</button>
+        <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8">
+        <button class="btn" onclick="stop()">STOP</button>
+        <div class="woofer-pro" id="wr">
+            <div class="cone"><div class="dust-cap"></div></div>
+        </div>
+    </div>
+    
+    <div class="eq-container" id="eq-display"></div>
+    
+    <!-- POPUP PALINSESTO -->
     <div id="locandina">
         <div class="header">
+            <span id="close-pali">&times;</span>
             <span id="giorno-live">---</span>
             <div class="titolo" id="titolo-locandina">DIRETTE RADIO LIVE</div>
         </div>
         <div id="lista-dj"></div>
     </div>
+</div>
 
 <script>
-    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
+    const streamUrl = "https://stm2.srvif.com:7198/;"; 
+    const defaultCover = "https://xatimg.com/image/or3rbqD5I3rS.png";
+    let lastSongTitle = "";
+    let isDjLiveCurrently = false;
+    
+    let audio = new Audio();
+    audio.preload = "none";
+    let isPlaying = false;
 
-    // I 10 link perfetti
+    // DATABASE FOTO E TURNI DJ
+    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     const img = [
         "https://xatimg.com/image/pORicTZi3lhE.jpg", // 0 = NIKITA
         "https://xatimg.com/image/9EUxzchBUN3A.jpg", // 1 = ROSY
@@ -79,7 +337,6 @@
         "https://xatimg.com/image/RrNrzPFPVBwN.png"  // 9 = NIKA / CARTAIO
     ];
 
-    // Palinsesto con foto abbinate correttamente
     const databaseTurni = {
         "LUNEDÌ": [
             {h:18, n:"DJ NIKITA",  f:img[0]}, 
@@ -126,7 +383,108 @@
         "DOMENICA": "RIPOSO"
     };
 
-    function aggiornaLive() {
+    // CONTROLLI PLAY / STOP
+    function play() {
+        audio.src = streamUrl;
+        audio.load();
+        
+        let p = audio.play();
+        if (p !== undefined) {
+            p.then(() => {
+                isPlaying = true;
+                document.getElementById('arm').style.transform = 'rotate(0deg)';
+                document.getElementById('v-box').style.animation = 'spin 3s linear infinite';
+                avviaEqualizzatore(true);
+            }).catch(() => {
+                audio.src = "https://stm2.srvif.com:7198/stream";
+                audio.play().then(() => {
+                    isPlaying = true;
+                    document.getElementById('arm').style.transform = 'rotate(0deg)';
+                    document.getElementById('v-box').style.animation = 'spin 3s linear infinite';
+                    avviaEqualizzatore(true);
+                });
+            });
+        }
+    }
+
+    function stop() {
+        audio.pause();
+        audio.src = "";
+        isPlaying = false;
+        document.getElementById('arm').style.transform = 'rotate(-25deg)';
+        document.getElementById('v-box').style.animation = 'none';
+        avviaEqualizzatore(false);
+    }
+
+    const volSlider = document.getElementById('vol');
+    volSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+    });
+
+    function setT(colore) {
+        const chassis = document.getElementById('player');
+        if (colore === 'rb') {
+            chassis.classList.add('rainbow-mode');
+        } else {
+            chassis.classList.remove('rainbow-mode');
+            document.documentElement.style.setProperty('--accent', colore);
+        }
+    }
+
+    function aggiornaOrologio() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+    }
+    setInterval(aggiornaOrologio, 1000);
+    aggiornaOrologio();
+
+    const eqContainer = document.getElementById('eq-display');
+    for (let i = 0; i < 28; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        for (let j = 0; j < 6; j++) {
+            const seg = document.createElement('div');
+            seg.className = 'eq-segment';
+            bar.appendChild(seg);
+        }
+        eqContainer.appendChild(bar);
+    }
+
+    let eqInterval;
+    function avviaEqualizzatore(attivo) {
+        clearInterval(eqInterval);
+        const bars = document.querySelectorAll('.eq-bar');
+        const woofers = [document.getElementById('wl'), document.getElementById('wr')];
+        
+        if (!attivo) {
+            document.querySelectorAll('.eq-segment').forEach(s => s.className = 'eq-segment');
+            woofers.forEach(w => w.style.transform = 'scale(1)');
+            return;
+        }
+
+        eqInterval = setInterval(() => {
+            bars.forEach(bar => {
+                const segs = bar.children;
+                const level = Math.floor(Math.random() * 7);
+                for (let i = 0; i < 6; i++) {
+                    segs[i].className = 'eq-segment';
+                    if (i < level) {
+                        if (i < 3) segs[i].classList.add('active-green');
+                        else if (i < 5) segs[i].classList.add('active-yellow');
+                        else segs[i].classList.add('active-red');
+                    }
+                }
+            });
+            const scale = 1 + Math.random() * 0.08;
+            woofers.forEach(w => w.style.transform = `scale(${scale})`);
+        }, 80);
+    }
+
+    // CONTROLLO DJ IN DIRETTA E COSTRUZIONE LOCANDINA
+    function aggiornaLiveDj() {
         const d = new Date();
         const oggi = giorni[d.getDay()];
         let oraAttuale = d.getHours();
@@ -136,12 +494,11 @@
         const djsOggi = databaseTurni[oggi];
         const titoloLoc = $('#titolo-locandina');
         
-        let coverTrovata = false;
+        isDjLiveCurrently = false;
 
         if (oggi === "DOMENICA" || djsOggi === "RIPOSO") {
             titoloLoc.hide();
             container.append('<div class="testo-lama">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
-            $('#box-cover270').hide();
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
@@ -156,11 +513,10 @@
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
                     
-                    // Mostra la cover 270 solo per il DJ attualmente in onda
+                    // Se c'è un DJ in diretta, imposta la sua foto sul vinile centrale
                     if (èLive) {
-                        $('#cover270').attr('src', dj.f); 
-                        $('#box-cover270').fadeIn();
-                        coverTrovata = true;
+                        $('#album-art').attr('src', dj.f);
+                        isDjLiveCurrently = true;
                     }
                     
                     container.append(`
@@ -170,18 +526,89 @@
                             <div class="nome"><span>${dj.n}</span> ${statusLed}</div>
                         </div>`);
                 });
-                
-                // Nasconde la cover se nessun DJ è programmato in quella fascia oraria
-                if(!coverTrovata && oraAttuale >= 9 && oraAttuale <= 21) {
-                     $('#box-cover270').hide();
-                }
             }
         }
     }
 
-    $('#btn-pali').on('click', function() { $('#locandina').toggle(); });
-    setInterval(aggiornaLive, 10000); 
-    aggiornaLive();
+    // LETTURA TITOLI STREAM E RECUPERO COVER ITUNES (SE NON C'È DJ IN DIRETTA)
+    function getRealTimeTitleAndCover() {
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(d) {
+            if(d && d.songtitle) {
+                let currentTitle = d.songtitle;
+                if(currentTitle !== lastSongTitle) {
+                    lastSongTitle = currentTitle;
+
+                    $('#scroll-text').text(currentTitle.toUpperCase());
+
+                    let parts = currentTitle.split(" - ");
+                    if(parts.length >= 2) {
+                        $('#artist').text(parts[0].trim().toUpperCase());
+                        $('#song').text(parts.slice(1).join(" - ").trim().toUpperCase());
+                    } else {
+                        $('#artist').text("ON AIR");
+                        $('#song').text(currentTitle.toUpperCase());
+                    }
+
+                    // Se non c'è un DJ in diretta, mostra la cover della canzone da iTunes
+                    if (!isDjLiveCurrently) {
+                        let searchQuery = encodeURIComponent(currentTitle);
+                        $.getJSON(`https://itunes.apple.com/search?term=${searchQuery}&media=music&limit=1`, function(data) {
+                            if(data.results && data.results.length > 0) {
+                                let coverUrl = data.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+                                $('#album-art').attr('src', coverUrl);
+                            } else {
+                                $('#album-art').attr('src', defaultCover);
+                            }
+                        }).fail(function() {
+                            $('#album-art').attr('src', defaultCover);
+                        });
+                    }
+                }
+            }
+            if(d && d.currentlisteners !== undefined) {
+                $('#v_listeners').text("UTENTI: " + d.currentlisteners);
+            }
+        });
+    }
+
+    // METEO E LOCALITÀ
+    function updateWeatherReal() {
+        $.getJSON('https://get.geojs.io/v1/ip/geo.json', d => {
+            if (d && d.ip) $('#v_ip').text(d.ip);
+            if (d && d.latitude && d.longitude) {
+                $.getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${d.latitude}&longitude=${d.longitude}&current_weather=true`, w => {
+                    if (w && w.current_weather) {
+                        $('#v_city').text(`${d.city.toUpperCase()} | ${Math.round(w.current_weather.temperature)}°C`);
+                    } else {
+                        $('#v_city').text(`${d.city.toUpperCase()} (${d.country_code})`);
+                    }
+                }).fail(() => {
+                    $('#v_city').text(`${d.city.toUpperCase()} (${d.country_code})`);
+                });
+            }
+        });
+    }
+
+    $(document).ready(() => {
+        aggiornaLiveDj();
+        getRealTimeTitleAndCover();
+        updateWeatherReal();
+        
+        setInterval(() => {
+            aggiornaLiveDj();
+            getRealTimeTitleAndCover();
+        }, 8000);
+    });
+
+    // APERTURA / CHIUSURA LOCANDINA
+    $('#btn-pali').on('click', function() { $('#locandina').fadeIn(200); });
+    $('#close-pali').on('click', function() { $('#locandina').fadeOut(200); });
+
+    function copySongInfo() {
+        const artista = document.getElementById('artist').innerText;
+        const brano = document.getElementById('song').innerText;
+        navigator.clipboard.writeText(`${artista} - ${brano}`);
+    }
 </script>
 </body>
 </html>
