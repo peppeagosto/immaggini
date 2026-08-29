@@ -36,39 +36,19 @@
         .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px;}
         .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
         
-        /* Stile per la Cover (In alto a sinistra per Xat) */
         #box-cover270 { 
-            position: fixed;
-            top: 30px;  
-            left: 45px; 
-            pointer-events: auto; 
-            display: none; 
-            text-align: center; 
-            z-index: 999999;
+            position: fixed; top: 30px; left: 45px; pointer-events: auto; display: none; text-align: center; z-index: 999999;
         }
         #cover270 { 
-            width: 80px; 
-            height: 80px; 
-            object-fit: cover; 
-            border-radius: 50%; 
-            border: 2px solid #0f0; 
-            box-shadow: 0 0 15px #0f0; 
-            animation: rotate-disco 4s linear infinite; 
+            width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #0f0; box-shadow: 0 0 15px #0f0; animation: rotate-disco 4s linear infinite; 
         }
         #nome-cover270 { 
-            margin-top: 5px; 
-            background: var(--rb); 
-            -webkit-background-clip: text; 
-            color: transparent; 
-            font-size: 11px; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
+            margin-top: 5px; background: var(--rb); -webkit-background-clip: text; color: transparent; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; 
         }
     </style>
 </head>
 <body>
-    <!-- Box dove appare la foto e il NOME del DJ in diretta -->
+
     <div id="box-cover270">
         <img id="cover270" src="" alt="DJ In Diretta">
         <div id="nome-cover270"></div>
@@ -88,56 +68,39 @@
     </div>
 
 <script>
-    // Link della tua Radio Shoutcast
+    // IL LINK DELLA TUA RADIO SHOUTCAST
     const URL_RADIO = "https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";
 
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
     const djs = [
-        { nome: "DJ NIKITA",  foto: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, // 0
-        { nome: "DJ TOTTI",   foto: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, // 1
-        { nome: "DJ CLAUDIA", foto: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, // 2
-        { nome: "DJ SIMONA",  foto: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, // 3
-        { nome: "DJ STEFANY", foto: "https://xatimg.com/image/X7febOvNHs96.jpg" }, // 4
-        { nome: "DJ ROBERTO", foto: "https://xatimg.com/image/DYidsujYf2BT.jpg" }, // 5
-        { nome: "DJ ALESSIA", foto: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, // 6
-        { nome: "DJ GENNY",   foto: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, // 7
-        { nome: "DJ MERY",    foto: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, // 8
-        { nome: "DJ CARTAIO", foto: "https://xatimg.com/image/RrNrzPFPVBwN.png" }  // 9
+        { nome: "DJ NIKITA",  foto: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, 
+        { nome: "DJ TOTTI",   foto: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, 
+        { nome: "DJ CLAUDIA", foto: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, 
+        { nome: "DJ SIMONA",  foto: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, 
+        { nome: "DJ STEFANY", foto: "https://xatimg.com/image/X7febOvNHs96.jpg" }, 
+        { nome: "DJ ROBERTO", foto: "https://xatimg.com/image/DYidsujYf2BT.jpg" }, 
+        { nome: "DJ ALESSIA", foto: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, 
+        { nome: "DJ GENNY",   foto: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, 
+        { nome: "DJ MERY",    foto: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, 
+        { nome: "DJ CARTAIO", foto: "https://xatimg.com/image/RrNrzPFPVBwN.png" }  
     ];
 
     const databaseTurni = {
-        "LUNEDÌ": [
-            {h:18, dj: djs[0]}, {h:19, dj: djs[1]}, {h:20, dj: djs[2]}, {h:21, dj: djs[3]}
-        ],
-        "MARTEDÌ": [
-            {h:17, dj: djs[4]}, {h:18, dj: djs[5]}, {h:19, dj: djs[6]}, {h:20, dj: djs[7]}, {h:21, dj: djs[8]}
-        ],
-        "MERCOLEDÌ": [
-            {h:18, dj: djs[9]}, {h:19, dj: djs[0]}, {h:20, dj: djs[1]}, {h:21, dj: djs[2]}
-        ],
-        "GIOVEDÌ": [
-            {h:17, dj: djs[3]}, {h:18, dj: djs[4]}, {h:19, dj: djs[5]}, {h:20, dj: djs[6]}, {h:21, dj: djs[7]}
-        ],
-        "VENERDÌ": [
-            {h:18, dj: djs[8]}, {h:19, dj: djs[9]}, {h:20, dj: djs[0]}, {h:21, dj: djs[1]}
-        ],
+        "LUNEDÌ": [ {h:18, dj: djs[0]}, {h:19, dj: djs[1]}, {h:20, dj: djs[2]}, {h:21, dj: djs[3]} ],
+        "MARTEDÌ": [ {h:17, dj: djs[4]}, {h:18, dj: djs[5]}, {h:19, dj: djs[6]}, {h:20, dj: djs[7]}, {h:21, dj: djs[8]} ],
+        "MERCOLEDÌ": [ {h:18, dj: djs[9]}, {h:19, dj: djs[0]}, {h:20, dj: djs[1]}, {h:21, dj: djs[2]} ],
+        "GIOVEDÌ": [ {h:17, dj: djs[3]}, {h:18, dj: djs[4]}, {h:19, dj: djs[5]}, {h:20, dj: djs[6]}, {h:21, dj: djs[7]} ],
+        "VENERDÌ": [ {h:18, dj: djs[8]}, {h:19, dj: djs[9]}, {h:20, dj: djs[0]}, {h:21, dj: djs[1]} ],
         "SABATO": [
-            {h:10, dj: djs[2]}, 
-            {h:11, dj: djs[3]}, 
-            {h:12, dj: djs[4]}, 
-            {h:13, dj: djs[0]}, 
-            {h:14, dj: djs[1]}, 
-            {h:17, dj: djs[5]}, 
-            {h:18, dj: djs[6]}, 
-            {h:19, dj: djs[7]}, 
-            {h:20, dj: djs[8]}, 
-            {h:21, dj: djs[9]}
+            {h:10, dj: djs[2]}, {h:11, dj: djs[3]}, {h:12, dj: djs[4]}, {h:13, dj: djs[0]}, 
+            {h:14, dj: djs[1]}, {h:17, dj: djs[5]}, {h:18, dj: djs[6]}, {h:19, dj: djs[7]}, 
+            {h:20, dj: djs[8]}, {h:21, dj: djs[9]}
         ],
         "DOMENICA": "RIPOSO"
     };
 
-    function processaInterfaccia(djDalServer) {
+    function processaInterfaccia(djServerReale) {
         const d = new Date();
         const oggi = giorni[d.getDay()];
         let oraAttuale = d.getHours();
@@ -156,18 +119,20 @@
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
+                // Se non c'è un DJ letto dal server, usiamo l'orario come piano B
                 let qualcunoLiveDaOrario = djsOggi.some(turno => turno.h === oraAttuale);
                 
                 djsOggi.forEach((turno, index) => {
                     let èLive = false;
 
-                    // 1. Controlla se il server radio trasmette il nome di questo DJ
-                    if (djDalServer && turno.dj.nome === djDalServer) {
+                    // PRIORITÀ 1: Il server dice che questo DJ è live?
+                    if (djServerReale && turno.dj.nome === djServerReale) {
                         èLive = true;
                     } 
-                    // 2. Se non c'è nessun nome dal server, usa l'orologio come piano B
-                    else if (!djDalServer) {
+                    // PRIORITÀ 2: Se il server non rileva nomi DJ, guardiamo l'orologio
+                    else if (!djServerReale) {
                         if (oraAttuale === turno.h) èLive = true;
+                        // Regole per sforamenti di orario come nel vecchio codice
                         if (!qualcunoLiveDaOrario && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
                         if (!qualcunoLiveDaOrario && oraAttuale < 9 && index === 0) èLive = true;
                     }
@@ -190,6 +155,7 @@
                         </div>`);
                 });
                 
+                // Se nessuno risulta live (né dal server né dall'orologio)
                 if(!coverTrovata) { 
                     $('#box-cover270').hide();
                 }
@@ -197,36 +163,36 @@
         }
     }
 
-    function controllaRadio() {
+    function aggiornaLiveDaServer() {
         $.getJSON(URL_RADIO, function(data) {
-            let stringaServer = "";
+            let infoServer = "";
             let djReale = null;
             
-            // Unisce il titolo della regia e il titolo della canzone
-            if(data.servertitle) stringaServer += data.servertitle.toUpperCase() + " ";
-            if(data.songtitle) stringaServer += data.songtitle.toUpperCase();
+            // Uniamo i dati del server (titolo della radio e titolo della canzone) per cercare il nome del DJ
+            if(data.servertitle) infoServer += data.servertitle.toUpperCase() + " ";
+            if(data.songtitle) infoServer += data.songtitle.toUpperCase();
 
-            // Cerca se uno dei DJ è menzionato nel titolo
+            // Cerchiamo se un nome della nostra lista DJ è presente nelle info del server
             djs.forEach(dj => {
-                if (stringaServer.includes(dj.nome)) {
-                    djReale = dj.nome; // Trovato il DJ in onda!
+                if (infoServer.includes(dj.nome)) {
+                    djReale = dj.nome; // Trovato!
                 }
             });
 
-            // Aggiorna la grafica
+            // Avvia la grafica passando il nome del DJ trovato (oppure null se non c'è nessuno)
             processaInterfaccia(djReale);
 
         }).fail(function() {
-            // Se la radio è spenta, usa l'orologio
+            // Se il server è irraggiungibile per qualche motivo, fallback sull'orologio
             processaInterfaccia(null);
         });
     }
 
     $('#btn-pali').on('click', function() { $('#locandina').toggle(); });
     
-    // Controlla la radio ogni 10 secondi
-    setInterval(controllaRadio, 10000); 
-    controllaRadio();
+    // Controlla il server ogni 10 secondi
+    setInterval(aggiornaLiveDaServer, 10000); 
+    aggiornaLiveDaServer();
 </script>
 </body>
 </html>
