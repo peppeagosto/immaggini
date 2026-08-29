@@ -1,271 +1,259 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabato Radio - xat</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    
-    body {
-      background: #0d0d11;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
-      user-select: none;
-    }
+    <meta charset="UTF-8">
+    <title>DIRETTE DJ LIVE</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        :root {
+            --accent: #ff00c8;
+            --neon: #00ffd5;
+            --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00);
+        }
+        * { box-sizing: border-box; }
+        body {
+            background: transparent;
+            margin: 0;
+            padding: 10px;
+            font-family: 'Arial Black', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container-box {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            height: 100%;
+            max-width: 580px;
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 0 25px var(--accent), inset 0 0 20px #000;
+        }
 
-    /* Container ottimizzato per iframe di xat */
-    .xat-widget {
-      width: 100%;
-      max-width: 650px;
-      height: 320px;
-      background: #16161d;
-      border: 1px solid #2a2a36;
-      border-radius: 12px;
-      display: flex;
-      overflow: hidden;
-      position: relative;
-    }
+        /* LATO SINISTRO: DISCO VINILE CON FOTO DJ */
+        .left-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 10px;
+        }
+        .vinyl-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid #0a0a0a;
+            box-shadow: 0 0 20px var(--accent);
+            overflow: hidden;
+            background: #000;
+        }
+        .vinyl-container.spinning {
+            animation: spin 3s linear infinite;
+        }
+        #dj-current-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .live-label {
+            margin-top: 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 900;
+            background: var(--rb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
 
-    /* --- LATO SINISTRO: DISCO VINILE IN ONDA --- */
-    .left-panel {
-      flex: 1;
-      background: radial-gradient(circle, #252535 0%, #111118 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      border-right: 1px solid #23232f;
-      text-align: center;
-    }
+        /* LATO DESTRO: ELENCO DJ E ORARI */
+        .right-side {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header-title {
+            text-align: center;
+            font-size: 12px;
+            color: #ffff00;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #333;
+        }
+        .lista-scroll {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 4px;
+        }
+        .lista-scroll::-webkit-scrollbar { width: 4px; }
+        .lista-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
-    .vinyl {
-      position: relative;
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #111 0%, #000 30%, #222 35%, #000 50%, #222 65%, #000 100%);
-      box-shadow: 0 0 15px rgba(0,0,0,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: spin 5s linear infinite;
-    }
+        .slot {
+            background: #08080c;
+            border: 1px solid #222;
+            border-radius: 18px;
+            padding: 5px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .slot.active {
+            border-color: #0f0;
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+            background: rgba(0, 255, 0, 0.05);
+        }
+        .ora { color: #0ff; font-size: 10px; font-weight: bold; width: 40px; text-align: center; }
+        .foto-mini { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #444; object-fit: cover; }
+        .foto-mini.spin { animation: spin 2.5s linear infinite; border-color: #0f0; }
+        .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
 
-    .vinyl-cover {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      border: 2px solid #ff007f;
-      object-fit: cover;
-    }
+        .led-verde { width: 8px; height: 8px; background-color: #0f0; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #0f0; animation: blink 0.8s infinite; }
+        .led-rosso { width: 8px; height: 8px; background-color: #f00; border-radius: 50%; display: inline-block; }
 
-    .vinyl-center-dot {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 10px;
-      height: 10px;
-      background: #16161d;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.4);
-    }
+        .testo-riposo { text-align: center; padding-top: 40px; font-size: 12px; color: #ff0; line-height: 1.6; }
 
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-
-    .status-tag {
-      font-size: 10px;
-      color: #ff007f;
-      font-weight: bold;
-      letter-spacing: 1.5px;
-      margin-top: 12px;
-    }
-
-    .dj-name {
-      font-size: 15px;
-      font-weight: bold;
-      color: #00e5ff;
-      margin-top: 4px;
-    }
-
-    .off-air {
-      color: #666;
-      font-size: 13px;
-    }
-
-    /* --- LATO DESTRO: LOCANDINA & PALINSESTO --- */
-    .right-panel {
-      flex: 1.1;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      background: #1a1a24;
-    }
-
-    /* Locandina Intestazione / Tasto Apri */
-    .poster-header {
-      background: linear-gradient(135deg, #ff007f, #7928ca);
-      padding: 14px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .poster-header h3 {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .poster-header span {
-      font-size: 11px;
-      background: rgba(0,0,0,0.3);
-      padding: 4px 8px;
-      border-radius: 12px;
-    }
-
-    /* Lista Palinsesto Sabato */
-    .schedule-content {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .schedule-content::-webkit-scrollbar {
-      width: 4px;
-    }
-    .schedule-content::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 4px;
-    }
-
-    .schedule-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #232332;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-    }
-
-    .schedule-row.active-now {
-      background: #2f1c38;
-      border: 1px solid #ff007f;
-    }
-
-    .schedule-row img {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .schedule-row .time {
-      color: #00e5ff;
-      font-weight: bold;
-      min-width: 42px;
-    }
-
-    .schedule-row .name {
-      font-weight: 600;
-      color: #ddd;
-    }
-  </style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
 </head>
 <body>
 
-<div class="xat-widget">
-  <!-- SX: Vinile in Onda -->
-  <div class="left-panel" id="live-panel">
-    <!-- Viene popolato in automatico via Javascript -->
-  </div>
+<div class="container-box">
+    <!-- A SINISTRA: VINILE LIVE -->
+    <div class="left-side">
+        <div class="vinyl-container" id="vinyl-disc">
+            <img id="dj-current-img" src="https://xatimg.com/image/or3rbqD5I3rS.png" alt="DJ Live">
+        </div>
+        <div class="live-label" id="dj-live-name">AUTODJ ON AIR</div>
+    </div>
 
-  <!-- DX: Locandina con Lista Palinsesto -->
-  <div class="right-panel">
-    <div class="poster-header">
-      <h3>📅 SABATO IN ONDA</h3>
-      <span>Palinsesto</span>
+    <!-- A DESTRA: LISTA ORARI E FOTO -->
+    <div class="right-side">
+        <div class="header-title" id="day-header">DIRETTE RADIO</div>
+        <div class="lista-scroll" id="dj-list-container"></div>
     </div>
-    <div class="schedule-content" id="schedule-box">
-      <!-- Lista DJ del Sabato -->
-    </div>
-  </div>
 </div>
 
 <script>
-  // Palinsesto del Sabato
-  const sabatoSchedule = [
-    {"h": 10, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
-    {"h": 11, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
-    {"h": 12, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"},
-    {"h": 17, "n": "DJ ROBERTA", "f": "https://xatimg.com/image/DYidsujYf2BT.jpg"},
-    {"h": 18, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
-    {"h": 19, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
-    {"h": 20, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
-    {"h": 21, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"}
-  ];
+    const defaultCover = "https://xatimg.com/image/or3rbqD5I3rS.png";
+    const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-  const livePanel = document.getElementById('live-panel');
-  const scheduleBox = document.getElementById('schedule-box');
+    // LINK AL TUO FILE JSON SU GITHUB (o modifica direttamente questo oggetto)
+    const turni = {
+        "LUNEDÌ": [
+            {"h": 18, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {"h": 19, "n": "DJ ROSY", "f": "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
+            {"h": 20, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {"h": 21, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"}
+        ],
+        "MARTEDÌ": [
+            {"h": 17, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"},
+            {"h": 18, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {"h": 19, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {"h": 20, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {"h": 21, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"}
+        ],
+        "MERCOLEDÌ": [
+            {"h": 18, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {"h": 19, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {"h": 20, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {"h": 21, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"}
+        ],
+        "GIOVEDÌ": [
+            {"h": 17, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {"h": 18, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"},
+            {"h": 19, "n": "DJ ROSY", "f": "https://xatimg.com/image/9EUxzchBUN3A.jpg"},
+            {"h": 20, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {"h": 21, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"}
+        ],
+        "VENERDÌ": [
+            {"h": 18, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
+            {"h": 19, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {"h": 20, "n": "DJ NIKITA", "f": "https://xatimg.com/image/pORicTZi3lhE.jpg"},
+            {"h": 21, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"}
+        ],
+        "SABATO": [
+            {"h": 10, "n": "DJ CLAUDIA", "f": "https://xatimg.com/image/zC9XQHm7xHte.jpg"},
+            {"h": 11, "n": "DJ SIMONA", "f": "https://xatimg.com/image/HnHeYw6n4jj3.jpg"},
+            {"h": 12, "n": "DJ STEFANY", "f": "https://xatimg.com/image/X7febOvNHs96.jpg"},
+            {"h": 17, "n": "DJ ROBERTA", "f": "https://xatimg.com/image/DYidsujYf2BT.jpg"},
+            {"h": 18, "n": "DJ ALESSIA", "f": "https://xatimg.com/image/DsFXMhIKnNDE.jpg"},
+            {"h": 19, "n": "DJ GENNY", "f": "https://xatimg.com/image/4Fa39NYJYZUF.jpg"},
+            {"h": 20, "n": "DJ MERY", "f": "https://xatimg.com/image/5vCvkJiVlHWF.jpg"},
+            {"h": 21, "n": "DJ CARTAIO", "f": "https://xatimg.com/image/RrNrzPFPVBwN.png"}
+        ],
+        "DOMENICA": "RIPOSO"
+    };
 
-  function checkStream() {
-    const currentHour = new Date().getHours();
-    const activeDJ = sabatoSchedule.find(dj => dj.h === currentHour);
+    function renderPalinsesto() {
+        const now = new Date();
+        const giornoOggi = giorni[now.getDay()];
+        const oraAttuale = now.getHours();
 
-    // Gestione Vinile a Sinistra
-    if (activeDJ) {
-      livePanel.innerHTML = `
-        <div class="vinyl">
-          <img class="vinyl-cover" src="${activeDJ.f}" alt="${activeDJ.n}">
-          <div class="vinyl-center-dot"></div>
-        </div>
-        <div class="status-tag">🔴 IN ONDA ORA</div>
-        <div class="dj-name">${activeDJ.n}</div>
-      `;
-    } else {
-      livePanel.innerHTML = `
-        <div class="off-air">
-          <p style="font-size:24px; margin-bottom:8px;">🎧</p>
-          <p>Nessun DJ in onda</p>
-          <span style="font-size:11px; color:#555;">Radio in Rotazione</span>
-        </div>
-      `;
+        $('#day-header').text(giornoOggi + " - DIRETTE LIVE");
+        const listContainer = $('#dj-list-container').empty();
+        const djsOggi = turni[giornoOggi];
+
+        let liveFound = false;
+
+        if (giornoOggi === "DOMENICA" || djsOggi === "RIPOSO" || !Array.isArray(djsOggi)) {
+            listContainer.append('<div class="testo-riposo">BUONA DOMENICA DA<br>IL CARTAIO<br>DOMANI SI RIPARTE!</div>');
+            $('#dj-current-img').attr('src', defaultCover);
+            $('#vinyl-disc').removeClass('spinning');
+            $('#dj-live-name').text('AUTODJ ON AIR');
+            return;
+        }
+
+        djsOggi.forEach(dj => {
+            const isLive = (oraAttuale === dj.h);
+            if (isLive) {
+                liveFound = true;
+                $('#dj-current-img').attr('src', dj.f);
+                $('#vinyl-disc').addClass('spinning');
+                $('#dj-live-name').text('IN ONDA: ' + dj.n);
+            }
+
+            const miniSpin = isLive ? 'spin' : '';
+            const slotActive = isLive ? 'active' : '';
+            const statusLed = isLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
+
+            listContainer.append(`
+                <div class="slot ${slotActive}">
+                    <span class="ora">${dj.h}:00</span>
+                    <img class="foto-mini ${miniSpin}" src="${dj.f}" onerror="this.src='${defaultCover}'">
+                    <div class="nome"><span>${dj.n}</span> ${statusLed}</div>
+                </div>
+            `);
+        });
+
+        if (!liveFound) {
+            $('#dj-current-img').attr('src', defaultCover);
+            $('#vinyl-disc').removeClass('spinning');
+            $('#dj-live-name').text('AUTODJ ON AIR');
+        }
     }
 
-    // Costruzione Lista a Destra
-    scheduleBox.innerHTML = '';
-    sabatoSchedule.forEach(dj => {
-      const isNow = dj.h === currentHour;
-      const row = document.createElement('div');
-      row.className = `schedule-row ${isNow ? 'active-now' : ''}`;
-      row.innerHTML = `
-        <span class="time">${dj.h}:00</span>
-        <img src="${dj.f}" alt="${dj.n}">
-        <span class="name">${dj.n} ${isNow ? '• (ON AIR)' : ''}</span>
-      `;
-      scheduleBox.appendChild(row);
+    $(document).ready(() => {
+        renderPalinsesto();
+        setInterval(renderPalinsesto, 10000);
     });
-  }
-
-  // Esegui subito e aggiorna ogni minuto
-  checkStream();
-  setInterval(checkStream, 60000);
 </script>
-
 </body>
 </html>
