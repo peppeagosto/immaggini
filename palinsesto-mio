@@ -74,7 +74,7 @@
         "MERCOLEDÌ": [{h:18, n:"DJ VALENTINA", f:img[9]}, {h:19, n:"DJ FABIO", f:img[0]}, {h:20, n:"DJ CHIARA", f:img[1]}, {h:21, n:"DJ ANDREA", f:img[2]}],
         "GIOVEDÌ": [{h:17, n:"DJ MARTINA", f:img[3]}, {h:18, n:"DJ GIOVANNI", f:img[4]}, {h:19, n:"DJ FEDERICA", f:img[5]}, {h:20, n:"DJ ENRICO", f:img[6]}, {h:21, n:"DJ BEATRICE", f:img[7]}],
         "VENERDÌ": [{h:18, n:"DJ RICCARDO", f:img[8]}, {h:19, n:"DJ ANNA", f:img[9]}, {h:20, n:"DJ PIETRO", f:img[0]}, {h:21, n:"DJ SILVIA", f:img[1]}],
-        "SABATO": [{h:17, n:"DJ CLAUDIO", f:img[2]}, {h:18, n:"DJ SIMONA", f:img[3]}, {h:19, n:"DJ STEFANO", f:img[4]}, {h:20, n:"DJ ROBERTO", f:img[5]}, {h:21, n:"DJ ALESSIA", f:img[6]}],
+        "SABATO": [{h:9, n:"DJ NIKITA", f:"https://xatimg.com/image/IqDWKCvkbBqc.jpg"}, {h:17, n:"DJ CLAUDIO", f:img[2]}, {h:18, n:"DJ SIMONA", f:img[3]}, {h:19, n:"DJ STEFANO", f:img[4]}, {h:20, n:"DJ ROBERTO", f:img[5]}, {h:21, n:"DJ ALESSIA", f:img[6]}],
         "DOMENICA": "RIPOSO"
     };
 
@@ -94,15 +94,13 @@
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
-                // Trucco: se siamo fuori orario, facciamo finta che l'ultimo DJ sia ancora live
                 let qualcunoLive = djsOggi.some(dj => dj.h === oraAttuale);
                 
                 djsOggi.forEach((dj, index) => {
                     let èLive = (oraAttuale === dj.h);
                     
-                    // Forza il live sul primo DJ se è presto, o sull'ultimo se è tardi per far sembrare attivo
                     if (!qualcunoLive && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
-                    if (!qualcunoLive && oraAttuale < 17 && index === 0) èLive = true;
+                    if (!qualcunoLive && oraAttuale < 9 && index === 0) èLive = true;
 
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : (oraAttuale > dj.h) ? '<span class="led-rosso"></span>' : '';
