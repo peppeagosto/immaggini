@@ -36,7 +36,6 @@
         .nome { color: #ff00ff; font-size: 10px; text-transform: uppercase; font-weight: 900; flex-grow: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px;}
         .testo-lama { font-size: 13px; text-align: center; padding: 20px 5px; display: block; letter-spacing: 0.5px; line-height: 1.4; }
         
-        /* Modificato: spostato a top: 70px e left: 65px */
         #box-cover270 { 
             position: fixed; top: 70px; left: 65px; pointer-events: auto; display: none; text-align: center; z-index: 999999;
         }
@@ -104,7 +103,6 @@
     function processaInterfaccia(djServerReale) {
         const d = new Date();
         const oggi = giorni[d.getDay()];
-        let oraAttuale = d.getHours();
         
         $('#giorno-live').text(oggi);
         const container = $('#lista-dj').empty();
@@ -120,19 +118,14 @@
         } else {
             titoloLoc.show();
             if (Array.isArray(djsOggi)) {
-                let qualcunoLiveDaOrario = djsOggi.some(turno => turno.h === oraAttuale);
                 
-                djsOggi.forEach((turno, index) => {
+                djsOggi.forEach((turno) => {
                     let èLive = false;
 
+                    // UNICA REGOLA: Si accende SOLO se il DJ è effettivamente letto dal server radio
                     if (djServerReale && turno.dj.nome === djServerReale) {
                         èLive = true;
                     } 
-                    else if (!djServerReale) {
-                        if (oraAttuale === turno.h) èLive = true;
-                        if (!qualcunoLiveDaOrario && oraAttuale > 21 && index === djsOggi.length - 1) èLive = true;
-                        if (!qualcunoLiveDaOrario && oraAttuale < 9 && index === 0) èLive = true;
-                    }
 
                     let classeGira = èLive ? "ruota-disco" : "";
                     let statusLed = èLive ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
@@ -152,6 +145,7 @@
                         </div>`);
                 });
                 
+                // Se non c'è nessuna diretta reale in corso, nascondi la foto grande in alto
                 if(!coverTrovata) { 
                     $('#box-cover270').hide();
                 }
@@ -176,7 +170,7 @@
             processaInterfaccia(djReale);
 
         }).fail(function() {
-            processaInterfaccia(null);
+            processaInterfaccia(null); // Server irraggiungibile = niente diretta mostrata
         });
     }
 
