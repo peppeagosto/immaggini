@@ -5,6 +5,10 @@
     <title>Palinsesto DJ Live - Invisibile</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        :root {
+            --grad-colore: linear-gradient(135deg, #ff0055, #ff5500, #ffcc00);
+        }
+
         body { 
             background: transparent; 
             margin: 0; 
@@ -13,10 +17,10 @@
             overflow: hidden; 
         }
 
-        /* 1. COVER 80x80 ROTANTE A SINISTRA (Nascosta di default) */
+        /* 1. COVER 80x80 ROTANTE A SINISTRA */
         #cover-box-sx {
             position: fixed; 
-            left: 120px; 
+            left: 150px; /* Spostata ancora un po' più a destra */
             top: 150px; 
             width: 80px; 
             height: 80px; 
@@ -40,24 +44,52 @@
             to { transform: rotate(360deg); } 
         }
 
-        /* 2. PUNTINO ROSSO SEGRETO (Tasto invisibile) */
+        /* 2. RETTANGOLO A DESTRA (Invisibile, compare al passaggio del mouse) */
         #btn-pali {
             position: fixed;
             right: 20px;
-            bottom: 20px;
-            width: 12px; /* Dimensione del puntino */
-            height: 12px;
-            background-color: red;
-            border-radius: 50%; /* Lo rende tondo */
+            top: 80px; /* Abbassato per non farlo tagliare dal bordo in alto */
+            width: 220px;
+            height: 55px;
+            background: #000;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             z-index: 999999;
-            opacity: 0.15; /* Opacità bassissima, quasi invisibile */
+            opacity: 0; /* Totalmente invisibile di base */
             transition: opacity 0.3s ease;
         }
 
-        /* Si accende leggermente quando ci passi sopra col mouse */
+        /* Appare quando ci passi sopra col mouse */
         #btn-pali:hover {
-            opacity: 0.8;
+            opacity: 1;
+        }
+
+        .btn-main-txt {
+            background: var(--grad-colore);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-sub-txt {
+            color: #00ffff;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-top: 2px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.96); }
         }
 
         /* 3. LOCANDINA POPUP TURNI */
@@ -65,7 +97,7 @@
             display: none; 
             position: fixed; 
             right: 20px; 
-            bottom: 40px; 
+            top: 145px; /* Agganciata subito sotto il pulsante */
             width: 260px; 
             background: #111; 
             border: 2px solid #333; 
@@ -169,8 +201,11 @@
         <img id="imgCoverDJ" class="disco-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
     </div>
 
-    <!-- PUNTINO SEGRETO A DX (Tutto il testo è stato rimosso) -->
-    <div id="btn-pali"></div>
+    <!-- RETTANGOLO APRI/CHIUDI A DX (INVISIBILE) -->
+    <div id="btn-pali">
+        <div class="btn-main-txt">PALINSESTO DJ</div>
+        <div class="btn-sub-txt">CLICCA QUI</div>
+    </div>
 
     <!-- LOCANDINA DEI TURNI A SCOMPARSA -->
     <div id="locandina-popup">
