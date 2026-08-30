@@ -17,15 +17,16 @@
             overflow: hidden;
         }
 
-        /* 1. COVER 80x80 ROTANTE A SINISTRA */
+        /* 1. COVER 80x80 ROTANTE A SINISTRA (Spostata e nascosta di default) */
         #cover-box-sx {
             position: fixed;
-            left: 20px;
-            top: 50px;
+            left: 120px; /* Spostata più a destra */
+            top: 150px;  /* Spostata più in basso */
             width: 80px;
             height: 80px;
             z-index: 999999;
             pointer-events: auto;
+            display: none; /* Appare solo al click del palinsesto */
         }
 
         .disco-cover {
@@ -44,11 +45,11 @@
             to { transform: rotate(360deg); }
         }
 
-        /* 2. RETTANGOLINO A DESTRA (PULSANTE) */
+        /* 2. RETTANGOLINO A DESTRA (Invisibile, compare al passaggio del mouse) */
         #btn-pali {
             position: fixed;
             right: 20px;
-            top: 50px;
+            bottom: 40px; /* Spostato in basso a destra */
             width: 220px;
             height: 55px;
             background: #000;
@@ -62,6 +63,13 @@
             z-index: 999999;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             user-select: none;
+            opacity: 0; /* Invisibile di base */
+            transition: opacity 0.3s ease; /* Animazione di comparsa */
+        }
+
+        /* Mostra il pulsante quando il mouse ci passa sopra */
+        #btn-pali:hover {
+            opacity: 1; 
         }
 
         .btn-main-txt {
@@ -92,7 +100,7 @@
             display: none;
             position: fixed;
             right: 20px;
-            top: 115px;
+            bottom: 110px; /* Posizionata appena sopra il pulsante */
             width: 260px;
             background: #111;
             border: 2px solid #333;
@@ -214,7 +222,6 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
 
-    // Turni divisi da Lunedì a Sabato dalle 19:00 alle 23:00 (ultimo turno finisce a mezzanotte)
     const databaseTurni = {
         "LUNEDÌ": [
             { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" },
@@ -283,7 +290,6 @@
             const inOndaOra = (turno.h === oraAttuale);
             const classeRiga = inOndaOra ? "riga-turno on-air" : "riga-turno";
             
-            // LED: Verde lampeggiante se in diretta, Rosso se non è la sua ora
             const led = inOndaOra ? '<span class="led-verde" title="In Streaming"></span>' : '<span class="led-rosso" title="Non in streaming"></span>';
 
             if (inOndaOra) {
@@ -302,18 +308,17 @@
             `);
         });
 
-        // Se a quest'ora non c'è nessun DJ in diretta, rimetti la cover base
         if (!trovatoInOnda) {
             $('#imgCoverDJ').attr('src', defaultFoto);
         }
     }
 
-    // Apertura e Chiusura al click sul tasto a DX
+    // Al click sul tasto a DX, apri sia la locandina che la cover del DJ a SX
     $('#btn-pali').on('click', function() {
         $('#locandina-popup').fadeToggle(200);
+        $('#cover-box-sx').fadeToggle(200);
     });
 
-    // Controllo automatico ogni 15 secondi
     aggiornaPalinsesto();
     setInterval(aggiornaPalinsesto, 15000);
 </script>
