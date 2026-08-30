@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Palinsesto DJ Live - Invisibile</title>
+    <title>Palinsesto DJ Live - Full Day</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         :root {
@@ -17,25 +17,25 @@
             overflow: hidden; 
         }
 
-        /* 1. COVER 80x80 ROTANTE A SINISTRA */
+        /* 1. COVER 120x120 ROTANTE A SINISTRA */
         #cover-box-sx {
             position: fixed; 
-            left: 150px; /* Spostata ancora un po' più a destra */
-            top: 150px; 
-            width: 80px; 
-            height: 80px; 
+            left: 40px; /* Spostata a sinistra */
+            top: 130px; 
+            width: 120px; /* Ingrandita */
+            height: 120px; /* Ingrandita */
             z-index: 999999; 
             display: none; 
         }
 
         .disco-cover {
-            width: 80px; 
-            height: 80px; 
+            width: 120px; 
+            height: 120px; 
             border-radius: 50%; 
             border: 3px solid #ff0055; 
             object-fit: cover; 
             background: #000; 
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.7); 
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.8); 
             animation: giraDisco 6s linear infinite;
         }
 
@@ -48,7 +48,7 @@
         #btn-pali {
             position: fixed;
             right: 20px;
-            top: 80px; /* Abbassato per non farlo tagliare dal bordo in alto */
+            top: 80px; 
             width: 220px;
             height: 55px;
             background: #000;
@@ -64,7 +64,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Appare quando ci passi sopra col mouse */
         #btn-pali:hover {
             opacity: 1;
         }
@@ -97,7 +96,7 @@
             display: none; 
             position: fixed; 
             right: 20px; 
-            top: 145px; /* Agganciata subito sotto il pulsante */
+            top: 145px; 
             width: 260px; 
             background: #111; 
             border: 2px solid #333; 
@@ -127,6 +126,18 @@
             font-size: 10px; 
             letter-spacing: 1px; 
         }
+
+        /* CONTENITORE LISTA CON SCROLLBAR PER TURNI LUNGHI */
+        #elenco-turni {
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Personalizzazione barra di scorrimento */
+        #elenco-turni::-webkit-scrollbar { width: 5px; }
+        #elenco-turni::-webkit-scrollbar-track { background: #111; }
+        #elenco-turni::-webkit-scrollbar-thumb { background: #ff0055; border-radius: 5px; }
 
         /* RIGHE TURNI */
         .riga-turno { 
@@ -196,18 +207,15 @@
 </head>
 <body>
 
-    <!-- COVER ROTANTE A SX -->
     <div id="cover-box-sx">
         <img id="imgCoverDJ" class="disco-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
     </div>
 
-    <!-- RETTANGOLO APRI/CHIUDI A DX (INVISIBILE) -->
     <div id="btn-pali">
         <div class="btn-main-txt">PALINSESTO DJ</div>
         <div class="btn-sub-txt">CLICCA QUI</div>
     </div>
 
-    <!-- LOCANDINA DEI TURNI A SCOMPARSA -->
     <div id="locandina-popup">
         <div class="header-pali">
             <span id="nome-giorno">LUNEDÌ</span>
@@ -219,13 +227,52 @@
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
+    // Associazione foto fissa per DJ
+    const foto = {
+        ROSY: "https://xatimg.com/image/9EUxzchBUN3A.jpg",
+        CLAUDIA: "https://xatimg.com/image/zC9XQHm7xHte.jpg",
+        SIMONA: "https://xatimg.com/image/HnHeYw6n4jj3.jpg",
+        NIKITA: "https://xatimg.com/image/pORicTZi3lhE.jpg",
+        CARTAIO: "https://xatimg.com/image/RrNrzPFPVBwN.png",
+        ALESSIA: "https://xatimg.com/image/DsFXMhIKnNDE.jpg",
+        GENNY: "https://xatimg.com/image/4Fa39NYJYZUF.jpg",
+        MERY: "https://xatimg.com/image/5vCvkJiVlHWF.jpg",
+        STEFANY: "https://xatimg.com/image/X7febOvNHs96.jpg",
+        ROBERTA: "https://xatimg.com/image/DYidsujYf2BT.jpg"
+    };
+
+    // Palinsesto esteso dalle 11:00 alle 23:00
     const databaseTurni = {
-        "LUNEDÌ": [ { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, { h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
-        "MARTEDÌ": [ { h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" }, { h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" } ],
-        "MERCOLEDÌ": [ { h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
-        "GIOVEDÌ": [ { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" } ],
-        "VENERDÌ": [ { h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
-        "SABATO": [ { h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }, { h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg" } ],
+        "LUNEDÌ": [ 
+            { h: 11, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 12, n: "DJ MERY", f: foto.MERY }, { h: 13, n: "DJ STEFANY", f: foto.STEFANY }, { h: 14, n: "DJ ROBERTA", f: foto.ROBERTA },
+            { h: 15, n: "DJ GENNY", f: foto.GENNY }, { h: 16, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 17, n: "DJ SIMONA", f: foto.SIMONA }, { h: 18, n: "DJ NIKITA", f: foto.NIKITA },
+            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 21, n: "DJ SIMONA", f: foto.SIMONA }, { h: 22, n: "DJ NIKITA", f: foto.NIKITA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+        ],
+        "MARTEDÌ": [ 
+            { h: 11, n: "DJ ROSY", f: foto.ROSY }, { h: 12, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 13, n: "DJ SIMONA", f: foto.SIMONA }, { h: 14, n: "DJ NIKITA", f: foto.NIKITA },
+            { h: 15, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 16, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 17, n: "DJ GENNY", f: foto.GENNY }, { h: 18, n: "DJ MERY", f: foto.MERY },
+            { h: 19, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 20, n: "DJ GENNY", f: foto.GENNY }, { h: 21, n: "DJ MERY", f: foto.MERY }, { h: 22, n: "DJ STEFANY", f: foto.STEFANY }, { h: 23, n: "DJ NIKITA", f: foto.NIKITA } 
+        ],
+        "MERCOLEDÌ": [ 
+            { h: 11, n: "DJ GENNY", f: foto.GENNY }, { h: 12, n: "DJ MERY", f: foto.MERY }, { h: 13, n: "DJ STEFANY", f: foto.STEFANY }, { h: 14, n: "DJ ROBERTA", f: foto.ROBERTA },
+            { h: 15, n: "DJ ROSY", f: foto.ROSY }, { h: 16, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 17, n: "DJ SIMONA", f: foto.SIMONA }, { h: 18, n: "DJ CARTAIO", f: foto.CARTAIO },
+            { h: 19, n: "DJ NIKITA", f: foto.NIKITA }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+        ],
+        "GIOVEDÌ": [ 
+            { h: 11, n: "DJ SIMONA", f: foto.SIMONA }, { h: 12, n: "DJ NIKITA", f: foto.NIKITA }, { h: 13, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 14, n: "DJ ALESSIA", f: foto.ALESSIA },
+            { h: 15, n: "DJ GENNY", f: foto.GENNY }, { h: 16, n: "DJ MERY", f: foto.MERY }, { h: 17, n: "DJ STEFANY", f: foto.STEFANY }, { h: 18, n: "DJ ROBERTA", f: foto.ROBERTA },
+            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ STEFANY", f: foto.STEFANY } 
+        ],
+        "VENERDÌ": [ 
+            { h: 11, n: "DJ ROBERTA", f: foto.ROBERTA }, { h: 12, n: "DJ STEFANY", f: foto.STEFANY }, { h: 13, n: "DJ MERY", f: foto.MERY }, { h: 14, n: "DJ GENNY", f: foto.GENNY },
+            { h: 15, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 16, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 17, n: "DJ NIKITA", f: foto.NIKITA }, { h: 18, n: "DJ SIMONA", f: foto.SIMONA },
+            { h: 19, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 20, n: "DJ NIKITA", f: foto.NIKITA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ MERY", f: foto.MERY }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+        ],
+        "SABATO": [ 
+            { h: 11, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 12, n: "DJ ROSY", f: foto.ROSY }, { h: 13, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 14, n: "DJ NIKITA", f: foto.NIKITA },
+            { h: 15, n: "DJ SIMONA", f: foto.SIMONA }, { h: 16, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 17, n: "DJ GENNY", f: foto.GENNY }, { h: 18, n: "DJ MERY", f: foto.MERY },
+            { h: 19, n: "DJ GENNY", f: foto.GENNY }, { h: 20, n: "DJ MERY", f: foto.MERY }, { h: 21, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 22, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 23, n: "DJ ROBERTA", f: foto.ROBERTA } 
+        ],
         "DOMENICA": "RIPOSO"
     };
 
@@ -233,7 +280,7 @@
         const d = new Date(); 
         const oggi = giorni[d.getDay()]; 
         const oraAttuale = d.getHours();
-        const defaultFoto = "https://xatimg.com/image/RrNrzPFPVBwN.png";
+        const defaultFoto = foto.CARTAIO;
         
         $('#nome-giorno').text(oggi);
         const contenitore = $('#elenco-turni').empty(); 
