@@ -2,58 +2,31 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Palinsesto DJ Live</title>
+    <title>Palinsesto DJ Live - TEST VISIBILITA</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        :root {
-            --grad-colore: linear-gradient(135deg, #ff0055, #ff5500, #ffcc00);
-        }
+        :root { --grad-colore: linear-gradient(135deg, #ff0055, #ff5500, #ffcc00); }
+        body { background: #111; margin: 0; padding: 0; font-family: 'Arial Black', Arial, sans-serif; overflow: hidden; }
 
-        body {
-            background: transparent;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial Black', Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        /* 1. COVER 80x80 ROTANTE A SINISTRA (Spostata e nascosta di default) */
         #cover-box-sx {
-            position: fixed;
-            left: 120px; /* Spostata più a destra */
-            top: 150px;  /* Spostata più in basso */
-            width: 80px;
-            height: 80px;
-            z-index: 999999;
-            pointer-events: auto;
-            display: none; /* Appare solo al click del palinsesto */
+            position: fixed; left: 20px; top: 120px; width: 80px; height: 80px; z-index: 999999; display: none; 
         }
 
         .disco-cover {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid #ff0055;
-            object-fit: cover;
-            background: #111;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.7);
-            animation: giraDisco 6s linear infinite;
+            width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ff0055; object-fit: cover; background: #000; box-shadow: 0 0 15px rgba(255, 0, 85, 0.7); animation: giraDisco 6s linear infinite;
         }
 
-        @keyframes giraDisco {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes giraDisco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* 2. RETTANGOLINO A DESTRA (Invisibile, compare al passaggio del mouse) */
+        /* IL TASTO ORA È IN ALTO A DESTRA, ROSSO E VISIBILE AL 100% */
         #btn-pali {
             position: fixed;
             right: 20px;
-            bottom: 40px; /* Spostato in basso a destra */
+            top: 20px; /* SPOSTATO IN ALTO PER NON FARLO USCIRE DALLO SCHERMO */
             width: 220px;
             height: 55px;
             background: #000;
-            border: 2px solid #fff;
+            border: 2px solid red; /* BORDO ROSSO PER TROVARLO SUBITO */
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -61,156 +34,47 @@
             justify-content: center;
             cursor: pointer;
             z-index: 999999;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            user-select: none;
-            opacity: 0; /* Invisibile di base */
-            transition: opacity 0.3s ease; /* Animazione di comparsa */
-        }
-
-        /* Mostra il pulsante quando il mouse ci passa sopra */
-        #btn-pali:hover {
-            opacity: 1; 
+            opacity: 1 !important; /* VISIBILITÀ AL MASSIMO */
         }
 
         .btn-main-txt {
-            background: var(--grad-colore);
-            -webkit-background-clip: text;
-            color: transparent;
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            background: var(--grad-colore); -webkit-background-clip: text; color: transparent; font-size: 13px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
         }
 
-        .btn-sub-txt {
-            color: #00ffff;
-            font-size: 11px;
-            letter-spacing: 2px;
-            margin-top: 2px;
-            animation: pulseText 1.5s infinite;
-        }
+        .btn-sub-txt { color: #00ffff; font-size: 11px; letter-spacing: 2px; margin-top: 2px; animation: pulseText 1.5s infinite; }
 
-        @keyframes pulseText {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.96); }
-        }
+        @keyframes pulseText { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.96); } }
 
-        /* 3. LOCANDINA POPUP TURNI */
         #locandina-popup {
-            display: none;
-            position: fixed;
-            right: 20px;
-            bottom: 110px; /* Posizionata appena sopra il pulsante */
-            width: 260px;
-            background: #111;
-            border: 2px solid #333;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-            z-index: 999998;
+            display: none; position: fixed; right: 20px; top: 85px; width: 260px; background: #0a0a0a; border: 2px solid #333; border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); z-index: 999998;
         }
 
-        .header-pali {
-            text-align: center;
-            border-bottom: 2px solid #222;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-        }
+        .header-pali { text-align: center; border-bottom: 2px solid #222; padding-bottom: 8px; margin-bottom: 10px; }
+        #nome-giorno { color: #ffff00; font-size: 14px; text-transform: uppercase; font-weight: 900; display: block; }
+        .sub-header { color: #888; font-size: 10px; letter-spacing: 1px; }
 
-        #nome-giorno {
-            color: #ffff00;
-            font-size: 14px;
-            text-transform: uppercase;
-            font-weight: 900;
-            display: block;
-        }
+        .riga-turno { display: flex; align-items: center; justify-content: space-between; background: #181818; border: 1px solid #2a2a2a; border-radius: 8px; padding: 7px 10px; margin-bottom: 6px; }
+        .riga-turno.on-air { background: #250810; border-color: #00ff66; box-shadow: 0 0 8px rgba(0, 255, 102, 0.2); }
+        .orario-txt { color: #00ffff; font-size: 11px; font-weight: bold; }
+        .nome-dj-txt { color: #fff; font-size: 11px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
 
-        .sub-header {
-            color: #888;
-            font-size: 10px;
-            letter-spacing: 1px;
-        }
-
-        /* RIGHE TURNI */
-        .riga-turno {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #181818;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 7px 10px;
-            margin-bottom: 6px;
-        }
-
-        .riga-turno.on-air {
-            background: #250810;
-            border-color: #00ff66;
-            box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
-        }
-
-        .orario-txt {
-            color: #00ffff;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .nome-dj-txt {
-            color: #fff;
-            font-size: 11px;
-            font-weight: 900;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* LED ROSSO E VERDE */
-        .led-verde {
-            width: 9px;
-            height: 9px;
-            background-color: #00ff66;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
-            animation: lampeggio 0.8s infinite;
-        }
-
-        .led-rosso {
-            width: 9px;
-            height: 9px;
-            background-color: #ff2200;
-            border-radius: 50%;
-            box-shadow: 0 0 5px #ff2200;
-        }
-
-        @keyframes lampeggio {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .messaggio-riposo {
-            color: #ffaa00;
-            text-align: center;
-            font-size: 12px;
-            padding: 15px 5px;
-            line-height: 1.5;
-        }
+        .led-verde { width: 9px; height: 9px; background-color: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; animation: lampeggio 0.8s infinite; }
+        .led-rosso { width: 9px; height: 9px; background-color: #ff2200; border-radius: 50%; box-shadow: 0 0 5px #ff2200; }
+        @keyframes lampeggio { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .messaggio-riposo { color: #ffaa00; text-align: center; font-size: 12px; padding: 15px 5px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <!-- COVER ROTANTE A SX -->
     <div id="cover-box-sx">
-        <img id="imgCoverDJ" class="disco-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png" alt="Cover DJ">
+        <img id="imgCoverDJ" class="disco-cover" src="https://xatimg.com/image/RrNrzPFPVBwN.png">
     </div>
 
-    <!-- RETTANGOLO APRI/CHIUDI A DX -->
     <div id="btn-pali">
         <div class="btn-main-txt">PALINSESTO DJ</div>
         <div class="btn-sub-txt">CLICCA QUI</div>
     </div>
 
-    <!-- LOCANDINA DEI TURNI A SCOMPARSA -->
     <div id="locandina-popup">
         <div class="header-pali">
             <span id="nome-giorno">LUNEDÌ</span>
@@ -221,107 +85,39 @@
 
 <script>
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
-
     const databaseTurni = {
-        "LUNEDÌ": [
-            { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" },
-            { h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
-            { h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
-            { h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
-            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
-        ],
-        "MARTEDÌ": [
-            { h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
-            { h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
-            { h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
-            { h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" },
-            { h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }
-        ],
-        "MERCOLEDÌ": [
-            { h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
-            { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
-            { h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
-            { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
-            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
-        ],
-        "GIOVEDÌ": [
-            { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" },
-            { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
-            { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
-            { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" },
-            { h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" }
-        ],
-        "VENERDÌ": [
-            { h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" },
-            { h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" },
-            { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
-            { h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
-            { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }
-        ],
-        "SABATO": [
-            { h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" },
-            { h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" },
-            { h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" },
-            { h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" },
-            { h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg" }
-        ],
+        "LUNEDÌ": [ { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, { h: 20, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 21, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 22, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
+        "MARTEDÌ": [ { h: 19, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 20, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 21, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 22, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" }, { h: 23, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" } ],
+        "MERCOLEDÌ": [ { h: 19, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 21, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
+        "GIOVEDÌ": [ { h: 19, n: "DJ ROSY", f: "https://xatimg.com/image/9EUxzchBUN3A.jpg" }, { h: 20, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 22, n: "DJ SIMONA", f: "https://xatimg.com/image/HnHeYw6n4jj3.jpg" }, { h: 23, n: "DJ STEFANY", f: "https://xatimg.com/image/X7febOvNHs96.jpg" } ],
+        "VENERDÌ": [ { h: 19, n: "DJ CLAUDIA", f: "https://xatimg.com/image/zC9XQHm7xHte.jpg" }, { h: 20, n: "DJ NIKITA", f: "https://xatimg.com/image/pORicTZi3lhE.jpg" }, { h: 21, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 22, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 23, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" } ],
+        "SABATO": [ { h: 19, n: "DJ GENNY", f: "https://xatimg.com/image/4Fa39NYJYZUF.jpg" }, { h: 20, n: "DJ MERY", f: "https://xatimg.com/image/5vCvkJiVlHWF.jpg" }, { h: 21, n: "DJ CARTAIO", f: "https://xatimg.com/image/RrNrzPFPVBwN.png" }, { h: 22, n: "DJ ALESSIA", f: "https://xatimg.com/image/DsFXMhIKnNDE.jpg" }, { h: 23, n: "DJ ROBERTA", f: "https://xatimg.com/image/DYidsujYf2BT.jpg" } ],
         "DOMENICA": "RIPOSO"
     };
 
     function aggiornaPalinsesto() {
-        const d = new Date();
-        const oggi = giorni[d.getDay()];
-        const oraAttuale = d.getHours();
+        const d = new Date(); const oggi = giorni[d.getDay()]; const oraAttuale = d.getHours();
         const defaultFoto = "https://xatimg.com/image/RrNrzPFPVBwN.png";
-
         $('#nome-giorno').text(oggi);
-        const contenitore = $('#elenco-turni').empty();
-        const turniOggi = databaseTurni[oggi];
-
+        const contenitore = $('#elenco-turni').empty(); const turniOggi = databaseTurni[oggi];
         if (oggi === "DOMENICA" || turniOggi === "RIPOSO") {
             $('#imgCoverDJ').attr('src', defaultFoto);
             contenitore.append('<div class="messaggio-riposo">BUONA DOMENICA DA<br><b>IL CARTAIO</b><br>NESSUNA DIRETTA OGGI!</div>');
             return;
         }
-
         let trovatoInOnda = false;
-
         turniOggi.forEach(turno => {
             const inOndaOra = (turno.h === oraAttuale);
             const classeRiga = inOndaOra ? "riga-turno on-air" : "riga-turno";
-            
-            const led = inOndaOra ? '<span class="led-verde" title="In Streaming"></span>' : '<span class="led-rosso" title="Non in streaming"></span>';
-
-            if (inOndaOra) {
-                $('#imgCoverDJ').attr('src', turno.f);
-                trovatoInOnda = true;
-            }
-
-            contenitore.append(`
-                <div class="${classeRiga}">
-                    <span class="orario-txt">${turno.h}:00 - ${turno.h + 1}:00</span>
-                    <span class="nome-dj-txt">
-                        ${turno.n}
-                        ${led}
-                    </span>
-                </div>
-            `);
+            const led = inOndaOra ? '<span class="led-verde"></span>' : '<span class="led-rosso"></span>';
+            if (inOndaOra) { $('#imgCoverDJ').attr('src', turno.f); trovatoInOnda = true; }
+            contenitore.append(`<div class="${classeRiga}"><span class="orario-txt">${turno.h}:00 - ${turno.h + 1}:00</span><span class="nome-dj-txt">${turno.n} ${led}</span></div>`);
         });
-
-        if (!trovatoInOnda) {
-            $('#imgCoverDJ').attr('src', defaultFoto);
-        }
+        if (!trovatoInOnda) { $('#imgCoverDJ').attr('src', defaultFoto); }
     }
 
-    // Al click sul tasto a DX, apri sia la locandina che la cover del DJ a SX
-    $('#btn-pali').on('click', function() {
-        $('#locandina-popup').fadeToggle(200);
-        $('#cover-box-sx').fadeToggle(200);
-    });
-
-    aggiornaPalinsesto();
-    setInterval(aggiornaPalinsesto, 15000);
+    $('#btn-pali').on('click', function() { $('#locandina-popup').fadeToggle(200); $('#cover-box-sx').fadeToggle(200); });
+    aggiornaPalinsesto(); setInterval(aggiornaPalinsesto, 15000);
 </script>
-
 </body>
 </html>
