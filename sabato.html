@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -239,41 +240,42 @@
         CARTAIO: "https://xatimg.com/image/RrNrzPFPVBwN.png"
     };
 
+    // Aggiunte le ore 0 (mezzanotte) per completare la fascia serale
     const databaseTurni = {
         "LUNEDÌ": [ 
             { h: 11, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 12, n: "DJ MERY", f: foto.MERY }, { h: 13, n: "DJ STEFANY", f: foto.STEFANY }, { h: 14, n: "DJ ROBERTA", f: foto.ROBERTA },
             { h: 15, n: "DJ GENNY", f: foto.GENNY }, { h: 16, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 17, n: "DJ SIMONA", f: foto.SIMONA }, { h: 18, n: "DJ NIKITA", f: foto.NIKITA },
-            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 21, n: "DJ SIMONA", f: foto.SIMONA }, { h: 22, n: "DJ NIKITA", f: foto.NIKITA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 21, n: "DJ SIMONA", f: foto.SIMONA }, { h: 22, n: "DJ NIKITA", f: foto.NIKITA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "MARTEDÌ": [ 
             { h: 11, n: "DJ ROSY", f: foto.ROSY }, { h: 12, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 13, n: "DJ SIMONA", f: foto.SIMONA }, { h: 14, n: "DJ NIKITA", f: foto.NIKITA },
             { h: 15, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 16, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 17, n: "DJ GENNY", f: foto.GENNY }, { h: 18, n: "DJ MERY", f: foto.MERY },
-            { h: 19, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 20, n: "DJ GENNY", f: foto.GENNY }, { h: 21, n: "DJ MERY", f: foto.MERY }, { h: 22, n: "DJ STEFANY", f: foto.STEFANY }, { h: 23, n: "DJ NIKITA", f: foto.NIKITA } 
+            { h: 19, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 20, n: "DJ GENNY", f: foto.GENNY }, { h: 21, n: "DJ MERY", f: foto.MERY }, { h: 22, n: "DJ STEFANY", f: foto.STEFANY }, { h: 23, n: "DJ NIKITA", f: foto.NIKITA }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "MERCOLEDÌ": [ 
             { h: 11, n: "DJ GENNY", f: foto.GENNY }, { h: 12, n: "DJ MERY", f: foto.MERY }, { h: 13, n: "DJ STEFANY", f: foto.STEFANY }, { h: 14, n: "DJ ROBERTA", f: foto.ROBERTA },
             { h: 15, n: "DJ ROSY", f: foto.ROSY }, { h: 16, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 17, n: "DJ SIMONA", f: foto.SIMONA }, { h: 18, n: "DJ CARTAIO", f: foto.CARTAIO },
-            { h: 19, n: "DJ NIKITA", f: foto.NIKITA }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+            { h: 19, n: "DJ NIKITA", f: foto.NIKITA }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "GIOVEDÌ": [ 
             { h: 11, n: "DJ SIMONA", f: foto.SIMONA }, { h: 12, n: "DJ NIKITA", f: foto.NIKITA }, { h: 13, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 14, n: "DJ ALESSIA", f: foto.ALESSIA },
             { h: 15, n: "DJ GENNY", f: foto.GENNY }, { h: 16, n: "DJ MERY", f: foto.MERY }, { h: 17, n: "DJ STEFANY", f: foto.STEFANY }, { h: 18, n: "DJ ROBERTA", f: foto.ROBERTA },
-            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ STEFANY", f: foto.STEFANY } 
+            { h: 19, n: "DJ ROSY", f: foto.ROSY }, { h: 20, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ SIMONA", f: foto.SIMONA }, { h: 23, n: "DJ STEFANY", f: foto.STEFANY }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "VENERDÌ": [ 
             { h: 11, n: "DJ ROBERTA", f: foto.ROBERTA }, { h: 12, n: "DJ STEFANY", f: foto.STEFANY }, { h: 13, n: "DJ MERY", f: foto.MERY }, { h: 14, n: "DJ GENNY", f: foto.GENNY },
             { h: 15, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 16, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 17, n: "DJ NIKITA", f: foto.NIKITA }, { h: 18, n: "DJ SIMONA", f: foto.SIMONA },
-            { h: 19, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 20, n: "DJ NIKITA", f: foto.NIKITA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ MERY", f: foto.MERY }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO } 
+            { h: 19, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 20, n: "DJ NIKITA", f: foto.NIKITA }, { h: 21, n: "DJ GENNY", f: foto.GENNY }, { h: 22, n: "DJ MERY", f: foto.MERY }, { h: 23, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "SABATO": [ 
             { h: 11, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 12, n: "DJ ROSY", f: foto.ROSY }, { h: 13, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 14, n: "DJ NIKITA", f: foto.NIKITA },
             { h: 15, n: "DJ SIMONA", f: foto.SIMONA }, { h: 16, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 17, n: "DJ GENNY", f: foto.GENNY }, { h: 18, n: "DJ MERY", f: foto.MERY },
-            { h: 19, n: "DJ GENNY", f: foto.GENNY }, { h: 20, n: "DJ MERY", f: foto.MERY }, { h: 21, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 22, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 23, n: "DJ ROBERTA", f: foto.ROBERTA } 
+            { h: 19, n: "DJ GENNY", f: foto.GENNY }, { h: 20, n: "DJ MERY", f: foto.MERY }, { h: 21, n: "DJ CARTAIO", f: foto.CARTAIO }, { h: 22, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 23, n: "DJ ROBERTA", f: foto.ROBERTA }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ],
         "DOMENICA": [ 
-            { h: 11, n: "DJ MISS", f: foto.CARTAIO }, { h: 12, n: "DJ NIKITA", f: foto.NIKITA }, { h: 13, n: "DJ SIMONA", f: foto.SIMONA }, { h: 14, n: "DJ ALESSIA", f: foto.ALESSIA },
+            { h: 11, n: "DJ MISS", f: foto.MISS }, { h: 12, n: "DJ NIKITA", f: foto.NIKITA }, { h: 13, n: "DJ SIMONA", f: foto.SIMONA }, { h: 14, n: "DJ ALESSIA", f: foto.ALESSIA },
             { h: 15, n: "DJ ROSY", f: foto.ROSY }, { h: 16, n: "DJ CLAUDIA", f: foto.CLAUDIA }, { h: 17, n: "DJ GENNY", f: foto.GENNY }, { h: 18, n: "DJ MERY", f: foto.MERY },
-            { h: 19, n: "DJ STEFANY", f: foto.STEFANY }, { h: 20, n: "DJ ROBERTA", f: foto.ROBERTA }, { h: 21, n: "MISS", f: foto.CARTAIO }, { h: 22, n: "DJ NIKITA", f: foto.NIKITA }, { h: 23, n: "DJ SIMONA", f: foto.SIMONA } 
+            { h: 19, n: "DJ STEFANY", f: foto.STEFANY }, { h: 20, n: "DJ ROBERTA", f: foto.ROBERTA }, { h: 21, n: "DJ MISS", f: foto.MISS }, { h: 22, n: "DJ NIKITA", f: foto.NIKITA }, { h: 23, n: "DJ SIMONA", f: foto.SIMONA }, { h: 0, n: "DJ CARTAIO", f: foto.CARTAIO } 
         ]
     };
 
@@ -305,7 +307,11 @@
                 trovatoInOnda = true; 
             }
             
-            contenitore.append(`<div class="${classeRiga}"><span class="orario-txt">${turno.h}:00 - ${turno.h + 1}:00</span><span class="nome-dj-txt">${turno.n} ${led}</span></div>`);
+            // Format orario pulito (00:00 - 01:00 invece di 0:00 - 1:00)
+            let hStart = turno.h === 0 ? "00" : (turno.h < 10 ? "0"+turno.h : turno.h);
+            let hEnd = (turno.h + 1) === 24 ? "00" : (turno.h + 1 < 10 ? "0"+(turno.h+1) : (turno.h + 1));
+            
+            contenitore.append(`<div class="${classeRiga}"><span class="orario-txt">${hStart}:00 - ${hEnd}:00</span><span class="nome-dj-txt">${turno.n} ${led}</span></div>`);
         });
         
         if (!trovatoInOnda) { 
