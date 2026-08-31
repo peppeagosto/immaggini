@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -18,7 +17,7 @@
             overflow: hidden; 
         }
 
-        /* 1. COVER 120x120 ROTANTE (Spostata verso destra) */
+        /* 1. COVER 120x120 ROTANTE */
         #cover-box-sx {
             position: fixed; 
             left: 80px; 
@@ -45,7 +44,7 @@
             to { transform: rotate(360deg); } 
         }
 
-        /* 2. RETTANGOLO A DESTRA (Invisibile, compare al passaggio del mouse) */
+        /* 2. RETTANGOLO A DESTRA */
         #btn-pali {
             position: fixed;
             right: 20px;
@@ -128,7 +127,6 @@
             letter-spacing: 1px; 
         }
 
-        /* CONTENITORE LISTA CON SCROLLBAR PER TURNI LUNGHI */
         #elenco-turni {
             max-height: 380px;
             overflow-y: auto;
@@ -139,7 +137,6 @@
         #elenco-turni::-webkit-scrollbar-track { background: #111; }
         #elenco-turni::-webkit-scrollbar-thumb { background: #ff0055; border-radius: 5px; }
 
-        /* RIGHE TURNI */
         .riga-turno { 
             display: flex; 
             align-items: center; 
@@ -224,6 +221,15 @@
     </div>
 
 <script>
+    // --- BLOCCO DI SICUREZZA ANTI-FURTO ---
+    // Funziona solo se il codice gira sul tuo GitHub Pages o direttamente nei tuoi test in locale
+    const dominioConsentito = "peppeagosto.github.io";
+    if (window.location.hostname !== "" && !window.location.hostname.includes(dominioConsentito) && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+        document.body.innerHTML = "<div style='color:#ff0055; text-align:center; padding:60px; font-family:Arial; background:#000; height:100vh;'><h2>PLAYER NON AUTORIZZATO</h2><p style='color:#fff;'>Questo palinsesto è protetto e appartiene a Il Cartaio.</p></div>";
+        throw new Error("Accesso negato: codice non autorizzato.");
+    }
+    // -------------------------------------
+
     const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
     
     const foto = {
@@ -240,7 +246,6 @@
         CARTAIO: "https://xatimg.com/image/RrNrzPFPVBwN.png"
     };
 
-    // Aggiunte le ore 0 (mezzanotte) per completare la fascia serale
     const databaseTurni = {
         "LUNEDÌ": [ 
             { h: 11, n: "DJ ALESSIA", f: foto.ALESSIA }, { h: 12, n: "DJ MERY", f: foto.MERY }, { h: 13, n: "DJ STEFANY", f: foto.STEFANY }, { h: 14, n: "DJ ROBERTA", f: foto.ROBERTA },
@@ -307,7 +312,6 @@
                 trovatoInOnda = true; 
             }
             
-            // Format orario pulito (00:00 - 01:00 invece di 0:00 - 1:00)
             let hStart = turno.h === 0 ? "00" : (turno.h < 10 ? "0"+turno.h : turno.h);
             let hEnd = (turno.h + 1) === 24 ? "00" : (turno.h + 1 < 10 ? "0"+(turno.h+1) : (turno.h + 1));
             
