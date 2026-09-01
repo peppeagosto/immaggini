@@ -3,124 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Protetta</title>
+    <title>Prova del Nove</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden; 
-            background-color: #000; 
-            color: #fff;
-            font-family: Arial, sans-serif;
-            pointer-events: auto !important; 
-        }
-        
-        #schermata-blocco {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #111;
-            z-index: 9999;
+            background-color: #cc0000; /* Sfondo Rosso */
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-
-        .box-sblocco {
-            background: #222;
-            padding: 40px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #444;
-        }
-
-        button {
-            padding: 15px 30px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #contenuto-pagina {
-            display: none; 
-            width: 100%;
             height: 100vh;
-            color: white; 
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 40px 80px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 15px;
+            background-color: white;
+            color: black;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- Schermata nera con il bottone -->
-    <div id="schermata-blocco">
-        <div class="box-sblocco">
-            <h3>Lucchetto di Sicurezza</h3>
-            <p>Per vedere le grafiche, devi sbloccare la pagina.</p>
-            <button onclick="chiediPassword()">Inserisci Parola d'Ordine</button>
-        </div>
-    </div>
+    <button id="bottone-test" onclick="cliccato()">CLICCAMI!</button>
 
-    <!-- Il tuo vero layout nascosto -->
-    <div id="contenuto-pagina">
-        
-        <!-- ========================================== -->
-        <!-- LA TUA LOCANDINA (VISIBILE SOLO AGLI AMICI) -->
-        <!-- ========================================== -->
-        <div style="text-align: center; margin-top: 50px;">
-            <h2>Grafica Sbloccata con Successo!</h2>
-            
-            <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina" style="width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.2);">
-            
-        </div>
-        <!-- ========================================== -->
-        
-    </div>
-
-    <!-- Il motore JavaScript con Pop-up e Trappola -->
     <script>
-        function chiediPassword() {
-            let parolaInserita = prompt("Scrivi qui la parola d'ordine:");
-            
-            if (parolaInserita === null || parolaInserita === "") {
-                return; 
-            }
-            
-            if (parolaInserita.toLowerCase() === "grazie") {
-                // SBLOCCATO
-                document.getElementById("schermata-blocco").style.display = "none";
-                document.getElementById("contenuto-pagina").style.display = "block";
-                document.body.style.overflow = "auto"; 
-            } else {
-                // TRAPPOLA: Vai su FEXBots
-                window.location.href = "https://xat.com/FEXBots";
-            }
-        }
-    </script>
-
-    <!-- SCUDO ANTI-ISPEZIONA -->
-    <script>
-        // Blocca il tasto destro del mouse
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        // Blocca i tasti della tastiera usati per ispezionare (F12, Ctrl+U, ecc.)
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123) { return false; } // Blocca F12
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Blocca Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Blocca Ctrl+Shift+J
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Blocca Ctrl+U
+        function cliccato() {
+            // Se clicca, cambia tutto in Verde
+            document.body.style.backgroundColor = "#28a745";
+            document.getElementById("bottone-test").innerText = "IL CLICK FUNZIONA!";
+            document.getElementById("bottone-test").style.backgroundColor = "black";
+            document.getElementById("bottone-test").style.color = "white";
         }
     </script>
 
