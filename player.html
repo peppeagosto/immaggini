@@ -10,6 +10,9 @@
             padding: 0;
             overflow: hidden; 
             background-color: #000; 
+            color: #fff;
+            font-family: Arial, sans-serif;
+            pointer-events: auto !important; 
         }
         
         #schermata-blocco {
@@ -21,39 +24,30 @@
             background-color: #111;
             z-index: 9999;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            font-family: Arial, sans-serif;
         }
-        
+
         .box-sblocco {
             background: #222;
-            padding: 30px;
+            padding: 40px;
             border-radius: 12px;
             text-align: center;
             border: 2px solid #444;
         }
 
-        #input-password {
-            padding: 10px;
-            margin: 15px 0;
-            width: 80%;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
         button {
-            padding: 10px 20px;
+            padding: 15px 30px;
             cursor: pointer;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
         }
 
         button:hover {
@@ -70,47 +64,47 @@
 </head>
 <body>
 
-    <!-- Schermata nera con password -->
+    <!-- Schermata nera con il bottone -->
     <div id="schermata-blocco">
         <div class="box-sblocco">
-            <h3>Accesso Riservato</h3>
-            <input type="password" id="input-password" placeholder="Parola d'ordine...">
-            <br>
-            <button onclick="sbloccaPagina()">Entra</button>
+            <h3>Lucchetto di Sicurezza</h3>
+            <p>Per vedere le grafiche, devi sbloccare la pagina.</p>
+            <button onclick="chiediPassword()">Inserisci Parola d'Ordine</button>
         </div>
     </div>
 
-    <!-- Il tuo vero layout nascosto per gli amici fidati -->
+    <!-- Il tuo vero layout nascosto -->
     <div id="contenuto-pagina">
         
         <!-- ========================================== -->
-        <!-- QUI METTERAI LE TUE VERE GRAFICHE E PLAYER -->
+        <!-- LA TUA LOCANDINA (VISIBILE SOLO AGLI AMICI) -->
         <!-- ========================================== -->
-        
         <div style="text-align: center; margin-top: 50px;">
-            <h2>Benvenuto! Solo i veri amici possono vedere questa grafica.</h2>
-            <!-- Ho lasciato la tua locandina, ma ora è solo un'immagine normale (non cliccabile) -->
-            <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina" style="width: 100%; max-width: 400px;">
+            <h2>Grafica Sbloccata con Successo!</h2>
+            
+            <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina" style="width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.2);">
+            
         </div>
+        <!-- ========================================== -->
         
-        <!-- ========================================== -->
-        <!-- FINE DEL TUO CODICE                        -->
-        <!-- ========================================== -->
-
     </div>
 
+    <!-- Il motore JavaScript con Pop-up e Trappola -->
     <script>
-        function sbloccaPagina() {
-            let parolaInserita = document.getElementById("input-password").value;
+        function chiediPassword() {
+            let parolaInserita = prompt("Scrivi qui la parola d'ordine:");
             
-            // Controlla se la parola è "grazie"
+            if (parolaInserita === null || parolaInserita === "") {
+                return; 
+            }
+            
             if (parolaInserita.toLowerCase() === "grazie") {
-                // Password corretta: svela la pagina agli amici
+                // SBLOCCATO
                 document.getElementById("schermata-blocco").style.display = "none";
                 document.getElementById("contenuto-pagina").style.display = "block";
                 document.body.style.overflow = "auto"; 
             } else {
-                // TRAPPOLA: Password sbagliata = Reindirizzamento su FEXBots
+                // TRAPPOLA: Vai su FEXBots
                 window.location.href = "https://xat.com/FEXBots";
             }
         }
