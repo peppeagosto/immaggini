@@ -8,8 +8,8 @@
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Blocca lo scorrimento della pagina dietro la schermata nera */
-            background-color: #000; /* Sfondo base */
+            overflow: hidden; 
+            background-color: #000; 
         }
         
         #schermata-blocco {
@@ -61,10 +61,10 @@
         }
 
         #contenuto-pagina {
-            display: none; /* Nasconde tutto il tuo layout finché non c'è la password */
+            display: none; 
             width: 100%;
             height: 100vh;
-            color: white; /* Testo bianco per il contenuto se lo sfondo è scuro */
+            color: white; 
         }
     </style>
 </head>
@@ -100,14 +100,12 @@
         function sbloccaPagina() {
             let parolaInserita = document.getElementById("input-password").value;
             
-            // Controlla se la parola è "peppe"
-            if (parolaInserita.toLowerCase() === "peppe") {
-                // Nasconde la schermata di blocco e mostra il tuo layout
+            // Controlla se la parola è "grazie"
+            if (parolaInserita.toLowerCase() === "grazie") {
                 document.getElementById("schermata-blocco").style.display = "none";
                 document.getElementById("contenuto-pagina").style.display = "block";
-                document.body.style.overflow = "auto"; // Riattiva lo scorrimento
+                document.body.style.overflow = "auto"; 
             } else {
-                // Errore
                 document.getElementById("messaggio-errore").style.display = "block";
                 document.getElementById("input-password").value = "";
             }
