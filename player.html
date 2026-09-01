@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Protetta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Blocca lo scorrimento della pagina dietro la schermata nera */
+            background-color: #000; /* Sfondo base */
+        }
+        
+        #schermata-blocco {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #111;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        
+        .box-sblocco {
+            background: #222;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #444;
+        }
+
+        #input-password {
+            padding: 10px;
+            margin: 15px 0;
+            width: 80%;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #contenuto-pagina {
+            display: none; /* Nasconde tutto il tuo layout finché non c'è la password */
+            width: 100%;
+            height: 100vh;
+            color: white; /* Testo bianco per il contenuto se lo sfondo è scuro */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Schermata nera con password -->
+    <div id="schermata-blocco">
+        <div class="box-sblocco">
+            <h3>Accesso Riservato</h3>
+            <input type="password" id="input-password" placeholder="Parola d'ordine...">
+            <br>
+            <button onclick="sbloccaPagina()">Entra</button>
+            <p id="messaggio-errore" style="color: red; display: none;">Parola errata!</p>
+        </div>
+    </div>
+
+    <!-- Il tuo vero layout nascosto -->
+    <div id="contenuto-pagina">
+        
+        <!-- ========================================== -->
+        <!-- INCOLLA QUI IL TUO CODICE, PLAYER O WIDGET -->
+        <!-- ========================================== -->
+        
+        <h2 style="text-align: center; margin-top: 50px;">Benvenuto! Grafiche sbloccate.</h2>
+        
+        <!-- ========================================== -->
+        <!-- FINE DEL TUO CODICE                        -->
+        <!-- ========================================== -->
+
+    </div>
+
+    <script>
+        function sbloccaPagina() {
+            let parolaInserita = document.getElementById("input-password").value;
+            
+            // Controlla se la parola è "peppe"
+            if (parolaInserita.toLowerCase() === "peppe") {
+                // Nasconde la schermata di blocco e mostra il tuo layout
+                document.getElementById("schermata-blocco").style.display = "none";
+                document.getElementById("contenuto-pagina").style.display = "block";
+                document.body.style.overflow = "auto"; // Riattiva lo scorrimento
+            } else {
+                // Errore
+                document.getElementById("messaggio-errore").style.display = "block";
+                document.getElementById("input-password").value = "";
+            }
+        }
+    </script>
+
+</body>
+</html>
