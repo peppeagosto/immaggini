@@ -3,41 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prova del Nove</title>
+    <title>Pagina Protetta</title>
     <style>
         body {
-            background-color: #cc0000; /* Sfondo Rosso */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            background-color: #000; 
+            color: #fff;
             font-family: Arial, sans-serif;
         }
-        button {
-            padding: 40px 80px;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
+        
+        #schermata-blocco {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #111;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box-sblocco {
+            background: #222;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #444;
+            max-width: 320px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        #display-password {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 24px;
+            text-align: center;
+            border-radius: 5px;
             border: none;
-            border-radius: 15px;
-            background-color: white;
-            color: black;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            background: #fff;
+            color: #000;
+            letter-spacing: 5px;
+            pointer-events: none; 
+        }
+
+        .tasto-lettera {
+            padding: 10px;
+            width: 38px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            background: #555;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tasto-lettera:hover {
+            background: #007bff;
+        }
+
+        .tasti-azione {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #contenuto-pagina {
+            display: none; 
+            width: 100%;
+            height: 100vh;
+            color: white; 
         }
     </style>
 </head>
 <body>
 
-    <button id="bottone-test" onclick="cliccato()">CLICCAMI!</button>
+    <div id="schermata-blocco">
+        <div class="box-sblocco">
+            <h3 style="margin-top:0;">Lucchetto di Sicurezza</h3>
+            <input type="text" id="display-password" readonly placeholder="***">
+            <div id="tastierino" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 15px;"></div>
+            <div style="display: flex; justify-content: center;">
+                <button class="tasti-azione" style="background: #dc3545;" onclick="cancellaTutto()">Cancella</button>
+                <button class="tasti-azione" style="background: #28a745;" onclick="sbloccaPagina()">Entra</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contenuto-pagina">
+        <div style="text-align: center; margin-top: 50px;">
+            <h2>Grafica Sbloccata con Successo!</h2>
+            <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina" style="width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.2);">
+        </div>
+    </div>
 
     <script>
-        function cliccato() {
-            // Se clicca, cambia tutto in Verde
-            document.body.style.backgroundColor = "#28a745";
-            document.getElementById("bottone-test").innerText = "IL CLICK FUNZIONA!";
-            document.getElementById("bottone-test").style.backgroundColor = "black";
-            document.getElementById("bottone-test").style.color = "white";
+        const tastierinoDiv = document.getElementById('tastierino');
+        const lettere = "QWERTYUIOPASDFGHJKLZXCVBNM".split('');
+        
+        lettere.forEach(lettera => {
+            let bottone = document.createElement('button');
+            bottone.className = 'tasto-lettera';
+            bottone.innerText = lettera;
+            bottone.onclick = function() {
+                document.getElementById('display-password').value += lettera.toLowerCase();
+            };
+            tastierinoDiv.appendChild(bottone);
+        });
+
+        function cancellaTutto() {
+            document.getElementById('display-password').value = "";
+        }
+
+        function sbloccaPagina() {
+            let parolaInserita = document.getElementById('display-password').value;
+            
+            if (parolaInserita === "grazie") {
+                document.getElementById("schermata-blocco").style.display = "none";
+                document.getElementById("contenuto-pagina").style.display = "block";
+            } else {
+                window.location.href = "https://xat.com/FEXBots";
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { return false; } 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } 
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } 
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } 
         }
     </script>
 
