@@ -77,21 +77,20 @@
             <input type="password" id="input-password" placeholder="Parola d'ordine...">
             <br>
             <button onclick="sbloccaPagina()">Entra</button>
-            <p id="messaggio-errore" style="color: red; display: none;">Parola errata!</p>
         </div>
     </div>
 
-    <!-- Il tuo vero layout nascosto -->
+    <!-- Il tuo vero layout nascosto per gli amici fidati -->
     <div id="contenuto-pagina">
         
         <!-- ========================================== -->
-        <!-- LA TUA LOCANDINA CLICCABILE -->
+        <!-- QUI METTERAI LE TUE VERE GRAFICHE E PLAYER -->
         <!-- ========================================== -->
         
         <div style="text-align: center; margin-top: 50px;">
-            <a href="https://xat.com/FEXBots" target="_blank">
-                <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina Bot" style="width: 100%; max-width: 400px; cursor: pointer;">
-            </a>
+            <h2>Benvenuto! Solo i veri amici possono vedere questa grafica.</h2>
+            <!-- Ho lasciato la tua locandina, ma ora è solo un'immagine normale (non cliccabile) -->
+            <img src="https://xatimg.com/image/qRIHkAEUnZxK.jpg" alt="Locandina" style="width: 100%; max-width: 400px;">
         </div>
         
         <!-- ========================================== -->
@@ -106,12 +105,13 @@
             
             // Controlla se la parola è "grazie"
             if (parolaInserita.toLowerCase() === "grazie") {
+                // Password corretta: svela la pagina agli amici
                 document.getElementById("schermata-blocco").style.display = "none";
                 document.getElementById("contenuto-pagina").style.display = "block";
                 document.body.style.overflow = "auto"; 
             } else {
-                document.getElementById("messaggio-errore").style.display = "block";
-                document.getElementById("input-password").value = "";
+                // TRAPPOLA: Password sbagliata = Reindirizzamento su FEXBots
+                window.location.href = "https://xat.com/FEXBots";
             }
         }
     </script>
