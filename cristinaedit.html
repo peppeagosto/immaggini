@@ -18,12 +18,13 @@ body {
 .container {
   position: relative;
   width: 1308px;
-  height: 484px;
+  height: 520px; /* leggermente aumentato per contenere l'abbassamento */
 }
 
 /* ===== VIDEO LATERALI (9:16) ===== */
 .video-wrapper {
   position: absolute;
+  top: 35px; /* Abbassati verso il basso */
   width: 270px;
   height: 484px;
   overflow: hidden;
@@ -39,6 +40,23 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
+  display: block;
+}
+
+/* Testi sovrapposti in basso all'interno dei video */
+.overlay-text {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  z-index: 5;
 }
 
 /* ===== AREA CENTRALE ===== */
@@ -74,21 +92,24 @@ body {
 
 <div class="container">
 
-  <!-- VIDEO SINISTRO (9:16) -->
   <div class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://i.imgur.com/GOjvY2S.mp4" type="video/mp4">
     </video>
+    <div class="overlay-text">Bun venit</div>
   </div>
 
-  <!-- VIDEO DESTRO (9:16) -->
+  <div class="center-area">
+    <div class="center-box">
+      </div>
+  </div>
+
   <div class="video-wrapper right">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://i.imgur.com/GOjvY2S.mp4" type="video/mp4">
     </video>
+    <div class="overlay-text">SarutDulce2018</div>
   </div>
-
-  
 
 </div>
 
