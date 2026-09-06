@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Station Cyber Deck - ITALIA_GHOST Edition</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #00d2ff;
+    --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    --btn-grad: linear-gradient(180deg, #ffffff 0%, #cfd3d8 100%);
+  }
+  * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; outline: none; }
+
+  html {
+    background: transparent !important;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent !important;
+    font-family: 'Orbitron', sans-serif;
+    padding: 10px 0;
+    overflow: hidden;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  /* CHASSIS PRINCIPALE A 800PX */
+  .station-deck {
+    position: relative;
+    width: 800px;
+    max-width: 100%;
+    height: 540px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #d8dbdf 0%, #b8bcc2 45%, #8f959c 55%, #c5c9ce 100%);
+    border: 10px solid #636b72;
+    border-radius: 20px;
+    box-shadow: 0 0 35px rgba(0, 210, 255, 0.25), 0 20px 45px rgba(0,0,0,0.95), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -4px 8px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* SERPENTINA SNAKE ESTERNA */
+  .station-deck::after {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 24px;
+    padding: 4px;
+    background: var(--rainbow);
+    background-size: 400% 400%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: snakeRun 6s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes snakeRun {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .bolt { position: absolute; width: 8px; height: 8px; background: #333; border-radius: 50%; border: 1px solid #aaa; box-shadow: 0 0 6px var(--accent); }
+  .b-tl { top: 6px; left: 6px; } .b-tr { top: 6px; right: 6px; }
+  .b-bl { bottom: 6px; left: 6px; } .b-br { bottom: 6px; right: 6px; }
+
+  /* RETTANGOLI WOOFER LATERALI */
+  .speaker-tower {
+    width: 130px;
+    height: 100%;
+    background: linear-gradient(180deg, #eef0f2 0%, #cfd3d8 50%, #b0b5bc 100%);
+    border-radius: 14px;
+    border: 6px solid #4a5157;
+    outline: 2px solid rgba(255,255,255,0.4);
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.35), inset 1px 1px 3px #fff, inset -2px -2px 5px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    flex-shrink: 0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .sub-bezel {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #151515 40%, #3a3a3a 85%, #777 100%);
+    border: 3px solid #1a1a1a;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.9), 0 2px 6px rgba(255,255,255,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .sub-surround {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #080808 60%, #222 100%);
+    box-shadow: inset 0 0 14px #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .sub-cone {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #ff0055, #ffaa00, #00ff88, #00d2ff, #7700ff, #ff0055);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    will-change: transform, box-shadow;
+    transition: transform 0.04s cubic-bezier(0.1, 0.9, 0.2, 1);
+    flex-shrink: 0;
+  }
+
+  .sub-cap {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--accent) 0%, #053b4c 60%, #00111a 100%);
+    border: 1.5px solid #000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 6px var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.04s ease;
+  }
+
+  /* CORSIE PALLINE IN VETRO FUMÉ TRASPARENTE */
+  .color-lane {
+    width: 42px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 18px 0;
+    flex-shrink: 0;
+  }
+
+  .orb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.65);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.85), inset 0 -4px 6px rgba(0,0,0,0.45);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+    animation: orbFloat 3.5s ease-in-out infinite alternate;
+  }
+  .orb:nth-child(even) { animation-delay: 1.8s; }
+  .orb:hover {
+    transform: scale(1.22);
+    filter: brightness(1.35);
+    box-shadow: 0 0 16px currentColor;
+  }
+  .orb:active { transform: scale(0.92); }
+
+  @keyframes orbFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-3px); } }
+
+  /* DECK CENTRALE */
+  .center-deck {
+    width: 380px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .marquee-box {
+    width: 100%;
+    background: #141719;
+    border: 2px solid #282f34;
+    border-radius: 8px;
+    padding: 5px 8px;
+    box-shadow: inset 0 2px 6px #000, 0 0 12px rgba(0, 210, 255, 0.25);
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .marquee-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: sweepLight 3s linear infinite;
+  }
+
+  @keyframes sweepLight { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+  .marquee-track {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .rainbow-text {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding-left: 100%;
+    animation: scrollRainbow 11s linear infinite, rainbowFlow 4s linear infinite;
+    background: linear-gradient(90deg, #ff0055, #ff9900, #ffee00, #00ff66, #00d2ff, #7a00ff, #ff0055);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.4));
+  }
+
+  @keyframes scrollRainbow { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+  @keyframes rainbowFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+  .spotlight-bar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 22px;
+    padding: 0 10px;
+    background: linear-gradient(180deg, #252528 0%, #0c0c10 100%);
+    border: 1px solid #444;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    position: relative;
+    z-index: 12;
+  }
+
+  .spot-head {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #111;
+    border: 1.5px solid #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .spot-head::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.3;
+    box-shadow: 0 0 4px currentColor;
+    transition: 0.3s;
+  }
+  .laser-live .spot-head::after {
+    opacity: 1;
+    box-shadow: 0 0 12px currentColor, 0 0 22px currentColor;
+  }
+
+  .disco-beam {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 46px;
+    height: 480px;
+    margin-left: -23px;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform-origin: top center;
+    clip-path: polygon(47% 0%, 53% 0%, 100% 100%, 0% 100%);
+    filter: blur(1px) drop-shadow(0 0 14px currentColor);
+    z-index: 2;
+    animation-play-state: paused;
+    transition: opacity 0.4s ease;
+  }
+  .laser-live .disco-beam {
+    opacity: 0.92;
+    animation-play-state: running;
+  }
+
+  .spot-sx-1 { color: #00ffd5; } 
+  .spot-sx-1 .disco-beam { 
+    background: linear-gradient(to bottom, #ffffff 0%, #00ffd5 15%, rgba(0,255,213,0.7) 60%, transparent 100%); 
+    animation: sweepDown1 4.5s ease-in-out infinite alternate; 
+  }
+  
+  .spot-sx-2 { color: #ff00c8; } 
+  .spot-sx-2 .disco-beam { 
+    background: linear-gradient(to bottom, #ffffff 0%, #ff00c8 15%, rgba(255,0,200,0.7) 60%, transparent 100%); 
+    animation: sweepDown2 3.8s ease-in-out infinite alternate; 
+  }
+
+  .spot-sx-3 { color: #48ff00; } 
+  .spot-sx-3 .disco-beam { 
+    background: linear-gradient(to bottom, #ffffff 0%, #48ff00 15%, rgba(72,255,0,0.7) 60%, transparent 100%); 
+    animation: sweepDown3 5.1s ease-in-out infinite alternate; 
+  }
+
+  .spot-sx-4 { color: #ff9900; } 
+  .spot-sx-4 .disco-beam { 
+    background: linear-gradient(to bottom, #ffffff 0%, #ff9900 15%, rgba(255,153,0,0.7) 60%, transparent 100%); 
+    animation: sweepDown4 4.1s ease-in-out infinite alternate; 
+  }
+
+  @keyframes sweepDown1 { 0% { transform: rotate(-65deg); } 50% { transform: rotate(0deg); } 100% { transform: rotate(62deg); } }
+  @keyframes sweepDown2 { 0% { transform: rotate(-58deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(68deg); } }
+  @keyframes sweepDown3 { 0% { transform: rotate(-68deg); } 50% { transform: rotate(-8deg); } 100% { transform: rotate(56deg); } }
+  @keyframes sweepDown4 { 0% { transform: rotate(-52deg); } 50% { transform: rotate(10deg); } 100% { transform: rotate(72deg); } }
+
+  /* PIATTO VINILE PROPORZIONATO */
+  .turntable-bay {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: #090a0c;
+    border: 3px solid #3c4146;
+    box-shadow: inset 0 0 22px #000, 0 5px 14px rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .shockwave-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.05s ease-out, opacity 0.05s ease-out;
+  }
+
+  .vinyl {
+    width: 206px;
+    height: 206px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    box-shadow: 0 0 18px rgba(0,0,0,0.95);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #000;
+  }
+
+  #album-art {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    z-index: 2;
+  }
+
+  /* BRACCETTO GESTITO CON CLASSE E ID DEDICATI */
+  .arm {
+    position: absolute;
+    width: 110px;
+    height: 220px;
+    right: -78px;
+    top: -24px;
+    background: url('https://xatimg.com/image/l4ZyXbUeYjft.png') no-repeat center center;
+    background-size: contain;
+    transform-origin: 90% 8%;
+    transform: rotate(-32deg);
+    transition: transform 1.3s cubic-bezier(0.45, 0.05, 0.55, 0.95), filter 0.3s ease;
+    z-index: 25;
+    pointer-events: none;
+    filter: drop-shadow(-6px 12px 8px rgba(0,0,0,0.85));
+  }
+
+  .eq-container {
+    width: 100%;
+    height: 26px;
+    background: rgba(10,12,15,0.85);
+    border: 1.5px solid #333a40;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 3px;
+    padding: 3px 6px;
+    box-shadow: inset 0 0 8px #000;
+  }
+  .eq-bar {
+    flex: 1;
+    height: 100%;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1.5px;
+  }
+  .eq-segment { width: 100%; height: 3.5px; background: #1c2024; border-radius: 1px; }
+  .eq-segment.active-green { background: #00ff66; box-shadow: 0 0 5px #00ff66; }
+  .eq-segment.active-yellow { background: #fffb00; box-shadow: 0 0 5px #fffb00; }
+  .eq-segment.active-red { background: #ff0055; box-shadow: 0 0 6px #ff0055; }
+
+  .console-panel {
+    width: 100%;
+    background: linear-gradient(180deg, #e3e6e8 0%, #bdc2c7 100%);
+    border: 2px solid #7d848b;
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: inset 0 1px 2px #fff, 0 3px 8px rgba(0,0,0,0.3);
+  }
+
+  .btn {
+    width: 40px;
+    height: 30px;
+    background: var(--btn-grad);
+    border: 1.5px solid #6b7278;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3), inset 0 1px 1px #fff;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1a1a1a;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: #fff; color: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .btn:active { transform: translateY(1px); }
+
+  .volume-slider-wrapper { flex: 1; margin: 0 14px; display: flex; align-items: center; }
+  .fader-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    background: #141719;
+    border-radius: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.7);
+    outline: none;
+  }
+  .fader-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 30px;
+    background: linear-gradient(180deg, #ffffff 0%, #a4abb3 50%, #e6eaed 100%);
+    border: 1.5px solid #4a5056;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 0 6px var(--accent);
+    cursor: pointer;
+  }
+
+  .ruota-disco { animation: spin 3s linear infinite !important; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="station-deck" id="stationDeck">
+  <div class="bolt b-tl"></div><div class="bolt b-tr"></div>
+  <div class="bolt b-bl"></div><div class="bolt b-br"></div>
+
+  <!-- TORRI WOOFER SX -->
+  <div class="speaker-tower" id="towerL">
+    <div class="sub-bezel"><div class="sub-surround"><div class="sub-cone"><div class="sub-cap"></div></div></div></div>
+    <div class="sub-bezel"><div class="sub-surround"><div class="sub-cone"><div class="sub-cap"></div></div></div></div>
+  </div>
+
+  <!-- CORSIA PALLINE SX (VETRO FUMÉ TRASPARENTE) -->
+  <div class="color-lane" id="laneLeft"></div>
+
+  <!-- DECK CENTRALE -->
+  <div class="center-deck">
+    <div class="marquee-box">
+      <div class="marquee-track">
+        <span class="rainbow-text" id="scroll-text">ITALIA_GHOST - CARICAMENTO IN CORSO...</span>
+      </div>
+    </div>
+
+    <!-- FARETTI INCROCIATI -->
+    <div class="spotlight-bar-top">
+      <div class="spot-head spot-sx-1"><div class="disco-beam"></div></div>
+      <div class="spot-head spot-sx-2"><div class="disco-beam"></div></div>
+      <div class="spot-head spot-sx-3"><div class="disco-beam"></div></div>
+      <div class="spot-head spot-sx-4"><div class="disco-beam"></div></div>
+    </div>
+
+    <!-- VINILE -->
+    <div class="turntable-bay">
+      <div class="shockwave-ring" id="shockRing"></div>
+      <div class="vinyl" id="v-box">
+        <img id="album-art" src="https://xatimg.com/image/nmrxYT8fDA5n.png" alt="Vinyl Cover">
+      </div>
+      <div id="arm" class="arm"></div>
+    </div>
+
+    <div class="eq-container" id="eq-display"></div>
+
+    <div class="console-panel">
+      <div class="btn" onclick="playAudio()">▶</div>
+      <div class="volume-slider-wrapper">
+        <input type="range" class="fader-range" id="vol" min="0" max="1" step="0.01" value="0.75">
+      </div>
+      <div class="btn" onclick="stopAudio()">■</div>
+    </div>
+  </div>
+
+  <!-- CORSIA PALLINE DX (VETRO FUMÉ TRASPARENTE) -->
+  <div class="color-lane" id="laneRight"></div>
+
+  <!-- TORRI WOOFER DX -->
+  <div class="speaker-tower" id="towerR">
+    <div class="sub-bezel"><div class="sub-surround"><div class="sub-cone"><div class="sub-cap"></div></div></div></div>
+    <div class="sub-bezel"><div class="sub-surround"><div class="sub-cone"><div class="sub-cap"></div></div></div></div>
+  </div>
+</div>
+
+<script>
+  /* PROTEZIONE DOMINIO & CHAT AUTORIZZATA (PORTUGAL / ITALIA_GHOST) */
+  const ALLOWED_ID = "220536060";
+  const ALLOWED_NAME = "italia_ghost";
+
+  function verifyHostSecurity() {
+    const ref = (document.referrer || "").toLowerCase();
+    const loc = (window.location.href || "").toLowerCase();
+    
+    // Controlla ID chat, nome chat o ambiente di test (GitHub Pages / locale)
+    const isXatLegit = ref.includes(ALLOWED_NAME) || ref.includes(ALLOWED_ID) || loc.includes(ALLOWED_NAME) || loc.includes(ALLOWED_ID);
+    const isTestingLegit = loc.includes("github.io") || loc.includes("localhost") || loc.includes("127.0.0.1");
+
+    if (!isXatLegit && !isTestingLegit && ref !== "") {
+      // Sabotaggio istantaneo: rimuove il braccetto e chiude il deck
+      const armElement = document.getElementById('arm');
+      if (armElement) armElement.remove();
+      
+      const vBox = document.getElementById('v-box');
+      if (vBox) vBox.innerHTML = '<div style="color:#ff0055;font-size:11px;font-weight:900;text-align:center;padding:25px 5px;line-height:1.4;">BLOQUEADO<br><span style="font-size:9px;color:#aaa;">ITALIA_GHOST</span></div>';
+      
+      $('#scroll-text').text("CÓPIA NÃO AUTORIZADA - EXCLUSIVO PARA ITALIA_GHOST (PORTUGAL)");
+      window.STREAM_URL = "";
+      return false;
+    }
+    return true;
+  }
+
+  let STREAM_URL = "https://stm2.srvif.com:7198/stream";
+  const JSON_METADATA_URL = "https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?";
+  const DEFAULT_COVER = "https://xatimg.com/image/nmrxYT8fDA5n.png";
+
+  let audio = new Audio();
+  let isPlaying = false;
+  let audioCtx, analyser, dataArray, source, eqAnimationId, eqInterval;
+  let lastSongTitle = "";
+
+  const cones = document.querySelectorAll('.sub-cone');
+  const caps = document.querySelectorAll('.sub-cap');
+  const shockRing = document.getElementById('shockRing');
+
+  /* 3 COLORI FORTI SX */
+  const leftColors = [
+    { base: '#ff6600', light: '#ffb366', dark: '#803300' },
+    { base: '#00f0ff', light: '#a6f8ff', dark: '#005257' },
+    { base: '#ff0077', light: '#ff80bc', dark: '#660030' }
+  ];
+
+  /* 3 COLORI FORTI DX */
+  const rightColors = [
+    { base: '#00ff44', light: '#8cffad', dark: '#005918' },
+    { base: '#9d00ff', light: '#d88cff', dark: '#400066' },
+    { base: '#ffee00', light: '#fff88c', dark: '#665f00' }
+  ];
+
+  function buildLanes(id, colors) {
+    const lane = document.getElementById(id);
+    lane.innerHTML = '';
+    colors.forEach(col => {
+      const orb = document.createElement('div');
+      orb.className = 'orb';
+      orb.style.background = `radial-gradient(circle at 35% 30%, ${col.light} 0%, ${col.base} 55%, ${col.dark} 95%)`;
+      orb.style.color = col.base;
+      orb.onclick = () => {
+        document.documentElement.style.setProperty('--accent', col.base);
+        $('#stationDeck').css('box-shadow', `0 0 50px ${col.base}, 0 20px 45px rgba(0,0,0,0.95)`);
+        $('#towerL, #towerR').css('border-color', col.base);
+      };
+      lane.appendChild(orb);
+    });
+  }
+  buildLanes('laneLeft', leftColors);
+  buildLanes('laneRight', rightColors);
+
+  const eqContainer = document.getElementById('eq-display');
+  for (let i = 0; i < 24; i++) {
+    let bar = document.createElement('div');
+    bar.className = 'eq-bar';
+    for (let j = 0; j < 5; j++) {
+      let seg = document.createElement('div');
+      seg.className = 'eq-segment';
+      bar.appendChild(seg);
+    }
+    eqContainer.appendChild(bar);
+  }
+
+  function initAudioContext() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      analyser = audioCtx.createAnalyser();
+      source = audioCtx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize = 64;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playAudio() {
+    if (!verifyHostSecurity() || !STREAM_URL) return;
+
+    initAudioContext();
+    audio.crossOrigin = "anonymous";
+    audio.src = STREAM_URL;
+
+    audio.play().then(() => {
+      isPlaying = true;
+      $('#stationDeck').addClass('laser-live');
+      $('#v-box').addClass('ruota-disco');
+      $('#arm').css('transform', 'rotate(14deg)');
+      avviaEqualizzatore(true, false);
+    }).catch(() => {
+      audio.crossOrigin = null;
+      audio.src = STREAM_URL;
+      audio.play().then(() => {
+        isPlaying = true;
+        $('#stationDeck').addClass('laser-live');
+        $('#v-box').addClass('ruota-disco');
+        $('#arm').css('transform', 'rotate(14deg)');
+        avviaEqualizzatore(true, true);
+      });
+    });
+  }
+
+  function stopAudio() {
+    audio.pause();
+    audio.src = '';
+    isPlaying = false;
+    $('#stationDeck').removeClass('laser-live');
+    $('#v-box').removeClass('ruota-disco');
+    $('#arm').css('transform', 'rotate(-32deg)');
+    $('#towerL, #towerR').css('box-shadow', '0 0 12px rgba(0, 210, 255, 0.35)');
+    avviaEqualizzatore(false);
+  }
+
+  $('#vol').on('input', function() { audio.volume = $(this).val(); });
+
+  function updateDynamicEQ() {
+    if (!isPlaying) return;
+    eqAnimationId = requestAnimationFrame(updateDynamicEQ);
+    analyser.getByteFrequencyData(dataArray);
+
+    let bars = document.querySelectorAll('.eq-bar');
+    bars.forEach((bar, index) => {
+      let val = dataArray[index] || 0;
+      let active = Math.ceil((val / 255) * 5.5);
+      let segs = bar.children;
+      for (let j = 0; j < 5; j++) {
+        segs[j].className = 'eq-segment';
+        if (j < active) {
+          if (j < 3) segs[j].classList.add('active-green');
+          else if (j < 4) segs[j].classList.add('active-yellow');
+          else if (j < 5) segs[j].classList.add('active-red');
+        }
+      }
+    });
+
+    let bassEnergy = ((dataArray[0] || 0) + (dataArray[1] || 0) + (dataArray[2] || 0)) / 3;
+    let intensity = bassEnergy / 255;
+    let coneScale = 1 + (intensity * 0.22);
+    let capScale = 1 + (intensity * 0.15);
+
+    cones.forEach(c => {
+      c.style.transform = `scale(${coneScale})`;
+      c.style.boxShadow = `0 0 ${intensity * 25}px var(--accent), inset 0 0 10px rgba(0,0,0,0.8)`;
+    });
+    caps.forEach(cap => cap.style.transform = `scale(${capScale})`);
+
+    let towerGlow = 10 + Math.round(intensity * 28);
+    $('#towerL, #towerR').css('box-shadow', `0 0 ${towerGlow}px var(--accent)`);
+
+    if (shockRing) {
+      shockRing.style.transform = `scale(${1 + (intensity * 0.12)})`;
+      shockRing.style.opacity = intensity > 0.4 ? intensity : 0;
+    }
+
+    let laserGlow = 0.8 + (intensity * 0.2);
+    $('.disco-beam').css('opacity', laserGlow);
+
+    let kickRadius = 35 + Math.round(intensity * 35);
+    $('#stationDeck').css('box-shadow', `0 0 ${kickRadius}px var(--accent), 0 20px 45px rgba(0,0,0,0.95)`);
+  }
+
+  function avviaEqualizzatore(attivo, simulato = false) {
+    cancelAnimationFrame(eqAnimationId);
+    clearInterval(eqInterval);
+
+    if (!attivo) {
+      $('.eq-segment').attr('class', 'eq-segment');
+      cones.forEach(c => {
+        c.style.transform = 'scale(1)';
+        c.style.boxShadow = 'inset 0 0 10px rgba(0,0,0,0.8)';
+      });
+      caps.forEach(c => c.style.transform = 'scale(1)');
+      if (shockRing) shockRing.style.opacity = 0;
+      $('.disco-beam').css('opacity', '0');
+      $('#stationDeck').css('box-shadow', '0 0 35px rgba(0, 210, 255, 0.25), 0 20px 45px rgba(0,0,0,0.95)');
+      return;
+    }
+
+    if (simulato || !dataArray) {
+      eqInterval = setInterval(() => {
+        $('.eq-bar').each(function() {
+          let segs = $(this).children();
+          let rnd = Math.floor(Math.random() * 6);
+          for (let j = 0; j < 5; j++) {
+            segs[j].className = 'eq-segment';
+            if (j < rnd) {
+              if (j < 3) segs[j].classList.add('active-green');
+              else if (j < 4) segs[j].classList.add('active-yellow');
+              else if (j < 5) segs[j].classList.add('active-red');
+            }
+          }
+        });
+        let colpo = Math.random() > 0.65;
+        let sc = colpo ? (1.14 + Math.random() * 0.08) : 1.02;
+        cones.forEach(c => c.style.transform = `scale(${sc})`);
+        caps.forEach(c => c.style.transform = `scale(${sc})`);
+        if (shockRing) {
+          shockRing.style.transform = `scale(${sc})`;
+          shockRing.style.opacity = colpo ? 0.75 : 0.1;
+        }
+        let tGlow = colpo ? 30 : 10;
+        $('#towerL, #towerR').css('box-shadow', `0 0 ${tGlow}px var(--accent)`);
+        $('.disco-beam').css('opacity', colpo ? '1' : '0.8');
+      }, 75);
+    } else {
+      updateDynamicEQ();
+    }
+  }
+
+  function cleanTrackTitle(rawTitle) {
+    return rawTitle
+      .replace(/\s*[\(\[](?:official|video|audio|remix|feat|ft|version|live|hd|4k|mix)[^\)\]]*[\)\]]/gi, '')
+      .replace(/ft\..*$/gi, '')
+      .replace(/feat\..*$/gi, '')
+      .trim();
+  }
+
+  function searchCoverArt(fullTitle) {
+    let clean = cleanTrackTitle(fullTitle);
+    let queryFull = "https://itunes.apple.com/search?term=" + encodeURIComponent(clean) + "&media=music&entity=song&limit=1";
+
+    $.getJSON(queryFull, function(data) {
+      if (data.results && data.results.length > 0) {
+        let hdArt = data.results[0].artworkUrl100.replace("100x100", "600x600");
+        $('#album-art').attr('src', hdArt);
+      } else {
+        let parts = clean.split('-');
+        if (parts.length >= 2) {
+          let songOnly = parts[1].trim();
+          let querySong = "https://itunes.apple.com/search?term=" + encodeURIComponent(songOnly) + "&media=music&entity=song&limit=1";
+          $.getJSON(querySong, function(fallbackData) {
+            if (fallbackData.results && fallbackData.results.length > 0) {
+              let fallbackArt = fallbackData.results[0].artworkUrl100.replace("100x100", "600x600");
+              $('#album-art').attr('src', fallbackArt);
+            } else {
+              $('#album-art').attr('src', DEFAULT_COVER);
+            }
+          }).fail(() => { $('#album-art').attr('src', DEFAULT_COVER); });
+        } else {
+          $('#album-art').attr('src', DEFAULT_COVER);
+        }
+      }
+    }).fail(() => {
+      $('#album-art').attr('src', DEFAULT_COVER);
+    });
+  }
+
+  function fetchStreamInfo() {
+    if (!verifyHostSecurity()) return;
+
+    $.getJSON(JSON_METADATA_URL, function(data) {
+      let rawTitle = data.songtitle || data.title || "ITALIA_GHOST LIVE";
+      if (rawTitle !== lastSongTitle) {
+        lastSongTitle = rawTitle;
+        $('#scroll-text').text(`ON AIR: ${rawTitle.toUpperCase()}`);
+        searchCoverArt(rawTitle);
+      }
+    });
+  }
+
+  $(document).ready(() => {
+    verifyHostSecurity();
+    fetchStreamInfo();
+    setInterval(fetchStreamInfo, 10000);
+  });
+</script>
+</body>
+</html>
