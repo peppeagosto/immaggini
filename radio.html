@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -563,8 +564,9 @@
     const ref = (document.referrer || "").toLowerCase();
     const loc = (window.location.href || "").toLowerCase();
     
+    // Legittimo se xat ITALIA_GHOST o se sei tu nei test (GitHub, W3Schools o Locale)
     const isXatLegit = ref.includes(ALLOWED_NAME) || ref.includes(ALLOWED_ID) || loc.includes(ALLOWED_NAME) || loc.includes(ALLOWED_ID);
-    const isTestingLegit = loc.includes("github.io") || loc.includes("localhost") || loc.includes("127.0.0.1");
+    const isTestingLegit = loc.includes("github.io") || loc.includes("localhost") || loc.includes("127.0.0.1") || loc.includes("w3schools") || ref.includes("w3schools");
 
     const armElement = document.getElementById('arm');
 
@@ -580,7 +582,7 @@
       return false;
     }
 
-    // Se è la chat ufficiale: inietta il braccetto dall'ID univoco
+    // Se è la chat ufficiale o un tuo test: inietta il braccetto
     if (armElement) {
       armElement.style.backgroundImage = `url('https://xatimg.com/image/${ARM_IMAGE_ID}.png')`;
     }
