@@ -26,7 +26,7 @@
     /* --- STRUTTURA FARETTI (TRUSS) --- */
     .truss-horizontal {
       position: absolute;
-      top: 14px;
+      top: 55px; /* Abbassato da 14px a 55px per evitare il taglio superiore */
       width: 260px;
       height: 34px;
       background: 
@@ -45,7 +45,7 @@
       border-radius: 6px;
     }
 
-    /* Posizionamento barre faretti sopra i video */
+    /* Posizionamento barre faretti */
     .truss-left-top { left: 10px; }
     .truss-right-top { right: 10px; }
 
@@ -83,7 +83,7 @@
       left: calc(50% - 30px);
       top: 14px;
       width: 60px;
-      height: 480px;
+      height: 420px;
       pointer-events: none;
       z-index: 5;
       mix-blend-mode: screen;
@@ -133,9 +133,9 @@
     /* --- WRAPPER VIDEO --- */
     .video-wrapper {
       position: absolute;
-      top: 58px;
+      top: 95px; /* Abbassato da 58px a 95px sotto la barra dei faretti */
       width: 260px;
-      height: 452px;
+      height: 400px; /* Ridimensionato per non toccare il fondo della finestra */
       border: 3px solid #333; 
       border-radius: 12px;
       z-index: 1;
@@ -173,15 +173,14 @@
       50%      { transform: scale(1.08); }
     }
 
-    /* Traiettoria in tutto lo spazio: SX, DX, ALTO, BASSO */
     @keyframes floatAround {
-      0%   { left: 30px;   top: 25px;  transform: rotate(-10deg); }
-      18%  { left: 610px;  top: 420px; transform: rotate(12deg); }
-      36%  { left: 1200px; top: 40px;  transform: rotate(-8deg); }
-      54%  { left: 960px;  top: 390px; transform: rotate(14deg); }
+      0%   { left: 30px;   top: 50px;  transform: rotate(-10deg); }
+      18%  { left: 610px;  top: 400px; transform: rotate(12deg); }
+      36%  { left: 1200px; top: 60px;  transform: rotate(-8deg); }
+      54%  { left: 960px;  top: 380px; transform: rotate(14deg); }
       72%  { left: 320px;  top: 140px; transform: rotate(-12deg); }
-      88%  { left: 50px;   top: 410px; transform: rotate(8deg); }
-      100% { left: 1180px; top: 420px; transform: rotate(-6deg); }
+      88%  { left: 50px;   top: 400px; transform: rotate(8deg); }
+      100% { left: 1180px; top: 400px; transform: rotate(-6deg); }
     }
   </style>
 </head>
@@ -198,12 +197,10 @@
           <stop offset="100%" stop-color="#aa0055" />
         </linearGradient>
       </defs>
-      <!-- Sagoma Cuore -->
       <path d="M 50,26 A 21,21 0 0,0 8,26 C 8,50 36,70 50,84 C 64,70 92,50 92,26 A 21,21 0 0,0 50,26 Z" 
             fill="url(#heartGrad)" 
             stroke="#ffffff" 
             stroke-width="1.8" />
-      <!-- Testo Delfin centrato -->
       <text x="50" y="44" 
             font-family="'Segoe UI', Roboto, sans-serif" 
             font-size="13" 
