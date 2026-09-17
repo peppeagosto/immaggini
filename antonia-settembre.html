@@ -76,6 +76,25 @@ body {
   100% { background-position: 100%; }
 }
 
+/* ===== BADGE PICCOLO NERO "ANTO" ANGOLO A DX ===== */
+.anto-badge {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  font-family: Trebuchet MS, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  z-index: 3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
 /* ===== AREA CENTRALE DI GIOCO (VUOTA) ===== */
 .center-area {
   position: absolute;
@@ -102,6 +121,10 @@ body {
     <div class="video-wrapper right">
         <!-- Video Destra -->
         <video class="side-video" src="https://i.imgur.com/m62glcL.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
+        
+        <!-- Scritta ANTO piccola nell'angolo in basso a destra -->
+        <div class="anto-badge">ANTO</div>
+
         <div class="video-text">amore2015</div>
     </div>
     
