@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EL CARTAIO</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent; /* Rimesso trasparente */
+}
+
+/* CONTENITORI VIDEO con GLOW ESTERNO PULSANTE */
+.video-box {
+    position: fixed;
+    width: 240px;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 14px;
+    border: 2px solid #ff0000;
+    overflow: hidden;
+    z-index: 9999;
+    /* Animazione del bagliore solo esterno */
+    animation: borderGlow 2s infinite alternate;
+}
+
+/* POSIZIONE */
+.video-left { left: 10px; }
+.video-right { right: 10px; }
+
+/* VIDEO */
+.video-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* TESTO ONDULATO IN BASSO */
+.video-text {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #fff, 0 0 15px #ff0000;
+    pointer-events: none;
+    animation: wave 3s ease-in-out infinite;
+    z-index: 20;
+}
+
+/* NUOVO TESTO "ANTO" PICCOLO NERO NELL'ANGOLO */
+.text-corner {
+    position: absolute;
+    top: 10px;       
+    right: 15px;     
+    color: #000;     
+    font-size: 14px; 
+    font-weight: bold;
+    z-index: 20;
+    text-shadow: 0 0 5px rgba(255,255,255,0.8);
+}
+
+/* ANIMAZIONE ONDA (per il testo in basso) */
+@keyframes wave {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(4px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* ANIMAZIONE GLOW (Solo Esterno) */
+@keyframes borderGlow {
+    0% {
+        box-shadow: 
+            0 0 10px #ff0000, 
+            0 0 20px #ffff00;
+    }
+    100% {
+        box-shadow: 
+            0 0 20px #ff0000, 
+            0 0 40px #ffff00; 
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- VIDEO SINISTRO (Ragazza 1) -->
+<div class="video-box video-left">
+    <video autoplay loop muted playsinline>
+        <source src="https://i.imgur.com/rfUoUBQ.mp4" type="video/mp4">
+    </video>
+    <div class="video-text">amore2015</div>
+</div>
+
+<!-- VIDEO DESTRO (Maschio 2) -->
+<div class="video-box video-right">
+    <video autoplay loop muted playsinline>
+        <source src="https://i.imgur.com/DFReJZ9.mp4" type="video/mp4">
+    </video>
+    <div class="text-corner">anto</div>
+    <div class="video-text">amore2015</div>
+</div>
+
+</body>
+</html>
