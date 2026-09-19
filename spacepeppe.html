@@ -1,100 +1,20 @@
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
-<meta charset="UTF-8">
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background-color: transparent; /* Mantiene lo sfondo trasparente per l'iframe */
-  }
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none; /* Fondamentale: permette ai click di passare attraverso la scia */
-    z-index: 9999;
-  }
-</style>
+  <meta charset="utf-8">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+  </style>
 </head>
 <body>
-
-<canvas id="trailCanvas"></canvas>
-
-<script>
-  const canvas = document.getElementById('trailCanvas');
-  const ctx = canvas.getContext('2d');
-  
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  let particles = [];
-  // Colori delle particelle. Puoi cambiarli per abbinarli ai tuoi design Glassmorphism o ai bordi arcobaleno
-  const colors = ['#00ffcc', '#00ccff', '#ffffff', '#ff00cc']; 
-
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-
-  const mouse = {
-    x: null,
-    y: null
-  };
-
-  window.addEventListener('mousemove', (event) => {
-    mouse.x = event.x;
-    mouse.y = event.y;
-    // Crea nuove particelle a ogni movimento del mouse
-    for (let i = 0; i < 3; i++) { 
-      particles.push(new Particle());
-    }
-  });
-
-  class Particle {
-    constructor() {
-      this.x = mouse.x;
-      this.y = mouse.y;
-      this.size = Math.random() * 5 + 1; // Dimensione iniziale
-      this.speedX = Math.random() * 3 - 1.5; // Diffusione orizzontale
-      this.speedY = Math.random() * 3 - 1.5; // Diffusione verticale
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.life = 1; // Opacità iniziale
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.size > 0.1) this.size -= 0.1; // Rimpicciolimento
-      this.life -= 0.02; // Velocità di dissolvenza della scia
-    }
-    draw() {
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = Math.max(0, this.life);
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-      
-      // Rimuove le particelle esaurite
-      if (particles[i].life <= 0) {
-        particles.splice(i, 1);
-        i--;
-      }
-    }
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-</script>
-
+  <!-- Qui ci va il tuo canvas o il codice JavaScript che crea la scia del mouse -->
+  <script>
+    // Il tuo script dell'effetto
+  </script>
 </body>
 </html>
