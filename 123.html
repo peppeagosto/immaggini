@@ -31,19 +31,20 @@
       justify-content: space-between;
       align-items: center;
       background: transparent;
-      overflow: visible; /* Fondamentale: impedisce che il fondo del rettangolo venga tagliato */
+      overflow: visible;
       perspective: 1200px;
     }
 
     .video-pod {
       position: relative;
       width: 272px;
-      height: 450px; /* Altezza calibrata per mantenere la cornice chiusa e visibile */
+      height: 460px;
       z-index: 10;
       display: flex;
       justify-content: center;
       align-items: center;
-      transform: translateY(32px); /* Posizione ribassata senza uscire dallo schermo */
+      /* Alzato di pochi pixel (da 32px a 16px) */
+      transform: translateY(16px);
     }
 
     .video-pod.left-pod {
@@ -54,7 +55,7 @@
       filter: drop-shadow(0 0 16px rgba(255, 0, 85, 0.45));
     }
 
-    /* Aura di energia perimetrale chiusa su tutti i 4 lati */
+    /* Aura di energia perimetrale visibile sui 4 lati */
     .energy-shield {
       position: absolute;
       inset: -4px;
@@ -82,11 +83,11 @@
       100% { opacity: 1; transform: scale(1.005); filter: brightness(1.2); }
     }
 
-    /* Rettangolo plasma chiuso e rifinito */
+    /* Rettangolo plasma */
     .plasma-border-wrapper {
       position: relative;
       width: 270px;
-      height: 448px;
+      height: 458px;
       border-radius: 22px;
       overflow: hidden;
       padding: 3.5px;
