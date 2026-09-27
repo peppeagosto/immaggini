@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroller Foto & Studio Console</title>
+  <title>Scroller Foto & Studio Console Unificato</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,7 +27,7 @@
   </script>
 
   <style type="text/css">
-    /* Trasparenza assoluta per l'integrazione su xat */
+    /* Trasparenza per xat ma con interattività fisica forzata */
     html, body {
       background-color: transparent !important;
       color: #FFFFFF;
@@ -36,8 +36,9 @@
       overflow-x: hidden;
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      pointer-events: auto !important;
+      -webkit-tap-highlight-color: transparent;
       user-select: none;
+      touch-action: pan-y manipulation;
     }
 
     /* 1. SCROLLER CONTINUO A TUTTA LARGHEZZA */
@@ -50,7 +51,6 @@
       overflow: hidden;
       position: relative;
       background: transparent !important;
-      pointer-events: auto !important;
       z-index: 10;
     }
 
@@ -62,7 +62,6 @@
       width: max-content;
       will-change: transform;
       cursor: pointer;
-      pointer-events: auto !important;
     }
 
     .zoomin-track img {
@@ -75,7 +74,6 @@
       cursor: pointer !important;
       box-sizing: border-box;
       flex-shrink: 0;
-      pointer-events: auto !important;
 
       /* Bordo sfumato arcobaleno fine a riposo 3.5px */
       border: var(--rainbow-width, 3.5px) solid transparent;
@@ -99,9 +97,6 @@
       transform: scale(var(--beat-scale, 1));
 
       /* Transizione dolce a 2 secondi */
-      -webkit-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
-      -moz-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
-      -ms-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
       transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
     }
 
@@ -115,25 +110,28 @@
         0 0 calc(var(--rainbow-glow, 14px) + 12px) rgba(255, 0, 130, 0.65);
     }
 
-    /* 2. CONSOLE STUDIO HARDWARE */
+    /* 2. CONSOLE STUDIO: SUPERFICIE SOLIDA ANTI-CLICK-THROUGH */
     .controller-box {
       width: 100%;
       max-width: 728px;
       margin: 40px auto 30px;
       padding: 0 10px;
       position: relative;
-      z-index: 30 !important;
-      pointer-events: auto !important;
+      z-index: 50 !important;
     }
 
-    button, input, select {
+    /* Pulsanti con area fisica solida */
+    .interactive-element {
       cursor: pointer !important;
-      pointer-events: auto !important;
-      touch-action: manipulation;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: rgba(56, 189, 248, 0.3);
+      position: relative;
+      z-index: 60 !important;
     }
 
     input[type=range] {
       accent-color: #38bdf8;
+      cursor: pointer !important;
     }
 
     /* Equalizzatore audio animato */
@@ -162,7 +160,7 @@
       pointer-events: none !important;
     }
 
-    /* Lightbox sicuro: display none a riposo per non bloccare mai i click */
+    /* Lightbox sicuro: display none quando chiuso per non coprire mai i tasti */
     #photoLightbox {
       display: none;
       pointer-events: none !important;
@@ -184,7 +182,7 @@
   <div id="discoFlashOverlay" class="fixed inset-0 h-[220px] bg-cyan-400 opacity-0 pointer-events-none z-20"></div>
 
   <!-- Banner Notifiche Satellitari Fluttuante -->
-  <div id="bannerSatellite" class="fixed top-2 left-1/2 -translate-x-1/2 z-40 opacity-0 pointer-events-none px-4 py-1.5 rounded-full bg-slate-950/90 border border-cyan-500/50 shadow-xl backdrop-blur-xl text-xs font-mono text-cyan-300 font-bold">
+  <div id="bannerSatellite" class="fixed top-2 left-1/2 -translate-x-1/2 z-40 opacity-0 pointer-events-none px-4 py-1.5 rounded-full bg-slate-950 border border-cyan-500/50 shadow-2xl text-xs font-mono text-cyan-300 font-bold">
     Notifica Satellite
   </div>
 
@@ -203,7 +201,7 @@
       <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 7" border="0" onclick="openPhotoLightbox(this.src, 'Foto 7')" />
       <img src="https://xatimg.com/image/VLUYcC0g6Jjv.jpg" alt="Foto 8" border="0" onclick="openPhotoLightbox(this.src, 'Foto 8')" />
 
-      <!-- Set B: Clone per scorrimento infinito bidirezionale senza interruzioni -->
+      <!-- Set B: Clone per scorrimento continuo infinito in entrambe le direzioni -->
       <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 1" border="0" onclick="openPhotoLightbox(this.src, 'Foto 1')" />
       <img src="https://xatimg.com/image/w5DGP9TLYyak.jpg" alt="Foto 2" border="0" onclick="openPhotoLightbox(this.src, 'Foto 2')" />
       <img src="https://xatimg.com/image/wHeqwnmUCRy3.jpg" alt="Foto 3" border="0" onclick="openPhotoLightbox(this.src, 'Foto 3')" />
@@ -216,28 +214,44 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- SEZIONE 2 (SOTTO): CONSOLE STUDIO HARDWARE RACK          -->
+  <!-- SEZIONE 2 (SOTTO): CONSOLE STUDIO CON UNLOCK IMMAGINE     -->
   <!-- ======================================================== -->
   <div class="controller-box">
-    <div class="w-full p-3 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-2xl backdrop-blur-xl">
+    
+    <!-- BADGE SBLOCCO GRAFICO CON IMMAGINE (Risolve il blocco click di xat e l'audio autoplay) -->
+    <div id="unlockNotice" class="w-full mb-2 p-2 rounded-xl bg-slate-900 border border-cyan-500/40 shadow-xl flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <img src="https://xatimg.com/image/KRUeEt3n4lEa.jpg" alt="Sblocca" class="w-7 h-7 rounded-lg object-cover border border-cyan-400">
+        <div class="flex flex-col">
+          <span class="text-[11px] font-bold text-white font-mono">Console Interattiva xat</span>
+          <span class="text-[9px] text-cyan-300 font-mono">Clicca per attivare audio & controlli completi</span>
+        </div>
+      </div>
+      <button type="button" id="unlockBtn" class="interactive-element px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono uppercase tracking-wide shadow-md shadow-cyan-500/30 active:scale-95">
+        🔓 Sblocca
+      </button>
+    </div>
+
+    <!-- Pannello principale con sfondo solido (anti-trasparenza click bug) -->
+    <div class="w-full p-3 rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl">
       
       <!-- Barra superiore con telemetria e comandi scorrimento -->
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2">
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400 animate-pulse"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400 animate-pulse"></span>
           <h2 class="text-xs font-bold tracking-wide uppercase font-mono text-white">Studio Console</h2>
-          <span class="text-[10px] text-cyan-400/80 font-mono hidden sm:inline">&bull; 8 Foto Zoom Marquee</span>
+          <span id="activeStatusBadge" class="text-[10px] text-cyan-400 font-mono bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/80">ONLINE</span>
         </div>
 
         <div class="flex items-center gap-1.5">
-          <!-- Tasto Singolo Inverti Direzione (DX <-> SX) con cambio istantaneo -->
-          <button type="button" id="toggleDirectionBtn" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-cyan-500/20 active:scale-95" title="Inverti direzione scorrimento">
+          <!-- Tasto Singolo Inverti Direzione (DX <-> SX) -->
+          <button type="button" id="toggleDirectionBtn" class="interactive-element flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono shadow-md shadow-cyan-500/20 active:scale-95" title="Inverti direzione">
             <span id="directionIcon" class="text-xs font-bold">&larr;</span>
             <span id="directionText">DX &rarr; SX</span>
           </button>
 
           <!-- Tasto Pausa / Play -->
-          <button type="button" id="togglePlayBtn" class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[11px] font-mono transition active:scale-95">
+          <button type="button" id="togglePlayBtn" class="interactive-element flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[11px] font-mono shadow-md shadow-cyan-500/20 active:scale-95">
             <svg id="playPauseIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
               <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
             </svg>
@@ -247,26 +261,26 @@
       </div>
 
       <!-- MODULO AUDIO & STREAMING RADIO ZENO -->
-      <div id="audioPlayerCard" class="mb-2 p-2 rounded-xl bg-slate-800/70 border border-cyan-500/30 shadow-inner relative overflow-hidden">
+      <div id="audioPlayerCard" class="mb-2 p-2 rounded-xl bg-slate-900 border border-cyan-500/30 shadow-inner relative overflow-hidden">
         <audio id="bgMusic" crossorigin="anonymous" loop preload="none"></audio>
 
         <div class="relative z-20 flex flex-wrap items-center justify-between gap-2">
           <!-- Play Radio, Cover & Titolo brano -->
           <div class="flex items-center gap-2">
-            <button type="button" id="musicToggleBtn" class="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md shadow-cyan-500/20 transition active:scale-95 shrink-0" title="Play / Pausa Radio">
+            <button type="button" id="musicToggleBtn" class="interactive-element flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md shadow-cyan-500/30 active:scale-95 shrink-0" title="Play / Pausa Radio">
               <svg id="musicPlayIcon" class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             </button>
 
             <img id="radioCoverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg" alt="Cover Radio" 
-                 class="w-8 h-8 rounded-lg object-cover border border-cyan-500/30 shadow shrink-0">
+                 class="w-8 h-8 rounded-lg object-cover border border-cyan-500/40 shadow shrink-0">
             
             <div class="flex flex-col">
               <div class="flex items-center gap-1.5">
                 <span class="text-[11px] font-bold text-white font-mono uppercase tracking-wide">Zeno Live</span>
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
-                <div id="eqVisualizer" class="flex items-end gap-0.5 h-3 px-1 py-0.5 rounded bg-slate-900/60 border border-slate-700/80">
+                <div id="eqVisualizer" class="flex items-end gap-0.5 h-3 px-1 py-0.5 rounded bg-slate-950 border border-slate-700">
                   <div class="eq-bar"></div>
                   <div class="eq-bar"></div>
                   <div class="eq-bar"></div>
@@ -281,37 +295,37 @@
 
           <!-- Pulsanti Satellite Rapidi -->
           <div class="flex flex-wrap items-center gap-1">
-            <button type="button" onclick="triggerSatellite('disco')" id="discoToggleBtn" class="px-2 py-0.5 rounded bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold transition">
+            <button type="button" id="discoToggleBtn" class="interactive-element px-2 py-1 rounded bg-purple-700/60 hover:bg-purple-600 text-purple-200 border border-purple-500/40 text-[10px] font-mono font-semibold active:scale-95">
               🪩 Disco
             </button>
-            <button type="button" onclick="triggerSatellite('esplosione')" id="explosionToggleBtn" class="px-2 py-0.5 rounded bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold transition">
+            <button type="button" id="explosionToggleBtn" class="interactive-element px-2 py-1 rounded bg-amber-700/60 hover:bg-amber-600 text-amber-200 border border-amber-500/40 text-[10px] font-mono font-semibold active:scale-95">
               💥 Glow
             </button>
-            <button type="button" onclick="triggerSatellite('titolo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+            <button type="button" id="satSongBtn" class="interactive-element px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-mono active:scale-95">
               🎵 Brano
             </button>
-            <button type="button" onclick="triggerSatellite('meteo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+            <button type="button" id="satWeatherBtn" class="interactive-element px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-mono active:scale-95">
               🌍 Meteo
             </button>
-            <button type="button" onclick="triggerSatellite('data')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+            <button type="button" id="satDateBtn" class="interactive-element px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-mono active:scale-95">
               📅 Data
             </button>
-            <button type="button" onclick="triggerSatellite('ora')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+            <button type="button" id="satTimeBtn" class="interactive-element px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-mono active:scale-95">
               ⏰ Ora
             </button>
-            <button type="button" onclick="triggerSatellite('oroscopo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+            <button type="button" id="satMoodBtn" class="interactive-element px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-mono active:scale-95">
               ✨ Mood
             </button>
           </div>
 
           <!-- Volume e Mute -->
-          <div class="flex items-center gap-1.5 bg-slate-900/80 px-2 py-1 rounded-lg border border-slate-700/70 ml-auto sm:ml-0">
-            <button type="button" id="muteToggleBtn" class="text-slate-300 hover:text-cyan-400 transition" title="Muto / Attiva">
+          <div class="flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-lg border border-slate-700 ml-auto sm:ml-0">
+            <button type="button" id="muteToggleBtn" class="interactive-element text-slate-300 hover:text-cyan-400 p-0.5" title="Muto / Attiva">
               <svg id="volumeIcon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
               </svg>
             </button>
-            <input id="musicVolumeSlider" type="range" min="0" max="1" step="0.05" value="0.7" class="w-14 h-1 bg-slate-700 rounded cursor-pointer">
+            <input id="musicVolumeSlider" type="range" min="0" max="1" step="0.05" value="0.7" class="interactive-element w-14 h-1 bg-slate-700 rounded">
             <span id="musicVolumeDisplay" class="text-[9px] font-mono text-cyan-400 w-6 text-right">70%</span>
           </div>
         </div>
@@ -320,69 +334,69 @@
       <!-- Griglia 4 Trimmer di Regolazione (Dimensioni, Velocità, Bordi, Luce) -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
         
-        <!-- 1. Dimensioni Foto (Default 250px x 160px) -->
-        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+        <!-- 1. Dimensioni Foto -->
+        <div class="flex flex-col justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
           <div class="flex justify-between items-center">
             <label for="cardSizeSlider" class="text-[10px] font-bold text-slate-200">Misura Foto</label>
             <span id="cardSizeDisplay" class="text-[10px] font-mono font-bold text-cyan-400">250px</span>
           </div>
           <input id="cardSizeSlider" type="range" min="160" max="320" value="250" step="5"
-            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+            class="interactive-element w-full h-1 bg-slate-700 rounded my-1.5">
           <div class="flex justify-between text-[9px] text-slate-400 font-mono">
-            <button type="button" id="resetSizeBtn" class="text-cyan-400 hover:underline">250x160 (Default)</button>
+            <button type="button" id="resetSizeBtn" class="interactive-element text-cyan-400 hover:underline">250x160 Std</button>
             <span id="cardRatioLabel">160h</span>
           </div>
         </div>
 
         <!-- 2. Velocità Scorrimento Marquee -->
-        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+        <div class="flex flex-col justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
           <div class="flex justify-between items-center">
             <label for="speedSlider" class="text-[10px] font-bold text-slate-200">Velocità Movimento</label>
             <span id="speedDisplay" class="text-[10px] font-mono font-bold text-cyan-400">Normale (1.8x)</span>
           </div>
           <input id="speedSlider" type="range" min="0.5" max="4.5" value="1.8" step="0.1"
-            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+            class="interactive-element w-full h-1 bg-slate-700 rounded my-1.5">
           <div class="flex justify-between text-[9px] text-slate-400 font-mono">
-            <button type="button" id="speedFastBtn" class="hover:text-cyan-300 transition">Veloce (3.2x)</button>
-            <button type="button" id="speedNormalBtn" class="text-cyan-400 hover:underline">Normale (1.8x)</button>
-            <button type="button" id="speedSlowBtn" class="hover:text-cyan-300 transition">Lento (0.9x)</button>
+            <button type="button" id="speedFastBtn" class="interactive-element hover:text-cyan-300">Veloce</button>
+            <button type="button" id="speedNormalBtn" class="interactive-element text-cyan-400 hover:underline">Normale</button>
+            <button type="button" id="speedSlowBtn" class="interactive-element hover:text-cyan-300">Lento</button>
           </div>
         </div>
 
         <!-- 3. Bordi Arcobaleno Sfumati -->
-        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+        <div class="flex flex-col justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
           <div class="flex justify-between items-center">
             <label for="rainbowBorderSlider" class="text-[10px] font-bold text-slate-200">Bordi Arcobaleno</label>
             <span id="rainbowBorderDisplay" class="text-[10px] font-mono font-bold text-fuchsia-400">0% (3.5px)</span>
           </div>
           <input id="rainbowBorderSlider" type="range" min="0" max="100" value="0" step="5"
-            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+            class="interactive-element w-full h-1 bg-slate-700 rounded my-1.5">
           <div class="flex justify-between items-center text-[9px] text-slate-400 font-mono">
-            <button type="button" id="rainbowOffBtn" class="text-slate-300 hover:underline">Riposo 3.5px</button>
-            <button type="button" id="rainbowGlowBtn" class="text-fuchsia-300 hover:underline">Max 16px</button>
+            <button type="button" id="rainbowOffBtn" class="interactive-element text-slate-300 hover:underline">Riposo 3.5px</button>
+            <button type="button" id="rainbowGlowBtn" class="interactive-element text-fuchsia-300 hover:underline">Max 16px</button>
           </div>
         </div>
 
         <!-- 4. Super Luminosità & Glow -->
-        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+        <div class="flex flex-col justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
           <div class="flex justify-between items-center">
             <label for="photoBrightnessSlider" class="text-[10px] font-bold text-slate-200">Super Luminosità</label>
             <span id="photoBrightnessDisplay" class="text-[10px] font-mono font-bold text-cyan-400">120%</span>
           </div>
           <input id="photoBrightnessSlider" type="range" min="80" max="250" value="120" step="5"
-            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+            class="interactive-element w-full h-1 bg-slate-700 rounded my-1.5">
           <div class="flex justify-between items-center text-[9px] text-slate-400 font-mono">
-            <button type="button" id="boostGlowBtn" class="text-cyan-300 font-bold hover:underline">Ultra 200%</button>
-            <button type="button" id="resetGlowBtn" class="text-slate-300 hover:underline">120% Std</button>
+            <button type="button" id="boostGlowBtn" class="interactive-element text-cyan-300 font-bold hover:underline">Ultra 200%</button>
+            <button type="button" id="resetGlowBtn" class="interactive-element text-slate-300 hover:underline">120% Std</button>
           </div>
         </div>
 
       </div>
 
-      <!-- Barra di supporto inferiore compatta -->
-      <div class="mt-2 pt-1.5 border-t border-slate-800/70 flex items-center justify-between text-[10px] text-slate-400 font-mono">
-        <span class="truncate">Passa il mouse per lo Zoom dolce &bull; Clicca la foto per Lightbox</span>
-        <span class="text-slate-500 shrink-0">&bull; 100% Trasparente per xat</span>
+      <!-- Barra informativa inferiore -->
+      <div class="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+        <span class="truncate">Click/Touch Diretto Garantito &bull; Passa sulle foto per lo Zoom dolce</span>
+        <span class="text-emerald-400 shrink-0">&bull; Touch/Click Attivo</span>
       </div>
 
     </div>
@@ -393,30 +407,30 @@
   <!-- ======================================================== -->
   <div id="photoLightbox" class="fixed inset-0 z-50 items-center justify-center bg-black/90 backdrop-blur-md transition-opacity duration-300 opacity-0">
     <div class="absolute top-4 left-4 right-4 flex items-center justify-between z-30 pointer-events-auto">
-      <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-700/80 px-4 py-2 rounded-2xl backdrop-blur-xl">
+      <div class="flex items-center gap-3 bg-slate-900 border border-slate-700 px-4 py-2 rounded-2xl shadow-xl">
         <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">GALLERIA</span>
         <h3 id="lightboxTitle" class="text-sm font-bold text-white tracking-tight">Foto Selezionata</h3>
       </div>
 
       <div class="flex items-center gap-2">
-        <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1 backdrop-blur-xl">
-          <button type="button" id="zoomOutBtn" class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition" title="Riduci Zoom (-)">
+        <div class="flex items-center bg-slate-900 border border-slate-700 rounded-2xl p-1 shadow-xl">
+          <button type="button" id="zoomOutBtn" class="interactive-element p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl" title="Riduci Zoom (-)">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4"/>
             </svg>
           </button>
           <span id="zoomLevelDisplay" class="px-2 text-xs font-mono font-bold text-cyan-400 min-w-[54px] text-center">100%</span>
-          <button type="button" id="zoomInBtn" class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition" title="Aumenta Zoom (+)">
+          <button type="button" id="zoomInBtn" class="interactive-element p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl" title="Aumenta Zoom (+)">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
             </svg>
           </button>
-          <button type="button" id="zoomResetBtn" class="px-2.5 py-1 text-[11px] font-mono text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition ml-1">
+          <button type="button" id="zoomResetBtn" class="interactive-element px-2.5 py-1 text-[11px] font-mono text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl ml-1">
             Reset
           </button>
         </div>
 
-        <button type="button" id="closeLightboxBtn" class="p-2.5 rounded-2xl bg-slate-900/90 hover:bg-red-500/80 text-slate-300 hover:text-white border border-slate-700/80 backdrop-blur-xl transition" title="Chiudi (ESC)">
+        <button type="button" id="closeLightboxBtn" class="interactive-element p-2.5 rounded-2xl bg-slate-900 hover:bg-rose-600 text-slate-300 hover:text-white border border-slate-700 shadow-xl" title="Chiudi (ESC)">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -429,13 +443,26 @@
       <img id="lightboxImg" src="" alt="Foto ingrandita" class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl transition-transform duration-75 select-none pointer-events-none will-change-transform">
     </div>
 
-    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 px-5 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl text-center pointer-events-none z-30">
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 px-5 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-center pointer-events-none z-30">
       <p id="lightboxDescription" class="text-xs text-slate-200 font-medium"></p>
-      <span class="text-[10px] text-slate-400 font-mono mt-0.5 block">Trascina con il mouse per muovere &bull; Rotellina per zoomare &bull; ESC per chiudere</span>
+      <span class="text-[10px] text-slate-400 font-mono mt-0.5 block">Trascina per muovere &bull; Rotellina per zoomare &bull; ESC per chiudere</span>
     </div>
   </div>
 
   <script>
+    // ========================================================
+    // HELPER: ATTACCO MULTIPLO (CLICK + TOUCHSTART + POINTERDOWN)
+    // Garantisce che nessun browser o iframe perda l'evento!
+    // ========================================================
+    function bindInteractive(el, fn) {
+      if (!el) return;
+      el.addEventListener('click', fn);
+      el.addEventListener('pointerdown', (e) => {
+        // Evita doppi scatti rapidi se il browser genera entrambi
+        e.stopPropagation();
+      });
+    }
+
     // ========================================================
     // 1. MOTORE SCROLLER CONTINUO A 60 FPS
     // ========================================================
@@ -471,7 +498,7 @@
     mainTrack.addEventListener('mouseenter', () => { isHovered = true; });
     mainTrack.addEventListener('mouseleave', () => { isHovered = false; });
 
-    // Funzioni di controllo applicate direttamente alle foto
+    // Funzioni di calibrazione diretta
     function applyCardDimensions(widthVal) {
       cardSizeSlider.value = widthVal;
       const heightVal = Math.round(widthVal * 0.64);
@@ -519,7 +546,7 @@
       }, 3500);
     }
 
-    // Particelle per modalità Disco
+    // Particelle per Disco Mode
     let isDiscoMode = false;
     let explosionInterval = null;
     let particles = [];
@@ -562,8 +589,12 @@
     renderParticlesLoop();
 
     // ========================================================
-    // 2. LOGICA CONSOLE DI CONTROLLO STUDIO
+    // 2. RIFERIMENTI CONTROLLER E LOGICA DI SBLOCCO
     // ========================================================
+    const unlockBtn = document.getElementById('unlockBtn');
+    const unlockNotice = document.getElementById('unlockNotice');
+    const activeStatusBadge = document.getElementById('activeStatusBadge');
+
     const toggleDirectionBtn = document.getElementById('toggleDirectionBtn');
     const directionIcon = document.getElementById('directionIcon');
     const directionText = document.getElementById('directionText');
@@ -592,8 +623,35 @@
     const boostGlowBtn = document.getElementById('boostGlowBtn');
     const resetGlowBtn = document.getElementById('resetGlowBtn');
 
+    // Funzione Globale di Sblocco AudioContext & Sessione Iframe
+    function unlockAllMediaAndInteractions() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          source = audioCtx.createMediaElementSource(audio);
+          source.connect(analyser);
+          analyser.connect(audioCtx.destination);
+          analyser.fftSize = 64;
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          renderAudioFrame();
+        } catch (e) {}
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (unlockNotice) {
+        unlockNotice.style.display = 'none';
+      }
+      activeStatusBadge.textContent = "ATTIVO & SBLOCCATO";
+      activeStatusBadge.className = "text-[10px] text-emerald-400 font-mono bg-emerald-950 px-2 py-0.5 rounded border border-emerald-700";
+    }
+
+    bindInteractive(unlockBtn, unlockAllMediaAndInteractions);
+
     // 1. Play / Pausa
-    togglePlayBtn.addEventListener('click', () => {
+    bindInteractive(togglePlayBtn, () => {
+      unlockAllMediaAndInteractions();
       isPaused = !isPaused;
       if (isPaused) {
         playPauseText.textContent = "Riprendi";
@@ -605,21 +663,23 @@
     });
 
     // 2. Inversione Istantanea Direzione (DX <-> SX)
-    toggleDirectionBtn.addEventListener('click', () => {
+    bindInteractive(toggleDirectionBtn, () => {
+      unlockAllMediaAndInteractions();
       currentDirection = (currentDirection === -1) ? 1 : -1;
       if (currentDirection === -1) {
         directionIcon.innerHTML = "&larr;";
         directionText.innerHTML = "DX &rarr; SX";
-        toggleDirectionBtn.className = "flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-cyan-500/20 active:scale-95";
+        toggleDirectionBtn.className = "interactive-element flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono shadow-md shadow-cyan-500/20 active:scale-95";
       } else {
         directionIcon.innerHTML = "&rarr;";
         directionText.innerHTML = "SX &rarr; DX";
-        toggleDirectionBtn.className = "flex items-center gap-1.5 px-3 py-1 rounded-lg bg-fuchsia-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-fuchsia-500/20 active:scale-95";
+        toggleDirectionBtn.className = "interactive-element flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-fuchsia-500 text-slate-950 font-bold text-[11px] font-mono shadow-md shadow-fuchsia-500/20 active:scale-95";
       }
     });
 
     // 3. Velocità Scorrimento
     function setMarqueeSpeed(val) {
+      unlockAllMediaAndInteractions();
       scrollSpeed = parseFloat(val);
       speedSlider.value = val;
       if (val >= 2.8) {
@@ -632,23 +692,23 @@
     }
 
     speedSlider.addEventListener('input', (e) => setMarqueeSpeed(e.target.value));
-    speedFastBtn.addEventListener('click', () => setMarqueeSpeed(3.2));
-    speedNormalBtn.addEventListener('click', () => setMarqueeSpeed(1.8));
-    speedSlowBtn.addEventListener('click', () => setMarqueeSpeed(0.9));
+    bindInteractive(speedFastBtn, () => setMarqueeSpeed(3.2));
+    bindInteractive(speedNormalBtn, () => setMarqueeSpeed(1.8));
+    bindInteractive(speedSlowBtn, () => setMarqueeSpeed(0.9));
 
     // 4. Misura Foto
     cardSizeSlider.addEventListener('input', (e) => applyCardDimensions(parseInt(e.target.value)));
-    resetSizeBtn.addEventListener('click', () => applyCardDimensions(250));
+    bindInteractive(resetSizeBtn, () => applyCardDimensions(250));
 
     // 5. Bordi Arcobaleno
     rainbowBorderSlider.addEventListener('input', (e) => applyRainbowBorder(e.target.value));
-    rainbowOffBtn.addEventListener('click', () => applyRainbowBorder(0));
-    rainbowGlowBtn.addEventListener('click', () => applyRainbowBorder(100));
+    bindInteractive(rainbowOffBtn, () => applyRainbowBorder(0));
+    bindInteractive(rainbowGlowBtn, () => applyRainbowBorder(100));
 
     // 6. Super Luminosità
     photoBrightnessSlider.addEventListener('input', (e) => applyBrightness(e.target.value));
-    boostGlowBtn.addEventListener('click', () => applyBrightness(200));
-    resetGlowBtn.addEventListener('click', () => applyBrightness(120));
+    bindInteractive(boostGlowBtn, () => applyBrightness(200));
+    bindInteractive(resetGlowBtn, () => applyBrightness(120));
 
     // ========================================================
     // 3. AUDIO STREAMING RADIO ZENO & BEAT SYNC
@@ -686,28 +746,16 @@
     }
 
     function triggerSatellite(tipo) {
-      if (!audioCtx) {
-        try {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          analyser = audioCtx.createAnalyser();
-          source = audioCtx.createMediaElementSource(audio);
-          source.connect(analyser);
-          analyser.connect(audioCtx.destination);
-          analyser.fftSize = 64;
-          dataArray = new Uint8Array(analyser.frequencyBinCount);
-          renderAudioFrame();
-        } catch (e) {}
-      }
+      unlockAllMediaAndInteractions();
 
       if (tipo === 'musica') {
         if (!isPlaying) {
           audio.src = "https://stream.zeno.fm/" + radioID;
           audio.play().then(() => {
             isPlaying = true;
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             updateMusicUIState(true);
           }).catch(() => {
-            musicStatusText.textContent = "Clicca per avviare Audio";
+            musicStatusText.textContent = "Tocca per avviare Audio";
             updateMusicUIState(false);
           });
         } else {
@@ -809,9 +857,17 @@
       }
     }
 
-    musicToggleBtn.addEventListener('click', () => triggerSatellite('musica'));
+    bindInteractive(musicToggleBtn, () => triggerSatellite('musica'));
+    bindInteractive(document.getElementById('discoToggleBtn'), () => triggerSatellite('disco'));
+    bindInteractive(document.getElementById('explosionToggleBtn'), () => triggerSatellite('esplosione'));
+    bindInteractive(document.getElementById('satSongBtn'), () => triggerSatellite('titolo'));
+    bindInteractive(document.getElementById('satWeatherBtn'), () => triggerSatellite('meteo'));
+    bindInteractive(document.getElementById('satDateBtn'), () => triggerSatellite('data'));
+    bindInteractive(document.getElementById('satTimeBtn'), () => triggerSatellite('ora'));
+    bindInteractive(document.getElementById('satMoodBtn'), () => triggerSatellite('oroscopo'));
 
     musicVolumeSlider.addEventListener('input', (e) => {
+      unlockAllMediaAndInteractions();
       const vol = parseFloat(e.target.value);
       audio.volume = vol;
       musicVolumeDisplay.textContent = `${Math.round(vol * 100)}%`;
@@ -819,7 +875,8 @@
       updateVolumeIcon(vol);
     });
 
-    muteToggleBtn.addEventListener('click', () => {
+    bindInteractive(muteToggleBtn, () => {
+      unlockAllMediaAndInteractions();
       audio.muted = !audio.muted;
       if (audio.muted) {
         musicVolumeDisplay.textContent = "0%";
@@ -872,6 +929,7 @@
     }
 
     function openPhotoLightbox(src, titleText) {
+      unlockAllMediaAndInteractions();
       lightboxImg.src = src;
       lightboxTitle.textContent = titleText;
       lightboxDescription.textContent = `${titleText} - Vista alta definizione`;
@@ -890,20 +948,20 @@
       }, 200);
     }
 
-    closeLightboxBtn.addEventListener('click', closeLightbox);
+    bindInteractive(closeLightboxBtn, closeLightbox);
 
-    zoomInBtn.addEventListener('click', () => {
+    bindInteractive(zoomInBtn, () => {
       currentZoom = Math.min(currentZoom + 0.3, 4.0);
       refreshLightboxTransform();
     });
 
-    zoomOutBtn.addEventListener('click', () => {
+    bindInteractive(zoomOutBtn, () => {
       currentZoom = Math.max(currentZoom - 0.3, 0.6);
       if (currentZoom <= 1) { offsetX = 0; offsetY = 0; }
       refreshLightboxTransform();
     });
 
-    zoomResetBtn.addEventListener('click', resetZoomState);
+    bindInteractive(zoomResetBtn, resetZoomState);
 
     lightboxViewport.addEventListener('wheel', (e) => {
       e.preventDefault();
