@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="it" class="bg-transparent">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroller Foto & Studio Console</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style type="text/css">
+    /* Trasparenza assoluta per l'integrazione su xat */
+    html, body {
+      background-color: transparent !important;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      pointer-events: auto !important;
+      user-select: none;
+    }
+
+    /* 1. SCROLLER CONTINUO A TUTTA LARGHEZZA */
+    .marquee-container-full {
+      width: 100% !important;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: transparent !important;
+      pointer-events: auto !important;
+      z-index: 10;
+    }
+
+    .zoomin-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      height: 220px;
+      width: max-content;
+      will-change: transform;
+      cursor: pointer;
+      pointer-events: auto !important;
+    }
+
+    .zoomin-track img {
+      height: var(--card-height, 160px);
+      width: var(--card-width, 250px);
+      margin: 0 4px;
+      vertical-align: middle;
+      border-radius: 12px;
+      object-fit: cover;
+      cursor: pointer !important;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      pointer-events: auto !important;
+
+      /* Bordo sfumato arcobaleno fine a riposo 3.5px */
+      border: var(--rainbow-width, 3.5px) solid transparent;
+      background: 
+        linear-gradient(rgba(10, 15, 29, 0.95), rgba(10, 15, 29, 0.95)) padding-box,
+        linear-gradient(135deg, 
+          rgba(255, 0, 90, var(--rainbow-opacity, 0.9)) 0%, 
+          rgba(255, 140, 0, var(--rainbow-opacity, 0.9)) 18%, 
+          rgba(255, 230, 0, var(--rainbow-opacity, 0.9)) 36%, 
+          rgba(0, 255, 140, var(--rainbow-opacity, 0.9)) 54%, 
+          rgba(0, 210, 255, var(--rainbow-opacity, 0.9)) 72%, 
+          rgba(150, 0, 255, var(--rainbow-opacity, 0.9)) 88%, 
+          rgba(255, 0, 130, var(--rainbow-opacity, 0.9)) 100%) border-box;
+
+      box-shadow: 
+        0 10px 24px -6px rgba(0, 0, 0, 0.85),
+        0 0 calc(var(--rainbow-glow, 8px)) rgba(0, 210, 255, calc(var(--rainbow-opacity, 0.9) * 0.45)),
+        0 0 calc(var(--rainbow-glow, 14px)) rgba(255, 0, 130, calc(var(--rainbow-opacity, 0.9) * 0.35));
+
+      filter: brightness(var(--photo-brightness, 120%)) contrast(var(--photo-contrast, 105%)) drop-shadow(0 0 var(--photo-glow, 3px) rgba(56, 189, 248, 0.35));
+      transform: scale(var(--beat-scale, 1));
+
+      /* Transizione dolce a 2 secondi */
+      -webkit-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
+      -moz-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
+      -ms-transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
+      transition: width 2s ease, height 2s ease, transform 0.25s ease, border 0.25s ease;
+    }
+
+    /* Zoom dolce su Hover senza scatti verso il basso */
+    .zoomin-track img:hover {
+      width: var(--hover-width, 310px);
+      height: var(--hover-height, 198px);
+      box-shadow: 
+        0 16px 32px -6px rgba(0, 0, 0, 0.95), 
+        0 0 calc(var(--rainbow-glow, 8px) + 8px) rgba(0, 210, 255, 0.75),
+        0 0 calc(var(--rainbow-glow, 14px) + 12px) rgba(255, 0, 130, 0.65);
+    }
+
+    /* 2. CONSOLE STUDIO HARDWARE */
+    .controller-box {
+      width: 100%;
+      max-width: 728px;
+      margin: 40px auto 30px;
+      padding: 0 10px;
+      position: relative;
+      z-index: 30 !important;
+      pointer-events: auto !important;
+    }
+
+    button, input, select {
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      touch-action: manipulation;
+    }
+
+    input[type=range] {
+      accent-color: #38bdf8;
+    }
+
+    /* Equalizzatore audio animato */
+    .eq-bar {
+      width: 2.5px;
+      background: #38bdf8;
+      border-radius: 1px;
+      height: 3px;
+      transition: height 0.12s ease;
+    }
+    .music-active .eq-bar:nth-child(1) { animation: eqPulse 0.7s infinite alternate ease-in-out; }
+    .music-active .eq-bar:nth-child(2) { animation: eqPulse 0.9s infinite alternate ease-in-out 0.2s; }
+    .music-active .eq-bar:nth-child(3) { animation: eqPulse 0.6s infinite alternate ease-in-out 0.4s; }
+    .music-active .eq-bar:nth-child(4) { animation: eqPulse 0.8s infinite alternate ease-in-out 0.1s; }
+    @keyframes eqPulse {
+      0% { height: 3px; }
+      100% { height: 14px; }
+    }
+
+    #discoFlashOverlay {
+      pointer-events: none !important;
+      transition: opacity 0.05s ease-out;
+    }
+
+    #particleCanvas {
+      pointer-events: none !important;
+    }
+
+    /* Lightbox sicuro: display none a riposo per non bloccare mai i click */
+    #photoLightbox {
+      display: none;
+      pointer-events: none !important;
+    }
+    #photoLightbox.is-active {
+      display: flex !important;
+      pointer-events: auto !important;
+    }
+
+    #bannerSatellite {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-slate-950 flex flex-col justify-start items-center">
+
+  <!-- Canvas Particelle & Flash Beat -->
+  <canvas id="particleCanvas" width="800" height="220" class="fixed inset-0 w-full h-[220px] object-cover pointer-events-none opacity-0 transition-opacity duration-500 z-10"></canvas>
+  <div id="discoFlashOverlay" class="fixed inset-0 h-[220px] bg-cyan-400 opacity-0 pointer-events-none z-20"></div>
+
+  <!-- Banner Notifiche Satellitari Fluttuante -->
+  <div id="bannerSatellite" class="fixed top-2 left-1/2 -translate-x-1/2 z-40 opacity-0 pointer-events-none px-4 py-1.5 rounded-full bg-slate-950/90 border border-cyan-500/50 shadow-xl backdrop-blur-xl text-xs font-mono text-cyan-300 font-bold">
+    Notifica Satellite
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SEZIONE 1 (SOPRA): SCROLLER CONTINUO A TUTTA LARGHEZZA   -->
+  <!-- ======================================================== -->
+  <div class="marquee-container-full" id="marqueeContainer">
+    <div class="zoomin-track" id="mainTrack">
+      <!-- Set A: Le tue 8 foto originali -->
+      <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 1" border="0" onclick="openPhotoLightbox(this.src, 'Foto 1')" />
+      <img src="https://xatimg.com/image/w5DGP9TLYyak.jpg" alt="Foto 2" border="0" onclick="openPhotoLightbox(this.src, 'Foto 2')" />
+      <img src="https://xatimg.com/image/wHeqwnmUCRy3.jpg" alt="Foto 3" border="0" onclick="openPhotoLightbox(this.src, 'Foto 3')" />
+      <img src="https://xatimg.com/image/0P7xHqyxOWYt.jpg" alt="Foto 4" border="0" onclick="openPhotoLightbox(this.src, 'Foto 4')" />
+      <img src="https://xatimg.com/image/lZPsw43H8IbK.jpg" alt="Foto 5" border="0" onclick="openPhotoLightbox(this.src, 'Foto 5')" />
+      <img src="https://xatimg.com/image/VLUYcC0g6Jjv.jpg" alt="Foto 6" border="0" onclick="openPhotoLightbox(this.src, 'Foto 6')" />
+      <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 7" border="0" onclick="openPhotoLightbox(this.src, 'Foto 7')" />
+      <img src="https://xatimg.com/image/VLUYcC0g6Jjv.jpg" alt="Foto 8" border="0" onclick="openPhotoLightbox(this.src, 'Foto 8')" />
+
+      <!-- Set B: Clone per scorrimento infinito bidirezionale senza interruzioni -->
+      <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 1" border="0" onclick="openPhotoLightbox(this.src, 'Foto 1')" />
+      <img src="https://xatimg.com/image/w5DGP9TLYyak.jpg" alt="Foto 2" border="0" onclick="openPhotoLightbox(this.src, 'Foto 2')" />
+      <img src="https://xatimg.com/image/wHeqwnmUCRy3.jpg" alt="Foto 3" border="0" onclick="openPhotoLightbox(this.src, 'Foto 3')" />
+      <img src="https://xatimg.com/image/0P7xHqyxOWYt.jpg" alt="Foto 4" border="0" onclick="openPhotoLightbox(this.src, 'Foto 4')" />
+      <img src="https://xatimg.com/image/lZPsw43H8IbK.jpg" alt="Foto 5" border="0" onclick="openPhotoLightbox(this.src, 'Foto 5')" />
+      <img src="https://xatimg.com/image/VLUYcC0g6Jjv.jpg" alt="Foto 6" border="0" onclick="openPhotoLightbox(this.src, 'Foto 6')" />
+      <img src="https://xatimg.com/image/grjOikS35f4E.jpg" alt="Foto 7" border="0" onclick="openPhotoLightbox(this.src, 'Foto 7')" />
+      <img src="https://xatimg.com/image/VLUYcC0g6Jjv.jpg" alt="Foto 8" border="0" onclick="openPhotoLightbox(this.src, 'Foto 8')" />
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SEZIONE 2 (SOTTO): CONSOLE STUDIO HARDWARE RACK          -->
+  <!-- ======================================================== -->
+  <div class="controller-box">
+    <div class="w-full p-3 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-2xl backdrop-blur-xl">
+      
+      <!-- Barra superiore con telemetria e comandi scorrimento -->
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400 animate-pulse"></span>
+          <h2 class="text-xs font-bold tracking-wide uppercase font-mono text-white">Studio Console</h2>
+          <span class="text-[10px] text-cyan-400/80 font-mono hidden sm:inline">&bull; 8 Foto Zoom Marquee</span>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <!-- Tasto Singolo Inverti Direzione (DX <-> SX) con cambio istantaneo -->
+          <button type="button" id="toggleDirectionBtn" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-cyan-500/20 active:scale-95" title="Inverti direzione scorrimento">
+            <span id="directionIcon" class="text-xs font-bold">&larr;</span>
+            <span id="directionText">DX &rarr; SX</span>
+          </button>
+
+          <!-- Tasto Pausa / Play -->
+          <button type="button" id="togglePlayBtn" class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-[11px] font-mono transition active:scale-95">
+            <svg id="playPauseIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <span id="playPauseText">Pausa</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULO AUDIO & STREAMING RADIO ZENO -->
+      <div id="audioPlayerCard" class="mb-2 p-2 rounded-xl bg-slate-800/70 border border-cyan-500/30 shadow-inner relative overflow-hidden">
+        <audio id="bgMusic" crossorigin="anonymous" loop preload="none"></audio>
+
+        <div class="relative z-20 flex flex-wrap items-center justify-between gap-2">
+          <!-- Play Radio, Cover & Titolo brano -->
+          <div class="flex items-center gap-2">
+            <button type="button" id="musicToggleBtn" class="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md shadow-cyan-500/20 transition active:scale-95 shrink-0" title="Play / Pausa Radio">
+              <svg id="musicPlayIcon" class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+
+            <img id="radioCoverArt" src="https://xatimg.com/image/KRUeEt3n4lEa.jpg" alt="Cover Radio" 
+                 class="w-8 h-8 rounded-lg object-cover border border-cyan-500/30 shadow shrink-0">
+            
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[11px] font-bold text-white font-mono uppercase tracking-wide">Zeno Live</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
+                <div id="eqVisualizer" class="flex items-end gap-0.5 h-3 px-1 py-0.5 rounded bg-slate-900/60 border border-slate-700/80">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span id="musicStatusText" class="text-[10px] text-cyan-300 font-mono font-semibold truncate max-w-[160px] sm:max-w-[210px]">
+                🎵 IN ONDA: RICERCA COVER...
+              </span>
+            </div>
+          </div>
+
+          <!-- Pulsanti Satellite Rapidi -->
+          <div class="flex flex-wrap items-center gap-1">
+            <button type="button" onclick="triggerSatellite('disco')" id="discoToggleBtn" class="px-2 py-0.5 rounded bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-semibold transition">
+              🪩 Disco
+            </button>
+            <button type="button" onclick="triggerSatellite('esplosione')" id="explosionToggleBtn" class="px-2 py-0.5 rounded bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-semibold transition">
+              💥 Glow
+            </button>
+            <button type="button" onclick="triggerSatellite('titolo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+              🎵 Brano
+            </button>
+            <button type="button" onclick="triggerSatellite('meteo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+              🌍 Meteo
+            </button>
+            <button type="button" onclick="triggerSatellite('data')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+              📅 Data
+            </button>
+            <button type="button" onclick="triggerSatellite('ora')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+              ⏰ Ora
+            </button>
+            <button type="button" onclick="triggerSatellite('oroscopo')" class="px-1.5 py-0.5 rounded bg-slate-900/80 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-mono transition">
+              ✨ Mood
+            </button>
+          </div>
+
+          <!-- Volume e Mute -->
+          <div class="flex items-center gap-1.5 bg-slate-900/80 px-2 py-1 rounded-lg border border-slate-700/70 ml-auto sm:ml-0">
+            <button type="button" id="muteToggleBtn" class="text-slate-300 hover:text-cyan-400 transition" title="Muto / Attiva">
+              <svg id="volumeIcon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+              </svg>
+            </button>
+            <input id="musicVolumeSlider" type="range" min="0" max="1" step="0.05" value="0.7" class="w-14 h-1 bg-slate-700 rounded cursor-pointer">
+            <span id="musicVolumeDisplay" class="text-[9px] font-mono text-cyan-400 w-6 text-right">70%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Griglia 4 Trimmer di Regolazione (Dimensioni, Velocità, Bordi, Luce) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        
+        <!-- 1. Dimensioni Foto (Default 250px x 160px) -->
+        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+          <div class="flex justify-between items-center">
+            <label for="cardSizeSlider" class="text-[10px] font-bold text-slate-200">Misura Foto</label>
+            <span id="cardSizeDisplay" class="text-[10px] font-mono font-bold text-cyan-400">250px</span>
+          </div>
+          <input id="cardSizeSlider" type="range" min="160" max="320" value="250" step="5"
+            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+          <div class="flex justify-between text-[9px] text-slate-400 font-mono">
+            <button type="button" id="resetSizeBtn" class="text-cyan-400 hover:underline">250x160 (Default)</button>
+            <span id="cardRatioLabel">160h</span>
+          </div>
+        </div>
+
+        <!-- 2. Velocità Scorrimento Marquee -->
+        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+          <div class="flex justify-between items-center">
+            <label for="speedSlider" class="text-[10px] font-bold text-slate-200">Velocità Movimento</label>
+            <span id="speedDisplay" class="text-[10px] font-mono font-bold text-cyan-400">Normale (1.8x)</span>
+          </div>
+          <input id="speedSlider" type="range" min="0.5" max="4.5" value="1.8" step="0.1"
+            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+          <div class="flex justify-between text-[9px] text-slate-400 font-mono">
+            <button type="button" id="speedFastBtn" class="hover:text-cyan-300 transition">Veloce (3.2x)</button>
+            <button type="button" id="speedNormalBtn" class="text-cyan-400 hover:underline">Normale (1.8x)</button>
+            <button type="button" id="speedSlowBtn" class="hover:text-cyan-300 transition">Lento (0.9x)</button>
+          </div>
+        </div>
+
+        <!-- 3. Bordi Arcobaleno Sfumati -->
+        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+          <div class="flex justify-between items-center">
+            <label for="rainbowBorderSlider" class="text-[10px] font-bold text-slate-200">Bordi Arcobaleno</label>
+            <span id="rainbowBorderDisplay" class="text-[10px] font-mono font-bold text-fuchsia-400">0% (3.5px)</span>
+          </div>
+          <input id="rainbowBorderSlider" type="range" min="0" max="100" value="0" step="5"
+            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+          <div class="flex justify-between items-center text-[9px] text-slate-400 font-mono">
+            <button type="button" id="rainbowOffBtn" class="text-slate-300 hover:underline">Riposo 3.5px</button>
+            <button type="button" id="rainbowGlowBtn" class="text-fuchsia-300 hover:underline">Max 16px</button>
+          </div>
+        </div>
+
+        <!-- 4. Super Luminosità & Glow -->
+        <div class="flex flex-col justify-between bg-slate-800/50 p-2 rounded-xl border border-slate-800">
+          <div class="flex justify-between items-center">
+            <label for="photoBrightnessSlider" class="text-[10px] font-bold text-slate-200">Super Luminosità</label>
+            <span id="photoBrightnessDisplay" class="text-[10px] font-mono font-bold text-cyan-400">120%</span>
+          </div>
+          <input id="photoBrightnessSlider" type="range" min="80" max="250" value="120" step="5"
+            class="w-full h-1 bg-slate-700 rounded appearance-none cursor-pointer my-1">
+          <div class="flex justify-between items-center text-[9px] text-slate-400 font-mono">
+            <button type="button" id="boostGlowBtn" class="text-cyan-300 font-bold hover:underline">Ultra 200%</button>
+            <button type="button" id="resetGlowBtn" class="text-slate-300 hover:underline">120% Std</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Barra di supporto inferiore compatta -->
+      <div class="mt-2 pt-1.5 border-t border-slate-800/70 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+        <span class="truncate">Passa il mouse per lo Zoom dolce &bull; Clicca la foto per Lightbox</span>
+        <span class="text-slate-500 shrink-0">&bull; 100% Trasparente per xat</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODALE LIGHTBOX (ISOLATA E NON BLOCCANTE)               -->
+  <!-- ======================================================== -->
+  <div id="photoLightbox" class="fixed inset-0 z-50 items-center justify-center bg-black/90 backdrop-blur-md transition-opacity duration-300 opacity-0">
+    <div class="absolute top-4 left-4 right-4 flex items-center justify-between z-30 pointer-events-auto">
+      <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-700/80 px-4 py-2 rounded-2xl backdrop-blur-xl">
+        <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">GALLERIA</span>
+        <h3 id="lightboxTitle" class="text-sm font-bold text-white tracking-tight">Foto Selezionata</h3>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-2xl p-1 backdrop-blur-xl">
+          <button type="button" id="zoomOutBtn" class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition" title="Riduci Zoom (-)">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4"/>
+            </svg>
+          </button>
+          <span id="zoomLevelDisplay" class="px-2 text-xs font-mono font-bold text-cyan-400 min-w-[54px] text-center">100%</span>
+          <button type="button" id="zoomInBtn" class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition" title="Aumenta Zoom (+)">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+            </svg>
+          </button>
+          <button type="button" id="zoomResetBtn" class="px-2.5 py-1 text-[11px] font-mono text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition ml-1">
+            Reset
+          </button>
+        </div>
+
+        <button type="button" id="closeLightboxBtn" class="p-2.5 rounded-2xl bg-slate-900/90 hover:bg-red-500/80 text-slate-300 hover:text-white border border-slate-700/80 backdrop-blur-xl transition" title="Chiudi (ESC)">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Viewport trascinabile con pan e zoom -->
+    <div id="lightboxViewport" class="w-full h-full flex items-center justify-center overflow-hidden relative cursor-grab active:cursor-grabbing select-none">
+      <img id="lightboxImg" src="" alt="Foto ingrandita" class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl transition-transform duration-75 select-none pointer-events-none will-change-transform">
+    </div>
+
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 px-5 py-2 rounded-2xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl text-center pointer-events-none z-30">
+      <p id="lightboxDescription" class="text-xs text-slate-200 font-medium"></p>
+      <span class="text-[10px] text-slate-400 font-mono mt-0.5 block">Trascina con il mouse per muovere &bull; Rotellina per zoomare &bull; ESC per chiudere</span>
+    </div>
+  </div>
+
+  <script>
+    // ========================================================
+    // 1. MOTORE SCROLLER CONTINUO A 60 FPS
+    // ========================================================
+    const mainTrack = document.getElementById('mainTrack');
+    const bannerSatellite = document.getElementById('bannerSatellite');
+    const particleCanvas = document.getElementById('particleCanvas');
+    const discoFlash = document.getElementById('discoFlashOverlay');
+    const ctx = particleCanvas.getContext('2d');
+
+    let currentOffset = 0;
+    let currentDirection = -1; // -1 = DX -> SX, +1 = SX -> DX
+    let scrollSpeed = 1.8;
+    let isPaused = false;
+    let isHovered = false;
+
+    function animateMarquee() {
+      if (!isPaused && !isHovered) {
+        currentOffset += currentDirection * scrollSpeed;
+        const halfWidth = mainTrack.scrollWidth / 2;
+
+        if (halfWidth > 0) {
+          if (currentOffset <= -halfWidth) {
+            currentOffset += halfWidth;
+          } else if (currentOffset >= 0) {
+            currentOffset -= halfWidth;
+          }
+        }
+        mainTrack.style.transform = `translate3d(${currentOffset}px, 0, 0)`;
+      }
+      requestAnimationFrame(animateMarquee);
+    }
+
+    mainTrack.addEventListener('mouseenter', () => { isHovered = true; });
+    mainTrack.addEventListener('mouseleave', () => { isHovered = false; });
+
+    // Funzioni di controllo applicate direttamente alle foto
+    function applyCardDimensions(widthVal) {
+      cardSizeSlider.value = widthVal;
+      const heightVal = Math.round(widthVal * 0.64);
+      const hoverW = Math.round(widthVal * 1.24);
+      const hoverH = Math.round(heightVal * 1.24);
+
+      cardSizeDisplay.textContent = `${widthVal}px`;
+      cardRatioLabel.textContent = `${heightVal}h`;
+
+      document.documentElement.style.setProperty('--card-width', `${widthVal}px`);
+      document.documentElement.style.setProperty('--card-height', `${heightVal}px`);
+      document.documentElement.style.setProperty('--hover-width', `${hoverW}px`);
+      document.documentElement.style.setProperty('--hover-height', `${hoverH}px`);
+    }
+
+    function applyRainbowBorder(val) {
+      rainbowBorderSlider.value = val;
+      const borderThickness = (3.5 + (val / 100) * 12.5).toFixed(1);
+      const opacity = (0.35 + (val / 100) * 0.65).toFixed(2);
+      const glowPx = Math.round(6 + (val / 100) * 18);
+
+      rainbowBorderDisplay.textContent = `${val}% (${borderThickness}px)`;
+      document.documentElement.style.setProperty('--rainbow-width', `${borderThickness}px`);
+      document.documentElement.style.setProperty('--rainbow-opacity', opacity);
+      document.documentElement.style.setProperty('--rainbow-glow', `${glowPx}px`);
+    }
+
+    function applyBrightness(val) {
+      photoBrightnessSlider.value = val;
+      photoBrightnessDisplay.textContent = `${val}%`;
+      document.documentElement.style.setProperty('--photo-brightness', `${val}%`);
+      const contrastVal = Math.min(100 + (val - 100) * 0.15, 135);
+      const glowVal = Math.max(0, Math.round((val - 100) * 0.07));
+      document.documentElement.style.setProperty('--photo-contrast', `${contrastVal}%`);
+      document.documentElement.style.setProperty('--photo-glow', `${glowVal}px`);
+    }
+
+    function showSatelliteNotification(text) {
+      bannerSatellite.textContent = text;
+      bannerSatellite.classList.remove('opacity-0', 'pointer-events-none');
+      bannerSatellite.classList.add('opacity-100');
+      setTimeout(() => {
+        bannerSatellite.classList.remove('opacity-100');
+        bannerSatellite.classList.add('opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Particelle per modalità Disco
+    let isDiscoMode = false;
+    let explosionInterval = null;
+    let particles = [];
+    const pColors = ['#00f2ff', '#ff00c8', '#fffb00', '#48ff00', '#ffffff'];
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.size = Math.random() * 4 + 2;
+        this.speedX = (Math.random() - 0.5) * 3;
+        this.speedY = (Math.random() - 0.5) * 3;
+        this.color = pColors[Math.floor(Math.random() * pColors.length)];
+      }
+      update(boost) {
+        this.x += this.speedX * (1 + boost * 2.5);
+        this.y += this.speedY * (1 + boost * 2.5);
+        if (this.x > particleCanvas.width || this.x < 0 || this.y > particleCanvas.height || this.y < 0) this.reset();
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 75; i++) particles.push(new Particle());
+
+    function renderParticlesLoop() {
+      if (isDiscoMode) {
+        ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+        particles.forEach(p => { p.update(0.3); p.draw(); });
+      }
+      requestAnimationFrame(renderParticlesLoop);
+    }
+    renderParticlesLoop();
+
+    // ========================================================
+    // 2. LOGICA CONSOLE DI CONTROLLO STUDIO
+    // ========================================================
+    const toggleDirectionBtn = document.getElementById('toggleDirectionBtn');
+    const directionIcon = document.getElementById('directionIcon');
+    const directionText = document.getElementById('directionText');
+    const togglePlayBtn = document.getElementById('togglePlayBtn');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const playPauseText = document.getElementById('playPauseText');
+
+    const speedSlider = document.getElementById('speedSlider');
+    const speedDisplay = document.getElementById('speedDisplay');
+    const speedFastBtn = document.getElementById('speedFastBtn');
+    const speedNormalBtn = document.getElementById('speedNormalBtn');
+    const speedSlowBtn = document.getElementById('speedSlowBtn');
+
+    const cardSizeSlider = document.getElementById('cardSizeSlider');
+    const cardSizeDisplay = document.getElementById('cardSizeDisplay');
+    const resetSizeBtn = document.getElementById('resetSizeBtn');
+    const cardRatioLabel = document.getElementById('cardRatioLabel');
+
+    const rainbowBorderSlider = document.getElementById('rainbowBorderSlider');
+    const rainbowBorderDisplay = document.getElementById('rainbowBorderDisplay');
+    const rainbowOffBtn = document.getElementById('rainbowOffBtn');
+    const rainbowGlowBtn = document.getElementById('rainbowGlowBtn');
+
+    const photoBrightnessSlider = document.getElementById('photoBrightnessSlider');
+    const photoBrightnessDisplay = document.getElementById('photoBrightnessDisplay');
+    const boostGlowBtn = document.getElementById('boostGlowBtn');
+    const resetGlowBtn = document.getElementById('resetGlowBtn');
+
+    // 1. Play / Pausa
+    togglePlayBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      if (isPaused) {
+        playPauseText.textContent = "Riprendi";
+        playPauseIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+      } else {
+        playPauseText.textContent = "Pausa";
+        playPauseIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+      }
+    });
+
+    // 2. Inversione Istantanea Direzione (DX <-> SX)
+    toggleDirectionBtn.addEventListener('click', () => {
+      currentDirection = (currentDirection === -1) ? 1 : -1;
+      if (currentDirection === -1) {
+        directionIcon.innerHTML = "&larr;";
+        directionText.innerHTML = "DX &rarr; SX";
+        toggleDirectionBtn.className = "flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-cyan-500/20 active:scale-95";
+      } else {
+        directionIcon.innerHTML = "&rarr;";
+        directionText.innerHTML = "SX &rarr; DX";
+        toggleDirectionBtn.className = "flex items-center gap-1.5 px-3 py-1 rounded-lg bg-fuchsia-500 text-slate-950 font-bold text-[11px] font-mono transition shadow-sm shadow-fuchsia-500/20 active:scale-95";
+      }
+    });
+
+    // 3. Velocità Scorrimento
+    function setMarqueeSpeed(val) {
+      scrollSpeed = parseFloat(val);
+      speedSlider.value = val;
+      if (val >= 2.8) {
+        speedDisplay.textContent = `Veloce (${val}x)`;
+      } else if (val <= 1.1) {
+        speedDisplay.textContent = `Lento (${val}x)`;
+      } else {
+        speedDisplay.textContent = `Normale (${val}x)`;
+      }
+    }
+
+    speedSlider.addEventListener('input', (e) => setMarqueeSpeed(e.target.value));
+    speedFastBtn.addEventListener('click', () => setMarqueeSpeed(3.2));
+    speedNormalBtn.addEventListener('click', () => setMarqueeSpeed(1.8));
+    speedSlowBtn.addEventListener('click', () => setMarqueeSpeed(0.9));
+
+    // 4. Misura Foto
+    cardSizeSlider.addEventListener('input', (e) => applyCardDimensions(parseInt(e.target.value)));
+    resetSizeBtn.addEventListener('click', () => applyCardDimensions(250));
+
+    // 5. Bordi Arcobaleno
+    rainbowBorderSlider.addEventListener('input', (e) => applyRainbowBorder(e.target.value));
+    rainbowOffBtn.addEventListener('click', () => applyRainbowBorder(0));
+    rainbowGlowBtn.addEventListener('click', () => applyRainbowBorder(100));
+
+    // 6. Super Luminosità
+    photoBrightnessSlider.addEventListener('input', (e) => applyBrightness(e.target.value));
+    boostGlowBtn.addEventListener('click', () => applyBrightness(200));
+    resetGlowBtn.addEventListener('click', () => applyBrightness(120));
+
+    // ========================================================
+    // 3. AUDIO STREAMING RADIO ZENO & BEAT SYNC
+    // ========================================================
+    const radioID = 'ylkruiq5e4fvv';
+    const defaultImg = "https://xatimg.com/image/KRUeEt3n4lEa.jpg";
+    let isPlaying = false;
+    let isExplosionMode = false;
+    let last_song = "";
+
+    let audioCtx, analyser, dataArray, source;
+    const audio = document.getElementById("bgMusic");
+    const radioCoverArt = document.getElementById("radioCoverArt");
+    const musicToggleBtn = document.getElementById("musicToggleBtn");
+    const musicPlayIcon = document.getElementById("musicPlayIcon");
+    const musicStatusText = document.getElementById("musicStatusText");
+    const eqVisualizer = document.getElementById("eqVisualizer");
+    const musicVolumeSlider = document.getElementById("musicVolumeSlider");
+    const musicVolumeDisplay = document.getElementById("musicVolumeDisplay");
+    const muteToggleBtn = document.getElementById("muteToggleBtn");
+    const volumeIcon = document.getElementById("volumeIcon");
+
+    function renderAudioFrame() {
+      requestAnimationFrame(renderAudioFrame);
+      if (analyser && isPlaying) {
+        analyser.getByteFrequencyData(dataArray);
+        let bass = dataArray[1] || 0;
+        let scale = 1 + (bass / 255) * 0.05;
+        document.documentElement.style.setProperty('--beat-scale', scale);
+        if (bass > 222 && isDiscoMode) {
+          discoFlash.style.opacity = '0.7';
+          setTimeout(() => { discoFlash.style.opacity = '0'; }, 35);
+        }
+      }
+    }
+
+    function triggerSatellite(tipo) {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          source = audioCtx.createMediaElementSource(audio);
+          source.connect(analyser);
+          analyser.connect(audioCtx.destination);
+          analyser.fftSize = 64;
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          renderAudioFrame();
+        } catch (e) {}
+      }
+
+      if (tipo === 'musica') {
+        if (!isPlaying) {
+          audio.src = "https://stream.zeno.fm/" + radioID;
+          audio.play().then(() => {
+            isPlaying = true;
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            updateMusicUIState(true);
+          }).catch(() => {
+            musicStatusText.textContent = "Clicca per avviare Audio";
+            updateMusicUIState(false);
+          });
+        } else {
+          audio.pause();
+          isPlaying = false;
+          updateMusicUIState(false);
+          document.documentElement.style.setProperty('--beat-scale', 1);
+        }
+      }
+
+      if (tipo === 'disco') {
+        isDiscoMode = !isDiscoMode;
+        document.getElementById('discoToggleBtn').classList.toggle('bg-purple-600', isDiscoMode);
+        particleCanvas.style.opacity = isDiscoMode ? '0.75' : '0';
+        showSatelliteNotification(isDiscoMode ? "🪩 MODALITÀ DISCO: ATTIVA" : "🪩 MODALITÀ DISCO: OFF");
+      }
+
+      if (tipo === 'esplosione') {
+        isExplosionMode = !isExplosionMode;
+        document.getElementById('explosionToggleBtn').classList.toggle('bg-amber-600', isExplosionMode);
+        if (isExplosionMode) {
+          const hot = ['#FF0000', '#FF4500', '#FF8C00', '#FFA500', '#FFD700', '#FF0080', '#FF1493', '#FFFFFF'];
+          if (explosionInterval) clearInterval(explosionInterval);
+          explosionInterval = setInterval(() => {
+            const chosen = hot[Math.floor(Math.random() * hot.length)];
+            document.documentElement.style.setProperty('--photo-glow', '12px');
+            document.querySelectorAll('.zoomin-track img').forEach(el => { el.style.borderColor = chosen; });
+          }, 400);
+          showSatelliteNotification("💥 GLOW FX: ATTIVO");
+        } else {
+          if (explosionInterval) { clearInterval(explosionInterval); explosionInterval = null; }
+          document.documentElement.style.setProperty('--photo-glow', '3px');
+          showSatelliteNotification("💥 GLOW FX: SPENTO");
+        }
+      }
+
+      if (tipo === 'data') {
+        const now = new Date();
+        const txt = "📅 DATA: " + now.toLocaleDateString('it-IT', { weekday: 'long', day: '2-digit', month: 'long' }).toUpperCase();
+        showSatelliteNotification(txt);
+      }
+
+      if (tipo === 'ora') {
+        const now = new Date();
+        const txt = "⏰ ORARIO: " + now.toLocaleTimeString('it-IT');
+        showSatelliteNotification(txt);
+      }
+
+      if (tipo === 'titolo') {
+        showSatelliteNotification("🎵 IN ONDA: " + (last_song || "ZENO FM LIVE"));
+      }
+
+      if (tipo === 'oroscopo') {
+        showSatelliteNotification("✨ SELEZIONA LE TUE ONDE E GODITI IL SOUND");
+      }
+
+      if (tipo === 'meteo') {
+        fetch('https://ipapi.co/json/')
+          .then(res => res.json())
+          .then(data => {
+            const city = (data.city || 'ONLINE').toUpperCase();
+            showSatelliteNotification(`🌍 METEO [${city}]: LIVE ON AIR`);
+          })
+          .catch(() => {
+            showSatelliteNotification("🌍 METEO: LIVE RADIO ONLINE");
+          });
+      }
+    }
+
+    async function updateMeta() {
+      try {
+        const r = await fetch(`https://zenoplay.zenomedia.com/api/zenofm/nowplaying/${radioID}?t=${Date.now()}`);
+        const d = await r.json();
+        if (d.title) {
+          last_song = d.title.toUpperCase();
+          musicStatusText.textContent = "🎵 IN ONDA: " + last_song;
+          const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(last_song)}&limit=1`);
+          const j = await it.json();
+          const cover = j.results?.[0]?.artworkUrl100?.replace("100x100", "600x600") || defaultImg;
+          radioCoverArt.src = cover;
+        } else {
+          radioCoverArt.src = defaultImg;
+          musicStatusText.textContent = "🎵 IN ONDA: ZENO FM STREAM";
+        }
+      } catch (e) {
+        radioCoverArt.src = defaultImg;
+      }
+    }
+    setInterval(updateMeta, 10000);
+    updateMeta();
+
+    function updateMusicUIState(active) {
+      if (active) {
+        musicPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+        eqVisualizer.classList.add('music-active');
+      } else {
+        musicPlayIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+        eqVisualizer.classList.remove('music-active');
+      }
+    }
+
+    musicToggleBtn.addEventListener('click', () => triggerSatellite('musica'));
+
+    musicVolumeSlider.addEventListener('input', (e) => {
+      const vol = parseFloat(e.target.value);
+      audio.volume = vol;
+      musicVolumeDisplay.textContent = `${Math.round(vol * 100)}%`;
+      audio.muted = false;
+      updateVolumeIcon(vol);
+    });
+
+    muteToggleBtn.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      if (audio.muted) {
+        musicVolumeDisplay.textContent = "0%";
+        volumeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>`;
+      } else {
+        musicVolumeDisplay.textContent = `${Math.round(audio.volume * 100)}%`;
+        updateVolumeIcon(audio.volume);
+      }
+    });
+
+    function updateVolumeIcon(vol) {
+      if (vol === 0) {
+        volumeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>`;
+      } else {
+        volumeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>`;
+      }
+    }
+
+    // ========================================================
+    // 4. MODALE LIGHTBOX (ZOOM E TRASCINAMENTO PAN)
+    // ========================================================
+    const photoLightbox = document.getElementById('photoLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDescription = document.getElementById('lightboxDescription');
+    const lightboxViewport = document.getElementById('lightboxViewport');
+    const closeLightboxBtn = document.getElementById('closeLightboxBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const zoomResetBtn = document.getElementById('zoomResetBtn');
+    const zoomLevelDisplay = document.getElementById('zoomLevelDisplay');
+
+    let currentZoom = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+
+    function refreshLightboxTransform() {
+      lightboxImg.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${currentZoom})`;
+      zoomLevelDisplay.textContent = `${Math.round(currentZoom * 100)}%`;
+    }
+
+    function resetZoomState() {
+      currentZoom = 1;
+      offsetX = 0;
+      offsetY = 0;
+      refreshLightboxTransform();
+    }
+
+    function openPhotoLightbox(src, titleText) {
+      lightboxImg.src = src;
+      lightboxTitle.textContent = titleText;
+      lightboxDescription.textContent = `${titleText} - Vista alta definizione`;
+      resetZoomState();
+
+      photoLightbox.classList.add('is-active');
+      setTimeout(() => photoLightbox.classList.remove('opacity-0'), 10);
+    }
+
+    function closeLightbox() {
+      photoLightbox.classList.add('opacity-0');
+      setTimeout(() => {
+        photoLightbox.classList.remove('is-active');
+        lightboxImg.src = '';
+        resetZoomState();
+      }, 200);
+    }
+
+    closeLightboxBtn.addEventListener('click', closeLightbox);
+
+    zoomInBtn.addEventListener('click', () => {
+      currentZoom = Math.min(currentZoom + 0.3, 4.0);
+      refreshLightboxTransform();
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      currentZoom = Math.max(currentZoom - 0.3, 0.6);
+      if (currentZoom <= 1) { offsetX = 0; offsetY = 0; }
+      refreshLightboxTransform();
+    });
+
+    zoomResetBtn.addEventListener('click', resetZoomState);
+
+    lightboxViewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const step = e.deltaY < 0 ? 0.2 : -0.2;
+      currentZoom = Math.min(Math.max(currentZoom + step, 0.6), 4.5);
+      if (currentZoom <= 1) { offsetX = 0; offsetY = 0; }
+      refreshLightboxTransform();
+    }, { passive: false });
+
+    lightboxViewport.addEventListener('mousedown', (e) => {
+      if (e.target !== lightboxViewport && e.target !== lightboxImg) return;
+      isDragging = true;
+      dragStartX = e.clientX - offsetX;
+      dragStartY = e.clientY - offsetY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      offsetX = e.clientX - dragStartX;
+      offsetY = e.clientY - dragStartY;
+      refreshLightboxTransform();
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    lightboxViewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        dragStartX = e.touches[0].clientX - offsetX;
+        dragStartY = e.touches[0].clientY - offsetY;
+      }
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      offsetX = e.touches[0].clientX - dragStartX;
+      offsetY = e.touches[0].clientY - dragStartY;
+      refreshLightboxTransform();
+    });
+
+    window.addEventListener('touchend', () => { isDragging = false; });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && photoLightbox.classList.contains('is-active')) {
+        closeLightbox();
+      }
+    });
+
+    // Inizializzazione standard al caricamento
+    applyCardDimensions(250);
+    applyBrightness(120);
+    applyRainbowBorder(0);
+    setMarqueeSpeed(1.8);
+    requestAnimationFrame(animateMarquee);
+  </script>
+</body>
+</html>
