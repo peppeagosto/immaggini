@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Quantum Overlay - Ultra Borders</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', Impact, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Contenitore master fisso per overlay 1308x484 */
+    .master-stage {
+      position: relative;
+      width: 1308px;
+      height: 484px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    .video-pod {
+      position: relative;
+      width: 272px;
+      height: 484px;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .video-pod.left-pod {
+      filter: drop-shadow(0 0 35px rgba(0, 243, 255, 0.55)) drop-shadow(0 0 15px rgba(191, 0, 255, 0.4));
+    }
+
+    .video-pod.right-pod {
+      filter: drop-shadow(0 0 35px rgba(255, 0, 85, 0.55)) drop-shadow(0 0 15px rgba(191, 0, 255, 0.4));
+    }
+
+    /* Aura di energia perimetrale esterna (Energy Shield) */
+    .energy-shield {
+      position: absolute;
+      inset: -5px;
+      border-radius: 26px;
+      background: transparent;
+      box-shadow: 
+        0 0 20px rgba(0, 243, 255, 0.35),
+        inset 0 0 20px rgba(0, 243, 255, 0.25);
+      pointer-events: none;
+      z-index: 1;
+      animation: shieldPulse 3s ease-in-out infinite alternate;
+    }
+
+    .right-pod .energy-shield {
+      box-shadow: 
+        0 0 20px rgba(255, 0, 85, 0.35),
+        inset 0 0 20px rgba(255, 0, 85, 0.25);
+    }
+
+    @keyframes shieldPulse {
+      0%   { opacity: 0.6; transform: scale(0.995); }
+      100% { opacity: 1; transform: scale(1.01); filter: brightness(1.3); }
+    }
+
+    /* Contenitore del fascio di luce neon rotante ad alta velocità */
+    .plasma-border-wrapper {
+      position: relative;
+      width: 270px;
+      height: 482px;
+      border-radius: 22px;
+      overflow: hidden;
+      padding: 3.5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(8, 12, 24, 0.85);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.85);
+      z-index: 2;
+    }
+
+    /* Fascio luminoso al plasma rotante (conic-gradient continuo) */
+    .plasma-border-wrapper::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: conic-gradient(
+        transparent 0deg,
+        #00f3ff 60deg,
+        #bf00ff 120deg,
+        #ff0055 180deg,
+        transparent 210deg,
+        #00f3ff 270deg,
+        #bf00ff 330deg,
+        transparent 360deg
+      );
+      animation: rotatePlasma 2.8s linear infinite;
+      z-index: 1;
+    }
+
+    .right-pod .plasma-border-wrapper::before {
+      background: conic-gradient(
+        transparent 0deg,
+        #ff0055 60deg,
+        #bf00ff 120deg,
+        #00f3ff 180deg,
+        transparent 210deg,
+        #ff0055 270deg,
+        #bf00ff 330deg,
+        transparent 360deg
+      );
+      animation: rotatePlasma 2.5s linear infinite reverse;
+    }
+
+    @keyframes rotatePlasma {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 19px;
+      background: #030308;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .stream-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: contrast(110%) saturate(118%);
+    }
+
+    /* Scanlines cinematografiche */
+    .scanlines-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* Scanner laser perimetrale */
+    .laser-scanner {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #00f3ff 50%, transparent 100%);
+      box-shadow: 0 0 15px #00f3ff, 0 0 35px #00f3ff;
+      animation: laserSweep 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .right-pod .laser-scanner {
+      background: linear-gradient(90deg, transparent 0%, #ff0055 50%, transparent 100%);
+      box-shadow: 0 0 15px #ff0055, 0 0 35px #ff0055;
+      animation-duration: 2.6s;
+      animation-delay: -1.3s;
+    }
+
+    @keyframes laserSweep {
+      0%   { top: 2%; opacity: 0.2; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { top: 97%; opacity: 0.2; }
+    }
+
+    /* Riflesso olografico obliquo */
+    .holo-sheen {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, transparent 42%, rgba(0, 243, 255, 0.1) 75%, transparent 100%);
+      pointer-events: none;
+      z-index: 6;
+      mix-blend-mode: overlay;
+    }
+
+    .corner-bracket {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 3px solid #00f3ff;
+      pointer-events: none;
+      z-index: 12;
+      filter: drop-shadow(0 0 8px #00f3ff) drop-shadow(0 0 14px rgba(0, 243, 255, 0.8));
+      transition: all 0.3s ease;
+    }
+
+    .right-pod .corner-bracket {
+      border-color: #ff0055;
+      filter: drop-shadow(0 0 8px #ff0055) drop-shadow(0 0 14px rgba(255, 0, 85, 0.8));
+    }
+
+    .bracket-tl { top: -4px; left: -4px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
+    .bracket-tr { top: -4px; right: -4px; border-left: none; border-bottom: none; border-top-right-radius: 12px; }
+    .bracket-bl { bottom: -4px; left: -4px; border-right: none; border-top: none; border-bottom-left-radius: 12px; }
+    .bracket-br { bottom: -4px; right: -4px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
+
+    /* Tacche graduate di frequenza animate lungo i margini */
+    .cyber-ticks {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 11;
+      pointer-events: none;
+    }
+
+    .cyber-ticks.left-side {
+      left: -9px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .cyber-ticks.right-side {
+      right: -9px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .tick {
+      width: 5px;
+      height: 3px;
+      border-radius: 1px;
+      background: #00f3ff;
+      box-shadow: 0 0 6px #00f3ff;
+      animation: tickBlink 1.4s ease-in-out infinite alternate;
+    }
+
+    .right-pod .tick {
+      background: #ff0055;
+      box-shadow: 0 0 6px #ff0055;
+    }
+
+    .tick:nth-child(2) { animation-delay: 0.15s; width: 7px; }
+    .tick:nth-child(3) { animation-delay: 0.3s; width: 10px; }
+    .tick:nth-child(4) { animation-delay: 0.45s; width: 6px; }
+    .tick:nth-child(5) { animation-delay: 0.6s; width: 12px; }
+    .tick:nth-child(6) { animation-delay: 0.75s; width: 8px; }
+    .tick:nth-child(7) { animation-delay: 0.9s; width: 5px; }
+
+    @keyframes tickBlink {
+      0%   { opacity: 0.3; transform: scaleX(0.7); }
+      50%  { opacity: 1; transform: scaleX(1.3); }
+      100% { opacity: 0.4; transform: scaleX(0.8); }
+    }
+
+    .atoms-stage {
+      position: relative;
+      width: 764px;
+      height: 484px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
+      cursor: grab;
+    }
+
+    #atomCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    /* Animazione nascita, crescita ed evaporazione continua di EL DIABLO */
+    .diablo-core-text {
+      position: absolute;
+      z-index: 15;
+      font-family: 'Arial Black', Impact, sans-serif;
+      font-weight: 900;
+      font-size: 74px;
+      text-transform: uppercase;
+      letter-spacing: 16px;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      animation: diabloCycle 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+      will-change: transform, opacity, filter;
+    }
+
+    @keyframes diabloCycle {
+      /* 1. Nascita minuscola dal centro esatto */
+      0% {
+        transform: scale(0.04);
+        opacity: 0;
+        filter: blur(16px) brightness(0.6);
+        letter-spacing: 2px;
+        color: #ff0055;
+        text-shadow: 0 0 10px #ff0055, 0 0 20px #00f3ff;
+      }
+      /* 2. Compare e comincia ad ingrandirsi */
+      15% {
+        opacity: 0.75;
+        filter: blur(4px) brightness(1.25);
+      }
+      /* 3. Picco massimo di dimensione, bagliore e leggibilità */
+      50% {
+        transform: scale(1.18);
+        opacity: 1;
+        letter-spacing: 18px;
+        filter: blur(0px) brightness(1.6);
+        color: #ffffff;
+        text-shadow: 
+          0 0 15px #ff0055,
+          0 0 35px #ff0055,
+          0 0 65px #ff0033,
+          0 0 95px #00f3ff,
+          0 0 130px rgba(0, 243, 255, 0.85);
+      }
+      /* 4. Mantiene la grandezza per un istante e inizia il ritiro */
+      65% {
+        opacity: 0.95;
+        filter: blur(1.5px) brightness(1.3);
+      }
+      /* 5. Si rimpicciolisce fino a sparire tornando al nucleo */
+      100% {
+        transform: scale(0.03);
+        opacity: 0;
+        letter-spacing: 1px;
+        filter: blur(18px) brightness(0.4);
+        color: #00f3ff;
+        text-shadow: 0 0 8px #00f3ff, 0 0 15px #ff0055;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="master-stage" id="stageContainer">
+    
+    <!-- VIDEO SINISTRO CON BORDI HIGH-TECH POTENZIATI -->
+    <div class="video-pod left-pod">
+      <div class="energy-shield"></div>
+      
+      <!-- Staffe angolari cibernetiche -->
+      <div class="corner-bracket bracket-tl"></div>
+      <div class="corner-bracket bracket-tr"></div>
+      <div class="corner-bracket bracket-bl"></div>
+      <div class="corner-bracket bracket-br"></div>
+
+      <!-- Tacche graduate sui fianchi -->
+      <div class="cyber-ticks left-side">
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+      </div>
+      <div class="cyber-ticks right-side">
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+      </div>
+
+      <!-- Bordo al plasma rotante e viewport video -->
+      <div class="plasma-border-wrapper">
+        <div class="video-viewport">
+          <video class="stream-video" autoplay loop muted playsinline>
+            <source src="https://i.imgur.com/jtE3U9S.mp4" type="video/mp4">
+          </video>
+          <div class="scanlines-overlay"></div>
+          <div class="laser-scanner"></div>
+          <div class="holo-sheen"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AREA CENTRALE CON SIMULAZIONE ATOMICA E TESTO EL DIABLO -->
+    <div class="atoms-stage">
+      <canvas id="atomCanvas"></canvas>
+      <div class="diablo-core-text">EL DIABLO</div>
+    </div>
+
+    <!-- VIDEO DESTRO CON BORDI HIGH-TECH POTENZIATI -->
+    <div class="video-pod right-pod">
+      <div class="energy-shield"></div>
+
+      <!-- Staffe angolari cibernetiche -->
+      <div class="corner-bracket bracket-tl"></div>
+      <div class="corner-bracket bracket-tr"></div>
+      <div class="corner-bracket bracket-bl"></div>
+      <div class="corner-bracket bracket-br"></div>
+
+      <!-- Tacche graduate sui fianchi -->
+      <div class="cyber-ticks left-side">
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+      </div>
+      <div class="cyber-ticks right-side">
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span>
+        <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+      </div>
+
+      <!-- Bordo al plasma rotante e viewport video -->
+      <div class="plasma-border-wrapper">
+        <div class="video-viewport">
+          <video class="stream-video" autoplay loop muted playsinline>
+            <source src="https://i.imgur.com/EImn94z.mp4" type="video/mp4">
+          </video>
+          <div class="scanlines-overlay"></div>
+          <div class="laser-scanner"></div>
+          <div class="holo-sheen"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById('atomCanvas');
+    const ctx = canvas.getContext('2d');
+    const stage = document.getElementById('stageContainer');
+
+    let width, height, cx, cy;
+
+    function resize() {
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+      cx = width / 2;
+      cy = height / 2;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Coordinate per la rotazione interattiva
+    let rotX = 0.2;
+    let rotY = 0;
+    let targetRotX = 0.2;
+    let targetRotY = 0;
+
+    stage.addEventListener('mousemove', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      targetRotY = nx * 1.2;
+      targetRotX = -ny * 0.9;
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      targetRotX = 0.2;
+      targetRotY = 0;
+    });
+
+    // Configurazione Orbitali Atomici
+    const orbitals = [
+      { radiusX: 200, radiusY: 78, tiltZ: 0, speed: 0.024, color: '#00f3ff', electrons: 3 },
+      { radiusX: 200, radiusY: 78, tiltZ: Math.PI / 3, speed: 0.021, color: '#ff007b', electrons: 3 },
+      { radiusX: 200, radiusY: 78, tiltZ: -Math.PI / 3, speed: 0.026, color: '#bf00ff', electrons: 3 },
+      { radiusX: 250, radiusY: 96, tiltZ: Math.PI / 6, speed: -0.018, color: '#00ffcc', electrons: 2 },
+      { radiusX: 250, radiusY: 96, tiltZ: -Math.PI / 6, speed: -0.022, color: '#ff3d00', electrons: 2 },
+      { radiusX: 130, radiusY: 50, tiltZ: Math.PI / 2, speed: 0.032, color: '#ffffff', electrons: 2 }
+    ];
+
+    // Nuvola di particelle atomiche fluttuanti (legami molecolari)
+    const CLOUD_COUNT = 55;
+    const cloudNodes = [];
+    for (let i = 0; i < CLOUD_COUNT; i++) {
+      cloudNodes.push({
+        x: (Math.random() - 0.5) * 440,
+        y: (Math.random() - 0.5) * 320,
+        z: (Math.random() - 0.5) * 260,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        vz: (Math.random() - 0.5) * 0.6,
+        color: Math.random() > 0.5 ? '#00f3ff' : '#ff0066',
+        size: Math.random() * 2.2 + 1.2
+      });
+    }
+
+    let time = 0;
+
+    // Proiezione 3D isometrica prospettica
+    function project3D(x, y, z) {
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      const x1 = x * cosY + z * sinY;
+      const z1 = -x * sinY + z * cosY;
+
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
+
+      const fov = 460;
+      const scale = fov / (fov + z2);
+      return {
+        x: cx + x1 * scale,
+        y: cy + y2 * scale,
+        scale: scale,
+        depth: z2
+      };
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      rotX += (targetRotX - rotX) * 0.06;
+      rotY += (targetRotY - rotY) * 0.06;
+      time += 0.022;
+
+      // 1. NUCLEO ATOMICO QUANTICO (Centro pulsante con fasci energetici)
+      const nucleusPulse = Math.sin(time * 3) * 6;
+      const nucleusP = project3D(0, 0, 0);
+
+      const radGrad = ctx.createRadialGradient(
+        nucleusP.x, nucleusP.y, 2,
+        nucleusP.x, nucleusP.y, 48 + nucleusPulse
+      );
+      radGrad.addColorStop(0, '#ffffff');
+      radGrad.addColorStop(0.25, '#00f3ff');
+      radGrad.addColorStop(0.65, 'rgba(255, 0, 110, 0.45)');
+      radGrad.addColorStop(1, 'transparent');
+
+      ctx.save();
+      ctx.fillStyle = radGrad;
+      ctx.beginPath();
+      ctx.arc(nucleusP.x, nucleusP.y, 50 + nucleusPulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Sfere interne del nucleo (Protoni / Neutroni)
+      const protonCount = 6;
+      for (let p = 0; p < protonCount; p++) {
+        const pAngle = time * 2 + (p * Math.PI * 2) / protonCount;
+        const pDist = 12 + Math.sin(time * 4 + p) * 3;
+        const px = Math.cos(pAngle) * pDist;
+        const py = Math.sin(pAngle) * pDist;
+        const pz = Math.sin(time * 3 + p) * 8;
+        const proj = project3D(px, py, pz);
+
+        ctx.beginPath();
+        ctx.arc(proj.x, proj.y, 4.5 * proj.scale, 0, Math.PI * 2);
+        ctx.fillStyle = p % 2 === 0 ? '#ff0066' : '#00f3ff';
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+      }
+
+      // 2. RETE DI NODI E PARTICELLE FLUTTUANTI (LEGAME MOLECOLARE)
+      for (let i = 0; i < CLOUD_COUNT; i++) {
+        const node = cloudNodes[i];
+        node.x += node.vx;
+        node.y += node.vy;
+        node.z += node.vz;
+
+        if (Math.abs(node.x) > 220) node.vx *= -1;
+        if (Math.abs(node.y) > 160) node.vy *= -1;
+        if (Math.abs(node.z) > 130) node.vz *= -1;
+
+        node.proj = project3D(node.x, node.y, node.z);
+      }
+
+      // Linee di connessione quantiche tra atomi vicini
+      ctx.lineWidth = 0.8;
+      for (let i = 0; i < CLOUD_COUNT; i++) {
+        for (let j = i + 1; j < CLOUD_COUNT; j++) {
+          const dx = cloudNodes[i].x - cloudNodes[j].x;
+          const dy = cloudNodes[i].y - cloudNodes[j].y;
+          const dz = cloudNodes[i].z - cloudNodes[j].z;
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+          if (dist < 75) {
+            const alpha = (1 - dist / 75) * 0.45;
+            ctx.strokeStyle = `rgba(0, 243, 255, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(cloudNodes[i].proj.x, cloudNodes[i].proj.y);
+            ctx.lineTo(cloudNodes[j].proj.x, cloudNodes[j].proj.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Punti particellari molecolari
+      cloudNodes.forEach((node) => {
+        ctx.beginPath();
+        ctx.arc(node.proj.x, node.proj.y, node.size * node.proj.scale, 0, Math.PI * 2);
+        ctx.fillStyle = node.color;
+        ctx.shadowColor = node.color;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+      });
+
+      // 3. ORBITALI ATOMICI ED ELETTRONI IN MOVIMENTO
+      orbitals.forEach((orb) => {
+        const steps = 70;
+        ctx.beginPath();
+
+        for (let s = 0; s <= steps; s++) {
+          const theta = (s * Math.PI * 2) / steps;
+          const ox = Math.cos(theta) * orb.radiusX;
+          const oy = Math.sin(theta) * orb.radiusY;
+
+          const cosT = Math.cos(orb.tiltZ);
+          const sinT = Math.sin(orb.tiltZ);
+          const worldX = ox * cosT - oy * sinT;
+          const worldY = (ox * sinT + oy * cosT) * 0.85;
+          const worldZ = (ox * sinT + oy * cosT) * 0.55;
+
+          const p = project3D(worldX, worldY, worldZ);
+          if (s === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+
+        ctx.strokeStyle = orb.color;
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 1.3;
+        ctx.shadowColor = orb.color;
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+
+        // Disegno Elettroni orbitanti
+        for (let e = 0; e < orb.electrons; e++) {
+          const eTheta = (time * orb.speed * 60) + (e * Math.PI * 2) / orb.electrons;
+          const ex = Math.cos(eTheta) * orb.radiusX;
+          const ey = Math.sin(eTheta) * orb.radiusY;
+
+          const cosT = Math.cos(orb.tiltZ);
+          const sinT = Math.sin(orb.tiltZ);
+          const eWorldX = ex * cosT - ey * sinT;
+          const eWorldY = (ex * sinT + ey * cosT) * 0.85;
+          const eWorldZ = (ex * sinT + ey * cosT) * 0.55;
+
+          const ep = project3D(eWorldX, eWorldY, eWorldZ);
+
+          // Scia dell'elettrone
+          ctx.beginPath();
+          ctx.arc(ep.x, ep.y, 4.5 * ep.scale, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = orb.color;
+          ctx.shadowBlur = 15;
+          ctx.fill();
+
+          // Alone colorato dell'elettrone
+          ctx.beginPath();
+          ctx.arc(ep.x, ep.y, 8.5 * ep.scale, 0, Math.PI * 2);
+          ctx.fillStyle = orb.color;
+          ctx.globalAlpha = 0.4;
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
