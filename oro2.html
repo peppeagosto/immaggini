@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>EL DIABLO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@700;800;900&family=Orbitron:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: transparent !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+    .container {
+      position: relative;
+      width: 1308px;
+      height: 484px;
+      pointer-events: none;
+    }
+    /* ===== STRUTTURA DELLE CARD ===== */
+    .frame-card {
+      position: absolute;
+      width: 270px;
+      height: 484px;
+      z-index: 1;
+      pointer-events: auto;
+    }
+    .left { left: 0; }
+    .right { right: 0; }
+
+    /* Glow esterno delicato */
+    .left::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 20px;
+      background: radial-gradient(circle, rgba(160, 210, 140, 0.22) 0%, rgba(240, 210, 100, 0.15) 50%, transparent 70%);
+      filter: blur(12px);
+      z-index: -1;
+    }
+    .right::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 20px;
+      background: radial-gradient(circle, rgba(255, 60, 110, 0.22) 0%, rgba(220, 180, 100, 0.15) 50%, transparent 70%);
+      filter: blur(12px);
+      z-index: -1;
+    }
+
+    /* Bordo metallico sottile */
+    .inner-border {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      padding: 2.5px;
+      background: linear-gradient(145deg, #dfba73, #fff2cc, #9e6f1f, #dfba73);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(223, 186, 115, 0.3);
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+    }
+    .side-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Overlay per elementi fluttuanti esterni */
+    .plant-overlay {
+      position: absolute;
+      inset: -24px;
+      width: calc(100% + 48px);
+      height: calc(100% + 48px);
+      pointer-events: none;
+      z-index: 10;
+      overflow: visible;
+    }
+
+    /* ===== MOVIMENTO ALI FARFALLA ===== */
+    .wing-l {
+      transform-origin: 0 0;
+      animation: flapL 0.35s ease-in-out infinite alternate;
+    }
+    .wing-r {
+      transform-origin: 0 0;
+      animation: flapR 0.35s ease-in-out infinite alternate;
+    }
+    @keyframes flapL {
+      0%   { transform: scaleX(1); }
+      100% { transform: scaleX(0.2); }
+    }
+    @keyframes flapR {
+      0%   { transform: scaleX(1); }
+      100% { transform: scaleX(0.2); }
+    }
+
+    /* Farfalla singola angolo dx */
+    .corner-butterfly {
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+    }
+
+    /* ===== TESTO SFUMATO ARCOBALENO (SX) ===== */
+    .video-text {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Orbitron', 'Cinzel', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      z-index: 6;
+      background: linear-gradient(90deg, #ff0055, #ff7700, #ffee00, #00ff66, #00ffff, #8800ff, #ff00aa, #ff0055);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowScroll 3.5s linear infinite;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 10px rgba(255, 0, 128, 0.6));
+      pointer-events: none;
+    }
+    @keyframes rainbowScroll {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    /* ===== TESTO "ANTO" PICCOLO, LUMINOSO E ATTACCATO A DESTRA ===== */
+    .anto-text {
+      position: absolute;
+      right: 6px;
+      bottom: 8px;
+      font-family: 'Cinzel', 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 0%, #ffe29a 50%, #ffb300 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 5px rgba(255, 215, 120, 0.45));
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .center-area {
+      position: absolute;
+      left: 280px;
+      right: 280px;
+      top: 0;
+      bottom: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- DEFINIZIONI COLORI -->
+<svg width="0" height="0" style="position: absolute;">
+  <defs>
+    <!-- GRADIENTE FARFALLA -->
+    <linearGradient id="bfCornerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#ff007f"/>
+      <stop offset="75%" stop-color="#ff7700"/>
+      <stop offset="100%" stop-color="#7b0038"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="container">
+  <!-- ================= RETTANGOLO SINISTRA ================= -->
+  <div class="frame-card left">
+    <div class="inner-border">
+      <div class="video-container">
+        <video class="side-video" src="https://i.imgur.com/je7ZkyP.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
+        <div class="video-text">amore2015</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RETTANGOLO DESTRA ================= -->
+  <div class="frame-card right">
+    <svg class="plant-overlay" viewBox="0 0 318 532">
+      <!-- 🦋 FARFALLA ANGOLO ALTO DX -->
+      <g class="corner-butterfly" transform="translate(290, 26) rotate(18) scale(0.72)">
+        <g class="wing-l">
+          <path d="M 0,0 C -7,-14 -20,-12 -21,-2 C -22,8 -11,12 0,3 Z" fill="url(#bfCornerGrad)" stroke="#ffffff" stroke-width="0.8"/>
+          <path d="M 0,3 C -11,7 -16,16 -12,21 C -8,25 -2,16 0,5 Z" fill="url(#bfCornerGrad)" stroke="#ffffff" stroke-width="0.8"/>
+        </g>
+        <g class="wing-r">
+          <path d="M 0,0 C 7,-14 20,-12 21,-2 C 22,8 11,12 0,3 Z" fill="url(#bfCornerGrad)" stroke="#ffffff" stroke-width="0.8"/>
+          <path d="M 0,3 C 11,7 16,16 12,21 C 8,25 2,16 0,5 Z" fill="url(#bfCornerGrad)" stroke="#ffffff" stroke-width="0.8"/>
+        </g>
+        <ellipse cx="0" cy="2" rx="1.8" ry="7" fill="#151515" />
+        <path d="M -0.5,-4 Q -3,-10 -6,-11 M 0.5,-4 Q 3,-10 6,-11" stroke="#ffffff" stroke-width="0.6" fill="none"/>
+      </g>
+    </svg>
+    <div class="inner-border">
+      <div class="video-container">
+        <video class="side-video" src="https://i.imgur.com/je7ZkyP.mp4" autoplay loop muted playsinline preload="auto" crossorigin="anonymous"></video>
+        
+        <!-- Scritta ANTO mini, dorata, senza puntino e attaccata all'angolo dx -->
+        <div class="anto-text">ANTO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Area Centrale trasparente -->
+  <div class="center-area"></div>
+</div>
+
+</body>
+</html>
