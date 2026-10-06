@@ -49,7 +49,6 @@
     }
   }
 
-  // IL NUOVO MESSAGGIO DI ERRORE CHE SPY-A IL LINK DI XAT
   if (bloccoAttivo) {
     document.body.innerHTML = `
       <div style="width: 250px; background-color: #111; border: 2px solid #ff0000; border-radius: 8px; padding: 15px; color: #ff0000; font-family: Arial; font-weight: bold; text-align: center; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);">
@@ -61,7 +60,6 @@
   }
   // 🔒 FINE SISTEMA ANTI-COPIA 🔒
 
-  // --- CONNESSIONE FIREBASE E LISTA VISITE ---
   const firebaseConfig = { apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic", authDomain: "globovisitatoricartaio.firebaseapp.com", databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com", projectId: "globovisitatoricartaio", storageBucket: "globovisitatoricartaio.firebasestorage.app", messagingSenderId: "870797967861", appId: "1:870797967861:web:0bc578a2053ff1f441e0bc" };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
@@ -71,7 +69,6 @@
     const lista = document.getElementById('lista-citta');
     const nuovaRiga = document.createElement('li');
     nuovaRiga.className = 'citta-item';
-    
     let orarioFormattato = "";
     if (timestamp) {
       const data = new Date(timestamp);
@@ -79,7 +76,6 @@
       const minuti = String(data.getMinutes()).padStart(2, '0');
       orarioFormattato = `<span class="orario-testo">${ore}:${minuti}</span>`;
     }
-
     nuovaRiga.innerHTML = `
       <div class="citta-info">
         <img src="${bandiera}" width="20" style="border-radius:3px;"> 
