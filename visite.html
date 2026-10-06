@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Ultimi 10 Ingressi con Orario - Il Cartaio</title>
+<title>Ultimi 10 Ingressi - ITALIA_GHOST</title>
 
 <!-- Richiama le librerie di Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -17,7 +17,7 @@
     padding: 10px;
     color: #fff;
     font-family: Arial, sans-serif;
-    font-size: 13px; /* Leggermente più piccolo per farci stare l'orario */
+    font-size: 13px;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
   }
 
@@ -44,7 +44,7 @@
     animation: comparsa 0.5s ease-in-out;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Spinge l'orario tutto a destra */
+    justify-content: space-between;
   }
 
   .citta-info {
@@ -58,7 +58,7 @@
 
   .orario-testo {
     font-size: 11px;
-    color: #00d4ff; /* Azzurro luminoso */
+    color: #00d4ff;
     font-weight: bold;
     padding-left: 5px;
   }
@@ -77,12 +77,43 @@
 
 <div id="box-visite">
   <div class="titolo">Ultimi 10 Ingressi</div>
-  <ul id="lista-citta">
-  </ul>
+  <ul id="lista-citta"></ul>
 </div>
 
 <script>
-  // CHIAVI FIREBASE
+  // 🔒 SISTEMA ANTI-COPIA DEL CARTAIO 🔒
+  // Solo queste chat possono mostrare il layout:
+  const chatAutorizzate = ["lorycuorestellare", "italia_ghost"]; 
+  
+  const provenienza = document.referrer.toLowerCase();
+  let bloccoAttivo = true;
+
+  // Sblocca se lo apri tu dal computer o da GitHub
+  if (provenienza === "" || provenienza.includes("github.io")) {
+    bloccoAttivo = false; 
+  } else {
+    // Sblocca solo se l'indirizzo della chat contiene i nomi autorizzati
+    for (let i = 0; i < chatAutorizzate.length; i++) {
+      if (provenienza.includes(chatAutorizzate[i])) {
+        bloccoAttivo = false;
+        break;
+      }
+    }
+  }
+
+  // Se la chat non è autorizzata, mostra l'errore rosso e blocca tutto
+  if (bloccoAttivo) {
+    document.body.innerHTML = `
+      <div style="width: 250px; background-color: #111; border: 2px solid #ff0000; border-radius: 8px; padding: 15px; color: #ff0000; font-family: Arial; font-weight: bold; text-align: center; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);">
+        🚫 ACCESSO NEGATO<br><br>
+        <span style="color:#fff; font-size:12px;">Questo codice è di proprietà esclusiva di <b>EL DIABLO / Il Cartaio</b> e non può essere usato su questa chat.</span>
+      </div>`;
+    throw new Error("Blocco Anti-Copia attivato. Sei stato bloccato dal Cartaio.");
+  }
+  // 🔒 FINE SISTEMA ANTI-COPIA 🔒
+
+
+  // --- CONNESSIONE FIREBASE E LISTA VISITE ---
   const firebaseConfig = {
     apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic",
     authDomain: "globovisitatoricartaio.firebaseapp.com",
@@ -97,13 +128,11 @@
   const db = firebase.database();
   const visitatoriRef = db.ref('visitatori');
 
-  // Funzione con l'aggiunta del parametro "timestamp"
   function aggiungiCitta(citta, nazione, bandiera, timestamp) {
     const lista = document.getElementById('lista-citta');
     const nuovaRiga = document.createElement('li');
     nuovaRiga.className = 'citta-item';
     
-    // Calcola l'orario leggendo i dati di Firebase
     let orarioFormattato = "";
     if (timestamp) {
       const data = new Date(timestamp);
@@ -112,7 +141,6 @@
       orarioFormattato = `<span class="orario-testo">${ore}:${minuti}</span>`;
     }
 
-    // Inserisce la città a sinistra e l'orario a destra
     nuovaRiga.innerHTML = `
       <div class="citta-info">
         <img src="${bandiera}" width="20" style="border-radius:3px;"> 
@@ -128,7 +156,6 @@
     }
   }
 
-  // Carica le visite e passa il tempo alla funzione
   visitatoriRef.limitToLast(10).on('child_added', function(snapshot) {
     const datiUtente = snapshot.val();
     if (datiUtente && datiUtente.citta) {
@@ -136,7 +163,6 @@
     }
   });
 
-  // Rileva posizione e salva
   fetch('https://ipwho.is/')
     .then(response => response.json())
     .then(data => {
@@ -157,7 +183,6 @@
         tempo: firebase.database.ServerValue.TIMESTAMP
       });
     });
-
 </script>
 
 </body>
