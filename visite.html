@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Ultimi 10 Ingressi con Orario - Il Cartaio</title>
+
+<!-- Richiama le librerie di Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<style>
+  #box-visite {
+    width: 250px;
+    background-color: #111; 
+    border: 2px solid #ff0000;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 13px; /* Leggermente più piccolo per farci stare l'orario */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+  }
+
+  .titolo {
+    text-align: center;
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  #lista-citta {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .citta-item {
+    padding: 6px 0;
+    border-bottom: 1px dashed #333;
+    animation: comparsa 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Spinge l'orario tutto a destra */
+  }
+
+  .citta-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .orario-testo {
+    font-size: 11px;
+    color: #00d4ff; /* Azzurro luminoso */
+    font-weight: bold;
+    padding-left: 5px;
+  }
+
+  .citta-item:last-child {
+    border-bottom: none;
+  }
+
+  @keyframes comparsa {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div id="box-visite">
+  <div class="titolo">Ultimi 10 Ingressi</div>
+  <ul id="lista-citta">
+  </ul>
+</div>
+
+<script>
+  // CHIAVI FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic",
+    authDomain: "globovisitatoricartaio.firebaseapp.com",
+    databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com",
+    projectId: "globovisitatoricartaio",
+    storageBucket: "globovisitatoricartaio.firebasestorage.app",
+    messagingSenderId: "870797967861",
+    appId: "1:870797967861:web:0bc578a2053ff1f441e0bc"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const visitatoriRef = db.ref('visitatori');
+
+  // Funzione con l'aggiunta del parametro "timestamp"
+  function aggiungiCitta(citta, nazione, bandiera, timestamp) {
+    const lista = document.getElementById('lista-citta');
+    const nuovaRiga = document.createElement('li');
+    nuovaRiga.className = 'citta-item';
+    
+    // Calcola l'orario leggendo i dati di Firebase
+    let orarioFormattato = "";
+    if (timestamp) {
+      const data = new Date(timestamp);
+      const ore = String(data.getHours()).padStart(2, '0');
+      const minuti = String(data.getMinutes()).padStart(2, '0');
+      orarioFormattato = `<span class="orario-testo">${ore}:${minuti}</span>`;
+    }
+
+    // Inserisce la città a sinistra e l'orario a destra
+    nuovaRiga.innerHTML = `
+      <div class="citta-info">
+        <img src="${bandiera}" width="20" style="border-radius:3px;"> 
+        <span>${citta}</span>
+      </div>
+      ${orarioFormattato}
+    `;
+    
+    lista.prepend(nuovaRiga);
+
+    if (lista.children.length > 10) {
+      lista.removeChild(lista.lastChild);
+    }
+  }
+
+  // Carica le visite e passa il tempo alla funzione
+  visitatoriRef.limitToLast(10).on('child_added', function(snapshot) {
+    const datiUtente = snapshot.val();
+    if (datiUtente && datiUtente.citta) {
+      aggiungiCitta(datiUtente.citta, datiUtente.nazione, datiUtente.bandiera, datiUtente.tempo);
+    }
+  });
+
+  // Rileva posizione e salva
+  fetch('https://ipwho.is/')
+    .then(response => response.json())
+    .then(data => {
+      if (!data.success) throw new Error("API Bloccata");
+      
+      visitatoriRef.push({
+        citta: data.city || "Sconosciuta",
+        nazione: data.country || "Mondo",
+        bandiera: `https://flagcdn.com/20x15/${(data.country_code || 'it').toLowerCase()}.png`,
+        tempo: firebase.database.ServerValue.TIMESTAMP
+      });
+    })
+    .catch(errore => {
+      visitatoriRef.push({
+        citta: "Visitatore",
+        nazione: "Nascosto",
+        bandiera: "https://flagcdn.com/20x15/un.png",
+        tempo: firebase.database.ServerValue.TIMESTAMP
+      });
+    });
+
+</script>
+
+</body>
+</html>
