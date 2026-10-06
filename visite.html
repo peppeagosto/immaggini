@@ -15,6 +15,10 @@
   .citta-info { display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .orario-testo { font-size: 11px; color: #00d4ff; font-weight: bold; padding-left: 5px; }
   .citta-item:last-child { border-bottom: none; }
+  
+  /* LA TUA FIRMA SEGRETA */
+  .firma-segreta { text-align: center; font-size: 11px; font-weight: bold; color: transparent; margin-top: 8px; cursor: default; transition: color 0.5s ease, text-shadow 0.5s ease; user-select: none; }
+  .firma-segreta:hover { color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.8); }
 </style>
 </head>
 <body>
@@ -22,6 +26,9 @@
 <div id="box-visite">
   <div class="titolo">Ultimi 10 Ingressi</div>
   <ul id="lista-citta"></ul>
+  
+  <!-- IL TESTO INVISIBILE -->
+  <div class="firma-segreta">Peppe & Lory 💖</div>
 </div>
 
 <script>
@@ -54,18 +61,8 @@
   }
   // 🔒 FINE SISTEMA ANTI-COPIA 🔒
 
-
   // --- CONNESSIONE FIREBASE E LISTA VISITE ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic",
-    authDomain: "globovisitatoricartaio.firebaseapp.com",
-    databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com",
-    projectId: "globovisitatoricartaio",
-    storageBucket: "globovisitatoricartaio.firebasestorage.app",
-    messagingSenderId: "870797967861",
-    appId: "1:870797967861:web:0bc578a2053ff1f441e0bc"
-  };
-
+  const firebaseConfig = { apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic", authDomain: "globovisitatoricartaio.firebaseapp.com", databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com", projectId: "globovisitatoricartaio", storageBucket: "globovisitatoricartaio.firebasestorage.app", messagingSenderId: "870797967861", appId: "1:870797967861:web:0bc578a2053ff1f441e0bc" };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
   const visitatoriRef = db.ref('visitatori');
@@ -96,20 +93,15 @@
 
   visitatoriRef.limitToLast(10).on('child_added', function(snapshot) {
     const datiUtente = snapshot.val();
-    if (datiUtente && datiUtente.citta) {
-      aggiungiCitta(datiUtente.citta, datiUtente.nazione, datiUtente.bandiera, datiUtente.tempo);
-    }
+    if (datiUtente && datiUtente.citta) { aggiungiCitta(datiUtente.citta, datiUtente.nazione, datiUtente.bandiera, datiUtente.tempo); }
   });
 
-  fetch('https://ipwho.is/')
-    .then(response => response.json())
-    .then(data => {
-      if (!data.success) throw new Error("API");
-      visitatoriRef.push({ citta: data.city || "Sconosciuta", nazione: data.country || "Mondo", bandiera: \`https://flagcdn.com/20x15/\${(data.country_code || 'it').toLowerCase()}.png\`, tempo: firebase.database.ServerValue.TIMESTAMP });
-    })
-    .catch(errore => {
-      visitatoriRef.push({ citta: "Visitatore", nazione: "Nascosto", bandiera: "https://flagcdn.com/20x15/un.png", tempo: firebase.database.ServerValue.TIMESTAMP });
-    });
+  fetch('https://ipwho.is/').then(response => response.json()).then(data => {
+    if (!data.success) throw new Error("API");
+    visitatoriRef.push({ citta: data.city || "Sconosciuta", nazione: data.country || "Mondo", bandiera: `https://flagcdn.com/20x15/${(data.country_code || 'it').toLowerCase()}.png`, tempo: firebase.database.ServerValue.TIMESTAMP });
+  }).catch(errore => {
+    visitatoriRef.push({ citta: "Visitatore", nazione: "Nascosto", bandiera: "https://flagcdn.com/20x15/un.png", tempo: firebase.database.ServerValue.TIMESTAMP });
+  });
 </script>
 
 </body>
