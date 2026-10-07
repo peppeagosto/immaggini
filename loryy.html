@@ -1,129 +1,334 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dxsx lorycuorestellare</title>
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    background: transparent;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globo e Visite Live - ITALIA_GHOST</title>
+    <!-- Three.js & Controls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+        body {
+            background: transparent !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            padding: 4px;
+        }
+                
+        #radar-card {
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
 
-/* CONTENITORE GENERALE */
-.container {
-    position: relative;
-    width: 1308px;
-    height: 486px;
-    background: transparent;
-}
+        #canvas-wrapper {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+            background: transparent !important;
+        }
+        #canvas-wrapper:active { cursor: grabbing; }
 
-/* VIDEO LATERALI */
-.video-wrapper {
-    position: absolute;
-    width: 290px;
-    height: 486px;
-    overflow: hidden;
-    border-radius: 12px;
-    z-index: 2;
-}
+        .location-tag {
+            position: absolute;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 30;
+            transform: translate(-50%, -100%);
+            transition: opacity 0.2s ease;
+        }
+        .tag-pill {
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            border: 1px solid #73ff00;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font: 700 10px Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .tag-pill img { width: 16px; height: 11px; object-fit: cover; border-radius: 1px; }
 
-video.side-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+        /* LISTA BILANCIATA A DESTRA (-140px) E INVISIBILE FINCHÉ NON PASSI IL MOUSE */
+        #lista-visite {
+            position: absolute;
+            right: -140px;
+            top: 20px;
+            width: 160px;
+            max-height: 220px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.88);
+            border: 1px solid rgba(115,255,0,0.4);
+            border-radius: 6px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 60;
+        }
 
-.left-video-wrapper { left: 10px; top: 0; }
-.right-video-wrapper { right: 10px; top: 0; }
+        /* Si vede solo al passaggio del mouse sul widget */
+        #radar-card:hover #lista-visite {
+            opacity: 1;
+            visibility: visible;
+        }
 
-/* VIDEO CENTRALE */
-.center-video-wrapper {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 728px;
-    height: 486px;
-    overflow: hidden;
-    border-radius: 12px;
-    z-index: 3;
-}
+        #lista-visite::-webkit-scrollbar { width: 4px; }
+        #lista-visite::-webkit-scrollbar-thumb { background: #73ff00; border-radius: 2px; }
 
-.center-video-wrapper video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+        .visita-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #fff;
+        }
+        .visita-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            overflow: hidden;
+        }
+        .visita-info img { width: 14px; height: 10px; border-radius: 2px; object-fit: cover; flex-shrink: 0; }
+        .visita-info span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .visita-orario {
+            font-family: monospace;
+            font-size: 9px;
+            color: #00ffff;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
 
-/* TESTI SUI VIDEO LATERALI */
-.video-text {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 22px; 
-    font-weight: bold;
-    white-space: nowrap;
-    z-index: 4;
-    animation: flashHeartbeat 25s infinite;
-    text-shadow: 0 0 6px #000, 0 0 10px #000;
-}
-
-/* COLORI TESTI PERSONALIZZATI */
-.left-video-wrapper .video-text,
-.right-video-wrapper .video-text {
-    color: gold;
-    text-shadow: 0 0 10px #ffcc00, 0 0 15px #ffaa00, 0 0 20px #ff8800, 0 0 30px #ffcc33;
-}
-
-/* ANIMAZIONE LAMPEGGIO + BATTITO CUORE */
-@keyframes flashHeartbeat {
-    0%, 20% {
-        opacity: 1;
-        bottom: 50%;
-        transform: translateX(-50%) scale(1);
-    }
-    5%, 15% {
-        transform: translateX(-50%) scale(1.2); 
-    }
-    21%, 100% {
-        opacity: 0;
-        bottom: 8px;
-        transform: translateX(-50%) scale(1);
-    }
-}
-</style>
+        /* FIRMA SEGRETA PER LORY IN BASSO A DESTRA */
+        .firma-segreta {
+            position: absolute;
+            right: 4px;
+            bottom: -14px;
+            font-size: 8px;
+            font-weight: bold;
+            color: transparent;
+            cursor: default;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+            user-select: none;
+            z-index: 50;
+        }
+        .firma-segreta:hover {
+            color: #ff007f;
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.9);
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
+<div id="radar-card">
+    <div id="canvas-wrapper"></div>
 
-  <!-- VIDEO SINISTRO -->
-  <div class="video-wrapper left-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/lu.mp4" type="video/mp4">
-    </video>
-    <div class="video-text">LORYCUORESTELLARE</div>
-  </div>
+    <!-- LISTA CRONOLOGICA DEGLI INGRESSI -->
+    <div id="lista-visite">
+        <div style="text-align:center; color:#888; font-size:10px; padding:6px;">Caricamento...</div>
+    </div>
 
-  <!-- VIDEO DESTRO -->
-  <div class="video-wrapper right-video-wrapper">
-    <video class="side-video" autoplay loop muted playsinline>
-      <source src="https://peppeagosto.github.io/immaggini/lu.mp4" type="video/mp4">
-    </video>
-    <div class="video-text">DISCOTECA VIRTUALE</div>
-  </div>
-
+    <!-- FIRMA SEGRETA -->
+    <div class="firma-segreta">Peppe & Lory 💖</div>
 </div>
 
+<script>
+    // Configurazione del TUO database Firebase personale
+    const firebaseConfig = { apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic", authDomain: "globovisitatoricartaio.firebaseapp.com", databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com", projectId: "globovisitatoricartaio", storageBucket: "globovisitatoricartaio.firebasestorage.app", messagingSenderId: "870797967861", appId: "1:870797967861:web:0bc578a2053ff1f441e0bc" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const visitatoriRef = db.ref('storico_visite_italia_ghost');
+
+    // Three.js 3D Globe Setup
+    const container = document.getElementById('canvas-wrapper');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const globeGroup = new THREE.Group();
+    globeGroup.rotation.z = 15 * (Math.PI / 180);
+    scene.add(globeGroup);
+
+    // Globo ingrandito
+    const globeRadius = 1.25;
+    const globeGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
+    const textureLoader = new THREE.TextureLoader();
+    const earthMap = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+    const globeMat = new THREE.MeshPhongMaterial({ map: earthMap, bumpScale: 0.04, shininess: 4, specular: new THREE.Color(0x111111) });
+    const globe = new THREE.Mesh(globeGeo, globeMat);
+    globeGroup.add(globe);
+
+    camera.position.set(0, 0, 3.6);
+    scene.add(new THREE.AmbientLight(0x556677, 1.4));
+    const sunLight = new THREE.DirectionalLight(0xffffff, 1.6);
+    sunLight.position.set(5, 4, 3);
+    scene.add(sunLight);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.enableZoom = true;
+    controls.minDistance = 1.4;
+    controls.maxDistance = 5.5;
+
+    function latLonToVector3(lat, lon, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);
+        return new THREE.Vector3(
+            -(radius * Math.sin(phi) * Math.cos(theta)),
+            radius * Math.cos(phi),
+            radius * Math.sin(phi) * Math.sin(theta)
+        );
+    }
+
+    let markers = [];
+
+    // Rileva IP del visitatore e SALVA NEL DATABASE
+    fetch('https://ipwho.is/').then(res => res.json()).then(data => {
+        if (!data.success) throw new Error();
+        const city = data.city || "Sconosciuta";
+        const code = (data.country_code || 'it').toLowerCase();
+        const lat = data.latitude || 41.9;
+        const lon = data.longitude || 12.5;
+
+        visitatoriRef.push({
+            citta: city,
+            code: code,
+            lat: lat,
+            lon: lon,
+            tempo: Date.now()
+        });
+    }).catch(() => {
+        visitatoriRef.push({
+            citta: "Visitatore",
+            code: "un",
+            lat: 41.9,
+            lon: 12.5,
+            tempo: Date.now()
+        });
+    });
+
+    // Ascolta in tempo reale tutto lo storico delle visite da Firebase
+    visitatoriRef.limitToLast(30).on('value', snapshot => {
+        const data = snapshot.val();
+        const listaDiv = document.getElementById('lista-visite');
+        listaDiv.innerHTML = '';
+        
+        // Pulisce i vecchi pin sul globo
+        markers.forEach(m => { m.tag.remove(); globe.remove(m.anchor); });
+        markers = [];
+
+        if (!data) {
+            listaDiv.innerHTML = '<div style="text-align:center; color:#888; font-size:10px; padding:6px;">Nessuna visita</div>';
+            return;
+        }
+
+        const entries = Object.values(data);
+
+        entries.reverse().forEach(v => {
+            const date = new Date(v.tempo || Date.now());
+            const orarioStr = String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
+            const code = (v.code || 'un').toLowerCase();
+
+            // Aggiunge la riga nella lista verticale
+            const item = document.createElement('div');
+            item.className = 'visita-item';
+            item.innerHTML = `
+                <div class="visita-info">
+                    <img src="https://flagcdn.com/w20/${code}.png" onerror="this.style.display='none'">
+                    <span>${v.citta}</span>
+                </div>
+                <span class="visita-orario">${orarioStr}</span>
+            `;
+            listaDiv.appendChild(item);
+
+            // Aggiunge il puntatore sul globo 3D
+            if (v.lat && v.lon) {
+                const pos = latLonToVector3(v.lat, v.lon, globeRadius + 0.008);
+                const pinGroup = new THREE.Group();
+                pinGroup.position.copy(pos);
+                pinGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.015, 8, 8), new THREE.MeshBasicMaterial({ color: 0x00ffff })));
+                globe.add(pinGroup);
+
+                const tag = document.createElement('div');
+                tag.className = 'location-tag';
+                tag.innerHTML = `
+                    <div class="tag-pill">
+                        <img src="https://flagcdn.com/w40/${code}.png" onerror="this.style.display='none'">
+                        <span>${v.citta}</span>
+                    </div>
+                `;
+                container.appendChild(tag);
+                markers.push({ anchor: pinGroup, tag: tag });
+            }
+        });
+    });
+
+    // Animazione Globo 3D
+    const projVec = new THREE.Vector3();
+    function animate() {
+        requestAnimationFrame(animate);
+        globe.rotation.y += 0.0015;
+        controls.update();
+
+        const halfW = container.clientWidth / 2;
+        const halfH = container.clientHeight / 2;
+
+        markers.forEach(m => {
+            m.anchor.getWorldPosition(projVec);
+            const dotProduct = projVec.clone().normalize().dot(camera.position.clone().normalize());
+            if (dotProduct > 0.15) {
+                projVec.project(camera);
+                m.tag.style.left = ((projVec.x * halfW) + halfW) + 'px';
+                m.tag.style.top = (-(projVec.y * halfH) + halfH) + 'px';
+                m.tag.style.opacity = '1';
+            } else {
+                m.tag.style.opacity = '0';
+            }
+        });
+
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+</script>
 </body>
 </html>
