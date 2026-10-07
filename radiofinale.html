@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>XatRadio & Globo Live</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Librerie Three.js e Firebase v8 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: transparent !important;
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+        ._0xM1 {
+            width: 728px; height: 786px;
+            background: transparent; border: none; 
+            position: relative; display: flex; flex-direction: column;
+        }
+        ._0xT2 {
+            font-size: 38px; text-align: center; padding: 25px 15px 10px 15px;
+            font-weight: 800; font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sh 3s linear infinite; text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            z-index: 2;
+        }
+        @keyframes sh { 0% { background-position: 0% 50% } 100% { background-position: 200% 50% } }
+
+        /* GLOBO 3D */
+        #canvas-globe {
+            width: 100%; height: 500px; background: transparent;
+            position: relative; cursor: grab;
+        }
+        #canvas-globe:active { cursor: grabbing; }
+
+        /* RETTANGOLINO LISTA VISITE */
+        ._0xL3 {
+            position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            background: rgba(10, 10, 15, 0.92); backdrop-filter: blur(8px);
+            border-radius: 15px; padding: 15px; display: none; overflow-y: auto;
+            z-index: 20; border: 2px solid rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        ._0xL3::-webkit-scrollbar { width: 6px; }
+        ._0xL3::-webkit-scrollbar-thumb { background: #ff0000; border-radius: 6px; }
+
+        .location-item {
+            padding: 10px; display: flex; align-items: center; gap: 12px;
+            border-bottom: 1px dashed rgba(255,255,255,0.15);
+            font-size: 15px; color: #fff; font-weight: 600;
+        }
+        .location-item:last-child { border-bottom: none; }
+        .location-item img {
+            width: 28px; height: 18px; object-fit: cover;
+            border-radius: 3px; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .loc-time-stamp {
+            margin-left: auto; font-family: 'Orbitron', sans-serif;
+            font-size: 11px; color: #ff007f;
+        }
+
+        /* ETICHETTE SUL GLOBO */
+        .location-tag {
+            position: absolute; color: #fff; font-size: 12px; font-weight: 700;
+            pointer-events: none; display: flex; align-items: center; gap: 5px;
+            text-shadow: 0 1px 4px #000; text-transform: uppercase;
+            z-index: 10; transform: translate(-50%, -50%);
+        }
+        .location-tag img { width: 16px; height: 11px; border-radius: 2px; }
+
+        /* BOTTOM E BOTTONE */
+        ._0xH4 { padding: 20px; text-align: center; background: transparent; z-index: 2; }
+        #time {
+            font-size: 28px; font-weight: 800; font-family: 'Orbitron', sans-serif;
+            color: #fff; display: block; margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+        }
+        #date {
+            font-size: 14px; margin-bottom: 15px; color: #ccc;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+        }
+        ._0xP5 {
+            background: rgba(0,0,0,0.6); padding: 10px 35px; border-radius: 30px;
+            border: 2px solid #ff0000; display: inline-flex; align-items: center; gap: 10px;
+            cursor: pointer; color: #ff0000; font-weight: 800;
+            font-family: 'Orbitron', sans-serif; transition: all 0.3s; font-size: 16px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+        ._0xP5:hover { background: rgba(255,0,0,0.3); box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+        #visNum { color: #00d4ff; font-size: 20px; text-shadow: 0 0 5px rgba(0, 212, 255, 0.6); }
+        
+        .anti-copia {
+            font-family: 'Orbitron', sans-serif; color: #ff0000; font-size: 13px;
+            margin-top: 25px; text-transform: uppercase; letter-spacing: 1.5px;
+            font-weight: 800; text-shadow: 0 0 5px rgba(255,0,0,0.8);
+            position: relative;
+        }
+
+        /* FIRMA SEGRETA PER LORY IN BASSO A DESTRA */
+        .firma-segreta {
+            position: absolute;
+            right: 15px;
+            bottom: 5px;
+            font-size: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+            color: transparent;
+            cursor: default;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+            user-select: none;
+            z-index: 50;
+        }
+        .firma-segreta:hover {
+            color: #ff007f;
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.9);
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <div class="_0xM1">
+        <div class="_0xT2">ITALIA GHOST RADIO</div>
+        
+        <div id="canvas-globe">
+            <div class="_0xL3" id="locationData"></div>
+        </div>
+
+        <div class="_0xH4">
+            <span id="time">--:--:--</span>
+            <div id="date">---</div>
+            <div class="_0xP5" id="trigList">VISITATORI <span id="visNum">00</span></div>
+            <marquee class="anti-copia" scrollamount="5">VERGOGNATEVI A COPIARE I CODICI INVECE DI CREARLI. RISPETTATE I CODICI DEL CARTAIO!</marquee>
+            
+            <!-- FIRMA SEGRETA PEPPE & LORY -->
+            <div class="firma-segreta">Peppe & Lory 💖</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. CONFIGURAZIONE FIREBASE UFFICIALE DEL CARTAIO
+    const firebaseConfig = {
+        apiKey: "AIzaSyDpc_UGHeNBiph4pmGzjPjPiuca-KylAic",
+        authDomain: "globovisitatoricartaio.firebaseapp.com",
+        databaseURL: "https://globovisitatoricartaio-default-rtdb.firebaseio.com",
+        projectId: "globovisitatoricartaio",
+        storageBucket: "globovisitatoricartaio.firebasestorage.app",
+        messagingSenderId: "870797967861",
+        appId: "1:870797967861:web:0bc578a2053ff1f441e0bc"
+    };
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    // Apertura/Chiusura pannello lista visite al click sul bottone
+    document.getElementById('trigList').onclick = function() {
+        const box = document.getElementById('locationData');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    };
+
+    // 2. CONFIGURAZIONE SCENA 3D (THREE.JS)
+    const containerWidth = 728, containerHeight = 500;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(containerWidth, containerHeight);
+
+    const canvasCont = document.getElementById('canvas-globe');
+    canvasCont.appendChild(renderer.domElement);
+
+    // Creazione Globo con texture della terra
+    const globeGeo = new THREE.SphereGeometry(1, 40, 40);
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+    
+    const globeMat = new THREE.MeshPhongMaterial({
+        map: earthTexture,
+        emissive: new THREE.Color('#1db954'),
+        emissiveIntensity: 0.1,
+        transparent: true
+    });
+    const globe = new THREE.Mesh(globeGeo, globeMat);
+    scene.add(globe);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.3));
+
+    camera.position.z = 2.8;
+
+    let markers = [], isDragging = false, prevMousePos = { x: 0, y: 0 };
+
+    function startDrag(e) {
+        isDragging = true;
+        prevMousePos = {
+            x: e.clientX || (e.touches && e.touches[0].clientX),
+            y: e.clientY || (e.touches && e.touches[0].clientY)
+        };
+    }
+    function moveDrag(e) {
+        if (!isDragging) return;
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const deltaX = clientX - prevMousePos.x;
+        const deltaY = clientY - prevMousePos.y;
+
+        const rotX = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), deltaX * 0.005);
+        const rotY = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), deltaY * 0.005);
+        globe.quaternion.premultiply(rotX);
+        globe.quaternion.premultiply(rotY);
+
+        prevMousePos = { x: clientX, y: clientY };
+    }
+    function endDrag() { isDragging = false; }
+
+    canvasCont.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('mouseup', endDrag);
+    canvasCont.addEventListener('touchstart', startDrag, { passive: true });
+    window.addEventListener('touchmove', moveDrag, { passive: true });
+    window.addEventListener('touchend', endDrag);
+
+    // 3. RILEVAMENTO POSIZIONE E REGISTRAZIONE SU FIRESTORE
+    async function fetchLocation() {
+        try {
+            let res = await fetch('https://ipwho.is/');
+            let data = await res.json();
+            if (data.success) {
+                return {
+                    city: data.city || 'Città',
+                    country: data.country || 'Mondo',
+                    code: (data.country_code || 'it').toLowerCase(),
+                    lat: data.latitude,
+                    lng: data.longitude
+                };
+            }
+        } catch(e) {}
+        try {
+            let res2 = await fetch('https://get.geojs.io/v1/ip/geo.json');
+            let data2 = await res2.json();
+            if (data2.city) {
+                return {
+                    city: data2.city,
+                    country: data2.country || 'Mondo',
+                    code: (data2.country_code || 'it').toLowerCase(),
+                    lat: parseFloat(data2.latitude),
+                    lng: parseFloat(data2.longitude)
+                };
+            }
+        } catch(e) {}
+        return { city: 'Roma', country: 'Italia', code: 'it', lat: 41.9, lng: 12.5 };
+    }
+
+    async function connect() {
+        const loc = await fetchLocation();
+        let userId = localStorage.getItem('visitante_id_cartaio');
+        if (!userId) {
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            localStorage.setItem('visitante_id_cartaio', userId);
+        }
+        // Salva o aggiorna la visita su Firestore
+        await db.collection('visitantes-xat').doc(userId).set({
+            city: loc.city,
+            country: loc.country,
+            code: loc.code,
+            lat: loc.lat,
+            lng: loc.lng,
+            t: Date.now()
+        }, { merge: true });
+    }
+
+    // 4. ASCOLTO IN TEMPO REALE DEGLI INGRESSI
+    db.collection('visitantes-xat').orderBy('t', 'desc').limit(15).onSnapshot(snapshot => {
+        document.getElementById('visNum').innerText = snapshot.size < 10 ? '0' + snapshot.size : snapshot.size;
+        
+        const dataBox = document.getElementById('locationData');
+        dataBox.innerHTML = '';
+
+        // Pulisce i vecchi marker dal globo 3D
+        markers.forEach(m => {
+            globe.remove(m.dot);
+            if (m.tag) m.tag.remove();
+        });
+        markers = [];
+
+        snapshot.forEach(doc => {
+            const info = doc.data();
+            const dateObj = new Date(info.t);
+            const timeStr = String(dateObj.getHours()).padStart(2, '0') + ':' + String(dateObj.getMinutes()).padStart(2, '0');
+
+            // Riempie la finestrella con la lista delle visite
+            const item = document.createElement('div');
+            item.className = 'location-item';
+            item.innerHTML = `
+                <img src="https://flagcdn.com/w40/${info.code}.png" onerror="this.style.display='none'">
+                <span>${info.city}, ${info.country}</span>
+                <span class="loc-time-stamp">${timeStr}</span>
+            `;
+            dataBox.appendChild(item);
+
+            // Disegna il punto rosso sul globo 3D se ci sono coordinate valide
+            if (info.lat !== undefined && info.lng !== undefined) {
+                const phi = (90 - info.lat) * (Math.PI / 180);
+                const theta = (info.lng + 180) * (Math.PI / 180);
+                const pos = new THREE.Vector3(
+                    -1.03 * Math.sin(phi) * Math.cos(theta),
+                    1.03 * Math.cos(phi),
+                    1.03 * Math.sin(phi) * Math.sin(theta)
+                );
+
+                const dotMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+                const dotMesh = new THREE.Mesh(new THREE.SphereGeometry(0.02, 12, 12), dotMat);
+                dotMesh.position.copy(pos);
+                globe.add(dotMesh);
+
+                const tag = document.createElement('div');
+                tag.className = 'location-tag';
+                tag.innerHTML = `<img src="https://flagcdn.com/w40/${info.code}.png" onerror="this.style.display='none'">${info.city}`;
+                canvasCont.appendChild(tag);
+
+                markers.push({ dot: dotMesh, tag: tag, pos: pos });
+            }
+        });
+    });
+
+    // 5. ANIMAZIONE E LOOP DEL GLOBO
+    function animate() {
+        requestAnimationFrame(animate);
+        if (!isDragging) {
+            const rot = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), 0.0025);
+            globe.quaternion.premultiply(rot);
+        }
+        globe.updateMatrixWorld();
+
+        markers.forEach(m => {
+            const vector = m.pos.clone().applyMatrix4(globe.matrixWorld);
+            const coord = vector.clone().project(camera);
+
+            if (vector.z > 0 && coord.z < 1) {
+                m.tag.style.display = 'flex';
+                m.tag.style.left = ((coord.x * 0.5 + 0.5) * canvasCont.clientWidth) + 'px';
+                m.tag.style.top = ((coord.y * -0.5 + 0.5) * canvasCont.clientHeight) + 'px';
+            } else {
+                m.tag.style.display = 'none';
+            }
+        });
+
+        renderer.render(scene, camera);
+    }
+
+    // Orologio e Data in basso
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('time').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('date').innerText = now.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }, 1000);
+
+    connect();
+    animate();
+</script>
+</body>
+</html>
