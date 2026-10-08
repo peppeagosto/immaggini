@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EL CARTAIO</title>
-<!-- IMPORTAZIONE DI UN FONT ELEGANTE E JQUERY COME NEL PALINSESTO -->
+<!-- IMPORTAZIONE FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
@@ -14,14 +14,18 @@ html, body {
     background-size: cover;
     overflow: hidden;
     font-family: 'Arial Black', sans-serif;
-    pointer-events: none; /* TRUCCHETTO */
+    pointer-events: none;
 }
 
-/* TASTO ZAP IMPOSTATO ESATTAMENTE COME IL PALINSESTO (DIV INVECE DI LINK) */
+/* 
+   IL SEGRETO È QUI:
+   Spostato a DESTRA (right: 20px) sotto il palinsesto (top: 140px).
+   Così schiviamo il riquadro invisibile della chat di xat a sinistra!
+*/
 #btn-zap {
     position: fixed;
-    left: 40px;
-    top: 90px;
+    right: 20px; 
+    top: 140px; 
     width: 250px;
     height: 60px;
     background: #000;
@@ -34,7 +38,13 @@ html, body {
     cursor: pointer;
     z-index: 999999;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    pointer-events: auto; /* Sblocca il click */
+    pointer-events: auto;
+}
+
+/* LINK PULITO PER NON FAR INTERVENIRE I BLOCCHI JAVASCRIPT */
+.link-zap {
+    text-decoration: none;
+    pointer-events: auto;
 }
 
 .btn-text, #clicca-qui-text {
@@ -122,11 +132,13 @@ html, body {
 </style></head>
 <body>
 
-<!-- IL TASTO ORA E' UN DIV, NON UN LINK -->
-<div id="btn-zap">
-    <div class="btn-text">FALAR NO ZAP</div>
-    <div id="clicca-qui-text">CLIQUE AQUI</div>
-</div>
+<!-- STRUTTURA DEL TASTO CORAZZATA -->
+<a href="https://wa.me/5512983217941" target="_blank" class="link-zap">
+    <div id="btn-zap">
+        <div class="btn-text">FALAR NO ZAP</div>
+        <div id="clicca-qui-text">CLIQUE AQUI</div>
+    </div>
+</a>
 
 <div class="left-bottom-container">
     <div class="floating-text">❤️ PRISCILLA ❤️</div>
@@ -136,11 +148,6 @@ html, body {
 </div>
 
 <script>
-// ECCO IL TRUCCO DEL PALINSESTO APPLICATO A WHATSAPP
-$('#btn-zap').on('click', function() {
-    window.open('https://wa.me/5512983217941', '_blank');
-});
-
 // SCRIPT NOTE MUSICALI
 const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
 const colors = ['#ff3366', '#ff9933', '#ffff33', '#33cc33', '#33cccc', '#3366ff', '#9933ff', '#ff33cc', '#00ffff', '#7fff00', '#ff1493', '#00ff7f'];
