@@ -1,59 +1,50 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EL CARTAIO</title>
 
+<!-- IMPORTAZIONE DI UN FONT ELEGANTE DA GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
 <style>
-html,body{
-    margin:0;
-    padding:0;
-    background: transparent !important; /* sfondo trasparente pulito */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #2c003e, #4a0e4e, #1a002b); /* Fundo roxo esfumado */
+    background-size: 400% 400%;
+    animation: bgGradient 15s ease infinite;
     overflow: hidden;
 }
 
-/* CONTENITORI VIDEO */
-.video-box{
-    position:fixed;
-    width:240px;
-    height:520px;
-    top:50%;
-    transform:translateY(-50%);
-    border-radius:14px;
-    border:2px solid #ff0000; /* solo rosso */
-    box-shadow:none; /* tolta sfumatura */
-    overflow:hidden;
-    z-index:9999;
+/* Animação lenta do fundo roxo */
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-/* POSIZIONE */
-.video-left{left:10px;}
-.video-right{right:10px;}
-
-/* VIDEO CON ZOOM E INQUADRATURA SPOSTATA VERSO IL BASSO (TAGLIA LA TESTA) */
-.video-box video{
-    width:100%;
-    height:100%;
-    object-fit: cover;
-    transform: scale(1.15); /* Zoom leggero per coprire scritte/testi */
-    object-position: center 70%; /* Sposta il video verso l'alto nel box, mostrando la parte inferiore e tagliando la testa */
-    display:block;
-}
-
-/* TESTO ARCOBALENO FLUTTUANTE */
-.video-text{
-    position:absolute;
-    bottom:12px;
-    left:0;
-    width:100%;
-    text-align:center;
-    font-size:24px;
-    font-weight:900;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    letter-spacing: 1px;
-    pointer-events:none;
+/* CONTENITORE FISSO AL CENTRO PER IL TESTO UNICO */
+.center-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10;
+    pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* TESTO PICCOLO, ELEGANTE CON CUORI E ARCOBALENO (FLUTTUANTE) */
+.floating-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px; /* Dimensione piccola e raffinata */
+    font-weight: 700;
+    letter-spacing: 2px;
     
     /* Gradiente arcobaleno in movimento */
     background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
@@ -61,47 +52,110 @@ html,body{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     
-    /* Animazioni combinate: onda di fluttuazione + scorrimento arcobaleno */
-    animation: wave 3s ease-in-out infinite, rainbowMove 6s linear infinite;
+    /* Animazioni: sfumatura arcobaleno + fluttuazione onda */
+    animation: rainbowMove 6s linear infinite, wave 3s ease-in-out infinite;
     
-    /* Leggero bagliore per far risaltare il testo sopra il video */
-    filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+    /* Leggero bagliore */
+    filter: drop-shadow(0 0 6px rgba(255,0,128,0.7));
+    display: inline-block;
 }
 
 /* ANIMAZIONE ONDA (FLUTTUAZIONE) */
-@keyframes wave{
-    0%{transform:translateY(0) rotate(0deg);}
-    25%{transform:translateY(-6px) rotate(-1.5deg);}
-    50%{transform:translateY(0) rotate(0deg);}
-    75%{transform:translateY(6px) rotate(1.5deg);}
-    100%{transform:translateY(0) rotate(0deg);}
+@keyframes wave {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-6px) rotate(-1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(6px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
 }
 
-/* ANIMAZIONE SFUMATURA ARCOBALENO */
-@keyframes rainbowMove{
-    0%{background-position: 0% center;}
-    100%{background-position: 400% center;}
+/* ANIMAZIONE DEL GRADIENTE ARCO-ÍRIS */
+@keyframes rainbowMove {
+    0% { background-position: 0% center; }
+    100% { background-position: 400% center; }
+}
+
+/* NOTAS MUSICAIS CAINDO */
+.musical-note {
+    position: fixed;
+    top: -10%;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    90% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- VIDEO SINISTRO -->
-<div class="video-box video-left">
-    <video autoplay loop muted playsinline>
-        <source src="https://i.imgur.com/A3sIDl4.mp4" type="video/mp4">
-    </video>
-    <div class="video-text">NATIVA94</div>
+<!-- TESTO UNICO AL CENTRO CON CUORI E EFFETTO FLUTTUANTE -->
+<div class="center-container">
+    <div class="floating-text">❤️ PRISCILLA ❤️</div>
 </div>
 
-<!-- VIDEO DESTRO -->
-<div class="video-box video-right">
-    <video autoplay loop muted playsinline>
-        <source src="https://i.imgur.com/A3sIDl4.mp4" type="video/mp4">
-    </video>
-    <div class="video-text">NATIVA94</div>
-</div>
+<!-- SCRIPT PER GENERARE NOTE MUSICALI DINAMICHE -->
+<script>
+const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
+const colors = [
+    '#ff3366', '#ff9933', '#ffff33', '#33cc33', 
+    '#33cccc', '#3366ff', '#9933ff', '#ff33cc', 
+    '#00ffff', '#7fff00', '#ff1493', '#00ff7f'
+];
+
+const numberOfNotes = 35; // Quantidade de notas na tela
+
+for (let i = 0; i < numberOfNotes; i++) {
+    createNote();
+}
+
+function createNote() {
+    const note = document.createElement('div');
+    note.className = 'musical-note';
+    
+    // Símbolo aleatório entre as notas musicais
+    note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+    
+    // Estilos aleatórios para posição, cor, tamanho e velocidade
+    note.style.left = Math.random() * 100 + 'vw';
+    note.style.color = colors[Math.floor(Math.random() * colors.length)];
+    note.style.fontSize = (Math.random() * 24 + 16) + 'px'; // de 16px a 40px
+    
+    const duration = Math.random() * 5 + 4; // Duração de 4 a 9 segundos
+    const delay = Math.random() * 5; // Atraso inicial aleatório
+    
+    note.style.animationDuration = duration + 's';
+    note.style.animationDelay = delay + 's';
+    
+    // Efeito de brilho colorido nas notas
+    note.style.filter = `drop-shadow(0 0 6px ${note.style.color})`;
+
+    document.body.appendChild(note);
+
+    // Recria a nota no final da animação para um fluxo infinito
+    setTimeout(() => {
+        note.remove();
+        createNote();
+    }, (duration + delay) * 1000);
+}
+</script>
 
 </body>
 </html>
