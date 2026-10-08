@@ -31,13 +31,13 @@ html,body{
 .video-left{left:10px;}
 .video-right{right:10px;}
 
-/* VIDEO CON ZOOM PER COPRIRE EVENTUALI SCRITTE AI BORDI */
+/* VIDEO CON ZOOM E INQUADRATURA SPOSTATA VERSO IL BASSO (TAGLIA LA TESTA) */
 .video-box video{
     width:100%;
     height:100%;
     object-fit: cover;
     transform: scale(1.15); /* Zoom leggero per coprire scritte/testi */
-    object-position: center;
+    object-position: center 70%; /* Sposta il video verso l'alto nel box, mostrando la parte inferiore e tagliando la testa */
     display:block;
 }
 
