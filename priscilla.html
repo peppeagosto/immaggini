@@ -1,5 +1,7 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EL CARTAIO</title>
-<!-- IMPORTAZIONE DI UN FONT ELEGANTE DA GOOGLE FONTS --><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<!-- IMPORTAZIONE DI UN FONT ELEGANTE E JQUERY COME NEL PALINSESTO -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
 
@@ -12,10 +14,10 @@ html, body {
     background-size: cover;
     overflow: hidden;
     font-family: 'Arial Black', sans-serif;
-    pointer-events: none; /* TRUCCHETTO DEL PALINSESTO */
+    pointer-events: none; /* TRUCCHETTO */
 }
 
-/* TASTO ZAP IN ALTO A SINISTRA (IDENTICO AL PALINSESTO) */
+/* TASTO ZAP IMPOSTATO ESATTAMENTE COME IL PALINSESTO (DIV INVECE DI LINK) */
 #btn-zap {
     position: fixed;
     left: 40px;
@@ -32,8 +34,7 @@ html, body {
     cursor: pointer;
     z-index: 999999;
     box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    pointer-events: auto; /* Sblocca il click sul tasto */
-    text-decoration: none;
+    pointer-events: auto; /* Sblocca il click */
 }
 
 .btn-text, #clicca-qui-text {
@@ -51,7 +52,7 @@ html, body {
     50% { opacity: 0.7; transform: scale(0.95); } 
 }
 
-/* CONTENITORE SINISTRA IN BASSO PER PRISCILLA */
+/* CONTENITORI IN BASSO */
 .left-bottom-container {
     position: fixed;
     bottom: 30px;
@@ -63,7 +64,6 @@ html, body {
     pointer-events: none;
 }
 
-/* CONTENITORE DESTRA IN BASSO PER MONTEIRO */
 .right-bottom-container {
     position: fixed;
     bottom: 30px;
@@ -75,7 +75,7 @@ html, body {
     pointer-events: none;
 }
 
-/* TESTO PICCOLO, ELEGANTE CON CUORI E ARCOBALENO (FLUTTUANTE) */
+/* TESTO FLUTTUANTE */
 .floating-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
@@ -90,7 +90,6 @@ html, body {
     display: inline-block;
 }
 
-/* ANIMAZIONE ONDA (FLUTTUAZIONE) */
 @keyframes wave {
     0% { transform: translateY(0) rotate(0deg); }
     25% { transform: translateY(-6px) rotate(-1deg); }
@@ -99,13 +98,12 @@ html, body {
     100% { transform: translateY(0) rotate(0deg); }
 }
 
-/* ANIMAZIONE DEL GRADIENTE ARCO-ÍRIS */
 @keyframes rainbowMove {
     0% { background-position: 0% center; }
     100% { background-position: 400% center; }
 }
 
-/* NOTAS MUSICAIS CAINDO */
+/* NOTE MUSICALI */
 .musical-note {
     position: fixed;
     top: -10%;
@@ -116,50 +114,38 @@ html, body {
 }
 
 @keyframes fall {
-    0% {
-        transform: translateY(-10vh) rotate(0deg) scale(0.8);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.9;
-    }
-    90% {
-        opacity: 0.9;
-    }
-    100% {
-        transform: translateY(110vh) rotate(360deg) scale(1.2);
-        opacity: 0;
-    }
+    0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.9; }
+    100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0; }
 }
 </style></head>
 <body>
 
-<!-- TASTO ZAP IN ALTO A SINISTRA (USO DEL TAG A COME IL PALINSESTO) -->
-<a href="https://wa.me/5512983217941" target="_blank" id="btn-zap">
+<!-- IL TASTO ORA E' UN DIV, NON UN LINK -->
+<div id="btn-zap">
     <div class="btn-text">FALAR NO ZAP</div>
     <div id="clicca-qui-text">CLIQUE AQUI</div>
-</a>
+</div>
 
-<!-- TESTO A SINISTRA IN BASSO (PRISCILLA) -->
 <div class="left-bottom-container">
     <div class="floating-text">❤️ PRISCILLA ❤️</div>
 </div>
-
-<!-- TESTO A DESTRA IN BASSO (MONTEIRO) -->
 <div class="right-bottom-container">
     <div class="floating-text">❤️ MONTEIRO ❤️</div>
 </div>
 
-<!-- SCRIPT PER GENERARE NOTE MUSICALI DINAMICHE -->
 <script>
-const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
-const colors = [
-    '#ff3366', '#ff9933', '#ffff33', '#33cc33', 
-    '#33cccc', '#3366ff', '#9933ff', '#ff33cc', 
-    '#00ffff', '#7fff00', '#ff1493', '#00ff7f'
-];
+// ECCO IL TRUCCO DEL PALINSESTO APPLICATO A WHATSAPP
+$('#btn-zap').on('click', function() {
+    window.open('https://wa.me/5512983217941', '_blank');
+});
 
+// SCRIPT NOTE MUSICALI
+const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
+const colors = ['#ff3366', '#ff9933', '#ffff33', '#33cc33', '#33cccc', '#3366ff', '#9933ff', '#ff33cc', '#00ffff', '#7fff00', '#ff1493', '#00ff7f'];
 const numberOfNotes = 35;
+
 for (let i = 0; i < numberOfNotes; i++) {
     createNote();
 }
@@ -168,20 +154,15 @@ function createNote() {
     const note = document.createElement('div');
     note.className = 'musical-note';
     note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
-    
     note.style.left = Math.random() * 100 + 'vw';
     note.style.color = colors[Math.floor(Math.random() * colors.length)];
     note.style.fontSize = (Math.random() * 24 + 16) + 'px';
-    
     const duration = Math.random() * 5 + 4;
     const delay = Math.random() * 5;
-    
     note.style.animationDuration = duration + 's';
     note.style.animationDelay = delay + 's';
     note.style.filter = `drop-shadow(0 0 6px ${note.style.color})`;
-
     document.body.appendChild(note);
-
     setTimeout(() => {
         note.remove();
         createNote();
