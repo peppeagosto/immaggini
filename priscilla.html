@@ -11,18 +11,7 @@ html, body {
     overflow: hidden;
 }
 
-/* CONTENITORE DESTRA IN ALTO PER PRISCILLA E ZAP (CLICCABILE) */
-.right-top-container {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    z-index: 10;
-    text-align: center;
-    white-space: nowrap;
-    pointer-events: auto; /* Fondamentale per renderlo cliccabile */
-}
-
-/* CONTENITORE SINISTRA IN BASSO PER MONTEIRO */
+/* CONTENITORE SINISTRA IN BASSO PER PRISCILLA */
 .left-bottom-container {
     position: fixed;
     bottom: 30px;
@@ -32,6 +21,29 @@ html, body {
     text-align: center;
     white-space: nowrap;
     pointer-events: auto;
+}
+
+/* CONTENITORE DESTRA IN BASSO PER MONTEIRO */
+.right-bottom-container {
+    position: fixed;
+    bottom: 30px;
+    right: 20%;
+    transform: translateX(50%);
+    z-index: 10;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: auto;
+}
+
+/* CONTENITORE DESTRA IN ALTO PER "CLIQUE AQUI" (CLICCABILE) */
+.right-top-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 10;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: auto; /* Fondamentale per renderlo cliccabile */
 }
 
 /* TESTO PICCOLO, ELEGANTE CON CUORI E ARCOBALENO (FLUTTUANTE) */
@@ -52,11 +64,10 @@ html, body {
     display: inline-block;
 }
 
-/* STILE PER IL BOTTONE / LINK CLICCABILE "ZAP" */
+/* STILE PER IL BOTTONE / LINK CLICCABILE "CLIQUE AQUI" */
 .click-btn {
     display: inline-block;
-    margin-top: 8px;
-    padding: 6px 16px;
+    padding: 8px 16px;
     font-family: 'Montserrat', sans-serif;
     font-size: 13px;
     font-weight: 700;
@@ -119,14 +130,18 @@ html, body {
 </style></head>
 <body>
 
-<!-- TESTO A DESTRA IN ALTO CON CUORI E BOTTONE ZAP CLICCABILE -->
+<!-- TESTO A DESTRA IN ALTO (CLIQUE AQUI) -->
 <div class="right-top-container">
-    <div class="floating-text">❤️ PRISCILLA ❤️</div><br>
-    <a href="https://wa.me/5512983217941" target="_blank" class="click-btn">ZAP</a>
+    <a href="https://wa.me/5512983217941" target="_blank" class="click-btn">CLIQUE AQUI</a>
 </div>
 
-<!-- TESTO A SINISTRA IN BASSO CON CUORI -->
+<!-- TESTO A SINISTRA IN BASSO (PRISCILLA) -->
 <div class="left-bottom-container">
+    <div class="floating-text">❤️ PRISCILLA ❤️</div>
+</div>
+
+<!-- TESTO A DESTRA IN BASSO (MONTEIRO) -->
+<div class="right-bottom-container">
     <div class="floating-text">❤️ MONTEIRO ❤️</div>
 </div>
 
