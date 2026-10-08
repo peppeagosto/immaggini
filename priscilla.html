@@ -1,40 +1,34 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EL CARTAIO</title>
-
-<!-- IMPORTAZIONE DI UN FONT ELEGANTE DA GOOGLE FONTS -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EL CARTAIO</title>
+<!-- IMPORTAZIONE DI UN FONT ELEGANTE DA GOOGLE FONTS --><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 <style>
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #2c003e, #4a0e4e, #1a002b); /* Fundo roxo esfumado */
-    background-size: 400% 400%;
-    animation: bgGradient 15s ease infinite;
+    background: url('https://xatimg.com/image/0XdWhYwzoROm.png') no-repeat center center fixed;
+    background-size: cover;
     overflow: hidden;
 }
 
-/* Animação lenta do fundo roxo */
-@keyframes bgGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* CONTENITORE SINISTRA PER PRISCILLA E LINK WHATSAPP (IN BASSO) */
+.left-container {
+    position: fixed;
+    bottom: 30px;
+    left: 20%;
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center;
+    white-space: nowrap;
 }
 
-/* CONTENITORE FISSO AL CENTRO PER IL TESTO UNICO */
-.center-container {
+/* CONTENITORE DESTRA PER MONTEIRO (IN BASSO) */
+.right-container {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    bottom: 30px;
+    right: 20%;
+    transform: translateX(50%);
     z-index: 10;
-    pointer-events: none;
     text-align: center;
     white-space: nowrap;
 }
@@ -42,22 +36,41 @@ html, body {
 /* TESTO PICCOLO, ELEGANTE CON CUORI E ARCOBALENO (FLUTTUANTE) */
 .floating-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 24px; /* Dimensione piccola e raffinata */
+    font-size: 20px; /* Dimensione piccola e raffinata */
     font-weight: 700;
     letter-spacing: 2px;
-    
     /* Gradiente arcobaleno in movimento */
     background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
     background-size: 400% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
     /* Animazioni: sfumatura arcobaleno + fluttuazione onda */
     animation: rainbowMove 6s linear infinite, wave 3s ease-in-out infinite;
-    
     /* Leggero bagliore */
     filter: drop-shadow(0 0 6px rgba(255,0,128,0.7));
     display: inline-block;
+}
+
+/* STILE PER IL BOTTONE / LINK CLICCABILE "CLIQUE AQUI" */
+.click-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #25d366, #128c7e); /* Colore WhatsApp elegante */
+    text-decoration: none;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(37, 211, 102, 0.7);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.click-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(37, 211, 102, 1);
 }
 
 /* ANIMAZIONE ONDA (FLUTTUAZIONE) */
@@ -101,14 +114,18 @@ html, body {
         opacity: 0;
     }
 }
-</style>
-</head>
-
+</style></head>
 <body>
 
-<!-- TESTO UNICO AL CENTRO CON CUORI E EFFETTO FLUTTUANTE -->
-<div class="center-container">
-    <div class="floating-text">❤️ PRISCILLA ❤️</div>
+<!-- TESTO A SINISTRA IN BASSO CON CUORI E LINK WHATSAPP -->
+<div class="left-container">
+    <div class="floating-text">❤️ PRISCILLA ❤️</div><br>
+    <a href="https://wa.me/5512983217941" target="_blank" class="click-btn">CLIQUE AQUI</a>
+</div>
+
+<!-- TESTO A DESTRA IN BASSO CON CUORI -->
+<div class="right-container">
+    <div class="floating-text">❤️ MONTEIRO ❤️</div>
 </div>
 
 <!-- SCRIPT PER GENERARE NOTE MUSICALI DINAMICHE -->
@@ -121,7 +138,6 @@ const colors = [
 ];
 
 const numberOfNotes = 35; // Quantidade de notas na tela
-
 for (let i = 0; i < numberOfNotes; i++) {
     createNote();
 }
@@ -157,5 +173,4 @@ function createNote() {
 }
 </script>
 
-</body>
-</html>
+</body></html>
