@@ -1,6 +1,8 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EL CARTAIO</title>
 <!-- IMPORTAZIONE DI UN FONT ELEGANTE DA GOOGLE FONTS --><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 <style>
+:root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
+
 html, body {
     margin: 0;
     padding: 0;
@@ -9,6 +11,8 @@ html, body {
     background: url('https://xatimg.com/image/0XdWhYwzoROm.png') no-repeat center center fixed;
     background-size: cover;
     overflow: hidden;
+    pointer-events: none; /* Fondamentale per non bloccare xat sotto */
+    font-family: 'Arial Black', sans-serif;
 }
 
 /* CONTENITORE SINISTRA IN BASSO PER PRISCILLA */
@@ -20,7 +24,7 @@ html, body {
     z-index: 10;
     text-align: center;
     white-space: nowrap;
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 /* CONTENITORE DESTRA IN BASSO PER MONTEIRO */
@@ -32,58 +36,60 @@ html, body {
     z-index: 10;
     text-align: center;
     white-space: nowrap;
-    pointer-events: auto;
+    pointer-events: none;
 }
 
-/* CONTENITORE SINISTRA IN ALTO (SPOSTATO A SINISTRA E ABBASSATO) */
+/* CONTENITORE SINISTRA IN ALTO (RETTANGOLO CLICCABILE COME IL PALINSESTO) */
 .left-top-container {
     position: fixed;
-    top: 90px; /* Abbassato per non essere coperto */
-    left: 40px; /* Spostato a sinistra */
-    z-index: 10;
+    top: 90px;
+    left: 40px;
+    width: 250px;
+    height: 60px;
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999999;
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    pointer-events: auto; /* Sblocca il click solo qui */
+    text-decoration: none;
+}
+
+/* TESTI INTERNI AL RETTANGOLO CON EFFETTO ARCOBALENO */
+.btn-text, #clicca-qui-text {
+    background: var(--rb);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-transform: uppercase;
+    font-weight: 900;
     text-align: center;
-    white-space: nowrap;
-    pointer-events: auto; /* Fondamentale per renderlo cliccabile */
+}
+.btn-text { font-size: 11px; }
+#clicca-qui-text { font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
+
+@keyframes pulse { 
+    0%, 100% { opacity: 1; transform: scale(1); } 
+    50% { opacity: 0.7; transform: scale(0.95); } 
 }
 
 /* TESTO PICCOLO, ELEGANTE CON CUORI E ARCOBALENO (FLUTTUANTE) */
 .floating-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px; /* Dimensione piccola e raffinata */
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: 2px;
-    /* Gradiente arcobaleno in movimento */
     background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
     background-size: 400% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* Animazioni: sfumatura arcobaleno + fluttuazione onda */
     animation: rainbowMove 6s linear infinite, wave 3s ease-in-out infinite;
-    /* Leggero bagliore */
     filter: drop-shadow(0 0 6px rgba(255,0,128,0.7));
     display: inline-block;
-}
-
-/* STILE PER IL BOTTONE / LINK CLICCABILE "CLIQUE AQUI" */
-.click-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    background: linear-gradient(135deg, #25d366, #128c7e); /* Colore WhatsApp elegante */
-    text-decoration: none;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(37, 211, 102, 0.7);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    letter-spacing: 1px;
-    pointer-events: auto; /* Fondamentale per renderlo cliccabile */
-}
-
-.click-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px rgba(37, 211, 102, 1);
 }
 
 /* ANIMAZIONE ONDA (FLUTTUAZIONE) */
@@ -130,10 +136,11 @@ html, body {
 </style></head>
 <body>
 
-<!-- TESTO A SINISTRA IN ALTO (CLIQUE AQUI) -->
-<div class="left-top-container">
-    <a href="https://wa.me/5512983217941" target="_blank" class="click-btn">CLIQUE AQUI</a>
-</div>
+<!-- RETTANGOLO A SINISTRA IN ALTO (CLIQUE AQUI CLICCABILE) -->
+<a href="https://wa.me/5512983217941" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="left-top-container">
+    <div class="btn-text">FALAR NO ZAP</div>
+    <div id="clicca-qui-text">CLIQUE AQUI</div>
+</a>
 
 <!-- TESTO A SINISTRA IN BASSO (PRISCILLA) -->
 <div class="left-bottom-container">
@@ -154,7 +161,7 @@ const colors = [
     '#00ffff', '#7fff00', '#ff1493', '#00ff7f'
 ];
 
-const numberOfNotes = 35; // Quantidade de notas na tela
+const numberOfNotes = 35;
 for (let i = 0; i < numberOfNotes; i++) {
     createNote();
 }
@@ -162,27 +169,21 @@ for (let i = 0; i < numberOfNotes; i++) {
 function createNote() {
     const note = document.createElement('div');
     note.className = 'musical-note';
-    
-    // Símbolo aleatório entre as notas musicais
     note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
     
-    // Estilos aleatórios para posição, cor, tamanho e velocidade
     note.style.left = Math.random() * 100 + 'vw';
     note.style.color = colors[Math.floor(Math.random() * colors.length)];
-    note.style.fontSize = (Math.random() * 24 + 16) + 'px'; // de 16px a 40px
+    note.style.fontSize = (Math.random() * 24 + 16) + 'px';
     
-    const duration = Math.random() * 5 + 4; // Duração de 4 a 9 segundos
-    const delay = Math.random() * 5; // Atraso inicial aleatório
+    const duration = Math.random() * 5 + 4;
+    const delay = Math.random() * 5;
     
     note.style.animationDuration = duration + 's';
     note.style.animationDelay = delay + 's';
-    
-    // Efeito de brilho colorido nas notas
     note.style.filter = `drop-shadow(0 0 6px ${note.style.color})`;
 
     document.body.appendChild(note);
 
-    // Recria a nota no final da animação para um fluxo infinito
     setTimeout(() => {
         note.remove();
         createNote();
