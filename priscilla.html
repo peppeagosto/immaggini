@@ -10,7 +10,6 @@
     <style>
         :root { --rb: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #f0f, #f00); }
 
-        /* BODY ESATTAMENTE COME IL PALINSESTO ORIGINALE CHE FUNZIONA (TRACCIA INVISIBILE) */
         body { 
             background: transparent; 
             margin: 0; 
@@ -22,7 +21,6 @@
             pointer-events: none; 
         }
 
-        /* SFONDO SEPARATO: NON BLOCCA PIU' I CLICK DEL BODY! */
         .sfondo-xat {
             position: fixed;
             top: 0; 
@@ -34,7 +32,6 @@
             pointer-events: none;
         }
 
-        /* ========= STILE DEI DUE TASTI ========= */
         .btn-stile {
             position: fixed;
             width: 250px;
@@ -49,14 +46,14 @@
             cursor: pointer;
             z-index: 9999999;
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            pointer-events: auto; /* IMPORTANTE: SBLOCCA I CLICK */
+            pointer-events: auto; /* SBLOCCA I CLICK */
         }
         
-        /* TASTO ZAP A SINISTRA */
-        #btn-zap { left: 40px; top: 90px; }
-        
-        /* TASTO PALINSESTO A DESTRA */
+        /* TASTO PALINSESTO (IN ALTO A DESTRA) */
         #btn-pali { right: 20px; top: 60px; }
+
+        /* TASTO ZAP SPOSTATO A DESTRA, SOTTO IL PALINSESTO */
+        #btn-zap { right: 20px; top: 140px; }
 
         .btn-text, #clicca-qui-text {
             background: var(--rb);
@@ -67,7 +64,6 @@
         }
         .btn-text { font-size: 11px; }
         #clicca-qui-text { font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
-
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
         /* ========= MODAL WHATSAPP ========= */
@@ -98,7 +94,7 @@
             display: none; 
             position: fixed; 
             right: 10px; 
-            top: 130px; 
+            top: 220px; /* Abbassata un po' per fare spazio ai due tasti */
             width: 280px; 
             background: #000; 
             border: 3px solid #333; 
@@ -136,19 +132,19 @@
 </head>
 <body>
 
-    <!-- SFONDO IMMAGINE TOTALMENTE INNOCUO -->
+    <!-- SFONDO IMMAGINE -->
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
-
-    <!-- TASTO SINISTRA: ZAP -->
-    <div id="btn-zap" class="btn-stile">
-        <div class="btn-text">FALAR NO ZAP</div>
-        <div id="clicca-qui-text">CLIQUE AQUI</div>
-    </div>
 
     <!-- TASTO DESTRA: PALINSESTO -->
     <div id="btn-pali" class="btn-stile">
         <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
         <div id="clicca-qui-text">CLICCA QUI</div>
+    </div>
+
+    <!-- TASTO ZAP (MESSO A DESTRA SOTTO IL PALINSESTO) -->
+    <div id="btn-zap" class="btn-stile">
+        <div class="btn-text">FALAR NO ZAP</div>
+        <div id="clicca-qui-text">CLIQUE AQUI</div>
     </div>
 
     <!-- PANNELLO ZAP (NASCOSTO FINO AL CLICK) -->
@@ -175,7 +171,7 @@
     <script>
         // GESTIONE CLICK ZAP
         $('#btn-zap').on('click', function() {
-            $('#locandina').fadeOut(200); // Chiude l'altro se è aperto per non fare confusione
+            $('#locandina').fadeOut(200);
             $('#zap-modal').fadeToggle(200);
         });
         $('#chiudi-zap').on('click', function() {
@@ -184,7 +180,7 @@
 
         // GESTIONE CLICK PALINSESTO
         $('#btn-pali').on('click', function() {
-            $('#zap-modal').fadeOut(200); // Chiude l'altro se è aperto
+            $('#zap-modal').fadeOut(200);
             $('#locandina').fadeToggle(200);
         });
 
