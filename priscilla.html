@@ -29,11 +29,11 @@
             pointer-events: none !important; 
         }
 
-        /* TASTO ZAP SPOSTATO PIU' IN BASSO (top: 350px) PER SCHIVARE IL BLOCCO DI XAT */
+        /* TASTO ZAP SPOSTATO A DESTRA (ZONA SICURA SOTTO IL PALINSESTO) */
         #btn-zap {
             position: fixed;
-            left: 40px; 
-            top: 350px; /* ECCO LA MAGIA, FUORI DALLA ZONA MORTA! */
+            right: 20px;  /* SPOSTATO A DESTRA! */
+            top: 130px;   /* MESSO ESATTAMENTE SOTTO IL TASTO PALINSESTO */
             width: 250px;
             height: 60px;
             background: #000;
@@ -46,7 +46,7 @@
             cursor: pointer;
             z-index: 9999999 !important;
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            pointer-events: auto !important; /* Questo gli permette di ricevere il click */
+            pointer-events: auto !important;
         }
 
         .btn-text, #clicca-qui-text {
@@ -79,7 +79,7 @@
             text-align: center;
             box-shadow: 0 0 50px rgba(37, 211, 102, 0.8);
             z-index: 9999998 !important;
-            pointer-events: auto !important; /* Cliccabile */
+            pointer-events: auto !important;
         }
 
         .zap-title {
@@ -202,7 +202,6 @@
     <div class="right-bottom-container"><div class="floating-text">❤️ MONTEIRO ❤️</div></div>
 
     <script>
-        // LOGICA DEL CLICK: APRE IMMAGINE E LINK INVECE DELLA LOCANDINA DJ
         $('#btn-zap').on('click', function() {
             $('#zap-modal').fadeIn();
         });
@@ -211,7 +210,6 @@
             $('#zap-modal').fadeOut();
         });
 
-        // SCRIPT NOTE MUSICALI
         const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
         const colors = ['#ff3366', '#ff9933', '#ffff33', '#33cc33', '#33cccc', '#3366ff', '#9933ff', '#ff33cc', '#00ffff', '#7fff00', '#ff1493', '#00ff7f'];
         const numberOfNotes = 35;
