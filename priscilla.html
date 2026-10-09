@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EL CARTAIO - ZAP DIRETTO</title>
+    <title>EL CARTAIO - ZAP DEFINITIVO</title>
     <!-- IMPORTAZIONE FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,40 +24,32 @@
             object-fit: cover; z-index: -999; pointer-events: none;
         }
 
-        /* LA "SCATOLA" DEI TASTI (XAT NON PUO' BLOCCARE I DIV) */
+        /* LA "SCATOLA" DEI TASTI (CORAZZATA) */
         #tasto-wapp, #tasto-pali {
             position: fixed;
-            height: 60px; /* Stessa altezza perfetta */
+            height: 60px;
             background: #000;
             border: 2px solid #fff;
             border-radius: 10px;
-            cursor: pointer !important; /* FORZA LA MANINA */
+            cursor: pointer !important;
             z-index: 9999999 !important;
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            pointer-events: auto !important; /* SBLOCCA IL CLICK */
+            pointer-events: auto !important; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         
-        /* TASTO ZAP A SINISTRA (Largo 180px, altezza top 60px) */
+        /* TASTO ZAP A SINISTRA */
         #tasto-wapp { left: 40px; top: 60px; width: 180px; }
 
         /* TASTO PALINSESTO A DESTRA */
-        #tasto-pali { 
-            right: 20px; top: 60px; width: 250px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        }
+        #tasto-pali { right: 20px; top: 60px; width: 250px; }
 
-        /* IL TRUCCO: IL LINK DIRETTO E' NASCOSTO DENTRO AL DIV */
-        #tasto-wapp a {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; height: 100%; text-decoration: none;
-        }
-
-        /* STILI DEL TESTO ARCOBALENO */
+        /* STILI DEL TESTO */
         .btn-text {
             background: var(--rb); -webkit-background-clip: text; color: transparent;
             text-transform: uppercase; font-weight: 900; font-size: 11px;
         }
-        #tasto-wapp .btn-text { font-size: 10px; } /* Più piccolo per stare nel tasto da 180px */
+        #tasto-wapp .btn-text { font-size: 10px; }
 
         .clicca-qui {
             background: var(--rb); -webkit-background-clip: text; color: transparent;
@@ -102,19 +94,16 @@
 </head>
 <body>
 
-    <!-- IMMAGINE DI SFONDO -->
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
 
-    <!-- TASTO WHATSAPP: SCATOLA DIV CON LINK ALL'INTERNO (NIENTE FINESTRE O FOTO) -->
+    <!-- TASTO WHATSAPP: SOLO DIV, NESSUN LINK HTML -->
     <div id="tasto-wapp">
-        <a href="https://wa.me/5512983217941" target="_blank">
-            <div class="btn-text">FALAR NO ZAP</div>
-            <div class="clicca-qui">CLIQUE AQUI</div>
-        </a>
+        <div class="btn-text">FALAR NO ZAP</div>
+        <div class="clicca-qui">CLIQUE AQUI</div>
     </div>
 
     <!-- TASTO PALINSESTO -->
-    <div id="tasto-pali" onclick="$('#finestra-pali').fadeToggle(200)">
+    <div id="tasto-pali">
         <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
         <div class="clicca-qui">CLICCA QUI</div>
     </div>
@@ -133,6 +122,18 @@
     <div class="right-bottom-container"><div class="floating-text">❤️ MONTEIRO ❤️</div></div>
 
     <script>
+        // === LA MAGIA E' QUI: JQUERY GESTISCE ENTRAMBI I CLICK ===
+        
+        // Cliccando il tasto ZAP, apre WhatsApp in una nuova scheda
+        $('#tasto-wapp').on('click', function() {
+            window.open('https://wa.me/5512983217941', '_blank');
+        });
+
+        // Cliccando il tasto PALINSESTO, apre la locandina
+        $('#tasto-pali').on('click', function() {
+            $('#finestra-pali').fadeToggle(200);
+        });
+
         // SCRIPT PALINSESTO (DB E LOGICA)
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const img = [
