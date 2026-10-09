@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EL CARTAIO - ZAP E PALINSESTO</title>
+    <title>EL CARTAIO - ZAP CAMUFFATO</title>
     <!-- IMPORTAZIONE FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -18,13 +19,12 @@
             pointer-events: none; 
         }
 
-        /* SFONDO IMMAGINE */
         .sfondo-xat {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             object-fit: cover; z-index: -999; pointer-events: none;
         }
 
-        /* STILE COMUNE DEI DUE TASTI */
+        /* TASTI CORAZZATI */
         .tasto-menu {
             position: fixed;
             height: 60px;
@@ -38,41 +38,26 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         
-        /* TASTO ZAP A SINISTRA (Più piccolo: 180px) */
+        /* TASTO ZAP A SINISTRA (180px) */
         #tasto-wapp { left: 40px; top: 60px; width: 180px; }
 
         /* TASTO PALINSESTO A DESTRA */
         #tasto-pali { right: 20px; top: 60px; width: 250px; }
 
-        /* TESTI DEI TASTI */
         .btn-text { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 11px; }
         #tasto-wapp .btn-text { font-size: 10px; }
+        
         .clicca-qui { background: var(--rb); -webkit-background-clip: text; color: transparent; text-transform: uppercase; font-weight: 900; font-size: 14px; animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px; }
         #tasto-wapp .clicca-qui { font-size: 12px; letter-spacing: 1px; }
 
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
-        /* ========= PANNELLI (LE LOCANDINE CHE SI APRONO) ========= */
-        .pannello-nascosto {
-            display: none; position: fixed; 
-            background: rgba(0, 0, 0, 0.85); /* Leggermente trasparente */
-            border: 3px solid #333; border-radius: 12px; 
-            padding: 15px; box-shadow: 0 0 50px #000; 
-            z-index: 9999998 !important; pointer-events: auto !important; 
-        }
-
-        /* PANNELLO WHATSAPP (Centrato o a sinistra) */
-        #finestra-wapp { 
-            left: 40px; top: 130px; width: 220px; 
-            border-color: #25D366; text-align: center;
-        }
-        .wapp-titolo { color: #fff; font-size: 14px; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
-        .wapp-numero { color: #25D366; font-size: 20px; font-weight: 900; margin-bottom: 15px; }
-        .btn-link-wapp { display: inline-block; background: #25D366; color: #000; text-decoration: none; padding: 10px 15px; border-radius: 8px; font-weight: 900; font-size: 12px; margin-bottom: 10px; transition: 0.3s; }
-        .btn-link-wapp:hover { background: #1ebe56; color: #fff; }
-
         /* PANNELLO PALINSESTO */
-        #finestra-pali { right: 20px; top: 130px; width: 280px; }
+        #finestra-pali { 
+            display: none; position: fixed; right: 20px; top: 130px; width: 280px; 
+            background: rgba(0, 0, 0, 0.95); border: 3px solid #333; border-radius: 12px; 
+            padding: 10px; box-shadow: 0 0 50px #000; z-index: 9999998 !important; pointer-events: auto !important; 
+        }
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
         #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
         .titolo, .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; }
@@ -103,27 +88,20 @@
 
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
 
-    <!-- TASTO WHATSAPP A SINISTRA -->
-    <div id="tasto-wapp" class="tasto-menu">
+    <!-- TASTO WHATSAPP CAMUFFATO -->
+    <div id="tasto-wapp" class="tasto-menu" onclick="magiaZap()">
         <div class="btn-text">FALAR NO ZAP</div>
         <div class="clicca-qui">CLIQUE AQUI</div>
     </div>
 
-    <!-- TASTO PALINSESTO A DESTRA -->
-    <div id="tasto-pali" class="tasto-menu">
+    <!-- TASTO PALINSESTO -->
+    <div id="tasto-pali" class="tasto-menu" onclick="$('#finestra-pali').fadeToggle(200)">
         <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
         <div class="clicca-qui">CLICCA QUI</div>
     </div>
 
-    <!-- PANNELLO WHATSAPP (Senza foto/QR, solo numero e link trasparente) -->
-    <div id="finestra-wapp" class="pannello-nascosto">
-        <div class="wapp-titolo">Adicione no Zap:</div>
-        <div class="wapp-numero">+55 12 98321-7941</div>
-        <a href="https://wa.me/5512983217941" target="_blank" class="btn-link-wapp">ABRIR WHATSAPP</a>
-    </div>
-
     <!-- PANNELLO PALINSESTO -->
-    <div id="finestra-pali" class="pannello-nascosto">
+    <div id="finestra-pali">
         <div class="header">
             <span id="giorno-live">---</span>
             <div class="titolo">DIRETTE RADIO LIVE</div>
@@ -135,19 +113,20 @@
     <div class="right-bottom-container"><div class="floating-text">❤️ MONTEIRO ❤️</div></div>
 
     <script>
-        // LA LOGICA E' UGUALE PER ENTRAMBI I TASTI ORA!
-        
-        // Click ZAP -> Apre la locandina dello Zap
-        $('#tasto-wapp').on('click', function() {
-            $('#finestra-pali').fadeOut(100); // Chiude l'altro per fare ordine
-            $('#finestra-wapp').fadeToggle(200);
-        });
-
-        // Click PALINSESTO -> Apre la locandina del Palinsesto
-        $('#tasto-pali').on('click', function() {
-            $('#finestra-wapp').fadeOut(100);
-            $('#finestra-pali').fadeToggle(200);
-        });
+        // SCRIPT FANTASMA PER AGGIRARE I BOT
+        function magiaZap() {
+            // Decodifica la stringa Base64 e genera il link di nascosto
+            var codiceSegreto = 'aHR0cHM6Ly93YS5tZS81NTEyOTgzMjE3OTQx';
+            var urlReale = atob(codiceSegreto);
+            
+            // Crea un link invisibile, lo clicca e lo distrugge in un attimo
+            var linkFantasma = document.createElement('a');
+            linkFantasma.href = urlReale;
+            linkFantasma.target = '_blank';
+            document.body.appendChild(linkFantasma);
+            linkFantasma.click();
+            document.body.removeChild(linkFantasma);
+        }
 
         // SCRIPT PALINSESTO (DB E LOGICA)
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
