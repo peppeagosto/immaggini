@@ -35,6 +35,7 @@
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
             pointer-events: auto !important; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-decoration: none; /* Evita sottolineature sul link */
         }
         
         /* TASTO ZAP A SINISTRA (180px) */
@@ -87,11 +88,11 @@
 
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
 
-    <!-- TASTO WHATSAPP CAMUFFATO -->
-    <div id="tasto-wapp" class="tasto-menu" onclick="magiaZap()">
+    <!-- TASTO WHATSAPP: trasformato in tag <a> nativo con decodifica al volo -->
+    <a id="tasto-wapp" class="tasto-menu" href="#" target="_blank" rel="noopener noreferrer" onmousedown="preparaZap(this)" ontouchstart="preparaZap(this)">
         <div class="btn-text">FALAR NO ZAP</div>
         <div class="clicca-qui">CLIQUE AQUI</div>
-    </div>
+    </a>
 
     <!-- TASTO PALINSESTO -->
     <div id="tasto-pali" class="tasto-menu" onclick="$('#finestra-pali').fadeToggle(200)">
@@ -112,19 +113,10 @@
     <div class="right-bottom-container"><div class="floating-text">❤️ MONTEIRO ❤️</div></div>
 
     <script>
-        // SCRIPT FANTASMA PER AGGIRARE I BOT
-        function magiaZap() {
-            // Decodifica la stringa Base64 e genera il link di nascosto
-            var codiceSegreto = 'aHR0cHM6Ly93YS5tZS81NTEyOTgzMjE3OTQx';
-            var urlReale = atob(codiceSegreto);
-            
-            // Crea un link invisibile, lo clicca e lo distrugge in un attimo
-            var linkFantasma = document.createElement('a');
-            linkFantasma.href = urlReale;
-            linkFantasma.target = '_blank';
-            document.body.appendChild(linkFantasma);
-            linkFantasma.click();
-            document.body.removeChild(linkFantasma);
+        // Inserisce l'URL al momento esatto del tocco/click: invisibile nei bot e nei crawler
+        function preparaZap(el) {
+            var segreto = 'aHR0cHM6Ly93YS5tZS81NTEyOTgzMjE3OTQx';
+            el.href = atob(segreto);
         }
 
         // SCRIPT PALINSESTO (DB E LOGICA)
