@@ -18,58 +18,62 @@
             pointer-events: none; 
         }
 
-        /* SFONDO IMMAGINE */
+        /* SFONDO IMMAGINE MESSO IN FONDO */
         .sfondo-xat {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             object-fit: cover; z-index: -999; pointer-events: none;
         }
 
-        /* ========= STILE BASE TASTI ========= */
-        .btn-stile {
+        /* LA "SCATOLA" DEI TASTI (XAT NON PUO' BLOCCARE I DIV) */
+        #tasto-wapp, #tasto-pali {
             position: fixed;
-            width: 250px;
-            height: 60px; 
-            background: #000; /* Se lo vuoi completamente trasparente, cambia #000 in transparent */
+            height: 60px; /* Stessa altezza perfetta */
+            background: #000;
             border: 2px solid #fff;
             border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            cursor: pointer !important; /* FORZA LA MANINA */
             z-index: 9999999 !important;
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            pointer-events: auto !important; 
-            text-decoration: none; /* Rimuove la sottolineatura del link */
+            pointer-events: auto !important; /* SBLOCCA IL CLICK */
         }
         
-        /* TASTO ZAP A SINISTRA (PURO LINK) */
-        #tasto-wapp { left: 40px; top: 90px; }
+        /* TASTO ZAP A SINISTRA (Largo 180px, altezza top 60px) */
+        #tasto-wapp { left: 40px; top: 60px; width: 180px; }
 
         /* TASTO PALINSESTO A DESTRA */
-        #tasto-pali { right: 20px; top: 60px; }
+        #tasto-pali { 
+            right: 20px; top: 60px; width: 250px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
 
+        /* IL TRUCCO: IL LINK DIRETTO E' NASCOSTO DENTRO AL DIV */
+        #tasto-wapp a {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%; height: 100%; text-decoration: none;
+        }
+
+        /* STILI DEL TESTO ARCOBALENO */
         .btn-text {
             background: var(--rb); -webkit-background-clip: text; color: transparent;
             text-transform: uppercase; font-weight: 900; font-size: 11px;
         }
+        #tasto-wapp .btn-text { font-size: 10px; } /* Più piccolo per stare nel tasto da 180px */
+
         .clicca-qui {
             background: var(--rb); -webkit-background-clip: text; color: transparent;
             text-transform: uppercase; font-weight: 900; font-size: 14px; 
             animation: pulse 1.5s infinite; letter-spacing: 2px; margin-top: 2px;
         }
+        #tasto-wapp .clicca-qui { font-size: 12px; letter-spacing: 1px; }
 
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
 
-        /* ========= LOCANDINA PALINSESTO (UNICA FINESTRA RIMASTA) ========= */
-        .pannello-nascosto {
-            display: none; position: fixed; background: rgba(0, 0, 0, 0.95);
-            border: 3px solid #333; border-radius: 15px; padding: 20px;
-            box-shadow: 0 0 50px #000; z-index: 9999998 !important; pointer-events: auto !important;
+        /* ========= LOCANDINA PALINSESTO ========= */
+        #finestra-pali { 
+            display: none; position: fixed; right: 20px; top: 130px; width: 280px; 
+            background: rgba(0, 0, 0, 0.95); border: 3px solid #333; border-radius: 12px; 
+            padding: 10px; box-shadow: 0 0 50px #000; z-index: 9999998 !important; pointer-events: auto !important; 
         }
-
-        #finestra-pali { right: 20px; top: 130px; width: 280px; padding: 10px; }
         .header { text-align: center; border-bottom: 2px solid #222; margin-bottom: 12px; padding-bottom: 8px; }
         #giorno-live { color: #ffff00; font-size: 14px; text-transform: uppercase; }
         .titolo, .testo-lama { background: var(--rb); -webkit-background-clip: text; color: transparent; font-weight: 900; text-transform: uppercase; }
@@ -101,20 +105,22 @@
     <!-- IMMAGINE DI SFONDO -->
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
 
-    <!-- TASTO WHATSAPP: ORA E' UN LINK DIRETTO SENZA FINESTRE/FOTO (target="_blank" apre una nuova scheda) -->
-    <a href="https://wa.me/5512983217941" target="_blank" id="tasto-wapp" class="btn-stile">
-        <div class="btn-text">FALAR NO ZAP</div>
-        <div class="clicca-qui">CLIQUE AQUI</div>
-    </a>
+    <!-- TASTO WHATSAPP: SCATOLA DIV CON LINK ALL'INTERNO (NIENTE FINESTRE O FOTO) -->
+    <div id="tasto-wapp">
+        <a href="https://wa.me/5512983217941" target="_blank">
+            <div class="btn-text">FALAR NO ZAP</div>
+            <div class="clicca-qui">CLIQUE AQUI</div>
+        </a>
+    </div>
 
-    <!-- TASTO PALINSESTO: APRE LA LOCANDINA -->
-    <div id="tasto-pali" class="btn-stile" onclick="$('#finestra-pali').fadeToggle(200)">
+    <!-- TASTO PALINSESTO -->
+    <div id="tasto-pali" onclick="$('#finestra-pali').fadeToggle(200)">
         <div class="btn-text">PALINSESTO DE IL CARTAIO</div>
         <div class="clicca-qui">CLICCA QUI</div>
     </div>
 
     <!-- PANNELLO PALINSESTO -->
-    <div id="finestra-pali" class="pannello-nascosto">
+    <div id="finestra-pali">
         <div class="header">
             <span id="giorno-live">---</span>
             <div class="titolo">DIRETTE RADIO LIVE</div>
