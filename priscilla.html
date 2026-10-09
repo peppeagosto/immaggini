@@ -35,7 +35,8 @@
             box-shadow: 0 0 15px rgba(255,255,255,0.3);
             pointer-events: auto !important; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-decoration: none; /* Evita sottolineature sul link */
+            text-decoration: none;
+            box-sizing: border-box;
         }
         
         /* TASTO ZAP A SINISTRA (180px) */
@@ -51,6 +52,19 @@
         #tasto-wapp .clicca-qui { font-size: 12px; letter-spacing: 1px; }
 
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
+
+        /* BOX INFO WHATSAPP (FALLBACK ANTI-BLOCCO) */
+        #finestra-zap {
+            display: none; position: fixed; left: 40px; top: 130px; width: 200px;
+            background: rgba(0, 0, 0, 0.95); border: 2px solid #25D366; border-radius: 12px;
+            padding: 10px; box-shadow: 0 0 25px rgba(37, 211, 102, 0.6); z-index: 9999998 !important; pointer-events: auto !important;
+            text-align: center;
+        }
+        #finestra-zap p { color: #fff; font-size: 11px; margin: 0 0 8px 0; font-family: sans-serif; }
+        #finestra-zap button {
+            background: #25D366; color: #000; border: none; font-weight: bold; padding: 7px 10px;
+            border-radius: 6px; cursor: pointer; font-size: 11px; width: 100%; text-transform: uppercase;
+        }
 
         /* PANNELLO PALINSESTO */
         #finestra-pali { 
@@ -88,11 +102,18 @@
 
     <img class="sfondo-xat" src="https://xatimg.com/image/0XdWhYwzoROm.png">
 
-    <!-- TASTO WHATSAPP: trasformato in tag <a> nativo con decodifica al volo -->
-    <a id="tasto-wapp" class="tasto-menu" href="#" target="_blank" rel="noopener noreferrer" onmousedown="preparaZap(this)" ontouchstart="preparaZap(this)">
+    <!-- TASTO WHATSAPP CON APERTURA DIRETTA E SICURA -->
+    <a id="tasto-wapp" class="tasto-menu" href="#" target="_blank" rel="noopener noreferrer" 
+       onmousedown="preparaZap(this)" ontouchstart="preparaZap(this)" onclick="eseguiZap(event, this)">
         <div class="btn-text">FALAR NO ZAP</div>
         <div class="clicca-qui">CLIQUE AQUI</div>
     </a>
+
+    <!-- BOX EMERGENZA (SE L'IFRAME DELLA CHAT BLOCCA L'USCITA) -->
+    <div id="finestra-zap">
+        <p>Se non si è aperto:</p>
+        <button id="btn-copia" onclick="copiaZap()">COPIA LINK ZAP</button>
+    </div>
 
     <!-- TASTO PALINSESTO -->
     <div id="tasto-pali" class="tasto-menu" onclick="$('#finestra-pali').fadeToggle(200)">
@@ -113,13 +134,46 @@
     <div class="right-bottom-container"><div class="floating-text">❤️ MONTEIRO ❤️</div></div>
 
     <script>
-        // Inserisce l'URL al momento esatto del tocco/click: invisibile nei bot e nei crawler
+        const zapUrl = atob('aHR0cHM6Ly93YS5tZS81NTEyOTgzMjE3OTQx');
+
+        // Prepara il link nativo prima del click effettivo
         function preparaZap(el) {
-            var segreto = 'aHR0cHM6Ly93YS5tZS81NTEyOTgzMjE3OTQx';
-            el.href = atob(segreto);
+            el.href = zapUrl;
         }
 
-        // SCRIPT PALINSESTO (DB E LOGICA)
+        // Tenta l'apertura forzata; se bloccata dall'iframe mostra il box di copia
+        function eseguiZap(e, el) {
+            el.href = zapUrl;
+
+            // Tentativo apertura via top/window
+            try {
+                var nuovaFinestra = window.open(zapUrl, '_blank');
+                if (!nuovaFinestra || nuovaFinestra.closed || typeof nuovaFinestra.closed === 'undefined') {
+                    $('#finestra-zap').fadeIn(200);
+                }
+            } catch (err) {
+                $('#finestra-zap').fadeIn(200);
+            }
+
+            // Mostra comunque il fallback dopo un breve intervallo se il browser non è uscito
+            setTimeout(function() {
+                $('#finestra-zap').fadeIn(200);
+            }, 600);
+        }
+
+        function copiaZap() {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(zapUrl).then(function() {
+                    $('#btn-copia').text('COPIATO! INCOLLALO');
+                }).catch(function() {
+                    prompt("Copia il link qui sotto:", zapUrl);
+                });
+            } else {
+                prompt("Copia il link qui sotto:", zapUrl);
+            }
+        }
+
+        // SCRIPT PALINSESTO
         const giorni = ["DOMENICA", "LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ", "GIOVEDÌ", "VENERDÌ", "SABATO"];
         const img = [
             "https://xatimg.com/image/iQgCyJrXx59k.jpg", "https://xatimg.com/image/Pb7d1636URvg.jpg",
@@ -169,7 +223,7 @@
         setInterval(aggiornaLive, 10000);
         aggiornaLive();
 
-        // SCRIPT NOTE MUSICALI
+        // NOTE MUSICALI
         const notes = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
         const colors = ['#ff3366', '#ff9933', '#ffff33', '#33cc33', '#33cccc', '#3366ff', '#9933ff', '#ff33cc', '#00ffff', '#7fff00', '#ff1493', '#00ff7f'];
         for (let i = 0; i < 35; i++) { createNote(); }
