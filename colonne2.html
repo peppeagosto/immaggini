@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Disco Stage con Toggle al Centro</title>
+  <title>Disco Stage Background</title>
   <style>
     * {
       box-sizing: border-box;
@@ -20,118 +20,8 @@
     }
 
     /* --------------------------------------------------
-       TOGGLE SWITCH AL CENTRO ORIZZONTALE (ALTEZZA FARO VERDE)
-    -------------------------------------------------- */
-    #toggle-lights {
-      display: none;
-    }
-
-    .toggle-container {
-      position: fixed;
-      top: 90%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 60;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(10, 12, 16, 0.95);
-      border: 1.5px solid #00ff66;
-      border-radius: 20px;
-      padding: 5px 14px;
-      box-shadow: 0 0 14px rgba(0, 255, 102, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.8);
-      user-select: none;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .toggle-label {
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 1.5px;
-      color: #d0d7de;
-    }
-
-    .switch-btn {
-      position: relative;
-      width: 36px;
-      height: 18px;
-      background: #141720;
-      border: 1px solid #4a5468;
-      border-radius: 12px;
-      cursor: pointer;
-      display: inline-block;
-    }
-
-    /* PALLINO LED VERDE LAMPEGGIANTE (ON) */
-    .switch-btn::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 3px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #00ff66;
-      box-shadow: 0 0 8px #00ff66;
-      animation: blinkGreen 0.75s infinite alternate ease-in-out;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .toggle-label::after {
-      content: 'ON';
-      color: #00ff66;
-      text-shadow: 0 0 8px #00ff66;
-    }
-
-    /* STATO OFF: BORDO ROSSO E LED ROSSO LAMPEGGIANTE */
-    #toggle-lights:checked ~ .toggle-container {
-      border-color: #ff0044;
-      box-shadow: 0 0 14px rgba(255, 0, 68, 0.45), inset 0 0 8px rgba(0, 0, 0, 0.8);
-    }
-
-    #toggle-lights:checked ~ .toggle-container .switch-btn::after {
-      transform: translateX(16px);
-      background: #ff0044;
-      box-shadow: 0 0 8px #ff0044;
-      animation: blinkRed 0.65s infinite alternate ease-in-out;
-    }
-
-    #toggle-lights:checked ~ .toggle-container .toggle-label::after {
-      content: 'OFF';
-      color: #ff0044;
-      text-shadow: 0 0 8px #ff0044;
-    }
-
-    /* ANIMAZIONI LAMPEGGIO LED */
-    @keyframes blinkGreen {
-      0% { opacity: 0.35; box-shadow: 0 0 3px #00ff66; }
-      100% { opacity: 1; box-shadow: 0 0 12px #00ff66, 0 0 20px #00ff66; }
-    }
-
-    @keyframes blinkRed {
-      0% { opacity: 0.3; box-shadow: 0 0 3px #ff0044; }
-      100% { opacity: 1; box-shadow: 0 0 12px #ff0044, 0 0 22px #ff0044; }
-    }
-
-    /* --------------------------------------------------
-       TRANSIZIONE E SCOMPARSA DELLE COLONNE
-    -------------------------------------------------- */
-    .disco-column {
-      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
-    }
-
-    #toggle-lights:checked ~ .column-left {
-      transform: translateX(-160px);
-      opacity: 0;
-    }
-
-    #toggle-lights:checked ~ .column-right {
-      transform: translateX(160px);
-      opacity: 0;
-    }
-
-    /* --------------------------------------------------
-       AREA CENTRALE PER BBCODE
+       AREA CENTRALE RISERVATA AL PLAYER / BBCODE
+       (pointer-events: none permette al click di passare sotto)
     -------------------------------------------------- */
     .radio-bbcode-slot {
       position: absolute;
@@ -140,12 +30,12 @@
       transform: translate(-50%, -50%);
       width: 760px;
       height: 500px;
-      z-index: 20;
+      z-index: 5;
       pointer-events: none;
     }
 
     /* --------------------------------------------------
-       STRUTTURA COLONNE D'ACCIAIO 3D
+       AMERICANA / TRALICCIO D'ACCIAIO 3D
     -------------------------------------------------- */
     .disco-column {
       position: fixed;
@@ -402,7 +292,7 @@
       filter: blur(40px);
       mix-blend-mode: screen;
       pointer-events: none;
-      z-index: 4;
+      z-index: 2;
       animation: fogFloat 12s infinite alternate ease-in-out;
     }
 
@@ -416,7 +306,7 @@
       bottom: 0; left: 0; right: 0; height: 35vh;
       perspective: 350px;
       overflow: hidden;
-      z-index: 2;
+      z-index: 1;
       pointer-events: none;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       background: linear-gradient(to top, rgba(8, 9, 14, 0.99), transparent);
@@ -443,15 +333,6 @@
 </head>
 <body>
 
-  <!-- CHECKBOX TOGGLE -->
-  <input type="checkbox" id="toggle-lights">
-
-  <!-- TOGGLE AL CENTRO DELLO SCHERMO -->
-  <div class="toggle-container">
-    <span class="toggle-label">LIGHTS: </span>
-    <label for="toggle-lights" class="switch-btn" title="Accendi/Spegni Colonne"></label>
-  </div>
-
   <!-- COLONNA AMERICANA SINISTRA -->
   <div class="disco-column column-left">
     <div class="truss-structure">
@@ -475,7 +356,6 @@
       <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
     </div>
 
-    <!-- FARETTI -->
     <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-cyan"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
