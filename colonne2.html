@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Disco Stage Background</title>
+  <title>Disco Stage con Toggle al Centro</title>
   <style>
     * {
       box-sizing: border-box;
@@ -20,9 +20,118 @@
     }
 
     /* --------------------------------------------------
-       AREA CENTRALE RISERVATA AL BBCODE DI XAT
-       (L'area è centrata e libera: pointer-events: none
-       evita qualunque interferenza con i controlli)
+       TOGGLE SWITCH AL CENTRO ORIZZONTALE (ALTEZZA FARO VERDE)
+    -------------------------------------------------- */
+    #toggle-lights {
+      display: none;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 12, 16, 0.95);
+      border: 1.5px solid #00ff66;
+      border-radius: 20px;
+      padding: 5px 14px;
+      box-shadow: 0 0 14px rgba(0, 255, 102, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.8);
+      user-select: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      color: #d0d7de;
+    }
+
+    .switch-btn {
+      position: relative;
+      width: 36px;
+      height: 18px;
+      background: #141720;
+      border: 1px solid #4a5468;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* PALLINO LED VERDE LAMPEGGIANTE (ON) */
+    .switch-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff66;
+      box-shadow: 0 0 8px #00ff66;
+      animation: blinkGreen 0.75s infinite alternate ease-in-out;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle-label::after {
+      content: 'ON';
+      color: #00ff66;
+      text-shadow: 0 0 8px #00ff66;
+    }
+
+    /* STATO OFF: BORDO ROSSO E LED ROSSO LAMPEGGIANTE */
+    #toggle-lights:checked ~ .toggle-container {
+      border-color: #ff0044;
+      box-shadow: 0 0 14px rgba(255, 0, 68, 0.45), inset 0 0 8px rgba(0, 0, 0, 0.8);
+    }
+
+    #toggle-lights:checked ~ .toggle-container .switch-btn::after {
+      transform: translateX(16px);
+      background: #ff0044;
+      box-shadow: 0 0 8px #ff0044;
+      animation: blinkRed 0.65s infinite alternate ease-in-out;
+    }
+
+    #toggle-lights:checked ~ .toggle-container .toggle-label::after {
+      content: 'OFF';
+      color: #ff0044;
+      text-shadow: 0 0 8px #ff0044;
+    }
+
+    /* ANIMAZIONI LAMPEGGIO LED */
+    @keyframes blinkGreen {
+      0% { opacity: 0.35; box-shadow: 0 0 3px #00ff66; }
+      100% { opacity: 1; box-shadow: 0 0 12px #00ff66, 0 0 20px #00ff66; }
+    }
+
+    @keyframes blinkRed {
+      0% { opacity: 0.3; box-shadow: 0 0 3px #ff0044; }
+      100% { opacity: 1; box-shadow: 0 0 12px #ff0044, 0 0 22px #ff0044; }
+    }
+
+    /* --------------------------------------------------
+       TRANSIZIONE E SCOMPARSA DELLE COLONNE
+    -------------------------------------------------- */
+    .disco-column {
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+    }
+
+    #toggle-lights:checked ~ .column-left {
+      transform: translateX(-160px);
+      opacity: 0;
+    }
+
+    #toggle-lights:checked ~ .column-right {
+      transform: translateX(160px);
+      opacity: 0;
+    }
+
+    /* --------------------------------------------------
+       AREA CENTRALE PER BBCODE
     -------------------------------------------------- */
     .radio-bbcode-slot {
       position: absolute;
@@ -33,13 +142,10 @@
       height: 500px;
       z-index: 20;
       pointer-events: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     /* --------------------------------------------------
-       1. AMERICANA / TRALICCIO D'ACCIAIO SOLIDO 3D
+       STRUTTURA COLONNE D'ACCIAIO 3D
     -------------------------------------------------- */
     .disco-column {
       position: fixed;
@@ -64,7 +170,6 @@
     .column-left { left: 5px; }
     .column-right { right: 5px; }
 
-    /* Tubolari diagonali in rilievo */
     .truss-structure {
       position: absolute;
       inset: 0;
@@ -92,7 +197,6 @@
     .truss-diagonal:nth-child(9) { top: 85%; left: -15px; transform: rotate(35deg); }
     .truss-diagonal:nth-child(10) { top: 95%; left: -15px; transform: rotate(-35deg); }
 
-    /* Bulloni d'ancoraggio */
     .truss-bolt {
       position: absolute;
       width: 10px;
@@ -110,7 +214,6 @@
     .tb-7 { top: 74%; left: 6px; }  .tb-8 { top: 74%; right: 6px; }
     .tb-9 { top: 96%; left: 6px; }  .tb-10 { top: 96%; right: 6px; }
 
-    /* Cablaggi di alimentazione */
     .cables-overlay {
       position: absolute;
       inset: 0;
@@ -130,7 +233,7 @@
     .cl-1 { left: 22px; filter: blur(0.5px); }
     .cl-2 { right: 26px; transform: rotate(0.5deg); }
 
-    /* VU-Meter LED integrato nel metallo */
+    /* EQUALIZZATORE LED */
     .truss-eq {
       position: absolute;
       top: 15px;
@@ -184,9 +287,7 @@
       65%, 100% { opacity: 1; }
     }
 
-    /* --------------------------------------------------
-       2. FARETTI TONDI 3D & FASCI LUMINOSI
-    -------------------------------------------------- */
+    /* FARETTI 3D E FASCI */
     .moving-head {
       position: relative;
       width: 56px;
@@ -293,9 +394,7 @@
       100% { opacity: 0.25; transform: translateY(-50%) rotate(-16deg) scaleX(1.35); }
     }
 
-    /* --------------------------------------------------
-       3. FUMO SCENICO E PAVIMENTO RIFLETTENTE
-    -------------------------------------------------- */
+    /* FUMO E PAVIMENTO */
     .fog-layer {
       position: fixed;
       bottom: 0; left: -50%; width: 200%; height: 48vh;
@@ -344,6 +443,15 @@
 </head>
 <body>
 
+  <!-- CHECKBOX TOGGLE -->
+  <input type="checkbox" id="toggle-lights">
+
+  <!-- TOGGLE AL CENTRO DELLO SCHERMO -->
+  <div class="toggle-container">
+    <span class="toggle-label">LIGHTS: </span>
+    <label for="toggle-lights" class="switch-btn" title="Accendi/Spegni Colonne"></label>
+  </div>
+
   <!-- COLONNA AMERICANA SINISTRA -->
   <div class="disco-column column-left">
     <div class="truss-structure">
@@ -367,6 +475,7 @@
       <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
     </div>
 
+    <!-- FARETTI -->
     <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-cyan"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
@@ -412,7 +521,7 @@
     <div class="floor-glow glow-r"></div>
   </div>
 
-  <!-- AREA TRASPARENTE CENTRATA PER IL BBCODE -->
+  <!-- AREA CENTRALE TRASPARENTE PER BBCODE -->
   <div class="radio-bbcode-slot"></div>
 
 </body>
