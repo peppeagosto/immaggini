@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Colonne Luci Discoteca</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #07070b;
+      color: #fff;
+      font-family: sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CONTENITORE CENTRALE */
+    .main-content {
+      position: relative;
+      z-index: 20;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    /* SAGOMA DELLA COLONNA (TRALICCIO / AMERICANA) */
+    .disco-column {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 70px;
+      background: linear-gradient(90deg, #18191f 0%, #2b2e38 50%, #15161c 100%);
+      border: 2px solid #3d4250;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Traversi a traliccio metallico sulla sagoma */
+    .disco-column::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 18px,
+        rgba(0, 0, 0, 0.55) 18px,
+        rgba(0, 0, 0, 0.55) 24px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(0, 0, 0, 0.55) 18px,
+        rgba(0, 0, 0, 0.55) 24px
+      );
+      opacity: 0.7;
+    }
+
+    .column-left {
+      left: 10px;
+      border-radius: 8px;
+    }
+
+    .column-right {
+      right: 10px;
+      border-radius: 8px;
+    }
+
+    /* CORPO FARETTO ROTONDO */
+    .spot-round {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle at 35% 35%, #4a4e5d, #14151a 75%);
+      border-radius: 50%;
+      border: 3px solid #20222a;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.95), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    /* Staffa di aggancio al traliccio */
+    .spot-round::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 8px;
+      background: #111;
+      border: 1px solid #444;
+      top: -7px;
+      border-radius: 2px;
+    }
+
+    /* OBIETTIVO / BULBO CENTRALE ROTONDO */
+    .lens {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 16px currentColor, inset 0 0 8px currentColor;
+    }
+
+    /* FASCIO LUMINOSO A CONO */
+    .beam {
+      position: absolute;
+      top: 50%;
+      height: 190px;
+      width: 500px;
+      opacity: 0.8;
+      filter: blur(14px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Fascio che parte dalla colonna sinistra verso destra */
+    .column-left .beam {
+      left: 100%;
+      transform-origin: left center;
+      clip-path: polygon(0 44%, 100% 0, 100% 100%, 0 56%);
+      animation: sweepLeft 1.4s infinite alternate ease-in-out;
+    }
+
+    /* Fascio che parte dalla colonna destra verso sinistra */
+    .column-right .beam {
+      right: 100%;
+      transform-origin: right center;
+      clip-path: polygon(100% 44%, 0 0, 0 100%, 100% 56%);
+      animation: sweepRight 1.5s infinite alternate ease-in-out;
+    }
+
+    /* COLORI E TEMPI PER OGNI FARETTO */
+    .col-1 { color: #ff0055; }
+    .column-left .col-1 .beam {
+      background: radial-gradient(ellipse at left, rgba(255, 0, 85, 0.95), transparent 75%);
+      animation-delay: 0s;
+    }
+
+    .col-2 { color: #00f0ff; }
+    .column-left .col-2 .beam {
+      background: radial-gradient(ellipse at left, rgba(0, 240, 255, 0.95), transparent 75%);
+      animation-delay: 0.3s;
+    }
+
+    .col-3 { color: #ffeb00; }
+    .column-left .col-3 .beam {
+      background: radial-gradient(ellipse at left, rgba(255, 235, 0, 0.95), transparent 75%);
+      animation-delay: 0.6s;
+    }
+
+    .col-4 { color: #b000ff; }
+    .column-left .col-4 .beam {
+      background: radial-gradient(ellipse at left, rgba(176, 0, 255, 0.95), transparent 75%);
+      animation-delay: 0.9s;
+    }
+
+    .col-5 { color: #00ff66; }
+    .column-left .col-5 .beam {
+      background: radial-gradient(ellipse at left, rgba(0, 255, 102, 0.95), transparent 75%);
+      animation-delay: 0.45s;
+    }
+
+    /* Stessi colori per i fasci del lato destro invertendo l'origine */
+    .column-right .col-1 .beam {
+      background: radial-gradient(ellipse at right, rgba(255, 0, 85, 0.95), transparent 75%);
+      animation-delay: 0.2s;
+    }
+    .column-right .col-2 .beam {
+      background: radial-gradient(ellipse at right, rgba(0, 240, 255, 0.95), transparent 75%);
+      animation-delay: 0.5s;
+    }
+    .column-right .col-3 .beam {
+      background: radial-gradient(ellipse at right, rgba(255, 235, 0, 0.95), transparent 75%);
+      animation-delay: 0.8s;
+    }
+    .column-right .col-4 .beam {
+      background: radial-gradient(ellipse at right, rgba(176, 0, 255, 0.95), transparent 75%);
+      animation-delay: 0.1s;
+    }
+    .column-right .col-5 .beam {
+      background: radial-gradient(ellipse at right, rgba(0, 255, 102, 0.95), transparent 75%);
+      animation-delay: 0.65s;
+    }
+
+    /* OSCILLAZIONI DEI FASCI */
+    @keyframes sweepLeft {
+      0% {
+        opacity: 0.25;
+        transform: translateY(-50%) rotate(-14deg) scaleX(0.7);
+      }
+      50% {
+        opacity: 0.95;
+      }
+      100% {
+        opacity: 0.35;
+        transform: translateY(-50%) rotate(18deg) scaleX(1.3);
+      }
+    }
+
+    @keyframes sweepRight {
+      0% {
+        opacity: 0.3;
+        transform: translateY(-50%) rotate(16deg) scaleX(0.75);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.25;
+        transform: translateY(-50%) rotate(-16deg) scaleX(1.35);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COLONNA SINISTRA -->
+  <div class="disco-column column-left">
+    <div class="spot-round col-1"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-2"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-3"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-4"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-5"><div class="lens"></div><div class="beam"></div></div>
+  </div>
+
+  <!-- COLONNA DESTRA -->
+  <div class="disco-column column-right">
+    <div class="spot-round col-4"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-1"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-5"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-2"><div class="lens"></div><div class="beam"></div></div>
+    <div class="spot-round col-3"><div class="lens"></div><div class="beam"></div></div>
+  </div>
+
+  <!-- CONTENUTO CENTRALE -->
+  <div class="main-content">
+    <h1>DISCO ZONE</h1>
+    <p>Layout centrale libero per radio, chat, player o box.</p>
+  </div>
+
+</body>
+</html>
