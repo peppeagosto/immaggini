@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Truss Stage Colonne Pro</title>
+  <title>Disco Stage Background</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,7 +12,7 @@
     }
 
     body {
-      background: #050508;
+      background: #030306;
       color: #fff;
       font-family: sans-serif;
       min-height: 100vh;
@@ -19,18 +20,40 @@
       position: relative;
     }
 
-    /* -----------------------------------------
-       1. AMERICANA / TRALICCIO DISCOTECA (METALLO)
-    ----------------------------------------- */
+    /* --------------------------------------------------
+       AREA CENTRALE RISERVATA AL BBCODE DI XAT
+       (L'area è centrata e libera: pointer-events: none
+       evita qualunque interferenza con i controlli)
+    -------------------------------------------------- */
+    .radio-bbcode-slot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 760px;
+      height: 500px;
+      z-index: 20;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --------------------------------------------------
+       1. AMERICANA / TRALICCIO D'ACCIAIO SOLIDO 3D
+    -------------------------------------------------- */
     .disco-column {
       position: fixed;
       top: 0;
       bottom: 0;
-      width: 90px;
-      background: linear-gradient(90deg, #121318 0%, #2e3342 35%, #1c1e26 65%, #0f1015 100%);
-      border-left: 2px solid #4a5065;
-      border-right: 2px solid #4a5065;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.95), inset 0 0 12px rgba(0, 0, 0, 0.85);
+      width: 95px;
+      background: linear-gradient(90deg, #0e0f13 0%, #1c1d24 25%, #2a2d38 50%, #16171d 75%, #0a0b0e 100%);
+      border-left: 3px solid #363a46;
+      border-right: 3px solid #363a46;
+      box-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.95), 
+        20px 0 50px rgba(0, 0, 0, 0.8), 
+        inset 0 0 15px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -39,56 +62,107 @@
       pointer-events: none;
     }
 
-    /* Traliccio a tubi diagonali d'acciaio */
-    .disco-column::before {
-      content: '';
+    .column-left { left: 5px; }
+    .column-right { right: 5px; }
+
+    /* Tubolari diagonali in rilievo */
+    .truss-structure {
       position: absolute;
       inset: 0;
-      background: 
-        repeating-linear-gradient(55deg, transparent, transparent 22px, rgba(0, 0, 0, 0.7) 22px, rgba(0, 0, 0, 0.7) 28px),
-        repeating-linear-gradient(-55deg, transparent, transparent 22px, rgba(0, 0, 0, 0.7) 22px, rgba(0, 0, 0, 0.7) 28px);
-      opacity: 0.8;
       z-index: 1;
+      overflow: hidden;
     }
 
-    .column-left { left: 8px; }
-    .column-right { right: 8px; }
+    .truss-diagonal {
+      position: absolute;
+      width: 130px;
+      height: 10px;
+      background: linear-gradient(180deg, #444a5a 0%, #20222a 50%, #0c0d12 100%);
+      border: 1px solid #5a6276;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.15);
+    }
 
-    /* -----------------------------------------
-       CHICCA 1: VU-METER / EQUALIZZATORE NELLA COLONNA
-    ----------------------------------------- */
+    .truss-diagonal:nth-child(1) { top: 5%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(2) { top: 15%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(3) { top: 25%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(4) { top: 35%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(5) { top: 45%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(6) { top: 55%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(7) { top: 65%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(8) { top: 75%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(9) { top: 85%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(10) { top: 95%; left: -15px; transform: rotate(-35deg); }
+
+    /* Bulloni d'ancoraggio */
+    .truss-bolt {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle at 35% 35%, #99a2b5, #3a3d4a);
+      border-radius: 50%;
+      border: 1px solid #1a1b22;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+
+    .tb-1 { top: 2%; left: 6px; }   .tb-2 { top: 2%; right: 6px; }
+    .tb-3 { top: 24%; left: 6px; }  .tb-4 { top: 24%; right: 6px; }
+    .tb-5 { top: 49%; left: 6px; }  .tb-6 { top: 49%; right: 6px; }
+    .tb-7 { top: 74%; left: 6px; }  .tb-8 { top: 74%; right: 6px; }
+    .tb-9 { top: 96%; left: 6px; }  .tb-10 { top: 96%; right: 6px; }
+
+    /* Cablaggi di alimentazione */
+    .cables-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    .cable-line {
+      position: absolute;
+      width: 4px;
+      height: 100%;
+      background: #08080a;
+      border-radius: 2px;
+      box-shadow: inset -1px 0 2px rgba(255,255,255,0.1);
+    }
+    .cl-1 { left: 22px; filter: blur(0.5px); }
+    .cl-2 { right: 26px; transform: rotate(0.5deg); }
+
+    /* VU-Meter LED integrato nel metallo */
     .truss-eq {
       position: absolute;
       top: 15px;
       bottom: 15px;
       width: 6px;
-      background: #090a0d;
+      background: #06070a;
       border-radius: 4px;
       overflow: hidden;
       display: flex;
       flex-direction: column-reverse;
       gap: 3px;
       padding: 2px;
-      box-shadow: inset 0 0 4px #000;
-      z-index: 2;
+      box-shadow: inset 0 0 6px #000;
+      z-index: 5;
     }
 
-    .column-left .truss-eq { right: 6px; }
-    .column-right .truss-eq { left: 6px; }
+    .column-left .truss-eq { right: 10px; }
+    .column-right .truss-eq { left: 10px; }
 
     .eq-bar {
       width: 100%;
       height: 6px;
       border-radius: 1px;
-      opacity: 0.15;
+      opacity: 0.12;
       transition: opacity 0.08s ease;
     }
 
-    .eq-g { background: #00ff66; box-shadow: 0 0 6px #00ff66; }
-    .eq-y { background: #ffeb00; box-shadow: 0 0 6px #ffeb00; }
-    .eq-r { background: #ff0044; box-shadow: 0 0 8px #ff0044; }
+    .eq-g { background: #00ff66; box-shadow: 0 0 5px #00ff66; }
+    .eq-y { background: #ffeb00; box-shadow: 0 0 5px #ffeb00; }
+    .eq-r { background: #ff0044; box-shadow: 0 0 7px #ff0044; }
 
-    /* Animazione ritmo cassa audio per il VU-Meter */
     .column-left .truss-eq .eq-bar { animation: vuPulseLeft 0.75s infinite alternate ease-in-out; }
     .column-right .truss-eq .eq-bar { animation: vuPulseRight 0.65s infinite alternate ease-in-out; }
 
@@ -102,46 +176,44 @@
     .truss-eq .eq-bar:nth-child(8) { animation-delay: 0.61s; }
 
     @keyframes vuPulseLeft {
-      0%, 25% { opacity: 0.15; }
+      0%, 25% { opacity: 0.12; }
       55%, 100% { opacity: 1; }
     }
 
     @keyframes vuPulseRight {
-      0%, 35% { opacity: 0.15; }
+      0%, 35% { opacity: 0.12; }
       65%, 100% { opacity: 1; }
     }
 
-    /* -----------------------------------------
-       CHICCA 2: MOVING HEAD (TESTA MOBILE TONDA 3D)
-    ----------------------------------------- */
+    /* --------------------------------------------------
+       2. FARETTI TONDI 3D & FASCI LUMINOSI
+    -------------------------------------------------- */
     .moving-head {
       position: relative;
-      width: 54px;
-      height: 54px;
-      background: radial-gradient(circle at 35% 35%, #565d70, #161820 70%, #0a0b0e 100%);
+      width: 56px;
+      height: 56px;
+      background: radial-gradient(circle at 35% 35%, #5a6073, #1a1c24 70%, #090a0d 100%);
       border-radius: 50%;
-      border: 3px solid #282c38;
+      border: 3.5px solid #2e323e;
       box-shadow: 
-        0 6px 14px rgba(0, 0, 0, 0.9),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4),
-        inset 0 -3px 6px rgba(0, 0, 0, 0.8);
+        0 6px 14px rgba(0, 0, 0, 0.95),
+        inset 0 2px 4px rgba(255, 255, 255, 0.35),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 3;
+      z-index: 4;
     }
 
-    /* Forcella snodata in alluminio del faretto */
     .moving-head::before {
       content: '';
       position: absolute;
-      inset: -5px;
+      inset: -4px;
       border-radius: 50%;
-      border: 2px dashed rgba(255, 255, 255, 0.22);
+      border: 2px dashed rgba(255, 255, 255, 0.18);
       pointer-events: none;
     }
 
-    /* Lente ottica interna */
     .lens {
       position: relative;
       width: 28px;
@@ -151,32 +223,28 @@
       box-shadow: 0 0 20px currentColor, inset 0 0 9px currentColor;
     }
 
-    /* CHICCA 3: LENS FLARE / ALONE CONCENTRICO */
     .lens::after {
       content: '';
       position: absolute;
       inset: -8px;
       border-radius: 50%;
       border: 2px solid currentColor;
-      opacity: 0.6;
+      opacity: 0.55;
       animation: flareRing 1.3s infinite alternate ease-in-out;
     }
 
     @keyframes flareRing {
-      0% { transform: scale(0.85); opacity: 0.2; }
-      100% { transform: scale(1.3); opacity: 0.85; filter: blur(2px); }
+      0% { transform: scale(0.85); opacity: 0.15; }
+      100% { transform: scale(1.25); opacity: 0.8; filter: blur(1.5px); }
     }
 
-    /* -----------------------------------------
-       FASCI DI LUCE VOLUMETRICI
-    ----------------------------------------- */
     .beam {
       position: absolute;
       top: 50%;
-      height: 210px;
-      width: 530px;
+      height: 220px;
+      width: 540px;
       opacity: 0.85;
-      filter: blur(13px);
+      filter: blur(12px);
       mix-blend-mode: screen;
       pointer-events: none;
       z-index: 1;
@@ -196,7 +264,6 @@
       animation: sweepRight 1.6s infinite alternate ease-in-out;
     }
 
-    /* COLORI FARETTI */
     .c-pink { color: #ff0055; }
     .c-cyan { color: #00f0ff; }
     .c-yellow { color: #ffeb00; }
@@ -227,13 +294,13 @@
       100% { opacity: 0.25; transform: translateY(-50%) rotate(-16deg) scaleX(1.35); }
     }
 
-    /* -----------------------------------------
-       FUMO E RIFLESSO SUL FONDO
-    ----------------------------------------- */
+    /* --------------------------------------------------
+       3. FUMO SCENICO E PAVIMENTO RIFLETTENTE
+    -------------------------------------------------- */
     .fog-layer {
       position: fixed;
-      bottom: 0; left: -50%; width: 200%; height: 50vh;
-      background: radial-gradient(ellipse at 50% 100%, rgba(170, 180, 230, 0.35), transparent 75%);
+      bottom: 0; left: -50%; width: 200%; height: 48vh;
+      background: radial-gradient(ellipse at 50% 100%, rgba(150, 160, 220, 0.3), transparent 75%);
       filter: blur(40px);
       mix-blend-mode: screen;
       pointer-events: none;
@@ -242,8 +309,8 @@
     }
 
     @keyframes fogFloat {
-      0% { transform: translateX(-60px); }
-      100% { transform: translateX(60px); }
+      0% { transform: translateX(-50px); }
+      100% { transform: translateX(50px); }
     }
 
     .stage-floor {
@@ -254,7 +321,7 @@
       z-index: 2;
       pointer-events: none;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(to top, rgba(10, 11, 16, 0.98), transparent);
+      background: linear-gradient(to top, rgba(8, 9, 14, 0.99), transparent);
     }
 
     .floor-grid {
@@ -270,7 +337,7 @@
 
     .floor-glow {
       position: absolute; bottom: 0; width: 45%; height: 100%;
-      filter: blur(30px); mix-blend-mode: screen; opacity: 0.6;
+      filter: blur(30px); mix-blend-mode: screen; opacity: 0.65;
     }
     .glow-l { left: 0; background: radial-gradient(ellipse at bottom left, #00f0ff, transparent 75%); }
     .glow-r { right: 0; background: radial-gradient(ellipse at bottom right, #ff0055, transparent 75%); }
@@ -278,21 +345,29 @@
 </head>
 <body>
 
-  <!-- COLONNA SINISTRA -->
+  <!-- COLONNA AMERICANA SINISTRA -->
   <div class="disco-column column-left">
-    <!-- VU-METER A LED -->
+    <div class="truss-structure">
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+    </div>
+    <div class="truss-bolt tb-1"></div><div class="truss-bolt tb-2"></div>
+    <div class="truss-bolt tb-3"></div><div class="truss-bolt tb-4"></div>
+    <div class="truss-bolt tb-5"></div><div class="truss-bolt tb-6"></div>
+    <div class="truss-bolt tb-7"></div><div class="truss-bolt tb-8"></div>
+    <div class="truss-bolt tb-9"></div><div class="truss-bolt tb-10"></div>
+    <div class="cables-overlay"><div class="cable-line cl-1"></div><div class="cable-line cl-2"></div></div>
+    
     <div class="truss-eq">
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-y"></div>
-      <div class="eq-bar eq-y"></div>
-      <div class="eq-bar eq-r"></div>
-      <div class="eq-bar eq-r"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-y"></div><div class="eq-bar eq-y"></div>
+      <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
     </div>
 
-    <!-- FARETTI TONDI 3D -->
     <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-cyan"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
@@ -300,21 +375,29 @@
     <div class="moving-head c-green"><div class="lens"></div><div class="beam"></div></div>
   </div>
 
-  <!-- COLONNA DESTRA -->
+  <!-- COLONNA AMERICANA DESTRA -->
   <div class="disco-column column-right">
-    <!-- VU-METER A LED -->
+    <div class="truss-structure">
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+    </div>
+    <div class="truss-bolt tb-1"></div><div class="truss-bolt tb-2"></div>
+    <div class="truss-bolt tb-3"></div><div class="truss-bolt tb-4"></div>
+    <div class="truss-bolt tb-5"></div><div class="truss-bolt tb-6"></div>
+    <div class="truss-bolt tb-7"></div><div class="truss-bolt tb-8"></div>
+    <div class="truss-bolt tb-9"></div><div class="truss-bolt tb-10"></div>
+    <div class="cables-overlay"><div class="cable-line cl-1"></div><div class="cable-line cl-2"></div></div>
+    
     <div class="truss-eq">
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-g"></div>
-      <div class="eq-bar eq-y"></div>
-      <div class="eq-bar eq-y"></div>
-      <div class="eq-bar eq-r"></div>
-      <div class="eq-bar eq-r"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-y"></div><div class="eq-bar eq-y"></div>
+      <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
     </div>
 
-    <!-- FARETTI TONDI 3D -->
     <div class="moving-head c-purple"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
     <div class="moving-head c-green"><div class="lens"></div><div class="beam"></div></div>
@@ -322,13 +405,16 @@
     <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
   </div>
 
-  <!-- FUMO E PAVIMENTO -->
+  <!-- FUMO E PISTA -->
   <div class="fog-layer"></div>
   <div class="stage-floor">
     <div class="floor-grid"></div>
     <div class="floor-glow glow-l"></div>
     <div class="floor-glow glow-r"></div>
   </div>
+
+  <!-- AREA TRASPARENTE CENTRATA PER IL BBCODE -->
+  <div class="radio-bbcode-slot"></div>
 
 </body>
 </html>
