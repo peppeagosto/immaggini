@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Disco Stage con Toggle al Centro</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #030306;
+      color: #fff;
+      font-family: sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* --------------------------------------------------
+       TOGGLE SWITCH AL CENTRO ORIZZONTALE (ALTEZZA FARO VERDE)
+    -------------------------------------------------- */
+    #toggle-lights {
+      display: none;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 12, 16, 0.95);
+      border: 1.5px solid #00ff66;
+      border-radius: 20px;
+      padding: 5px 14px;
+      box-shadow: 0 0 14px rgba(0, 255, 102, 0.4), inset 0 0 8px rgba(0, 0, 0, 0.8);
+      user-select: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      color: #d0d7de;
+    }
+
+    .switch-btn {
+      position: relative;
+      width: 36px;
+      height: 18px;
+      background: #141720;
+      border: 1px solid #4a5468;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* PALLINO LED VERDE LAMPEGGIANTE (ON) */
+    .switch-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff66;
+      box-shadow: 0 0 8px #00ff66;
+      animation: blinkGreen 0.75s infinite alternate ease-in-out;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle-label::after {
+      content: 'ON';
+      color: #00ff66;
+      text-shadow: 0 0 8px #00ff66;
+    }
+
+    /* STATO OFF: BORDO ROSSO E LED ROSSO LAMPEGGIANTE */
+    #toggle-lights:checked ~ .toggle-container {
+      border-color: #ff0044;
+      box-shadow: 0 0 14px rgba(255, 0, 68, 0.45), inset 0 0 8px rgba(0, 0, 0, 0.8);
+    }
+
+    #toggle-lights:checked ~ .toggle-container .switch-btn::after {
+      transform: translateX(16px);
+      background: #ff0044;
+      box-shadow: 0 0 8px #ff0044;
+      animation: blinkRed 0.65s infinite alternate ease-in-out;
+    }
+
+    #toggle-lights:checked ~ .toggle-container .toggle-label::after {
+      content: 'OFF';
+      color: #ff0044;
+      text-shadow: 0 0 8px #ff0044;
+    }
+
+    /* ANIMAZIONI LAMPEGGIO LED */
+    @keyframes blinkGreen {
+      0% { opacity: 0.35; box-shadow: 0 0 3px #00ff66; }
+      100% { opacity: 1; box-shadow: 0 0 12px #00ff66, 0 0 20px #00ff66; }
+    }
+
+    @keyframes blinkRed {
+      0% { opacity: 0.3; box-shadow: 0 0 3px #ff0044; }
+      100% { opacity: 1; box-shadow: 0 0 12px #ff0044, 0 0 22px #ff0044; }
+    }
+
+    /* --------------------------------------------------
+       TRANSIZIONE E SCOMPARSA DELLE COLONNE
+    -------------------------------------------------- */
+    .disco-column {
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+    }
+
+    #toggle-lights:checked ~ .column-left {
+      transform: translateX(-160px);
+      opacity: 0;
+    }
+
+    #toggle-lights:checked ~ .column-right {
+      transform: translateX(160px);
+      opacity: 0;
+    }
+
+    /* --------------------------------------------------
+       AREA CENTRALE PER BBCODE
+    -------------------------------------------------- */
+    .radio-bbcode-slot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 760px;
+      height: 500px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* --------------------------------------------------
+       STRUTTURA COLONNE D'ACCIAIO 3D
+    -------------------------------------------------- */
+    .disco-column {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 95px;
+      background: linear-gradient(90deg, #0e0f13 0%, #1c1d24 25%, #2a2d38 50%, #16171d 75%, #0a0b0e 100%);
+      border-left: 3px solid #363a46;
+      border-right: 3px solid #363a46;
+      box-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.95), 
+        20px 0 50px rgba(0, 0, 0, 0.8), 
+        inset 0 0 15px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .column-left { left: 5px; }
+    .column-right { right: 5px; }
+
+    .truss-structure {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .truss-diagonal {
+      position: absolute;
+      width: 130px;
+      height: 10px;
+      background: linear-gradient(180deg, #444a5a 0%, #20222a 50%, #0c0d12 100%);
+      border: 1px solid #5a6276;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.15);
+    }
+
+    .truss-diagonal:nth-child(1) { top: 5%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(2) { top: 15%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(3) { top: 25%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(4) { top: 35%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(5) { top: 45%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(6) { top: 55%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(7) { top: 65%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(8) { top: 75%; left: -15px; transform: rotate(-35deg); }
+    .truss-diagonal:nth-child(9) { top: 85%; left: -15px; transform: rotate(35deg); }
+    .truss-diagonal:nth-child(10) { top: 95%; left: -15px; transform: rotate(-35deg); }
+
+    .truss-bolt {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle at 35% 35%, #99a2b5, #3a3d4a);
+      border-radius: 50%;
+      border: 1px solid #1a1b22;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+
+    .tb-1 { top: 2%; left: 6px; }   .tb-2 { top: 2%; right: 6px; }
+    .tb-3 { top: 24%; left: 6px; }  .tb-4 { top: 24%; right: 6px; }
+    .tb-5 { top: 49%; left: 6px; }  .tb-6 { top: 49%; right: 6px; }
+    .tb-7 { top: 74%; left: 6px; }  .tb-8 { top: 74%; right: 6px; }
+    .tb-9 { top: 96%; left: 6px; }  .tb-10 { top: 96%; right: 6px; }
+
+    .cables-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    .cable-line {
+      position: absolute;
+      width: 4px;
+      height: 100%;
+      background: #08080a;
+      border-radius: 2px;
+      box-shadow: inset -1px 0 2px rgba(255,255,255,0.1);
+    }
+    .cl-1 { left: 22px; filter: blur(0.5px); }
+    .cl-2 { right: 26px; transform: rotate(0.5deg); }
+
+    /* EQUALIZZATORE LED */
+    .truss-eq {
+      position: absolute;
+      top: 15px;
+      bottom: 15px;
+      width: 6px;
+      background: #06070a;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 3px;
+      padding: 2px;
+      box-shadow: inset 0 0 6px #000;
+      z-index: 5;
+    }
+
+    .column-left .truss-eq { right: 10px; }
+    .column-right .truss-eq { left: 10px; }
+
+    .eq-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 1px;
+      opacity: 0.12;
+      transition: opacity 0.08s ease;
+    }
+
+    .eq-g { background: #00ff66; box-shadow: 0 0 5px #00ff66; }
+    .eq-y { background: #ffeb00; box-shadow: 0 0 5px #ffeb00; }
+    .eq-r { background: #ff0044; box-shadow: 0 0 7px #ff0044; }
+
+    .column-left .truss-eq .eq-bar { animation: vuPulseLeft 0.75s infinite alternate ease-in-out; }
+    .column-right .truss-eq .eq-bar { animation: vuPulseRight 0.65s infinite alternate ease-in-out; }
+
+    .truss-eq .eq-bar:nth-child(1) { animation-delay: 0.05s; }
+    .truss-eq .eq-bar:nth-child(2) { animation-delay: 0.12s; }
+    .truss-eq .eq-bar:nth-child(3) { animation-delay: 0.18s; }
+    .truss-eq .eq-bar:nth-child(4) { animation-delay: 0.24s; }
+    .truss-eq .eq-bar:nth-child(5) { animation-delay: 0.31s; }
+    .truss-eq .eq-bar:nth-child(6) { animation-delay: 0.4s; }
+    .truss-eq .eq-bar:nth-child(7) { animation-delay: 0.52s; }
+    .truss-eq .eq-bar:nth-child(8) { animation-delay: 0.61s; }
+
+    @keyframes vuPulseLeft {
+      0%, 25% { opacity: 0.12; }
+      55%, 100% { opacity: 1; }
+    }
+
+    @keyframes vuPulseRight {
+      0%, 35% { opacity: 0.12; }
+      65%, 100% { opacity: 1; }
+    }
+
+    /* FARETTI 3D E FASCI */
+    .moving-head {
+      position: relative;
+      width: 56px;
+      height: 56px;
+      background: radial-gradient(circle at 35% 35%, #5a6073, #1a1c24 70%, #090a0d 100%);
+      border-radius: 50%;
+      border: 3.5px solid #2e323e;
+      box-shadow: 
+        0 6px 14px rgba(0, 0, 0, 0.95),
+        inset 0 2px 4px rgba(255, 255, 255, 0.35),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+    }
+
+    .moving-head::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+    }
+
+    .lens {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 20px currentColor, inset 0 0 9px currentColor;
+    }
+
+    .lens::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      opacity: 0.55;
+      animation: flareRing 1.3s infinite alternate ease-in-out;
+    }
+
+    @keyframes flareRing {
+      0% { transform: scale(0.85); opacity: 0.15; }
+      100% { transform: scale(1.25); opacity: 0.8; filter: blur(1.5px); }
+    }
+
+    .beam {
+      position: absolute;
+      top: 50%;
+      height: 220px;
+      width: 540px;
+      opacity: 0.85;
+      filter: blur(12px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .column-left .beam {
+      left: 100%;
+      transform-origin: left center;
+      clip-path: polygon(0 44%, 100% 0, 100% 100%, 0 56%);
+      animation: sweepLeft 1.5s infinite alternate ease-in-out;
+    }
+
+    .column-right .beam {
+      right: 100%;
+      transform-origin: right center;
+      clip-path: polygon(100% 44%, 0 0, 0 100%, 100% 56%);
+      animation: sweepRight 1.6s infinite alternate ease-in-out;
+    }
+
+    .c-pink { color: #ff0055; }
+    .c-cyan { color: #00f0ff; }
+    .c-yellow { color: #ffeb00; }
+    .c-purple { color: #b000ff; }
+    .c-green { color: #00ff66; }
+
+    .column-left .c-pink .beam { background: radial-gradient(ellipse at left, rgba(255, 0, 85, 0.95), transparent 75%); animation-delay: 0s; }
+    .column-left .c-cyan .beam { background: radial-gradient(ellipse at left, rgba(0, 240, 255, 0.95), transparent 75%); animation-delay: 0.3s; }
+    .column-left .c-yellow .beam { background: radial-gradient(ellipse at left, rgba(255, 235, 0, 0.95), transparent 75%); animation-delay: 0.6s; }
+    .column-left .c-purple .beam { background: radial-gradient(ellipse at left, rgba(176, 0, 255, 0.95), transparent 75%); animation-delay: 0.9s; }
+    .column-left .c-green .beam { background: radial-gradient(ellipse at left, rgba(0, 255, 102, 0.95), transparent 75%); animation-delay: 0.45s; }
+
+    .column-right .c-pink .beam { background: radial-gradient(ellipse at right, rgba(255, 0, 85, 0.95), transparent 75%); animation-delay: 0.2s; }
+    .column-right .c-cyan .beam { background: radial-gradient(ellipse at right, rgba(0, 240, 255, 0.95), transparent 75%); animation-delay: 0.5s; }
+    .column-right .c-yellow .beam { background: radial-gradient(ellipse at right, rgba(255, 235, 0, 0.95), transparent 75%); animation-delay: 0.8s; }
+    .column-right .c-purple .beam { background: radial-gradient(ellipse at right, rgba(176, 0, 255, 0.95), transparent 75%); animation-delay: 0.1s; }
+    .column-right .c-green .beam { background: radial-gradient(ellipse at right, rgba(0, 255, 102, 0.95), transparent 75%); animation-delay: 0.65s; }
+
+    @keyframes sweepLeft {
+      0% { opacity: 0.25; transform: translateY(-50%) rotate(-14deg) scaleX(0.75); }
+      50% { opacity: 1; }
+      100% { opacity: 0.35; transform: translateY(-50%) rotate(18deg) scaleX(1.3); }
+    }
+
+    @keyframes sweepRight {
+      0% { opacity: 0.3; transform: translateY(-50%) rotate(16deg) scaleX(0.75); }
+      50% { opacity: 1; }
+      100% { opacity: 0.25; transform: translateY(-50%) rotate(-16deg) scaleX(1.35); }
+    }
+
+    /* FUMO E PAVIMENTO */
+    .fog-layer {
+      position: fixed;
+      bottom: 0; left: -50%; width: 200%; height: 48vh;
+      background: radial-gradient(ellipse at 50% 100%, rgba(150, 160, 220, 0.3), transparent 75%);
+      filter: blur(40px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 4;
+      animation: fogFloat 12s infinite alternate ease-in-out;
+    }
+
+    @keyframes fogFloat {
+      0% { transform: translateX(-50px); }
+      100% { transform: translateX(50px); }
+    }
+
+    .stage-floor {
+      position: fixed;
+      bottom: 0; left: 0; right: 0; height: 35vh;
+      perspective: 350px;
+      overflow: hidden;
+      z-index: 2;
+      pointer-events: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(to top, rgba(8, 9, 14, 0.99), transparent);
+    }
+
+    .floor-grid {
+      position: absolute; width: 140%; left: -20%; bottom: 0; height: 120%;
+      transform: rotateX(65deg); transform-origin: bottom center;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(to top, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 60px 40px;
+      mask-image: linear-gradient(to top, black 20%, transparent 95%);
+      -webkit-mask-image: linear-gradient(to top, black 20%, transparent 95%);
+    }
+
+    .floor-glow {
+      position: absolute; bottom: 0; width: 45%; height: 100%;
+      filter: blur(30px); mix-blend-mode: screen; opacity: 0.65;
+    }
+    .glow-l { left: 0; background: radial-gradient(ellipse at bottom left, #00f0ff, transparent 75%); }
+    .glow-r { right: 0; background: radial-gradient(ellipse at bottom right, #ff0055, transparent 75%); }
+  </style>
+</head>
+<body>
+
+  <!-- CHECKBOX TOGGLE -->
+  <input type="checkbox" id="toggle-lights">
+
+  <!-- TOGGLE AL CENTRO DELLO SCHERMO -->
+  <div class="toggle-container">
+    <span class="toggle-label">LIGHTS: </span>
+    <label for="toggle-lights" class="switch-btn" title="Accendi/Spegni Colonne"></label>
+  </div>
+
+  <!-- COLONNA AMERICANA SINISTRA -->
+  <div class="disco-column column-left">
+    <div class="truss-structure">
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+    </div>
+    <div class="truss-bolt tb-1"></div><div class="truss-bolt tb-2"></div>
+    <div class="truss-bolt tb-3"></div><div class="truss-bolt tb-4"></div>
+    <div class="truss-bolt tb-5"></div><div class="truss-bolt tb-6"></div>
+    <div class="truss-bolt tb-7"></div><div class="truss-bolt tb-8"></div>
+    <div class="truss-bolt tb-9"></div><div class="truss-bolt tb-10"></div>
+    <div class="cables-overlay"><div class="cable-line cl-1"></div><div class="cable-line cl-2"></div></div>
+    
+    <div class="truss-eq">
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-y"></div><div class="eq-bar eq-y"></div>
+      <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
+    </div>
+
+    <!-- FARETTI -->
+    <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-cyan"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-purple"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-green"><div class="lens"></div><div class="beam"></div></div>
+  </div>
+
+  <!-- COLONNA AMERICANA DESTRA -->
+  <div class="disco-column column-right">
+    <div class="truss-structure">
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+      <div class="truss-diagonal"></div><div class="truss-diagonal"></div>
+    </div>
+    <div class="truss-bolt tb-1"></div><div class="truss-bolt tb-2"></div>
+    <div class="truss-bolt tb-3"></div><div class="truss-bolt tb-4"></div>
+    <div class="truss-bolt tb-5"></div><div class="truss-bolt tb-6"></div>
+    <div class="truss-bolt tb-7"></div><div class="truss-bolt tb-8"></div>
+    <div class="truss-bolt tb-9"></div><div class="truss-bolt tb-10"></div>
+    <div class="cables-overlay"><div class="cable-line cl-1"></div><div class="cable-line cl-2"></div></div>
+    
+    <div class="truss-eq">
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-g"></div><div class="eq-bar eq-g"></div>
+      <div class="eq-bar eq-y"></div><div class="eq-bar eq-y"></div>
+      <div class="eq-bar eq-r"></div><div class="eq-bar eq-r"></div>
+    </div>
+
+    <div class="moving-head c-purple"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-pink"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-green"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-cyan"><div class="lens"></div><div class="beam"></div></div>
+    <div class="moving-head c-yellow"><div class="lens"></div><div class="beam"></div></div>
+  </div>
+
+  <!-- FUMO E PISTA -->
+  <div class="fog-layer"></div>
+  <div class="stage-floor">
+    <div class="floor-grid"></div>
+    <div class="floor-glow glow-l"></div>
+    <div class="floor-glow glow-r"></div>
+  </div>
+
+  <!-- AREA CENTRALE TRASPARENTE PER BBCODE -->
+  <div class="radio-bbcode-slot"></div>
+
+</body>
+</html>
