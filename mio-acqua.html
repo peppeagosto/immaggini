@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio XAT 800px - WebGL Water Final</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
+    <style>
+        :root {
+            --neon-color: #00ffff;
+            --metal-gold: #ffd700;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* BOX PRINCIPALE 800x650 con la tua nuova immagine xatimg */
+        #xat-box {
+            width: 800px;
+            height: 650px;
+            background: url('https://xatimg.com/image/NZlQHiGVsxJF.png') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .panels-wrapper, .display-panel, .controls {
+            pointer-events: auto;
+        }
+
+        .panels-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            transform: scale(0.85);
+            margin-top: -30px;
+            margin-bottom: -15px;
+        }
+
+        .side-panels {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .light-box {
+            width: 220px;
+            height: 220px;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.5);
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            transition: all 0.5s;
+        }
+        .light-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+        }
+        .corona-frame-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+        }
+        .info-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 10px;
+            width: 80%;
+        }
+        .info-content.visible { opacity: 1; }
+        .rainbow-text {
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowMove 3s linear infinite;
+            font-weight: bold;
+        }
+        @keyframes rainbowMove { 100% { background-position: 200% center; } }
+
+        .main-altar {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            border: 3px solid rgba(0, 255, 255, 0.4);
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .main-altar.neon-boom-active {
+            box-shadow: 0 0 50px var(--neon-color);
+            border-color: var(--neon-color);
+        }
+        #corona-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+        }
+        #mainCover {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            object-fit: cover;
+            z-index: 1;
+            animation: spin 10s linear infinite;
+            animation-play-state: paused;
+            border: 4px solid #111;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .sculpted-frame {
+            border-radius: 50%;
+            transition: transform 0.5s;
+        }
+        .vinyl-mode {
+            animation: spin 5s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .display-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        #track-text {
+            font-size: 1.2em;
+            color: var(--neon-color);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #music-time {
+            font-family: monospace;
+            font-size: 1.5em;
+            color: white;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            padding: 15px 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+        button {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--neon-color);
+            color: var(--neon-color);
+        }
+        #vinylBtn { color: var(--metal-gold); }
+        input[type="range"] {
+            width: 100px;
+            accent-color: var(--neon-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="xat-box">
+        
+        <div class="content-layer">
+            <div class="panels-wrapper">
+                <div class="side-panels">
+                    <div class="light-box sculpted-frame">
+                        <canvas class="corona-frame-canvas" width="220" height="220"></canvas>
+                        <div class="info-content"></div>
+                    </div>
+                    <div class="light-box sculpted-frame">
+                        <canvas class="corona-frame-canvas" width="220" height="220"></canvas>
+                        <div class="info-content"></div>
+                    </div>
+                </div>
+
+                <div class="main-altar">
+                    <canvas id="corona-canvas" width="400" height="400"></canvas>
+                    <img id="mainCover" src="https://xatimg.com/image/Fd6W0krgBFas.png" alt="Cover">
+                </div>
+
+                <div class="side-panels">
+                    <div class="light-box sculpted-frame">
+                        <canvas class="corona-frame-canvas" width="220" height="220"></canvas>
+                        <div class="info-content"></div>
+                    </div>
+                    <div class="light-box sculpted-frame">
+                        <canvas class="corona-frame-canvas" width="220" height="220"></canvas>
+                        <div class="info-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="display-panel">
+                <div id="track-text">SISTEMA FERMO</div>
+                <div id="music-time">00:00</div>
+            </div>
+
+            <div class="controls">
+                <button id="exeBtn">PLAY</button>
+                <button id="vinylBtn">VINYL</button>
+                <button id="boomBtn">BOOM</button>
+                <button id="stopBtn">STOP</button>
+                <input type="range" id="volRange" min="0" max="1" step="0.01" value="1">
+            </div>
+            
+            <audio id="audio" crossorigin="anonymous"></audio>
+        </div>
+    </div>
+
+    <!-- SCRIPT ACQUA WEBGL -->
+    <script>
+        $(document).ready(function() {
+            try {
+                // crossOrigin: 'anonymous' fondamentale per le immagini esterne
+                $('#xat-box').ripples({
+                    resolution: 512,
+                    dropRadius: 20,
+                    perturbance: 0.04,
+                    interactive: true,
+                    crossOrigin: 'anonymous'
+                });
+
+                setInterval(function() {
+                    var $el =$('#xat-box');
+                    var x = Math.random() * $el.outerWidth();
+                    var y = Math.random() * $el.outerHeight();
+                    var dropRadius = 20;
+                    var strength = 0.04 + Math.random() * 0.04;
+                    $el.ripples('drop', x, y, dropRadius, strength);
+                }, 400);
+
+            } catch (e) {
+                console.error("Errore WebGL Ripples: ", e);
+            }
+        });
+
+        // --- SCRIPT RADIO ---
+        const audio=document.getElementById("audio"), 
+              exeBtn=document.getElementById("exeBtn"), 
+              boomBtn=document.getElementById("boomBtn"), 
+              stopBtn=document.getElementById("stopBtn"), 
+              vinylBtn=document.getElementById("vinylBtn"), 
+              mainCover=document.getElementById("mainCover"), 
+              coronaCanvas=document.getElementById("corona-canvas"), 
+              ctxC=coronaCanvas.getContext("2d");
+        const frameCanvases = document.querySelectorAll('.corona-frame-canvas');
+        const frameCtxs = Array.from(frameCanvases).map(c => c.getContext("2d"));
+
+        const infernalPhotos = ["https://xatimg.com/image/B5CL1z1wMVWd.png", "https://xatimg.com/image/2VoO05FyWAKI.png", "https://xatimg.com/image/2fi0CWlsVy0a.png", "https://xatimg.com/image/7Lqw99TaNqoz.png", "https://xatimg.com/image/nTVj39YdWKIP.png", "https://xatimg.com/image/ROZhqLn39pKb.jpg", "https://xatimg.com/image/TgklcM2jZJEk.jpg", "https://xatimg.com/image/MlY3RmB2QWgU.png", "https://xatimg.com/image/XzTOUFUQMvkJ.png", "https://xatimg.com/image/6DvBwHp3AK6v.jpg", "https://xatimg.com/image/B5CL1z1wMVWd.png", "https://xatimg.com/image/2VoO05FyWAKI.png"];
+        const boomColors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#00ffff", "#ff00ff", "#ffffff", "#ff8800", "#88ff00", "#00ffaa"];
+        
+        let audioCtx, analyser, dataArray, isPlaying=false, isBoom=false, isVinyl=false, angleCorona=0, stepCounter=0, boomIdx=0, currentSong = "", boomTimer;
+        let geoData={city:"TURIN", ip:"0.0.0.0", sign:"...", date:"..."};
+        audio.src = "https://stm2.srvif.com:7198/stream";
+
+        function getiTunesCover(songName) {    
+            let query = encodeURIComponent(songName.replace(/-/g, ' '));    
+            $.ajax({        
+                url: `https://itunes.apple.com/search?term=${query}&media=music&limit=1`,        
+                dataType: 'jsonp',        
+                success: function(data) {            
+                    if(data.results.length > 0) {                
+                        let img = data.results[0].artworkUrl100.replace('100x100', '400x400');                
+                        mainCover.src = img;            
+                    } else {                
+                        mainCover.src = "https://xatimg.com/image/Fd6W0krgBFas.png";            
+                    }        
+                }    
+            });
+        }
+
+        function updateStats() {    
+            $.getJSON('https://streaming.ifantasy.com.br/api-json/NzE5OCsw', function(data) {        
+                if(data && data.musica_atual) {            
+                    let song = data.musica_atual.toUpperCase();            
+                    if(song !== currentSong) {                
+                        currentSong = song;                
+                        document.getElementById("track-text").innerText = song;                
+                        getiTunesCover(song);            
+                    }        
+                }    
+            });
+        }
+
+        function runCycle() {    
+            const frames = document.querySelectorAll('.light-box');    
+            if (!isPlaying) return;        
+            if (stepCounter >= 3) {         
+                frames.forEach((f, idx) => {            
+                    const content = f.querySelector('.info-content');            
+                    const d = new Date(); 
+                    geoData.date = d.toLocaleDateString('it-IT', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();            
+                    if (idx == 0) content.innerHTML=`<div class="label" style="color:var(--neon-color)">Meteo</div><div class="data rainbow-text">${geoData.city}</div>`;            
+                    else if (idx == 1) content.innerHTML=`<div class="label" style="color:var(--neon-color)">IP</div><div class="data rainbow-text">${geoData.ip}</div>`;            
+                    else if (idx == 2) content.innerHTML=`<div class="label" style="color:var(--neon-color)">Oroscopo</div><div class="data rainbow-text">${geoData.sign}</div>`;            
+                    else content.innerHTML=`<div class="label" style="color:var(--neon-color)">Datario</div><div class="data rainbow-text">${geoData.date}</div>`;            
+                    content.classList.add('visible');        
+                });        
+                setTimeout(() => { frames.forEach(f => f.querySelector('.info-content').classList.remove('visible')); stepCounter = 0; }, 4000);    
+            } else {        
+                frames.forEach((f, idx) => {             
+                    f.style.backgroundImage = `url('${infernalPhotos[(stepCounter * 4) + idx]}')`;         
+                });        
+                stepCounter++;    
+            }
+        }
+
+        function initAnalyzer() {    
+            if(!audioCtx) {        
+                audioCtx=new(window.AudioContext||window.webkitAudioContext)(); 
+                analyser=audioCtx.createAnalyser();        
+                const src=audioCtx.createMediaElementSource(audio); 
+                src.connect(analyser); 
+                analyser.connect(audioCtx.destination);        
+                analyser.fftSize=128; 
+                dataArray=new Uint8Array(analyser.frequencyBinCount);    
+            }
+        }
+
+        exeBtn.onclick=()=>{    
+            initAnalyzer();    
+            if(audio.paused){         
+                audio.play().then(() => {            
+                    isPlaying=true;             
+                    exeBtn.innerText="CLOSE";             
+                    mainCover.style.animationPlayState="running";             
+                    if(isVinyl) $('.sculpted-frame').css('animation-play-state', 'running');            
+                    drawCorona();         
+                }).catch(e => {             
+                    console.log("Play bloccato:", e);            
+                    isPlaying=true;            
+                    exeBtn.innerText="CLOSE";            
+                    mainCover.style.animationPlayState="running";            
+                    $('.sculpted-frame').css('animation-play-state', 'running');            
+                    drawCorona();        
+                });    
+            } else {         
+                audio.pause();         
+                isPlaying=false;         
+                exeBtn.innerText="PLAY";         
+                mainCover.style.animationPlayState="paused";         
+                $('.sculpted-frame').css('animation-play-state', 'paused');    
+            }
+        };
+
+        vinylBtn.onclick=()=>{    
+            isVinyl = !isVinyl;    
+            $('.sculpted-frame').toggleClass('vinyl-mode', isVinyl);    
+            if(isVinyl && isPlaying) {        
+                $('.sculpted-frame').css('animation-play-state', 'running');    
+            } else if(isVinyl) {        
+                $('.sculpted-frame').css('animation-play-state', 'paused');    
+            }    
+            vinylBtn.style.color = isVinyl ? "var(--neon-color)" : "var(--metal-gold)";
+        };
+
+        boomBtn.onclick=()=>{    
+            isBoom = !isBoom;    
+            if(isBoom){         
+                $('.sculpted-frame, .main-altar').addClass('neon-boom-active');        
+                boomTimer = setInterval(() => {            
+                    boomIdx = (boomIdx + 1) % boomColors.length;            
+                    document.documentElement.style.setProperty('--neon-color', boomColors[boomIdx]);        
+                }, 400);    
+            } else {         
+                clearInterval(boomTimer);        
+                $('.sculpted-frame, .main-altar').removeClass('neon-boom-active');        
+                document.documentElement.style.setProperty('--neon-color', "#00ffff");    
+            }
+        };
+
+        stopBtn.onclick=()=>{    
+            audio.pause(); 
+            audio.currentTime = 0; 
+            isPlaying = false;     
+            if(isBoom) boomBtn.click();    
+            if(isVinyl) vinylBtn.click();    
+            exeBtn.innerText="PLAY"; 
+            mainCover.style.animationPlayState="paused";    
+            $('.sculpted-frame').css('animation-play-state', 'paused');    
+            document.getElementById("track-text").innerText = "SISTEMA FERMO";
+        };
+
+        document.getElementById('volRange').oninput=(e)=>{ audio.volume=e.target.value; };
+        
+        audio.ontimeupdate=()=>{ 
+            let min=Math.floor(audio.currentTime/60), sec=Math.floor(audio.currentTime%60); 
+            document.getElementById("music-time").innerText=`${min<10?'0'+min:min}:${sec<10?'0'+sec:sec}`; 
+        };
+
+        function drawCorona() {    
+            if(!isPlaying) return; 
+            requestAnimationFrame(drawCorona); 
+            analyser.getByteFrequencyData(dataArray);    
+            let power = (dataArray[10] * 1.2 + dataArray[20] * 1.5) / 2;    
+            let jump = (power / 255) * 50;         
+            
+            ctxC.clearRect(0,0,400,400);    
+            for(let i=0; i<16; i++) {        
+                let currentAngle=angleCorona+(i*(Math.PI*2/16));        
+                let radius=110 + (jump * 0.7);        
+                let x=200+Math.cos(currentAngle)*radius, y=200+Math.sin(currentAngle)*radius;        
+                ctxC.beginPath(); 
+                ctxC.arc(x,y, 2.2 + (jump * 0.2), 0, Math.PI*2);        
+                ctxC.fillStyle=`hsl(${(i*22)+(angleCorona*50)}, 100%, 50%)`;        
+                ctxC.shadowBlur=6 + jump; 
+                ctxC.shadowColor=ctxC.fillStyle; 
+                ctxC.fill();    
+            }
+
+            if(isVinyl) {        
+                frameCtxs.forEach(ctx => {            
+                    ctx.clearRect(0, 0, 220, 220);            
+                    for(let i=0; i<16; i++) {                
+                        let currentAngle = angleCorona + (i * (Math.PI * 2 / 16));                
+                        let radius = 72 + (jump * 0.5);                
+                        let x = 110 + Math.cos(currentAngle) * radius;                
+                        let y = 110 + Math.sin(currentAngle) * radius;                
+                        ctx.beginPath(); 
+                        ctx.arc(x, y, 1.8 + (jump * 0.1), 0, Math.PI * 2);                
+                        ctx.fillStyle = `hsl(${(i * 22.5) + (angleCorona * 50)}, 100%, 50%)`;                
+                        ctx.shadowBlur = 4 + jump; 
+                        ctx.shadowColor = ctx.fillStyle; 
+                        ctx.fill();            
+                    }        
+                });    
+            }
+
+            angleCorona += 0.02;
+        }
+
+        setInterval(runCycle, 4500); 
+        setInterval(updateStats, 10000); 
+        updateStats();
+
+        (function init(){    
+            $.getJSON("https://ipapi.co/json/", d=>{ 
+                geoData.city=d.city?d.city.toUpperCase():"TURIN"; 
+                geoData.ip=d.ip||"0.0.0.0"; 
+            });    
+            const d = new Date();    
+            const signs = [{n:"CAPRICORNO", m:1, d:20}, {n:"ACQUARIO", m:2, d:19}, {n:"PESCI", m:3, d:20}, {n:"ARIETE", m:4, d:20}, {n:"TORO", m:5, d:20}, {n:"GEMELLI", m:6, d:21}, {n:"CANCRO", m:7, d:22}, {n:"LEONE", m:8, d:23}, {n:"VERGINE", m:9, d:22}, {n:"BILANCIA", m:10, d:22}, {n:"SCORPIONE", m:11, d:22}, {n:"SAGITTARIO", m:12, d:21}];    
+            geoData.sign = (signs.find(s => (d.getMonth()+1 < s.m || (d.getMonth()+1 === s.m && d.getDate() <= s.d))) || signs[0]).n;
+        })();
+    </script>
+</body>
+</html>
