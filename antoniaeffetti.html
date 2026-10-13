@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EL CARTAIO</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Azzurro ghiaccio/cielo ultra chiaro e brillante */
+    background: radial-gradient(circle at 50% 30%, #f0f9ff 0%, #d4eeff 40%, #b8e2fb 75%, #9fd2f3 100%);
+}
+
+/* LAYER LUCCICHII E CHICCHE LUMINOSE */
+.sparkles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* STELLA BRILLANTE A 4 PUNTE (SPARKLE DIAMANTE) */
+.sparkle {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle, #ffffff 30%, rgba(255, 255, 255, 0.9) 60%, transparent 75%);
+    clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+    filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 14px #00f2fe) drop-shadow(0 0 20px #e0f2fe);
+    animation: shine-diamond 2.8s infinite ease-in-out;
+}
+
+/* PARTICELLE TONDE TURCHESE / BIANCO SCINTILLANTI */
+.glow-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 10px #ffffff, 0 0 18px #00f2fe, 0 0 25px #00b4d8;
+    animation: float-glow 3.5s infinite ease-in-out alternate;
+}
+
+/* POSIZIONAMENTO CHICCHE LUCIDE */
+.s1  { top: 10%; left: 22%; animation-delay: 0s; transform: scale(1.1); }
+.s2  { top: 22%; left: 48%; animation-delay: 0.6s; transform: scale(1.6); }
+.s3  { top: 14%; left: 74%; animation-delay: 1.2s; transform: scale(1.3); }
+.s4  { top: 38%; left: 32%; animation-delay: 1.8s; transform: scale(0.9); }
+.s5  { top: 48%; left: 66%; animation-delay: 0.3s; transform: scale(1.5); }
+.s6  { top: 72%; left: 24%; animation-delay: 1.5s; transform: scale(1.2); }
+.s7  { top: 82%; left: 50%; animation-delay: 2.1s; transform: scale(1.0); }
+.s8  { top: 70%; left: 78%; animation-delay: 0.9s; transform: scale(1.7); }
+.s9  { top: 32%; left: 88%; animation-delay: 2.4s; transform: scale(1.1); }
+.s10 { top: 58%; left: 14%; animation-delay: 0.5s; transform: scale(1.4); }
+.s11 { top: 6%;  left: 58%; animation-delay: 1.7s; transform: scale(1.2); }
+.s12 { top: 88%; left: 36%; animation-delay: 1.1s; transform: scale(1.3); }
+.s13 { top: 44%; left: 52%; animation-delay: 2.7s; transform: scale(1.8); }
+
+/* PUNTINI LUMINOSI EXTRA */
+.g1 { width: 5px; height: 5px; top: 18%; left: 38%; animation-delay: 0.2s; }
+.g2 { width: 7px; height: 7px; top: 28%; left: 60%; animation-delay: 1.4s; }
+.g3 { width: 6px; height: 6px; top: 62%; left: 42%; animation-delay: 0.8s; }
+.g4 { width: 4px; height: 4px; top: 78%; left: 68%; animation-delay: 2.2s; }
+.g5 { width: 8px; height: 8px; top: 52%; left: 20%; animation-delay: 1.9s; }
+.g6 { width: 5px; height: 5px; top: 84%; left: 84%; animation-delay: 0.5s; }
+
+@keyframes shine-diamond {
+    0%   { transform: scale(0.1) rotate(0deg); opacity: 0.05; }
+    50%  { transform: scale(1.35) rotate(45deg); opacity: 1; }
+    100% { transform: scale(0.1) rotate(90deg); opacity: 0.05; }
+}
+
+@keyframes float-glow {
+    0%   { transform: translateY(0px) scale(0.7); opacity: 0.3; }
+    50%  { transform: translateY(-8px) scale(1.3); opacity: 1; }
+    100% { transform: translateY(0px) scale(0.7); opacity: 0.3; }
+}
+
+/* CONTENITORI BOX CON GLOW TURCHESE */
+.box-img {
+    position: fixed;
+    width: 240px;
+    height: 520px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 14px;
+    border: 2px solid #00f2fe;
+    box-shadow: 0 0 15px #00f2fe, 0 0 35px #00c4df, 0 0 60px rgba(0, 242, 254, 0.4);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+/* POSIZIONE */
+.box-left { left: 10px; }
+.box-right { right: 10px; }
+
+/* IMMAGINI */
+.box-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* TESTO CON OMBRA TURCHESE */
+.img-text {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 6px #fff, 0 0 12px #00f2fe, 0 0 20px #0096c7;
+    pointer-events: none;
+    animation: wave 3s ease-in-out infinite;
+}
+
+/* ANIMAZIONE ONDA */
+@keyframes wave {
+    0%   { transform: translateY(0) rotate(0deg); }
+    25%  { transform: translateY(-4px) rotate(-1deg); }
+    50%  { transform: translateY(0) rotate(0deg); }
+    75%  { transform: translateY(4px) rotate(1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- CHICCHE LUCIDE & LUCCICHII -->
+<div class="sparkles-container">
+    <div class="sparkle s1"></div>
+    <div class="sparkle s2"></div>
+    <div class="sparkle s3"></div>
+    <div class="sparkle s4"></div>
+    <div class="sparkle s5"></div>
+    <div class="sparkle s6"></div>
+    <div class="sparkle s7"></div>
+    <div class="sparkle s8"></div>
+    <div class="sparkle s9"></div>
+    <div class="sparkle s10"></div>
+    <div class="sparkle s11"></div>
+    <div class="sparkle s12"></div>
+    <div class="sparkle s13"></div>
+
+    <div class="glow-dot g1"></div>
+    <div class="glow-dot g2"></div>
+    <div class="glow-dot g3"></div>
+    <div class="glow-dot g4"></div>
+    <div class="glow-dot g5"></div>
+    <div class="glow-dot g6"></div>
+</div>
+
+<!-- BOX SINISTRO (Antonia) -->
+<div class="box-img box-left">
+    <img src="https://xatimg.com/image/SAsHphNMESPA.jpg" alt="Antonia">
+    <div class="img-text">Antonia</div>
+</div>
+
+<!-- BOX DESTRO (Radio Zano) -->
+<div class="box-img box-right">
+    <img src="https://xatimg.com/image/vIui5MFncQcN.jpg" alt="Radio Zano">
+    <div class="img-text">Radio Zano</div>
+</div>
+
+</body>
+</html>
