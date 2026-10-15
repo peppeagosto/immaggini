@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl@2.29.0/dist/globe.gl.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
     body {
       margin: 0;
       background: #0a0a1a;
@@ -123,7 +124,6 @@
       color: #00ffaa;
       font-size: 13px;
     }
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
   </style>
 </head>
 <body>
@@ -137,12 +137,17 @@
   </div>
 
   <script>
-    // CONFIG FIREBASE
+    // CONFIG FIREBASE AGGIORNATA
     const firebaseConfig = {
-      apiKey: "AIzaSyB15gRwPXe7Pl6KLEhyacg0-ep5pOr2Qu8",
-      authDomain: "your-project.firebaseapp.com",
-      projectId: "your-project",
+      apiKey: "AIzaSyCzW6ylN9PALpgS2RB8b_Pp9KS-y9aLcd8",
+      authDomain: "globo-liberty-2026.firebaseapp.com",
+      projectId: "globo-liberty-2026",
+      storageBucket: "globo-liberty-2026.firebasestorage.app",
+      messagingSenderId: "540262363609",
+      appId: "1:540262363609:web:aa40db96c937ed2cd6e9c8",
+      measurementId: "G-PNZ4YZKK5D"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
@@ -155,10 +160,9 @@
       .pointsMerge(true)
       (document.getElementById('globe-container'));
 
-    // *** AGGIUNTA ROTAZIONE AUTOMATICA ***
+    // Rotazione automatica
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.3;
-    // ***************************************
 
     function getScreenPosition(lat, lng) {
       const phi = (90 - lat) * (Math.PI / 180);
@@ -177,9 +181,9 @@
       };
     }
 
-    function formatTimestamp() {
-      const now = new Date();
-      return now.toLocaleTimeString('it-IT', { hour12: false });
+    function formatTimestamp(ts) {
+      const date = ts ? new Date(ts) : new Date();
+      return date.toLocaleTimeString('it-IT', { hour12: false });
     }
 
     async function saveVisitor(city, region, country, lat, lon) {
@@ -195,6 +199,9 @@
     }
 
     async function loadVisitors() {
+      // Pulisce le vecchie etichette per evitare duplicati grafici
+      document.querySelectorAll('.label').forEach(el => el.remove());
+
       const snapshot = await db.collection("visitatori")
         .orderBy("timestamp", "desc")
         .limit(100)
@@ -210,7 +217,6 @@
         const v = doc.data();
         const key = `${v.city}|${v.region}|${v.country}`;
 
-        // Conta visite per città
         if (!visitePerCitta[key]) {
           visitePerCitta[key] = {
             city: v.city,
@@ -223,22 +229,19 @@
         }
         visitePerCitta[key].count++;
 
-        // Label sul globo
         const label = document.createElement("div");
         label.className = "label";
         label.textContent = `${v.city}, ${v.region}`;
         document.body.appendChild(label);
 
-        // Lista singola visita
         const li = document.createElement("li");
-        li.innerHTML = `${v.city}, ${v.region} <span class="timestamp">${formatTimestamp()}</span>`;
+        li.innerHTML = `${v.city}, ${v.region} <span class="timestamp">${formatTimestamp(v.timestamp)}</span>`;
         ul.appendChild(li);
 
         data.push({ lat: v.lat, lng: v.lon });
         updateLabel(label, v.lat, v.lon);
       });
 
-      // Mostra riepilogo visite per città sotto lista
       const riepilogoDiv = document.getElementById("riepilogo-visite");
       let riepilogoTesto = "Visite totali per città:<br>";
       for (const key in visitePerCitta) {
@@ -271,7 +274,7 @@
         const res = await fetch('https://ipinfo.io/json?token=b36581ef70cb35');
         if (!res.ok) throw new Error(`Errore API: ${res.status}`);
         const data = await res.json();
-        const [lat, lon] = data.loc ? data.loc.split(',') : [41.9, 12.5]; // fallback Roma
+        const [lat, lon] = data.loc ? data.loc.split(',') : [41.9, 12.5];
         const city = data.city || 'Sconosciuto';
         const region = data.region || '';
         const country = data.country || 'IT';
@@ -283,7 +286,7 @@
     }
 
     getVisitorLocation();
-    setInterval(loadVisitors, 10000); // aggiorna ogni 10 sec
+    setInterval(loadVisitors, 10000);
 
     function updateDateTime() {
       const now = new Date();
