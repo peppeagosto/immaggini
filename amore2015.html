@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMORE2015 - Water Effect</title>
+  <!-- jQuery e jquery.ripples WebGL -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cyan: #00f0ff;
+      --turquoise: #00d2d3;
+      --dark-blue: #020814;
+      --bg: #05070d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+    }
+
+    /* FORMATO STRISCIA / BANNER SLIM (960x220) */
+    .banner-wrapper {
+      position: relative;
+      width: 960px;
+      max-width: 95vw;
+      height: 220px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 50% 50%, #081122 0%, #03060d 75%, #010307 100%);
+      box-shadow: 
+        0 0 45px rgba(0, 240, 255, 0.22),
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        inset 0 0 25px rgba(0, 240, 255, 0.15);
+      border: 1.5px solid rgba(0, 240, 255, 0.4);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* Angoli Cyberpunk */
+    .corner-acc {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--cyan);
+      border-style: solid;
+      pointer-events: none;
+      z-index: 30;
+      filter: drop-shadow(0 0 6px var(--cyan));
+    }
+    .corner-tl { top: 9px; left: 9px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 9px; right: 9px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 9px; left: 9px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 9px; right: 9px; border-width: 0 2px 2px 0; }
+
+    /* Griglia cyber di sfondo */
+    .cyber-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+      background-size: 22px 22px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Glow orizzontale */
+    .center-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 780px;
+      height: 130px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(0, 210, 211, 0.08) 60%, transparent 80%);
+      filter: blur(30px);
+      pointer-events: none;
+      z-index: 2;
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
+      100% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    #textTextureCanvas {
+      display: none;
+    }
+
+    #waterContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .status-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: rgba(0, 240, 255, 0.85);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+      z-index: 25;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #00f0ff;
+      box-shadow: 0 0 8px #00f0ff;
+      animation: blinkDot 1.4s infinite alternate;
+    }
+
+    @keyframes blinkDot {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner-wrapper">
+    <div class="corner-acc corner-tl"></div>
+    <div class="corner-acc corner-tr"></div>
+    <div class="corner-acc corner-bl"></div>
+    <div class="corner-acc corner-br"></div>
+
+    <div class="cyber-grid"></div>
+    <div class="center-glow"></div>
+
+    <canvas id="textTextureCanvas" width="1920" height="440"></canvas>
+    <div id="waterContainer"></div>
+
+    <div class="status-tag">
+      <span class="status-dot"></span>
+      ★ MATRIX WAVE ★ AMORE2015 ★
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      function generateTextTexture() {
+        const canvas = document.getElementById('textTextureCanvas');
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Fondo scuro
+        const bgGrad = ctx.createRadialGradient(w / 2, h / 2, 80, w / 2, h / 2, w / 1.6);
+        bgGrad.addColorStop(0, '#0a1628');
+        bgGrad.addColorStop(0.65, '#050a14');
+        bgGrad.addColorStop(1, '#02040a');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Scanlines
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.025)';
+        for (let y = 0; y < h; y += 7) {
+          ctx.fillRect(0, y, w, 3);
+        }
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // ---------------- TESTO UNICO "AMORE2015" ----------------
+        ctx.font = '900 145px "Orbitron", sans-serif';
+
+        // Bagliore esterno profondo
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 45;
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.55)';
+        ctx.strokeText('AMORE2015', w / 2, h / 2);
+
+        // Tratto nitido
+        ctx.shadowBlur = 15;
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#00f0ff';
+        ctx.strokeText('AMORE2015', w / 2, h / 2);
+
+        // Gradiente metallico / ciano
+        const grad = ctx.createLinearGradient(0, h / 2 - 80, 0, h / 2 + 80);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.35, '#caffff');
+        grad.addColorStop(0.55, '#00f0ff');
+        grad.addColorStop(1, '#00788f');
+        ctx.fillStyle = grad;
+        ctx.shadowBlur = 0;
+        ctx.fillText('AMORE2015', w / 2, h / 2);
+
+        return canvas.toDataURL('image/png');
+      }
+
+      function initWaterBanner() {
+        const textureUrl = generateTextTexture();
+        const $water = $('#waterContainer');
+
+        $water.css('background-image', 'url(' + textureUrl + ')');
+
+        try {
+          $water.ripples({
+            resolution: 512,
+            dropRadius: 20,
+            perturbance: 0.04,
+            interactive: true,
+            crossOrigin: ''
+          });
+
+          setInterval(function() {
+            const w = $water.outerWidth();
+            const h = $water.outerHeight();
+            if (w > 0 && h > 0) {
+              const x = Math.random() * w;
+              const y = Math.random() * h;
+              const radius = 14 + Math.random() * 10;
+              const strength = 0.03 + Math.random() * 0.035;
+              $water.ripples('drop', x, y, radius, strength);
+            }
+          }, 450);
+
+        } catch (err) {
+          console.warn("WebGL Ripples non supportato:", err);
+        }
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(initWaterBanner);
+      } else {
+        setTimeout(initWaterBanner, 300);
+      }
+
+      $('#waterContainer').on('click', function(e) {
+        const offset = $(this).offset();
+        const x = e.pageX - offset.left;
+        const y = e.pageY - offset.top;
+        $(this).ripples('drop', x, y, 26, 0.075);
+      });
+    });
+  </script>
+</body>
+</html>
