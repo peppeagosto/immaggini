@@ -43,7 +43,7 @@
       position: relative;
     }
 
-    /* SFONDO MATRIX RAIN */
+    /* MATRIX RAIN SFONDO */
     #matrix-canvas {
       position: fixed;
       top: 0;
@@ -55,7 +55,7 @@
       opacity: 0.18;
     }
 
-    /* EFFETTO SCANLINE VINTAGE MONITOR */
+    /* CRT SCANLINES */
     .scanlines-overlay {
       position: fixed;
       inset: 0;
@@ -163,7 +163,7 @@
       100% { transform: translateX(-100%); }
     }
 
-    /* GRIGLIA A 3 RACK CYBERPUNK */
+    /* GRIGLIA A 3 RACK */
     .mainframe-grid {
       position: relative;
       z-index: 10;
@@ -196,7 +196,6 @@
       text-transform: uppercase;
     }
 
-    /* PULSANTI TOGGLE RACK A SINISTRA */
     .source-btn-list {
       display: flex;
       flex-direction: column;
@@ -280,7 +279,7 @@
       display: none;
     }
 
-    /* CHRONO DATARIO BIOS */
+    /* CHRONO DATARIO */
     .chrono-card {
       background: #020604;
       border: 1px solid var(--neon-dim);
@@ -352,7 +351,7 @@
       display: flex;
     }
 
-    /* SCHERMO 1: PLAYER RADIO COMPATIBILE & SCROLLABILE */
+    /* SCHERMO 1: PLAYER RADIO */
     .radio-deck-container {
       width: 100%;
       max-width: 820px;
@@ -369,27 +368,156 @@
       display: block;
     }
 
-    /* SCHERMO 2: VIDEO BALLERINA AUTO-LOOP */
-    .ballerina-deck-container {
+    /* SCHERMO 2: EXPLOIT SCANNER & NETWORK SNIFFER INTERATTIVO */
+    .cyber-hacker-deck {
       width: 100%;
-      max-width: 740px;
-      height: 560px;
-      border: 1px solid var(--neon-green);
-      background: #000;
-      box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
-      overflow: hidden;
+      max-width: 840px;
+      background: #040c06;
+      border: 1.5px solid var(--neon-green);
+      box-shadow: 0 0 25px rgba(0, 255, 102, 0.25);
       display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .hacker-deck-top {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      border-bottom: 1px solid var(--neon-dim);
+      padding-bottom: 10px;
     }
 
-    .ballerina-deck-container video {
+    .hacker-title-hud {
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px var(--neon-glow);
+    }
+
+    .cyber-terminal-log {
+      height: 270px;
+      background: #010402;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      padding: 12px;
+      font-size: 0.76rem;
+      line-height: 1.5;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: inset 0 0 12px rgba(0, 255, 102, 0.1);
+    }
+
+    .cyber-terminal-log::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .cyber-terminal-log::-webkit-scrollbar-thumb {
+      background: var(--neon-green);
+    }
+
+    .log-node-entry {
+      color: var(--cyber-cyan);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-bottom: 1px dashed rgba(0, 255, 102, 0.15);
+      padding-bottom: 2px;
+    }
+
+    .log-node-entry strong {
+      color: var(--neon-green);
+    }
+
+    .log-node-entry .isp-tag {
+      color: var(--cyber-amber);
+      font-weight: bold;
+    }
+
+    .spectrum-grid {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 60px;
+      background: #020603;
+      border: 1px solid var(--neon-dim);
+      padding: 6px 12px;
+      gap: 4px;
+    }
+
+    .spectrum-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--neon-green), var(--cyber-cyan));
+      height: 20%;
+      transition: height 0.12s ease;
+      box-shadow: 0 0 6px rgba(0, 255, 102, 0.4);
+    }
+
+    .deck-sub-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-exploit {
+      background: var(--neon-green);
+      color: #000;
+      font-family: var(--font-terminal);
+      font-weight: 900;
+      font-size: 0.8rem;
+      border: none;
+      padding: 9px 16px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.2s;
+    }
+
+    .btn-exploit:hover {
+      background: #39ff14;
+      box-shadow: 0 0 16px var(--neon-glow);
+    }
+
+    .btn-bypass {
+      background: rgba(255, 51, 68, 0.2);
+      border: 1px solid var(--cyber-red);
+      color: var(--cyber-red);
+      font-family: var(--font-terminal);
+      font-weight: bold;
+      font-size: 0.8rem;
+      padding: 8px 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .btn-bypass:hover {
+      background: var(--cyber-red);
+      color: #000;
+      box-shadow: 0 0 14px var(--cyber-red);
+    }
+
+    .progress-track {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: 8px;
+      background: #020503;
+      border: 1px solid var(--neon-dim);
+      overflow: hidden;
     }
 
-    /* SCHERMO 3: XAT ROOM CON CODICE EMBED PULITO */
+    .progress-fill {
+      width: 35%;
+      height: 100%;
+      background: var(--neon-green);
+      box-shadow: 0 0 8px var(--neon-glow);
+      transition: width 0.3s ease;
+    }
+
+    /* SCHERMO 3: XAT ROOM */
     .xat-deck-container {
       width: 650px;
       max-width: 100%;
@@ -407,7 +535,7 @@
       background: #000;
     }
 
-    /* RADAR OPENSTREETMAP SATELLITARE A DESTRA */
+    /* RADAR OPENSTREETMAP A DESTRA */
     #radar-feed {
       width: 100%;
       height: 230px;
@@ -484,7 +612,7 @@
       object-fit: cover;
     }
 
-    /* TRASMISSIONE DEDICHE CRITTOGRAFATA */
+    /* FORM DEDICHE */
     .cyber-form {
       display: flex;
       flex-direction: column;
@@ -537,10 +665,10 @@
 </head>
 <body>
 
-  <!-- MATRIX RAIN BACKGROUND CANVAS -->
+  <!-- MATRIX RAIN BACKGROUND -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- CRT SCANLINES OVERLAY -->
+  <!-- CRT SCANLINES -->
   <div class="scanlines-overlay"></div>
 
   <!-- CONSOLE TOPBAR -->
@@ -571,7 +699,7 @@
     <div class="ticker-prompt">> SEC_FEED</div>
     <div class="ticker-scroll-content">
       <div class="ticker-text-move">
-        [SYS] ZERO COOL PROTOCOL ENGAGED -- DIRECT SHOUTCAST / ICECAST ROUTING ACTIVE -- RADAR FIRESTORE OPENSTREETMAP ONLINE -- MATRIX DECRYPTION ACTIVE -- HACK THE PLANET!
+        [SYS] EXPLOIT SCANNER REALTIME ATTIVO -- PREMI [ESEGUI_EXPLOIT] PER SCANSIONARE GLI ULTIMI 10 IP E PROVIDER (VODAFONE, FASTWEB, TIM) CONNESSI -- ZERO COOL PROTOCOL ONLINE!
       </div>
     </div>
   </div>
@@ -579,22 +707,21 @@
   <!-- MAINFRAME 3 RACK LAYOUT -->
   <div class="mainframe-grid">
 
-    <!-- RACK SINISTRO: CONTROLLI SORGENTE, TELEMETRIA IP E CHRONO -->
+    <!-- RACK SINISTRO -->
     <aside class="rack-box">
       <div class="rack-title">
         <span>// MONITOR_ROUTING</span>
         <span>MOD_01</span>
       </div>
 
-      <!-- SELETTORI SORGENTE SCHERMO -->
       <div class="source-btn-list">
         <button type="button" class="cyber-btn active" id="btn-radio" onclick="switchMonitorSource('radio')">
           <span>[■] RAW_RADIO_STREAM</span>
           <span class="led-square"></span>
         </button>
 
-        <button type="button" class="cyber-btn" id="btn-ballerina" onclick="switchMonitorSource('ballerina')">
-          <span>[■] BALLERINA_MP4</span>
+        <button type="button" class="cyber-btn" id="btn-exploit" onclick="switchMonitorSource('exploit')">
+          <span>[■] CYBER_EXPLOIT_SCAN</span>
           <span class="led-square"></span>
         </button>
 
@@ -604,7 +731,7 @@
         </button>
       </div>
 
-      <!-- TELEMETRIA CONNESSIONE VISITATORE -->
+      <!-- TELEMETRIA VISITATORE -->
       <div class="rack-title">
         <span>// INCOMING_NODE_IP</span>
         <span>AUTH_GUEST</span>
@@ -618,16 +745,16 @@
           </span>
         </div>
         <div class="telemetry-row">
-          <span>PROXY_HOST:</span>
-          <span class="telemetry-val" id="my-ip-display">127.0.0.1</span>
+          <span>CLIENT_IP:</span>
+          <span class="telemetry-val" id="my-ip-display" style="color: var(--neon-green);">SCANNING...</span>
         </div>
         <div class="telemetry-row">
-          <span>GPS_COORDS:</span>
-          <span class="telemetry-val" id="my-coords-display">00.00, 00.00</span>
+          <span>CLIENT_ISP:</span>
+          <span class="telemetry-val" id="my-isp-display" style="color: var(--cyber-amber);">DETECTING...</span>
         </div>
         <div class="telemetry-row">
           <span>SOCKET_STATUS:</span>
-          <span class="telemetry-val" style="color: var(--neon-green);">SECURE_256BIT 🟢</span>
+          <span class="telemetry-val" style="color: var(--neon-green);">CONNECTED 🟢</span>
         </div>
       </div>
 
@@ -643,7 +770,7 @@
       </div>
     </aside>
 
-    <!-- MONITOR CENTRALE: RADIO / BALLERINA / XAT -->
+    <!-- MONITOR CENTRALE -->
     <main class="central-screen">
       <div class="screen-header-bar">
         <span id="monitor-target-info">> TARGET: xatradio.com/player // RAW_RADIO</span>
@@ -652,7 +779,7 @@
 
       <div class="viewport-box">
         
-        <!-- VISTA 1: RAW RADIO STREAM (ALTEZZA 750px SCROLLABILE CON TASTI NATIVI) -->
+        <!-- VISTA 1: RAW RADIO STREAM -->
         <div class="screen-view active" id="view-radio">
           <div class="radio-deck-container">
             <iframe 
@@ -666,18 +793,58 @@
           </div>
         </div>
 
-        <!-- VISTA 2: BALLERINA MP4 LOOP DIRETTO -->
-        <div class="screen-view" id="view-ballerina">
-          <div class="ballerina-deck-container">
-            <video autoplay muted loop playsinline preload="auto">
-              <!-- Sostituisci il link src con il file mp4 che preferisci -->
-              <source src="https://assets.codepen.io/3364143/7btrrd.mp4" type="video/mp4">
-              Browser incompatible with mp4.
-            </video>
+        <!-- VISTA 2: EXPLOIT SCANNER REALTIME SUGLI UTENTI VERI CONNESSI -->
+        <div class="screen-view" id="view-exploit">
+          <div class="cyber-hacker-deck">
+            <div class="hacker-deck-top">
+              <span class="hacker-title-hud">> NETWORK_SNIFFER // RECENT_NODES</span>
+              <span style="color: var(--cyber-cyan); font-size: 0.75rem;">TARGET_PORT: ALL (0-65535)</span>
+            </div>
+
+            <!-- Terminale di scansione che stampa gli IP e i Provider reali -->
+            <div class="cyber-terminal-log" id="terminal-feed-log">
+              <div style="color: #888;">[INIT] PREMI "ESEGUI_EXPLOIT" PER SCANSIONARE GLI ULTIMI 10 IP ENTRATI...</div>
+            </div>
+
+            <!-- Spettro Audio Animato -->
+            <div style="font-size: 0.72rem; color: var(--cyber-cyan); display: flex; justify-content: space-between;">
+              <span>AUDIO_RADIO_SPECTRUM_MONITOR</span>
+              <span id="freq-khz">107.5 MHz // 320 KBPS</span>
+            </div>
+            <div class="spectrum-grid" id="spectrum-box">
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+              <div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+            </div>
+
+            <!-- Barra Progresso Violazione -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px;">
+                <span>BUFFER_OVERFLOW_LEVEL</span>
+                <span id="buffer-pct" style="color: var(--neon-green);">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="buffer-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Pulsanti Console Interattivi -->
+            <div class="deck-sub-controls">
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-exploit" onclick="runAttackCycle()">▶ ESEGUI_EXPLOIT</button>
+                <button type="button" class="btn-bypass" onclick="injectRootKey()">⏹ INIETTA_ROOT</button>
+              </div>
+              <span id="exploit-status-txt" style="color: var(--neon-green); font-size: 0.75rem;">STATUS: PRONTO</span>
+            </div>
           </div>
         </div>
 
-        <!-- VISTA 3: XAT CHAT PULITA SENZA TESTO SPURIO -->
+        <!-- VISTA 3: XAT CHAT PULITA -->
         <div class="screen-view" id="view-xat">
           <div class="xat-deck-container">
             <iframe 
@@ -696,7 +863,7 @@
       </div>
     </main>
 
-    <!-- RACK DESTRO: SATELLITE RADAR FIRESTORE & TRANSMIT PAYLOAD -->
+    <!-- RACK DESTRO -->
     <aside class="rack-box">
       <div class="rack-title">
         <span>// SATELLITE_RADAR</span>
@@ -763,7 +930,7 @@
     }
     setInterval(drawMatrix, 40);
 
-    // 2. SWITCH VISTE CON I PULSANTI VERDI
+    // 2. SWITCH VISTE RACK
     function switchMonitorSource(mode) {
       document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.cyber-btn').forEach(b => b.classList.remove('active'));
@@ -776,11 +943,11 @@
         document.getElementById('btn-radio').classList.add('active');
         modeLabel.textContent = 'MODE: LIVE_RADIO';
         targetLabel.textContent = '> TARGET: xatradio.com/player // RAW_RADIO';
-      } else if (mode === 'ballerina') {
-        document.getElementById('view-ballerina').classList.add('active');
-        document.getElementById('btn-ballerina').classList.add('active');
-        modeLabel.textContent = 'MODE: VIDEO_BALLERINA';
-        targetLabel.textContent = '> TARGET: MEDIA_DECK // BALLERINA_MP4';
+      } else if (mode === 'exploit') {
+        document.getElementById('view-exploit').classList.add('active');
+        document.getElementById('btn-exploit').classList.add('active');
+        modeLabel.textContent = 'MODE: CYBER_EXPLOIT_SCAN';
+        targetLabel.textContent = '> TARGET: NETWORK_SNIFFER // LIVE_LOG';
       } else if (mode === 'xat') {
         document.getElementById('view-xat').classList.add('active');
         document.getElementById('btn-xat').classList.add('active');
@@ -789,7 +956,101 @@
       }
     }
 
-    // 3. OROLOGIO & DATARIO
+    // 3. CACHE DEI VISITATORI ONLINE DA FIRESTORE
+    let latestOnlineVisitors = [];
+
+    // ANIMAZIONE SPETTRO AUDIO
+    const bars = document.querySelectorAll('.spectrum-bar');
+    setInterval(() => {
+      bars.forEach(bar => {
+        const h = Math.floor(Math.random() * 85) + 12;
+        bar.style.height = h + '%';
+      });
+    }, 120);
+
+    // FUNZIONE ESEGUI EXPLOIT: SCANSIONA GLI ULTIMI 10 IP E PROVIDER REALI
+    function runAttackCycle() {
+      const logBox = document.getElementById('terminal-feed-log');
+      logBox.innerHTML = '';
+
+      const startMsg = document.createElement('div');
+      startMsg.style.color = '#00e5ff';
+      startMsg.textContent = `>>> [ZERO_COOL] INIZIO SCANSIONE INTERCETTAZIONE PACCHETTI RAW...`;
+      logBox.appendChild(startMsg);
+
+      let step = 0;
+      const bufferBar = document.getElementById('buffer-bar');
+      const bufferPct = document.getElementById('buffer-pct');
+      const statusTxt = document.getElementById('exploit-status-txt');
+
+      statusTxt.textContent = "SCANSIONE IN CORSO...";
+      statusTxt.style.color = "#00e5ff";
+
+      // Prende i primi 10 visitatori reali presenti in memoria
+      const targets = latestOnlineVisitors.slice(0, 10);
+
+      const scanInterval = setInterval(() => {
+        if (step < targets.length) {
+          const item = targets[step];
+          const entry = document.createElement('div');
+          entry.className = "log-node-entry";
+
+          const ipClean = item.ip || '127.0.0.1';
+          const ispClean = item.isp || 'Telecom / Fastweb / Vodafone';
+          const cityClean = item.city || 'ROMA';
+
+          entry.innerHTML = `
+            <span>[#${step + 1}]</span>
+            <strong>IP: ${ipClean}</strong>
+            <span class="isp-tag">[${ispClean}]</span>
+            <span style="color: #fff;">LOC: ${cityClean}</span>
+            <span style="color: var(--neon-green);">STATUS: CAPTURED</span>
+          `;
+          logBox.appendChild(entry);
+          logBox.scrollTop = logBox.scrollHeight;
+
+          const pct = Math.round(((step + 1) / targets.length) * 100);
+          bufferBar.style.width = pct + '%';
+          bufferPct.textContent = pct + '%';
+
+          step++;
+        } else {
+          clearInterval(scanInterval);
+          const endMsg = document.createElement('div');
+          endMsg.style.color = '#39ff14';
+          endMsg.style.fontWeight = 'bold';
+          endMsg.textContent = `>>> SCANSIONE COMPLETATA: ${targets.length} NODI INTERCETTATI CON SUCCESSO!`;
+          logBox.appendChild(endMsg);
+          logBox.scrollTop = logBox.scrollHeight;
+
+          statusTxt.textContent = "SCANSIONE COMPLETATA ⚡";
+          statusTxt.style.color = "#00ff66";
+        }
+      }, 350);
+    }
+
+    // FUNZIONE INIETTA ROOT: FORZA IL BLOCCO / OVERRIDE DEL SISTEMA
+    function injectRootKey() {
+      const logBox = document.getElementById('terminal-feed-log');
+      const row = document.createElement('div');
+      row.style.color = "#ff3344";
+      row.style.fontWeight = "bold";
+      row.style.padding = "4px 0";
+      row.textContent = `[ROOT_ALERT] PRIVILEGI ROOT INIETTATI -- CONNESSIONE REMOTA BLOCCATA SUI NODI!`;
+      logBox.appendChild(row);
+      logBox.scrollTop = logBox.scrollHeight;
+
+      document.getElementById('buffer-bar').style.width = '100%';
+      document.getElementById('buffer-bar').style.background = '#ff3344';
+      document.getElementById('buffer-pct').textContent = '100% ROOT_LOCK';
+      document.getElementById('buffer-pct').style.color = '#ff3344';
+
+      const statusTxt = document.getElementById('exploit-status-txt');
+      statusTxt.textContent = "ROOT OVERRIDE ATTIVO 🔴";
+      statusTxt.style.color = "#ff3344";
+    }
+
+    // 4. OROLOGIO & DATARIO
     const sessionStart = Date.now();
     function updateTerminalClocks() {
       const now = new Date();
@@ -812,7 +1073,7 @@
     setInterval(updateTerminalClocks, 1000);
     updateTerminalClocks();
 
-    // 4. FIREBASE & FIRESTORE CONFIGURAZIONE
+    // 5. FIREBASE & FIRESTORE CONFIGURAZIONE
     const firebaseConfig = {
       apiKey: "AIzaSyBzy1" + "Ujp7cbx9vO" + "F2r8EoiYQK" + "63pAKpTP",
       authDomain: "mondo-mio.firebaseapp.com",
@@ -830,7 +1091,7 @@
       sessionStorage.setItem('zerocool_sess_id', mySessionId);
     }
 
-    // 5. INIZIALIZZAZIONE MAPPA RADAR
+    // 6. MAPPA RADAR
     let radarMap = null;
     let markersLayer = [];
 
@@ -851,12 +1112,20 @@
       }, 400);
     }
 
-    // 6. GEOLOCALIZZAZIONE DINAMICA CON MULTI-FALLBACK
+    // 7. GEOLOCALIZZAZIONE DINAMICA CON RILEVAMENTO ISP (VODAFONE, FASTWEB, TIM, ECC.)
     async function trackVisitorNode() {
-      let loc = { city: "ROMA", country: "IT", code: "it", lat: 41.9028, lng: 12.4964, ip: "127.0.0.1" };
+      let loc = { 
+        city: "ROMA", 
+        country: "IT", 
+        code: "it", 
+        lat: 41.9028, 
+        lng: 12.4964, 
+        ip: "127.0.0.1", 
+        isp: "Telecom Italia / TIM" 
+      };
       let success = false;
 
-      // Tentativo 1: ipwho.is
+      // Tentativo 1: ipwho.is (fornisce connection.isp)
       try {
         const res = await fetch("https://ipwho.is/");
         const data = await res.json();
@@ -867,13 +1136,14 @@
             code: (data.country_code || "it").toLowerCase(),
             lat: Number(data.latitude),
             lng: Number(data.longitude),
-            ip: data.ip || "127.0.0.1"
+            ip: data.ip || "127.0.0.1",
+            isp: data.connection?.isp || data.connection?.org || "Fastweb / Vodafone"
           };
           success = true;
         }
       } catch (e) {}
 
-      // Tentativo 2 (fallback): ipapi.co
+      // Tentativo 2: ipapi.co (fornisce org)
       if (!success) {
         try {
           const res2 = await fetch("https://ipapi.co/json/");
@@ -885,7 +1155,8 @@
               code: (d2.country_code || "it").toLowerCase(),
               lat: Number(d2.latitude),
               lng: Number(d2.longitude),
-              ip: d2.ip || "127.0.0.1"
+              ip: d2.ip || "127.0.0.1",
+              isp: d2.org || "Vodafone / Iliad"
             };
             success = true;
           }
@@ -895,20 +1166,13 @@
       // Aggiornamento telemetria a schermo
       document.getElementById('top-city').textContent = loc.city;
       document.getElementById('my-city-display').textContent = loc.city;
-      document.getElementById('my-coords-display').textContent = `${loc.lat.toFixed(2)}, ${loc.lng.toFixed(2)}`;
+      document.getElementById('my-ip-display').textContent = loc.ip;
+      document.getElementById('my-isp-display').textContent = loc.isp;
 
       const flagElem = document.getElementById('my-flag-icon');
       flagElem.src = `https://flagcdn.com/w40/${loc.code}.png`;
       flagElem.style.display = "inline-block";
 
-      const ipParts = loc.ip.split('.');
-      if (ipParts.length === 4) {
-        document.getElementById('my-ip-display').textContent = `${ipParts[0]}.${ipParts[1]}.***.***`;
-      } else {
-        document.getElementById('my-ip-display').textContent = loc.ip;
-      }
-
-      // Rilevamento temperatura
       let temp = "--";
       try {
         const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lng}&current=temperature_2m`);
@@ -919,18 +1183,19 @@
         }
       } catch (e) {}
 
-      // Centra mappa sul visitatore
       if (radarMap) {
         radarMap.setView([loc.lat, loc.lng], 5);
         radarMap.invalidateSize();
       }
 
-      // Registrazione su Firestore
+      // Scrittura su Firestore di IP, ISP, Città e coordinate
       const nodeDoc = db.collection("visitantes").doc(mySessionId);
       await nodeDoc.set({
         city: loc.city,
         country: loc.country,
         code: loc.code,
+        ip: loc.ip,
+        isp: loc.isp,
         lat: loc.lat,
         lng: loc.lng,
         temp: temp,
@@ -942,7 +1207,7 @@
       }, 30000);
     }
 
-    // 7. ASCOLTO REALTIME DEI VISITATORI ONLINE
+    // 8. ASCOLTO REALTIME RADAR & SALVATAGGIO DEI NODI PER L'EXPLOIT SCANNER
     function listenToFirestoreRadarNodes() {
       db.collection("visitantes").onSnapshot(snapshot => {
         const listContainer = document.getElementById("radar-nodes-list");
@@ -955,11 +1220,13 @@
 
         let count = 0;
         const now = Date.now();
+        latestOnlineVisitors = [];
 
         snapshot.forEach(doc => {
           const item = doc.data();
           if (item.t && (now - item.t) < 1500000) {
             count++;
+            latestOnlineVisitors.push(item);
 
             const row = document.createElement("div");
             row.className = "radar-row";
@@ -998,7 +1265,6 @@
       });
     }
 
-    // AVVIO ALL'APERTURA DELLA PAGINA
     window.addEventListener('DOMContentLoaded', () => {
       initRadarMap();
       trackVisitorNode();
