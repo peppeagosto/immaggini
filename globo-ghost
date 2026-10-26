@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Globo 3D ITALIA_GHOST</title>
+  
+  <!-- Firebase & Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- Mapbox GL JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Contenitore Mappa fisso a 800px con box laterale protetto */
+    #map-wrapper {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      border: 2px solid #00ffcc;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+      overflow: hidden;
+      display: flex;
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+    }
+
+    /* Pannello Storico Visitatori a destra */
+    #visitor-panel {
+      width: 250px;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.92);
+      border-left: 1px solid rgba(0, 255, 204, 0.3);
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+
+    #visitor-header {
+      padding: 12px;
+      border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+      background: rgba(0, 255, 204, 0.05);
+    }
+
+    #visitor-header h3 {
+      margin: 0 0 4px 0;
+      font-size: 13px;
+      color: #00ffcc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #visitor-header p {
+      margin: 0;
+      font-size: 11px;
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    #visitor-list {
+      list-style: none;
+      margin: 0;
+      padding: 8px;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 11px;
+    }
+
+    #visitor-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    #visitor-list::-webkit-scrollbar-thumb {
+      background: #00ffcc;
+      border-radius: 4px;
+    }
+
+    #visitor-list li {
+      padding: 6px 8px;
+      margin-bottom: 6px;
+      background: rgba(0, 255, 204, 0.08);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .v-city {
+      color: #00ffaa;
+      font-weight: bold;
+    }
+
+    .v-time {
+      color: #ffff00;
+      font-size: 9px;
+    }
+
+    /* Marker Luminoso sul Globo */
+    .custom-marker {
+      width: 16px;
+      height: 16px;
+      background-color: #00ffcc;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00ffcc, 0 0 25px #00ffcc;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.8); }
+      70% { transform: scale(1.3); box-shadow: 0 0 0 12px rgba(0, 255, 204, 0); }
+      100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map-wrapper">
+    <div id="map"></div>
+    <div id="visitor-panel">
+      <div id="visitor-header">
+        <h3>ITALIA_GHOST</h3>
+        <p id="total-visitors">Cloud: Caricamento...</p>
+      </div>
+      <ul id="visitor-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // 🛡️ BLOCCO DI SICUREZZA ANTI-FURTO (Autorizza ITALIA_GHOST, xatradio.com e localhost)
+    const currentUrl = window.location.href;
+    if (!currentUrl.includes("ITALIA_GHOST") && !currentUrl.includes("xatradio.com") && !currentUrl.includes("localhost") && !currentUrl.includes("127.0.0.1")) {
+      document.body.innerHTML = "<h1 style='color:#ff0055; text-align:center; margin-top:25vh; font-family:Arial;'>ACCESSO NEGATO: CODICE PROTETTO DI EL DIABLO</h1>";
+      throw new Error("Codice non autorizzato.");
+    }
+
+    // 1. Configurazione Mapbox con il tuo Token ufficiale[cite: 1]
+    mapboxgl.accessToken = 'pk.eyJ1IjoicGVwcGUtZGlhYmxvMjAyNiIsImEiOiJjbXZwZWVuaGEwMG9rMnlzNmdmeTdpczkzIn0.OqURexk5sioEEIw_sTnLmA';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      center: [12.4964, 41.9028],
+      zoom: 1.5,
+      projection: 'globe'
+    });
+
+    map.on('style.load', () => {
+      map.setFog({
+        color: 'rgb(186, 210, 235)',
+        'high-color': 'rgb(36, 92, 163)',
+        'space-color': 'rgb(11, 15, 25)',
+        'star-intensity': 0.6
+      });
+    });
+
+    // Rotazione automatica[cite: 1]
+    let userInteracting = false;
+    function spinGlobe() {
+      if (!userInteracting && map.getZoom() < 5) {
+        const center = map.getCenter();
+        center.lng -= 360 / 120;
+        map.easeTo({ center, duration: 1000, easing: (n) => n });
+      }
+    }
+    map.on('mousedown', () => { userInteracting = true; });
+    map.on('mouseup', () => { userInteracting = false; spinGlobe(); });
+    map.on('dragend', () => { userInteracting = false; spinGlobe(); });
+    map.on('moveend', () => { spinGlobe(); });
+    spinGlobe();
+
+    // 2. Configurazione Firebase Firestore (Cloud)[cite: 1]
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzW6ylN9PALpgS2RB8b_Pp9KS-y9aLcd8",
+      authDomain: "globo-liberty-2026.firebaseapp.com",
+      projectId: "globo-liberty-2026",
+      storageBucket: "globo-liberty-2026.firebasestorage.app",
+      messagingSenderId: "540262363609",
+      appId: "1:540262363609:web:aa40db96c937ed2cd6e9c8",
+      measurementId: "G-PNZ4YZKK5D"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    let activeMarkers = [];
+
+    function renderCloudVisitors(records) {
+      const listEl = document.getElementById('visitor-list');
+      listEl.innerHTML = '';
+
+      activeMarkers.forEach(m => m.remove());
+      activeMarkers = [];
+
+      records.forEach(v => {
+        if (v.lat && v.lon) {
+          const el = document.createElement('div');
+          el.className = 'custom-marker';
+
+          const popup = new mapboxgl.Popup({ offset: 20 })
+            .setHTML(`<strong>${v.city}, ${v.country}</strong><br><small>${v.date || ''}</small>`);
+
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat([v.lon, v.lat])
+            .setPopup(popup)
+            .addTo(map);
+
+          activeMarkers.push(marker);
+        }
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span class="v-city">${v.city}, ${v.country}</span>
+          <span class="v-time">${v.date || 'Recente'}</span>
+        `;
+        listEl.appendChild(li);
+      });
+
+      document.getElementById('total-visitors').innerText = `Totale Cloud: ${records.length}`;
+    }
+
+    function loadCloudVisitors() {
+      db.collection('visitatori')
+        .orderBy('timestamp', 'desc')
+        .limit(50)
+        .get()
+        .then(snapshot => {
+          const visitors = [];
+          snapshot.forEach(doc => {
+            visitors.push(doc.data());
+          });
+          renderCloudVisitors(visitors);
+        })
+        .catch(err => {
+          console.error("Errore lettura database:", err);
+        });
+    }
+
+    // 3. Rilevamento IP e salvataggio cloud[cite: 1]
+    fetch('https://ipwho.is/')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.latitude && data.longitude) {
+          const newVisitor = {
+            city: data.city || 'Sconosciuta',
+            country: data.country || 'Sconosciuto',
+            lat: data.latitude,
+            lon: data.longitude,
+            date: new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+            timestamp: Date.now()
+          };
+
+          db.collection('visitatori').add(newVisitor)
+            .then(() => {
+              loadCloudVisitors();
+            });
+        }
+      })
+      .catch(err => {
+        console.log("Rilevamento IP non riuscito");
+      });
+
+    setInterval(loadCloudVisitors, 10000);
+    loadCloudVisitors();
+  </script>
+
+</body>
+</html>
