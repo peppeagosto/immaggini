@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>ITALIA_GHOST</title>
+<meta name="description" content="ITALIA_GHOST Web Radio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta property="og:title" content="ITALIA_GHOST Player">
+<meta property="og:description" content="ITALIA_GHOST Web Radio">
+<link rel="icon" type="image/png" href="https://i.imgur.com/nNh98kV.png" sizes="48x48">
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,600,700" rel="stylesheet" type="text/css">
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    body, html {
+        width: 100%;
+        height: 100%;
+        background: #040508;
+        overflow: hidden;
+        font-family: 'Josefin Sans', sans-serif;
+    }
+    .cover {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    .overlay-static {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        pointer-events: none;
+        padding: 20px;
+    }
+
+    /* TITOLO PRINCIPALE: ITALIA_GHOST */
+    .neon-title {
+        font-size: 3.8rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        text-shadow: 
+            0 0 10px #ff0055, 
+            0 0 20px #ff0055, 
+            0 0 40px #ff0055, 
+            0 0 80px #ff0055, 
+            0 0 120px #ff0033;
+        animation: neonPulse 2.5s infinite alternate, floatTitle 4s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    /* SOTTOTITOLO: Benvenuti e Buon Ascolto */
+    .neon-subtitle {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ffaa00;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        text-shadow: 
+            0 0 8px #ff3300, 
+            0 0 15px #ff3300, 
+            0 0 30px #ff0000, 
+            0 0 50px #ff0000;
+        animation: subtitleGlow 1.8s infinite alternate;
+    }
+
+    @keyframes neonPulse {
+        0% {
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px #ff0055, 
+                0 0 20px #ff0055, 
+                0 0 40px #ff0055, 
+                0 0 80px #ff0055;
+            transform: scale(1);
+        }
+        100% {
+            color: #ffe6ee;
+            text-shadow: 
+                0 0 15px #ff0077, 
+                0 0 30px #ff0077, 
+                0 0 60px #ff0055, 
+                0 0 100px #ff0033, 
+                0 0 150px #ff0000;
+            transform: scale(1.03);
+        }
+    }
+
+    @keyframes floatTitle {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+    }
+
+    @keyframes subtitleGlow {
+        0% {
+            color: #ffaa00;
+            text-shadow: 0 0 8px #ff3300, 0 0 20px #ff0000;
+            opacity: 0.85;
+        }
+        100% {
+            color: #ffff55;
+            text-shadow: 0 0 15px #ffea00, 0 0 35px #ff3300, 0 0 60px #ff0000;
+            opacity: 1;
+        }
+    }
+    
+    /* Box Immagine Diavolo */
+    #devil-icon {
+        position: absolute;
+        left: 30px;
+        bottom: 30px;
+        z-index: 3;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.8);
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.7), inset 0 0 15px rgba(255, 0, 0, 0.5);
+        border: 2px solid #ff0000;
+        overflow: hidden;
+        animation: floatDevil 3s ease-in-out infinite, devilGlow 1.5s infinite alternate;
+    }
+
+    #devil-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @keyframes floatDevil {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @keyframes devilGlow {
+        0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.3); }
+        100% { box-shadow: 0 0 35px rgba(255, 0, 0, 0.9), inset 0 0 20px rgba(255, 0, 0, 0.8); }
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    <!-- Canvas Sfondo Effetti -->
+    <canvas id="can"></canvas>
+
+    <div class="overlay-static">
+        <h1 class="neon-title">ITALIA_GHOST</h1>
+        <p class="neon-subtitle">Benvenuti e Buon Ascolto</p>
+    </div>
+</div>
+
+<!-- Immagine Diavolo -->
+<div id="devil-icon">
+    <img src="https://xatimg.com/image/MsGs6xq4e5fF.jpg" alt="ITALIA_GHOST Diavolo">
+</div>
+
+<script>
+    const canvas = document.getElementById('can');
+    const ctx = canvas.getContext('2d');
+    
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // 1. Stelline a 5 punte (Piccole e Medie con scintillio)
+    let stars = [];
+    for (let i = 0; i < 60; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 6 + 3, // Dimensioni varie (piccole e medie)
+            alpha: Math.random(),
+            speedAlpha: (Math.random() * 0.02 + 0.005),
+            color: Math.random() > 0.4 ? '#ff0055' : '#ffaa00'
+        });
+    }
+
+    function drawStar(cx, cy, spikes, outerRadius, innerRadius, color, alpha) {
+        let rot = Math.PI / 2 * 3;
+        let x = cx;
+        let y = cy;
+        let step = Math.PI / spikes;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - outerRadius);
+        for (let i = 0; i < spikes; i++) {
+            x = cx + Math.cos(rot) * outerRadius;
+            y = cy + Math.sin(rot) * outerRadius;
+            ctx.lineTo(x, y);
+            rot += step;
+
+            x = cx + Math.cos(rot) * innerRadius;
+            y = cy + Math.sin(rot) * innerRadius;
+            ctx.lineTo(x, y);
+            rot += step;
+        }
+        ctx.lineTo(cx, cy - outerRadius);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = color;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // 2. Note Musicali Fluttuanti
+    const musicSymbols = ['♪', '♫', '♬', '♩'];
+    let notes = [];
+    for (let i = 0; i < 25; i++) {
+        notes.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height + canvas.height,
+            symbol: musicSymbols[Math.floor(Math.random() * musicSymbols.length)],
+            fontSize: Math.floor(Math.random() * 16 + 14), // 14px a 30px
+            speedY: Math.random() * 1.2 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.6,
+            angle: Math.random() * 360,
+            spin: (Math.random() - 0.5) * 0.02,
+            alpha: Math.random() * 0.7 + 0.3,
+            color: Math.random() > 0.5 ? '#ff0033' : '#00ffff'
+        });
+    }
+
+    // Loop Principale Animazione Canvas
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Effetto Sfondo Bagliore Rosso Centrale
+        let gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 50, canvas.width / 2, canvas.height / 2, canvas.width / 1.2);
+        gradient.addColorStop(0, 'rgba(80, 0, 20, 0.25)');
+        gradient.addColorStop(1, 'rgba(4, 5, 8, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Disegna Stelline Scintillanti
+        stars.forEach(s => {
+            s.alpha += s.speedAlpha;
+            if (s.alpha >= 1 || s.alpha <= 0.2) {
+                s.speedAlpha = -s.speedAlpha;
+            }
+            drawStar(s.x, s.y, 5, s.size, s.size / 2, s.color, Math.abs(s.alpha));
+        });
+
+        // Disegna Note Musicali Fluttuanti
+        notes.forEach(n => {
+            n.y -= n.speedY;
+            n.x += n.speedX;
+            n.angle += n.spin;
+
+            if (n.y < -30) {
+                n.y = canvas.height + 20;
+                n.x = Math.random() * canvas.width;
+            }
+
+            ctx.save();
+            ctx.translate(n.x, n.y);
+            ctx.rotate(n.angle);
+            ctx.font = `${n.fontSize}px 'Josefin Sans', sans-serif`;
+            ctx.fillStyle = n.color;
+            ctx.globalAlpha = n.alpha;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = n.color;
+            ctx.fillText(n.symbol, 0, 0);
+            ctx.restore();
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+
+<script>
+    var message = "ITALIA_GHOST - Tutti i diritti riservati";
+    document.oncontextmenu = function () {
+        alert(message);
+        return false;
+    }
+    document.onselectstart = function () {
+        return false;
+    }
+</script>
+
+</body>
+</html>
