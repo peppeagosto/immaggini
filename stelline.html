@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <title>ITALIA_GHOST</title>
@@ -24,6 +24,21 @@
         overflow: hidden;
         font-family: 'Josefin Sans', sans-serif;
     }
+    
+    /* Background Video MP4 */
+    #bg-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: 0;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+    }
+
     .cover {
         position: relative;
         width: 100vw;
@@ -46,6 +61,13 @@
         text-align: center;
         pointer-events: none;
         padding: 20px;
+        /* Animazione su e giù per l'intero bloco di testo */
+        animation: floatUpDown 3.5s ease-in-out infinite;
+    }
+
+    @keyframes floatUpDown {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-18px); }
     }
 
     /* TITOLO PRINCIPALE: ITALIA_GHOST */
@@ -61,11 +83,11 @@
             0 0 40px #ff0055, 
             0 0 80px #ff0055, 
             0 0 120px #ff0033;
-        animation: neonPulse 2.5s infinite alternate, floatTitle 4s ease-in-out infinite;
+        animation: neonPulse 2.5s infinite alternate;
         margin-bottom: 20px;
     }
 
-    /* SOTTOTITOLO: Benvenuti e Buon Ascolto */
+    /* SOTTOTITOLO IN PORTOGHESE */
     .neon-subtitle {
         font-size: 1.5rem;
         font-weight: 600;
@@ -100,11 +122,6 @@
                 0 0 150px #ff0000;
             transform: scale(1.03);
         }
-    }
-
-    @keyframes floatTitle {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-8px); }
     }
 
     @keyframes subtitleGlow {
@@ -155,13 +172,18 @@
 </head>
 <body>
 
+<!-- Sfondo Video MP4 (Sostituisci il link src se ne hai uno specifico) -->
+<video autoplay loop muted playsinline id="bg-video">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-red-abstract-particle-tunnel-41549-large.mp4" type="video/mp4">
+</video>
+
 <div class="cover">
     <!-- Canvas Sfondo Effetti -->
     <canvas id="can"></canvas>
 
     <div class="overlay-static">
         <h1 class="neon-title">ITALIA_GHOST</h1>
-        <p class="neon-subtitle">Benvenuti e Buon Ascolto</p>
+        <p class="neon-subtitle">Bem-vindos e Boa Audição</p>
     </div>
 </div>
 
@@ -181,16 +203,17 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // 1. Stelline a 5 punte (Piccole e Medie con scintillio)
+    // 1. Stelline piu piccole e ridotte di numero
     let stars = [];
-    for (let i = 0; i < 60; i++) {
+    const starColors = ['#ff0055', '#ffaa00', '#00ffff', '#ffffff'];
+    for (let i = 0; i < 40; i++) {
         stars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 6 + 3, // Dimensioni varie (piccole e medie)
+            size: Math.random() * 4 + 2, // Piccole (da 2px a 6px)
             alpha: Math.random(),
             speedAlpha: (Math.random() * 0.02 + 0.005),
-            color: Math.random() > 0.4 ? '#ff0055' : '#ffaa00'
+            color: starColors[Math.floor(Math.random() * starColors.length)]
         });
     }
 
@@ -218,40 +241,33 @@
         ctx.closePath();
         ctx.fillStyle = color;
         ctx.globalAlpha = alpha;
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 8;
         ctx.shadowColor = color;
         ctx.fill();
         ctx.restore();
     }
 
-    // 2. Note Musicali Fluttuanti
+    // 2. Note Musicali Fluttuanti (Dimensioni ridotte)
     const musicSymbols = ['♪', '♫', '♬', '♩'];
     let notes = [];
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 20; i++) {
         notes.push({
             x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height + canvas.height,
+            y: Math.random() * canvas.height,
             symbol: musicSymbols[Math.floor(Math.random() * musicSymbols.length)],
-            fontSize: Math.floor(Math.random() * 16 + 14), // 14px a 30px
-            speedY: Math.random() * 1.2 + 0.5,
-            speedX: (Math.random() - 0.5) * 0.6,
+            fontSize: Math.floor(Math.random() * 10 + 12), // Piccole (da 12px a 22px)
+            speedY: Math.random() * 1.0 + 0.4,
+            speedX: (Math.random() - 0.5) * 0.5,
             angle: Math.random() * 360,
             spin: (Math.random() - 0.5) * 0.02,
             alpha: Math.random() * 0.7 + 0.3,
-            color: Math.random() > 0.5 ? '#ff0033' : '#00ffff'
+            color: Math.random() > 0.5 ? '#ff0055' : '#00ffff'
         });
     }
 
     // Loop Principale Animazione Canvas
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Effetto Sfondo Bagliore Rosso Centrale
-        let gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 50, canvas.width / 2, canvas.height / 2, canvas.width / 1.2);
-        gradient.addColorStop(0, 'rgba(80, 0, 20, 0.25)');
-        gradient.addColorStop(1, 'rgba(4, 5, 8, 0)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Disegna Stelline Scintillanti
         stars.forEach(s => {
@@ -279,7 +295,7 @@
             ctx.font = `${n.fontSize}px 'Josefin Sans', sans-serif`;
             ctx.fillStyle = n.color;
             ctx.globalAlpha = n.alpha;
-            ctx.shadowBlur = 10;
+            ctx.shadowBlur = 8;
             ctx.shadowColor = n.color;
             ctx.fillText(n.symbol, 0, 0);
             ctx.restore();
@@ -291,7 +307,7 @@
 </script>
 
 <script>
-    var message = "ITALIA_GHOST - Tutti i diritti riservati";
+    var message = "ITALIA_GHOST - Todos os direitos reservados";
     document.oncontextmenu = function () {
         alert(message);
         return false;
