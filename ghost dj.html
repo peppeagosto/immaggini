@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Web DJ Console 850px - Custom MP3 Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome per Icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        djBg: '#0b0f17',
+                        djDark: '#111622',
+                        djCard: '#171e2e',
+                        djBorder: '#232d42',
+                        djOrange: '#ff6b00',
+                        djBlue: '#00b4d8',
+                        djGreen: '#10b981',
+                        djPurple: '#8b5cf6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-vinyl-spin {
+            animation: spinSlow 2.2s linear infinite;
+        }
+        .paused-spin {
+            animation-play-state: paused !important;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            background: #232d42;
+            border-radius: 4px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 12px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        input[type=range].crossfader::-webkit-slider-thumb {
+            height: 28px;
+            width: 16px;
+            background: #ff6b00;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 15px rgba(255,107,0,0.9);
+        }
+        input[type=range].v-fader {
+            writing-mode: bt-lr;
+            -webkit-appearance: slider-vertical;
+            width: 8px;
+            height: 120px;
+        }
+        .vinyl-grooves {
+            background: repeating-radial-gradient(
+                circle at center,
+                #111 0px,
+                #1c1c1c 2px,
+                #111 3px,
+                #252525 4px
+            );
+        }
+        .vu-meter-bar {
+            background: linear-gradient(to top, #10b981 60%, #f59e0b 85%, #ef4444 100%);
+        }
+        .neon-box-orange {
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.25), inset 0 0 15px rgba(255, 107, 0, 0.1);
+        }
+        .neon-box-blue {
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.25), inset 0 0 15px rgba(0, 180, 216, 0.1);
+        }
+        .vinyl-glow-orange {
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.6), inset 0 0 15px rgba(0,0,0,0.9);
+        }
+        .vinyl-glow-blue {
+            box-shadow: 0 0 25px rgba(0, 180, 216, 0.6), inset 0 0 15px rgba(0,0,0,0.9);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 font-sans select-none">
+
+    <!-- TOP HEADER -->
+    <div class="w-full max-w-[850px] mb-2 flex items-center justify-between text-xs text-slate-400 px-1">
+        <div class="flex items-center gap-2">
+            <span class="font-display font-black text-white text-base tracking-wider flex items-center gap-1">
+                YOU<span class="text-djOrange drop-shadow-[0_0_8px_#ff6b00]">DJ</span> <span class="text-[10px] bg-djOrange text-black font-bold px-1.5 py-0.5 rounded shadow-lg">850PX</span>
+            </span>
+            <span class="hidden sm:inline-block text-slate-500">| Pro DJ Console</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button id="btn-audio-init" class="bg-djOrange text-black font-extrabold px-3 py-1 rounded-md hover:bg-orange-400 transition shadow-[0_0_12px_rgba(255,107,0,0.6)] flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-power-off text-xs"></i> Attiva Audio
+            </button>
+            <span class="text-djGreen font-semibold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-djGreen animate-ping"></span> ONLINE
+            </span>
+        </div>
+    </div>
+
+    <!-- MAIN CONSOLE CONTAINER (850PX) -->
+    <div class="w-full max-w-[850px] bg-djBg border border-djBorder rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col">
+
+        <!-- BARRA SUPERIORE DECK STATUS -->
+        <div class="bg-djDark border-b border-djBorder px-4 py-2 flex items-center justify-between">
+            <div class="flex items-center gap-2 overflow-hidden w-5/12">
+                <span class="bg-djOrange/20 text-djOrange text-[10px] font-bold px-1.5 py-0.5 rounded border border-djOrange/40 shadow-[0_0_8px_rgba(255,107,0,0.3)]">DECK 1</span>
+                <div class="truncate">
+                    <div id="deck1-title" class="text-xs font-semibold text-white truncate">Stream 7198 Live</div>
+                    <div class="text-[10px] text-slate-400 flex items-center gap-2">
+                        <span id="deck1-time">LIVE STREAM</span>
+                        <span class="text-djOrange font-mono">124.0 BPM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button class="text-red-500 hover:text-red-400 text-xs font-bold flex items-center gap-1 drop-shadow-[0_0_6px_#ef4444]">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span> REC
+                </button>
+                <div class="h-4 w-[1px] bg-djBorder"></div>
+                <div class="flex items-center gap-1 text-slate-400 hover:text-white cursor-pointer transition">
+                    <i class="fa-solid fa-sliders text-xs"></i>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 overflow-hidden w-5/12 text-right">
+                <div class="truncate">
+                    <div id="deck2-title" class="text-xs font-semibold text-white truncate">Zeno Radio Live</div>
+                    <div class="text-[10px] text-slate-400 flex items-center justify-end gap-2">
+                        <span class="text-djBlue font-mono">128.0 BPM</span>
+                        <span id="deck2-time">LIVE STREAM</span>
+                    </div>
+                </div>
+                <span class="bg-djBlue/20 text-djBlue text-[10px] font-bold px-1.5 py-0.5 rounded border border-djBlue/40 shadow-[0_0_8px_rgba(0,180,216,0.3)]">DECK 2</span>
+            </div>
+        </div>
+
+        <!-- MAIN DJ INTERFACE GRID -->
+        <div class="grid grid-cols-12 gap-2 p-3 bg-djDark">
+
+            <!-- ================= DECK 1 (SINISTRA) ================= -->
+            <div class="col-span-5 flex flex-col gap-2.5 bg-djBg p-2.5 rounded-xl border border-djBorder/80 neon-box-orange">
+                <div class="w-full h-8 bg-slate-900 rounded-lg border border-djBorder overflow-hidden relative cursor-pointer" id="wave-container-1">
+                    <canvas id="waveform-1" class="w-full h-full"></canvas>
+                    <div id="wave-progress-1" class="absolute top-0 left-0 h-full w-[25%] bg-djOrange/30 border-r-2 border-djOrange pointer-events-none"></div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2">
+                    <!-- Pad Sampler Deck 1 -->
+                    <div class="flex flex-col gap-1 w-28">
+                        <div class="flex items-center justify-between text-[9px] font-bold text-slate-400">
+                            <span>SAMPLER</span>
+                            <span class="text-djOrange">D1</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button id="d1-pad-1" class="h-9 rounded-md bg-orange-600/20 hover:bg-orange-500/40 border border-orange-500/60 text-orange-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(255,107,0,0.2)] cursor-pointer">APPLAUSE</button>
+                            <button id="d1-pad-2" class="h-9 rounded-md bg-yellow-600/20 hover:bg-yellow-500/40 border border-yellow-500/60 text-yellow-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(234,179,8,0.2)] cursor-pointer">SIREN</button>
+                            <button id="d1-pad-3" class="h-9 rounded-md bg-emerald-600/20 hover:bg-emerald-500/40 border border-emerald-500/60 text-emerald-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(16,185,129,0.2)] cursor-pointer">SCRATCH</button>
+                            <button id="d1-pad-4" class="h-9 rounded-md bg-purple-600/20 hover:bg-purple-500/40 border border-purple-500/60 text-purple-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(139,92,246,0.2)] cursor-pointer">AIRHORN</button>
+                        </div>
+                    </div>
+
+                    <!-- Vinyl Turntable Deck 1 -->
+                    <div class="relative flex-1 flex justify-center items-center py-1">
+                        <div id="vinyl-1" class="w-32 h-32 sm:w-36 sm:h-36 rounded-full vinyl-grooves border-4 border-slate-800 vinyl-glow-orange relative flex items-center justify-center animate-vinyl-spin paused-spin transition-transform">
+                            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-orange-500/80 bg-slate-900 flex items-center justify-center overflow-hidden shadow-2xl">
+                                <img id="vinyl-img-1" src="https://xatimg.com/image/Fd6W0krgBFas.png" alt="Cover 7198" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="w-3 h-3 bg-slate-200 rounded-full absolute border-2 border-orange-600 shadow-[0_0_8px_#ff6b00]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-1.5 pt-1.5 border-t border-djBorder/60">
+                    <button id="play-btn-1" class="w-10 h-9 bg-slate-900 hover:bg-djOrange hover:text-black text-djOrange font-bold rounded-md flex items-center justify-center transition border border-djOrange/40 shadow-[0_0_8px_rgba(255,107,0,0.3)] cursor-pointer">
+                        <i class="fa-solid fa-play text-sm"></i>
+                    </button>
+                    <button id="cue-btn-1" class="w-10 h-9 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-md border border-slate-700 cursor-pointer">CUE</button>
+                    <div class="flex items-center bg-slate-900 rounded-md border border-djBorder p-0.5">
+                        <button id="loop-minus-1" class="w-6 h-8 text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 rounded">-</button>
+                        <span id="loop-val-1" class="text-[10px] font-bold text-djOrange px-1">4</span>
+                        <button id="loop-plus-1" class="w-6 h-8 text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 rounded">+</button>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center">
+                        <span class="text-[9px] text-slate-400 font-bold mb-0.5">PITCH</span>
+                        <input id="pitch-1" type="range" min="0.9" max="1.1" step="0.005" value="1" class="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= CENTER MIXER ================= -->
+            <div class="col-span-2 bg-djCard p-2 rounded-xl border border-djBorder flex flex-col items-center justify-between shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+                <div class="w-full text-center border-b border-djBorder pb-1.5">
+                    <button id="btn-sync" class="bg-slate-900 hover:bg-djOrange hover:text-black border border-djOrange/50 text-djOrange text-[9px] font-extrabold px-2 py-1 rounded-md w-full tracking-wider transition shadow-[0_0_8px_rgba(255,107,0,0.2)] cursor-pointer">SYNC BPM</button>
+                </div>
+                <div class="w-full flex justify-around py-1 gap-1">
+                    <div class="flex flex-col items-center gap-1.5">
+                        <span class="text-[9px] font-bold text-djOrange">D1</span>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">HI</span>
+                            <input id="eq-hi-1" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djOrange cursor-pointer">
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">MID</span>
+                            <input id="eq-mid-1" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djOrange cursor-pointer">
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">LOW</span>
+                            <input id="eq-low-1" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djOrange cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="flex gap-1 h-32 items-end py-1">
+                        <div class="w-1.5 h-full bg-slate-950 rounded-full overflow-hidden flex flex-col justify-end border border-slate-800">
+                            <div id="vu-meter-1" class="w-full vu-meter-bar h-[65%] transition-all duration-75"></div>
+                        </div>
+                        <div class="w-1.5 h-full bg-slate-950 rounded-full overflow-hidden flex flex-col justify-end border border-slate-800">
+                            <div id="vu-meter-2" class="w-full vu-meter-bar h-[70%] transition-all duration-75"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                        <span class="text-[9px] font-bold text-djBlue">D2</span>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">HI</span>
+                            <input id="eq-hi-2" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djBlue cursor-pointer">
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">MID</span>
+                            <input id="eq-mid-2" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djBlue cursor-pointer">
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[8px] text-slate-400">LOW</span>
+                            <input id="eq-low-2" type="range" min="-12" max="12" value="0" class="w-8 h-8 rounded-full bg-slate-900 accent-djBlue cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-around items-center py-1">
+                    <div class="flex flex-col items-center">
+                        <input id="vol-deck-1" type="range" min="0" max="1" step="0.01" value="0.8" class="v-fader accent-djOrange">
+                        <span class="text-[8px] font-bold text-slate-400 mt-1">VOL 1</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <input id="vol-deck-2" type="range" min="0" max="1" step="0.01" value="0.8" class="v-fader accent-djBlue">
+                        <span class="text-[8px] font-bold text-slate-400 mt-1">VOL 2</span>
+                    </div>
+                </div>
+
+                <div class="w-full pt-1.5 border-t border-djBorder">
+                    <span class="text-[8px] font-bold text-slate-400 block text-center mb-0.5">CROSSFADER</span>
+                    <input id="crossfader" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full h-2 crossfader cursor-pointer">
+                </div>
+            </div>
+
+            <!-- ================= DECK 2 (DESTRA) ================= -->
+            <div class="col-span-5 flex flex-col gap-2.5 bg-djBg p-2.5 rounded-xl border border-djBorder/80 neon-box-blue">
+                <div class="w-full h-8 bg-slate-900 rounded-lg border border-djBorder overflow-hidden relative cursor-pointer" id="wave-container-2">
+                    <canvas id="waveform-2" class="w-full h-full"></canvas>
+                    <div id="wave-progress-2" class="absolute top-0 left-0 h-full w-[35%] bg-djBlue/30 border-r-2 border-djBlue pointer-events-none"></div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2">
+                    <!-- Vinyl Turntable Deck 2 -->
+                    <div class="relative flex-1 flex justify-center items-center py-1">
+                        <div id="vinyl-2" class="w-32 h-32 sm:w-36 sm:h-36 rounded-full vinyl-grooves border-4 border-slate-800 vinyl-glow-blue relative flex items-center justify-center animate-vinyl-spin paused-spin transition-transform">
+                            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-djBlue/80 bg-slate-900 flex items-center justify-center overflow-hidden shadow-2xl">
+                                <img id="vinyl-img-2" src="https://xatimg.com/image/2gSKS392WGsA.jpg" alt="Cover Zeno" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="w-3 h-3 bg-slate-200 rounded-full absolute border-2 border-djBlue shadow-[0_0_8px_#00b4d8]"></div>
+                        </div>
+                    </div>
+
+                    <!-- Pad Sampler Deck 2 -->
+                    <div class="flex flex-col gap-1 w-28">
+                        <div class="flex items-center justify-between text-[9px] font-bold text-slate-400">
+                            <span class="text-djBlue">D2</span>
+                            <span>SAMPLER</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button id="d2-pad-1" class="h-9 rounded-md bg-cyan-600/20 hover:bg-cyan-500/40 border border-cyan-500/60 text-cyan-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(0,180,216,0.2)] cursor-pointer">APPLAUSE</button>
+                            <button id="d2-pad-2" class="h-9 rounded-md bg-blue-600/20 hover:bg-blue-500/40 border border-blue-500/60 text-blue-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(59,130,246,0.2)] cursor-pointer">SIREN</button>
+                            <button id="d2-pad-3" class="h-9 rounded-md bg-indigo-600/20 hover:bg-indigo-500/40 border border-indigo-500/60 text-indigo-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(99,102,241,0.2)] cursor-pointer">SCRATCH</button>
+                            <button id="d2-pad-4" class="h-9 rounded-md bg-pink-600/20 hover:bg-pink-500/40 border border-pink-500/60 text-pink-400 font-bold text-[9px] flex items-center justify-center active:scale-95 transition shadow-[0_0_8px_rgba(236,72,153,0.2)] cursor-pointer">AIRHORN</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-1.5 pt-1.5 border-t border-djBorder/60">
+                    <div class="flex-1 flex flex-col items-center">
+                        <span class="text-[9px] text-slate-400 font-bold mb-0.5">PITCH</span>
+                        <input id="pitch-2" type="range" min="0.9" max="1.1" step="0.005" value="1" class="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="flex items-center bg-slate-900 rounded-md border border-djBorder p-0.5">
+                        <button id="loop-minus-2" class="w-6 h-8 text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 rounded cursor-pointer">-</button>
+                        <span id="loop-val-2" class="text-[10px] font-bold text-djBlue px-1">4</span>
+                        <button id="loop-plus-2" class="w-6 h-8 text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 rounded cursor-pointer">+</button>
+                    </div>
+                    <button id="cue-btn-2" class="w-10 h-9 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-md border border-slate-700 cursor-pointer">CUE</button>
+                    <button id="play-btn-2" class="w-10 h-9 bg-slate-900 hover:bg-djBlue hover:text-black text-djBlue font-bold rounded-md flex items-center justify-center transition border border-djBlue/40 shadow-[0_0_8px_rgba(0,180,216,0.3)] cursor-pointer">
+                        <i class="fa-solid fa-play text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIQUADRI COVER INFERIORI -->
+        <div class="grid grid-cols-2 gap-3 p-3 bg-djBg border-t border-djBorder">
+            <div class="flex items-center gap-3 bg-djDark p-2.5 rounded-xl border border-djBorder shadow-md">
+                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-lg bg-slate-900 border border-djOrange/40 overflow-hidden flex-shrink-0 relative shadow-[0_0_15px_rgba(255,107,0,0.2)]">
+                    <img id="card-cover-1" src="https://xatimg.com/image/Fd6W0krgBFas.png" alt="iTunes Cover Stream 7198" class="w-full h-full object-cover">
+                    <span class="absolute top-1 left-1 bg-djOrange text-black text-[9px] font-black px-1 rounded shadow">D1</span>
+                </div>
+                <div class="flex flex-col justify-center overflow-hidden">
+                    <span class="text-[10px] text-djOrange font-bold tracking-wider uppercase drop-shadow-[0_0_5px_rgba(255,107,0,0.5)]">Stream 7198 • iTunes</span>
+                    <div id="card-title-1" class="text-xs font-bold text-white truncate mt-0.5">Caricamento traccia...</div>
+                    <span class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                        <i class="fa-solid fa-music text-djOrange"></i> Live Stream 7198
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 bg-djDark p-2.5 rounded-xl border border-djBorder shadow-md">
+                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-lg bg-slate-900 border border-djBlue/40 overflow-hidden flex-shrink-0 relative shadow-[0_0_15px_rgba(0,180,216,0.2)]">
+                    <img id="card-cover-2" src="https://xatimg.com/image/2gSKS392WGsA.jpg" alt="Zeno Cover" class="w-full h-full object-cover">
+                    <span class="absolute top-1 left-1 bg-djBlue text-black text-[9px] font-black px-1 rounded shadow">D2</span>
+                </div>
+                <div class="flex flex-col justify-center overflow-hidden">
+                    <span class="text-[10px] text-djBlue font-bold tracking-wider uppercase drop-shadow-[0_0_5px_rgba(0,180,216,0.5)]">Zeno Radio Live</span>
+                    <div id="card-title-2" class="text-xs font-bold text-white truncate mt-0.5">In attesa di Zeno...</div>
+                    <span class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                        <i class="fa-solid fa-radio text-djBlue"></i> Stream ylkruiq5e4fvv
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM STATUS BAR -->
+        <div class="bg-djBg border-t border-djBorder px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-400">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1 hover:text-white cursor-pointer"><i class="fa-solid fa-headphones text-djOrange"></i> Master Out</span>
+                <span class="flex items-center gap-1 hover:text-white cursor-pointer"><i class="fa-solid fa-bolt text-yellow-400 drop-shadow-[0_0_6px_#facc15]"></i> Custom MP3 Sampler</span>
+            </div>
+            <div class="text-[10px] text-slate-500 font-mono">
+                YOUDJ CONSOLE • 850px LOCAL MP3
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO STREAMS -->
+    <audio id="audio-stream-1" preload="none" crossorigin="anonymous"></audio>
+    <audio id="audio-stream-2" preload="none" crossorigin="anonymous"></audio>
+
+    <script>
+        const CONFIG_STREAMS = {
+            DECK_1_URL: "https://stm2.srvif.com:7198/stream", 
+            DECK_2_URL: "https://stream.zeno.fm/ylkruiq5e4fvv"
+        };
+
+        // PERCORSI FILE MP3 LOCALI (Rinomina i tuoi 4 file nella stessa cartella)
+        const SAMPLE_URLS = {
+            applause: "applause.mp3",
+            siren: "siren.mp3",
+            scratch: "horror.mp3",
+            airhorn: "sveglia.mp3"
+        };
+
+        let currentSongDeck1 = "";
+        let currentSongDeck2 = "";
+
+        // Metadati Deck 1
+        function updateDeck1Metadata() {
+            fetch('https://streaming.ifantasy.com.br/api-json/NzE5OCsw')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.musica_atual) {
+                        const song = data.musica_atual.toUpperCase();
+                        if (song !== currentSongDeck1) {
+                            currentSongDeck1 = song;
+                            document.getElementById('deck1-title').innerText = song;
+                            document.getElementById('card-title-1').innerText = song;
+                            fetchiTunesCover(song);
+                        }
+                    }
+                })
+                .catch(err => console.log('Errore API Deck 1 Metadata:', err));
+        }
+
+        function fetchiTunesCover(songName) {
+            const cleanQuery = encodeURIComponent(songName.replace(/-/g, ' '));
+            const script = document.createElement('script');
+            const callbackName = 'itunesCallback_' + Math.floor(Math.random() * 1000000);
+
+            window[callbackName] = function(data) {
+                if (data && data.results && data.results.length > 0) {
+                    const imgUrl = data.results[0].artworkUrl100.replace('100x100', '400x400');
+                    document.getElementById('card-cover-1').src = imgUrl;
+                    document.getElementById('vinyl-img-1').src = imgUrl;
+                } else {
+                    const fallback = "https://xatimg.com/image/Fd6W0krgBFas.png";
+                    document.getElementById('card-cover-1').src = fallback;
+                    document.getElementById('vinyl-img-1').src = fallback;
+                }
+                delete window[callbackName];
+                document.body.removeChild(script);
+            };
+
+            script.src = `https://itunes.apple.com/search?term=${cleanQuery}&media=music&limit=1&callback=${callbackName}`;
+            document.body.appendChild(script);
+        }
+
+        // Metadati Deck 2
+        function updateDeck2Metadata() {
+            fetch("https://zenoplay.zenomedia.com/api/zenofm/nowplaying/ylkruiq5e4fvv")
+                .then(res => res.json())
+                .then(d => {
+                    const titleText = ((d.artist || "") + " - " + (d.title || "")).trim();
+                    const songTitle = titleText.length > 3 ? titleText : "Zeno Radio Live";
+
+                    if (songTitle !== currentSongDeck2) {
+                        currentSongDeck2 = songTitle;
+                        document.getElementById('deck2-title').innerText = songTitle;
+                        document.getElementById('card-title-2').innerText = songTitle;
+
+                        let coverUrl = "https://xatimg.com/image/2gSKS392WGsA.jpg";
+                        if (d.cover && d.cover.length > 0) {
+                            coverUrl = d.cover;
+                        } else if (d.albums && d.albums.length > 0) {
+                            coverUrl = d.albums[0];
+                        }
+                        document.getElementById('card-cover-2').src = coverUrl;
+                        document.getElementById('vinyl-img-2').src = coverUrl;
+                    }
+                })
+                .catch(err => console.log('Errore API Deck 2 Zeno Metadata:', err));
+        }
+
+        setInterval(updateDeck1Metadata, 10000);
+        setInterval(updateDeck2Metadata, 10000);
+        updateDeck1Metadata();
+        updateDeck2Metadata();
+
+        // Audio Context & Routing
+        let audioCtx = null;
+        let isAudioInit = false;
+
+        const deckState = {
+            1: { playing: false, volume: 0.8, audioEl: null, gainNode: null, eqHi: null, eqMid: null, eqLow: null },
+            2: { playing: false, volume: 0.8, audioEl: null, gainNode: null, eqHi: null, eqMid: null, eqLow: null }
+        };
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+
+                setupDeckAudioNode(1);
+                setupDeckAudioNode(2);
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isAudioInit = true;
+            const btnInit = document.getElementById('btn-audio-init');
+            btnInit.classList.remove('bg-djOrange');
+            btnInit.classList.add('bg-emerald-600', 'text-white', 'shadow-[0_0_15px_#10b981]');
+            btnInit.innerHTML = `<i class="fa-solid fa-check"></i> Audio Attivo`;
+        }
+
+        function setupDeckAudioNode(deckId) {
+            const audioEl = document.getElementById(`audio-stream-${deckId}`);
+            deckState[deckId].audioEl = audioEl;
+            audioEl.src = deckId === 1 ? CONFIG_STREAMS.DECK_1_URL : CONFIG_STREAMS.DECK_2_URL;
+
+            try {
+                const source = audioCtx.createMediaElementSource(audioEl);
+                
+                const eqLow = audioCtx.createBiquadFilter();
+                eqLow.type = 'lowshelf';
+                eqLow.frequency.value = 320;
+
+                const eqMid = audioCtx.createBiquadFilter();
+                eqMid.type = 'peaking';
+                eqMid.frequency.value = 1000;
+                eqMid.Q.value = 1.0;
+
+                const eqHi = audioCtx.createBiquadFilter();
+                eqHi.type = 'highshelf';
+                eqHi.frequency.value = 3200;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = deckState[deckId].volume;
+
+                source.connect(eqLow);
+                eqLow.connect(eqMid);
+                eqMid.connect(eqHi);
+                eqHi.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                deckState[deckId].gainNode = gainNode;
+                deckState[deckId].eqHi = eqHi;
+                deckState[deckId].eqMid = eqMid;
+                deckState[deckId].eqLow = eqLow;
+            } catch (e) {
+                console.log(`Audio Node setup deck ${deckId} fallback:`, e);
+            }
+        }
+
+        // FUNZIONE PER RIPRODURRE I FILE MP3 LOCALI
+        function playCustomSample(key) {
+            if (!isAudioInit) initAudio();
+            const filePath = SAMPLE_URLS[key];
+            if (filePath) {
+                const sAudio = new Audio(filePath);
+                sAudio.volume = 1.0;
+                sAudio.play().catch(e => console.log("File MP3 non trovato o bloccato:", e));
+            }
+        }
+
+        // Collegamento Pad Sampler MP3 per SX e DX
+        ['1', '2'].forEach(deck => {
+            document.getElementById(`d${deck}-pad-1`).addEventListener('click', () => playCustomSample('applause'));
+            document.getElementById(`d${deck}-pad-2`).addEventListener('click', () => playCustomSample('siren'));
+            document.getElementById(`d${deck}-pad-3`).addEventListener('click', () => playCustomSample('scratch'));
+            document.getElementById(`d${deck}-pad-4`).addEventListener('click', () => playCustomSample('airhorn'));
+        });
+
+        // Master Volume & Crossfader
+        function updateMasterVolumes() {
+            const crossVal = parseFloat(document.getElementById('crossfader').value);
+            const vol1 = parseFloat(document.getElementById('vol-deck-1').value);
+            const vol2 = parseFloat(document.getElementById('vol-deck-2').value);
+
+            let mult1 = 1;
+            let mult2 = 1;
+
+            if (crossVal < 0.5) {
+                mult2 = crossVal * 2;
+            } else if (crossVal > 0.5) {
+                mult1 = (1 - crossVal) * 2;
+            }
+
+            const finalVol1 = vol1 * mult1;
+            const finalVol2 = vol2 * mult2;
+
+            deckState[1].volume = finalVol1;
+            deckState[2].volume = finalVol2;
+
+            if (deckState[1].audioEl) deckState[1].audioEl.volume = finalVol1;
+            if (deckState[2].audioEl) deckState[2].audioEl.volume = finalVol2;
+
+            if (deckState[1].gainNode) deckState[1].gainNode.gain.value = finalVol1;
+            if (deckState[2].gainNode) deckState[2].gainNode.gain.value = finalVol2;
+
+            document.getElementById('vu-meter-1').style.height = `${Math.min(100, finalVol1 * 85 + 15)}%`;
+            document.getElementById('vu-meter-2').style.height = `${Math.min(100, finalVol2 * 85 + 15)}%`;
+        }
+
+        document.getElementById('crossfader').addEventListener('input', updateMasterVolumes);
+        document.getElementById('vol-deck-1').addEventListener('input', updateMasterVolumes);
+        document.getElementById('vol-deck-2').addEventListener('input', updateMasterVolumes);
+
+        // EQ
+        ['1', '2'].forEach(id => {
+            document.getElementById(`eq-hi-${id}`).addEventListener('input', (e) => {
+                if (deckState[id].eqHi) deckState[id].eqHi.gain.value = parseFloat(e.target.value);
+            });
+            document.getElementById(`eq-mid-${id}`).addEventListener('input', (e) => {
+                if (deckState[id].eqMid) deckState[id].eqMid.gain.value = parseFloat(e.target.value);
+            });
+            document.getElementById(`eq-low-${id}`).addEventListener('input', (e) => {
+                if (deckState[id].eqLow) deckState[id].eqLow.gain.value = parseFloat(e.target.value);
+            });
+        });
+
+        document.getElementById('btn-audio-init').addEventListener('click', initAudio);
+
+        // Play / Pause Deck 1
+        const playBtn1 = document.getElementById('play-btn-1');
+        const vinyl1 = document.getElementById('vinyl-1');
+
+        playBtn1.addEventListener('click', () => {
+            if (!isAudioInit) initAudio();
+            const audio = deckState[1].audioEl;
+            if (audio.paused) {
+                audio.play().then(() => {
+                    deckState[1].playing = true;
+                    vinyl1.classList.remove('paused-spin');
+                    playBtn1.classList.add('bg-djOrange', 'text-black');
+                    playBtn1.innerHTML = `<i class="fa-solid fa-pause text-sm"></i>`;
+                }).catch(e => { audio.play(); });
+            } else {
+                audio.pause();
+                deckState[1].playing = false;
+                vinyl1.classList.add('paused-spin');
+                playBtn1.classList.remove('bg-djOrange', 'text-black');
+                playBtn1.innerHTML = `<i class="fa-solid fa-play text-sm"></i>`;
+            }
+        });
+
+        // Play / Pause Deck 2
+        const playBtn2 = document.getElementById('play-btn-2');
+        const vinyl2 = document.getElementById('vinyl-2');
+
+        playBtn2.addEventListener('click', () => {
+            if (!isAudioInit) initAudio();
+            const audio = deckState[2].audioEl;
+            if (audio.paused) {
+                audio.play().then(() => {
+                    deckState[2].playing = true;
+                    vinyl2.classList.remove('paused-spin');
+                    playBtn2.classList.add('bg-djBlue', 'text-black');
+                    playBtn2.innerHTML = `<i class="fa-solid fa-pause text-sm"></i>`;
+                }).catch(e => { audio.play(); });
+            } else {
+                audio.pause();
+                deckState[2].playing = false;
+                vinyl2.classList.add('paused-spin');
+                playBtn2.classList.remove('bg-djBlue', 'text-black');
+                playBtn2.innerHTML = `<i class="fa-solid fa-play text-sm"></i>`;
+            }
+        });
+    </script>
+</body>
+</html>
