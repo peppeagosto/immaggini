@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -39,44 +40,44 @@
         object-fit: cover;
     }
 
-    /* Effetto di luce centrale (Largo 748px) */
+    /* Effetto di luce centrale (580px) */
     .center-light-effect {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 748px;
-        height: 748px;
+        width: 580px;
+        height: 580px;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(255, 0, 85, 0.35) 0%, rgba(255, 51, 0, 0.2) 40%, rgba(0, 0, 0, 0) 70%);
+        background: radial-gradient(circle, rgba(255, 0, 85, 0.4) 0%, rgba(255, 51, 0, 0.25) 45%, rgba(0, 0, 0, 0) 70%);
         pointer-events: none;
         z-index: 1;
         border-radius: 50%;
         animation: pulseCenterLight 4s ease-in-out infinite alternate, rotateLight 12s linear infinite;
-        filter: blur(20px);
+        filter: blur(25px);
     }
 
-    /* Anello di Scariche Elettriche attorno ai 748px */
+    /* Anello di Scariche Elettriche rotanti (580px) */
     .electric-ring {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 748px;
-        height: 748px;
+        width: 580px;
+        height: 580px;
         transform: translate(-50%, -50%);
         pointer-events: none;
         z-index: 1;
         border-radius: 50%;
-        border: 2px dashed rgba(0, 255, 255, 0.6);
-        box-shadow: 0 0 15px #00ffff, inset 0 0 15px #ff0055, 0 0 35px #ff0055;
+        border: 2px dashed rgba(0, 255, 255, 0.7);
+        box-shadow: 0 0 20px #00ffff, inset 0 0 20px #ff0055, 0 0 40px #ff0055;
         animation: electricSpin 6s linear infinite, electricGlow 1.2s ease-in-out infinite alternate;
     }
 
     .electric-ring::before {
         content: '';
         position: absolute;
-        inset: -10px;
+        inset: -12px;
         border-radius: 50%;
-        border: 3px dotted rgba(255, 0, 128, 0.8);
+        border: 3px dotted rgba(255, 0, 128, 0.9);
         animation: electricSpinReverse 4s linear infinite;
     }
 
@@ -92,11 +93,11 @@
 
     @keyframes electricGlow {
         0% {
-            box-shadow: 0 0 10px #00ffff, inset 0 0 10px #ff0055, 0 0 25px #ff0055;
-            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 12px #00ffff, inset 0 0 12px #ff0055, 0 0 30px #ff0055;
+            border-color: rgba(0, 255, 255, 0.5);
         }
         100% {
-            box-shadow: 0 0 25px #00ffff, inset 0 0 25px #ff0077, 0 0 50px #ff0055, 0 0 80px #00ffff;
+            box-shadow: 0 0 30px #00ffff, inset 0 0 30px #ff0077, 0 0 60px #ff0055, 0 0 90px #00ffff;
             border-color: rgba(0, 255, 255, 1);
         }
     }
@@ -254,10 +255,10 @@
     <source src="https://assets.mixkit.co/videos/preview/mixkit-red-abstract-particle-tunnel-41549-large.mp4" type="video/mp4">
 </video>
 
-<!-- Effetto Luce al centro (748px) -->
+<!-- Effetto Luce al centro (580px) -->
 <div class="center-light-effect"></div>
 
-<!-- Anello di Scariche Elettriche rotanti (748px) -->
+<!-- Anello di Scariche Elettriche rotanti (580px) -->
 <div class="electric-ring"></div>
 
 <div class="cover">
@@ -286,7 +287,7 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // 1. Stelline: Aumentate di numero (65) e ingrandite (5px - 14px)
+    // 1. Stelline: (65 stelline da 5px a 14px)
     let stars = [];
     const starColors = ['#ff0055', '#ffaa00', '#00ffff', '#ffffff', '#ff00aa'];
     for (let i = 0; i < 65; i++) {
@@ -330,7 +331,7 @@
         ctx.restore();
     }
 
-    // 2. Note Musicali Fluttuanti: Aumentate di numero (35) e ingrandite (22px - 36px)
+    // 2. Note Musicali Fluttuanti: (35 note da 22px a 36px)
     const musicSymbols = ['♪', '♫', '♬', '♩'];
     let notes = [];
     for (let i = 0; i < 35; i++) {
