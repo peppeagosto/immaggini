@@ -39,6 +39,84 @@
         object-fit: cover;
     }
 
+    /* Effetto di luce centrale (Largo 748px) */
+    .center-light-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 748px;
+        height: 748px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(255, 0, 85, 0.35) 0%, rgba(255, 51, 0, 0.2) 40%, rgba(0, 0, 0, 0) 70%);
+        pointer-events: none;
+        z-index: 1;
+        border-radius: 50%;
+        animation: pulseCenterLight 4s ease-in-out infinite alternate, rotateLight 12s linear infinite;
+        filter: blur(20px);
+    }
+
+    /* Anello di Scariche Elettriche attorno ai 748px */
+    .electric-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 748px;
+        height: 748px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 1;
+        border-radius: 50%;
+        border: 2px dashed rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 15px #00ffff, inset 0 0 15px #ff0055, 0 0 35px #ff0055;
+        animation: electricSpin 6s linear infinite, electricGlow 1.2s ease-in-out infinite alternate;
+    }
+
+    .electric-ring::before {
+        content: '';
+        position: absolute;
+        inset: -10px;
+        border-radius: 50%;
+        border: 3px dotted rgba(255, 0, 128, 0.8);
+        animation: electricSpinReverse 4s linear infinite;
+    }
+
+    @keyframes electricSpin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes electricSpinReverse {
+        0% { transform: rotate(360deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    @keyframes electricGlow {
+        0% {
+            box-shadow: 0 0 10px #00ffff, inset 0 0 10px #ff0055, 0 0 25px #ff0055;
+            border-color: rgba(0, 255, 255, 0.4);
+        }
+        100% {
+            box-shadow: 0 0 25px #00ffff, inset 0 0 25px #ff0077, 0 0 50px #ff0055, 0 0 80px #00ffff;
+            border-color: rgba(0, 255, 255, 1);
+        }
+    }
+
+    @keyframes pulseCenterLight {
+        0% {
+            transform: translate(-50%, -50%) scale(0.85);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1.15);
+            opacity: 0.95;
+        }
+    }
+
+    @keyframes rotateLight {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
     .cover {
         position: relative;
         width: 100vw;
@@ -61,7 +139,6 @@
         text-align: center;
         pointer-events: none;
         padding: 20px;
-        /* Animazione su e giù per l'intero bloco di testo */
         animation: floatUpDown 3.5s ease-in-out infinite;
     }
 
@@ -172,10 +249,16 @@
 </head>
 <body>
 
-<!-- Sfondo Video MP4 (Sostituisci il link src se ne hai uno specifico) -->
+<!-- Sfondo Video MP4 -->
 <video autoplay loop muted playsinline id="bg-video">
     <source src="https://assets.mixkit.co/videos/preview/mixkit-red-abstract-particle-tunnel-41549-large.mp4" type="video/mp4">
 </video>
+
+<!-- Effetto Luce al centro (748px) -->
+<div class="center-light-effect"></div>
+
+<!-- Anello di Scariche Elettriche rotanti (748px) -->
+<div class="electric-ring"></div>
 
 <div class="cover">
     <!-- Canvas Sfondo Effetti -->
@@ -203,14 +286,14 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // 1. Stelline piu piccole e ridotte di numero
+    // 1. Stelline: Aumentate di numero (65) e ingrandite (5px - 14px)
     let stars = [];
-    const starColors = ['#ff0055', '#ffaa00', '#00ffff', '#ffffff'];
-    for (let i = 0; i < 40; i++) {
+    const starColors = ['#ff0055', '#ffaa00', '#00ffff', '#ffffff', '#ff00aa'];
+    for (let i = 0; i < 65; i++) {
         stars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 4 + 2, // Piccole (da 2px a 6px)
+            size: Math.random() * 9 + 5,
             alpha: Math.random(),
             speedAlpha: (Math.random() * 0.02 + 0.005),
             color: starColors[Math.floor(Math.random() * starColors.length)]
@@ -241,25 +324,25 @@
         ctx.closePath();
         ctx.fillStyle = color;
         ctx.globalAlpha = alpha;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 12;
         ctx.shadowColor = color;
         ctx.fill();
         ctx.restore();
     }
 
-    // 2. Note Musicali Fluttuanti (Dimensioni ridotte)
+    // 2. Note Musicali Fluttuanti: Aumentate di numero (35) e ingrandite (22px - 36px)
     const musicSymbols = ['♪', '♫', '♬', '♩'];
     let notes = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 35; i++) {
         notes.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             symbol: musicSymbols[Math.floor(Math.random() * musicSymbols.length)],
-            fontSize: Math.floor(Math.random() * 10 + 12), // Piccole (da 12px a 22px)
-            speedY: Math.random() * 1.0 + 0.4,
-            speedX: (Math.random() - 0.5) * 0.5,
+            fontSize: Math.floor(Math.random() * 14 + 22),
+            speedY: Math.random() * 1.2 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.6,
             angle: Math.random() * 360,
-            spin: (Math.random() - 0.5) * 0.02,
+            spin: (Math.random() - 0.5) * 0.03,
             alpha: Math.random() * 0.7 + 0.3,
             color: Math.random() > 0.5 ? '#ff0055' : '#00ffff'
         });
@@ -295,7 +378,7 @@
             ctx.font = `${n.fontSize}px 'Josefin Sans', sans-serif`;
             ctx.fillStyle = n.color;
             ctx.globalAlpha = n.alpha;
-            ctx.shadowBlur = 8;
+            ctx.shadowBlur = 12;
             ctx.shadowColor = n.color;
             ctx.fillText(n.symbol, 0, 0);
             ctx.restore();
