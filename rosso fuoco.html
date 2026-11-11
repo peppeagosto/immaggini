@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" style="--vh: 5.99px;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>EL DIABLO - Lightning & Fire</title>
+<style>
+:root {
+  --bg: #0c0205;
+  --sky-top: #070104;
+  --sky-mid: #2a050c;
+  --sky-low: #5e0d14;
+  --sky-horizon: #9a2414;
+  --moon-size: clamp(90px, 22vmin, 340px);
+  --moon-right: 14vw;
+  --moon-top: 5vh;
+  --sil: #0a0204;
+  --rim: #6a1018;
+  --tree-max: 40vw;
+  --patch: clamp(160px, 34vmin, 540px);
+  --sigil-w: clamp(150px, 26vw, 440px);
+  --sigil-top: 28%;
+  --flock-every: 60;
+  --flock-hold: 9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+
+@keyframes fx-ltr { from { transform: translateX(-14vw); } to { transform: translateX(114vw); } }
+@keyframes fx-rtl { from { transform: translateX(114vw); } to { transform: translateX(-14vw); } }
+@keyframes bob { from { transform: translateY(-14px) rotate(-4deg); } to { transform: translateY(14px) rotate(4deg); } }
+@keyframes flap { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-.45); } }
+@keyframes cloud-bob { from { transform: translateY(-8px); } to { transform: translateY(8px); } }
+@keyframes moon-glow { from { transform: scale(1); opacity: .7; } to { transform: scale(1.07); opacity: 1; } }
+@keyframes moon-halo { from { transform: scale(1); opacity: .35; } to { transform: scale(1.16); opacity: .65; } }
+@keyframes fog-a { from { transform: translateX(-6vw); } to { transform: translateX(6vw); } }
+@keyframes window { from { opacity: .7; } to { opacity: 1; } }
+@keyframes lava { from { opacity: .55; } to { opacity: 1; } }
+@keyframes sigil-float { from { transform: translateY(-1.2vh); } to { transform: translateY(1.2vh); } }
+@keyframes sigil-burn { from { opacity: .5; } to { opacity: 1; } }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+
+/* Flash dei lampi sul testo */
+@keyframes electric-flicker {
+  0%, 100% { opacity: 0.95; filter: drop-shadow(0 0 6px #ff4a1c); }
+  22% { opacity: 1; filter: drop-shadow(0 0 25px #00f0ff) drop-shadow(0 0 45px #ffffff); }
+  24% { opacity: 0.7; }
+  26% { opacity: 1; filter: drop-shadow(0 0 35px #ffffff); }
+  68% { opacity: 0.9; filter: drop-shadow(0 0 10px #ff7a2a); }
+  70% { opacity: 1; filter: drop-shadow(0 0 30px #7df9ff); }
+}
+
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 45% at calc(100% - var(--moon-right) - var(--moon-size)/2) calc(var(--moon-top) + var(--moon-size)/2), rgba(255, 80, 40, .32), transparent 70%),
+    radial-gradient(ellipse 70% 30% at 50% 78%, rgba(255, 90, 30, .28), transparent 70%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 34%, var(--sky-low) 64%, var(--sky-horizon) 80%, #2a0508 100%);
+  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+}
+.scene.paused * { animation-play-state: paused !important; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+canvas.sky { z-index: 1; }
+canvas.fx { z-index: 6; }
+canvas.embers { z-index: 11; }
+
+.moon-wrap {
+  position: absolute;
+  right: var(--moon-right);
+  top: var(--moon-top);
+  width: var(--moon-size);
+  height: var(--moon-size);
+  z-index: 2;
+}
+.moon-halo {
+  position: absolute;
+  inset: -95%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 70, 40, .45) 0%, rgba(200, 30, 30, .18) 35%, transparent 65%);
+  animation: moon-halo 9s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+.moon-glow {
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 150, 90, .9) 45%, rgba(230, 60, 40, .35) 62%, transparent 72%);
+  animation: moon-glow 6s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+.moon {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 34%, rgba(130, 20, 20, .5) 0 7%, transparent 8%),
+    radial-gradient(circle at 58% 26%, rgba(130, 20, 20, .4) 0 5%, transparent 6%),
+    radial-gradient(circle at 66% 58%, rgba(120, 18, 18, .5) 0 11%, transparent 12.5%),
+    radial-gradient(circle at 38% 68%, rgba(130, 20, 20, .4) 0 6%, transparent 7%),
+    radial-gradient(circle at 46% 46%, rgba(150, 30, 25, .3) 0 16%, transparent 18%),
+    radial-gradient(circle at 74% 34%, rgba(130, 20, 20, .35) 0 3.5%, transparent 4.5%),
+    radial-gradient(circle at 35% 30%, #ffe2c0 0%, #ff9a62 38%, #e0472c 72%, #8f1515 100%);
+  box-shadow: inset -1.4vmin -1.4vmin 3.4vmin rgba(70, 0, 10, .5), 0 0 5vmin rgba(255, 80, 40, .6);
+}
+
+.clouds { z-index: 3; }
+.cl { position: absolute; left: 0; will-change: transform; }
+.cl > div { will-change: transform; }
+.cl svg { display: block; width: 100%; height: auto; }
+
+.land {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56%;
+  z-index: 5;
+  pointer-events: none;
+}
+.land svg { width: 100%; height: 100%; display: block; }
+.win { animation: window 5s ease-in-out infinite alternate; }
+
+.fog {
+  position: absolute;
+  left: -15%;
+  width: 130%;
+  pointer-events: none;
+  will-change: transform;
+}
+.fog.back {
+  bottom: 4%;
+  height: 30%;
+  z-index: 7;
+  background:
+    radial-gradient(ellipse 30% 45% at 20% 70%, rgba(200, 50, 40, .28), transparent 70%),
+    radial-gradient(ellipse 35% 40% at 65% 75%, rgba(170, 30, 40, .24), transparent 70%),
+    radial-gradient(ellipse 25% 35% at 90% 65%, rgba(210, 60, 40, .22), transparent 70%);
+  animation: fog-a 38s ease-in-out infinite alternate;
+}
+.fog.front {
+  bottom: -4%;
+  height: 22%;
+  z-index: 10;
+  background:
+    radial-gradient(ellipse 28% 50% at 30% 80%, rgba(220, 70, 50, .18), transparent 70%),
+    radial-gradient(ellipse 30% 50% at 78% 85%, rgba(220, 70, 50, .16), transparent 70%);
+  animation: fog-a 52s ease-in-out -20s infinite alternate-reverse;
+}
+
+.spires {
+  position: absolute;
+  bottom: 0;
+  z-index: 8;
+  pointer-events: none;
+  height: 92%;
+  aspect-ratio: 6/10;
+  max-width: var(--tree-max);
+}
+.spires svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.spires.left { left: -2vw; }
+.spires.right { right: -2vw; height: 84%; transform: scaleX(-1); }
+.vein { animation: lava 5s ease-in-out infinite alternate; }
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16%;
+  z-index: 9;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(10, 1, 4, .88) 50%, #0a0104);
+}
+.lava {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12%;
+  z-index: 9;
+  pointer-events: none;
+}
+.lava svg { width: 100%; height: 100%; display: block; }
+.lava .hot { animation: lava 4.5s ease-in-out infinite alternate; }
+.grass {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6%;
+  z-index: 9;
+  pointer-events: none;
+}
+.grass svg { width: 100%; height: 100%; display: block; }
+
+/* EL DIABLO Sigils con fulmini */
+.sigil {
+  position: absolute;
+  top: var(--sigil-top);
+  width: var(--sigil-w);
+  z-index: 13;
+  pointer-events: none;
+  animation: sigil-float 7s ease-in-out infinite alternate;
+}
+.sigil.left { left: 2vw; }
+.sigil.right { right: 2vw; animation-delay: -3.5s; }
+
+.sigil .aura {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 140%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 80, 30, .38), rgba(160, 10, 20, .16) 40%, transparent 68%);
+  animation: sigil-burn 5s ease-in-out infinite alternate;
+}
+.sigil .ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 110%;
+  aspect-ratio: 1;
+  margin: -55% 0 0 -55%;
+  opacity: .6;
+}
+.sigil .ring svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: ring-spin 120s linear infinite;
+}
+.sigil.right .ring svg { animation-direction: reverse; }
+
+.sigil-inner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sigil .mark {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  animation: electric-flicker 4s infinite;
+}
+.sigil .burn { animation: sigil-burn 3.8s ease-in-out infinite alternate; }
+
+/* Canvas dedicato per i lampi sopra a ciascun sigillo */
+.lightning-canvas {
+  position: absolute;
+  left: -20%;
+  top: -25%;
+  width: 140%;
+  height: 150%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+@media (max-width: 768px) {
+  :root { --tree-max: 34vw; }
+}
+@media (max-aspect-ratio: 3/4) {
+  :root {
+    --moon-right: 8vw;
+    --patch: clamp(130px, 38vw, 300px);
+    --sigil-w: clamp(110px, 28vw, 240px);
+    --sigil-top: 22%;
+  }
+  .sigil.left { left: 1vw; }
+  .sigil.right { right: 1vw; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="cloudGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a1c24"></stop>
+      <stop offset=".5" stop-color="#3e0a12"></stop>
+      <stop offset="1" stop-color="#1c0308"></stop>
+    </linearGradient>
+    <radialGradient id="winGlow">
+      <stop offset="0" stop-color="#ff9a50" stop-opacity=".7"></stop>
+      <stop offset="1" stop-color="#ff3a1c" stop-opacity="0"></stop>
+    </radialGradient>
+    <linearGradient id="fireLava" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff4c2"></stop>
+      <stop offset=".25" stop-color="#ffbe4a"></stop>
+      <stop offset=".6" stop-color="#ff4a1c"></stop>
+      <stop offset="1" stop-color="#a80e14"></stop>
+    </linearGradient>
+    <linearGradient id="heatFlow" x1="0" y1="0" x2="0" y2=".35" spreadMethod="reflect">
+      <stop offset="0" stop-color="#fff6c8" stop-opacity="0"></stop>
+      <stop offset=".5" stop-color="#fff6c8" stop-opacity=".65"></stop>
+      <stop offset="1" stop-color="#fff6c8" stop-opacity="0"></stop>
+      <animateTransform attributeName="gradientTransform" type="translate" values="0 0;0 .7" dur="6s" repeatCount="indefinite"></animateTransform>
+    </linearGradient>
+    <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+    </filter>
+    <filter id="blur3" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"></feGaussianBlur>
+    </filter>
+  </defs>
+</svg>
+
+<div class="scene" id="scene">
+  <canvas class="sky" id="sky" width="1360" height="599"></canvas>
+  
+  <div class="moon-wrap">
+    <div class="moon-halo"></div>
+    <div class="moon-glow"></div>
+    <div class="moon"></div>
+  </div>
+  
+  <div class="layer clouds" id="clouds"></div>
+  
+  <div class="land">
+    <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice">
+      <path d="M0 380 L90 330 L150 352 L240 290 L300 318 L380 262 L470 300 L560 276 L660 330 L760 300 L860 340 L960 296 L1060 326 L1150 280 L1240 310 L1330 268 L1420 306 L1510 286 L1600 320 L1600 600 L0 600Z" fill="#4a0c14" opacity=".75"></path>
+      <g class="win">
+        <ellipse cx="560" cy="300" rx="130" ry="70" fill="url(#winGlow)"></ellipse>
+      </g>
+      <path d="M380 470 L500 318 L530 300 L590 300 L620 318 L760 470Z" fill="#2a050c"></path>
+      <g class="vein" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M540 304 L532 340 L548 372 L536 410 L550 450 M578 304 L590 336 L578 362 L596 400 L590 440" stroke="#ff3a14" stroke-width="10" filter="url(#blur6)" opacity=".8"></path>
+        <path d="M540 304 L532 340 L548 372 L536 410 L550 450 M578 304 L590 336 L578 362 L596 400 L590 440" stroke="#ff7a2a" stroke-width="3"></path>
+        <path d="M530 301 L590 301" stroke="#ffd8a0" stroke-width="3"></path>
+      </g>
+      <path d="M0 450 C 160 410, 300 420, 430 440 C 560 460, 700 430, 860 450 C 1000 468, 1140 420, 1300 430 C 1430 440, 1520 420, 1600 430 L1600 600 L0 600Z" fill="#33070e"></path>
+      <g fill="#1a0308">
+        <path d="M0 520 C 110 462, 270 440, 430 462 C 540 478, 630 520, 700 600 L0 600Z"></path>
+        <path d="M880 600 C 960 500, 1100 452, 1250 448 C 1400 446, 1520 480, 1600 500 L1600 600Z"></path>
+        <rect x="1100" y="330" width="34" height="140"></rect><rect x="1092" y="322" width="50" height="12"></rect>
+        <rect x="1180" y="300" width="34" height="170"></rect><rect x="1172" y="292" width="50" height="12"></rect>
+        <path d="M1260 470 L1260 360 L1270 350 L1282 368 L1294 344 L1294 470Z"></path>
+        <rect x="1340" y="340" width="34" height="130"></rect><rect x="1332" y="332" width="50" height="12"></rect>
+        <path d="M1172 292 C 1172 230, 1222 230, 1222 292 L1212 292 C 1212 244, 1182 244, 1182 292Z"></path>
+        <path d="M200 470 L200 380 L212 370 L222 386 L234 366 L234 470Z"></path>
+        <rect x="290" y="400" width="30" height="70"></rect><rect x="283" y="392" width="44" height="10"></rect>
+      </g>
+    </svg>
+  </div>
+
+  <canvas class="fx" id="fx" width="1360" height="599"></canvas>
+  <div class="fog back"></div>
+
+  <div class="spires left"><svg viewBox="0 0 600 1000" preserveAspectRatio="xMinYMax meet" id="spL"></svg></div>
+  <div class="spires right"><svg viewBox="0 0 600 1000" preserveAspectRatio="xMinYMax meet" id="spR"></svg></div>
+
+  <div class="ground"></div>
+  <div class="lava"><svg viewBox="0 0 1600 120" preserveAspectRatio="none" id="lava"></svg></div>
+  <div class="grass"><svg viewBox="0 0 1000 60" preserveAspectRatio="none" id="grass"></svg></div>
+
+  <div class="fog front"></div>
+  <canvas class="embers" id="embers" width="1360" height="599"></canvas>
+
+  <!-- Sigillo Sinistro con Lampi -->
+  <div class="sigil left" id="sigilL">
+    <div class="sigil-inner">
+      <canvas class="lightning-canvas" id="ltL"></canvas>
+    </div>
+  </div>
+
+  <!-- Sigillo Destro con Lampi -->
+  <div class="sigil right" id="sigilR">
+    <div class="sigil-inner">
+      <canvas class="lightning-canvas" id="ltR"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var CONFIG = { flock: 120, clouds: 5, speed: 1, embers: 42 };
+  var NS = 'http://www.w3.org/2000/svg';
+  var rnd = function (a, b) { return a + Math.random() * (b - a); };
+  var css = getComputedStyle(document.documentElement);
+  var FLOCK_EVERY = parseFloat(css.getPropertyValue('--flock-every')) || 60;
+  var FLOCK_HOLD = parseFloat(css.getPropertyValue('--flock-hold')) || 9;
+
+  function setVH() { document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }
+  setVH();
+  addEventListener('resize', setVH);
+  addEventListener('orientationchange', setVH);
+  addEventListener('pageshow', setVH);
+
+  var scene = document.getElementById('scene');
+  var paused = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  // Cerchio runico rosso/arancio
+  var RING = (function () {
+    var s = '<svg viewBox="-140 -140 280 280"><circle r="128" fill="none" stroke="#ff5a2a" stroke-width=".9" stroke-dasharray="3 5" opacity=".8"/>' +
+      '<circle r="118" fill="none" stroke="#ff8c3a" stroke-width=".5" opacity=".55"/>';
+    for (var i = 0; i < 24; i++) {
+      var a = i / 24 * Math.PI * 2, r = 123, x = Math.cos(a) * r, y = Math.sin(a) * r;
+      s += '<path d="M' + x.toFixed(1) + ' ' + y.toFixed(1) + ' l2.6 -4.5 l2.6 4.5z" fill="#ff6a30" opacity=".75" transform="rotate(' + (a * 180 / Math.PI + 90).toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+    }
+    return s + '</svg>';
+  })();
+
+  function textSigil(fill, stroke, strokeWidth, filter) {
+    var filt = filter ? ' filter="' + filter + '"' : '';
+    return '<text x="160" y="52" text-anchor="middle" dominant-baseline="central" ' +
+      'font-family="Cinzel, Georgia, serif" font-weight="900" font-size="33" letter-spacing="4px" ' +
+      'fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + strokeWidth + '"' + filt + '>EL DIABLO</text>';
+  }
+
+  var MARK = '<div class="aura"></div><div class="ring">' + RING + '</div>' +
+    '<svg class="mark" viewBox="0 0 320 100">' +
+      '<g class="burn">' + textSigil('none', '#ff3a14', 14, 'url(#blur6)') + '</g>' +
+      '<g>' + textSigil('#140205', '#140205', 7, '') + '</g>' +
+      '<g>' + textSigil('url(#fireLava)', 'url(#fireLava)', 2.5, '') + '</g>' +
+      '<g>' + textSigil('url(#heatFlow)', 'none', 0, '') + '</g>' +
+      '<g opacity=".9">' + textSigil('#fff0b8', 'none', 0, 'url(#blur3)') + '</g>' +
+    '</svg>';
+
+  var innerL = document.querySelector('#sigilL .sigil-inner');
+  var innerR = document.querySelector('#sigilR .sigil-inner');
+  innerL.insertAdjacentHTML('beforeend', MARK);
+  innerR.insertAdjacentHTML('beforeend', MARK);
+
+  // Generatore di lampi ed archi elettrici procedurali
+  function createLightningController(canvasId) {
+    var cvs = document.getElementById(canvasId);
+    var ctx = cvs.getContext('2d');
+    var bolts = [];
+
+    function resizeCanvas() {
+      var rect = cvs.getBoundingClientRect();
+      cvs.width = rect.width * (window.devicePixelRatio || 1);
+      cvs.height = rect.height * (window.devicePixelRatio || 1);
+      ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+    }
+    resizeCanvas();
+    addEventListener('resize', resizeCanvas);
+
+    function triggerBolt() {
+      var rect = cvs.getBoundingClientRect();
+      var w = rect.width;
+      var h = rect.height;
+
+      // Coordinate agganciate al box del testo centrale
+      var startX = rnd(w * 0.15, w * 0.85);
+      var startY = rnd(h * 0.2, h * 0.8);
+      var length = rnd(25, 90);
+      var angle = rnd(0, Math.PI * 2);
+      var endX = startX + Math.cos(angle) * length;
+      var endY = startY + Math.sin(angle) * length;
+
+      var segments = [ { x: startX, y: startY } ];
+      var steps = Math.floor(rnd(4, 9));
+      var currX = startX, currY = startY;
+
+      for (var i = 1; i <= steps; i++) {
+        var progress = i / steps;
+        var targetX = startX + (endX - startX) * progress;
+        var targetY = startY + (endY - startY) * progress;
+        currX = targetX + rnd(-16, 16);
+        currY = targetY + rnd(-16, 16);
+        segments.push({ x: currX, y: currY });
+      }
+
+      bolts.push({
+        segments: segments,
+        life: 1.0,
+        decay: rnd(0.04, 0.09),
+        color: Math.random() < 0.65 ? '#ffffff' : (Math.random() < 0.5 ? '#7df9ff' : '#00e5ff'),
+        width: rnd(1.5, 3.2),
+        isExplosion: Math.random() < 0.25,
+        burstX: startX,
+        burstY: startY,
+        burstR: rnd(10, 24)
+      });
+    }
+
+    function updateAndDraw() {
+      var rect = cvs.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      if (Math.random() < 0.18) triggerBolt();
+      if (Math.random() < 0.08) triggerBolt();
+
+      for (var i = bolts.length - 1; i >= 0; i--) {
+        var b = bolts[i];
+        b.life -= b.decay;
+        if (b.life <= 0) {
+          bolts.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, b.life);
+
+        // Flash di esplosione
+        if (b.isExplosion) {
+          var grad = ctx.createRadialGradient(b.burstX, b.burstY, 0, b.burstX, b.burstY, b.burstR);
+          grad.addColorStop(0, '#ffffff');
+          grad.addColorStop(0.35, '#00e5ff');
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(b.burstX, b.burstY, b.burstR, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Alone elettrico esterno
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = b.width * 2.8;
+        ctx.shadowColor = '#00ffff';
+        ctx.shadowBlur = 15;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'miter';
+
+        ctx.beginPath();
+        for (var j = 0; j < b.segments.length; j++) {
+          var p = b.segments[j];
+          if (j === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.stroke();
+
+        // Anima interna bianca accecante
+        ctx.strokeStyle = b.color;
+        ctx.lineWidth = b.width;
+        ctx.shadowBlur = 4;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    return { update: updateAndDraw };
+  }
+
+  var ltLeft = createLightningController('ltL');
+  var ltRight = createLightningController('ltR');
+
+  // Obsidian spires
+  var SHARDS = [[60,150,980,-30],[170,110,760,40],[250,90,560,-20],[330,70,400,30],[110,70,620,-60],[400,50,260,10],[20,90,520,20],[460,40,170,-12],[210,46,330,-50]];
+  function buildSpires(svg) {
+    var s = '';
+    SHARDS.forEach(function (sh, i) {
+      var x = sh[0], w = sh[1], hgt = sh[2], lean = sh[3], tx = x + lean, ty = 1000 - hgt;
+      var mx = x + w * .12 + lean * .4, my = 1000 - hgt * .55;
+      s += '<path d="M' + (x - w / 2) + ' 1010 L' + mx + ' ' + my + ' L' + tx + ' ' + ty + ' L' + (x + w / 2) + ' 1010Z" fill="#0a0204"/>';
+      s += '<path d="M' + tx + ' ' + ty + ' L' + (x + w / 2) + ' 1010 L' + (x + w * .18) + ' 1010 L' + (mx + w * .06) + ' ' + (my + 40) + 'Z" fill="#2a0610"/>';
+      s += '<path d="M' + tx + ' ' + ty + ' L' + (x + w / 2) + ' 1010" stroke="#7a1420" stroke-width="2" opacity=".8"/>';
+      if (i < 6) {
+        var vx = x + rnd(-w * .15, w * .1), vy = 1010, d = 'M' + vx.toFixed(0) + ' ' + vy;
+        for (var k = 0; k < 6; k++) { vx += (tx - vx) * .16 + rnd(-8, 8); vy -= hgt * .09; d += ' L' + vx.toFixed(0) + ' ' + vy.toFixed(0); }
+        s += '<g class="vein" style="animation-delay:' + (-i * .9) + 's" fill="none" stroke-linecap="round" stroke-linejoin="round">' +
+             '<path d="' + d + '" stroke="#ff3a14" stroke-width="9" filter="url(#blur6)"/>' +
+             '<path d="' + d + '" stroke="#ff7a2a" stroke-width="2.4"/>' +
+             '</g>';
+      }
+    });
+    svg.innerHTML = s;
+  }
+  buildSpires(document.getElementById('spL'));
+  buildSpires(document.getElementById('spR'));
+
+  // Lava cracks
+  (function () {
+    function crack(x0, y0, len, dir) {
+      var d = 'M' + x0 + ' ' + y0, x = x0, y = y0;
+      for (var i = 0; i < 9; i++) {
+        x += dir * rnd(len * .06, len * .14);
+        y += rnd(-9, 9);
+        y = Math.max(20, Math.min(115, y));
+        d += ' L' + x.toFixed(0) + ' ' + y.toFixed(0);
+      }
+      return d;
+    }
+    var paths = [crack(0, 70, 520, 1), crack(40, 100, 380, 1), crack(1600, 76, 520, -1), crack(1560, 104, 400, -1), crack(160, 112, 220, 1), crack(1440, 112, 240, -1)];
+    var s = '<g class="hot" fill="none" stroke-linecap="round" stroke-linejoin="round">' +
+      '<g stroke="#ff3a14" stroke-width="12" filter="url(#blur6)" opacity=".8">' + paths.map(function (p) { return '<path d="' + p + '"/>'; }).join('') + '</g>' +
+      '<g stroke="#ff7a2a" stroke-width="3.5">' + paths.map(function (p) { return '<path d="' + p + '"/>'; }).join('') + '</g>' +
+      '<g stroke="#ffe0a0" stroke-width="1.2">' + paths.map(function (p) { return '<path d="' + p + '"/>'; }).join('') + '</g></g>';
+    document.getElementById('lava').innerHTML = s;
+  })();
+
+  // Ground silhouette
+  (function () {
+    var d = 'M0 60 ', x = 0;
+    while (x < 1000) {
+      var w = rnd(6, 14), h = rnd(14, 50);
+      d += 'L' + (x + w * .45).toFixed(1) + ' ' + (60 - h).toFixed(1) + ' L' + (x + w).toFixed(1) + ' ' + rnd(44, 56).toFixed(1) + ' ';
+      x += w;
+    }
+    d += 'L1000 60Z';
+    document.getElementById('grass').innerHTML = '<path d="' + d + '" fill="#080103"/>';
+  })();
+
+  // Clouds
+  var CLOUD = 'M20 62 C 0 62, 0 40, 22 40 C 22 22, 50 14, 64 30 C 72 8, 112 6, 120 28 C 132 16, 162 20, 162 42 C 186 40, 196 62, 174 64 Z';
+  var cloudBox = document.getElementById('clouds');
+  function spawnCloud(initial) {
+    var dur = rnd(60, 100) / CONFIG.speed, dir = Math.random() < .5 ? 'fx-ltr' : 'fx-rtl';
+    var outer = document.createElement('div');
+    outer.className = 'cl';
+    outer.style.top = rnd(-2, 24) + '%';
+    outer.style.width = rnd(14, 26) + 'vw';
+    outer.style.transform = dir === 'fx-ltr' ? 'translateX(-14vw)' : 'translateX(114vw)';
+    outer.style.animation = dir + ' ' + dur + 's linear ' + (initial ? -rnd(0, dur) : rnd(0, 10)) + 's 1 forwards';
+    var inner = document.createElement('div'), b = rnd(8, 15);
+    inner.style.opacity = rnd(.5, .8);
+    inner.style.animation = 'cloud-bob ' + b + 's ease-in-out ' + (-rnd(0, b)) + 's infinite alternate';
+    inner.innerHTML = '<svg viewBox="0 0 200 70"><path d="' + CLOUD + '" fill="url(#cloudGrad)"/><path d="M28 40 C 30 26, 50 20, 62 32 M72 22 C 84 12, 108 12, 116 28" stroke="#ff7a50" stroke-opacity=".45" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>';
+    if (Math.random() < .5) inner.firstChild.style.transform = 'scaleX(-1)';
+    outer.appendChild(inner);
+    outer.addEventListener('animationend', function (e) { if (e.target !== outer) return; outer.remove(); spawnCloud(false); });
+    cloudBox.appendChild(outer);
+  }
+  for (var c = 0; c < CONFIG.clouds; c++) spawnCloud(true);
+
+  // Flock "EL DIABLO" in cielo
+  var GLYPH = [];
+  (function () {
+    var offCanvas = document.createElement('canvas');
+    offCanvas.width = 360;
+    offCanvas.height = 70;
+    var octx = offCanvas.getContext('2d');
+    octx.font = 'bold 36px monospace';
+    octx.fillStyle = '#fff';
+    octx.textAlign = 'center';
+    octx.textBaseline = 'middle';
+    octx.fillText('EL DIABLO', 180, 35);
+    
+    var imgData = octx.getImageData(0, 0, 360, 70).data;
+    var validPoints = [];
+    for (var y = 0; y < 70; y += 3) {
+      for (var x = 0; x < 360; x += 3) {
+        var idx = (y * 360 + x) * 4;
+        if (imgData[idx + 3] > 128) {
+          validPoints.push({ x: x, y: y });
+        }
+      }
+    }
+    
+    var step = validPoints.length / CONFIG.flock;
+    for (var i = 0; i < CONFIG.flock; i++) {
+      var p = validPoints[Math.min(validPoints.length - 1, Math.floor(i * step))];
+      GLYPH.push({ x: p.x, y: p.y });
+    }
+    GLYPH.sort(function (a, b) { return a.x - b.x; });
+  })();
+
+  // Canvases principali
+  var sky = document.getElementById('sky'), sctx = sky.getContext('2d');
+  var fx = document.getElementById('fx'), fctx = fx.getContext('2d');
+  var em = document.getElementById('embers'), ectx = em.getContext('2d');
+  var W, H, stars = [], embers = [], flock = [], sources = [];
+  var formT = 0, form = 0, nextForm = 6, holdLeft = 0;
+
+  function newEmber(initial) {
+    var src = sources[Math.floor(Math.random() * sources.length)];
+    var x = rnd(src.x0, src.x1), y = initial ? rnd(src.y0 - H * .3, src.y1) : rnd(src.y0, src.y1);
+    return { x: x, y: y, vy: rnd(14, 34), amp: rnd(6, 20), ph: rnd(0, 6.28), r: rnd(.8, 2.1), life: initial ? rnd(0, 6) : 0, max: rnd(5, 10) };
+  }
+  function measureSources() {
+    sources = [{ x0: 0, x1: W * .3, y0: H * .9, y1: H }, { x0: W * .7, x1: W, y0: H * .9, y1: H }];
+    ['sigilL', 'sigilR'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        var r = el.getBoundingClientRect();
+        sources.push({ x0: r.left + r.width * .1, x1: r.right - r.width * .1, y0: r.top + r.height * .2, y1: r.bottom });
+      }
+    });
+  }
+  function glyphLayout() {
+    var gw = 360, gh = 70;
+    var s = Math.min(W * .48 / gw, H * .14 / gh);
+    return { s: s, ox: W / 2 - gw * s / 2, oy: H * .03 };
+  }
+  function wanderTarget(b, t) {
+    return { x: W * (.5 + .52 * Math.sin(t * b.a + b.p1)), y: H * (.03 + .22 * (.5 + .5 * Math.sin(t * b.b + b.p2))) };
+  }
+  function initFlock() {
+    flock = [];
+    for (var i = 0; i < GLYPH.length; i++) {
+      var b = { a: rnd(.025, .07), b: rnd(.05, .12), p1: rnd(0, 6.28), p2: rnd(0, 6.28), fp: rnd(0, 6.28), fs: rnd(9, 13), sz: rnd(.8, 1.2), dir: 1, vx: 0, vy: 0 };
+      var w = wanderTarget(b, clock); b.x = w.x; b.y = w.y;
+      flock.push(b);
+    }
+  }
+  function resize() {
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = innerWidth; H = innerHeight;
+    [[sky, sctx], [fx, fctx], [em, ectx]].forEach(function (c) { c[0].width = W * dpr; c[0].height = H * dpr; c[1].setTransform(dpr, 0, 0, dpr, 0, 0); });
+    stars = []; var n = Math.min(200, Math.round(W * H / 9000));
+    for (var i = 0; i < n; i++) stars.push({ x: Math.random() * W, y: Math.pow(Math.random(), 1.6) * H * .55, r: rnd(.35, 1.4), b: rnd(.3, .9), sp: rnd(.3, 1.1), ph: rnd(0, 6.28) });
+    measureSources();
+    embers = []; for (var k = 0; k < CONFIG.embers; k++) embers.push(newEmber(true));
+    if (!flock.length) initFlock();
+    draw(clock, 0);
+  }
+
+  // Sprite arancione/fuoco per lo sciame
+  var SPR = document.createElement('canvas'); SPR.width = SPR.height = 64;
+  (function () {
+    var c = SPR.getContext('2d'), g = c.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,248,220,1)');
+    g.addColorStop(.18, 'rgba(255,190,90,.95)');
+    g.addColorStop(.42, 'rgba(255,70,24,.45)');
+    g.addColorStop(1, 'rgba(160,0,10,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 64, 64);
+  })();
+
+  var clock = 0;
+  function draw(t, dt) {
+    // Stars
+    sctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i], a = s.b * (.6 + .4 * Math.sin(t * s.sp + s.ph));
+      sctx.globalAlpha = a; sctx.fillStyle = '#ffd8c8';
+      sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, 6.283); sctx.fill();
+    }
+    sctx.globalAlpha = 1;
+
+    // Formation timing
+    if (dt > 0) {
+      nextForm -= dt;
+      if (nextForm <= 0 && holdLeft <= 0) { holdLeft = FLOCK_HOLD; nextForm = FLOCK_EVERY; }
+      if (holdLeft > 0) holdLeft -= dt;
+      formT += ((holdLeft > 0 ? 1 : 0) - formT) * Math.min(1, dt * .8);
+    }
+    form = formT * formT * (3 - 2 * formT);
+
+    // Flock
+    fctx.globalCompositeOperation = 'destination-out';
+    fctx.fillStyle = 'rgba(0,0,0,' + (dt > 0 ? .22 : 1) + ')'; fctx.fillRect(0, 0, W, H);
+    fctx.globalCompositeOperation = 'lighter';
+    var g = glyphLayout();
+    if (form > .02) {
+      var cx = g.ox + 180 * g.s, cy = g.oy + 35 * g.s, rr = 210 * g.s;
+      var grd = fctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+      grd.addColorStop(0, 'rgba(255,70,30,' + (.07 * form) + ')');
+      grd.addColorStop(.5, 'rgba(180,20,20,' + (.03 * form) + ')');
+      grd.addColorStop(1, 'rgba(120,0,0,0)');
+      fctx.fillStyle = grd; fctx.fillRect(cx - rr, cy - rr, rr * 2, rr * 2);
+    }
+    var batSize = Math.max(10, Math.min(26, 17 * g.s));
+    for (var k = 0; k < flock.length; k++) {
+      var b = flock[k], wt = wanderTarget(b, t), gp = GLYPH[b.slot != null ? b.slot : k];
+      var fxp = g.ox + gp.x * g.s + Math.sin(t * 1.6 + b.p1) * 1.5, fyp = g.oy + gp.y * g.s + Math.cos(t * 1.9 + b.p2) * 1.5;
+      var tx = wt.x + (fxp - wt.x) * form, ty = wt.y + (fyp - wt.y) * form;
+      if (dt > 0) {
+        var k1 = .9 + 3.2 * form, c1 = 1.6 + 2.6 * form;
+        b.vx += ((tx - b.x) * k1 - b.vx * c1) * dt; b.vy += ((ty - b.y) * k1 - b.vy * c1) * dt;
+        b.x += b.vx * dt; b.y += b.vy * dt;
+        if (Math.abs(b.vx) > 4) b.dir += ((b.vx > 0 ? 1 : -1) - b.dir) * Math.min(1, dt * 4);
+        b.fp += dt * b.fs * (1 - .35 * form);
+      }
+      var flick = .75 + .25 * Math.sin(b.fp * .7), sz = batSize * b.sz * (.7 + .5 * form) * flick;
+      fctx.globalAlpha = .45 + .55 * form;
+      fctx.drawImage(SPR, b.x - sz / 2, b.y - sz / 2, sz, sz);
+    }
+    fctx.globalAlpha = 1; fctx.globalCompositeOperation = 'source-over';
+
+    // Embers
+    ectx.clearRect(0, 0, W, H);
+    for (var e = 0; e < embers.length; e++) {
+      var m = embers[e]; m.life += dt; m.y -= m.vy * dt;
+      if (m.life > m.max) { embers[e] = newEmber(false); continue; }
+      var p = m.life / m.max, al = Math.sin(p * Math.PI) * .85, x = m.x + Math.sin(t * .8 + m.ph) * m.amp;
+      ectx.globalAlpha = al * .35; ectx.fillStyle = '#ff3a14'; ectx.beginPath(); ectx.arc(x, m.y, m.r * 3.5, 0, 6.283); ectx.fill();
+      ectx.globalAlpha = al; ectx.fillStyle = '#ffc070'; ectx.beginPath(); ectx.arc(x, m.y, m.r, 0, 6.283); ectx.fill();
+    }
+    ectx.globalAlpha = 1;
+
+    // Aggiorna le scariche elettriche sui due testi EL DIABLO
+    ltLeft.update();
+    ltRight.update();
+  }
+
+  function assignSlots() {
+    var idx = flock.map(function (b, i) { return i; }).sort(function (a, b) { return flock[a].x - flock[b].x; });
+    idx.forEach(function (fi, n) { flock[fi].slot = n; });
+  }
+
+  var last = 0;
+  function loop(now) {
+    var dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
+    if (!paused) {
+      if (holdLeft <= 0 && nextForm - dt * CONFIG.speed <= 0) assignSlots();
+      clock += dt * CONFIG.speed; draw(clock, dt * CONFIG.speed);
+    }
+    requestAnimationFrame(loop);
+  }
+  addEventListener('resize', resize);
+  resize(); requestAnimationFrame(loop);
+  if (paused) scene.classList.add('paused');
+})();
+</script>
+</body>
+</html>
