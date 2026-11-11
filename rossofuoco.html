@@ -199,7 +199,7 @@ canvas.embers { z-index: 11; }
 }
 .grass svg { width: 100%; height: 100%; display: block; }
 
-/* EL DIABLO Sigils con fulmini */
+/* Posizionamento dei due sigilli: SX verso sinistra (0.5vw), DX verso destra (0.5vw) */
 .sigil {
   position: absolute;
   top: var(--sigil-top);
@@ -208,8 +208,8 @@ canvas.embers { z-index: 11; }
   pointer-events: none;
   animation: sigil-float 7s ease-in-out infinite alternate;
 }
-.sigil.left { left: 2vw; }
-.sigil.right { right: 2vw; animation-delay: -3.5s; }
+.sigil.left { left: 0.5vw; }
+.sigil.right { right: 0.5vw; animation-delay: -3.5s; }
 
 .sigil .aura {
   position: absolute;
@@ -256,7 +256,6 @@ canvas.embers { z-index: 11; }
 }
 .sigil .burn { animation: sigil-burn 3.8s ease-in-out infinite alternate; }
 
-/* Canvas dedicato per i lampi sopra a ciascun sigillo */
 .lightning-canvas {
   position: absolute;
   left: -20%;
@@ -277,8 +276,8 @@ canvas.embers { z-index: 11; }
     --sigil-w: clamp(110px, 28vw, 240px);
     --sigil-top: 22%;
   }
-  .sigil.left { left: 1vw; }
-  .sigil.right { right: 1vw; }
+  .sigil.left { left: 0vw; }
+  .sigil.right { right: 0vw; }
 }
 </style>
 </head>
@@ -367,14 +366,14 @@ canvas.embers { z-index: 11; }
   <div class="fog front"></div>
   <canvas class="embers" id="embers" width="1360" height="599"></canvas>
 
-  <!-- Sigillo Sinistro con Lampi -->
+  <!-- Sigillo Sinistro: EL DIABLO -->
   <div class="sigil left" id="sigilL">
     <div class="sigil-inner">
       <canvas class="lightning-canvas" id="ltL"></canvas>
     </div>
   </div>
 
-  <!-- Sigillo Destro con Lampi -->
+  <!-- Sigillo Destro: 666 -->
   <div class="sigil right" id="sigilR">
     <div class="sigil-inner">
       <canvas class="lightning-canvas" id="ltR"></canvas>
@@ -411,26 +410,29 @@ canvas.embers { z-index: 11; }
     return s + '</svg>';
   })();
 
-  function textSigil(fill, stroke, strokeWidth, filter) {
+  function textSigil(txt, fontSize, letterSpacing, fill, stroke, strokeWidth, filter) {
     var filt = filter ? ' filter="' + filter + '"' : '';
     return '<text x="160" y="52" text-anchor="middle" dominant-baseline="central" ' +
-      'font-family="Cinzel, Georgia, serif" font-weight="900" font-size="33" letter-spacing="4px" ' +
-      'fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + strokeWidth + '"' + filt + '>EL DIABLO</text>';
+      'font-family="Cinzel, Georgia, serif" font-weight="900" font-size="' + fontSize + '" letter-spacing="' + letterSpacing + '" ' +
+      'fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + strokeWidth + '"' + filt + '>' + txt + '</text>';
   }
 
-  var MARK = '<div class="aura"></div><div class="ring">' + RING + '</div>' +
-    '<svg class="mark" viewBox="0 0 320 100">' +
-      '<g class="burn">' + textSigil('none', '#ff3a14', 14, 'url(#blur6)') + '</g>' +
-      '<g>' + textSigil('#140205', '#140205', 7, '') + '</g>' +
-      '<g>' + textSigil('url(#fireLava)', 'url(#fireLava)', 2.5, '') + '</g>' +
-      '<g>' + textSigil('url(#heatFlow)', 'none', 0, '') + '</g>' +
-      '<g opacity=".9">' + textSigil('#fff0b8', 'none', 0, 'url(#blur3)') + '</g>' +
-    '</svg>';
+  function buildMark(txt, fontSize, letterSpacing) {
+    return '<div class="aura"></div><div class="ring">' + RING + '</div>' +
+      '<svg class="mark" viewBox="0 0 320 100">' +
+        '<g class="burn">' + textSigil(txt, fontSize, letterSpacing, 'none', '#ff3a14', 14, 'url(#blur6)') + '</g>' +
+        '<g>' + textSigil(txt, fontSize, letterSpacing, '#140205', '#140205', 7, '') + '</g>' +
+        '<g>' + textSigil(txt, fontSize, letterSpacing, 'url(#fireLava)', 'url(#fireLava)', 2.5, '') + '</g>' +
+        '<g>' + textSigil(txt, fontSize, letterSpacing, 'url(#heatFlow)', 'none', 0, '') + '</g>' +
+        '<g opacity=".9">' + textSigil(txt, fontSize, letterSpacing, '#fff0b8', 'none', 0, 'url(#blur3)') + '</g>' +
+      '</svg>';
+  }
 
+  // SX = EL DIABLO, DX = 666
   var innerL = document.querySelector('#sigilL .sigil-inner');
   var innerR = document.querySelector('#sigilR .sigil-inner');
-  innerL.insertAdjacentHTML('beforeend', MARK);
-  innerR.insertAdjacentHTML('beforeend', MARK);
+  innerL.insertAdjacentHTML('beforeend', buildMark('EL DIABLO', '33', '4px'));
+  innerR.insertAdjacentHTML('beforeend', buildMark('666', '48', '8px'));
 
   // Generatore di lampi ed archi elettrici procedurali
   function createLightningController(canvasId) {
@@ -452,9 +454,8 @@ canvas.embers { z-index: 11; }
       var w = rect.width;
       var h = rect.height;
 
-      // Coordinate agganciate al box del testo centrale
-      var startX = rnd(w * 0.15, w * 0.85);
-      var startY = rnd(h * 0.2, h * 0.8);
+      var startX = rnd(w * 0.18, w * 0.82);
+      var startY = rnd(h * 0.22, h * 0.78);
       var length = rnd(25, 90);
       var angle = rnd(0, Math.PI * 2);
       var endX = startX + Math.cos(angle) * length;
@@ -504,7 +505,6 @@ canvas.embers { z-index: 11; }
         ctx.save();
         ctx.globalAlpha = Math.max(0, b.life);
 
-        // Flash di esplosione
         if (b.isExplosion) {
           var grad = ctx.createRadialGradient(b.burstX, b.burstY, 0, b.burstX, b.burstY, b.burstR);
           grad.addColorStop(0, '#ffffff');
@@ -516,7 +516,6 @@ canvas.embers { z-index: 11; }
           ctx.fill();
         }
 
-        // Alone elettrico esterno
         ctx.strokeStyle = '#00f0ff';
         ctx.lineWidth = b.width * 2.8;
         ctx.shadowColor = '#00ffff';
@@ -532,7 +531,6 @@ canvas.embers { z-index: 11; }
         }
         ctx.stroke();
 
-        // Anima interna bianca accecante
         ctx.strokeStyle = b.color;
         ctx.lineWidth = b.width;
         ctx.shadowBlur = 4;
@@ -781,7 +779,7 @@ canvas.embers { z-index: 11; }
     }
     ectx.globalAlpha = 1;
 
-    // Aggiorna le scariche elettriche sui due testi EL DIABLO
+    // Aggiorna scariche elettriche
     ltLeft.update();
     ltRight.update();
   }
