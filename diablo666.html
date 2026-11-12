@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>666 - INFERNAL FLAMES</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: transparent !important;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #canvas-container {
+    width: 750px;
+    height: 180px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    display: block;
+    width: 750px;
+    height: 180px;
+    background: transparent !important;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div id="canvas-container">
+  <canvas id="canvas" width="750" height="180"></canvas>
+</div>
+
+<script>
+/**
+ * 666 - INFERNAL FLAMES (Upgraded Hellfire & Molten Magma Engine)
+ * - Nessun testo o bottone inferiore
+ * - Sfondo 100% trasparente (750x180)
+ * - Sigillo arcano rotante, fiamme volumetriche in additive blending,
+ *   testo 3D in ossidiana e magma fuso con onde d'urto interattive.
+ */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const CW = 750;
+const CH = 180;
+const MAIN_TITLE = "666";
+
+// Palette colori infernale (Dal nucleo bianco-oro al cremisi abissale)
+const FLAME_COLORS = [
+  "#FFFFFF",
+  "#FFF7AA",
+  "#FFD700",
+  "#FF9900",
+  "#FF4500",
+  "#FF0022",
+  "#990000"
+];
+
+let flames = [];
+let sparks = [];
+let shockwaves = [];
+let selectedLetterIndex = null;
+let mouse = { x: CW / 2, y: CH / 2, active: false };
+
+// Variabili per rotazione dinamica e boost dei cerchi arcani
+let sigilRotAngle = 0;
+let sigilSpinBoost = 0;
+let lastFrameTime = performance.now();
+const RUNE_GLYPHS = ["ᚠ", "ᚢ", "ᚦ", "ᚨ", "ᚱ", "ᚲ", "ᚷ", "ᚹ", "ᚺ", "ᚾ", "ᛁ", "ᛃ", "ᛇ", "ᛈ", "ᛉ", "ᛊ"];
+
+// Classe per lingue di fuoco volumetriche e braci ascendenti
+class FlameParticle {
+  constructor(x, y, type = "flame") {
+    this.type = type; // "flame" | "ember" | "burst" | "cursor"
+    this.x = x + (Math.random() - 0.5) * (type === "flame" ? 38 : 14);
+    this.y = y + (Math.random() - 0.5) * (type === "flame" ? 14 : 8);
+
+    if (type === "burst") {
+      const ang = Math.random() * Math.PI * 2;
+      const spd = Math.random() * 5.5 + 1.5;
+      this.vx = Math.cos(ang) * spd;
+      this.vy = Math.sin(ang) * spd - 1.2;
+      this.size = Math.random() * 8 + 3;
+      this.decay = Math.random() * 0.022 + 0.016;
+    } else if (type === "ember") {
+      this.vx = (Math.random() - 0.5) * 1.4;
+      this.vy = -(Math.random() * 2.6 + 1.0);
+      this.size = Math.random() * 3.2 + 1.2;
+      this.decay = Math.random() * 0.014 + 0.008;
+    } else if (type === "cursor") {
+      this.vx = (Math.random() - 0.5) * 1.8;
+      this.vy = -(Math.random() * 2.2 + 0.6);
+      this.size = Math.random() * 7 + 2;
+      this.decay = Math.random() * 0.03 + 0.02;
+    } else {
+      // Fiamma principale che avvolge le cifre
+      this.vx = (Math.random() - 0.5) * 0.9;
+      this.vy = -(Math.random() * 2.4 + 1.1);
+      this.size = Math.random() * 16 + 8;
+      this.decay = Math.random() * 0.022 + 0.014;
+    }
+
+    this.life = 1.0;
+    this.turbulencePhase = Math.random() * Math.PI * 2;
+    this.turbulenceSpeed = Math.random() * 0.12 + 0.05;
+    this.colorIndex = Math.floor(Math.random() * FLAME_COLORS.length);
+  }
+
+  update() {
+    this.turbulencePhase += this.turbulenceSpeed;
+    if (this.type !== "burst") {
+      this.x += this.vx + Math.sin(this.turbulencePhase) * 0.65;
+    } else {
+      this.x += this.vx;
+      this.vx *= 0.95;
+      this.vy *= 0.95;
+      this.vy -= 0.05; // Spinta termica verso l'alto
+    }
+    this.y += this.vy;
+
+    if (this.type === "flame" || this.type === "cursor") {
+      this.size *= 0.975;
+    } else {
+      this.size *= 0.988;
+    }
+
+    this.life -= this.decay;
+    return this.life <= 0 || this.size <= 0.4;
+  }
+
+  draw(ctx) {
+    const alpha = Math.max(0, this.life);
+    ctx.save();
+
+    if (this.type === "ember") {
+      // Brace incandescente nitida
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = this.life > 0.6 ? "#FFF6AA" : (this.life > 0.3 ? "#FF7700" : "#FF1100");
+      ctx.shadowColor = "#FF3300";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Fiamma volumetrica morbida con gradiente radiale
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+      if (this.life > 0.7) {
+        grad.addColorStop(0, `rgba(255, 255, 220, ${alpha})`);
+        grad.addColorStop(0.35, `rgba(255, 180, 0, ${alpha * 0.85})`);
+        grad.addColorStop(0.75, `rgba(255, 40, 0, ${alpha * 0.45})`);
+      } else if (this.life > 0.35) {
+        grad.addColorStop(0, `rgba(255, 200, 50, ${alpha})`);
+        grad.addColorStop(0.45, `rgba(255, 55, 0, ${alpha * 0.75})`);
+        grad.addColorStop(0.85, `rgba(180, 0, 20, ${alpha * 0.3})`);
+      } else {
+        grad.addColorStop(0, `rgba(255, 60, 0, ${alpha * 0.8})`);
+        grad.addColorStop(0.6, `rgba(120, 0, 0, ${alpha * 0.35})`);
+      }
+      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+}
+
+// Classe per Onde d'Urto Infernali al clic
+class Shockwave {
+  constructor(x, y, maxRadius = 95, color = "#FF4500") {
+    this.x = x;
+    this.y = y;
+    this.radius = 8;
+    this.maxRadius = maxRadius;
+    this.alpha = 1.0;
+    this.color = color;
+  }
+  update() {
+    this.radius += (this.maxRadius - this.radius) * 0.14;
+    this.alpha -= 0.032;
+    return this.alpha <= 0;
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 3.5 * this.alpha;
+    ctx.shadowColor = "#FF2200";
+    ctx.shadowBlur = 16;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function spawnInfernalBurst(x, y, count = 32) {
+  sigilSpinBoost = Math.min(sigilSpinBoost + 0.045, 0.12);
+  shockwaves.push(new Shockwave(x, y, 115, "#FFD700"));
+  shockwaves.push(new Shockwave(x, y, 82, "#FF3300"));
+  for (let i = 0; i < count; i++) {
+    flames.push(new FlameParticle(x, y, "burst"));
+  }
+  for (let i = 0; i < Math.floor(count * 0.7); i++) {
+    sparks.push(new FlameParticle(x, y, "ember"));
+  }
+}
+
+// Configurazione e posizionamento centrato del titolo "666"
+const FONT_SPEC = "900 116px 'Impact', 'Arial Black', sans-serif";
+ctx.font = FONT_SPEC;
+const letterSpacing = 44;
+let charData = [];
+let totalW = 0;
+
+for (let i = 0; i < MAIN_TITLE.length; i++) {
+  const w = ctx.measureText(MAIN_TITLE[i]).width;
+  totalW += w + (i < MAIN_TITLE.length - 1 ? letterSpacing : 0);
+}
+
+let startX = (CW - totalW) / 2;
+for (let i = 0; i < MAIN_TITLE.length; i++) {
+  const ch = MAIN_TITLE[i];
+  const w = ctx.measureText(ch).width;
+  charData.push({
+    id: i,
+    char: ch,
+    homeX: startX,
+    targetX: startX,
+    currentX: startX,
+    w: w,
+    jumpY: 0,
+    scale: 1,
+    rot: 0
+  });
+  startX += w + letterSpacing;
+}
+
+// Interazione Mouse: Scia di fuoco al passaggio
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = (e.clientX - rect.left) * (CW / rect.width);
+  mouse.y = (e.clientY - rect.top) * (CH / rect.height);
+  mouse.active = true;
+
+  for (let i = 0; i < 2; i++) {
+    flames.push(new FlameParticle(mouse.x, mouse.y, "cursor"));
+  }
+  if (Math.random() < 0.5) {
+    sparks.push(new FlameParticle(mouse.x, mouse.y, "ember"));
+  }
+});
+
+canvas.addEventListener("mouseleave", () => {
+  mouse.active = false;
+});
+
+// Clic sulle cifre "6" per scambiarle o scatenare un'esplosione
+canvas.addEventListener("click", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const clickX = (e.clientX - rect.left) * (CW / rect.width);
+  const clickY = (e.clientY - rect.top) * (CH / rect.height);
+  const centerY = CH / 2;
+
+  let hit = false;
+  for (let i = 0; i < charData.length; i++) {
+    const c = charData[i];
+    const charCenterX = c.currentX + c.w / 2;
+
+    if (Math.abs(clickX - charCenterX) < c.w / 2 + 18 && Math.abs(clickY - centerY) < 62) {
+      hit = true;
+      c.jumpY = -28;
+      c.scale = 1.22;
+      c.rot = (Math.random() - 0.5) * 0.28;
+      spawnInfernalBurst(charCenterX, centerY, 34);
+
+      if (selectedLetterIndex === null) {
+        selectedLetterIndex = i;
+      } else if (selectedLetterIndex === i) {
+        selectedLetterIndex = null;
+      } else {
+        const first = charData[selectedLetterIndex];
+        const second = c;
+
+        const tempX = first.targetX;
+        first.targetX = second.targetX;
+        second.targetX = tempX;
+
+        first.jumpY = -34;
+        second.jumpY = -34;
+        first.scale = 1.28;
+        second.scale = 1.28;
+
+        spawnInfernalBurst(first.currentX + first.w / 2, centerY, 40);
+        spawnInfernalBurst(second.currentX + second.w / 2, centerY, 40);
+        selectedLetterIndex = null;
+      }
+      break;
+    }
+  }
+
+  // Se si clicca fuori dalle lettere, scatena il dardo infuocato e riallinea
+  if (!hit) {
+    triggerInfernalSweep();
+  }
+});
+
+// Doppio clic per scatenare l'onda infernale completa
+canvas.addEventListener("dblclick", () => {
+  triggerInfernalSweep();
+});
+
+function triggerInfernalSweep() {
+  selectedLetterIndex = null;
+  state = "FLARE_SWEEP";
+  stateTime = performance.now();
+  sweepProgress = 0;
+  sigilSpinBoost = 0.09;
+  for (let i = 0; i < charData.length; i++) {
+    const c = charData[i];
+    c.targetX = c.homeX;
+    c.jumpY = -24;
+    c.scale = 1.18;
+    spawnInfernalBurst(c.currentX + c.w / 2, CH / 2, 26);
+  }
+}
+
+/**
+ * Disegna un complesso Sigillo Infernale multistrato ad alta visibilità
+ * con anelli contro-rotanti, rune incandescenti, stelle occulte e vortice interno
+ */
+function drawArcaneSigil(ctx, x, y, radius, baseAngle, time, intensity = 1, isMaster = false) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.globalCompositeOperation = "lighter";
+
+  const pulse = 0.8 + Math.sin(time * 0.005) * 0.2;
+  const alpha = Math.min(1, intensity * pulse);
+
+  // 0. Bagliore radiale infernale di fondo per far risaltare i cerchi
+  const bgGlow = ctx.createRadialGradient(0, 0, radius * 0.15, 0, 0, radius * 1.15);
+  bgGlow.addColorStop(0, `rgba(255, 60, 0, ${0.24 * alpha})`);
+  bgGlow.addColorStop(0.6, `rgba(220, 20, 0, ${0.14 * alpha})`);
+  bgGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = bgGlow;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius * 1.15, 0, Math.PI * 2);
+  ctx.fill();
+
+  // =========================================================================
+  // LIVELLO 1 (ESTERNO): Anello Runico Pesante - Rotazione Oraria
+  // =========================================================================
+  ctx.save();
+  ctx.rotate(baseAngle * 1.1);
+
+  ctx.strokeStyle = `rgba(255, 50, 0, ${0.9 * alpha})`;
+  ctx.lineWidth = isMaster ? 3.2 : 2.4;
+  ctx.shadowColor = "#FF2200";
+  ctx.shadowBlur = 18;
+
+  // Doppio cerchio esterno inciso
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = `rgba(255, 160, 0, ${0.85 * alpha})`;
+  ctx.lineWidth = isMaster ? 2.0 : 1.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius * 0.86, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Tacche e Glifi Runici lungo la corona esterna
+  const runeCount = isMaster ? 16 : 12;
+  ctx.font = `bold ${Math.max(9, Math.floor(radius * 0.11))}px monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = `rgba(255, 225, 100, ${0.95 * alpha})`;
+
+  for (let i = 0; i < runeCount; i++) {
+    const ang = (i * Math.PI * 2) / runeCount;
+    ctx.save();
+    ctx.rotate(ang);
+
+    // Trattino divisorio radiale
+    ctx.strokeStyle = `rgba(255, 110, 0, ${0.8 * alpha})`;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(radius * 0.86, 0);
+    ctx.lineTo(radius, 0);
+    ctx.stroke();
+
+    // Runa luminosa al centro del settore
+    ctx.rotate(Math.PI / runeCount);
+    ctx.fillText(RUNE_GLYPHS[i % RUNE_GLYPHS.length], radius * 0.93, 0);
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // =========================================================================
+  // LIVELLO 2 (MEDIO): Stella Occulta + Esagramma - Rotazione Antioraria
+  // =========================================================================
+  ctx.save();
+  ctx.rotate(-baseAngle * 1.75);
+
+  const starR = radius * 0.84;
+  ctx.strokeStyle = `rgba(255, 185, 0, ${0.92 * alpha})`;
+  ctx.lineWidth = isMaster ? 2.6 : 2.0;
+  ctx.shadowColor = "#FF6600";
+  ctx.shadowBlur = 16;
+
+  // Pentagramma Infernale a 5 punte
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const ang = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+    const px = Math.cos(ang) * starR;
+    const py = Math.sin(ang) * starR;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.stroke();
+
+  // Secondo poligono intrecciato ruotato (Decagramma) per maggiore complessità
+  ctx.strokeStyle = `rgba(255, 60, 0, ${0.75 * alpha})`;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const ang = (i * 4 * Math.PI) / 5 + Math.PI / 2;
+    const px = Math.cos(ang) * starR;
+    const py = Math.sin(ang) * starR;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.stroke();
+
+  // Nodi energetici incandescenti sui vertici della stella
+  for (let i = 0; i < 5; i++) {
+    const ang = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+    const vx = Math.cos(ang) * starR;
+    const vy = Math.sin(ang) * starR;
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.shadowColor = "#FFD700";
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.arc(vx, vy, isMaster ? 3.8 : 2.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // =========================================================================
+  // LIVELLO 3 (INTERNO): Vortice Segmentato Rapido - Rotazione Oraria Veloce
+  // =========================================================================
+  ctx.save();
+  ctx.rotate(baseAngle * 2.8);
+
+  const innerR = radius * 0.56;
+  ctx.strokeStyle = `rgba(255, 230, 90, ${0.95 * alpha})`;
+  ctx.lineWidth = isMaster ? 3.0 : 2.2;
+  ctx.shadowColor = "#FF9900";
+  ctx.shadowBlur = 14;
+  ctx.setLineDash([innerR * 0.35, innerR * 0.18]);
+
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Anello alchemico centrale con punte interne
+  ctx.setLineDash([]);
+  ctx.strokeStyle = `rgba(255, 40, 0, ${0.85 * alpha})`;
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR * 0.68, 0, Math.PI * 2);
+  ctx.stroke();
+
+  for (let i = 0; i < 8; i++) {
+    const ang = (i * Math.PI) / 4;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(ang) * (innerR * 0.68), Math.sin(ang) * (innerR * 0.68));
+    ctx.lineTo(Math.cos(ang) * innerR, Math.sin(ang) * innerR);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+  ctx.restore();
+}
+
+/**
+ * Disegna i connettori di energia arcana tra i 3 cerchi dietro i "666"
+ */
+function drawInfernalLeylines(ctx, y, time) {
+  if (charData.length < 3) return;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+
+  const firstX = charData[0].currentX + charData[0].w / 2;
+  const lastX = charData[charData.length - 1].currentX + charData[charData.length - 1].w / 2;
+  const pulse = 0.7 + Math.sin(time * 0.008) * 0.3;
+
+  // Grande ellisse runica orizzontale che abbraccia l'intero 666
+  ctx.strokeStyle = `rgba(255, 70, 0, ${0.55 * pulse})`;
+  ctx.lineWidth = 2.2;
+  ctx.shadowColor = "#FF2200";
+  ctx.shadowBlur = 16;
+  ctx.setLineDash([14, 10]);
+  ctx.lineDashOffset = -time * 0.05;
+
+  ctx.beginPath();
+  ctx.ellipse(CW / 2, y, (lastX - firstX) * 0.72 + 75, 78, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+/**
+ * Disegna un singolo carattere "6" con estrusione 3D in ossidiana,
+ * riempimento in magma fuso animato, crepe incandescenti e bordi dorati
+ */
+function drawInfernalDigit(ctx, c, x, y, time, isSelected) {
+  ctx.save();
+  const centerX = x + c.w / 2;
+  ctx.translate(centerX, y);
+  ctx.scale(c.scale, c.scale);
+  ctx.rotate(c.rot);
+  ctx.translate(-centerX, -y);
+
+  ctx.font = FONT_SPEC;
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "left";
+
+  // 1. Halo / Bagliore abissale rosso sangue dietro la cifra
+  ctx.save();
+  ctx.shadowColor = "#FF0000";
+  ctx.shadowBlur = 32 + Math.sin(time * 0.008 + c.id) * 10;
+  ctx.fillStyle = "rgba(180, 0, 0, 0.35)";
+  ctx.fillText(c.char, x, y);
+  ctx.restore();
+
+  // 2. Estrusione 3D profonda (Roccia d'ossidiana bruciata)
+  const depth = 7;
+  for (let d = depth; d >= 1; d--) {
+    ctx.fillStyle = d > 4 ? "#140000" : "#2e0300";
+    ctx.strokeStyle = d === depth ? "#550000" : "#220000";
+    ctx.lineWidth = 6;
+    ctx.strokeText(c.char, x, y + d * 1.4);
+    ctx.fillText(c.char, x, y + d * 1.4);
+  }
+
+  // 3. Contorno esterno di brace ardente
+  ctx.save();
+  ctx.strokeStyle = isSelected ? "#FFF275" : "#FF2200";
+  ctx.lineWidth = isSelected ? 7 : 5;
+  ctx.lineJoin = "round";
+  ctx.shadowColor = isSelected ? "#FFD700" : "#FF4500";
+  ctx.shadowBlur = isSelected ? 26 : 16;
+  ctx.strokeText(c.char, x, y);
+  ctx.restore();
+
+  // 4. Riempimento Magma Fuso dinamico (Scorre nel tempo)
+  const shift = Math.sin(time * 0.004 + c.id * 1.1) * 14;
+  const grad = ctx.createLinearGradient(x, y - 56 + shift, x, y + 56 + shift);
+  grad.addColorStop(0.0, "#FFFFFF");
+  grad.addColorStop(0.16, "#FFF394");
+  grad.addColorStop(0.38, "#FFAE00");
+  grad.addColorStop(0.65, "#FF3300");
+  grad.addColorStop(0.88, "#990000");
+  grad.addColorStop(1.0, "#2E0000");
+
+  ctx.save();
+  ctx.fillStyle = grad;
+  ctx.fillText(c.char, x, y);
+  ctx.restore();
+
+  // 5. Riflesso metallico tagliente sul bordo interno (Oro bianco)
+  const rimGrad = ctx.createLinearGradient(x, y - 55, x + c.w, y + 55);
+  rimGrad.addColorStop(0, "#FFFFFF");
+  rimGrad.addColorStop(0.3, "#FFD700");
+  rimGrad.addColorStop(0.6, "rgba(255, 90, 0, 0.2)");
+  rimGrad.addColorStop(1, "#FFCC00");
+
+  ctx.save();
+  ctx.strokeStyle = rimGrad;
+  ctx.lineWidth = 1.8;
+  ctx.strokeText(c.char, x, y - 1);
+  ctx.restore();
+
+  // 6. Anello energetico potenziato se la cifra è selezionata per lo scambio
+  if (isSelected) {
+    drawArcaneSigil(ctx, centerX, y, 76, -sigilRotAngle * 2.4, time, 1.35, true);
+  }
+
+  ctx.restore();
+}
+
+// Macchina a stati per l'animazione continua
+let state = "BUILD";
+let stateTime = 0;
+let revealed = 0;
+let lastRevealTime = 0;
+const revealInterval = 210;
+let sweepProgress = 0;
+
+function animate(time) {
+  const dt = Math.min(50, time - lastFrameTime);
+  lastFrameTime = time;
+
+  // Aggiorna la velocità di rotazione dei cerchi con accelerazione fluida e smorzamento
+  sigilRotAngle += dt * 0.0011 + sigilSpinBoost;
+  sigilSpinBoost *= 0.94;
+
+  ctx.clearRect(0, 0, CW, CH);
+
+  const mainY = CH / 2 + 4; // Perfettamente centrato nei 180px di altezza
+
+  // Gestione fasi di apparizione ed esplosione periodica
+  if (state === "BUILD") {
+    if (time - lastRevealTime > revealInterval) {
+      if (revealed < MAIN_TITLE.length) {
+        const cur = charData[revealed];
+        cur.jumpY = -30;
+        cur.scale = 1.3;
+        spawnInfernalBurst(cur.currentX + cur.w / 2, mainY, 38);
+        revealed++;
+        lastRevealTime = time;
+      } else {
+        state = "FLARE_SWEEP";
+        stateTime = time;
+        sweepProgress = 0;
+        sigilSpinBoost = 0.07;
+      }
+    }
+  } else if (state === "FLARE_SWEEP") {
+    const elapsed = time - stateTime;
+    sweepProgress = elapsed / 950;
+    if (sweepProgress >= 1) {
+      state = "INFERNAL_IDLE";
+      stateTime = time;
+    }
+  } else if (state === "INFERNAL_IDLE") {
+    // Dopo 7.5 secondi scatena un nuovo impulso di fuoco automatico senza far sparire il logo
+    if (time - stateTime > 7500) {
+      state = "FLARE_SWEEP";
+      stateTime = time;
+      sweepProgress = 0;
+      sigilSpinBoost = 0.065;
+      for (let i = 0; i < charData.length; i++) {
+        charData[i].jumpY = -14;
+        charData[i].scale = 1.1;
+      }
+    }
+  }
+
+  // 1. Disegna l'orbita arcana e il Grande Sigillo Centrale sullo sfondo
+  drawInfernalLeylines(ctx, mainY, time);
+  drawArcaneSigil(ctx, CW / 2, mainY, 85, sigilRotAngle, time, 1.15, true);
+
+  // 1b. Disegna i Cerchi Arcani individuali ben visibili dietro ciascun "6"
+  for (let i = 0; i < revealed; i++) {
+    const c = charData[i];
+    const wave = Math.sin(time * 0.0055 + i * 1.4) * 5 + c.jumpY;
+    const yPos = mainY + wave;
+    const dir = i % 2 === 0 ? -1 : 1;
+    drawArcaneSigil(
+      ctx,
+      c.currentX + c.w / 2,
+      yPos,
+      68,
+      sigilRotAngle * 1.35 * dir + i * 1.2,
+      time,
+      1.0,
+      false
+    );
+  }
+
+  // 2. Genera fiamme e braci continue dalla base di ciascun "6"
+  for (let i = 0; i < revealed; i++) {
+    const c = charData[i];
+    const centerX = c.currentX + c.w / 2;
+    const waveY = mainY + Math.sin(time * 0.0055 + i * 1.4) * 5 + c.jumpY;
+
+    if (Math.random() < 0.85) {
+      flames.push(new FlameParticle(centerX, waveY + 26, "flame"));
+    }
+    if (Math.random() < 0.45) {
+      sparks.push(new FlameParticle(centerX + (Math.random() - 0.5) * 50, waveY + 10, "ember"));
+    }
+  }
+
+  // 3. Renderizza le Fiamme Posteriori con Additive Blending ("lighter") per effetto plasma reale
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (let i = flames.length - 1; i >= 0; i--) {
+    flames[i].draw(ctx);
+    if (flames[i].update()) {
+      flames.splice(i, 1);
+    }
+  }
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    shockwaves[i].draw(ctx);
+    if (shockwaves[i].update()) {
+      shockwaves.splice(i, 1);
+    }
+  }
+  ctx.restore();
+
+  // 4. Disegna i tre "666" in primo piano con fisica elastica fluida
+  for (let i = 0; i < revealed; i++) {
+    const c = charData[i];
+    c.currentX += (c.targetX - c.currentX) * 0.14;
+    c.jumpY *= 0.86;
+    c.scale += (1 - c.scale) * 0.14;
+    c.rot *= 0.85;
+
+    const wave = Math.sin(time * 0.0055 + i * 1.4) * 5 + c.jumpY;
+    const yPos = mainY + wave;
+
+    // Disegno 3D del carattere "6" sopra i cerchi rotanti
+    drawInfernalDigit(ctx, c, c.currentX, yPos, time, selectedLetterIndex === i);
+  }
+
+  // 5. Fascio di Fuoco / Cometa Infernale che attraversa il "666"
+  if (state === "FLARE_SWEEP" && sweepProgress <= 1) {
+    const startSweepX = (CW - totalW) / 2 - 90;
+    const endSweepX = (CW + totalW) / 2 + 90;
+    const flareX = startSweepX + (endSweepX - startSweepX) * sweepProgress;
+
+    for (let k = 0; k < 4; k++) {
+      flames.push(new FlameParticle(flareX - 8, mainY + (Math.random() - 0.5) * 35, "flame"));
+    }
+    for (let k = 0; k < 3; k++) {
+      sparks.push(new FlameParticle(flareX, mainY + (Math.random() - 0.5) * 40, "ember"));
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+
+    const flareGrad = ctx.createRadialGradient(flareX, mainY, 0, flareX, mainY, 95);
+    flareGrad.addColorStop(0, "rgba(255, 255, 240, 1)");
+    flareGrad.addColorStop(0.25, "rgba(255, 190, 0, 0.9)");
+    flareGrad.addColorStop(0.6, "rgba(255, 30, 0, 0.45)");
+    flareGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    ctx.fillStyle = flareGrad;
+    ctx.beginPath();
+    ctx.arc(flareX, mainY, 95, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Lama di luce orizzontale
+    const bladeGrad = ctx.createLinearGradient(flareX - 160, mainY, flareX + 160, mainY);
+    bladeGrad.addColorStop(0, "rgba(255, 30, 0, 0)");
+    bladeGrad.addColorStop(0.35, "rgba(255, 120, 0, 0.85)");
+    bladeGrad.addColorStop(0.5, "rgba(255, 255, 255, 1)");
+    bladeGrad.addColorStop(0.65, "rgba(255, 120, 0, 0.85)");
+    bladeGrad.addColorStop(1, "rgba(255, 30, 0, 0)");
+
+    ctx.fillStyle = bladeGrad;
+    ctx.fillRect(flareX - 160, mainY - 3, 320, 6);
+    ctx.restore();
+  }
+
+  // 6. Braci e Scintille in primo piano sopra le lettere
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (let i = sparks.length - 1; i >= 0; i--) {
+    sparks[i].draw(ctx);
+    if (sparks[i].update()) {
+      sparks.splice(i, 1);
+    }
+  }
+  ctx.restore();
+
+  requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
