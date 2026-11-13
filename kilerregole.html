@@ -8,12 +8,12 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: transparent;
+    background: #000;
     overflow-x: hidden;
 }
 
 /* =========================================
-   BOX LATERALI (INTERAMENTE PER LE REGOLE)
+   BOX LATERALI CON FOTO SCORREVOLE IN CONTINUO
    ========================================= */
 .rule-panel {
     position: fixed;
@@ -21,7 +21,7 @@ html, body {
     transform: translateY(-50%);
     width: 280px;
     height: 520px;
-    background: rgba(10, 0, 15, 0.95);
+    background: #05000a;
     border: 2px solid #ff0000;
     box-shadow: 0 0 20px #ff0000, 0 0 40px #ffff00;
     border-radius: 14px;
@@ -36,59 +36,61 @@ html, body {
 .panel-left { left: 15px; }
 .panel-right { right: 15px; }
 
-/* HEADER FISSO IN CIMA AL BOX */
+/* HEADER FISSO CON EFFETTO LAMPEGGIANTE (BLINK) */
 .rules-header {
     background: linear-gradient(90deg, #ff0000, #ff00ff);
     color: #fff;
     text-align: center;
-    padding: 8px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 15px;
     font-weight: bold;
     text-shadow: 0 0 5px #000;
     letter-spacing: 1px;
     border-bottom: 2px solid #ffff00;
-    z-index: 2;
+    z-index: 3;
+    animation: blinkText 1.5s infinite;
 }
 
-/* CONTENITORE INTERO PER IL TESTO SCORREVOLE */
+@keyframes blinkText {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* CONTENITORE PRINCIPALE SCORREVOLE */
 .rules-content {
     flex: 1;
     overflow: hidden;
     position: relative;
-    background: rgba(5, 0, 10, 0.98);
+    background: #000;
 }
 
-.rules-scroll {
+/* CONTENITORE ANIMATO CON LE DUE FOTO IN FILA */
+.rules-image-scroll {
     position: absolute;
     width: 100%;
-    padding: 15px;
-    box-sizing: border-box;
-    color: #fff;
-    font-size: 13px;
-    line-height: 1.5;
-    text-shadow: 0 0 3px #000;
-    animation: scrollUp 28s linear infinite;
+    animation: scrollPhotoLoop 22s linear infinite;
 }
 
-.rules-scroll:hover {
-    animation-play-state: paused; /* Si ferma se ci metti il mouse sopra */
+/* Ferma lo scorrimento e fa lo zoom quando avvicini il mouse */
+.rule-panel:hover .rules-image-scroll {
+    animation-play-state: paused;
 }
 
-.rules-scroll h3 {
-    color: #ffff00;
-    font-size: 14px;
-    margin: 5px 0 10px 0;
-    text-align: center;
-    text-shadow: 0 0 8px #ff0000;
+.rule-panel:hover .rules-bg-img {
+    transform: scale(1.10);
 }
 
-.rules-scroll p {
-    margin: 0 0 10px 0;
+/* LE FOTO ORIGINALI */
+.rules-bg-img {
+    width: 100%;
+    display: block;
+    transition: transform 0.4s ease;
 }
 
-@keyframes scrollUp {
-    0% { transform: translateY(100%); }
-    100% { transform: translateY(-100%); }
+@keyframes scrollPhotoLoop {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
 }
 
 /* Responsive per schermi piccoli */
@@ -99,38 +101,28 @@ html, body {
 </head>
 <body>
 
-<!-- BOX SINISTRO (REGULAMENT - PENTRU UTILIZATORI) -->
+<!-- BOX SINISTRO (UTENTI) -->
 <div class="rule-panel panel-left">
-    <div class="rules-header">RADIO CONNECT FM</div>
+    <div class="rules-header">REGULAMENT IMPORTANT</div>
     <div class="rules-content">
-        <div class="rules-scroll">
-            <h3>REGULAMENT IMPORTANT</h3>
-            <p style="color: #00ffff; font-weight: bold; text-align: center;">PENTRU UTILIZATORI!</p>
-            <p>🔊 Toți utilizatorii de xat sunt rugați să păstreze un limbaj decent.</p>
-            <p>🚫 Este strict interzisă reclama către alte radiouri / site / xat.</p>
-            <p>👤 Este strict interzisă banarea persoanelor pentru privat, se va da ignore.</p>
-            <p>✈️ Se dă ban pentru rechin / hipopotan / avion timp de 1 oră.</p>
-            <p>⚠️ Nu se cer funcții, se vor da doar dacă este cazul.</p>
-            <p>⚠️ Nu este permisă debanarea unui user banat de alt owner, decizia o va lua doar cel ce este main, atunci când este cazul.</p>
-            <p>🟣 Persoanele ce sunt owneri sunt obligați să ia măsuri atunci când toate acestea nu sunt respectate.</p>
-            <p style="color: #ffff00; text-align: center; font-weight: bold;">Nerespectarea acestor reguli poate duce la BANAREA UTILIZATORULUI!</p>
+        <div class="rules-image-scroll">
+            <!-- Prima copia dell'immagine -->
+            <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Utilizatori">
+            <!-- Seconda copia esatta per chiudere il loop senza stacchi -->
+            <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Utilizatori 2">
         </div>
     </div>
 </div>
 
-<!-- BOX DESTRO (REGULAMENT - PENTRU MODERATORI) -->
+<!-- BOX DESTRO (MODERATORI) -->
 <div class="rule-panel panel-right">
-    <div class="rules-header">RADIO CONNECT FM</div>
+    <div class="rules-header">REGULAMENT IMPORTANT</div>
     <div class="rules-content">
-        <div class="rules-scroll" style="animation-delay: -14s;">
-            <h3>REGULAMENT IMPORTANT</h3>
-            <p style="color: #00ffff; font-weight: bold; text-align: center;">PENTRU MODERATORI DE EMISII!</p>
-            <p>⏱️ Timpul pentru emisie este de 2 ore, se poate emite mai mult în cazul în care nu este anunțat nici un alt coleg.</p>
-            <p>⭐ Dedicațiile și preferințele se iau în mod express de pe site, doar în anumite cazuri din privat.</p>
-            <p>🎙️ Este strict interzis limbajul obscen pe radio în timpul emisiei.</p>
-            <p>🤝 Vă rugăm să vă respectați colegii de radio, precum și userii de pe xat.</p>
-            <p style="color: #ff5555; text-align: center; font-weight: bold;">⚠️ Nerespectarea acestor reguli poate duce la ȘTERGEREA CONȚINUTULUI DE EMISIE!</p>
-            <p style="text-align: center; color: #00ffff; font-weight: bold;">www.RadioConnect.Ro</p>
+        <div class="rules-image-scroll" style="animation-delay: -11s;">
+            <!-- Prima copia dell'immagine -->
+            <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Moderatorit">
+            <!-- Seconda copia esatta per chiudere il loop senza stacchi -->
+            <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Moderatorit 2">
         </div>
     </div>
 </div>
