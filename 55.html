@@ -22,7 +22,7 @@
     }
     .video-wrapper {
       position: absolute;
-      width: 290px;
+      width: 250px; /* <--- HO STRETTO QUI (prima era 290px) */
       height: 486px;
       top: 0;
       overflow: visible;
@@ -63,30 +63,21 @@
       }
     }
     .video-wrapper video {
-      width: 290px;
+      width: 250px; /* <--- HO STRETTO ANCHE QUI (prima era 290px) */
       height: 486px;
-      object-fit: cover;
+      object-fit: cover; /* Se il video ti sembra troppo tagliato dentro, cambia 'cover' con 'fill' */
       border-radius: 15px;
       display: block;
       position: relative;
       z-index: 2;
     }
+    
+    /* Posizioni azzerate per non far tagliare i bordi da xat */
     .left-wrapper {
-      left: -20px;
+      left: 0; 
     }
     .right-wrapper {
-      right: -20px;
-    }
-    .center-image {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 728px;
-      height: 486px;
-      z-index: 3;
-      pointer-events: none;
-      user-select: none;
+      right: 0; 
     }
   </style>
 </head>
@@ -99,7 +90,7 @@
       </video>
     </div>
 
-    <img class="center-image" src="https://xatimg.com/image/EeBHyZAptqNU.png" alt="Centro trasparente" />
+   
 
     <div class="video-wrapper right-wrapper">
       <video id="videoRight" autoplay loop muted playsinline>
