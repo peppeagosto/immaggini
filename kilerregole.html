@@ -14,7 +14,7 @@ html, body {
 
 /* =========================================
    BOX LATERALI CON FOTO SCORREVOLE IN CONTINUO
-   ========================================= */
+========================================= */
 .rule-panel {
     position: fixed;
     top: 50%;
@@ -72,20 +72,16 @@ html, body {
     animation: scrollPhotoLoop 22s linear infinite;
 }
 
-/* Ferma lo scorrimento e fa lo zoom quando avvicini il mouse */
+/* Ferma lo scorrimento quando avvicini il mouse */
 .rule-panel:hover .rules-image-scroll {
     animation-play-state: paused;
 }
 
-.rule-panel:hover .rules-bg-img {
-    transform: scale(1.10);
-}
-
-/* LE FOTO ORIGINALI */
+/* LE FOTO ORIGINALI - Animazione solo sul transform, senza ritardo sull'origin */
 .rules-bg-img {
     width: 100%;
     display: block;
-    transition: transform 0.4s ease;
+    transition: transform 0.2s ease;
 }
 
 @keyframes scrollPhotoLoop {
@@ -93,9 +89,20 @@ html, body {
     100% { transform: translateY(-50%); }
 }
 
-/* Responsive per schermi piccoli */
-@media(max-width: 650px) {
-    .rule-panel { display: none; }
+/* Responsive per schermi medi e piccoli (Adatta i box senza nasconderli) */
+@media(max-width: 800px) {
+    .rule-panel { 
+        width: 220px;
+        height: 450px;
+    }
+    .rules-header {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+@media(max-width: 500px) {
+    .panel-left { transform: translateY(-50%) scale(0.85); transform-origin: left center; }
+    .panel-right { transform: translateY(-50%) scale(0.85); transform-origin: right center; }
 }
 </style>
 </head>
@@ -108,7 +115,7 @@ html, body {
         <div class="rules-image-scroll">
             <!-- Prima copia dell'immagine -->
             <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Utilizatori">
-            <!-- Seconda copia esatta per chiudere il loop senza stacchi -->
+            <!-- Seconda copia per il loop -->
             <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Utilizatori 2">
         </div>
     </div>
@@ -121,11 +128,38 @@ html, body {
         <div class="rules-image-scroll" style="animation-delay: -11s;">
             <!-- Prima copia dell'immagine -->
             <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Moderatorit">
-            <!-- Seconda copia esatta per chiudere il loop senza stacchi -->
+            <!-- Seconda copia per il loop -->
             <img src="https://xatimg.com/image/95MQNMaF7uqb.jpg" class="rules-bg-img" alt="Regulament Moderatorit 2">
         </div>
     </div>
 </div>
+
+<!-- SCRIPT PER L'EFFETTO LENTE D'INGRANDIMENTO -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const images = document.querySelectorAll('.rules-bg-img');
+
+    images.forEach(img => {
+        img.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            // Calcola la posizione esatta del mouse in percentuale
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            // Sposta il focus dello zoom e ingrandisce
+            this.style.transformOrigin = `${x}% ${y}%`;
+            // Se vuoi ingrandire di più, cambia "2.5" in "3". Se è troppo, abbassalo a "2".
+            this.style.transform = "scale(2.5)"; 
+        });
+
+        img.addEventListener('mouseleave', function() {
+            // Quando il mouse esce dal box, l'immagine torna normale
+            this.style.transformOrigin = "center center";
+            this.style.transform = "scale(1)";
+        });
+    });
+});
+</script>
 
 </body>
 </html>
