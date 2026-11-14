@@ -77,7 +77,7 @@ html, body {
     animation-play-state: paused;
 }
 
-/* LE FOTO ORIGINALI - Animazione solo sul transform, senza ritardo sull'origin */
+/* LE FOTO ORIGINALI - Animazione solo sul transform */
 .rules-bg-img {
     width: 100%;
     display: block;
@@ -134,31 +134,38 @@ html, body {
     </div>
 </div>
 
-<!-- SCRIPT PER L'EFFETTO LENTE D'INGRANDIMENTO -->
+<!-- SCRIPT PER L'EFFETTO LENTE D'INGRANDIMENTO (OTTIMIZZATO PER IFRAME XAT) -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+// Creiamo una funzione diretta invece di aspettare il caricamento del DOM
+function attivaLente() {
     const images = document.querySelectorAll('.rules-bg-img');
-
-    images.forEach(img => {
-        img.addEventListener('mousemove', function(e) {
+    
+    for (let i = 0; i < images.length; i++) {
+        let img = images[i];
+        
+        // Usiamo onmousemove diretto (più digeribile per gli iframe restrittivi)
+        img.onmousemove = function(e) {
             const rect = this.getBoundingClientRect();
-            // Calcola la posizione esatta del mouse in percentuale
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-            // Sposta il focus dello zoom e ingrandisce
+            
             this.style.transformOrigin = `${x}% ${y}%`;
-            // Se vuoi ingrandire di più, cambia "2.5" in "3". Se è troppo, abbassalo a "2".
             this.style.transform = "scale(2.5)"; 
-        });
-
-        img.addEventListener('mouseleave', function() {
-            // Quando il mouse esce dal box, l'immagine torna normale
+        };
+        
+        // Resetta quando il mouse esce
+        img.onmouseleave = function() {
             this.style.transformOrigin = "center center";
             this.style.transform = "scale(1)";
-        });
-    });
-});
+        };
+    }
+}
+
+// 1. Eseguiamo subito lo script (visto che si trova a fine pagina)
+attivaLente();
+
+// 2. Per doppia sicurezza, lo facciamo scattare anche al window.onload dell'iframe
+window.onload = attivaLente;
 </script>
 
 </body>
