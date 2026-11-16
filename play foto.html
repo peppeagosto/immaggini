@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IL CARTAIO - CYBER PLAYER 750x700</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --bg-dark: rgba(10, 10, 20, 0.95);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+        .main-stage {
+            width: 750px;
+            height: 700px;
+            background: var(--bg-dark);
+            border: 2px solid var(--neon-blue);
+            border-radius: 25px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        /* HEADER CON MARQUEE CSS */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            padding-bottom: 8px;
+            gap: 15px;
+            overflow: hidden; 
+        }
+        .marquee-box {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollText 15s linear infinite;
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+            letter-spacing: 1px;
+        }
+        @keyframes scrollText {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        .resolution {
+            font-size: 10px;
+            color: #fff;
+            font-weight: bold;
+            white-space: nowrap;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* CORPO CENTRALE */
+        .center-body {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            justify-content: center;
+            flex: 1;
+            margin: 15px 0;
+        }
+
+        /* COVER INGRANDITA A 360px E CENTRATA VERTICALMENTE */
+        .cover-box {
+            width: 360px;
+            height: 360px;
+            border: 3px solid var(--neon-pink);
+            border-radius: 20px;
+            background: #05050a; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            align-self: center;
+        }
+        
+        /* STILE MEDIA */
+        #video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0; 
+        }
+        
+        #image-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: border-radius 0.4s ease; 
+        }
+
+        /* CLASSI DINAMICHE PER ROTAZIONE E FORMA */
+        .media-circle {
+            border-radius: 50%; 
+            transform: scale(0.95);
+            /* Rotazione continua in 6 secondi */
+            animation: spinRecord 6s linear infinite;
+            /* Di base è in pausa finché non c'è play */
+            animation-play-state: paused;
+        }
+
+        /* Quando il JS aggiunge "playing", il disco gira */
+        .media-circle.playing {
+            animation-play-state: running;
+        }
+
+        .media-square {
+            border-radius: 0; 
+            transform: scale(1);
+            animation: none; /* Le foto quadrate non girano */
+        }
+
+        /* Animazione Disco Vinile */
+        @keyframes spinRecord {
+            0% { transform: scale(0.95) rotate(0deg); }
+            100% { transform: scale(0.95) rotate(360deg); }
+        }
+
+        /* PANNELLO CON I 4 BOX DISTANZIATI PERFETTAMENTE */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 330px;
+            height: 100%; 
+        }
+        
+        .box-section {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--neon-blue);
+            padding: 12px 10px; 
+            border-radius: 12px;
+            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.05);
+        }
+        .box-title {
+            font-size: 10px;
+            color: #fff;
+            margin-bottom: 6px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+        .slot-btn {
+            padding: 6px 0;
+            font-size: 9px;
+            border-radius: 6px;
+            border: 1px solid var(--neon-blue);
+            background: rgba(0,243,255,0.05);
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .slot-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+        .slot-btn.active-file {
+            border: 1px solid var(--neon-pink);
+            background: rgba(255,0,255,0.25);
+            color: #fff;
+        }
+
+        /* STILI SPECIFICI PER IL 4° BOX (TERMINALE CYBER) */
+        .term-line-1 {
+            font-size: 11px;
+            color: #fff;
+            text-shadow: 0 0 4px #fff;
+            margin-bottom: 6px;
+        }
+        .term-line-2 {
+            font-size: 9px;
+            color: #fff;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        /* Effetto macchina da scrivere */
+        .typing-effect {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #fff;
+            animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* BARRA INFERIORE */
+        .player-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 1px solid var(--neon-pink);
+        }
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+        .btn-stop {
+            border-color: #ff3366;
+            color: #ff3366;
+            text-shadow: 0 0 5px #ff3366;
+        }
+        .btn-stop:hover {
+            background: #ff3366;
+            color: #000;
+        }
+        .vol-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .vol-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 5px;
+            background: #222;
+            border-radius: 3px;
+            border: 1px solid var(--neon-pink);
+            outline: none;
+        }
+        .vol-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neon-pink);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--neon-pink);
+        }
+        .status-marquee {
+            font-size: 10px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-stage">
+    <!-- HEADER CON MARQUEE -->
+    <div class="header">
+        <div class="marquee-box">
+            <div class="marquee-text" id="main-marquee">
+                ▶ IL CARTAIO ✦ CYBER PLAYER ✦ IN ATTESA DEL SERVER RADIO... ◀
+            </div>
+        </div>
+        <div class="resolution">750 x 700 px</div>
+    </div>
+
+    <!-- CORPO CENTRALE -->
+    <div class="center-body">
+        
+        <!-- COLONNA SINISTRA: COVER (360x360) -->
+        <div class="cover-box">
+            <video id="video-player" playsinline style="display:none;" controls></video>
+            <img id="image-cover" src="https://xatimg.com/image/GEg6IiRprwxU.gif" alt="Cover" class="media-circle">
+        </div>
+
+        <!-- COLONNA DESTRA: 4 BOX DISTANZIATI -->
+        <div class="control-panel">
+            
+            <!-- BOX 1: 10 SLOT MP3 -->
+            <div class="box-section">
+                <div class="box-title">🎵 10 Audio Slots (MP3)</div>
+                <div class="slot-grid" id="mp3-slots"></div>
+            </div>
+
+            <!-- BOX 2: 10 SLOT MP4 -->
+            <div class="box-section">
+                <div class="box-title">🎬 10 Video Slots (MP4)</div>
+                <div class="slot-grid" id="mp4-slots"></div>
+            </div>
+
+            <!-- BOX 3: 10 FOTO PRESET -->
+            <div class="box-section">
+                <div class="box-title">🖼️ 10 Player Samples</div>
+                <div class="slot-grid" id="photo-slots"></div>
+            </div>
+
+            <!-- BOX 4: TERMINALE CYBER RILEVAMENTO -->
+            <div class="box-section">
+                <div class="box-title">🌍 Scanner Rete & Geolocation</div>
+                <div class="term-line-1" id="sys-location">
+                    <span style="color: #ffff00;">⏳ RILEVAMENTO IP IN CORSO...</span>
+                </div>
+                <div class="term-line-2">
+                    <span class="typing-effect">>> CONNESSIONE IN INGRESSO... BENVENUTO.</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BARRA INFERIORE -->
+    <div class="player-bar">
+        <div style="display: flex; gap: 6px;">
+            <button class="btn" id="play-btn">▶ PLAY</button>
+            <button class="btn btn-stop" onclick="stopMedia()">■ STOP</button>
+        </div>
+        
+        <div class="status-marquee" id="status-text">In attesa...</div>
+
+        <div class="vol-container">
+            <span style="font-size:9px; color:#fff; font-weight:bold; text-shadow: 0 0 5px rgba(255,255,255,0.5);">VOL</span>
+            <input type="range" class="vol-slider" min="0" max="1" step="0.01" value="1" oninput="changeVolume(this.value)">
+        </div>
+    </div>
+</div>
+
+<!-- INPUT FILE NASCOSTI PER APRIRE IL DESKTOP -->
+<input type="file" id="file-input-mp3" accept="audio/*" style="display:none" onchange="loadDesktopAudio(this)">
+<input type="file" id="file-input-mp4" accept="video/mp4" style="display:none" onchange="loadDesktopVideo(this)">
+
+<!-- AUDIO STREAM -->
+<audio id="radio-stream" crossorigin="anonymous">
+    <source src="https://stm2.srvif.com:7198/;stream" type="audio/mpeg">
+</audio>
+
+<script>
+    // Variabili Globali per il controllo dei player
+    let audioStream, videoPlayer, imageCover, statusText, mainMarquee;
+    let activeMp3Slot = null;
+    let activeMp4Slot = null;
+    let lastSongTitle = ""; 
+    let playerMode = 'radio'; 
+
+    $(document).ready(function() {
+        audioStream = document.getElementById('radio-stream');
+        videoPlayer = document.getElementById('video-player');
+        imageCover = document.getElementById('image-cover');
+        statusText = document.getElementById('status-text');
+        mainMarquee = document.getElementById('main-marquee');
+
+        // GESTIONE ROTAZIONE DISCO AUTOMATICA 
+        // L'animazione si avvia e si ferma ascoltando lo stato dell'audio!
+        audioStream.addEventListener('play', function() {
+            imageCover.classList.add('playing');
+        });
+        
+        audioStream.addEventListener('pause', function() {
+            imageCover.classList.remove('playing');
+        });
+
+        // 1. Geolocalizzazione IP
+        fetch('https://ipwho.is/')
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    $('#sys-location').html(`<span style="color: #0f0; text-shadow: 0 0 5px #0f0;">🟢 SYS.LINK:</span> ${data.city} (${data.country})`);
+                } else {
+                    $('#sys-location').html(`<span style="color: #ff3366;">🔴 SYS.LINK:</span> Posizione Anonima`);
+                }
+            })
+            .catch(error => {
+                $('#sys-location').html(`<span style="color: #ff3366;">🔴 SYS.LINK:</span> Rilevamento Fallito`);
+            });
+
+        // 2. Avvio Sistema Titoli e Copertine
+        fetchRadioTitleAndCover();
+        setInterval(fetchRadioTitleAndCover, 10000);
+
+        // 3. Generazione Bottoni Immagini/Video (Samples)
+        const presetPhotos = [
+            "https://i.imgur.com/UFhJtmv.png",
+            "https://i.imgur.com/XrncLJR.png",
+            "https://i.imgur.com/IE3G3q7.png",
+            "https://i.imgur.com/JMWuNUK.mp4",
+            "https://i.imgur.com/qvXgr6m.png",
+            "https://i.imgur.com/a62zHER.png",
+            "https://i.imgur.com/LyI9XKE.png",
+            "https://i.imgur.com/qcFZMwY.png",
+            "https://i.imgur.com/kxWlsJm.png",
+            "https://i.imgur.com/FLCZ7zv.png"
+        ];
+        const photoContainer = document.getElementById('photo-slots');
+        presetPhotos.forEach((src, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn active-file';
+            btn.innerText = idx + 1;
+            btn.title = "Show Sample " + (idx + 1);
+            btn.onclick = () => setPresetPhoto(src);
+            photoContainer.appendChild(btn);
+        });
+
+        // 4. Generazione Bottoni Slot MP3
+        const mp3Container = document.getElementById('mp3-slots');
+        for(let i = 0; i < 10; i++) {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn';
+            btn.id = 'mp3-slot-' + i;
+            btn.innerText = i + 1;
+            btn.title = "Load MP3 in slot " + (i + 1);
+            btn.onclick = () => {
+                activeMp3Slot = i;
+                document.getElementById('file-input-mp3').click();
+            };
+            mp3Container.appendChild(btn);
+        }
+
+        // 5. Generazione Bottoni Slot MP4
+        const mp4Container = document.getElementById('mp4-slots');
+        for(let i = 0; i < 10; i++) {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn';
+            btn.id = 'mp4-slot-' + i;
+            btn.innerText = i + 1;
+            btn.title = "Load MP4 in slot " + (i + 1);
+            btn.onclick = () => {
+                activeMp4Slot = i;
+                document.getElementById('file-input-mp4').click();
+            };
+            mp4Container.appendChild(btn);
+        }
+
+        // 6. Setup Pulsante PLAY Principale
+        $('#play-btn').click(function() {
+            if (playerMode === 'local') {
+                if (videoPlayer.style.display === 'block') {
+                    videoPlayer.play();
+                    $(statusText).text("Playing: Video");
+                } else {
+                    audioStream.play().catch(e => console.log(e));
+                }
+            } else {
+                playerMode = 'radio';
+                
+                // Preparazione visiva per la radio
+                imageCover.classList.remove('media-square');
+                imageCover.classList.add('media-circle');
+                imageCover.style.display = 'block';
+                videoPlayer.style.display = 'none';
+                
+                audioStream.src = "https://stm2.srvif.com:7198/;stream";
+                audioStream.play().catch(e => console.log(e));
+                
+                fetchRadioTitleAndCover(); 
+            }
+        });
+    });
+
+    // === FUNZIONI GLOBALI DEL CORE ===
+
+    function fetchRadioTitleAndCover() {
+        if (playerMode !== 'radio') return;
+
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(d) {
+            if(d && d.songtitle) {
+                let currentTitle = d.songtitle;
+                
+                $('#main-marquee').text("▶ 🎵 ON AIR: " + currentTitle.toUpperCase() + " ✦ IL CARTAIO CYBER PLAYER ◀");
+                $('#status-text').text("ON AIR: " + currentTitle);
+                
+                if(currentTitle !== lastSongTitle) {
+                    lastSongTitle = currentTitle;
+                    
+                    let searchQuery = encodeURIComponent(currentTitle);
+                    $.getJSON(`https://itunes.apple.com/search?term=${searchQuery}&media=music&limit=1`, function(data) {
+                        
+                        if (playerMode === 'radio' && $('#video-player').css('display') === 'none') {
+                            if(data.results && data.results.length > 0) {
+                                let coverUrl = data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
+                                $('#image-cover').attr('src', coverUrl);
+                            } else {
+                                $('#image-cover').attr('src', 'https://xatimg.com/image/GEg6IiRprwxU.gif');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function setPresetPhoto(url) {
+        playerMode = 'local';
+        stopAllMedia();
+        if(url.endsWith('.mp4')) {
+            videoPlayer.src = url;
+            videoPlayer.style.display = 'block';
+            imageCover.style.display = 'none';
+            videoPlayer.play();
+            $(statusText).text("Sample Video Active");
+        } else {
+            imageCover.src = url;
+            // Rimuove la forma a disco e la rotazione
+            imageCover.classList.remove('media-circle', 'playing');
+            imageCover.classList.add('media-square'); 
+            imageCover.style.display = 'block';
+            videoPlayer.style.display = 'none';
+            $(statusText).text("Sample Image Active");
+        }
+    }
+
+    function loadDesktopAudio(input) {
+        if(input.files && input.files[0]) {
+            playerMode = 'local'; 
+            let file = input.files[0];
+            let url = URL.createObjectURL(file);
+            stopAllMedia();
+            
+            if (videoPlayer.style.display === 'block') {
+                imageCover.src = "https://xatimg.com/image/GEg6IiRprwxU.gif";
+                imageCover.classList.remove('media-square');
+                imageCover.classList.add('media-circle');
+                imageCover.style.display = 'block';
+                videoPlayer.style.display = 'none';
+            }
+
+            audioStream.src = url;
+            audioStream.play();
+            $(statusText).text("Audio: " + file.name);
+
+            $('.slot-btn').removeClass('active-file');
+            $('#mp3-slot-' + activeMp3Slot).addClass('active-file');
+        }
+    }
+
+    function loadDesktopVideo(input) {
+        if(input.files && input.files[0]) {
+            playerMode = 'local'; 
+            let file = input.files[0];
+            let url = URL.createObjectURL(file);
+            stopAllMedia();
+            videoPlayer.src = url;
+            videoPlayer.style.display = 'block';
+            imageCover.style.display = 'none'; 
+            videoPlayer.play();
+            $(statusText).text("Video: " + file.name);
+
+            $('.slot-btn').removeClass('active-file');
+            $('#mp4-slot-' + activeMp4Slot).addClass('active-file');
+        }
+    }
+
+    function stopMedia() {
+        stopAllMedia();
+        playerMode = 'radio'; 
+        $(statusText).text("Stopped");
+        
+        lastSongTitle = ""; 
+        imageCover.src = "https://xatimg.com/image/GEg6IiRprwxU.gif";
+        imageCover.classList.remove('media-square');
+        imageCover.classList.add('media-circle');
+        imageCover.style.display = 'block';
+        videoPlayer.style.display = 'none';
+
+        $('.slot-btn').removeClass('active-file');
+        
+        setTimeout(fetchRadioTitleAndCover, 1000); 
+    }
+
+    function stopAllMedia() {
+        audioStream.pause();
+        audioStream.currentTime = 0;
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+    }
+
+    function changeVolume(val) {
+        audioStream.volume = parseFloat(val);
+        videoPlayer.volume = parseFloat(val);
+    }
+</script>
+</body>
+</html>
