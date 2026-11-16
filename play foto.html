@@ -42,7 +42,7 @@
             position: relative;
         }
         
-        /* HEADER CON MARQUEE CSS */
+        /* HEADER CON MARQUEE */
         .header {
             display: flex;
             justify-content: space-between;
@@ -89,7 +89,7 @@
             margin: 15px 0;
         }
 
-        /* COVER INGRANDITA A 360px E CENTRATA VERTICALMENTE */
+        /* COVER INGRANDITA A 360px */
         .cover-box {
             width: 360px;
             height: 360px;
@@ -120,17 +120,14 @@
             transition: border-radius 0.4s ease; 
         }
 
-        /* CLASSI DINAMICHE PER ROTAZIONE E FORMA */
+        /* CLASSI DINAMICHE PER ROTAZIONE */
         .media-circle {
             border-radius: 50%; 
             transform: scale(0.95);
-            /* Rotazione continua in 6 secondi */
             animation: spinRecord 6s linear infinite;
-            /* Di base è in pausa finché non c'è play */
             animation-play-state: paused;
         }
 
-        /* Quando il JS aggiunge "playing", il disco gira */
         .media-circle.playing {
             animation-play-state: running;
         }
@@ -138,16 +135,15 @@
         .media-square {
             border-radius: 0; 
             transform: scale(1);
-            animation: none; /* Le foto quadrate non girano */
+            animation: none; 
         }
 
-        /* Animazione Disco Vinile */
         @keyframes spinRecord {
             0% { transform: scale(0.95) rotate(0deg); }
             100% { transform: scale(0.95) rotate(360deg); }
         }
 
-        /* PANNELLO CON I 4 BOX DISTANZIATI PERFETTAMENTE */
+        /* PANNELLO CON I 4 BOX */
         .control-panel {
             display: flex;
             flex-direction: column;
@@ -198,7 +194,7 @@
             color: #fff;
         }
 
-        /* STILI SPECIFICI PER IL 4° BOX (TERMINALE CYBER) */
+        /* STILI TERMINALE CYBER */
         .term-line-1 {
             font-size: 11px;
             color: #fff;
@@ -212,7 +208,6 @@
             white-space: nowrap;
             overflow: hidden;
         }
-        /* Effetto macchina da scrivere */
         .typing-effect {
             display: inline-block;
             overflow: hidden;
@@ -314,30 +309,30 @@
     <!-- CORPO CENTRALE -->
     <div class="center-body">
         
-        <!-- COLONNA SINISTRA: COVER (360x360) -->
+        <!-- COLONNA SINISTRA: COVER -->
         <div class="cover-box">
             <video id="video-player" playsinline style="display:none;" controls></video>
             <img id="image-cover" src="https://xatimg.com/image/GEg6IiRprwxU.gif" alt="Cover" class="media-circle">
         </div>
 
-        <!-- COLONNA DESTRA: 4 BOX DISTANZIATI -->
+        <!-- COLONNA DESTRA -->
         <div class="control-panel">
             
-            <!-- BOX 1: 10 SLOT MP3 -->
+            <!-- BOX 1: 10 SLOT MP3 (Cerca file dal tuo PC al volo) -->
             <div class="box-section">
-                <div class="box-title">🎵 10 Audio Slots (MP3)</div>
+                <div class="box-title">🎵 10 Audio (Dal PC)</div>
                 <div class="slot-grid" id="mp3-slots"></div>
             </div>
 
-            <!-- BOX 2: 10 SLOT MP4 -->
+            <!-- BOX 2: 10 VIDEO (Da GITHUB) -->
             <div class="box-section">
-                <div class="box-title">🎬 10 Video Slots (MP4)</div>
+                <div class="box-title">🎬 10 Video (GitHub)</div>
                 <div class="slot-grid" id="mp4-slots"></div>
             </div>
 
-            <!-- BOX 3: 10 FOTO PRESET -->
+            <!-- BOX 3: 10 FOTO -->
             <div class="box-section">
-                <div class="box-title">🖼️ 10 Player Samples</div>
+                <div class="box-title">🖼️ 10 Foto (Preset)</div>
                 <div class="slot-grid" id="photo-slots"></div>
             </div>
 
@@ -371,9 +366,8 @@
     </div>
 </div>
 
-<!-- INPUT FILE NASCOSTI PER APRIRE IL DESKTOP -->
+<!-- SOLO L'INPUT PER GLI MP3 LIBERI -->
 <input type="file" id="file-input-mp3" accept="audio/*" style="display:none" onchange="loadDesktopAudio(this)">
-<input type="file" id="file-input-mp4" accept="video/mp4" style="display:none" onchange="loadDesktopVideo(this)">
 
 <!-- AUDIO STREAM -->
 <audio id="radio-stream" crossorigin="anonymous">
@@ -381,12 +375,43 @@
 </audio>
 
 <script>
-    // Variabili Globali per il controllo dei player
     let audioStream, videoPlayer, imageCover, statusText, mainMarquee;
     let activeMp3Slot = null;
-    let activeMp4Slot = null;
     let lastSongTitle = ""; 
     let playerMode = 'radio'; 
+
+    // =======================================================
+    // 👉 1. LA TUA LISTA DEI 10 VIDEO MP4 SU GITHUB
+    // Incolla qui i link diretti (Raw) dei video caricati su GitHub
+    // =======================================================
+    const githubVideos = [
+        "https://peppeagosto.github.io/immaggini/video1.mp4", 
+        "https://peppeagosto.github.io/immaggini/video2.mp4", 
+        "https://peppeagosto.github.io/immaggini/video3.mp4",
+        "https://peppeagosto.github.io/immaggini/video4.mp4",
+        "https://peppeagosto.github.io/immaggini/video5.mp4",
+        "https://peppeagosto.github.io/immaggini/video6.mp4",
+        "https://peppeagosto.github.io/immaggini/video7.mp4",
+        "https://peppeagosto.github.io/immaggini/video8.mp4",
+        "https://peppeagosto.github.io/immaggini/video9.mp4",
+        "https://peppeagosto.github.io/immaggini/video10.mp4"
+    ];
+
+    // =======================================================
+    // 👉 2. LA TUA LISTA DELLE 10 FOTO PREFISSE
+    // =======================================================
+    const webPhotos = [
+        "https://i.imgur.com/UFhJtmv.png", 
+        "https://i.imgur.com/XrncLJR.png", 
+        "https://i.imgur.com/IE3G3q7.png",
+        "https://i.imgur.com/qvXgr6m.png",
+        "https://i.imgur.com/a62zHER.png",
+        "https://i.imgur.com/LyI9XKE.png",
+        "https://i.imgur.com/qcFZMwY.png",
+        "https://i.imgur.com/kxWlsJm.png",
+        "https://i.imgur.com/FLCZ7zv.png",
+        "https://xatimg.com/image/GEg6IiRprwxU.gif"
+    ];
 
     $(document).ready(function() {
         audioStream = document.getElementById('radio-stream');
@@ -395,8 +420,7 @@
         statusText = document.getElementById('status-text');
         mainMarquee = document.getElementById('main-marquee');
 
-        // GESTIONE ROTAZIONE DISCO AUTOMATICA 
-        // L'animazione si avvia e si ferma ascoltando lo stato dell'audio!
+        // GESTIONE ROTAZIONE DISCO AUTOMATICA
         audioStream.addEventListener('play', function() {
             imageCover.classList.add('playing');
         });
@@ -405,7 +429,7 @@
             imageCover.classList.remove('playing');
         });
 
-        // 1. Geolocalizzazione IP
+        // Geolocalizzazione IP
         fetch('https://ipwho.is/')
             .then(response => response.json())
             .then(data => {
@@ -419,41 +443,18 @@
                 $('#sys-location').html(`<span style="color: #ff3366;">🔴 SYS.LINK:</span> Rilevamento Fallito`);
             });
 
-        // 2. Avvio Sistema Titoli e Copertine
+        // Avvio Sistema Titoli e Copertine
         fetchRadioTitleAndCover();
         setInterval(fetchRadioTitleAndCover, 10000);
 
-        // 3. Generazione Bottoni Immagini/Video (Samples)
-        const presetPhotos = [
-            "https://i.imgur.com/UFhJtmv.png",
-            "https://i.imgur.com/XrncLJR.png",
-            "https://i.imgur.com/IE3G3q7.png",
-            "https://i.imgur.com/JMWuNUK.mp4",
-            "https://i.imgur.com/qvXgr6m.png",
-            "https://i.imgur.com/a62zHER.png",
-            "https://i.imgur.com/LyI9XKE.png",
-            "https://i.imgur.com/qcFZMwY.png",
-            "https://i.imgur.com/kxWlsJm.png",
-            "https://i.imgur.com/FLCZ7zv.png"
-        ];
-        const photoContainer = document.getElementById('photo-slots');
-        presetPhotos.forEach((src, idx) => {
-            let btn = document.createElement('button');
-            btn.className = 'slot-btn active-file';
-            btn.innerText = idx + 1;
-            btn.title = "Show Sample " + (idx + 1);
-            btn.onclick = () => setPresetPhoto(src);
-            photoContainer.appendChild(btn);
-        });
-
-        // 4. Generazione Bottoni Slot MP3
+        // BOX 1: Generazione Bottoni Slot MP3 (Cerca file liberi dal PC)
         const mp3Container = document.getElementById('mp3-slots');
         for(let i = 0; i < 10; i++) {
             let btn = document.createElement('button');
             btn.className = 'slot-btn';
             btn.id = 'mp3-slot-' + i;
             btn.innerText = i + 1;
-            btn.title = "Load MP3 in slot " + (i + 1);
+            btn.title = "Cerca MP3 nel PC " + (i + 1);
             btn.onclick = () => {
                 activeMp3Slot = i;
                 document.getElementById('file-input-mp3').click();
@@ -461,22 +462,37 @@
             mp3Container.appendChild(btn);
         }
 
-        // 5. Generazione Bottoni Slot MP4
+        // BOX 2: Generazione Bottoni Slot MP4 (Legge dai link di GitHub)
         const mp4Container = document.getElementById('mp4-slots');
-        for(let i = 0; i < 10; i++) {
+        githubVideos.forEach((src, idx) => {
             let btn = document.createElement('button');
             btn.className = 'slot-btn';
-            btn.id = 'mp4-slot-' + i;
-            btn.innerText = i + 1;
-            btn.title = "Load MP4 in slot " + (i + 1);
+            btn.innerText = idx + 1;
+            btn.title = "Play Video GitHub " + (idx + 1);
             btn.onclick = () => {
-                activeMp4Slot = i;
-                document.getElementById('file-input-mp4').click();
+                $('.slot-btn').removeClass('active-file');
+                btn.classList.add('active-file');
+                setFixedMedia(src, 'video');
             };
             mp4Container.appendChild(btn);
-        }
+        });
 
-        // 6. Setup Pulsante PLAY Principale
+        // BOX 3: Generazione Bottoni Foto (Legge dai link fissi)
+        const photoContainer = document.getElementById('photo-slots');
+        webPhotos.forEach((src, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn';
+            btn.innerText = idx + 1;
+            btn.title = "Visualizza Foto " + (idx + 1);
+            btn.onclick = () => {
+                $('.slot-btn').removeClass('active-file');
+                btn.classList.add('active-file');
+                setFixedMedia(src, 'photo');
+            };
+            photoContainer.appendChild(btn);
+        });
+
+        // Setup Pulsante PLAY Principale
         $('#play-btn').click(function() {
             if (playerMode === 'local') {
                 if (videoPlayer.style.display === 'block') {
@@ -488,7 +504,6 @@
             } else {
                 playerMode = 'radio';
                 
-                // Preparazione visiva per la radio
                 imageCover.classList.remove('media-square');
                 imageCover.classList.add('media-circle');
                 imageCover.style.display = 'block';
@@ -502,7 +517,7 @@
         });
     });
 
-    // === FUNZIONI GLOBALI DEL CORE ===
+    // === FUNZIONI GLOBALI ===
 
     function fetchRadioTitleAndCover() {
         if (playerMode !== 'radio') return;
@@ -534,26 +549,28 @@
         });
     }
 
-    function setPresetPhoto(url) {
+    // Questa funzione avvia i video MP4 da GitHub o le foto dai link
+    function setFixedMedia(url, type) {
         playerMode = 'local';
         stopAllMedia();
-        if(url.endsWith('.mp4')) {
+        
+        if(type === 'video') {
             videoPlayer.src = url;
             videoPlayer.style.display = 'block';
             imageCover.style.display = 'none';
             videoPlayer.play();
-            $(statusText).text("Sample Video Active");
+            $(statusText).text("Riproduzione Video GitHub");
         } else {
             imageCover.src = url;
-            // Rimuove la forma a disco e la rotazione
             imageCover.classList.remove('media-circle', 'playing');
             imageCover.classList.add('media-square'); 
             imageCover.style.display = 'block';
             videoPlayer.style.display = 'none';
-            $(statusText).text("Sample Image Active");
+            $(statusText).text("Visualizzazione Foto");
         }
     }
 
+    // Funzione per caricare gli MP3 a mano dalla cartella col classico tasto sfoglia
     function loadDesktopAudio(input) {
         if(input.files && input.files[0]) {
             playerMode = 'local'; 
@@ -575,23 +592,6 @@
 
             $('.slot-btn').removeClass('active-file');
             $('#mp3-slot-' + activeMp3Slot).addClass('active-file');
-        }
-    }
-
-    function loadDesktopVideo(input) {
-        if(input.files && input.files[0]) {
-            playerMode = 'local'; 
-            let file = input.files[0];
-            let url = URL.createObjectURL(file);
-            stopAllMedia();
-            videoPlayer.src = url;
-            videoPlayer.style.display = 'block';
-            imageCover.style.display = 'none'; 
-            videoPlayer.play();
-            $(statusText).text("Video: " + file.name);
-
-            $('.slot-btn').removeClass('active-file');
-            $('#mp4-slot-' + activeMp4Slot).addClass('active-file');
         }
     }
 
