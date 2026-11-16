@@ -73,7 +73,7 @@
         }
         .resolution {
             font-size: 10px;
-            color: #fff; /* Convertito in bianco */
+            color: #fff;
             font-weight: bold;
             white-space: nowrap;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
@@ -120,14 +120,31 @@
             transition: border-radius 0.4s ease; 
         }
 
-        /* CLASSI DINAMICHE PER GESTIRE LA FORMA */
+        /* CLASSI DINAMICHE PER ROTAZIONE E FORMA */
         .media-circle {
             border-radius: 50%; 
-            transform: scale(0.95); 
+            transform: scale(0.95);
+            /* Rotazione continua in 6 secondi */
+            animation: spinRecord 6s linear infinite;
+            /* Di base è in pausa finché non c'è play */
+            animation-play-state: paused;
         }
+
+        /* Quando il JS aggiunge "playing", il disco gira */
+        .media-circle.playing {
+            animation-play-state: running;
+        }
+
         .media-square {
             border-radius: 0; 
             transform: scale(1);
+            animation: none; /* Le foto quadrate non girano */
+        }
+
+        /* Animazione Disco Vinile */
+        @keyframes spinRecord {
+            0% { transform: scale(0.95) rotate(0deg); }
+            100% { transform: scale(0.95) rotate(360deg); }
         }
 
         /* PANNELLO CON I 4 BOX DISTANZIATI PERFETTAMENTE */
@@ -148,7 +165,7 @@
         }
         .box-title {
             font-size: 10px;
-            color: #fff; /* Convertito in bianco */
+            color: #fff;
             margin-bottom: 6px;
             font-weight: bold;
             text-transform: uppercase;
@@ -190,7 +207,7 @@
         }
         .term-line-2 {
             font-size: 9px;
-            color: #fff; /* Convertito in bianco */
+            color: #fff;
             letter-spacing: 1px;
             white-space: nowrap;
             overflow: hidden;
@@ -200,7 +217,7 @@
             display: inline-block;
             overflow: hidden;
             white-space: nowrap;
-            border-right: 2px solid #fff; /* Cursore convertito in bianco */
+            border-right: 2px solid #fff;
             animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
         }
         @keyframes typing {
@@ -273,7 +290,7 @@
         .status-marquee {
             font-size: 10px;
             color: #fff;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Sostituito l'alone viola con uno bianco */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -287,8 +304,8 @@
     <!-- HEADER CON MARQUEE -->
     <div class="header">
         <div class="marquee-box">
-            <div class="marquee-text">
-                ▶ IL CARTAIO ✦ CYBER PLAYER ✦ CARICA IL TUO FILE ✦ AUDIO & VIDEO MANAGER ◀
+            <div class="marquee-text" id="main-marquee">
+                ▶ IL CARTAIO ✦ CYBER PLAYER ✦ IN ATTESA DEL SERVER RADIO... ◀
             </div>
         </div>
         <div class="resolution">750 x 700 px</div>
@@ -364,117 +381,197 @@
 </audio>
 
 <script>
-    const audioStream = document.getElementById('radio-stream');
-    const videoPlayer = document.getElementById('video-player');
-    const imageCover = document.getElementById('image-cover');
-    const statusText = document.getElementById('status-text');
-
+    // Variabili Globali per il controllo dei player
+    let audioStream, videoPlayer, imageCover, statusText, mainMarquee;
     let activeMp3Slot = null;
     let activeMp4Slot = null;
+    let lastSongTitle = ""; 
+    let playerMode = 'radio'; 
 
-    // --- LETTURA DELLA CITTA' ---
-    function locateVisitor() {
-        const locationBox = document.getElementById('sys-location');
+    $(document).ready(function() {
+        audioStream = document.getElementById('radio-stream');
+        videoPlayer = document.getElementById('video-player');
+        imageCover = document.getElementById('image-cover');
+        statusText = document.getElementById('status-text');
+        mainMarquee = document.getElementById('main-marquee');
+
+        // GESTIONE ROTAZIONE DISCO AUTOMATICA 
+        // L'animazione si avvia e si ferma ascoltando lo stato dell'audio!
+        audioStream.addEventListener('play', function() {
+            imageCover.classList.add('playing');
+        });
+        
+        audioStream.addEventListener('pause', function() {
+            imageCover.classList.remove('playing');
+        });
+
+        // 1. Geolocalizzazione IP
         fetch('https://ipwho.is/')
             .then(response => response.json())
             .then(data => {
                 if(data.success) {
-                    const city = data.city || "Sconosciuta";
-                    const country = data.country || "Pianeta Terra";
-                    locationBox.innerHTML = `<span style="color: #0f0; text-shadow: 0 0 5px #0f0;">🟢 SYS.LINK:</span> ${city} (${country})`;
+                    $('#sys-location').html(`<span style="color: #0f0; text-shadow: 0 0 5px #0f0;">🟢 SYS.LINK:</span> ${data.city} (${data.country})`);
                 } else {
-                    locationBox.innerHTML = `<span style="color: #ff3366;">🔴 SYS.LINK:</span> Posizione Anonima`;
+                    $('#sys-location').html(`<span style="color: #ff3366;">🔴 SYS.LINK:</span> Posizione Anonima`);
                 }
             })
             .catch(error => {
-                locationBox.innerHTML = `<span style="color: #ff3366;">🔴 SYS.LINK:</span> Rilevamento Fallito`;
+                $('#sys-location').html(`<span style="color: #ff3366;">🔴 SYS.LINK:</span> Rilevamento Fallito`);
             });
-    }
-    locateVisitor();
 
-    const presetPhotos = [
-        "https://i.imgur.com/UFhJtmv.png",
-        "https://i.imgur.com/XrncLJR.png",
-        "https://i.imgur.com/IE3G3q7.png",
-        "https://i.imgur.com/JMWuNUK.mp4",
-        "https://i.imgur.com/qvXgr6m.png",
-        "https://i.imgur.com/a62zHER.png",
-        "https://i.imgur.com/LyI9XKE.png",
-        "https://i.imgur.com/qcFZMwY.png",
-        "https://i.imgur.com/kxWlsJm.png",
-        "https://i.imgur.com/FLCZ7zv.png"
-    ];
+        // 2. Avvio Sistema Titoli e Copertine
+        fetchRadioTitleAndCover();
+        setInterval(fetchRadioTitleAndCover, 10000);
 
-    const photoContainer = document.getElementById('photo-slots');
-    presetPhotos.forEach((src, idx) => {
-        let btn = document.createElement('button');
-        btn.className = 'slot-btn active-file';
-        btn.innerText = idx + 1;
-        btn.title = "Show Sample " + (idx + 1);
-        btn.onclick = () => setPresetPhoto(src);
-        photoContainer.appendChild(btn);
+        // 3. Generazione Bottoni Immagini/Video (Samples)
+        const presetPhotos = [
+            "https://i.imgur.com/UFhJtmv.png",
+            "https://i.imgur.com/XrncLJR.png",
+            "https://i.imgur.com/IE3G3q7.png",
+            "https://i.imgur.com/JMWuNUK.mp4",
+            "https://i.imgur.com/qvXgr6m.png",
+            "https://i.imgur.com/a62zHER.png",
+            "https://i.imgur.com/LyI9XKE.png",
+            "https://i.imgur.com/qcFZMwY.png",
+            "https://i.imgur.com/kxWlsJm.png",
+            "https://i.imgur.com/FLCZ7zv.png"
+        ];
+        const photoContainer = document.getElementById('photo-slots');
+        presetPhotos.forEach((src, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn active-file';
+            btn.innerText = idx + 1;
+            btn.title = "Show Sample " + (idx + 1);
+            btn.onclick = () => setPresetPhoto(src);
+            photoContainer.appendChild(btn);
+        });
+
+        // 4. Generazione Bottoni Slot MP3
+        const mp3Container = document.getElementById('mp3-slots');
+        for(let i = 0; i < 10; i++) {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn';
+            btn.id = 'mp3-slot-' + i;
+            btn.innerText = i + 1;
+            btn.title = "Load MP3 in slot " + (i + 1);
+            btn.onclick = () => {
+                activeMp3Slot = i;
+                document.getElementById('file-input-mp3').click();
+            };
+            mp3Container.appendChild(btn);
+        }
+
+        // 5. Generazione Bottoni Slot MP4
+        const mp4Container = document.getElementById('mp4-slots');
+        for(let i = 0; i < 10; i++) {
+            let btn = document.createElement('button');
+            btn.className = 'slot-btn';
+            btn.id = 'mp4-slot-' + i;
+            btn.innerText = i + 1;
+            btn.title = "Load MP4 in slot " + (i + 1);
+            btn.onclick = () => {
+                activeMp4Slot = i;
+                document.getElementById('file-input-mp4').click();
+            };
+            mp4Container.appendChild(btn);
+        }
+
+        // 6. Setup Pulsante PLAY Principale
+        $('#play-btn').click(function() {
+            if (playerMode === 'local') {
+                if (videoPlayer.style.display === 'block') {
+                    videoPlayer.play();
+                    $(statusText).text("Playing: Video");
+                } else {
+                    audioStream.play().catch(e => console.log(e));
+                }
+            } else {
+                playerMode = 'radio';
+                
+                // Preparazione visiva per la radio
+                imageCover.classList.remove('media-square');
+                imageCover.classList.add('media-circle');
+                imageCover.style.display = 'block';
+                videoPlayer.style.display = 'none';
+                
+                audioStream.src = "https://stm2.srvif.com:7198/;stream";
+                audioStream.play().catch(e => console.log(e));
+                
+                fetchRadioTitleAndCover(); 
+            }
+        });
     });
 
+    // === FUNZIONI GLOBALI DEL CORE ===
+
+    function fetchRadioTitleAndCover() {
+        if (playerMode !== 'radio') return;
+
+        $.getJSON("https://stm2.srvif.com:7198/stats?sid=1&json=1&callback=?", function(d) {
+            if(d && d.songtitle) {
+                let currentTitle = d.songtitle;
+                
+                $('#main-marquee').text("▶ 🎵 ON AIR: " + currentTitle.toUpperCase() + " ✦ IL CARTAIO CYBER PLAYER ◀");
+                $('#status-text').text("ON AIR: " + currentTitle);
+                
+                if(currentTitle !== lastSongTitle) {
+                    lastSongTitle = currentTitle;
+                    
+                    let searchQuery = encodeURIComponent(currentTitle);
+                    $.getJSON(`https://itunes.apple.com/search?term=${searchQuery}&media=music&limit=1`, function(data) {
+                        
+                        if (playerMode === 'radio' && $('#video-player').css('display') === 'none') {
+                            if(data.results && data.results.length > 0) {
+                                let coverUrl = data.results[0].artworkUrl100.replace('100x100bb', '400x400bb');
+                                $('#image-cover').attr('src', coverUrl);
+                            } else {
+                                $('#image-cover').attr('src', 'https://xatimg.com/image/GEg6IiRprwxU.gif');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     function setPresetPhoto(url) {
+        playerMode = 'local';
         stopAllMedia();
         if(url.endsWith('.mp4')) {
             videoPlayer.src = url;
             videoPlayer.style.display = 'block';
             imageCover.style.display = 'none';
             videoPlayer.play();
-            statusText.innerText = "Sample Video Active";
+            $(statusText).text("Sample Video Active");
         } else {
             imageCover.src = url;
-            imageCover.className = 'media-square'; 
+            // Rimuove la forma a disco e la rotazione
+            imageCover.classList.remove('media-circle', 'playing');
+            imageCover.classList.add('media-square'); 
             imageCover.style.display = 'block';
             videoPlayer.style.display = 'none';
-            statusText.innerText = "Sample Image Active";
+            $(statusText).text("Sample Image Active");
         }
-    }
-
-    const mp3Container = document.getElementById('mp3-slots');
-    for(let i = 0; i < 10; i++) {
-        let btn = document.createElement('button');
-        btn.className = 'slot-btn';
-        btn.id = 'mp3-slot-' + i;
-        btn.innerText = i + 1;
-        btn.title = "Load MP3 in slot " + (i + 1);
-        btn.onclick = () => {
-            activeMp3Slot = i;
-            document.getElementById('file-input-mp3').click();
-        };
-        mp3Container.appendChild(btn);
-    }
-
-    const mp4Container = document.getElementById('mp4-slots');
-    for(let i = 0; i < 10; i++) {
-        let btn = document.createElement('button');
-        btn.className = 'slot-btn';
-        btn.id = 'mp4-slot-' + i;
-        btn.innerText = i + 1;
-        btn.title = "Load MP4 in slot " + (i + 1);
-        btn.onclick = () => {
-            activeMp4Slot = i;
-            document.getElementById('file-input-mp4').click();
-        };
-        mp4Container.appendChild(btn);
     }
 
     function loadDesktopAudio(input) {
         if(input.files && input.files[0]) {
+            playerMode = 'local'; 
             let file = input.files[0];
             let url = URL.createObjectURL(file);
             stopAllMedia();
-            audioStream.src = url;
-            audioStream.play();
-            statusText.innerText = "Audio: " + file.name;
-
+            
             if (videoPlayer.style.display === 'block') {
                 imageCover.src = "https://xatimg.com/image/GEg6IiRprwxU.gif";
-                imageCover.className = 'media-circle';
+                imageCover.classList.remove('media-square');
+                imageCover.classList.add('media-circle');
                 imageCover.style.display = 'block';
                 videoPlayer.style.display = 'none';
             }
+
+            audioStream.src = url;
+            audioStream.play();
+            $(statusText).text("Audio: " + file.name);
 
             $('.slot-btn').removeClass('active-file');
             $('#mp3-slot-' + activeMp3Slot).addClass('active-file');
@@ -483,6 +580,7 @@
 
     function loadDesktopVideo(input) {
         if(input.files && input.files[0]) {
+            playerMode = 'local'; 
             let file = input.files[0];
             let url = URL.createObjectURL(file);
             stopAllMedia();
@@ -490,42 +588,28 @@
             videoPlayer.style.display = 'block';
             imageCover.style.display = 'none'; 
             videoPlayer.play();
-            statusText.innerText = "Video: " + file.name;
+            $(statusText).text("Video: " + file.name);
 
             $('.slot-btn').removeClass('active-file');
             $('#mp4-slot-' + activeMp4Slot).addClass('active-file');
         }
     }
 
-    document.getElementById('play-btn').addEventListener('click', function() {
-        if (videoPlayer.src && videoPlayer.style.display !== 'none') {
-            videoPlayer.play();
-            statusText.innerText = "Playing: Video";
-        } else if (audioStream.src && !audioStream.src.endsWith(window.location.host + "/")) {
-            audioStream.play().catch(e => console.log(e));
-            statusText.innerText = "Playing: Audio";
-        } else {
-            audioStream.src = "https://stm2.srvif.com:7198/;stream";
-            audioStream.play().catch(e => console.log(e));
-            statusText.innerText = "Radio Stream Active";
-            
-            imageCover.src = "https://xatimg.com/image/GEg6IiRprwxU.gif";
-            imageCover.className = 'media-circle';
-            imageCover.style.display = 'block';
-            videoPlayer.style.display = 'none';
-        }
-    });
-
     function stopMedia() {
         stopAllMedia();
-        statusText.innerText = "Stopped";
+        playerMode = 'radio'; 
+        $(statusText).text("Stopped");
         
+        lastSongTitle = ""; 
         imageCover.src = "https://xatimg.com/image/GEg6IiRprwxU.gif";
-        imageCover.className = 'media-circle';
+        imageCover.classList.remove('media-square');
+        imageCover.classList.add('media-circle');
         imageCover.style.display = 'block';
         videoPlayer.style.display = 'none';
 
         $('.slot-btn').removeClass('active-file');
+        
+        setTimeout(fetchRadioTitleAndCover, 1000); 
     }
 
     function stopAllMedia() {
