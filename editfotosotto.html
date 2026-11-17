@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sfondi Multipli Diablo Iframe</title>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        /* Cursore a mirino e setup base per Iframe */
+        body {
+            background-image: linear-gradient(109.6deg, rgba(48,207,208,1) 11.2%, rgba(51,8,103,1) 92.5%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Fondamentale per l'iframe su xat per non avere barre di scorrimento */
+            transition: background-image 0.5s ease-in-out;
+            cursor: crosshair; 
+        }
+
+        /* Bottone in Basso al Centro e più piccolo */
+        .but {
+            z-index: 1000;
+            position: absolute;
+            bottom: 5%; /* Distanza dal fondo */
+            left: 50%; /* Lo piazza a metà schermo... */
+            transform: translateX(-50%); /* ...e lo centra perfettamente sul suo asse */
+            
+            /* Stile Dark compatto */
+            background-color: #111111;
+            border: 1px solid #ff0000;
+            border-radius: 6px;
+            padding: 6px 12px; /* Ridotto per occupare meno spazio */
+            
+            color: #ffffff;
+            font-size: 10px; /* Testo rimpicciolito */
+            font-weight: bold;
+            text-decoration: none;
+            letter-spacing: 1px;
+            white-space: nowrap; /* Evita che il testo vada a capo nell'iframe stretto */
+            
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            
+            animation: neonGlow 1.5s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover: Attenzione a mantenere il translateX(-50%) insieme allo scale */
+        .but:hover {
+            background-color: #222222;
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000, 0 0 15px #ff0000; 
+            transform: translateX(-50%) scale(1.05); /* Centrato + Ingrandito */
+        }
+
+        .but:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        /* LED rimpicciolito */
+        .led-indicator {
+            width: 7px;
+            height: 7px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: ledFlash 0.5s infinite alternate;
+        }
+
+        /* ANIMAZIONI */
+        @keyframes neonGlow {
+            0% {
+                box-shadow: 0 0 4px rgba(255, 0, 0, 0.2), 0 0 8px rgba(255, 0, 0, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 12px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 6px rgba(255, 0, 0, 0.3);
+            }
+        }
+
+        @keyframes ledFlash {
+            0% {
+                opacity: 0.3;
+                transform: scale(0.8);
+                box-shadow: 0 0 2px #ff0000;
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+                background-color: #ff3333;
+                box-shadow: 0 0 8px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a class="but" href="#" onclick="Bgs()">
+        <div class="led-indicator"></div>
+        DIABLO.. GUARDA MIEI SFONDI MULTIPLI
+    </a>
+
+    <script>
+        let count = 0;
+
+        const backgrounds = [
+            'linear-gradient(110.6deg, #00ffff 7%, #0080ff 100%)',
+            'url(https://xatimg.com/image/wT30KBIIZ5ua.png)',
+            'url(https://xatimg.com/image/93tPKKkEvBot.png)',
+            'url(https://xatimg.com/image/dN2mTGssWyrP.png)',
+            'url(https://xatimg.com/image/BgyRwjsii8wV.png)',
+            'url(https://xatimg.com/image/4Stapy06Udhe.png)',
+            'url(https://xatimg.com/image/m4bNGCPB0btz.png)',
+            'url(https://xatimg.com/image/R5EShFDtKQIO.png)',
+            'linear-gradient(70.6deg, rgba(255,255,0,1) 11.2%, rgba(255,100,0,1) 92.5%)'
+        ];
+
+        function Bgs() {
+            $('body').css({
+                'background-image': backgrounds[count],
+                'background-repeat': 'no-repeat',
+                'background-size': 'cover',
+                'background-position': 'center'
+            });
+
+            count++;
+            
+            if (count >= backgrounds.length) {
+                count = 0;
+            }
+        }
+    </script>
+
+</body>
+</html>
