@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -145,7 +144,6 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 
 .stage-wrapper { position: relative; width: 100%; display: flex; justify-content: center; }
 
-/* FIX LARGHEZZA CONTROLLER PER TABLET */
 #barWrap {
   position: relative; width: 750px; flex-shrink: 0; height: 122px; border-radius: 22px; background: rgba(10, 0, 0, 0.88);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: space-between;
@@ -271,7 +269,6 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 @keyframes blinkLive { 0% { opacity: 0.45; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.2); } }
 @keyframes pulseBtn { 0%, 100% { box-shadow: 0 0 20px rgba(255, 34, 0, 0.6), inset 0 0 12px rgba(255, 34, 0, 0.3); } 50% { box-shadow: 0 0 35px rgba(255, 34, 0, 0.9), inset 0 0 20px rgba(255, 34, 0, 0.5); } }
 
-/* SCALING DINAMICO FIXATO */
 @media (max-width: 800px) { 
   #barWrap { 
     transform: scale(calc((100vw - 32px) / 750)); 
@@ -289,9 +286,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 </head>
 <body>
 
-
 <canvas id="pageSnow" class="page-snow"></canvas>
-
 
 <div class="dock dock-right">
   <button class="dock-btn" id="themeBtn" title="Cambia colori e sfondo" aria-label="Cambia colori">
@@ -300,9 +295,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   <span class="dock-cap" id="themeLabel">Rosso Sangue</span>
 </div>
 
-
 <div class="wrap">
-  <!-- BANNER VIDEO & TESTI -->
   <div class="cover-banner">
     <img data-photo src="" alt="Foto Copertina" />
     <div class="cover-text">
@@ -313,7 +306,6 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       </div>
     </div>
   </div>
-
 
   <div class="stage-wrapper">
     <div id="barWrap" class="anima-on neb-on">
@@ -333,13 +325,10 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
             <span class="live-dot"></span>
             <span id="liveStatus">STANDBY</span>
           </div>
-          <!-- 3 EFFETTI + 1 LINK XAT ITALIA_GHOST -->
           <div class="toggles-bar" aria-label="Effetti e Xat">
-            <!-- Tasti Effetti Visivi -->
             <button type="button" class="circle-toggle active" data-toggle="lap" data-color="fire" data-label="Lapilli: ON"><span class="led-dot"></span>LAP</button>
             <button type="button" class="circle-toggle active" data-toggle="neb" data-color="blood" data-label="Nebbia: ON"><span class="led-dot"></span>NEB</button>
             <button type="button" class="circle-toggle active" data-toggle="ani" data-color="demon" data-label="Anima: ON"><span class="led-dot"></span>ANI</button>
-            
             <a href="https://xat.com/ITALIA_GHOST" target="_blank" class="circle-toggle active" data-color="amber" data-label="La mia Xat"><span class="led-dot"></span>XAT</a>
           </div>
         </div>
@@ -353,7 +342,6 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       
       <div class="right-section">
         <div class="eq-wrap">
-          
           <canvas id="eqCanvas" width="220" height="40"></canvas>
         </div>
         <div class="volume-row">
@@ -364,20 +352,16 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       </div>
     </div>
   </div>
-  
-
 </div>
 
 <audio id="audio" crossorigin="anonymous"></audio>
 
 <script>
-
 const CONFIG = {
   name:    "EL DIABLO",
   tagline: "QUI SEI ALL'INFERNO COMANDA EL DIABLO",
   profilePhoto: "https://xatimg.com/image/aqqnLNOz5gQe.png",
 
-  // Il tuo Video Sigla 
   coverVideo: {
     on: true,
     src: "https://i.imgur.com/kpWuypl.mp4",
@@ -386,7 +370,6 @@ const CONFIG = {
   status: { on: true, onlineText: "Online · su xat" },
   pageSnow: { on: true, density: 14000, speed: .5, size: 1.1, rise: .12, alpha: .55, min: 18, max: 55 },
 
-  // I Temi che appariranno quando clicchi il pulsante a destra!
   themes: [
     { label:"Rosso Sangue",  bg:"#150000", card:"rgba(30,0,0,.4)", line:"rgba(255,0,0,.4)", accent:"#ff0000", accent2:"#ff4d4d", text:"#ffffff", shadow:"rgba(255,0,0,.7)", glow:"rgba(255,0,0,.9)" },
     { label:"Fuoco Infernale", bg:"#150500", card:"rgba(30,10,0,.4)", line:"rgba(255,85,0,.4)", accent:"#ff5500", accent2:"#ffaa00", text:"#ffffff", shadow:"rgba(255,85,0,.7)", glow:"rgba(255,85,0,.9)" },
@@ -406,7 +389,6 @@ document.querySelectorAll("[data-tagline]").forEach(el => el.textContent = CONFI
 document.querySelectorAll("[data-photo]").forEach(el => el.src = CONFIG.profilePhoto);
 document.title = CONFIG.name;
 
-// GESTIONE DEI TEMI DAL TASTO DESTRO
 let themeIndex = 0;
 let accentRGB = { r:255, g:0, b:0 }; 
 
@@ -443,9 +425,8 @@ if(tBtn){
     applyTheme(themeIndex);
   });
 }
-applyTheme(0); // Imposta colore di base (Rosso Sangue)
+applyTheme(0); 
 
-// Inizializza il Video Sigla nel Banner 
 (function mountCoverVideo(){
   const v = CONFIG.coverVideo;
   if (!v.on || !v.src) return;
@@ -454,10 +435,7 @@ applyTheme(0); // Imposta colore di base (Rosso Sangue)
   if(bannerImg) {
     const vid = document.createElement("video");
     vid.src = v.src;
-    
-    if (v.poster) {
-      vid.poster = v.poster;
-    }
+    if (v.poster) vid.poster = v.poster;
     
     vid.muted = true; vid.loop = true; vid.autoplay = true; vid.playsInline = true;
     vid.id = "siglaVideo"; 
@@ -475,7 +453,6 @@ applyTheme(0); // Imposta colore di base (Rosso Sangue)
   chips.forEach(chip => chip.querySelector(".status-text").textContent = st.onlineText);
 })();
 
-// Effetto Cenere / Neve Infernale Sfondo Pagina
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (CONFIG.pageSnow.on && !reduceMotion){
   const cfg   = CONFIG.pageSnow;
@@ -526,7 +503,6 @@ if (CONFIG.pageSnow.on && !reduceMotion){
   sizeVeil();
   requestAnimationFrame(drawVeil);
 }
-
 
 const S_URL = "https://stm2.srvif.com:7198/;type=mp3"; 
 const defaultCover = "https://xatimg.com/image/aqqnLNOz5gQe.png";
@@ -674,7 +650,7 @@ function playIntro() {
   if (sigla) {
     isIntroPlaying = true;
     
-    // FIX TABLET: Ferma temporaneamente e forza la rimozione del muto!
+    // RIMOSSO IL MUTO PER FAR SENTIRE L'AUDIO DEL VIDEO
     sigla.pause();
     sigla.removeAttribute("muted");
     sigla.muted = false;
@@ -696,7 +672,7 @@ function playIntro() {
         isIntroPlaying = false;
         introDone = true;
         
-        // Finito l'intro, rimettiamo in muto e facciamo ripartire il loop visivo
+        // IL VIDEO TORNA MUTO COME SFONDO DOPO I 9 SECONDI
         sigla.muted = true; 
         sigla.setAttribute("muted", "");
         sigla.loop = true;  
@@ -705,7 +681,7 @@ function playIntro() {
         startRadioStream();
       };
       
-      // LA LOGICA DEI 9 SECONDI ESATTI (9000 millisecondi)
+      // LOGICA DEI 9 SECONDI ESATTI
       setTimeout(() => {
         if (isIntroPlaying) sigla.onended();
       }, 9000); 
@@ -743,7 +719,6 @@ function stopAll() {
   
   const sigla = document.getElementById("siglaVideo");
   if (sigla) {
-    // Ritorna silenzioso come sfondo
     sigla.muted = true;
     sigla.setAttribute("muted", "");
     sigla.loop = true;
@@ -824,7 +799,6 @@ volumeControl.addEventListener("input", (e) => {
 });
 
 </script>
-
 
 <canvas id="magicTrail" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
 <script>
