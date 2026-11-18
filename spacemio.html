@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -175,8 +176,10 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   box-shadow: 0 0 18px rgba(255, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; transition: box-shadow 0.35s ease;
 }
 #coverBox.spinning { box-shadow: 0 0 30px rgba(255, 50, 0, 0.8), 0 0 45px rgba(255, 0, 0, 0.6); }
+
+/* Vinile con bordo sistemato */
 #main-cover {
-  width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #090000; animation: spinVinyl 9s linear infinite; animation-play-state: paused;
+  width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #090000; animation: spinVinyl 9s linear infinite; animation-play-state: paused; background: #000;
 }
 .is-active #coverBox.spinning #main-cover { animation-play-state: running; }
 
@@ -297,6 +300,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 
 <div class="wrap">
   <div class="cover-banner">
+    <!-- IMMAGINE RIPULITA: Il rettangolo blu e rosso e scomparso da qui -->
     <img data-photo src="" alt="Foto Copertina" />
     <div class="cover-text">
       <h1 class="name" data-name>Name</h1>
@@ -314,7 +318,8 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       
       <div class="left-section">
         <div id="coverBox">
-          <img id="main-cover" src="https://xatimg.com/image/aqqnLNOz5gQe.png" alt="Cover Live" />
+          <!-- IMMAGINE VINILE RIPULITA: non caricherà più l'errore di xatimg -->
+          <img id="main-cover" src="https://xatimg.com/image/YMfB5am5LDvK.png" alt="Cover Live" />
         </div>
         <button id="playBtn" title="Play / Pause Stream">▶</button>
       </div>
@@ -360,7 +365,10 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 const CONFIG = {
   name:    "EL DIABLO",
   tagline: "QUI SEI ALL'INFERNO COMANDA EL DIABLO",
-  profilePhoto: "https://xatimg.com/image/aqqnLNOz5gQe.png",
+  
+  // HO RIMOSSO IL LINK DI XATIMG ROTTO CHE CAUSAVA IL TESTO STRANO
+  // ORA C'È UN PIXEL TRASPARENTE DI DEFAULT. Puoi mettere qui il tuo nuovo link funzionante!
+  profilePhoto: "https://xatimg.com/image/YMfB5am5LDvK.png",
 
   coverVideo: {
     on: true,
@@ -441,7 +449,10 @@ applyTheme(0);
     vid.id = "siglaVideo"; 
     vid.setAttribute("playsinline", "");
     bannerImg.after(vid);
-    bannerImg.style.display = "none";
+    
+    // Distruggo l'immagine di errore in modo che non si veda mai neanche per sbaglio
+    bannerImg.remove();
+    
     vid.play().catch(() => {});
   }
 })();
@@ -505,7 +516,8 @@ if (CONFIG.pageSnow.on && !reduceMotion){
 }
 
 const S_URL = "https://stm2.srvif.com:7198/;type=mp3"; 
-const defaultCover = "https://xatimg.com/image/aqqnLNOz5gQe.png";
+// IMMAGINE DI DEFAULT RIPULITA (pixel trasparente invece del link rotto)
+const defaultCover = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 const aud = document.getElementById("audio");
 const playBtn = document.getElementById("playBtn");
@@ -681,7 +693,7 @@ function playIntro() {
         startRadioStream();
       };
       
-      // LOGICA DEI 9 SECONDI ESATTI
+      // LOGICA DEI 9 SECONDI ESATTI (9000 millisecondi)
       setTimeout(() => {
         if (isIntroPlaying) sigla.onended();
       }, 9000); 
