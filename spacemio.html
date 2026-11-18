@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -64,11 +65,9 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 .cover-banner{
   position:relative; display:block;
   width:100%;
-  /* Altezza ridotta per lasciare spazio ai controlli su mobile */
-  height:clamp(200px, 40vw, 540px);
+  height:clamp(280px, 56vh, 480px);
   border-radius:var(--radius); overflow:hidden;
   border:1px solid var(--card-line);
-  /* TRIPLO GLOW SUL BANNER */
   box-shadow: 0 0 30px var(--shadow), 0 0 60px var(--shadow), 0 0 100px var(--img-glow), 0 28px 64px rgba(0,0,0,.9);
   cursor:default;
   transition:box-shadow .7s ease, border-color .7s ease;
@@ -146,7 +145,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 
 .stage-wrapper { position: relative; width: 100%; display: flex; justify-content: center; }
 
-/* FIX LARGHEZZA CONTROLLER: reso fisso e senza restringimento per evitare il taglio degli elementi interni */
+/* FIX LARGHEZZA CONTROLLER PER TABLET */
 #barWrap {
   position: relative; width: 750px; flex-shrink: 0; height: 122px; border-radius: 22px; background: rgba(10, 0, 0, 0.88);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: space-between;
@@ -272,7 +271,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 @keyframes blinkLive { 0% { opacity: 0.45; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.2); } }
 @keyframes pulseBtn { 0%, 100% { box-shadow: 0 0 20px rgba(255, 34, 0, 0.6), inset 0 0 12px rgba(255, 34, 0, 0.3); } 50% { box-shadow: 0 0 35px rgba(255, 34, 0, 0.9), inset 0 0 20px rgba(255, 34, 0, 0.5); } }
 
-/* SCALING DINAMICO FIXATO: la barra scalerà al millimetro sui telefoni senza mai tagliarsi */
+/* SCALING DINAMICO FIXATO */
 @media (max-width: 800px) { 
   #barWrap { 
     transform: scale(calc((100vw - 32px) / 750)); 
@@ -446,7 +445,7 @@ if(tBtn){
 }
 applyTheme(0); // Imposta colore di base (Rosso Sangue)
 
-// Inizializza il Video Sigla nel Banner (FIX RETTANGOLO COLORATO)
+// Inizializza il Video Sigla nel Banner 
 (function mountCoverVideo(){
   const v = CONFIG.coverVideo;
   if (!v.on || !v.src) return;
@@ -456,8 +455,6 @@ applyTheme(0); // Imposta colore di base (Rosso Sangue)
     const vid = document.createElement("video");
     vid.src = v.src;
     
-    // FIX: Ora mette il poster solo se lo inserisci tu.
-    // Non forza più l'immagine profilo distorta!
     if (v.poster) {
       vid.poster = v.poster;
     }
@@ -676,9 +673,13 @@ function playIntro() {
   const sigla = document.getElementById("siglaVideo");
   if (sigla) {
     isIntroPlaying = true;
-    sigla.currentTime = 0; 
+    
+    // FIX TABLET: Ferma temporaneamente e forza la rimozione del muto!
+    sigla.pause();
+    sigla.removeAttribute("muted");
+    sigla.muted = false;
     sigla.volume = volumeControl.value;
-    sigla.muted = false; 
+    sigla.currentTime = 0; 
     sigla.loop = false; 
     
     sigla.play().then(() => {
@@ -694,16 +695,20 @@ function playIntro() {
         if(!isIntroPlaying) return; 
         isIntroPlaying = false;
         introDone = true;
+        
+        // Finito l'intro, rimettiamo in muto e facciamo ripartire il loop visivo
         sigla.muted = true; 
+        sigla.setAttribute("muted", "");
         sigla.loop = true;  
         sigla.play().catch(()=>{});
         
         startRadioStream();
       };
       
+      // LA LOGICA DEI 9 SECONDI ESATTI (9000 millisecondi)
       setTimeout(() => {
         if (isIntroPlaying) sigla.onended();
-      }, 10000); 
+      }, 9000); 
       
     }).catch(err => {
       isIntroPlaying = false;
@@ -738,7 +743,9 @@ function stopAll() {
   
   const sigla = document.getElementById("siglaVideo");
   if (sigla) {
+    // Ritorna silenzioso come sfondo
     sigla.muted = true;
+    sigla.setAttribute("muted", "");
     sigla.loop = true;
     sigla.play().catch(()=>{});
     introDone = true; 
