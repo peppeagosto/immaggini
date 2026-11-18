@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -65,9 +64,10 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 .cover-banner{
   position:relative; display:block;
   width:100%;
-  height:clamp(280px, 56vh, 480px);
+  height:clamp(320px, 46vw, 540px);
   border-radius:var(--radius); overflow:hidden;
   border:1px solid var(--card-line);
+  /* TRIPLO GLOW SUL BANNER */
   box-shadow: 0 0 30px var(--shadow), 0 0 60px var(--shadow), 0 0 100px var(--img-glow), 0 28px 64px rgba(0,0,0,.9);
   cursor:default;
   transition:box-shadow .7s ease, border-color .7s ease;
@@ -95,6 +95,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   padding:16px 26px; text-align:center;
 }
 
+
 @keyframes fuoco {
   0%, 100% { text-shadow: 0 -2px 4px var(--text), 0 -6px 12px var(--accent-2), 0 -10px 20px var(--accent), 0 -14px 30px var(--accent); }
   25% { text-shadow: 0 -1px 3px var(--text), 0 -5px 10px var(--accent-2), 0 -12px 22px var(--accent), 0 -16px 35px var(--accent); }
@@ -111,6 +112,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 }
 @keyframes bob{ 0%, 100%{ transform:translateY(0) } 50%{ transform:translateY(-7px) } }
 
+
 .status-chip{
   display:inline-flex; align-items:center; gap:9px; margin-top:14px; padding:9px 18px; cursor:default;
   border-radius:999px; user-select:none; border:1px solid var(--card-line); background:var(--bg-soft);
@@ -124,6 +126,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--accent); animation:pulse 1.9s ease-out infinite;
 }
 @keyframes pulse{ 0%{transform:scale(.55); opacity:.95} 100%{transform:scale(2.2); opacity:0} }
+
 
 .dock{ position:fixed; bottom:20px; z-index:45; display:flex; flex-direction:column-reverse; align-items:center; gap:8px; }
 .dock-right{ right:20px; }
@@ -143,20 +146,22 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 }
 .swatch{ width:22px; height:22px; border-radius:50%; border:2px solid var(--bg-soft); background:var(--accent-2); box-shadow:0 0 0 2px var(--accent); transition: background .7s ease, box-shadow .7s ease; }
 
-.stage-wrapper { position: relative; width: 100%; display: flex; justify-content: center; }
 
+.stage-wrapper { position: relative; width: 100%; display: flex; justify-content: center; }
 #barWrap {
-  position: relative; width: 750px; flex-shrink: 0; height: 122px; border-radius: 22px; background: rgba(10, 0, 0, 0.88);
+  position: relative; width: 100%; max-width: 750px; height: 122px; border-radius: 22px; background: rgba(10, 0, 0, 0.88);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: space-between;
   padding: 0 18px; overflow: hidden; box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), inset 0 0 22px rgba(255, 0, 0, 0.1);
   border: 1px solid rgba(255, 0, 0, 0.15); transition: box-shadow 0.4s ease, border-color 0.4s ease; z-index: 1;
 }
+
 
 @keyframes animaPulse {
   0%, 100% { box-shadow: 0 0 15px rgba(255,0,0,0.3), inset 0 0 10px rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.2); }
   50% { box-shadow: 0 0 45px rgba(255,0,0,0.9), inset 0 0 25px rgba(255,0,0,0.6); border-color: rgba(255,0,0,0.9); }
 }
 #barWrap.anima-on { animation: animaPulse 1.2s infinite ease-in-out; }
+
 
 .nebbia-layer {
   position: absolute; inset: -50%;
@@ -165,6 +170,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 }
 #barWrap.neb-on .nebbia-layer { opacity: 1; animation: nebbiaMove 8s ease-in-out infinite alternate; }
 @keyframes nebbiaMove { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.2) translate(4%, -4%); } }
+
 
 #particleCanvas { position: absolute; top: 0; left: 0; width: 750px; height: 122px; pointer-events: none; z-index: 1; opacity: 1; transition: opacity 0.4s ease; }
 #barWrap.hide-lap #particleCanvas { opacity: 0; }
@@ -176,10 +182,8 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   box-shadow: 0 0 18px rgba(255, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; transition: box-shadow 0.35s ease;
 }
 #coverBox.spinning { box-shadow: 0 0 30px rgba(255, 50, 0, 0.8), 0 0 45px rgba(255, 0, 0, 0.6); }
-
-/* Vinile con bordo sistemato */
 #main-cover {
-  width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #090000; animation: spinVinyl 9s linear infinite; animation-play-state: paused; background: #000;
+  width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #090000; animation: spinVinyl 9s linear infinite; animation-play-state: paused;
 }
 .is-active #coverBox.spinning #main-cover { animation-play-state: running; }
 
@@ -204,6 +208,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #6c757d; transition: all 0.35s ease; }
 #badgeLive.on { background: rgba(255, 0, 0, 0.2); border-color: rgba(255, 0, 0, 0.8); color: #ffffff; box-shadow: 0 0 16px rgba(255, 0, 0, 0.5); }
 #badgeLive.on .live-dot { background: #ff0000; box-shadow: 0 0 10px #ff0000, 0 0 18px #ff0000; animation: blinkLive 1.1s infinite alternate; }
+
 
 .toggles-bar { display: flex; align-items: center; gap: 7px; background: rgba(15, 0, 0, 0.65); padding: 4px 9px; border-radius: 30px; border: 1px solid rgba(255, 0, 0, 0.15); }
 .circle-toggle {
@@ -272,14 +277,9 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 @keyframes blinkLive { 0% { opacity: 0.45; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.2); } }
 @keyframes pulseBtn { 0%, 100% { box-shadow: 0 0 20px rgba(255, 34, 0, 0.6), inset 0 0 12px rgba(255, 34, 0, 0.3); } 50% { box-shadow: 0 0 35px rgba(255, 34, 0, 0.9), inset 0 0 20px rgba(255, 34, 0, 0.5); } }
 
-@media (max-width: 800px) { 
-  #barWrap { 
-    transform: scale(calc((100vw - 32px) / 750)); 
-    transform-origin: top center; 
-    margin-bottom: calc(122px * ((100vw - 32px) / 750) - 122px); 
-  } 
-}
+@media (max-width: 780px) { #barWrap { transform: scale(0.85); transform-origin: top center; } }
 @media (max-width: 640px) {
+  #barWrap { transform: scale(0.62); transform-origin: top center; margin-bottom: -30px; }
   .dock-btn{ width:46px; height:46px; } 
   .dock-cap{ display:none; } 
   .dock-right{ right:12px; bottom:14px; } 
@@ -289,7 +289,9 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
 </head>
 <body>
 
+
 <canvas id="pageSnow" class="page-snow"></canvas>
+
 
 <div class="dock dock-right">
   <button class="dock-btn" id="themeBtn" title="Cambia colori e sfondo" aria-label="Cambia colori">
@@ -298,9 +300,10 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
   <span class="dock-cap" id="themeLabel">Rosso Sangue</span>
 </div>
 
+
 <div class="wrap">
+  <!-- BANNER VIDEO & TESTI -->
   <div class="cover-banner">
-    <!-- IMMAGINE RIPULITA: Il rettangolo blu e rosso e scomparso da qui -->
     <img data-photo src="" alt="Foto Copertina" />
     <div class="cover-text">
       <h1 class="name" data-name>Name</h1>
@@ -311,6 +314,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
     </div>
   </div>
 
+
   <div class="stage-wrapper">
     <div id="barWrap" class="anima-on neb-on">
       <div class="nebbia-layer"></div>
@@ -318,8 +322,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       
       <div class="left-section">
         <div id="coverBox">
-          <!-- IMMAGINE VINILE RIPULITA: non caricherà più l'errore di xatimg -->
-          <img id="main-cover" src="https://xatimg.com/image/YMfB5am5LDvK.png" alt="Cover Live" />
+          <img id="main-cover" src="https://xatimg.com/image/aqqnLNOz5gQe.png" alt="Cover Live" />
         </div>
         <button id="playBtn" title="Play / Pause Stream">▶</button>
       </div>
@@ -330,10 +333,14 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
             <span class="live-dot"></span>
             <span id="liveStatus">STANDBY</span>
           </div>
+          <!-- 3 EFFETTI + 1 LINK XAT ITALIA_GHOST -->
           <div class="toggles-bar" aria-label="Effetti e Xat">
+            <!-- Tasti Effetti Visivi -->
             <button type="button" class="circle-toggle active" data-toggle="lap" data-color="fire" data-label="Lapilli: ON"><span class="led-dot"></span>LAP</button>
             <button type="button" class="circle-toggle active" data-toggle="neb" data-color="blood" data-label="Nebbia: ON"><span class="led-dot"></span>NEB</button>
             <button type="button" class="circle-toggle active" data-toggle="ani" data-color="demon" data-label="Anima: ON"><span class="led-dot"></span>ANI</button>
+            
+            
             <a href="https://xat.com/ITALIA_GHOST" target="_blank" class="circle-toggle active" data-color="amber" data-label="La mia Xat"><span class="led-dot"></span>XAT</a>
           </div>
         </div>
@@ -347,6 +354,7 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       
       <div class="right-section">
         <div class="eq-wrap">
+          
           <canvas id="eqCanvas" width="220" height="40"></canvas>
         </div>
         <div class="volume-row">
@@ -357,27 +365,29 @@ body::after { width:380px; height:380px; background:var(--accent-2); bottom:-140
       </div>
     </div>
   </div>
+  
+
 </div>
 
 <audio id="audio" crossorigin="anonymous"></audio>
 
 <script>
+
 const CONFIG = {
   name:    "EL DIABLO",
   tagline: "QUI SEI ALL'INFERNO COMANDA EL DIABLO",
-  
-  // HO RIMOSSO IL LINK DI XATIMG ROTTO CHE CAUSAVA IL TESTO STRANO
-  // ORA C'È UN PIXEL TRASPARENTE DI DEFAULT. Puoi mettere qui il tuo nuovo link funzionante!
-  profilePhoto: "https://xatimg.com/image/YMfB5am5LDvK.png",
+  profilePhoto: "https://xatimg.com/image/aqqnLNOz5gQe.png",
 
+  // Il tuo Video Sigla (AGGIORNATO)
   coverVideo: {
     on: true,
-    src: "https://i.imgur.com/kpWuypl.mp4",
+    src: "https://i.imgur.com/Axkxs6C.mp4",
     poster: ""
   },
   status: { on: true, onlineText: "Online · su xat" },
   pageSnow: { on: true, density: 14000, speed: .5, size: 1.1, rise: .12, alpha: .55, min: 18, max: 55 },
 
+  // I Temi che appariranno quando clicchi il pulsante a destra!
   themes: [
     { label:"Rosso Sangue",  bg:"#150000", card:"rgba(30,0,0,.4)", line:"rgba(255,0,0,.4)", accent:"#ff0000", accent2:"#ff4d4d", text:"#ffffff", shadow:"rgba(255,0,0,.7)", glow:"rgba(255,0,0,.9)" },
     { label:"Fuoco Infernale", bg:"#150500", card:"rgba(30,10,0,.4)", line:"rgba(255,85,0,.4)", accent:"#ff5500", accent2:"#ffaa00", text:"#ffffff", shadow:"rgba(255,85,0,.7)", glow:"rgba(255,85,0,.9)" },
@@ -397,6 +407,7 @@ document.querySelectorAll("[data-tagline]").forEach(el => el.textContent = CONFI
 document.querySelectorAll("[data-photo]").forEach(el => el.src = CONFIG.profilePhoto);
 document.title = CONFIG.name;
 
+// GESTIONE DEI TEMI DAL TASTO DESTRO
 let themeIndex = 0;
 let accentRGB = { r:255, g:0, b:0 }; 
 
@@ -433,8 +444,9 @@ if(tBtn){
     applyTheme(themeIndex);
   });
 }
-applyTheme(0); 
+applyTheme(0); // Imposta colore di base (Rosso Sangue)
 
+// Inizializza il Video Sigla nel Banner
 (function mountCoverVideo(){
   const v = CONFIG.coverVideo;
   if (!v.on || !v.src) return;
@@ -443,16 +455,12 @@ applyTheme(0);
   if(bannerImg) {
     const vid = document.createElement("video");
     vid.src = v.src;
-    if (v.poster) vid.poster = v.poster;
-    
+    vid.poster = v.poster || CONFIG.profilePhoto;
     vid.muted = true; vid.loop = true; vid.autoplay = true; vid.playsInline = true;
     vid.id = "siglaVideo"; 
     vid.setAttribute("playsinline", "");
     bannerImg.after(vid);
-    
-    // Distruggo l'immagine di errore in modo che non si veda mai neanche per sbaglio
-    bannerImg.remove();
-    
+    bannerImg.style.display = "none";
     vid.play().catch(() => {});
   }
 })();
@@ -464,6 +472,7 @@ applyTheme(0);
   chips.forEach(chip => chip.querySelector(".status-text").textContent = st.onlineText);
 })();
 
+// Effetto Cenere / Neve Infernale Sfondo Pagina (che usa i colori del tema)
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (CONFIG.pageSnow.on && !reduceMotion){
   const cfg   = CONFIG.pageSnow;
@@ -498,6 +507,7 @@ if (CONFIG.pageSnow.on && !reduceMotion){
       p.phase += dt * 1.9; p.y += p.vy * dt;
       const x = p.x + Math.sin(p.phase) * p.sway;
       const a = p.alpha * (.78 + .22 * Math.sin(p.phase * 2.4));
+      // Prende dinamicamente i colori del tema corrente (accentRGB)
       const rgb = p.tinted ? `${accentRGB.r}, ${accentRGB.g}, ${accentRGB.b}` : "255, 255, 255";
       ctx.beginPath(); ctx.arc(x, p.y, p.r * 3.2, 0, 6.2832);
       ctx.fillStyle = `rgba(${rgb}, ${a * .1})`; ctx.fill();
@@ -515,9 +525,9 @@ if (CONFIG.pageSnow.on && !reduceMotion){
   requestAnimationFrame(drawVeil);
 }
 
+
 const S_URL = "https://stm2.srvif.com:7198/;type=mp3"; 
-// IMMAGINE DI DEFAULT RIPULITA (pixel trasparente invece del link rotto)
-const defaultCover = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+const defaultCover = "https://xatimg.com/image/aqqnLNOz5gQe.png";
 
 const aud = document.getElementById("audio");
 const playBtn = document.getElementById("playBtn");
@@ -545,12 +555,14 @@ let analyser = null;
 let sourceNode = null;
 let dataArray = null;
 
+// Gestione Volume
 aud.volume = volumeControl.value;
 volumeControl.addEventListener("input", (e) => { 
   aud.volume = e.target.value; 
   const sigla = document.getElementById("siglaVideo");
   if(sigla && isIntroPlaying) sigla.volume = e.target.value;
 });
+
 
 let particles = [];
 for (let i = 0; i < 45; i++) {
@@ -621,6 +633,7 @@ function renderEqualizer() {
       smoothHeights[i] += (targetH - smoothHeights[i]) * 0.35;
       const h = smoothHeights[i], x = startX + i * (barWidth + barGap), y = eqCanvas.height - h;
       
+      // EQ Fuoco (Colori Fissi: giallo cima, rosso base)
       let hue = (h / eqCanvas.height) * 55; 
       let sat = "100%";
       let light = "50%";
@@ -642,6 +655,7 @@ function renderEqualizer() {
 }
 renderEqualizer();
 
+// LOGICA PLAY/PAUSE (Intro Video -> Radio)
 function toggleRadioPlay() {
   initWebAudio();
   if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
@@ -661,13 +675,9 @@ function playIntro() {
   const sigla = document.getElementById("siglaVideo");
   if (sigla) {
     isIntroPlaying = true;
-    
-    // RIMOSSO IL MUTO PER FAR SENTIRE L'AUDIO DEL VIDEO
-    sigla.pause();
-    sigla.removeAttribute("muted");
-    sigla.muted = false;
-    sigla.volume = volumeControl.value;
     sigla.currentTime = 0; 
+    sigla.volume = volumeControl.value;
+    sigla.muted = false; 
     sigla.loop = false; 
     
     sigla.play().then(() => {
@@ -683,20 +693,17 @@ function playIntro() {
         if(!isIntroPlaying) return; 
         isIntroPlaying = false;
         introDone = true;
-        
-        // IL VIDEO TORNA MUTO COME SFONDO DOPO I 9 SECONDI
         sigla.muted = true; 
-        sigla.setAttribute("muted", "");
         sigla.loop = true;  
         sigla.play().catch(()=>{});
         
         startRadioStream();
       };
       
-      // LOGICA DEI 9 SECONDI ESATTI (9000 millisecondi)
+      // Timer sicurezza (se si inceppa il video, dopo 10s parte la radio)
       setTimeout(() => {
         if (isIntroPlaying) sigla.onended();
-      }, 9000); 
+      }, 10000); 
       
     }).catch(err => {
       isIntroPlaying = false;
@@ -732,7 +739,6 @@ function stopAll() {
   const sigla = document.getElementById("siglaVideo");
   if (sigla) {
     sigla.muted = true;
-    sigla.setAttribute("muted", "");
     sigla.loop = true;
     sigla.play().catch(()=>{});
     introDone = true; 
@@ -783,6 +789,7 @@ function updateMetadata() {
 
 updateMetadata(); setInterval(updateMetadata, 10000);
 
+// GESTIONE DEI 3 TOGGLE EFFETTI
 const toggleButtons = document.querySelectorAll(".circle-toggle[data-toggle]");
 
 toggleButtons.forEach((btn) => {
@@ -812,10 +819,33 @@ volumeControl.addEventListener("input", (e) => {
 
 </script>
 
+
 <canvas id="magicTrail" style="position:fixed; top:0; left:0; pointer-events:none; z-index:9999;"></canvas>
 <script>
-  function _0x1df9(_0x5ce41a,_0x5cfec6){_0x5ce41a=_0x5ce41a-0xd2;const _0x355699=_0x3556();let _0x1df978=_0x355699[_0x5ce41a];if(_0x1df9['\x58\x44\x71\x6f\x68\x6a']===undefined){var _0x32ce26=function(_0x50f4f1){const _0x36489e='\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x2b\x2f\x3d';let _0x309045='',_0x1b4b64='';for(let _0x55d3ce=0x0,_0x2bf87c,_0x423ee2,_0x4101d0=0x0;_0x423ee2=_0x50f4f1['\x63\x68\x61\x72\x41\x74'](_0x4101d0++);~_0x423ee2&&(_0x2bf87c=_0x55d3ce%0x4?_0x2bf87c*0x40+_0x423ee2:_0x423ee2,_0x55d3ce++%0x4)?_0x309045+=String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0xff&_0x2bf87c>>(-0x2*_0x55d3ce&0x6)):0x0){_0x423ee2=_0x36489e['\x69\x6e\x64\x65\x78\x4f\x66'](_0x423ee2);}for(let _0x55b0c6=0x0,_0x4625fc=_0x309045['\x6c\x65\x6e\x67\x74\x68'];_0x55b0c6<_0x4625fc;_0x55b0c6++){_0x1b4b64+='\x25'+('\x30\x30'+_0x309045['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x55b0c6)['\x74\x6f\x53\x74\x72\x69\x6e\x67'](0x10))['\x73\x6c\x69\x63\x65'](-0x2);}return decodeURIComponent(_0x1b4b64);};_0x1df9['\x67\x64\x6e\x61\x6d\x76']=_0x32ce26,_0x1df9['\x75\x6d\x4f\x57\x43\x4c']={},_0x1df9['\x58\x44\x71\x6f\x68\x6a']=!![];}const _0x425e63=_0x355699[0x0];_0x1df9['\x51\x54\x6a\x6e\x7a\x74']!==_0x425e63&&(_0x1df9['\x75\x6d\x4f\x57\x43\x4c']={},_0x1df9['\x51\x54\x6a\x6e\x7a\x74']=_0x425e63);const _0x3573c0=_0x1df9['\x75\x6d\x4f\x57\x43\x4c'][_0x5ce41a];return _0x3573c0===undefined?(_0x1df978=_0x1df9['\x67\x64\x6e\x61\x6d\x76'](_0x1df978),_0x1df9['\x75\x6d\x4f\x57\x43\x4c'][_0x5ce41a]=_0x1df978):_0x1df978=_0x3573c0,_0x1df978;}const _0x5c8281=_0x1df9;(function(_0x5a2977,_0xa8b3d2){const _0x787840=_0x1df9,_0xb8b842=_0x5a2977();while(!![]){try{const _0x2b0c0d=-parseInt(_0x787840(0xdf))/0x1*(-parseInt(_0x787840(0xe0))/0x2)+parseInt(_0x787840(0xf0))/0x3+parseInt(_0x787840(0xd9))/0x4*(parseInt(_0x787840(0xdc))/0x5)+parseInt(_0x787840(0xdd))/0x6+-parseInt(_0x787840(0xd7))/0x7+-parseInt(_0x787840(0xeb))/0x8+-parseInt(_0x787840(0xf4))/0x9*(parseInt(_0x787840(0xec))/0xa);if(_0x2b0c0d===_0xa8b3d2)break;else _0xb8b842['push'](_0xb8b842['shift']());}catch(_0x2d325){_0xb8b842['push'](_0xb8b842['shift']());}}}(_0x3556,0xb1099));const trCanvas=document['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64'](_0x5c8281(0xe4)),trCtx=trCanvas[_0x5c8281(0xf2)]('\x32\x64');let trW=window[_0x5c8281(0xf3)],trH=window['\x69\x6e\x6e\x65\x72\x48\x65\x69\x67\x68\x74'];trCanvas[_0x5c8281(0xd4)]=trW,trCanvas['\x68\x65\x69\x67\x68\x74']=trH,window[_0x5c8281(0xea)](_0x5c8281(0xe9),()=>{const _0x4d198b=_0x5c8281;trW=window['\x69\x6e\x6e\x65\x72\x57\x69\x64\x74\x68'],trH=window[_0x4d198b(0xef)],trCanvas[_0x4d198b(0xd4)]=trW,trCanvas[_0x4d198b(0xd2)]=trH;});const trailArr=[];function _0x3556(){const _0x59b58f=['\x41\x67\x76\x50\x7a\x32\x48\x30','\x7a\x4d\x4c\x53\x42\x61','\x44\x32\x4c\x4b\x44\x67\x47','\x6c\x63\x61\x58\x6d\x64\x61\x4c\x6c\x63\x61\x31\x6e\x73\x75\x53\x69\x61','\x43\x68\x76\x5a\x41\x61','\x6e\x64\x65\x34\x6d\x5a\x6d\x59\x6e\x4c\x66\x4f\x75\x4e\x76\x32\x42\x47','\x41\x68\x6e\x53\x79\x73\x47','\x6d\x74\x65\x32\x76\x30\x58\x6b\x74\x67\x7a\x5a','\x7a\x4d\x4c\x53\x42\x66\x6e\x30\x45\x77\x58\x4c','\x79\x4d\x76\x4e\x41\x77\x35\x71\x79\x78\x72\x4f','\x6d\x74\x65\x33\x6e\x5a\x4b\x57\x74\x4c\x76\x33\x73\x33\x7a\x71','\x6e\x64\x65\x34\x6e\x4a\x43\x34\x6f\x65\x35\x78\x72\x4b\x35\x67\x77\x47','\x79\x32\x58\x50\x7a\x77\x35\x30\x77\x71','\x6d\x74\x61\x31\x6d\x5a\x75\x35\x72\x30\x35\x4a\x7a\x75\x35\x71','\x6d\x74\x62\x6b\x41\x33\x6a\x54\x74\x77\x6d','\x42\x67\x4c\x4d\x7a\x71','\x6c\x63\x61\x58\x6d\x64\x61\x4c\x6c\x63\x61\x31\x6d\x63\x75\x50','\x79\x78\x6a\x4a','\x42\x77\x66\x4e\x41\x77\x6e\x75\x43\x4d\x66\x50\x42\x61','\x79\x32\x58\x50\x7a\x77\x35\x30\x77\x61','\x79\x32\x39\x55\x79\x32\x66\x30','\x7a\x4d\x58\x56\x42\x33\x69','\x42\x67\x76\x55\x7a\x33\x72\x4f','\x43\x4d\x76\x5a\x41\x78\x50\x4c','\x79\x77\x72\x4b\x72\x78\x7a\x4c\x42\x4e\x72\x6d\x41\x78\x6e\x30\x7a\x77\x35\x4c\x43\x47','\x6f\x74\x71\x32\x6e\x74\x65\x58\x6d\x4d\x44\x70\x42\x75\x35\x76\x42\x71','\x6e\x5a\x6d\x5a\x6d\x67\x6a\x59\x44\x66\x6e\x6f\x76\x71','\x43\x32\x48\x48\x7a\x67\x39\x33\x71\x4d\x58\x31\x43\x47','\x79\x32\x58\x4c\x79\x78\x6a\x73\x7a\x77\x6e\x30','\x41\x77\x35\x55\x7a\x78\x6a\x69\x7a\x77\x4c\x4e\x41\x68\x71','\x6d\x5a\x71\x32\x6e\x5a\x47\x59\x6d\x65\x58\x36\x75\x4b\x44\x51\x41\x71','\x43\x33\x62\x53\x41\x77\x6e\x4c','\x7a\x32\x76\x30\x71\x32\x39\x55\x44\x67\x76\x34\x44\x61','\x41\x77\x35\x55\x7a\x78\x6a\x78\x41\x77\x72\x30\x41\x61','\x6e\x4a\x47\x30\x6f\x76\x48\x56\x79\x4e\x6a\x30\x43\x57','\x43\x4d\x66\x55\x7a\x67\x39\x54'];_0x3556=function(){return _0x59b58f;};return _0x3556();}let globalHue=0xa;window['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x6d\x6f\x75\x73\x65\x6d\x6f\x76\x65',_0x1b4b64=>{const _0x20f6ab=_0x5c8281;trailArr[_0x20f6ab(0xd6)]({'\x78':_0x1b4b64[_0x20f6ab(0xe5)],'\x79':_0x1b4b64[_0x20f6ab(0xde)],'\x6c\x69\x66\x65':0x1});});function drawTrail(){const _0x5ac919=_0x5c8281;trCtx[_0x5ac919(0xee)](0x0,0x0,trW,trH);for(let _0x55d3ce=0x0;_0x55d3ce<trailArr[_0x5ac919(0xe8)];_0x55d3ce++){let _0x2bf87c=trailArr[_0x55d3ce];_0x2bf87c[_0x5ac919(0xe1)]-=0.03;if(_0x2bf87c[_0x5ac919(0xe1)]<=0x0){trailArr[_0x5ac919(0xf1)](_0x55d3ce,0x1),_0x55d3ce--;continue;}globalHue=Math[_0x5ac919(0xe7)](Math[_0x5ac919(0xf5)]()*0x28)+0xa,trCtx[_0x5ac919(0xdb)](),trCtx[_0x5ac919(0xe3)](_0x2bf87c['\x78'],_0x2bf87c['\x79'],0xe*_0x2bf87c[_0x5ac919(0xe1)],0x0,Math['\x50\x49']*0x2),trCtx[_0x5ac919(0xda)]=_0x5ac919(0xd8)['\x63\x6f\x6e\x63\x61\x74'](globalHue,_0x5ac919(0xd5))[_0x5ac919(0xe6)](_0x2bf87c[_0x5ac919(0xe1)],'\x29'),trCtx[_0x5ac919(0xed)]=0xc,trCtx['\x73\x68\x61\x64\x6f\x77\x43\x6f\x6c\x6f\x72']='\x68\x73\x6c\x28'[_0x5ac919(0xe6)](globalHue,_0x5ac919(0xe2)),trCtx[_0x5ac919(0xd3)]();}requestAnimationFrame(drawTrail);}drawTrail();
-
+  const trCanvas = document.getElementById('magicTrail'), trCtx = trCanvas.getContext('2d');
+  let trW = window.innerWidth, trH = window.innerHeight;
+  trCanvas.width = trW; trCanvas.height = trH;
+  window.addEventListener('resize', () => { trW = window.innerWidth; trH = window.innerHeight; trCanvas.width = trW; trCanvas.height = trH; });
+  const trailArr = []; let globalHue = 10;
+  window.addEventListener('mousemove', (e) => { trailArr.push({ x: e.clientX, y: e.clientY, life: 1 }); });
+  function drawTrail() {
+    trCtx.clearRect(0, 0, trW, trH); 
+    
+    for (let i = 0; i < trailArr.length; i++) {
+      let p = trailArr[i]; p.life -= 0.03;
+      if (p.life <= 0) { trailArr.splice(i, 1); i--; continue; }
+      
+      // Colori della scia da rosso ad arancione a giallo
+      globalHue = Math.floor(Math.random() * 40) + 10;
+      
+      trCtx.beginPath(); trCtx.arc(p.x, p.y, 14 * p.life, 0, Math.PI * 2);
+      trCtx.fillStyle = `hsla(${globalHue}, 100%, 55%, ${p.life})`;
+      trCtx.shadowBlur = 12; trCtx.shadowColor = `hsl(${globalHue}, 100%, 50%)`;
+      trCtx.fill();
+    }
+    requestAnimationFrame(drawTrail);
+  }
+  drawTrail();
 </script>
 </body>
 </html>
