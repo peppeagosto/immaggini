@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
+<html lang="it"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ITALIA_GHOST - BUONE FESTE</title>
@@ -99,7 +97,7 @@ html, body {
     position: fixed;
     width: 240px;
     height: 520px;
-    top: 50%;
+    top: calc(50% + 18px);
     transform: translateY(-50%);
     border-radius: 20px;
     z-index: 9999;
@@ -212,8 +210,8 @@ html, body {
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
-<canvas id="snow-canvas"></canvas>
-<canvas id="trail-canvas"></canvas>
+<canvas id="snow-canvas" width="805" height="599"></canvas>
+<canvas id="trail-canvas" width="805" height="599"></canvas>
 
 <div class="stage-3d">
     <div class="text-3d">BUONE FESTE</div>
@@ -221,13 +219,13 @@ html, body {
 
 <div class="video-box video-left">
     <div class="video-inner">
-        <video src="https://i.imgur.com/RvT2bRh.mp4" autoplay loop muted playsinline disablePictureInPicture controlsList="nodownload"></video>
+        <video src="https://i.imgur.com/RvT2bRh.mp4" autoplay="" loop="" muted="" playsinline="" disablepictureinpicture="" controlslist="nodownload"></video>
     </div>
 </div>
 
 <div class="video-box video-right">
     <div class="video-inner">
-        <video src="https://i.imgur.com/RvT2bRh.mp4" autoplay loop muted playsinline disablePictureInPicture controlsList="nodownload"></video>
+        <video src="https://i.imgur.com/RvT2bRh.mp4" autoplay="" loop="" muted="" playsinline="" disablepictureinpicture="" controlslist="nodownload"></video>
     </div>
 </div>
 
@@ -423,5 +421,5 @@ function animate() {
 
 animate();
 </script>
-</body>
-</html>
+
+</body></html>
