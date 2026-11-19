@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sfondo Natalizio Neon & Oro - Buon Natale</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 0%, #0d1f3c 0%, #060b18 55%, #02040a 100%);
+      position: relative;
+      font-family: 'Segoe UI', Impact, sans-serif;
+    }
+
+    /* Lastra trasparente protettiva */
+    .lastra-trasparente {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: transparent;
+      pointer-events: auto;
+    }
+
+    /* Aurora boreale morbida sullo sfondo */
+    .aurora {
+      position: fixed;
+      inset: -20%;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.14), transparent 45%),
+        radial-gradient(circle at 80% 25%, rgba(255, 0, 85, 0.14), transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(255, 200, 50, 0.10), transparent 50%);
+      filter: blur(40px);
+      animation: auroraDrift 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraDrift {
+      0%   { transform: translate(-2%, -1%) scale(1); opacity: 0.8; }
+      50%  { transform: translate(2%, 2%) scale(1.06); opacity: 1; }
+      100% { transform: translate(-1%, 1%) scale(0.98); opacity: 0.85; }
+    }
+
+    /* Canvas Neve 3D e Polvere d'Oro */
+    #snowCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ==========================================
+       SCRITTA BUON NATALE + CAPPELLINO SULLA B
+       Ciclo totale: 30s (10s visibile + 20s sparita)
+       ========================================== */
+    .xmas-banner-wrap {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .xmas-text {
+      position: relative;
+      font-family: 'Arial Black', Impact, sans-serif;
+      font-size: clamp(38px, 6vw, 76px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #fff6d6;
+      text-shadow:
+        0 0 10px #ffcc00,
+        0 0 24px #ff9900,
+        0 0 42px #ff0044,
+        0 0 70px rgba(255, 0, 85, 0.85);
+      animation: xmasDriftCycle 30s linear infinite;
+      will-change: transform, opacity;
+    }
+
+    .first-letter {
+      position: relative;
+      display: inline-block;
+      color: #ff3355;
+      text-shadow:
+        0 0 12px #ff0044,
+        0 0 28px #ffcc00,
+        0 0 50px #ff0044;
+    }
+
+    /* Cappellino di Natale sopra la B */
+    .santa-hat {
+      position: absolute;
+      top: -36px;
+      left: -18px;
+      width: 56px;
+      height: 56px;
+      transform: rotate(-16deg);
+      filter: drop-shadow(0 0 8px rgba(255, 0, 68, 0.75));
+      pointer-events: none;
+    }
+
+    @keyframes xmasDriftCycle {
+      /* 0s: parte leggermente a destra, invisibile */
+      0% {
+        opacity: 0;
+        transform: translateX(130px) scale(0.95);
+      }
+      /* 1.5s: entra in dissolvenza */
+      5% {
+        opacity: 1;
+        transform: translateX(85px) scale(1);
+      }
+      /* 8.5s: scorre dolcemente verso sinistra */
+      28.33% {
+        opacity: 1;
+        transform: translateX(-85px) scale(1);
+      }
+      /* 10s: sfuma e sparisce */
+      33.33% {
+        opacity: 0;
+        transform: translateX(-130px) scale(0.95);
+      }
+      /* Da 10s a 30s (20 secondi esatti): resta completamente invisibile */
+      100% {
+        opacity: 0;
+        transform: translateX(-130px) scale(0.95);
+      }
+    }
+
+    /* Filo di luci natalizie in alto */
+    .garland-top {
+      position: fixed;
+      top: -6px;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      pointer-events: none;
+      border-top: 2px solid rgba(255, 215, 100, 0.35);
+    }
+
+    .bulb-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-origin: top center;
+      animation: bulbSway 4s ease-in-out infinite alternate;
+    }
+
+    .bulb-wrap:nth-child(even) {
+      margin-top: 10px;
+      animation-duration: 5s;
+      animation-direction: alternate-reverse;
+    }
+
+    .bulb-wire {
+      width: 2px;
+      height: 14px;
+      background: rgba(255, 215, 120, 0.45);
+    }
+
+    .bulb {
+      width: 12px;
+      height: 16px;
+      border-radius: 50% 50% 45% 45%;
+      animation: bulbGlow 2.4s ease-in-out infinite alternate;
+    }
+
+    .bulb.gold  { background: #ffe066; box-shadow: 0 0 12px #ffcc00, 0 0 26px #ff9900; animation-delay: 0s; }
+    .bulb.red   { background: #ff3366; box-shadow: 0 0 12px #ff0055, 0 0 26px #ff0033; animation-delay: 0.6s; }
+    .bulb.cyan  { background: #66f7ff; box-shadow: 0 0 12px #00f3ff, 0 0 26px #00aaff; animation-delay: 1.2s; }
+    .bulb.green { background: #4dffb8; box-shadow: 0 0 12px #00ff88, 0 0 26px #00cc66; animation-delay: 1.8s; }
+
+    @keyframes bulbGlow {
+      0%   { opacity: 0.45; transform: scale(0.92); }
+      100% { opacity: 1;    transform: scale(1.12); }
+    }
+
+    @keyframes bulbSway {
+      0%   { transform: rotate(-3deg); }
+      100% { transform: rotate(3deg); }
+    }
+
+    /* Decorazioni pendenti ai lati (SX e DX) */
+    .side-ornaments {
+      position: fixed;
+      top: 0;
+      z-index: 4;
+      display: flex;
+      gap: 28px;
+      pointer-events: none;
+    }
+
+    .side-ornaments.left  { left: 32px; }
+    .side-ornaments.right { right: 32px; }
+
+    .ornament {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-origin: top center;
+      animation: ornamentSwing 5.5s ease-in-out infinite alternate;
+    }
+
+    .ornament.slow { animation-duration: 7s; animation-delay: -2s; }
+    .ornament.fast { animation-duration: 4.8s; animation-delay: -1s; }
+
+    .string {
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(255, 215, 100, 0.2), rgba(255, 215, 100, 0.85));
+      box-shadow: 0 0 6px rgba(255, 215, 100, 0.5);
+    }
+
+    .cap {
+      width: 14px;
+      height: 8px;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(90deg, #b8860b, #fff0a0, #b8860b);
+    }
+
+    .bauble {
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bauble::after {
+      content: '';
+      position: absolute;
+      top: 14%;
+      left: 18%;
+      width: 32%;
+      height: 22%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      transform: rotate(-28deg);
+      filter: blur(1px);
+    }
+
+    .bauble.ruby {
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 35% 30%, #ff6699, #cc0033 55%, #4d0014 100%);
+      box-shadow: 0 0 22px rgba(255, 0, 85, 0.65), inset 0 0 12px rgba(255, 180, 200, 0.4);
+    }
+
+    .bauble.gold-ball {
+      width: 44px;
+      height: 44px;
+      background: radial-gradient(circle at 35% 30%, #fff4b3, #e6a800 55%, #664400 100%);
+      box-shadow: 0 0 22px rgba(255, 204, 0, 0.65), inset 0 0 12px rgba(255, 255, 220, 0.5);
+    }
+
+    .bauble.ice {
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle at 35% 30%, #b3fcff, #00aacc 55%, #00334d 100%);
+      box-shadow: 0 0 22px rgba(0, 243, 255, 0.65), inset 0 0 12px rgba(220, 255, 255, 0.5);
+    }
+
+    @keyframes ornamentSwing {
+      0%   { transform: rotate(-4deg); }
+      100% { transform: rotate(4deg); }
+    }
+
+    /* Bagliore innevato sul bordo inferiore */
+    .bottom-frost {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      z-index: 3;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(180, 235, 255, 0.22) 0%, rgba(0, 243, 255, 0.06) 45%, transparent 100%);
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;">
+
+  <div class="lastra-trasparente" oncontextmenu="return false;"></div>
+  <div class="aurora"></div>
+  <canvas id="snowCanvas"></canvas>
+
+  <!-- Scritta BUON NATALE con cappellino di Natale sulla B -->
+  <div class="xmas-banner-wrap">
+    <div class="xmas-text">
+      <span class="first-letter">B
+        <svg class="santa-hat" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <!-- Corpo rosso del cappello -->
+          <path d="M12 44 C14 20, 34 8, 52 18 C46 22, 44 30, 48 44 Z" fill="#e60026" stroke="#990019" stroke-width="2"/>
+          <!-- Riflesso luminoso -->
+          <path d="M18 38 C20 24, 32 16, 44 19" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="3" stroke-linecap="round"/>
+          <!-- Fascia bianca pelosa -->
+          <rect x="8" y="40" width="44" height="11" rx="5.5" fill="#ffffff" stroke="#e0e8f0" stroke-width="1.5"/>
+          <!-- Pompon bianco -->
+          <circle cx="53" cy="19" r="6.5" fill="#ffffff" stroke="#e0e8f0" stroke-width="1.5"/>
+        </svg>
+      </span>UON NATALE
+    </div>
+  </div>
+
+  <!-- Ghirlanda di luci in alto -->
+  <div class="garland-top" id="garlandTop"></div>
+
+  <!-- Palline lato sinistro -->
+  <div class="side-ornaments left">
+    <div class="ornament slow">
+      <div class="string" style="height: 115px;"></div>
+      <div class="cap"></div>
+      <div class="bauble ruby"></div>
+    </div>
+    <div class="ornament fast">
+      <div class="string" style="height: 185px;"></div>
+      <div class="cap"></div>
+      <div class="bauble gold-ball"></div>
+    </div>
+    <div class="ornament">
+      <div class="string" style="height: 85px;"></div>
+      <div class="cap"></div>
+      <div class="bauble ice"></div>
+    </div>
+  </div>
+
+  <!-- Palline lato destro -->
+  <div class="side-ornaments right">
+    <div class="ornament">
+      <div class="string" style="height: 90px;"></div>
+      <div class="cap"></div>
+      <div class="bauble ice"></div>
+    </div>
+    <div class="ornament fast">
+      <div class="string" style="height: 175px;"></div>
+      <div class="cap"></div>
+      <div class="bauble gold-ball"></div>
+    </div>
+    <div class="ornament slow">
+      <div class="string" style="height: 120px;"></div>
+      <div class="cap"></div>
+      <div class="bauble ruby"></div>
+    </div>
+  </div>
+
+  <div class="bottom-frost"></div>
+
+  <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Generazione automatica luci in alto
+    const garland = document.getElementById('garlandTop');
+    const bulbColors = ['gold', 'red', 'cyan', 'green'];
+    const bulbCount = 26;
+    for (let i = 0; i < bulbCount; i++) {
+      const wrap = document.createElement('div');
+      wrap.className = 'bulb-wrap';
+      const wire = document.createElement('div');
+      wire.className = 'bulb-wire';
+      const bulb = document.createElement('div');
+      bulb.className = 'bulb ' + bulbColors[i % bulbColors.length];
+      wrap.appendChild(wire);
+      wrap.appendChild(bulb);
+      garland.appendChild(wrap);
+    }
+
+    // Canvas Neve 3D + Scintille Oro
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let w, h;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    let mouseWind = 0;
+    let targetWind = 0;
+    document.addEventListener('mousemove', (e) => {
+      targetWind = ((e.clientX / w) - 0.5) * 1.4;
+    });
+
+    const snowflakes = [];
+    const SNOW_COUNT = 150;
+
+    for (let i = 0; i < SNOW_COUNT; i++) {
+      const depth = Math.random();
+      snowflakes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 1.2 + depth * 3.8,
+        speedY: 0.45 + depth * 1.45,
+        swayAmp: 0.4 + depth * 0.9,
+        swayFreq: 0.008 + Math.random() * 0.015,
+        phase: Math.random() * Math.PI * 2,
+        opacity: 0.25 + depth * 0.7
+      });
+    }
+
+    const sparkles = [];
+    const SPARKLE_COUNT = 45;
+    for (let i = 0; i < SPARKLE_COUNT; i++) {
+      sparkles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 1 + Math.random() * 2.2,
+        speedY: -(0.2 + Math.random() * 0.5),
+        alpha: Math.random(),
+        alphaSpeed: 0.01 + Math.random() * 0.02
+      });
+    }
+
+    let t = 0;
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      t += 1;
+      mouseWind += (targetWind - mouseWind) * 0.04;
+
+      for (const f of snowflakes) {
+        f.y += f.speedY;
+        f.x += Math.sin(t * f.swayFreq + f.phase) * f.swayAmp + mouseWind;
+
+        if (f.y > h + 10) {
+          f.y = -10;
+          f.x = Math.random() * w;
+        }
+        if (f.x > w + 10) f.x = -10;
+        if (f.x < -10) f.x = w + 10;
+
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(230, 248, 255, ${f.opacity})`;
+        ctx.shadowColor = '#00f3ff';
+        ctx.shadowBlur = f.r > 3 ? 10 : 4;
+        ctx.fill();
+      }
+
+      for (const s of sparkles) {
+        s.y += s.speedY;
+        s.alpha += s.alphaSpeed;
+        if (s.alpha > 1 || s.alpha < 0.1) s.alphaSpeed *= -1;
+
+        if (s.y < -10) {
+          s.y = h + 10;
+          s.x = Math.random() * w;
+        }
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 220, 110, ${Math.max(0, s.alpha)})`;
+        ctx.shadowColor = '#ffcc00';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
