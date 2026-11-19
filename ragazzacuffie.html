@@ -10,6 +10,7 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
@@ -33,6 +34,89 @@
       background: transparent;
       overflow: visible;
       perspective: 1200px;
+    }
+
+    /* LASTRA TRASPARENTE PROTETTIVA (sotto al tasto Play, sopra a tutto il resto) */
+    .lastra-trasparente {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0);
+      z-index: 9000;
+      pointer-events: auto;
+      cursor: default;
+    }
+
+    /* TASTO PLAY IN ALTO A DESTRA (sopra alla lastra trasparente) */
+    .cyber-play-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 2px solid #00f3ff;
+      background: rgba(8, 12, 24, 0.85);
+      color: #ffffff;
+      font-family: 'Arial Black', Impact, sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      pointer-events: auto;
+      box-shadow: 
+        0 0 12px rgba(0, 243, 255, 0.7),
+        inset 0 0 10px rgba(255, 0, 85, 0.45);
+      text-shadow: 0 0 8px #00f3ff;
+      transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cyber-play-btn:hover {
+      transform: scale(1.06);
+      border-color: #ff0055;
+      box-shadow: 
+        0 0 18px rgba(255, 0, 85, 0.9),
+        0 0 28px rgba(0, 243, 255, 0.6),
+        inset 0 0 12px rgba(0, 243, 255, 0.5);
+    }
+
+    .cyber-play-btn:active {
+      transform: scale(0.95);
+    }
+
+    .cyber-play-btn.playing {
+      border-color: #ff0055;
+      background: rgba(255, 0, 85, 0.28);
+      animation: playPulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .cyber-play-icon {
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid #00f3ff;
+      filter: drop-shadow(0 0 6px #00f3ff);
+      transition: border-left-color 0.2s ease;
+    }
+
+    .cyber-play-btn:hover .cyber-play-icon,
+    .cyber-play-btn.playing .cyber-play-icon {
+      border-left-color: #ff0055;
+      filter: drop-shadow(0 0 8px #ff0055);
+    }
+
+    @keyframes playPulse {
+      0% {
+        box-shadow: 0 0 12px #ff0055, 0 0 24px #00f3ff;
+      }
+      100% {
+        box-shadow: 0 0 22px #ff0055, 0 0 40px #00f3ff;
+      }
     }
 
     .video-pod {
@@ -163,6 +247,7 @@
       border: none;
       display: block;
       filter: contrast(110%) saturate(118%);
+      pointer-events: none;
     }
 
     /* Scanlines cinematografiche */
@@ -290,7 +375,6 @@
       justify-content: center;
       align-items: center;
       pointer-events: auto;
-      cursor: grab;
     }
 
     #atomCanvas {
@@ -359,10 +443,22 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;">
+
+  <!-- Player nascosto dedicato alla sigla dell'MP4 (evita eco e non interrompe i loop visivi) -->
+  <video id="siglaPlayer" src="https://peppeagosto.github.io/immaggini/ragazzacuffie.mp4" preload="auto" playsinline style="display:none;"></video>
 
   <div class="master-stage" id="stageContainer">
-    
+
+    <!-- LASTRA TRASPARENTE ANTI-COPIA (protegge video e grafica, evita il tasto Play) -->
+    <div class="lastra-trasparente" id="lastraProtettiva" oncontextmenu="return false;"></div>
+
+    <!-- TASTO PLAY SIGLA IN ALTO A DESTRA -->
+    <button class="cyber-play-btn" id="playSiglaBtn" type="button" title="Ascolta la sigla">
+      <span class="cyber-play-icon"></span>
+      <span id="playBtnText">PLAY</span>
+    </button>
+
     <!-- Rettangolo Sinistra (SX) -->
     <div class="video-pod left-pod">
       <div class="energy-shield"></div>
@@ -427,6 +523,44 @@
   </div>
 
   <script>
+    // ==========================================
+    // TASTO PLAY SIGLA DA MP4 ORIGINALE
+    // ==========================================
+    const siglaPlayer = document.getElementById('siglaPlayer');
+    const playBtn = document.getElementById('playSiglaBtn');
+    const playBtnText = document.getElementById('playBtnText');
+
+    function riproduciSiglaMP4() {
+      siglaPlayer.pause();
+      siglaPlayer.currentTime = 0;
+      siglaPlayer.muted = false;
+      siglaPlayer.volume = 1.0;
+
+      playBtn.classList.add('playing');
+      playBtnText.textContent = 'SIGLA...';
+
+      siglaPlayer.play().catch(() => {
+        playBtn.classList.remove('playing');
+        playBtnText.textContent = 'PLAY';
+      });
+    }
+
+    siglaPlayer.addEventListener('ended', () => {
+      playBtn.classList.remove('playing');
+      playBtnText.textContent = 'PLAY';
+    });
+
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      riproduciSiglaMP4();
+    });
+
+    // Blocco tasto destro globale sulla pagina
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // ==========================================
+    // ANIMAZIONE ATOMO 3D
+    // ==========================================
     const canvas = document.getElementById('atomCanvas');
     const ctx = canvas.getContext('2d');
     const stage = document.getElementById('stageContainer');
@@ -447,7 +581,8 @@
     let targetRotX = 0.2;
     let targetRotY = 0;
 
-    stage.addEventListener('mousemove', (e) => {
+    // Ascolto su document così l'atomo ruota anche con la lastra trasparente attiva
+    document.addEventListener('mousemove', (e) => {
       const rect = stage.getBoundingClientRect();
       const nx = (e.clientX - rect.left) / rect.width - 0.5;
       const ny = (e.clientY - rect.top) / rect.height - 0.5;
@@ -455,7 +590,7 @@
       targetRotX = -ny * 0.9;
     });
 
-    stage.addEventListener('mouseleave', () => {
+    document.addEventListener('mouseleave', () => {
       targetRotX = 0.2;
       targetRotY = 0;
     });
