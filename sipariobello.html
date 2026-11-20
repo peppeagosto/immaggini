@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <title>PEPPE TEST PLAYER SFONDO - Sipario Overlay Trasparente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Server89.com">
+
+    <!-- Font elegante per controlli e dettagli teatrali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+           VARIABILI E IMPOSTAZIONI OVERLAY TRASPARENTE
+           ========================================================= */
+        :root {
+            --velvet-dark: #250107;
+            --velvet-mid: #750614;
+            --velvet-bright: #b60e23;
+            --gold-dark: #8a6418;
+            --gold-mid: #d4af37;
+            --gold-light: #fff0ad;
+            --curtain-speed: 2s;
+            --curtain-ease: cubic-bezier(0.65, 0.02, 0.25, 1);
+            --light-transition: 0.75s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sfondo 100% trasparente per utilizzo come overlay */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent !important;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #fdf6e3;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Contenitore principale completamente trasparente e non bloccante */
+        .theater-stage {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: transparent !important;
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           AREA CHAT / PLAYER CENTRALE (100% TRASPARENTE DI DEFAULT)
+           ========================================================= */
+        .chat {
+            position: absolute;
+            width: 620px;
+            height: 410px;
+            max-width: 94vw;
+            max-height: 78vh;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent !important;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        /* =========================================================
+           SISTEMA LUCI: RIFLETTORI VOLUMETRICI & GLOW
+           ========================================================= */
+        .spotlights-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 22;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity var(--light-transition);
+        }
+
+        .spotlight {
+            position: absolute;
+            top: -14%;
+            width: 48vw;
+            height: 128vh;
+            mix-blend-mode: screen;
+            filter: blur(20px);
+            transform-origin: top center;
+            opacity: 0.9;
+        }
+
+        .spotlight-left {
+            left: 4%;
+            background: conic-gradient(
+                from 164deg at 50% 0%,
+                transparent 0deg,
+                rgba(255, 224, 130, 0.34) 13deg,
+                rgba(255, 190, 75, 0.16) 24deg,
+                transparent 36deg
+            );
+            animation: spotSweepLeft 9s ease-in-out infinite alternate;
+        }
+
+        .spotlight-right {
+            right: 4%;
+            background: conic-gradient(
+                from 162deg at 50% 0%,
+                transparent 0deg,
+                rgba(255, 224, 130, 0.34) 14deg,
+                rgba(255, 190, 75, 0.16) 25deg,
+                transparent 36deg
+            );
+            animation: spotSweepRight 11s ease-in-out infinite alternate;
+        }
+
+        .spotlight-center {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 68vw;
+            background: radial-gradient(
+                ellipse at 50% 0%,
+                rgba(255, 240, 175, 0.36) 0%,
+                rgba(255, 196, 85, 0.14) 42%,
+                transparent 72%
+            );
+            animation: centerGlowPulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes spotSweepLeft {
+            0%   { transform: rotate(-7deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        @keyframes spotSweepRight {
+            0%   { transform: rotate(7deg); }
+            100% { transform: rotate(-5deg); }
+        }
+
+        @keyframes centerGlowPulse {
+            0%   { opacity: 0.72; }
+            100% { opacity: 1; }
+        }
+
+        /* Canvas trasparente per pulviscolo e scintille dorate */
+        #sparkleCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 25;
+            opacity: 1;
+            transition: opacity var(--light-transition);
+        }
+
+        /* =========================================================
+           SIPARIO IN VELLUTO (PANNELLI SINISTRO E DESTRO)
+           ========================================================= */
+        .curtains-container {
+            position: absolute;
+            inset: 0;
+            z-index: 30;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .curtain-panel {
+            position: absolute;
+            top: 0;
+            width: 52.5vw;
+            height: 100vh;
+            pointer-events: auto;
+            cursor: pointer;
+            will-change: transform, filter;
+            transition:
+                transform var(--curtain-speed) var(--curtain-ease),
+                filter var(--light-transition),
+                box-shadow var(--light-transition);
+
+            /* Pieghe verticali 3D realistiche in velluto cremisi/bordeaux */
+            background-color: var(--velvet-mid);
+            background-image:
+                /* Ombra superiore sotto la mantovana e profondità inferiore */
+                linear-gradient(180deg, rgba(16, 0, 4, 0.85) 0%, rgba(16, 0, 4, 0.16) 14%, transparent 32%, rgba(16, 0, 4, 0.38) 84%, rgba(8, 0, 2, 0.82) 100%),
+                /* Riflesso caldo sul velluto */
+                radial-gradient(ellipse at 50% 30%, rgba(255, 200, 130, 0.16) 0%, transparent 65%),
+                /* Pieghe ampie tridimensionali */
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(22, 0, 5, 0.82) 0%,
+                    rgba(145, 10, 28, 0.36) 3.5%,
+                    rgba(215, 34, 54, 0.44) 6.5%,
+                    rgba(115, 8, 22, 0.48) 10%,
+                    rgba(28, 1, 7, 0.85) 13.5%,
+                    rgba(160, 16, 35, 0.38) 17.5%,
+                    rgba(38, 2, 9, 0.80) 21%
+                ),
+                /* Micro-pieghe fitte del tessuto pesante */
+                repeating-linear-gradient(
+                    90deg,
+                    #34020a 0px,
+                    #8c091b 18px,
+                    #bc142a 32px,
+                    #620411 52px,
+                    #220106 70px,
+                    #9a0c1f 92px,
+                    #34020a 112px
+                );
+        }
+
+        /* Leggero riflesso ondeggiante del velluto */
+        .curtain-fabric-sway {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 225, 180, 0.05) 4%,
+                transparent 8%,
+                rgba(0, 0, 0, 0.16) 12%,
+                transparent 16%
+            );
+            background-size: 200% 100%;
+            animation: velvetShimmer 8s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes velvetShimmer {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 18% 0%; }
+        }
+
+        /* Pannello Sinistro */
+        .curtain-left {
+            left: -2vw;
+            transform-origin: top left;
+            border-right: 3px solid rgba(250, 220, 120, 0.55);
+            box-shadow:
+                16px 0 38px rgba(0, 0, 0, 0.85),
+                inset -18px 0 30px rgba(15, 0, 4, 0.65);
+        }
+
+        /* Pannello Destro */
+        .curtain-right {
+            right: -2vw;
+            transform-origin: top right;
+            border-left: 3px solid rgba(250, 220, 120, 0.55);
+            box-shadow:
+                -16px 0 38px rgba(0, 0, 0, 0.85),
+                inset 18px 0 30px rgba(15, 0, 4, 0.65);
+        }
+
+        /* Bordo ricamato e frangia dorata inferiore */
+        .curtain-gold-trim {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 28px;
+            background:
+                linear-gradient(180deg,
+                    rgba(255, 240, 173, 0.98) 0px,
+                    rgba(212, 175, 55, 0.98) 3px,
+                    #54030e 4px,
+                    #54030e 8px,
+                    rgba(250, 224, 140, 0.98) 9px,
+                    rgba(138, 100, 24, 0.98) 12px,
+                    transparent 13px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    #d4af37 0px,
+                    #fff0ad 2px,
+                    #8a6418 4px,
+                    rgba(30, 5, 2, 0.35) 5px,
+                    #d4af37 7px
+                );
+            background-position: top, bottom;
+            background-size: 100% 13px, 100% 15px;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            transition: filter var(--light-transition);
+        }
+
+        /* Scintillio animato sulle frange dorate in modalità Glow */
+        .curtain-gold-trim::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                105deg,
+                transparent 20%,
+                rgba(255, 250, 220, 0.75) 50%,
+                transparent 80%
+            );
+            background-size: 220% 100%;
+            animation: goldSweep 3.8s linear infinite;
+            opacity: 0.9;
+            transition: opacity var(--light-transition);
+        }
+
+        @keyframes goldSweep {
+            0%   { background-position: 180% 0; }
+            100% { background-position: -80% 0; }
+        }
+
+        /* Cordoni e nappe dorate laterali (Embrasse) */
+        .tieback {
+            position: absolute;
+            top: 53%;
+            width: 118px;
+            height: 155px;
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                opacity 1s ease 0.45s,
+                transform 1.3s var(--curtain-ease) 0.3s,
+                filter var(--light-transition);
+        }
+
+        .curtain-left .tieback {
+            right: -14px;
+            transform: translateX(-20px) scale(0.85);
+        }
+
+        .curtain-right .tieback {
+            left: -14px;
+            transform: translateX(20px) scale(0.85) scaleX(-1);
+        }
+
+        /* =========================================================
+           STATO APERTO DEL SIPARIO
+           ========================================================= */
+        .theater-stage.is-open .curtain-left {
+            transform: translateX(-78%) scaleX(0.65) skewX(-5deg);
+        }
+
+        .theater-stage.is-open .curtain-right {
+            transform: translateX(78%) scaleX(0.65) skewX(5deg);
+        }
+
+        .theater-stage.is-open .curtain-left .tieback {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        .theater-stage.is-open .curtain-right .tieback {
+            opacity: 1;
+            transform: translateX(0) scale(1) scaleX(-1);
+        }
+
+        @media (max-width: 640px) {
+            .theater-stage.is-open .curtain-left {
+                transform: translateX(-87%) scaleX(0.55) skewX(-3deg);
+            }
+            .theater-stage.is-open .curtain-right {
+                transform: translateX(87%) scaleX(0.55) skewX(3deg);
+            }
+        }
+
+        /* =========================================================
+           MANTOVANA SUPERIORE (VALANCE) + LUCI DI RIBALTA
+           ========================================================= */
+        .valance-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 94px;
+            z-index: 40;
+            pointer-events: none;
+            transition: filter var(--light-transition);
+        }
+
+        @media (max-width: 640px) {
+            .valance-wrapper {
+                height: 68px;
+            }
+        }
+
+        .valance-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Barra superiore con lampadine di ribalta pulsanti */
+        .stage-bulbs {
+            position: absolute;
+            top: 6px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 3%;
+            z-index: 42;
+            pointer-events: none;
+            transition: opacity var(--light-transition);
+        }
+
+        .stage-bulb {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffffff 0%, #fff1a8 45%, #f59e0b 100%);
+            box-shadow:
+                0 0 8px 3px rgba(255, 240, 165, 0.95),
+                0 0 22px 8px rgba(255, 196, 55, 0.78),
+                0 0 42px 14px rgba(255, 165, 20, 0.45);
+            animation: bulbPulse 2.4s ease-in-out infinite alternate;
+        }
+
+        .stage-bulb:nth-child(even) {
+            animation-delay: 1.2s;
+        }
+
+        @keyframes bulbPulse {
+            0%   { transform: scale(0.92); opacity: 0.8; }
+            100% { transform: scale(1.18); opacity: 1; }
+        }
+
+        /* =========================================================
+           STATO 1: LUCE GLOW ACCESA (INTENTO SPETTACOLARE - DEFAULT)
+           ========================================================= */
+        .theater-stage.lights-glow .curtain-left {
+            box-shadow:
+                6px 0 28px rgba(255, 208, 70, 0.55),
+                14px 0 55px rgba(255, 165, 30, 0.35),
+                inset -8px 0 26px rgba(255, 224, 130, 0.38);
+            filter: brightness(1.12) saturate(1.12);
+        }
+
+        .theater-stage.lights-glow .curtain-right {
+            box-shadow:
+                -6px 0 28px rgba(255, 208, 70, 0.55),
+                -14px 0 55px rgba(255, 165, 30, 0.35),
+                inset 8px 0 26px rgba(255, 224, 130, 0.38);
+            filter: brightness(1.12) saturate(1.12);
+        }
+
+        .theater-stage.lights-glow .curtain-gold-trim {
+            filter:
+                drop-shadow(0 0 8px rgba(255, 224, 115, 0.95))
+                drop-shadow(0 -4px 18px rgba(255, 184, 40, 0.8));
+        }
+
+        .theater-stage.lights-glow .tieback {
+            filter:
+                drop-shadow(0 0 10px rgba(255, 224, 115, 0.9))
+                drop-shadow(0 4px 18px rgba(255, 175, 35, 0.65));
+        }
+
+        .theater-stage.lights-glow .valance-wrapper {
+            filter:
+                drop-shadow(0 6px 16px rgba(255, 210, 75, 0.68))
+                drop-shadow(0 14px 32px rgba(255, 165, 20, 0.45));
+        }
+
+        /* =========================================================
+           STATO 2: LUCE SPENTA (TEATRO OSCURATO, INTERNO TRASPARENTE)
+           ========================================================= */
+        .theater-stage.lights-off .spotlights-layer,
+        .theater-stage.lights-off #sparkleCanvas,
+        .theater-stage.lights-off .stage-bulbs {
+            opacity: 0;
+        }
+
+        .theater-stage.lights-off .curtain-panel {
+            filter: brightness(0.45) contrast(1.1);
+            border-color: rgba(45, 5, 10, 0.85);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.85);
+        }
+
+        .theater-stage.lights-off .curtain-gold-trim {
+            filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.8));
+        }
+
+        .theater-stage.lights-off .curtain-gold-trim::after {
+            opacity: 0;
+        }
+
+        .theater-stage.lights-off .tieback {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+        }
+
+        .theater-stage.lights-off .valance-wrapper {
+            filter: brightness(0.45) contrast(1.1) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.9));
+        }
+
+        /* =========================================================
+           BARRA DI CONTROLLO COMPATTA IN BASSO A DESTRA
+           ========================================================= */
+        .controls-dock {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            z-index: 60;
+            pointer-events: auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 9999px;
+            background: rgba(12, 6, 8, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.42);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7);
+        }
+
+        .control-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 12px;
+            border-radius: 9999px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            color: #efe5cf;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.22);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .control-btn:hover {
+            background: rgba(212, 175, 55, 0.18);
+            border-color: rgba(250, 224, 140, 0.65);
+            transform: translateY(-1px);
+        }
+
+        .control-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Pulsante Luce Glow attivo */
+        .control-btn.is-active-glow {
+            background: linear-gradient(135deg, rgba(245, 185, 45, 0.38) 0%, rgba(180, 120, 15, 0.48) 100%);
+            color: #fff7d6;
+            border-color: #fde068;
+            box-shadow:
+                0 0 14px rgba(255, 208, 70, 0.55),
+                inset 0 1px 0 rgba(255, 248, 210, 0.45);
+        }
+
+        /* Pulsante Spegni Luce attivo */
+        .control-btn.is-active-off {
+            background: linear-gradient(135deg, rgba(65, 55, 85, 0.65) 0%, rgba(28, 22, 42, 0.85) 100%);
+            color: #e2e8f0;
+            border-color: rgba(180, 195, 235, 0.65);
+            box-shadow: 0 0 10px rgba(120, 140, 200, 0.35);
+        }
+
+        /* Pulsante Sipario */
+        .control-btn-curtain {
+            background: linear-gradient(135deg, #960b1d 0%, #5e0410 100%);
+            color: #fdf6e3;
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .control-btn-curtain:hover {
+            background: linear-gradient(135deg, #b80f24 0%, #7a0716 100%);
+            border-color: rgba(250, 224, 140, 0.85);
+        }
+
+        @media (max-width: 520px) {
+            .controls-dock {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                justify-content: center;
+                border-radius: 18px;
+            }
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 0.74rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONTENITORE PRINCIPALE OVERLAY TRASPARENTE (Luce Glow attiva di default) -->
+    <main id="theaterStage" class="theater-stage lights-glow" aria-label="Sipario di teatro trasparente">
+
+        <!-- =====================================================
+             AREA CENTRALE .chat (100% TRASPARENTE)
+             Incolla qui dentro il codice della tua chat (es. xat.com)
+             oppure il tuo player audio/video. Se inserisci contenuti
+             interattivi, aggiungi pointer-events: auto all'elemento interno.
+             ===================================================== -->
+        <div class="chat">
+            <!-- INCOLLA QUI LA TUA CHAT O IL TUO PLAYER -->
+        </div>
+
+        <!-- Fasci di riflettori volumetrici dorati -->
+        <div class="spotlights-layer" aria-hidden="true">
+            <div class="spotlight spotlight-left"></div>
+            <div class="spotlight spotlight-center"></div>
+            <div class="spotlight spotlight-right"></div>
+        </div>
+
+        <!-- Canvas trasparente per pulviscolo dorato e scintille (glitter) -->
+        <canvas id="sparkleCanvas" aria-hidden="true"></canvas>
+
+        <!-- =====================================================
+             SIPARIO IN VELLUTO (SINISTRA E DESTRA)
+             ===================================================== -->
+        <div class="curtains-container">
+            <!-- Tenda Sinistra -->
+            <div id="curtainLeft" class="curtain-panel curtain-left" title="Clicca per aprire o chiudere il sipario">
+                <div class="curtain-fabric-sway"></div>
+                <div class="curtain-gold-trim"></div>
+
+                <!-- Cordone e nappa dorata (Embrasse) -->
+                <svg class="tieback" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="goldRopeGrad" x1="0" y1="0" x2="120" y2="160" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#fff0ad"/>
+                            <stop offset="50%" stop-color="#d4af37"/>
+                            <stop offset="100%" stop-color="#8a6418"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 22 C 48 56, 86 58, 108 38" stroke="url(#goldRopeGrad)" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M12 22 C 48 56, 86 58, 108 38" stroke="#5e4108" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" opacity="0.6"/>
+                    <circle cx="88" cy="52" r="9" fill="url(#goldRopeGrad)" stroke="#6e4d0c" stroke-width="1.5"/>
+                    <path d="M81 61 H95 L98 76 H78 Z" fill="url(#goldRopeGrad)" stroke="#6e4d0c" stroke-width="1.2"/>
+                    <path d="M78 76 L72 136 M82 76 L79 140 M86 76 L86 142 M90 76 L92 140 M94 76 L99 136 M98 76 L104 132" stroke="url(#goldRopeGrad)" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <!-- Tenda Destra -->
+            <div id="curtainRight" class="curtain-panel curtain-right" title="Clicca per aprire o chiudere il sipario">
+                <div class="curtain-fabric-sway"></div>
+                <div class="curtain-gold-trim"></div>
+
+                <!-- Cordone e nappa dorata (specchiato via CSS) -->
+                <svg class="tieback" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 22 C 48 56, 86 58, 108 38" stroke="url(#goldRopeGrad)" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M12 22 C 48 56, 86 58, 108 38" stroke="#5e4108" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" opacity="0.6"/>
+                    <circle cx="88" cy="52" r="9" fill="url(#goldRopeGrad)" stroke="#6e4d0c" stroke-width="1.5"/>
+                    <path d="M81 61 H95 L98 76 H78 Z" fill="url(#goldRopeGrad)" stroke="#6e4d0c" stroke-width="1.2"/>
+                    <path d="M78 76 L72 136 M82 76 L79 140 M86 76 L86 142 M90 76 L92 140 M94 76 L99 136 M98 76 L104 132" stroke="url(#goldRopeGrad)" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             MANTOVANA SUPERIORE (VALANCE) E LUCI DI RIBALTA
+             ===================================================== -->
+        <div class="valance-wrapper" aria-hidden="true">
+            <svg class="valance-svg" viewBox="0 0 1200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="valanceVelvet" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#360209"/>
+                        <stop offset="35%" stop-color="#8c0b1d"/>
+                        <stop offset="70%" stop-color="#5e0411"/>
+                        <stop offset="100%" stop-color="#280107"/>
+                    </linearGradient>
+                    <linearGradient id="valanceGold" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#9e741c"/>
+                        <stop offset="25%" stop-color="#fff0ad"/>
+                        <stop offset="50%" stop-color="#f0c441"/>
+                        <stop offset="75%" stop-color="#fff0ad"/>
+                        <stop offset="100%" stop-color="#9e741c"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Festoni in velluto -->
+                <path d="M0,0 L1200,0 L1200,48
+                         Q1100,92 1000,48
+                         Q900,92 800,48
+                         Q700,92 600,48
+                         Q500,92 400,48
+                         Q300,92 200,48
+                         Q100,92 0,48 Z"
+                      fill="url(#valanceVelvet)"/>
+
+                <!-- Drappeggi interni 3D -->
+                <path d="M0,22 Q100,66 200,22 Q300,66 400,22 Q500,66 600,22 Q700,66 800,22 Q900,66 1000,22 Q1100,66 1200,22"
+                      fill="none" stroke="rgba(255, 200, 160, 0.16)" stroke-width="5"/>
+                <path d="M0,34 Q100,78 200,34 Q300,78 400,34 Q500,78 600,34 Q700,78 800,34 Q900,78 1000,34 Q1100,78 1200,34"
+                      fill="none" stroke="rgba(18, 0, 4, 0.48)" stroke-width="4"/>
+
+                <!-- Bordatura dorata luminosa -->
+                <path d="M0,48
+                         Q100,92 200,48
+                         Q300,92 400,48
+                         Q500,92 600,48
+                         Q700,92 800,48
+                         Q900,92 1000,48
+                         Q1100,92 1200,48"
+                      fill="none" stroke="url(#valanceGold)" stroke-width="6" stroke-linecap="round"/>
+
+                <!-- Nappe dorate tra i festoni -->
+                <g fill="url(#valanceGold)">
+                    <circle cx="200" cy="52" r="5"/><rect x="197.5" y="57" width="5" height="14" rx="2"/>
+                    <circle cx="400" cy="52" r="5"/><rect x="397.5" y="57" width="5" height="14" rx="2"/>
+                    <circle cx="600" cy="52" r="5"/><rect x="597.5" y="57" width="5" height="14" rx="2"/>
+                    <circle cx="800" cy="52" r="5"/><rect x="797.5" y="57" width="5" height="14" rx="2"/>
+                    <circle cx="1000" cy="52" r="5"/><rect x="997.5" y="57" width="5" height="14" rx="2"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Luci di ribalta superiori pulsanti -->
+        <div class="stage-bulbs" aria-hidden="true">
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+            <span class="stage-bulb"></span>
+        </div>
+
+        <!-- =====================================================
+             BARRA CONTROLLI COMPATTA (3 PULSANTI IN BASSO A DESTRA)
+             ===================================================== -->
+        <div class="controls-dock" role="toolbar" aria-label="Controlli sipario e luci">
+            <!-- Pulsante 1: Accende Luce Glow Forte -->
+            <button id="btnGlowOn" type="button" class="control-btn is-active-glow" aria-pressed="true">
+                ✨ Luce Glow
+            </button>
+
+            <!-- Pulsante 2: Spegne completamente le luci -->
+            <button id="btnLightOff" type="button" class="control-btn" aria-pressed="false">
+                🌙 Spegni Luce
+            </button>
+
+            <!-- Pulsante 3: Apri / Chiudi Sipario -->
+            <button id="btnToggleCurtain" type="button" class="control-btn control-btn-curtain">
+                🎭 Apri Sipario
+            </button>
+        </div>
+
+    </main>
+
+    <!-- =========================================================
+         LOGICA JAVASCRIPT (SIPARIO, 2 LUCI E SCINTILLE DORATE)
+         ========================================================= -->
+    <script>
+        (function () {
+            'use strict';
+
+            // Elementi DOM
+            const stage = document.getElementById('theaterStage');
+            const curtainLeft = document.getElementById('curtainLeft');
+            const curtainRight = document.getElementById('curtainRight');
+            const btnGlowOn = document.getElementById('btnGlowOn');
+            const btnLightOff = document.getElementById('btnLightOff');
+            const btnToggleCurtain = document.getElementById('btnToggleCurtain');
+            const canvas = document.getElementById('sparkleCanvas');
+
+            // Stati iniziali
+            let isCurtainOpen = false;
+            let isGlowActive = true;
+            let autoOpenTimer = null;
+
+            /**
+             * Aggiorna lo stato aperto/chiuso del sipario.
+             * @param {boolean} open - True per aprire, False per chiudere.
+             */
+            function setCurtainState(open) {
+                isCurtainOpen = open;
+                stage.classList.toggle('is-open', isCurtainOpen);
+                btnToggleCurtain.textContent = isCurtainOpen ? '🎭 Chiudi Sipario' : '🎭 Apri Sipario';
+            }
+
+            /**
+             * Alterna apertura e chiusura del sipario.
+             */
+            function toggleCurtain() {
+                if (autoOpenTimer) {
+                    clearTimeout(autoOpenTimer);
+                    autoOpenTimer = null;
+                }
+                setCurtainState(!isCurtainOpen);
+            }
+
+            /**
+             * Imposta il sistema a 2 luci: 'glow' (luce forte) o 'off' (luce spenta).
+             * @param {'glow'|'off'} mode
+             */
+            function setLightMode(mode) {
+                isGlowActive = (mode === 'glow');
+
+                stage.classList.toggle('lights-glow', isGlowActive);
+                stage.classList.toggle('lights-off', !isGlowActive);
+
+                btnGlowOn.classList.toggle('is-active-glow', isGlowActive);
+                btnGlowOn.setAttribute('aria-pressed', String(isGlowActive));
+
+                btnLightOff.classList.toggle('is-active-off', !isGlowActive);
+                btnLightOff.setAttribute('aria-pressed', String(!isGlowActive));
+            }
+
+            // Eventi dei 3 pulsanti
+            btnGlowOn.addEventListener('click', function () {
+                setLightMode('glow');
+            });
+
+            btnLightOff.addEventListener('click', function () {
+                setLightMode('off');
+            });
+
+            btnToggleCurtain.addEventListener('click', toggleCurtain);
+
+            // Cliccando sulle tende si può aprire o chiudere il sipario
+            curtainLeft.addEventListener('click', toggleCurtain);
+            curtainRight.addEventListener('click', toggleCurtain);
+
+            // Apertura automatica dopo ~0.8 secondi dal caricamento
+            window.addEventListener('load', function () {
+                autoOpenTimer = setTimeout(function () {
+                    setCurtainState(true);
+                }, 800);
+            });
+
+            /* =========================================================
+               CANVAS TRASPARENTE: PULVISCOLO DORATO E SCINTILLE GLITTER
+               ========================================================= */
+            try {
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                const PARTICLE_COUNT = 75;
+
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+
+                function createParticle() {
+                    const isSparkle = Math.random() < 0.34; // 34% scintille a stella brillante
+                    return {
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        radius: isSparkle ? (Math.random() * 2.4 + 1.6) : (Math.random() * 1.8 + 0.6),
+                        vx: (Math.random() - 0.5) * 0.32,
+                        vy: -(Math.random() * 0.42 + 0.1),
+                        alpha: Math.random() * 0.65 + 0.25,
+                        twinkleSpeed: isSparkle ? (Math.random() * 0.055 + 0.025) : (Math.random() * 0.02 + 0.008),
+                        twinklePhase: Math.random() * Math.PI * 2,
+                        isSparkle: isSparkle
+                    };
+                }
+
+                function initParticles() {
+                    particles = [];
+                    for (let i = 0; i < PARTICLE_COUNT; i++) {
+                        particles.push(createParticle());
+                    }
+                }
+
+                /**
+                 * Disegna una piccola stella a 4 punte scintillante.
+                 */
+                function drawSparkleStar(x, y, size, alpha) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.fillStyle = `rgba(255, 246, 200, ${alpha.toFixed(3)})`;
+                    ctx.shadowColor = 'rgba(255, 205, 60, 0.95)';
+                    ctx.shadowBlur = 10;
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, -size * 2.2);
+                    ctx.quadraticCurveTo(size * 0.25, -size * 0.25, size * 2.2, 0);
+                    ctx.quadraticCurveTo(size * 0.25, size * 0.25, 0, size * 2.2);
+                    ctx.quadraticCurveTo(-size * 0.25, size * 0.25, -size * 2.2, 0);
+                    ctx.quadraticCurveTo(-size * 0.25, -size * 0.25, 0, -size * 2.2);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                function animateSparkles() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Disegna pulviscolo e scintille solo quando la Luce Glow è accesa
+                    if (isGlowActive) {
+                        for (let i = 0; i < particles.length; i++) {
+                            const p = particles[i];
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            p.twinklePhase += p.twinkleSpeed;
+
+                            if (p.y < -15) {
+                                p.y = canvas.height + 15;
+                                p.x = Math.random() * canvas.width;
+                            }
+                            if (p.x < -15) p.x = canvas.width + 15;
+                            if (p.x > canvas.width + 15) p.x = -15;
+
+                            const pulse = 0.4 + 0.6 * Math.sin(p.twinklePhase);
+                            const currentAlpha = Math.max(0, Math.min(1, p.alpha * pulse));
+
+                            if (p.isSparkle) {
+                                drawSparkleStar(p.x, p.y, p.radius, currentAlpha);
+                            } else {
+                                ctx.beginPath();
+                                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                                ctx.fillStyle = `rgba(255, 232, 155, ${currentAlpha.toFixed(3)})`;
+                                ctx.fill();
+                            }
+                        }
+                    }
+
+                    requestAnimationFrame(animateSparkles);
+                }
+
+                resizeCanvas();
+                initParticles();
+                animateSparkles();
+                window.addEventListener('resize', resizeCanvas);
+            } catch (error) {
+                console.warn('Effetto scintille non disponibile:', error);
+            }
+        })();
+    </script>
+</body>
+</html>
