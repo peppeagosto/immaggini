@@ -2,18 +2,18 @@
 <html lang="it">
 <head>
     <meta charset="utf-8">
-    <title>PEPPE TEST PLAYER SFONDO - Sipario Overlay Trasparente</title>
+    <title>PEPPE TEST PLAYER SFONDO - Sipario Overlay xat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Server89.com">
 
-    <!-- Font elegante per controlli e dettagli teatrali -->
+    <!-- Font pulito e leggibile -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
 
     <style>
         /* =========================================================
-           VARIABILI E IMPOSTAZIONI OVERLAY TRASPARENTE
+           VARIABILI E RESET BASE (OVERLAY 100% TRASPARENTE PER XAT)
            ========================================================= */
         :root {
             --velvet-dark: #250107;
@@ -31,39 +31,45 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-
-        /* Sfondo 100% trasparente per utilizzo come overlay */
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: transparent !important;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            color: #fdf6e3;
             user-select: none;
+            -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Contenitore principale completamente trasparente e non bloccante */
-        .theater-stage {
-            position: relative;
-            width: 100vw;
+        /* Architettura identica all'esempio funzionante su iframe xat */
+        html, body {
+            width: 100%;
             height: 100vh;
-            overflow: hidden;
             background: transparent !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #fdf6e3;
+        }
+
+        /* =========================================================
+           CONTENITORE MASTER CENTRATO (1308x484 ADATTIVO)
+           ========================================================= */
+        .master-stage {
+            position: relative;
+            width: min(1308px, 100vw);
+            height: min(484px, 100vh);
+            background: transparent !important;
+            overflow: hidden;
             pointer-events: none;
         }
 
         /* =========================================================
-           AREA CHAT / PLAYER CENTRALE (100% TRASPARENTE DI DEFAULT)
+           AREA CENTRALE .chat (100% TRASPARENTE E NON BLOCCANTE)
            ========================================================= */
         .chat {
             position: absolute;
             width: 620px;
             height: 410px;
-            max-width: 94vw;
-            max-height: 78vh;
+            max-width: 94%;
+            max-height: 85%;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -87,13 +93,13 @@
 
         .spotlight {
             position: absolute;
-            top: -14%;
-            width: 48vw;
-            height: 128vh;
+            top: -16%;
+            width: 48%;
+            height: 132%;
             mix-blend-mode: screen;
-            filter: blur(20px);
+            filter: blur(18px);
             transform-origin: top center;
-            opacity: 0.9;
+            opacity: 0.92;
         }
 
         .spotlight-left {
@@ -101,8 +107,8 @@
             background: conic-gradient(
                 from 164deg at 50% 0%,
                 transparent 0deg,
-                rgba(255, 224, 130, 0.34) 13deg,
-                rgba(255, 190, 75, 0.16) 24deg,
+                rgba(255, 224, 130, 0.36) 13deg,
+                rgba(255, 190, 75, 0.18) 24deg,
                 transparent 36deg
             );
             animation: spotSweepLeft 9s ease-in-out infinite alternate;
@@ -113,8 +119,8 @@
             background: conic-gradient(
                 from 162deg at 50% 0%,
                 transparent 0deg,
-                rgba(255, 224, 130, 0.34) 14deg,
-                rgba(255, 190, 75, 0.16) 25deg,
+                rgba(255, 224, 130, 0.36) 14deg,
+                rgba(255, 190, 75, 0.18) 25deg,
                 transparent 36deg
             );
             animation: spotSweepRight 11s ease-in-out infinite alternate;
@@ -123,11 +129,11 @@
         .spotlight-center {
             left: 50%;
             transform: translateX(-50%);
-            width: 68vw;
+            width: 68%;
             background: radial-gradient(
                 ellipse at 50% 0%,
-                rgba(255, 240, 175, 0.36) 0%,
-                rgba(255, 196, 85, 0.14) 42%,
+                rgba(255, 240, 175, 0.38) 0%,
+                rgba(255, 196, 85, 0.15) 42%,
                 transparent 72%
             );
             animation: centerGlowPulse 4s ease-in-out infinite alternate;
@@ -174,8 +180,8 @@
         .curtain-panel {
             position: absolute;
             top: 0;
-            width: 52.5vw;
-            height: 100vh;
+            width: 52.5%;
+            height: 100%;
             pointer-events: auto;
             cursor: pointer;
             will-change: transform, filter;
@@ -187,11 +193,8 @@
             /* Pieghe verticali 3D realistiche in velluto cremisi/bordeaux */
             background-color: var(--velvet-mid);
             background-image:
-                /* Ombra superiore sotto la mantovana e profondità inferiore */
                 linear-gradient(180deg, rgba(16, 0, 4, 0.85) 0%, rgba(16, 0, 4, 0.16) 14%, transparent 32%, rgba(16, 0, 4, 0.38) 84%, rgba(8, 0, 2, 0.82) 100%),
-                /* Riflesso caldo sul velluto */
                 radial-gradient(ellipse at 50% 30%, rgba(255, 200, 130, 0.16) 0%, transparent 65%),
-                /* Pieghe ampie tridimensionali */
                 repeating-linear-gradient(
                     90deg,
                     rgba(22, 0, 5, 0.82) 0%,
@@ -202,20 +205,19 @@
                     rgba(160, 16, 35, 0.38) 17.5%,
                     rgba(38, 2, 9, 0.80) 21%
                 ),
-                /* Micro-pieghe fitte del tessuto pesante */
                 repeating-linear-gradient(
                     90deg,
                     #34020a 0px,
-                    #8c091b 18px,
-                    #bc142a 32px,
-                    #620411 52px,
-                    #220106 70px,
-                    #9a0c1f 92px,
-                    #34020a 112px
+                    #8c091b 16px,
+                    #bc142a 28px,
+                    #620411 46px,
+                    #220106 62px,
+                    #9a0c1f 82px,
+                    #34020a 100px
                 );
         }
 
-        /* Leggero riflesso ondeggiante del velluto */
+        /* Riflesso ondeggiante del velluto */
         .curtain-fabric-sway {
             position: absolute;
             inset: 0;
@@ -239,7 +241,7 @@
 
         /* Pannello Sinistro */
         .curtain-left {
-            left: -2vw;
+            left: -2%;
             transform-origin: top left;
             border-right: 3px solid rgba(250, 220, 120, 0.55);
             box-shadow:
@@ -249,7 +251,7 @@
 
         /* Pannello Destro */
         .curtain-right {
-            right: -2vw;
+            right: -2%;
             transform-origin: top right;
             border-left: 3px solid rgba(250, 220, 120, 0.55);
             box-shadow:
@@ -263,16 +265,16 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 28px;
+            height: 24px;
             background:
                 linear-gradient(180deg,
                     rgba(255, 240, 173, 0.98) 0px,
                     rgba(212, 175, 55, 0.98) 3px,
                     #54030e 4px,
-                    #54030e 8px,
-                    rgba(250, 224, 140, 0.98) 9px,
-                    rgba(138, 100, 24, 0.98) 12px,
-                    transparent 13px
+                    #54030e 7px,
+                    rgba(250, 224, 140, 0.98) 8px,
+                    rgba(138, 100, 24, 0.98) 11px,
+                    transparent 12px
                 ),
                 repeating-linear-gradient(
                     90deg,
@@ -283,7 +285,7 @@
                     #d4af37 7px
                 );
             background-position: top, bottom;
-            background-size: 100% 13px, 100% 15px;
+            background-size: 100% 12px, 100% 12px;
             background-repeat: no-repeat;
             pointer-events: none;
             transition: filter var(--light-transition);
@@ -297,12 +299,12 @@
             background: linear-gradient(
                 105deg,
                 transparent 20%,
-                rgba(255, 250, 220, 0.75) 50%,
+                rgba(255, 250, 220, 0.78) 50%,
                 transparent 80%
             );
             background-size: 220% 100%;
             animation: goldSweep 3.8s linear infinite;
-            opacity: 0.9;
+            opacity: 0.92;
             transition: opacity var(--light-transition);
         }
 
@@ -314,9 +316,9 @@
         /* Cordoni e nappe dorate laterali (Embrasse) */
         .tieback {
             position: absolute;
-            top: 53%;
-            width: 118px;
-            height: 155px;
+            top: 50%;
+            width: 96px;
+            height: 128px;
             opacity: 0;
             pointer-events: none;
             transition:
@@ -326,42 +328,42 @@
         }
 
         .curtain-left .tieback {
-            right: -14px;
+            right: -12px;
             transform: translateX(-20px) scale(0.85);
         }
 
         .curtain-right .tieback {
-            left: -14px;
+            left: -12px;
             transform: translateX(20px) scale(0.85) scaleX(-1);
         }
 
         /* =========================================================
-           STATO APERTO DEL SIPARIO
+           STATO APERTO DEL SIPARIO (LASCIA LIBERO IL CENTRO)
            ========================================================= */
-        .theater-stage.is-open .curtain-left {
-            transform: translateX(-78%) scaleX(0.65) skewX(-5deg);
+        .master-stage.is-open .curtain-left {
+            transform: translateX(-76%) scaleX(0.62) skewX(-5deg);
         }
 
-        .theater-stage.is-open .curtain-right {
-            transform: translateX(78%) scaleX(0.65) skewX(5deg);
+        .master-stage.is-open .curtain-right {
+            transform: translateX(76%) scaleX(0.62) skewX(5deg);
         }
 
-        .theater-stage.is-open .curtain-left .tieback {
+        .master-stage.is-open .curtain-left .tieback {
             opacity: 1;
             transform: translateX(0) scale(1);
         }
 
-        .theater-stage.is-open .curtain-right .tieback {
+        .master-stage.is-open .curtain-right .tieback {
             opacity: 1;
             transform: translateX(0) scale(1) scaleX(-1);
         }
 
         @media (max-width: 640px) {
-            .theater-stage.is-open .curtain-left {
-                transform: translateX(-87%) scaleX(0.55) skewX(-3deg);
+            .master-stage.is-open .curtain-left {
+                transform: translateX(-86%) scaleX(0.54) skewX(-3deg);
             }
-            .theater-stage.is-open .curtain-right {
-                transform: translateX(87%) scaleX(0.55) skewX(3deg);
+            .master-stage.is-open .curtain-right {
+                transform: translateX(86%) scaleX(0.54) skewX(3deg);
             }
         }
 
@@ -373,7 +375,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 94px;
+            height: 76px;
             z-index: 40;
             pointer-events: none;
             transition: filter var(--light-transition);
@@ -381,7 +383,7 @@
 
         @media (max-width: 640px) {
             .valance-wrapper {
-                height: 68px;
+                height: 58px;
             }
         }
 
@@ -391,7 +393,7 @@
             display: block;
         }
 
-        /* Barra superiore con lampadine di ribalta pulsanti */
+        /* Fila superiore di lampadine di ribalta dorate */
         .stage-bulbs {
             position: absolute;
             top: 6px;
@@ -406,14 +408,14 @@
         }
 
         .stage-bulb {
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
             background: radial-gradient(circle, #ffffff 0%, #fff1a8 45%, #f59e0b 100%);
             box-shadow:
                 0 0 8px 3px rgba(255, 240, 165, 0.95),
-                0 0 22px 8px rgba(255, 196, 55, 0.78),
-                0 0 42px 14px rgba(255, 165, 20, 0.45);
+                0 0 22px 8px rgba(255, 196, 55, 0.8),
+                0 0 40px 14px rgba(255, 165, 20, 0.45);
             animation: bulbPulse 2.4s ease-in-out infinite alternate;
         }
 
@@ -422,197 +424,252 @@
         }
 
         @keyframes bulbPulse {
-            0%   { transform: scale(0.92); opacity: 0.8; }
+            0%   { transform: scale(0.92); opacity: 0.82; }
             100% { transform: scale(1.18); opacity: 1; }
         }
 
         /* =========================================================
-           STATO 1: LUCE GLOW ACCESA (INTENTO SPETTACOLARE - DEFAULT)
+           STATO 1: LUCE GLOW ACCESA (DEFAULT)
            ========================================================= */
-        .theater-stage.lights-glow .curtain-left {
+        .master-stage.lights-glow .curtain-left {
             box-shadow:
-                6px 0 28px rgba(255, 208, 70, 0.55),
-                14px 0 55px rgba(255, 165, 30, 0.35),
-                inset -8px 0 26px rgba(255, 224, 130, 0.38);
-            filter: brightness(1.12) saturate(1.12);
+                6px 0 28px rgba(255, 208, 70, 0.6),
+                14px 0 55px rgba(255, 165, 30, 0.38),
+                inset -8px 0 26px rgba(255, 224, 130, 0.4);
+            filter: brightness(1.14) saturate(1.14);
         }
 
-        .theater-stage.lights-glow .curtain-right {
+        .master-stage.lights-glow .curtain-right {
             box-shadow:
-                -6px 0 28px rgba(255, 208, 70, 0.55),
-                -14px 0 55px rgba(255, 165, 30, 0.35),
-                inset 8px 0 26px rgba(255, 224, 130, 0.38);
-            filter: brightness(1.12) saturate(1.12);
+                -6px 0 28px rgba(255, 208, 70, 0.6),
+                -14px 0 55px rgba(255, 165, 30, 0.38),
+                inset 8px 0 26px rgba(255, 224, 130, 0.4);
+            filter: brightness(1.14) saturate(1.14);
         }
 
-        .theater-stage.lights-glow .curtain-gold-trim {
+        .master-stage.lights-glow .curtain-gold-trim {
             filter:
                 drop-shadow(0 0 8px rgba(255, 224, 115, 0.95))
-                drop-shadow(0 -4px 18px rgba(255, 184, 40, 0.8));
+                drop-shadow(0 -4px 18px rgba(255, 184, 40, 0.82));
         }
 
-        .theater-stage.lights-glow .tieback {
+        .master-stage.lights-glow .tieback {
             filter:
-                drop-shadow(0 0 10px rgba(255, 224, 115, 0.9))
-                drop-shadow(0 4px 18px rgba(255, 175, 35, 0.65));
+                drop-shadow(0 0 10px rgba(255, 224, 115, 0.92))
+                drop-shadow(0 4px 18px rgba(255, 175, 35, 0.68));
         }
 
-        .theater-stage.lights-glow .valance-wrapper {
+        .master-stage.lights-glow .valance-wrapper {
             filter:
-                drop-shadow(0 6px 16px rgba(255, 210, 75, 0.68))
-                drop-shadow(0 14px 32px rgba(255, 165, 20, 0.45));
+                drop-shadow(0 6px 16px rgba(255, 210, 75, 0.72))
+                drop-shadow(0 14px 32px rgba(255, 165, 20, 0.48));
         }
 
         /* =========================================================
-           STATO 2: LUCE SPENTA (TEATRO OSCURATO, INTERNO TRASPARENTE)
+           STATO 2: LUCE SPENTA (TEATRO OSCURATO, CENTRO TRASPARENTE)
            ========================================================= */
-        .theater-stage.lights-off .spotlights-layer,
-        .theater-stage.lights-off #sparkleCanvas,
-        .theater-stage.lights-off .stage-bulbs {
+        .master-stage.lights-off .spotlights-layer,
+        .master-stage.lights-off #sparkleCanvas,
+        .master-stage.lights-off .stage-bulbs {
             opacity: 0;
         }
 
-        .theater-stage.lights-off .curtain-panel {
-            filter: brightness(0.45) contrast(1.1);
+        .master-stage.lights-off .curtain-panel {
+            filter: brightness(0.42) contrast(1.12);
             border-color: rgba(45, 5, 10, 0.85);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 28px rgba(0, 0, 0, 0.88);
         }
 
-        .theater-stage.lights-off .curtain-gold-trim {
+        .master-stage.lights-off .curtain-gold-trim {
             filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.8));
         }
 
-        .theater-stage.lights-off .curtain-gold-trim::after {
+        .master-stage.lights-off .curtain-gold-trim::after {
             opacity: 0;
         }
 
-        .theater-stage.lights-off .tieback {
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+        .master-stage.lights-off .tieback {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.85));
         }
 
-        .theater-stage.lights-off .valance-wrapper {
-            filter: brightness(0.45) contrast(1.1) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.9));
+        .master-stage.lights-off .valance-wrapper {
+            filter: brightness(0.42) contrast(1.12) drop-shadow(0 10px 16px rgba(0, 0, 0, 0.92));
         }
 
         /* =========================================================
-           BARRA DI CONTROLLO COMPATTA IN BASSO A DESTRA
+           COMANDI CLICCABILI NELLA ZONA ESATTA FUNZIONANTE SU XAT
+           (top: 2px; right: 12px; z-index: 99999 - entro 270px DX)
            ========================================================= */
-        .controls-dock {
-            position: fixed;
-            bottom: 14px;
-            right: 14px;
-            z-index: 60;
-            pointer-events: auto;
+        .theater-controls {
+            position: absolute;
+            top: 2px;
+            right: 12px;
+            z-index: 99999;
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            justify-content: flex-end;
             gap: 6px;
-            padding: 6px;
-            border-radius: 9999px;
-            background: rgba(12, 6, 8, 0.78);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 175, 55, 0.42);
-            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7);
+            pointer-events: auto;
         }
 
-        .control-btn {
+        .ctrl-btn {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            padding: 7px 12px;
-            border-radius: 9999px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-            color: #efe5cf;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(212, 175, 55, 0.22);
+            padding: 4px 9px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(212, 175, 55, 0.75);
+            background: rgba(14, 6, 10, 0.9);
+            color: #f8eed8;
+            font-family: 'Arial Black', 'Inter', Impact, sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            line-height: 1;
             cursor: pointer;
-            transition: all 0.25s ease;
-            white-space: nowrap;
+            pointer-events: auto;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.75);
+            transition: transform 0.16s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
         }
 
-        .control-btn:hover {
-            background: rgba(212, 175, 55, 0.18);
-            border-color: rgba(250, 224, 140, 0.65);
-            transform: translateY(-1px);
+        .ctrl-btn:hover {
+            transform: scale(1.06);
         }
 
-        .control-btn:active {
-            transform: scale(0.96);
+        .ctrl-btn:active {
+            transform: scale(0.94);
         }
 
-        /* Pulsante Luce Glow attivo */
-        .control-btn.is-active-glow {
-            background: linear-gradient(135deg, rgba(245, 185, 45, 0.38) 0%, rgba(180, 120, 15, 0.48) 100%);
-            color: #fff7d6;
-            border-color: #fde068;
+        /* Triangolino CSS compatto a sinistra della scritta */
+        .ctrl-tri {
+            width: 0;
+            height: 0;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            border-left: 7px solid #d4af37;
+            transition: border-left-color 0.22s ease, filter 0.22s ease, transform 0.22s ease;
+        }
+
+        /* 1) Pulsante ON (Luce Glow Oro) */
+        .btn-glow-on {
+            border-color: rgba(250, 204, 21, 0.8);
+        }
+
+        .btn-glow-on .ctrl-tri {
+            border-left-color: #fde047;
+        }
+
+        .btn-glow-on:hover,
+        .btn-glow-on.is-active {
+            border-color: #fff3b0;
+            background: rgba(180, 120, 10, 0.92);
+            color: #ffffff;
+            text-shadow: 0 0 6px #fde047;
             box-shadow:
-                0 0 14px rgba(255, 208, 70, 0.55),
-                inset 0 1px 0 rgba(255, 248, 210, 0.45);
+                0 0 10px rgba(255, 224, 102, 0.95),
+                0 0 18px rgba(255, 175, 25, 0.75),
+                inset 0 0 6px rgba(255, 245, 190, 0.55);
         }
 
-        /* Pulsante Spegni Luce attivo */
-        .control-btn.is-active-off {
-            background: linear-gradient(135deg, rgba(65, 55, 85, 0.65) 0%, rgba(28, 22, 42, 0.85) 100%);
-            color: #e2e8f0;
-            border-color: rgba(180, 195, 235, 0.65);
-            box-shadow: 0 0 10px rgba(120, 140, 200, 0.35);
+        .btn-glow-on.is-active .ctrl-tri {
+            border-left-color: #ffffff;
+            filter: drop-shadow(0 0 5px #fff3b0);
         }
 
-        /* Pulsante Sipario */
-        .control-btn-curtain {
-            background: linear-gradient(135deg, #960b1d 0%, #5e0410 100%);
-            color: #fdf6e3;
-            border-color: rgba(212, 175, 55, 0.5);
+        /* 2) Pulsante OFF (Spegni Luce Blu/Argento Scuro) */
+        .btn-light-off {
+            border-color: rgba(148, 163, 184, 0.75);
         }
 
-        .control-btn-curtain:hover {
-            background: linear-gradient(135deg, #b80f24 0%, #7a0716 100%);
-            border-color: rgba(250, 224, 140, 0.85);
+        .btn-light-off .ctrl-tri {
+            border-left-color: #94a3b8;
         }
 
-        @media (max-width: 520px) {
-            .controls-dock {
-                bottom: 10px;
-                right: 10px;
-                left: 10px;
-                justify-content: center;
-                border-radius: 18px;
-            }
-            .control-btn {
-                padding: 6px 10px;
-                font-size: 0.74rem;
-            }
+        .btn-light-off:hover,
+        .btn-light-off.is-active {
+            border-color: #e2e8f0;
+            background: rgba(24, 34, 62, 0.95);
+            color: #ffffff;
+            text-shadow: 0 0 6px rgba(186, 230, 253, 0.9);
+            box-shadow:
+                0 0 10px rgba(148, 185, 255, 0.85),
+                inset 0 0 6px rgba(186, 230, 253, 0.45);
+        }
+
+        .btn-light-off.is-active .ctrl-tri {
+            border-left-color: #e2e8f0;
+            filter: drop-shadow(0 0 5px #bae6fd);
+        }
+
+        /* 3) Pulsante SIPARIO (Cremisi / Oro) */
+        .btn-curtain {
+            border-color: rgba(220, 38, 68, 0.85);
+        }
+
+        .btn-curtain .ctrl-tri {
+            border-left-color: #fbbf24;
+        }
+
+        .btn-curtain:hover,
+        .btn-curtain.is-active {
+            border-color: #fde068;
+            background: rgba(145, 12, 32, 0.95);
+            color: #fff8dc;
+            text-shadow: 0 0 6px rgba(255, 210, 80, 0.85);
+            box-shadow:
+                0 0 10px rgba(255, 190, 60, 0.8),
+                0 0 16px rgba(185, 18, 42, 0.8),
+                inset 0 0 6px rgba(255, 224, 130, 0.45);
+        }
+
+        .btn-curtain.is-active .ctrl-tri {
+            border-left-color: #fff3b0;
+            transform: rotate(90deg);
+            filter: drop-shadow(0 0 5px #fde068);
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- CONTENITORE PRINCIPALE OVERLAY TRASPARENTE (Luce Glow attiva di default) -->
-    <main id="theaterStage" class="theater-stage lights-glow" aria-label="Sipario di teatro trasparente">
+    <!-- CONTENITORE PRINCIPALE CENTRATO 1308x484 (Luce Glow attiva di default) -->
+    <main id="theaterStage" class="master-stage lights-glow" aria-label="Sipario di teatro trasparente">
+
+        <!-- =====================================================
+             COMANDI CLICCABILI IN ALTO A DESTRA (ZONA ATTIVA XAT)
+             ===================================================== -->
+        <div class="theater-controls" role="group" aria-label="Controlli luci e sipario">
+            <button id="btnGlowOn" type="button" class="ctrl-btn btn-glow-on is-active" title="Accendi Luce Glow" aria-pressed="true">
+                <span class="ctrl-tri" aria-hidden="true"></span>
+                <span>ON</span>
+            </button>
+
+            <button id="btnLightOff" type="button" class="ctrl-btn btn-light-off" title="Spegni Luce Teatro" aria-pressed="false">
+                <span class="ctrl-tri" aria-hidden="true"></span>
+                <span>OFF</span>
+            </button>
+
+            <button id="btnToggleCurtain" type="button" class="ctrl-btn btn-curtain" title="Apri o Chiudi Sipario" aria-pressed="false">
+                <span class="ctrl-tri" aria-hidden="true"></span>
+                <span>SIPARIO</span>
+            </button>
+        </div>
 
         <!-- =====================================================
              AREA CENTRALE .chat (100% TRASPARENTE)
-             Incolla qui dentro il codice della tua chat (es. xat.com)
-             oppure il tuo player audio/video. Se inserisci contenuti
-             interattivi, aggiungi pointer-events: auto all'elemento interno.
              ===================================================== -->
         <div class="chat">
-            <!-- INCOLLA QUI LA TUA CHAT O IL TUO PLAYER -->
+            <!-- INTERNO COMPLETAMENTE TRASPARENTE PER CHAT / PLAYER -->
         </div>
 
-        <!-- Fasci di riflettori volumetrici dorati -->
+        <!-- Fasci di riflettori volumetrici caldi -->
         <div class="spotlights-layer" aria-hidden="true">
             <div class="spotlight spotlight-left"></div>
             <div class="spotlight spotlight-center"></div>
             <div class="spotlight spotlight-right"></div>
         </div>
 
-        <!-- Canvas trasparente per pulviscolo dorato e scintille (glitter) -->
+        <!-- Canvas HTML5 trasparente per pulviscolo e scintille dorate -->
         <canvas id="sparkleCanvas" aria-hidden="true"></canvas>
 
         <!-- =====================================================
@@ -658,7 +715,7 @@
         </div>
 
         <!-- =====================================================
-             MANTOVANA SUPERIORE (VALANCE) E LUCI DI RIBALTA
+             MANTOVANA SUPERIORE (VALANCE) + LUCI DI RIBALTA
              ===================================================== -->
         <div class="valance-wrapper" aria-hidden="true">
             <svg class="valance-svg" viewBox="0 0 1200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -730,26 +787,6 @@
             <span class="stage-bulb"></span>
         </div>
 
-        <!-- =====================================================
-             BARRA CONTROLLI COMPATTA (3 PULSANTI IN BASSO A DESTRA)
-             ===================================================== -->
-        <div class="controls-dock" role="toolbar" aria-label="Controlli sipario e luci">
-            <!-- Pulsante 1: Accende Luce Glow Forte -->
-            <button id="btnGlowOn" type="button" class="control-btn is-active-glow" aria-pressed="true">
-                ✨ Luce Glow
-            </button>
-
-            <!-- Pulsante 2: Spegne completamente le luci -->
-            <button id="btnLightOff" type="button" class="control-btn" aria-pressed="false">
-                🌙 Spegni Luce
-            </button>
-
-            <!-- Pulsante 3: Apri / Chiudi Sipario -->
-            <button id="btnToggleCurtain" type="button" class="control-btn control-btn-curtain">
-                🎭 Apri Sipario
-            </button>
-        </div>
-
     </main>
 
     <!-- =========================================================
@@ -758,6 +795,11 @@
     <script>
         (function () {
             'use strict';
+
+            // Blocco tasto destro globale (come da esempio xat)
+            document.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+            });
 
             // Elementi DOM
             const stage = document.getElementById('theaterStage');
@@ -780,11 +822,12 @@
             function setCurtainState(open) {
                 isCurtainOpen = open;
                 stage.classList.toggle('is-open', isCurtainOpen);
-                btnToggleCurtain.textContent = isCurtainOpen ? '🎭 Chiudi Sipario' : '🎭 Apri Sipario';
+                btnToggleCurtain.classList.toggle('is-active', isCurtainOpen);
+                btnToggleCurtain.setAttribute('aria-pressed', String(isCurtainOpen));
             }
 
             /**
-             * Alterna apertura e chiusura del sipario.
+             * Alterna apertura/chiusura del sipario.
              */
             function toggleCurtain() {
                 if (autoOpenTimer) {
@@ -795,143 +838,160 @@
             }
 
             /**
-             * Imposta il sistema a 2 luci: 'glow' (luce forte) o 'off' (luce spenta).
-             * @param {'glow'|'off'} mode
+             * Imposta il sistema a 2 luci: Glow ON oppure Spegni Luce OFF.
+             * @param {boolean} glowOn - True per luce Glow forte, False per teatro oscurato.
              */
-            function setLightMode(mode) {
-                isGlowActive = (mode === 'glow');
+            function setLightMode(glowOn) {
+                isGlowActive = glowOn;
+                stage.classList.toggle('lights-glow', glowOn);
+                stage.classList.toggle('lights-off', !glowOn);
 
-                stage.classList.toggle('lights-glow', isGlowActive);
-                stage.classList.toggle('lights-off', !isGlowActive);
+                btnGlowOn.classList.toggle('is-active', glowOn);
+                btnGlowOn.setAttribute('aria-pressed', String(glowOn));
 
-                btnGlowOn.classList.toggle('is-active-glow', isGlowActive);
-                btnGlowOn.setAttribute('aria-pressed', String(isGlowActive));
-
-                btnLightOff.classList.toggle('is-active-off', !isGlowActive);
-                btnLightOff.setAttribute('aria-pressed', String(!isGlowActive));
+                btnLightOff.classList.toggle('is-active', !glowOn);
+                btnLightOff.setAttribute('aria-pressed', String(!glowOn));
             }
 
-            // Eventi dei 3 pulsanti
-            btnGlowOn.addEventListener('click', function () {
-                setLightMode('glow');
+            // Eventi click sui 3 pulsanti nativi con stopPropagation
+            btnGlowOn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setLightMode(true);
             });
 
-            btnLightOff.addEventListener('click', function () {
-                setLightMode('off');
+            btnLightOff.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setLightMode(false);
             });
 
-            btnToggleCurtain.addEventListener('click', toggleCurtain);
-
-            // Cliccando sulle tende si può aprire o chiudere il sipario
-            curtainLeft.addEventListener('click', toggleCurtain);
-            curtainRight.addEventListener('click', toggleCurtain);
-
-            // Apertura automatica dopo ~0.8 secondi dal caricamento
-            window.addEventListener('load', function () {
-                autoOpenTimer = setTimeout(function () {
-                    setCurtainState(true);
-                }, 800);
+            btnToggleCurtain.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleCurtain();
             });
 
-            /* =========================================================
-               CANVAS TRASPARENTE: PULVISCOLO DORATO E SCINTILLE GLITTER
-               ========================================================= */
+            // Click diretto sulle tende laterali
+            curtainLeft.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleCurtain();
+            });
+
+            curtainRight.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleCurtain();
+            });
+
+            // Apertura automatica del sipario dopo 0.8 secondi
+            autoOpenTimer = setTimeout(function () {
+                setCurtainState(true);
+                autoOpenTimer = null;
+            }, 800);
+
+            // =====================================================
+            // ANIMAZIONE CANVAS: PULVISCOLO E SCINTILLE DORATE
+            // =====================================================
+            let ctx = null;
             try {
-                const ctx = canvas.getContext('2d');
-                let particles = [];
-                const PARTICLE_COUNT = 75;
+                ctx = canvas.getContext('2d');
+            } catch (err) {
+                ctx = null;
+            }
+
+            if (ctx) {
+                let width = 0;
+                let height = 0;
+                const particles = [];
+                const PARTICLE_COUNT = 55;
 
                 function resizeCanvas() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
+                    const rect = stage.getBoundingClientRect();
+                    width = canvas.width = Math.max(1, Math.floor(rect.width));
+                    height = canvas.height = Math.max(1, Math.floor(rect.height));
                 }
 
-                function createParticle() {
-                    const isSparkle = Math.random() < 0.34; // 34% scintille a stella brillante
+                function createParticle(randomY) {
+                    const isStar = Math.random() < 0.35;
                     return {
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        radius: isSparkle ? (Math.random() * 2.4 + 1.6) : (Math.random() * 1.8 + 0.6),
-                        vx: (Math.random() - 0.5) * 0.32,
-                        vy: -(Math.random() * 0.42 + 0.1),
+                        x: Math.random() * width,
+                        y: randomY ? Math.random() * height : height + 10,
+                        radius: isStar ? Math.random() * 2.2 + 1.2 : Math.random() * 1.6 + 0.6,
+                        vx: (Math.random() - 0.5) * 0.35,
+                        vy: -(Math.random() * 0.45 + 0.15),
                         alpha: Math.random() * 0.65 + 0.25,
-                        twinkleSpeed: isSparkle ? (Math.random() * 0.055 + 0.025) : (Math.random() * 0.02 + 0.008),
-                        twinklePhase: Math.random() * Math.PI * 2,
-                        isSparkle: isSparkle
+                        phase: Math.random() * Math.PI * 2,
+                        twinkleSpeed: Math.random() * 0.045 + 0.015,
+                        isStar: isStar
                     };
                 }
 
                 function initParticles() {
-                    particles = [];
+                    particles.length = 0;
                     for (let i = 0; i < PARTICLE_COUNT; i++) {
-                        particles.push(createParticle());
+                        particles.push(createParticle(true));
                     }
                 }
 
-                /**
-                 * Disegna una piccola stella a 4 punte scintillante.
-                 */
-                function drawSparkleStar(x, y, size, alpha) {
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.fillStyle = `rgba(255, 246, 200, ${alpha.toFixed(3)})`;
-                    ctx.shadowColor = 'rgba(255, 205, 60, 0.95)';
-                    ctx.shadowBlur = 10;
+                function drawSparkles() {
+                    ctx.clearRect(0, 0, width, height);
 
-                    ctx.beginPath();
-                    ctx.moveTo(0, -size * 2.2);
-                    ctx.quadraticCurveTo(size * 0.25, -size * 0.25, size * 2.2, 0);
-                    ctx.quadraticCurveTo(size * 0.25, size * 0.25, 0, size * 2.2);
-                    ctx.quadraticCurveTo(-size * 0.25, size * 0.25, -size * 2.2, 0);
-                    ctx.quadraticCurveTo(-size * 0.25, -size * 0.25, 0, -size * 2.2);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.restore();
-                }
-
-                function animateSparkles() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                    // Disegna pulviscolo e scintille solo quando la Luce Glow è accesa
                     if (isGlowActive) {
                         for (let i = 0; i < particles.length; i++) {
                             const p = particles[i];
-                            p.x += p.vx;
+                            p.x += p.vx + Math.sin(p.phase * 0.5) * 0.15;
                             p.y += p.vy;
-                            p.twinklePhase += p.twinkleSpeed;
+                            p.phase += p.twinkleSpeed;
 
-                            if (p.y < -15) {
-                                p.y = canvas.height + 15;
-                                p.x = Math.random() * canvas.width;
+                            if (p.y < -12 || p.x < -12 || p.x > width + 12) {
+                                particles[i] = createParticle(false);
+                                continue;
                             }
-                            if (p.x < -15) p.x = canvas.width + 15;
-                            if (p.x > canvas.width + 15) p.x = -15;
 
-                            const pulse = 0.4 + 0.6 * Math.sin(p.twinklePhase);
-                            const currentAlpha = Math.max(0, Math.min(1, p.alpha * pulse));
+                            const twinkle = 0.45 + 0.55 * Math.sin(p.phase);
+                            const currentAlpha = p.alpha * twinkle;
 
-                            if (p.isSparkle) {
-                                drawSparkleStar(p.x, p.y, p.radius, currentAlpha);
-                            } else {
+                            ctx.save();
+                            ctx.globalAlpha = currentAlpha;
+
+                            if (p.isStar) {
+                                // Piccola scintilla a croce dorata
+                                const s = p.radius * 2.4;
+                                ctx.strokeStyle = '#fff3b0';
+                                ctx.shadowColor = '#fbbf24';
+                                ctx.shadowBlur = 10;
+                                ctx.lineWidth = 1.1;
                                 ctx.beginPath();
-                                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                                ctx.fillStyle = `rgba(255, 232, 155, ${currentAlpha.toFixed(3)})`;
-                                ctx.fill();
+                                ctx.moveTo(p.x - s, p.y);
+                                ctx.lineTo(p.x + s, p.y);
+                                ctx.moveTo(p.x, p.y - s);
+                                ctx.lineTo(p.x, p.y + s);
+                                ctx.stroke();
                             }
+
+                            ctx.fillStyle = '#ffe896';
+                            ctx.shadowColor = '#f59e0b';
+                            ctx.shadowBlur = 8;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
                         }
                     }
 
-                    requestAnimationFrame(animateSparkles);
+                    requestAnimationFrame(drawSparkles);
                 }
 
+                window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('load', function () {
+                    resizeCanvas();
+                    initParticles();
+                    requestAnimationFrame(drawSparkles);
+                });
+
+                // Avvio immediato nel caso il DOM sia già pronto
                 resizeCanvas();
                 initParticles();
-                animateSparkles();
-                window.addEventListener('resize', resizeCanvas);
-            } catch (error) {
-                console.warn('Effetto scintille non disponibile:', error);
             }
         })();
     </script>
+
 </body>
 </html>
