@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -32,25 +33,25 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    background-size: contain; /* Non taglia mai le foto grandi */
+    background-size: cover; /* Tutto schermo, niente bordi neri */
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transform: scale(1); /* Parte a grandezza normale */
+    transform: scale(1.08); /* Parte leggermente zoomata */
     transition: opacity 1.5s ease-in-out, transform 6s ease-out;
     will-change: opacity, transform;
   }
 
   .slide.active {
     opacity: 1;
-    transform: scale(0.92); /* Zoom al contrario: si rimpicciolisce piano */
+    transform: scale(1); /* Si rimpicciolisce fino a riempire perfetto lo schermo */
     z-index: 2;
   }
 
-  /* COMANDI ABBASSATI PER NON ESSERE COPERTI */
+  /* COMANDI ABBASSATI */
   #controls {
     position: fixed;
-    top: 65px;   /* Se serve più giù aumenta questo numero (es. 90px) */
+    top: 65px;
     right: 15px;
     z-index: 9999;
     display: flex;
@@ -108,16 +109,16 @@
     "https://xatimg.com/image/kDCprEQ8xRjq.png",
     "https://xatimg.com/image/Z5dFbgwpyF3d.png",
     "https://xatimg.com/image/7akx3jYqBrVp.jpg",
-    "https://xatimg.com/image/AfoI8vU3dF0w.png",
-    "https://xatimg.com/image/LhZUPaSTmtmK.png",
-    "https://xatimg.com/image/h8oegriyddRu.png",
-    "https://xatimg.com/image/Bc6bVblHt94Z.png",
-    "https://xatimg.com/image/5rORyp9Q15xw.png",
-    "https://xatimg.com/image/7hGO93Zp3grL.png",
-    "https://xatimg.com/image/aQQh9EWw5foP.png",
-    "https://xatimg.com/image/aq6ygddq5bAv.png",
-    "https://xatimg.com/image/N7fkVoV6iAMn.png",
-    "https://xatimg.com/image/YHo0thPGqxom.png"
+    "https://xatimg.com/image/izA85xO1CgTl.jpg",
+    "https://xatimg.com/image/WsRBFbgkq6q1.jpg",
+    "https://xatimg.com/image/WsUrCRZ6G7mS.jpg",
+    "https://xatimg.com/image/cogGuCPElpY9.jpg",
+    "https://xatimg.com/image/axHYAp9mh4cZ.jpg",
+    "https://xatimg.com/image/VExgk27XIRgB.jpg",
+    "https://xatimg.com/image/q77DdRiBmbfO.jpg",
+    "https://xatimg.com/image/Fvbw9sfVLMKK.jpg",
+    "https://xatimg.com/image/OqtgoN6N1MYB.jpg",
+    "https://xatimg.com/image/4UwReHTCQb5P.jpg"
   ];
 
   const container = document.getElementById('slideshow');
@@ -127,7 +128,7 @@
   const slides = [];
 
   // Crea e precarica le slide
-  sfondi.forEach((url, index) => {
+  sfondi.forEach((url) => {
     const img = new Image();
     img.src = url;
 
