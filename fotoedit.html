@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xatframe Slideshow</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
+
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  #slideshow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 1.5s ease-in-out, transform 8s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  /* COMANDI PROPRIO IN ALTO A DESTRA */
+  #controls {
+    position: fixed;
+    top: 6px;
+    right: 6px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 4px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 0, 68, 0.7);
+    box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .ctrl-btn {
+    background: transparent;
+    border: none;
+    color: #ffd700;
+    font-size: 13px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+  }
+
+  .ctrl-btn:hover {
+    background: #ff0044;
+    color: #fff;
+    box-shadow: 0 0 8px #ff0044;
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+  <div id="slideshow"></div>
+
+  <!-- Comandi in alto a destra -->
+  <div id="controls">
+    <button class="ctrl-btn" id="btn-prev" title="Precedente">&#9664;</button>
+    <button class="ctrl-btn" id="btn-play" title="Pausa / Play">&#10074;&#10074;</button>
+    <button class="ctrl-btn" id="btn-next" title="Successiva">&#9654;</button>
+  </div>
+
+<script>
+  // IMPOSTA QUI OGNI QUANTI SECONDI CAMBIA FOTO
+  const secondi = 6;
+
+  // INCOLLA QUI I LINK DELLE TUE 15 FOTO / SFONDI
+  const sfondi = [
+    "https://xatimg.com/image/fUejAIuw7klN.jpg",
+    "https://xatimg.com/image/ZR3tFX9tcqaZ.jpg",
+    "https://xatimg.com/image/4hg0ybvCJ4iB.jpg",
+    "https://xatimg.com/image/8adkDtwRetpI.jpg",
+    "https://xatimg.com/image/7akx3jYqBrVp.jpg",
+    "https://xatimg.com/image/izA85xO1CgTl.jpg",
+    "https://xatimg.com/image/WsRBFbgkq6q1.jpg",
+    "https://xatimg.com/image/WsUrCRZ6G7mS.jpg",
+    "https://xatimg.com/image/cogGuCPElpY9.jpg",
+    "https://xatimg.com/image/axHYAp9mh4cZ.jpg",
+    "https://xatimg.com/image/VExgk27XIRgB.jpg",
+    "https://xatimg.com/image/q77DdRiBmbfO.jpg",
+    "https://xatimg.com/image/Fvbw9sfVLMKK.jpg",
+    "https://xatimg.com/image/OqtgoN6N1MYB.jpg",
+    "https://xatimg.com/image/4UwReHTCQb5P.jpg"
+  ];
+
+  const container = document.getElementById('slideshow');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnPlay = document.getElementById('btn-play');
+  const btnNext = document.getElementById('btn-next');
+  const slides = [];
+
+  // Crea e precarica le slide
+  sfondi.forEach((url, index) => {
+    const img = new Image();
+    img.src = url;
+
+    const div = document.createElement('div');
+    div.className = 'slide' + (index === 0 ? ' active' : '');
+    div.style.backgroundImage = `url('${url}')`;
+    container.appendChild(div);
+    slides.push(div);
+  });
+
+  let corrente = 0;
+  let inPausa = false;
+  let timer = null;
+
+  function vaiA(nuovoIndice) {
+    slides[corrente].classList.remove('active');
+    corrente = (nuovoIndice + slides.length) % slides.length;
+    slides[corrente].classList.add('active');
+  }
+
+  function avviaTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => vaiA(corrente + 1), secondi * 1000);
+  }
+
+  btnPlay.addEventListener('click', () => {
+    inPausa = !inPausa;
+    if (inPausa) {
+      clearInterval(timer);
+      btnPlay.innerHTML = '&#9654;'; // Icona Play
+    } else {
+      avviaTimer();
+      btnPlay.innerHTML = '&#10074;&#10074;'; // Icona Pausa
+    }
+  });
+
+  btnNext.addEventListener('click', () => {
+    vaiA(corrente + 1);
+    if (!inPausa) avviaTimer();
+  });
+
+  btnPrev.addEventListener('click', () => {
+    vaiA(corrente - 1);
+    if (!inPausa) avviaTimer();
+  });
+
+  // Avvio automatico
+  avviaTimer();
+</script>
+</body>
+</html>
