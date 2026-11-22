@@ -32,31 +32,31 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    background-size: cover;
+    background-size: contain; /* Non taglia mai le foto grandi */
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transform: scale(1.06);
-    transition: opacity 1.5s ease-in-out, transform 8s ease-out;
+    transform: scale(1); /* Parte a grandezza normale */
+    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
     will-change: opacity, transform;
   }
 
   .slide.active {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(0.92); /* Zoom al contrario: si rimpicciolisce piano */
     z-index: 2;
   }
 
-  /* COMANDI PROPRIO IN ALTO A DESTRA */
+  /* COMANDI ABBASSATI PER NON ESSERE COPERTI */
   #controls {
     position: fixed;
-    top: 6px;
-    right: 6px;
+    top: 65px;   /* Se serve più giù aumenta questo numero (es. 90px) */
+    right: 15px;
     z-index: 9999;
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.65);
     padding: 4px 8px;
     border-radius: 20px;
     border: 1px solid rgba(255, 0, 68, 0.7);
@@ -90,7 +90,7 @@
 
   <div id="slideshow"></div>
 
-  <!-- Comandi in alto a destra -->
+  <!-- Comandi -->
   <div id="controls">
     <button class="ctrl-btn" id="btn-prev" title="Precedente">&#9664;</button>
     <button class="ctrl-btn" id="btn-play" title="Pausa / Play">&#10074;&#10074;</button>
@@ -132,10 +132,15 @@
     img.src = url;
 
     const div = document.createElement('div');
-    div.className = 'slide' + (index === 0 ? ' active' : '');
+    div.className = 'slide';
     div.style.backgroundImage = `url('${url}')`;
     container.appendChild(div);
     slides.push(div);
+  });
+
+  // Fa partire l'animazione anche sulla prima foto
+  requestAnimationFrame(() => {
+    slides[0].classList.add('active');
   });
 
   let corrente = 0;
