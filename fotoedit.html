@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xatframe Slideshow</title>
 <style>
+  :root {
+    /* PERSONALIZZA QUI MISURA E COLORI DEL BORDO UGUALE SU TUTTI I LATI */
+    --bordo-misura: 6px;
+    --bordo-colore: #ff0044;
+    --bordo-luce: #ffd700;
+    --durata-zoom: 6s;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -20,11 +28,29 @@
     font-family: 'Segoe UI', sans-serif;
   }
 
+  /* Contenitore con bordi colorati identici su tutti e 4 i lati */
   #slideshow {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    border: var(--bordo-misura) solid var(--bordo-colore);
+    box-shadow:
+      inset 0 0 18px var(--bordo-colore),
+      inset 0 0 6px var(--bordo-luce);
+    z-index: 1;
+  }
+
+  /* Cornice luminosa interna per uniformare i bordi su ogni foto */
+  #slideshow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    border: 2px solid rgba(255, 215, 0, 0.55);
+    box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.65);
   }
 
   .slide {
@@ -32,19 +58,36 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    background-size: cover; /* Tutto schermo, niente bordi neri */
+    background-size: 100% 100%; /* Mantiene tutti e 4 i bordi della foto sempre visibili e uguali */
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transform: scale(1.08); /* Parte leggermente zoomata */
-    transition: opacity 1.5s ease-in-out, transform 6s ease-out;
+    transform: scale(1);
+    transition: opacity 1.2s ease-in-out;
     will-change: opacity, transform;
   }
 
   .slide.active {
     opacity: 1;
-    transform: scale(1); /* Si rimpicciolisce fino a riempire perfetto lo schermo */
     z-index: 2;
+    animation: zoomAvantiIndietro var(--durata-zoom) ease-in-out infinite;
+  }
+
+  /* Mette in pausa anche lo zoom quando premi il tasto Pausa */
+  #slideshow.paused .slide.active {
+    animation-play-state: paused;
+  }
+
+  @keyframes zoomAvantiIndietro {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   /* COMANDI ABBASSATI */
@@ -98,27 +141,30 @@
   </div>
 
 <script>
-  // IMPOSTA QUI OGNI QUANTI SECONDI CAMBIA FOTO
+  // IMPOSTA QUI OGNI QUANTI SECONDI CAMBIA FOTO (e dura il ciclo zoom avanti/indietro)
   const secondi = 6;
 
   // INCOLLA QUI I LINK DELLE TUE 15 FOTO / SFONDI
   const sfondi = [
-    "https://xatimg.com/image/sxatFIZdPfMv.jpg",
-    "https://xatimg.com/image/TNDsgTrYfr2A.png",
-    "https://xatimg.com/image/CI3RdJak6EwR.png",
-    "https://xatimg.com/image/0Xi53jyg1jZw.png",
-    "https://xatimg.com/image/829L1Y7VzVv4.png",
-    "https://xatimg.com/image/izA85xO1CgTl.jpg",
-    "https://xatimg.com/image/WsRBFbgkq6q1.jpg",
-    "https://xatimg.com/image/WsUrCRZ6G7mS.jpg",
-    "https://xatimg.com/image/UIuCDAfRaoj6.png",
-    "https://xatimg.com/image/axHYAp9mh4cZ.jpg",
-    "https://xatimg.com/image/VExgk27XIRgB.jpg",
-    "https://xatimg.com/image/q77DdRiBmbfO.jpg",
-    "https://xatimg.com/image/Fvbw9sfVLMKK.jpg",
-    "https://xatimg.com/image/OqtgoN6N1MYB.jpg",
-    "https://xatimg.com/image/4UwReHTCQb5P.jpg"
+    "https://xatimg.com/image/hBjsno8j2I0k.jpg",
+    "https://xatimg.com/image/5Kcr367342aT.jpg",
+    "https://xatimg.com/image/9MzpSo1M87u7.jpg",
+    "https://xatimg.com/image/ib7QYpJ0ads9.jpg",
+    "https://xatimg.com/image/JAjlgRqsoqlw.jpg",
+    "https://xatimg.com/image/SYrNiI7hVEbu.jpg",
+    "https://xatimg.com/image/M9adc3Ca19Yp.jpg",
+    "https://xatimg.com/image/3x6Jdpmify4E.jpg",
+    "https://xatimg.com/image/Ikhx7UM1Zma4.jpg",
+    "https://xatimg.com/image/fjhS3UVEMkly.jpg",
+    "https://xatimg.com/image/vPenoJkLFdfq.jpg",
+    "https://xatimg.com/image/IleFPSH8oyb6.jpg",
+    "https://xatimg.com/image/b0hxy5UhWuqV.jpg",
+    "https://xatimg.com/image/v5UlH7Pg6nFv.jpg",
+    "https://xatimg.com/image/tiUuQdZW46Ss.jpg"
   ];
+
+  // Sincronizza la durata dello zoom CSS con i secondi impostati sopra
+  document.documentElement.style.setProperty('--durata-zoom', secondi + 's');
 
   const container = document.getElementById('slideshow');
   const btnPrev = document.getElementById('btn-prev');
@@ -126,8 +172,11 @@
   const btnNext = document.getElementById('btn-next');
   const slides = [];
 
+  // Filtra solo i link compilati
+  const sfondiValidi = sfondi.filter(url => url && url.trim() !== "");
+
   // Crea e precarica le slide
-  sfondi.forEach((url) => {
+  sfondiValidi.forEach((url) => {
     const img = new Image();
     img.src = url;
 
@@ -138,32 +187,40 @@
     slides.push(div);
   });
 
-  // Fa partire l'animazione anche sulla prima foto
-  requestAnimationFrame(() => {
-    slides[0].classList.add('active');
-  });
-
   let corrente = 0;
   let inPausa = false;
   let timer = null;
 
+  if (slides.length > 0) {
+    requestAnimationFrame(() => {
+      slides[0].classList.add('active');
+    });
+  }
+
   function vaiA(nuovoIndice) {
+    if (slides.length <= 1) return;
     slides[corrente].classList.remove('active');
     corrente = (nuovoIndice + slides.length) % slides.length;
+    // Riavvia l'animazione zoom da zero sulla nuova foto
+    void slides[corrente].offsetWidth;
     slides[corrente].classList.add('active');
   }
 
   function avviaTimer() {
     clearInterval(timer);
-    timer = setInterval(() => vaiA(corrente + 1), secondi * 1000);
+    if (slides.length > 1) {
+      timer = setInterval(() => vaiA(corrente + 1), secondi * 1000);
+    }
   }
 
   btnPlay.addEventListener('click', () => {
     inPausa = !inPausa;
     if (inPausa) {
       clearInterval(timer);
+      container.classList.add('paused');
       btnPlay.innerHTML = '&#9654;'; // Icona Play
     } else {
+      container.classList.remove('paused');
       avviaTimer();
       btnPlay.innerHTML = '&#10074;&#10074;'; // Icona Pausa
     }
