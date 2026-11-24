@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cyber Quantum Overlay - Ultra Borders</title>
+  <title>Cyber Quantum Overlay - Redbull_ViP</title>
   <style>
     * {
       box-sizing: border-box;
@@ -43,7 +43,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Alzato di pochi pixel (da 32px a 16px) */
       transform: translateY(16px);
     }
 
@@ -302,59 +301,86 @@
       z-index: 1;
     }
 
-    /* Animazione testo EL DIABLO */
-    .diablo-core-text {
+    /* Testo colorato leggero Redbull_ViP + Corona */
+    .vip-core-text {
       position: absolute;
       z-index: 15;
-      font-family: 'Arial Black', Impact, sans-serif;
+      font-family: 'Arial Black', 'Segoe UI', Impact, sans-serif;
       font-weight: 900;
-      font-size: 74px;
-      text-transform: uppercase;
-      letter-spacing: 16px;
+      font-size: 62px;
+      letter-spacing: 5px;
       white-space: nowrap;
       pointer-events: none;
       user-select: none;
-      animation: diabloCycle 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-      will-change: transform, opacity, filter;
+      display: inline-flex;
+      align-items: baseline;
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 14px rgba(0, 243, 255, 0.45));
+      animation: vipCycle 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+      will-change: transform, opacity;
     }
 
-    @keyframes diabloCycle {
+    .red-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Corona dorata posizionata sopra "Red" */
+    .red-crown {
+      position: absolute;
+      top: -36px;
+      left: 46%;
+      width: 48px;
+      height: 36px;
+      transform: translateX(-50%) rotate(-8deg);
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 16px rgba(255, 136, 0, 0.7));
+      animation: crownFloat 2.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes crownFloat {
+      0%   { transform: translateX(-50%) translateY(0px) rotate(-10deg) scale(0.98); }
+      100% { transform: translateX(-50%) translateY(-5px) rotate(-4deg) scale(1.05); }
+    }
+
+    /* Colori separati puliti e vibranti */
+    .txt-red {
+      background: linear-gradient(180deg, #ff6b81 0%, #ff0044 55%, #cc0022 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .txt-bull {
+      background: linear-gradient(180deg, #ffffff 10%, #7ef9ff 65%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .txt-vip {
+      background: linear-gradient(180deg, #fff066 0%, #ffaa00 50%, #ff2a85 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes vipCycle {
       0% {
-        transform: scale(0.04);
-        opacity: 0;
-        filter: blur(16px) brightness(0.6);
-        letter-spacing: 2px;
-        color: #ff0055;
-        text-shadow: 0 0 10px #ff0055, 0 0 20px #00f3ff;
-      }
-      15% {
-        opacity: 0.75;
-        filter: blur(4px) brightness(1.25);
-      }
-      50% {
-        transform: scale(1.18);
-        opacity: 1;
-        letter-spacing: 18px;
-        filter: blur(0px) brightness(1.6);
-        color: #ffffff;
-        text-shadow: 
-          0 0 15px #ff0055,
-          0 0 35px #ff0055,
-          0 0 65px #ff0033,
-          0 0 95px #00f3ff,
-          0 0 130px rgba(0, 243, 255, 0.85);
-      }
-      65% {
-        opacity: 0.95;
-        filter: blur(1.5px) brightness(1.3);
-      }
-      100% {
-        transform: scale(0.03);
+        transform: scale(0.15);
         opacity: 0;
         letter-spacing: 1px;
-        filter: blur(18px) brightness(0.4);
-        color: #00f3ff;
-        text-shadow: 0 0 8px #00f3ff, 0 0 15px #ff0055;
+      }
+      18% {
+        opacity: 0.9;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+        letter-spacing: 7px;
+      }
+      72% {
+        opacity: 0.95;
+      }
+      100% {
+        transform: scale(0.12);
+        opacity: 0;
+        letter-spacing: 1px;
       }
     }
   </style>
@@ -394,7 +420,25 @@
 
     <div class="atoms-stage">
       <canvas id="atomCanvas"></canvas>
-      <div class="diablo-core-text">EL DIABLO</div>
+      <div class="vip-core-text">
+        <span class="red-wrapper">
+          <svg class="red-crown" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="crownGold" x1="0" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFF68F"/>
+                <stop offset="50%" stop-color="#FFD700"/>
+                <stop offset="100%" stop-color="#FF8C00"/>
+              </linearGradient>
+            </defs>
+            <path d="M6 38L2 14L19 25L32 8L45 25L62 14L58 38H6Z" fill="url(#crownGold)" stroke="#FFF9C4" stroke-width="2" stroke-linejoin="round"/>
+            <rect x="7" y="40" width="50" height="5" rx="2.5" fill="url(#crownGold)"/>
+            <circle cx="32" cy="5" r="3" fill="#FF0055"/>
+            <circle cx="2" cy="11" r="2.5" fill="#00F3FF"/>
+            <circle cx="62" cy="11" r="2.5" fill="#00F3FF"/>
+          </svg>
+          <span class="txt-red">Red</span>
+        </span><span class="txt-bull">bull</span><span class="txt-vip">_ViP</span>
+      </div>
     </div>
 
     <div class="video-pod right-pod">
