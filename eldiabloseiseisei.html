@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost - El Diablo 360</title>
+<style>
+  :root {
+    /* Cambia questo valore per ridimensionare tutto il widget su xat */
+    --size: 320px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: transparent !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  .stage {
+    width: var(--size);
+    height: var(--size);
+    perspective: 1100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .coin {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* FACCIA FRONTALE: Immagine originale */
+  .face-front {
+    transform: translateZ(4px);
+    z-index: 3;
+  }
+
+  .face-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    filter: drop-shadow(0 0 12px rgba(255, 40, 0, 0.35));
+  }
+
+  /* Riflesso metallico dinamico durante la rotazione */
+  .sheen {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(255, 220, 150, 0.28) 50%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Spessore 3D del medaglione (bordo oro/cremisi) */
+  .rim {
+    position: absolute;
+    inset: 3%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #3a0707 60%, #b87b1e 92%, #5c0c0c 100%);
+    box-shadow: inset 0 0 18px #000, 0 0 10px rgba(212, 145, 38, 0.45);
+    pointer-events: none;
+  }
+  .rim-1 { transform: translateZ(2px); }
+  .rim-2 { transform: translateZ(0px); }
+  .rim-3 { transform: translateZ(-2px); }
+
+  /* FACCIA POSTERIORE: Scudo + Fuoco + Scritta EL DIABLO */
+  .face-back {
+    transform: rotateY(180deg) translateZ(4px);
+    z-index: 2;
+  }
+
+  /* Cornice specchiata presa dall'immagine originale */
+  .back-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scaleX(-1);
+    pointer-events: none;
+    filter: brightness(0.85) contrast(1.15);
+  }
+
+  /* Scudo interno scuro cremisi per far risaltare le fiamme */
+  .back-shield {
+    position: absolute;
+    inset: 11.5%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 55%,
+      #3b0505 0%,
+      #1a0202 68%,
+      #090000 100%
+    );
+    border: 2px solid rgba(224, 154, 43, 0.75);
+    box-shadow:
+      inset 0 0 28px rgba(255, 60, 0, 0.55),
+      0 0 14px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Canvas fiamme reali */
+  #fireCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Scritta infuocata EL DIABLO */
+  .diablo-text {
+    position: relative;
+    z-index: 4;
+    font-size: calc(var(--size) * 0.132);
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: linear-gradient(
+      180deg,
+      #fffbe0 0%,
+      #ffd000 32%,
+      #ff5500 68%,
+      #990000 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(60, 5, 0, 0.85);
+    animation: flamePulse 0.14s infinite alternate;
+  }
+
+  @keyframes flamePulse {
+    0% {
+      filter:
+        drop-shadow(0 0 4px #ffae00)
+        drop-shadow(0 -3px 10px #ff4500)
+        drop-shadow(0 -7px 18px #cc0000);
+      transform: scale(1);
+    }
+    100% {
+      filter:
+        drop-shadow(0 0 7px #fff066)
+        drop-shadow(0 -5px 14px #ff6600)
+        drop-shadow(0 -10px 24px #e60000);
+      transform: scale(1.025);
+    }
+  }
+</style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;">
+
+<div class="stage">
+  <div class="coin" id="coin">
+    <!-- Bordi spessore 3D -->
+    <div class="rim rim-3"></div>
+    <div class="rim rim-2"></div>
+    <div class="rim rim-1"></div>
+
+    <!-- Faccia Frontale (Immagine Normale) -->
+    <div class="face face-front">
+      <img id="frontImg" src="da usare play.png" alt="Ghost">
+      <div class="sheen" id="sheenFront"></div>
+    </div>
+
+    <!-- Faccia Posteriore (Scritta Infuocata EL DIABLO) -->
+    <div class="face face-back">
+      <img id="backFrameImg" class="back-frame" src="da usare play.png" alt="">
+      <div class="back-shield">
+        <canvas id="fireCanvas" width="220" height="220"></canvas>
+        <div class="diablo-text" id="diabloText">EL DIABLO</div>
+      </div>
+      <div class="sheen" id="sheenBack"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- SE VUOI USARE UN LINK DIRETTO (es. xatimg / Imgur / GitHub), INCOLLALO QUI ---
+  const IMAGE_URL = "da usare play.png";
+  document.getElementById("frontImg").src = IMAGE_URL;
+  document.getElementById("backFrameImg").src = IMAGE_URL;
+
+  const coin = document.getElementById("coin");
+  const diabloText = document.getElementById("diabloText");
+  const fireCanvas = document.getElementById("fireCanvas");
+  const sheenFront = document.getElementById("sheenFront");
+  const sheenBack = document.getElementById("sheenBack");
+  const ctx = fireCanvas.getContext("2d");
+
+  // --- MOTORE FIAMME E SCINTILLE SU CANVAS ---
+  const W = fireCanvas.width;
+  const H = fireCanvas.height;
+  const particles = [];
+  const sparks = [];
+
+  for (let i = 0; i < 65; i++) {
+    particles.push({
+      x: W * 0.15 + Math.random() * W * 0.7,
+      y: H * 0.56 + Math.random() * 14,
+      vx: (Math.random() - 0.5) * 0.9,
+      vy: -1.2 - Math.random() * 2.2,
+      size: 10 + Math.random() * 16,
+      life: Math.random(),
+      decay: 0.018 + Math.random() * 0.022
+    });
+  }
+
+  for (let i = 0; i < 28; i++) {
+    sparks.push({
+      x: W * 0.18 + Math.random() * W * 0.64,
+      y: H * 0.52 + Math.random() * 20,
+      vx: (Math.random() - 0.5) * 1.4,
+      vy: -1.8 - Math.random() * 2.8,
+      r: 1 + Math.random() * 1.8,
+      life: Math.random(),
+      decay: 0.015 + Math.random() * 0.02
+    });
+  }
+
+  function renderFire() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Alone caldo centrale dietro EL DIABLO
+    const glow = ctx.createRadialGradient(W / 2, H * 0.52, 8, W / 2, H * 0.52, W * 0.48);
+    glow.addColorStop(0, "rgba(255, 130, 0, 0.55)");
+    glow.addColorStop(0.55, "rgba(220, 30, 0, 0.25)");
+    glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    // Lingue di fuoco
+    for (const p of particles) {
+      p.x += p.vx + Math.sin(p.life * 8) * 0.45;
+      p.y += p.vy;
+      p.life += p.decay;
+
+      if (p.life >= 1) {
+        p.x = W * 0.15 + Math.random() * W * 0.7;
+        p.y = H * 0.56 + Math.random() * 10;
+        p.life = 0;
+      }
+
+      const alpha = Math.sin(p.life * Math.PI);
+      const radius = p.size * (1 - p.life * 0.55);
+      const grad = ctx.createRadialGradient(p.x, p.y, 1, p.x, p.y, radius);
+      grad.addColorStop(0, `rgba(255, 245, 150, ${alpha * 0.9})`);
+      grad.addColorStop(0.4, `rgba(255, 110, 0, ${alpha * 0.75})`);
+      grad.addColorStop(0.8, `rgba(200, 15, 0, ${alpha * 0.35})`);
+      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Scintille ascendenti
+    for (const s of sparks) {
+      s.x += s.vx + Math.cos(s.life * 10) * 0.5;
+      s.y += s.vy;
+      s.life += s.decay;
+
+      if (s.life >= 1) {
+        s.x = W * 0.18 + Math.random() * W * 0.64;
+        s.y = H * 0.55 + Math.random() * 14;
+        s.life = 0;
+      }
+
+      const a = Math.sin(s.life * Math.PI);
+      ctx.fillStyle = `rgba(255, 220, 90, ${a})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // --- TIMELINE ESATTA DELLA SEQUENZA ---
+  // Ogni step: [durata_ms, angolo_inizio, angolo_fine, mostra_testo_infuocato]
+  const steps = [
+    [900,     0,    0, false], // 1. Normale iniziale
+    [1300,    0,  360, false], // 2. Primo giro completo a 360° -> torna normale
+    [600,   360,  360, false], //    Breve pausa normale
+    [850,   360,  540, true],  // 3. Secondo giro -> rivela testo infuocato EL DIABLO
+    [2200,  540,  540, true],  //    Mostra EL DIABLO infuocato
+    [850,   540,  720, true],  // 4. Rigira -> torna normale
+    [1000,  720,  720, false], //    Si vede normale
+    [1300,  720, 1080, false], // 5. Fa un altro giro completo a 360° -> torna normale
+    [550,  1080, 1080, false], //    Breve pausa normale
+    [850,  1080, 1260, true],  // 6. Gira -> di nuovo testo infuocato EL DIABLO
+    [2200, 1260, 1260, true],  //    Mostra EL DIABLO infuocato
+    [850,  1260, 1440, true],  // 7. Rigira -> torna normale
+    [1100, 1440, 1440, false]  //    Chiusura normale prima di ripetere il loop
+  ];
+
+  const totalDuration = steps.reduce((acc, s) => acc + s[0], 0);
+  let startTime = null;
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = (timestamp - startTime) % totalDuration;
+
+    let acc = 0;
+    let currentAngle = 0;
+    let showFireText = false;
+
+    for (const [dur, fromDeg, toDeg, fireFlag] of steps) {
+      if (elapsed < acc + dur) {
+        const localT = (elapsed - acc) / dur;
+        const eased = fromDeg === toDeg ? 0 : easeInOutCubic(localT);
+        currentAngle = fromDeg + (toDeg - fromDeg) * eased;
+        showFireText = fireFlag;
+        break;
+      }
+      acc += dur;
+    }
+
+    // Attiva/disattiva la scritta infuocata in base al giro corrente
+    if (showFireText) {
+      diabloText.style.opacity = "1";
+      fireCanvas.style.opacity = "1";
+      renderFire();
+    } else {
+      diabloText.style.opacity = "0";
+      fireCanvas.style.opacity = "0";
+    }
+
+    // Applica rotazione 3D e riflesso luce
+    coin.style.transform = `rotateY(${currentAngle}deg)`;
+    const rad = (currentAngle * Math.PI) / 180;
+    const turnIntensity = Math.abs(Math.sin(rad));
+    sheenFront.style.opacity = (turnIntensity * 0.85).toFixed(2);
+    sheenBack.style.opacity = (turnIntensity * 0.85).toFixed(2);
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+</script>
+</body>
+</html>
