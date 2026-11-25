@@ -22,8 +22,8 @@ body{
 /* ===== TASTO CLIK PIÙ PICCOLO E ABBASSATO ===== */
 .play-btn {
   position: absolute;
-  top: 2px;     /* Sceso un po' di più, appena sopra il rettangolo destro */
-  right: 15px;  /* Allineato a destra sopra il box */
+  top: 2px;
+  right: 15px;
   z-index: 9999;
   background: rgba(15, 15, 20, 0.85);
   color: #ffe9b0;
@@ -124,9 +124,9 @@ body{
 <div class="container">
 
   <!-- TASTO CLIK POSIZIONATO SOPRA IL RETTANGOLO DESTRO -->
-  <button id="playBtn" class="play-btn" onclick="attivaVideo()">CLIK</button>
+  <button id="playBtn" class="play-btn" onclick="attivaSigla()">CLIK</button>
 
-  <!-- VIDEO SINISTRO -->
+  <!-- VIDEO SINISTRO (SEMPRE IN LOOP MUTO) -->
   <div id="videoA" class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/sorriso.mp4">
@@ -134,7 +134,7 @@ body{
     <div class="video-text">MANUELA</div>
   </div>
 
-  <!-- VIDEO DESTRO -->
+  <!-- VIDEO DESTRO (SEMPRE IN LOOP MUTO) -->
   <div id="videoB" class="video-wrapper right">
     <video class="side-video" autoplay loop muted playsinline>
       <source src="https://peppeagosto.github.io/immaggini/sorriso.mp4">
@@ -148,23 +148,41 @@ body{
 </div>
 
 <script>
-function attivaVideo() {
-  const videos = document.querySelectorAll('.side-video');
-  const btn = document.getElementById('playBtn');
+const videos = document.querySelectorAll('.side-video');
+const btn = document.getElementById('playBtn');
+let siglaAttiva = false;
+let ultimoTempo = 0;
+
+function attivaSigla() {
+  siglaAttiva = true;
+  ultimoTempo = 0;
   
-  videos.forEach(video => {
-    video.muted = !video.muted;
+  videos.forEach((video, index) => {
+    video.currentTime = 0;
+    // Attiva l'audio solo su un video per evitare eco doppio
+    video.muted = (index !== 0);
     video.play();
   });
 
-  if (!videos[0].muted) {
-    btn.innerHTML = "AUDIO ON";
-    btn.style.borderColor = "#00ff88";
-  } else {
-    btn.innerHTML = "CLIK";
-    btn.style.borderColor = "#ff007f";
-  }
+  btn.innerHTML = "AUDIO ON";
+  btn.style.borderColor = "#00ff88";
 }
+
+// Controlla quando il loop ricomincia da capo per rimettere subito il muto
+videos[0].addEventListener('timeupdate', () => {
+  if (siglaAttiva) {
+    // Se il tempo attuale torna indietro (significa che il video ha finito il giro ed è ripartito in loop)
+    if (videos[0].currentTime < ultimoTempo) {
+      siglaAttiva = false;
+      videos.forEach(video => {
+        video.muted = true;
+      });
+      btn.innerHTML = "CLIK";
+      btn.style.borderColor = "#ff007f";
+    }
+  }
+  ultimoTempo = videos[0].currentTime;
+});
 </script>
 
 </body>
