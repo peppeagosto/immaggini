@@ -16,25 +16,26 @@ body{
 .container{
   position:relative;
   width:1308px;
-  height:484px;
+  height:515px;
 }
 
-/* ===== TASTO PLAY IN ALTO A DESTRA SOPRA IL RETTANGOLO ===== */
+/* ===== TASTO CLIK PIÙ PICCOLO E ABBASSATO ===== */
 .play-btn {
   position: absolute;
-  top: -36px;   /* Poco più su dell'inizio del rettangolo destro */
-  right: 12px;  /* Allineato a destra sopra il box */
+  top: 2px;     /* Sceso un po' di più, appena sopra il rettangolo destro */
+  right: 15px;  /* Allineato a destra sopra il box */
   z-index: 9999;
   background: rgba(15, 15, 20, 0.85);
   color: #ffe9b0;
-  border: 2px solid #ff007f;
-  border-radius: 20px;
-  padding: 5px 16px;
+  border: 1.5px solid #ff007f;
+  border-radius: 14px;
+  padding: 2px 10px;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 13px;
+  font-size: 10px;
   font-weight: bold;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(255, 0, 127, 0.7), 0 0 12px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 6px rgba(255, 0, 127, 0.7), 0 0 8px rgba(0, 255, 255, 0.5);
   transition: transform 0.2s, background 0.2s;
   pointer-events: auto;
 }
@@ -43,9 +44,10 @@ body{
   background: rgba(35, 15, 40, 0.95);
 }
 
-/* ===== CONTENITORE VIDEO ===== */
+/* ===== CONTENITORE VIDEO (ABBASSATI) ===== */
 .video-wrapper{
   position:absolute;
+  top: 25px;
   width:270px;
   height:484px;
   overflow:hidden;
@@ -109,8 +111,8 @@ body{
   position:absolute;
   left:280px;
   right:280px;
-  height:726px; /* grandezza quasi pari ai laterali */
-  top:12px;     /* leggermente più in basso */
+  height:726px;
+  top:37px;
   border-radius:20px;
   background:transparent;
   pointer-events:none;
@@ -121,8 +123,8 @@ body{
 
 <div class="container">
 
-  <!-- TASTO PLAY POSIZIONATO SOPRA IL RETTANGOLO DESTRO -->
-  <button id="playBtn" class="play-btn" onclick="attivaVideo()">▶ PLAY AUDIO</button>
+  <!-- TASTO CLIK POSIZIONATO SOPRA IL RETTANGOLO DESTRO -->
+  <button id="playBtn" class="play-btn" onclick="attivaVideo()">CLIK</button>
 
   <!-- VIDEO SINISTRO -->
   <div id="videoA" class="video-wrapper left">
@@ -156,10 +158,10 @@ function attivaVideo() {
   });
 
   if (!videos[0].muted) {
-    btn.innerHTML = "🔊 AUDIO ON";
+    btn.innerHTML = "AUDIO ON";
     btn.style.borderColor = "#00ff88";
   } else {
-    btn.innerHTML = "▶ PLAY AUDIO";
+    btn.innerHTML = "CLIK";
     btn.style.borderColor = "#ff007f";
   }
 }
