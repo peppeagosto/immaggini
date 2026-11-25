@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -18,6 +17,30 @@ body{
   position:relative;
   width:1308px;
   height:484px;
+}
+
+/* ===== TASTO PLAY IN ALTO A DESTRA SOPRA IL RETTANGOLO ===== */
+.play-btn {
+  position: absolute;
+  top: -36px;   /* Poco più su dell'inizio del rettangolo destro */
+  right: 12px;  /* Allineato a destra sopra il box */
+  z-index: 9999;
+  background: rgba(15, 15, 20, 0.85);
+  color: #ffe9b0;
+  border: 2px solid #ff007f;
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 0, 127, 0.7), 0 0 12px rgba(0, 255, 255, 0.5);
+  transition: transform 0.2s, background 0.2s;
+  pointer-events: auto;
+}
+.play-btn:hover {
+  transform: scale(1.06);
+  background: rgba(35, 15, 40, 0.95);
 }
 
 /* ===== CONTENITORE VIDEO ===== */
@@ -98,6 +121,9 @@ body{
 
 <div class="container">
 
+  <!-- TASTO PLAY POSIZIONATO SOPRA IL RETTANGOLO DESTRO -->
+  <button id="playBtn" class="play-btn" onclick="attivaVideo()">▶ PLAY AUDIO</button>
+
   <!-- VIDEO SINISTRO -->
   <div id="videoA" class="video-wrapper left">
     <video class="side-video" autoplay loop muted playsinline>
@@ -118,6 +144,26 @@ body{
   <div class="center-area"></div>
 
 </div>
+
+<script>
+function attivaVideo() {
+  const videos = document.querySelectorAll('.side-video');
+  const btn = document.getElementById('playBtn');
+  
+  videos.forEach(video => {
+    video.muted = !video.muted;
+    video.play();
+  });
+
+  if (!videos[0].muted) {
+    btn.innerHTML = "🔊 AUDIO ON";
+    btn.style.borderColor = "#00ff88";
+  } else {
+    btn.innerHTML = "▶ PLAY AUDIO";
+    btn.style.borderColor = "#ff007f";
+  }
+}
+</script>
 
 </body>
 </html>
