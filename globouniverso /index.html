@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Globo 3D - ITALIA_GHOST</title>
+  
+  <!-- Firebase / Firestore SDK 8.10.0 (collegato a globo-liberty-2026) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- Mapbox GL JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html {
+      background-color: transparent;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Schermata di blocco anti-furto */
+    #access-denied {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #030508;
+      color: #ff0033;
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-weight: bold;
+      text-align: center;
+      font-family: monospace;
+      border: 3px solid #ff0033;
+    }
+    #access-denied h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 12px #ff0033;
+    }
+    #access-denied p { font-size: 13px; color: #fff; }
+
+    /* Contenitore Principale 780x500 */
+    #map-wrapper {
+      position: relative;
+      width: 780px;
+      height: 500px;
+      max-width: 100vw;
+      max-height: 100vh;
+      border: 2px solid #00f0ff;
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.45), inset 0 0 15px rgba(0, 240, 255, 0.2);
+      overflow: hidden;
+      display: flex;
+      background: #020611;
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+    }
+
+    /* Controlli rapidi sul globo */
+    #globe-controls {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 20;
+      display: flex;
+      gap: 6px;
+    }
+
+    .ctrl-btn {
+      background: rgba(8, 16, 30, 0.88);
+      border: 1px solid rgba(0, 240, 255, 0.55);
+      color: #00f0ff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover {
+      background: #00f0ff;
+      color: #000;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+
+    /* Pannello Laterale Visitatori */
+    #visitor-panel {
+      width: 245px;
+      height: 100%;
+      background: rgba(8, 15, 28, 0.95);
+      border-left: 1px solid rgba(0, 240, 255, 0.4);
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      z-index: 10;
+    }
+
+    #visitor-header {
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.14), rgba(255, 0, 127, 0.08));
+    }
+
+    #visitor-header h3 {
+      margin: 0 0 4px 0;
+      font-size: 13px;
+      color: #00f0ff;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #ff2a85;
+      font-weight: bold;
+    }
+
+    .live-badge {
+      color: #00ff88;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #00ff88;
+    }
+
+    #visitor-list {
+      list-style: none;
+      margin: 0;
+      padding: 8px;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 11px;
+    }
+
+    #visitor-list::-webkit-scrollbar { width: 4px; }
+    #visitor-list::-webkit-scrollbar-thumb { background: #00f0ff; border-radius: 4px; }
+
+    #visitor-list li {
+      padding: 7px 8px;
+      margin-bottom: 6px;
+      background: rgba(0, 240, 255, 0.07);
+      border: 1px solid rgba(0, 240, 255, 0.22);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #visitor-list li:hover {
+      background: rgba(0, 240, 255, 0.18);
+      border-color: #00f0ff;
+      transform: translateX(-2px);
+    }
+
+    .v-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .v-city-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    .v-city-wrap img {
+      width: 15px;
+      height: 11px;
+      border-radius: 2px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .v-city {
+      color: #00ffaa;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .v-count {
+      background: rgba(255, 0, 127, 0.25);
+      border: 1px solid rgba(255, 0, 127, 0.5);
+      color: #ff66aa;
+      font-size: 9px;
+      padding: 0 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .v-time {
+      color: #ffea00;
+      font-size: 9.5px;
+      opacity: 0.9;
+    }
+
+    /* Marker Luminoso sul Globo */
+    .custom-marker {
+      width: 14px;
+      height: 14px;
+      background-color: #ff0055;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #ff0055, 0 0 22px #ff007f;
+      cursor: pointer;
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.85); }
+      70% { transform: scale(1.25); box-shadow: 0 0 0 11px rgba(255, 0, 85, 0); }
+      100% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+    }
+
+    .mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Schermata di blocco anti-furto -->
+  <div id="access-denied">
+    <h1>⚠️ ACCESSO NEGATO ⚠️</h1>
+    <p>Questo widget appartiene a EL DIABLO - ITALIA_GHOST.</p>
+    <p><small>Copia non autorizzata bloccata.</small></p>
+  </div>
+
+  <div id="map-wrapper">
+    <div id="map"></div>
+
+    <div id="globe-controls">
+      <button type="button" class="ctrl-btn" id="btn-spin" onclick="toggleSpin()">⏸ PAUSA</button>
+      <button type="button" class="ctrl-btn" onclick="resetGlobeView()">🌍 CENTRO</button>
+    </div>
+
+    <div id="visitor-panel">
+      <div id="visitor-header">
+        <h3>ITALIA_GHOST</h3>
+        <div class="stats-row">
+          <span class="live-badge"><span class="live-dot"></span><span id="online-count">ONLINE: 1</span></span>
+          <span id="total-visitors">Visite: 0</span>
+        </div>
+      </div>
+      <ul id="visitor-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // 1. PROTEZIONE ANTI-FURTO E ANTI-ISPEZIONE
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    (function() {
+      const currentUrl = window.location.href.toLowerCase();
+      const referrer = document.referrer.toLowerCase();
+      const allowedDomains = [
+        "xat.com",
+        "xatradio.com",
+        "peppeagosto.github.io",
+        "localhost",
+        "127.0.0.1"
+      ];
+
+      let isAllowed = allowedDomains.some(d => currentUrl.includes(d) || referrer.includes(d));
+      if (!isAllowed && window.self !== window.top) {
+        document.getElementById('access-denied').style.display = 'flex';
+        throw new Error("Accesso non autorizzato.");
+      }
+    })();
+
+    // 2. CONFIGURAZIONE MAPBOX GLOBO 3D
+    mapboxgl.accessToken = 'pk.eyJ1IjoicGVwcGUtZGlhYmxvMjAyNiIsImEiOiJjbXZwZWVuaGEwMG9rMnlzNmdmeTdpczkzIn0.OqURexk5sioEEIw_sTnLmA';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/outdoors-v12',
+      center: [12.4964, 41.9028],
+      zoom: 1.65,
+      projection: 'globe',
+      attributionControl: false
+    });
+
+    map.on('style.load', () => {
+      map.setFog({
+        'color': 'rgba(0, 180, 255, 0.32)',
+        'high-color': 'rgba(20, 90, 180, 0.85)',
+        'space-color': 'rgb(3, 7, 18)',
+        'star-intensity': 0.75
+      });
+    });
+
+    let userInteracting = false;
+    let spinEnabled = true;
+
+    function spinGlobe() {
+      if (spinEnabled && !userInteracting && map.getZoom() < 4.5) {
+        const center = map.getCenter();
+        center.lng -= 360 / 120;
+        map.easeTo({ center, duration: 1000, easing: (n) => n });
+      }
+    }
+
+    function toggleSpin() {
+      spinEnabled = !spinEnabled;
+      document.getElementById('btn-spin').innerText = spinEnabled ? '⏸ PAUSA' : '▶ RUOTA';
+      if (spinEnabled) spinGlobe();
+    }
+
+    function resetGlobeView() {
+      spinEnabled = true;
+      document.getElementById('btn-spin').innerText = '⏸ PAUSA';
+      map.flyTo({ center: [12.4964, 41.9028], zoom: 1.65, speed: 1.2 });
+    }
+
+    map.on('mousedown', () => { userInteracting = true; });
+    map.on('touchstart', () => { userInteracting = true; });
+    map.on('mouseup', () => { userInteracting = false; spinGlobe(); });
+    map.on('touchend', () => { userInteracting = false; spinGlobe(); });
+    map.on('dragend', () => { userInteracting = false; spinGlobe(); });
+    map.on('moveend', () => { spinGlobe(); });
+    spinGlobe();
+
+    // 3. CONFIGURAZIONE FIREBASE FIRESTORE (identica al monitor 24/7 su globo-liberty-2026)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzW6ylN9PALpgS2RB8b_Pp9KS-y9aLcd8",
+      authDomain: "globo-liberty-2026.firebaseapp.com",
+      projectId: "globo-liberty-2026",
+      storageBucket: "globo-liberty-2026.firebasestorage.app",
+      messagingSenderId: "540262363609",
+      appId: "1:540262363609:web:aa40db96c937ed2cd6e9c8",
+      measurementId: "G-PNZ4YZKK5D"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    // ID Sessione univoco (stessa chiave del monitor)
+    let mySessionId = sessionStorage.getItem('ghost_node_id');
+    if (!mySessionId) {
+      mySessionId = 'GHOST_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+      sessionStorage.setItem('ghost_node_id', mySessionId);
+    }
+
+    function detectOS() {
+      const ua = navigator.userAgent || "";
+      if (/android/i.test(ua)) return "Android";
+      if (/iPad|iPhone|iPod/.test(ua)) return "iOS";
+      if (/Win/i.test(ua)) return "Windows";
+      if (/Mac/i.test(ua)) return "MacOS";
+      if (/Linux/i.test(ua)) return "Linux";
+      return "Web";
+    }
+
+    let activeMarkers = [];
+
+    function renderCloudVisitors(records) {
+      const listEl = document.getElementById('visitor-list');
+      listEl.innerHTML = '';
+
+      activeMarkers.forEach(m => m.remove());
+      activeMarkers = [];
+
+      let totalVisits = 0;
+
+      records.forEach(v => {
+        const count = v.visits || 1;
+        totalVisits += count;
+
+        let formattedDate = 'Recente';
+        if (v.lastVisit) {
+          const d = new Date(v.lastVisit);
+          const gg = d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
+          const hh = d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+          formattedDate = `${gg} • ${hh}`;
+        }
+
+        if (typeof v.lat === 'number' && typeof v.lon === 'number') {
+          const el = document.createElement('div');
+          el.className = 'custom-marker';
+
+          const popup = new mapboxgl.Popup({ offset: 18, closeButton: false })
+            .setHTML(`
+              <strong style="color:#000">${v.city || 'Sconosciuta'}, ${v.country || ''}</strong><br>
+              <small style="color:#333">${v.isp || ''} • ${formattedDate} (${count}x)</small>
+            `);
+
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat([v.lon, v.lat])
+            .setPopup(popup)
+            .addTo(map);
+
+          activeMarkers.push(marker);
+        }
+
+        const code = (v.code || 'it').toLowerCase();
+        const li = document.createElement('li');
+        li.title = typeof v.lat === 'number' ? 'Clicca per volare su questa città' : 'Coordinate non disponibili';
+        li.innerHTML = `
+          <div class="v-top">
+            <div class="v-city-wrap">
+              <img src="https://flagcdn.com/w20/${code}.png" alt="">
+              <span class="v-city">${v.city || 'Sconosciuta'}, ${v.country || ''}</span>
+            </div>
+            <span class="v-count">x${count}</span>
+          </div>
+          <span class="v-time">${formattedDate}</span>
+        `;
+
+        li.addEventListener('click', () => {
+          if (typeof v.lat === 'number' && typeof v.lon === 'number') {
+            spinEnabled = false;
+            document.getElementById('btn-spin').innerText = '▶ RUOTA';
+            map.flyTo({ center: [v.lon, v.lat], zoom: 4.8, speed: 1.3 });
+          }
+        });
+
+        listEl.appendChild(li);
+      });
+
+      document.getElementById('total-visitors').innerText = `Visite: ${totalVisits}`;
+    }
+
+    // 4. REGISTRAZIONE AUTOMATICA SU 'visitantes' + 'storico-citta-mondo' (24/7 anche a PC spento)
+    async function registerGlobeNode() {
+      let loc = {
+        city: "Sconosciuta",
+        country: "IT",
+        code: "it",
+        ip: "N/D",
+        isp: "Rete Privata",
+        os: detectOS(),
+        lat: null,
+        lon: null
+      };
+
+      try {
+        const res = await fetch("https://ipwho.is/");
+        const data = await res.json();
+        if (data && data.success) {
+          loc = {
+            city: data.city || "Sconosciuta",
+            country: data.country || "IT",
+            code: (data.country_code || "it").toLowerCase(),
+            ip: data.ip || "N/D",
+            isp: (data.connection && data.connection.isp) ? data.connection.isp : "Provider Sconosciuto",
+            os: detectOS(),
+            lat: typeof data.latitude === 'number' ? data.latitude : null,
+            lon: typeof data.longitude === 'number' ? data.longitude : null
+          };
+        }
+      } catch (e) {
+        try {
+          const res2 = await fetch("https://ipapi.co/json/");
+          const data2 = await res2.json();
+          if (data2 && data2.ip) {
+            loc = {
+              city: data2.city || "Sconosciuta",
+              country: data2.country_name || "IT",
+              code: (data2.country_code || "it").toLowerCase(),
+              ip: data2.ip,
+              isp: data2.org || "Provider Sconosciuto",
+              os: detectOS(),
+              lat: typeof data2.latitude === 'number' ? data2.latitude : null,
+              lon: typeof data2.longitude === 'number' ? data2.longitude : null
+            };
+          }
+        } catch (err) {}
+      }
+
+      const now = Date.now();
+
+      // Presenza live in 'visitantes'
+      const liveRef = db.collection('visitantes').doc(mySessionId);
+      await liveRef.set({ ...loc, t: now }, { merge: true }).catch(() => {});
+
+      // Storico permanente 24/7 in 'storico-citta-mondo' (1 incremento per sessione)
+      const safeCity = loc.city.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const safeIp = loc.ip.replace(/[^a-z0-9]/gi, '_');
+      const historyKey = `${safeCity}_${safeIp}`;
+      const historyRef = db.collection("storico-citta-mondo").doc(historyKey);
+
+      const alreadyLogged = sessionStorage.getItem('ghost_globe_counted');
+      const payload = {
+        ...loc,
+        lastVisit: now
+      };
+      if (!alreadyLogged) {
+        payload.visits = firebase.firestore.FieldValue.increment(1);
+        sessionStorage.setItem('ghost_globe_counted', '1');
+      }
+
+      await historyRef.set(payload, { merge: true }).catch(() => {});
+
+      // Battito cardiaco ogni 25 secondi
+      setInterval(() => {
+        liveRef.set({ t: Date.now() }, { merge: true }).catch(() => {});
+      }, 25000);
+    }
+
+    // 5. LETTURA IN TEMPO REALE DAL CLOUD (stesse collezioni del monitor)
+    function startGlobeSync() {
+      db.collection("visitantes").onSnapshot((snap) => {
+        const limit = Date.now() - 65000;
+        let activeCount = 0;
+        snap.forEach(doc => {
+          const d = doc.data();
+          if (d.t && d.t > limit) activeCount++;
+        });
+        document.getElementById("online-count").innerText = `ONLINE: ${Math.max(1, activeCount)}`;
+      });
+
+      db.collection("storico-citta-mondo")
+        .orderBy("lastVisit", "desc")
+        .limit(100)
+        .onSnapshot((snapshot) => {
+          const visitors = [];
+          snapshot.forEach(doc => visitors.push(doc.data()));
+          renderCloudVisitors(visitors);
+        }, (err) => {
+          console.error("Errore lettura Firestore:", err);
+        });
+    }
+
+    window.addEventListener('load', () => {
+      registerGlobeNode();
+      startGlobeSync();
+    });
+  </script>
+
+</body>
+</html>
