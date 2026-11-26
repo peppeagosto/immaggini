@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>ITALIA_GHOST // VISITOR MONITOR</title>
+  <!-- Firebase / Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: "Courier New", Courier, monospace;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* PALLINO ROSSO STEALTH IN BASSO A SINISTRA */
+    #stealth-pin {
+      position: fixed;
+      bottom: 8px;
+      left: 8px;
+      width: 5px;
+      height: 5px;
+      background-color: #ff2233;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999999;
+      opacity: 0.65;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    #stealth-pin:hover {
+      opacity: 1;
+      transform: scale(1.7);
+      box-shadow: 0 0 8px #ff2233;
+    }
+
+    /* PANNELLO CENTRATO 600x550 */
+    .cyber-frame {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 550px;
+      max-width: calc(100vw - 20px);
+      max-height: calc(100vh - 20px);
+      background: rgba(3, 8, 5, 0.96);
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 102, 0.45), inset 0 0 15px rgba(0, 255, 102, 0.12);
+      flex-direction: column;
+      padding: 14px;
+      gap: 10px;
+      overflow: hidden;
+      z-index: 99999;
+    }
+    .cyber-frame.active { display: flex; }
+
+    /* EFFETTO SCANLINES */
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%);
+      background-size: 100% 4px;
+      pointer-events: none !important;
+      z-index: 10;
+    }
+
+    /* HEADER */
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #00ff66;
+      padding-bottom: 6px;
+      color: #00ff66;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .badge-live {
+      background: rgba(0, 255, 102, 0.15);
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+    }
+    .badge-status {
+      background: #00ff66;
+      color: #000;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+    .btn-close {
+      background: transparent;
+      border: 1px solid #ff3344;
+      color: #ff3344;
+      font-family: monospace;
+      font-size: 0.85rem;
+      font-weight: bold;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-close:hover { background: #ff3344; color: #000; }
+
+    /* TERMINALE LOG */
+    .terminal-display {
+      flex: 1;
+      background: #010402;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      padding: 10px;
+      font-size: 0.74rem;
+      line-height: 1.5;
+      color: #00e5ff;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.1);
+    }
+    .terminal-display::-webkit-scrollbar { width: 5px; }
+    .terminal-display::-webkit-scrollbar-thumb { background: #00ff66; }
+
+    .log-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px dashed rgba(0, 255, 102, 0.15);
+      padding-bottom: 4px;
+    }
+    .log-line img {
+      width: 16px;
+      height: 11px;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+    .log-line strong { color: #00ff66; }
+    .log-line .isp-info { color: #ffaa00; font-weight: bold; }
+    .log-line .visits-badge {
+      background: rgba(0, 229, 255, 0.15);
+      color: #00e5ff;
+      padding: 0 4px;
+      border-radius: 2px;
+      font-size: 0.68rem;
+    }
+
+    /* SPETTRO FREQUENZE */
+    .spectrum-area {
+      display: flex;
+      align-items: flex-end;
+      height: 40px;
+      background: #020603;
+      border: 1px solid rgba(0, 255, 102, 0.25);
+      padding: 4px 6px;
+      gap: 3px;
+    }
+    .spectrum-bar {
+      flex: 1;
+      background: linear-gradient(to top, #00ff66, #00e5ff);
+      height: 20%;
+      transition: height 0.1s ease;
+    }
+
+    /* BUFFER BAR */
+    .buffer-container { display: flex; flex-direction: column; gap: 4px; }
+    .buffer-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #00ff66;
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #020503;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      overflow: hidden;
+    }
+    .progress-fill {
+      width: 100%;
+      height: 100%;
+      background: #00ff66;
+      box-shadow: 0 0 8px #00ff66;
+      transition: width 0.25s ease, background 0.25s ease;
+    }
+
+    /* PULSANTI */
+    .action-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-action {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.78rem;
+      font-weight: bold;
+      padding: 8px 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .btn-exploit {
+      background: #00ff66;
+      color: #000;
+      border: none;
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+    }
+    .btn-exploit:hover {
+      background: #39ff14;
+      box-shadow: 0 0 16px #00ff66;
+    }
+    .btn-root {
+      background: rgba(255, 51, 68, 0.15);
+      border: 1px solid #ff3344;
+      color: #ff3344;
+    }
+    .btn-root:hover {
+      background: #ff3344;
+      color: #000;
+      box-shadow: 0 0 12px #ff3344;
+    }
+    .status-text { font-size: 0.75rem; color: #00ff66; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <!-- TESTA D'AGO IN BASSO A SINISTRA -->
+  <div id="stealth-pin" title="Monitor Visite ITALIA_GHOST" onclick="toggleStealthConsole()"></div>
+
+  <!-- CONSOLE 600x550px -->
+  <div class="cyber-frame" id="cyber-panel">
+    <div class="scanlines"></div>
+    <div class="deck-header">
+      <span>⚡ ITALIA_GHOST // CLOUD_LOG_24H</span>
+      <div class="header-right">
+        <span class="badge-live" id="live-counter">ONLINE: 1</span>
+        <span class="badge-status" id="sys-clock">00:00:00</span>
+        <button type="button" class="btn-close" onclick="toggleStealthConsole()" title="Chiudi">✕</button>
+      </div>
+    </div>
+
+    <!-- Terminale log -->
+    <div class="terminal-display" id="log-output">
+      <div style="color: #00ff66;">[CLOUD_SYNC] SINCRONIZZAZIONE CON FIRESTORE IN CORSO...</div>
+    </div>
+
+    <!-- Spettro animato -->
+    <div class="spectrum-area" id="spectrum-grid">
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+      <div class="spectrum-bar"></div><div class="spectrum-bar"></div><div class="spectrum-bar"></div>
+    </div>
+
+    <!-- Barra Buffer -->
+    <div class="buffer-container">
+      <div class="buffer-info">
+        <span>STORICO_VISITATORI_24/7:</span>
+        <span id="pct-display">SYNC_OK</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="fill-track"></div>
+      </div>
+    </div>
+
+    <!-- Pulsanti Inferiori -->
+    <div class="action-panel">
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-action btn-exploit" onclick="refreshRealtimeLogs()">↻ AGGIORNA_LOG</button>
+        <button type="button" class="btn-action btn-root" onclick="clearOldOfflineNodes()">🧹 PULISCI_OFFLINE</button>
+      </div>
+      <span class="status-text" id="status-display">CLOUD ATTIVO</span>
+    </div>
+  </div>
+
+  <script>
+    // Configurazione Firebase (Cloud attivo 24/7 anche a PC spento)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzy1" + "Ujp7cbx9vO" + "F2r8EoiYQK" + "63pAKpTP",
+      authDomain: "mondo-mio.firebaseapp.com",
+      projectId: "mondo-mio",
+      storageBucket: "mondo-mio.appspot.com",
+      messagingSenderId: "228456692857",
+      appId: "1:228456692857:web:c317af7b68af10bb255398"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    // ID Sessione univoco per scheda/visitatore
+    let mySessionId = sessionStorage.getItem('ghost_node_id');
+    if (!mySessionId) {
+      mySessionId = 'GHOST_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+      sessionStorage.setItem('ghost_node_id', mySessionId);
+    }
+
+    function toggleStealthConsole() {
+      const panel = document.getElementById('cyber-panel');
+      panel.classList.toggle('active');
+    }
+
+    // Orologio digitale
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('sys-clock').innerText = now.toTimeString().split(' ')[0];
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Animazione barre spettro
+    const bars = document.querySelectorAll('.spectrum-bar');
+    setInterval(() => {
+      bars.forEach(bar => {
+        bar.style.height = (Math.random() * 85 + 15) + '%';
+      });
+    }, 120);
+
+    // 1. REGISTRAZIONE AUTOMATICA DEL VISITATORE (funziona per chiunque apra la pagina)
+    async function registerVisitorNode() {
+      let loc = {
+        city: "Sconosciuta",
+        country: "IT",
+        code: "it",
+        ip: "N/D",
+        isp: "Rete Privata"
+      };
+
+      // Tentativo 1: ipwho.is
+      try {
+        const res = await fetch("https://ipwho.is/");
+        const data = await res.json();
+        if (data && data.success) {
+          loc = {
+            city: data.city || "Sconosciuta",
+            country: data.country || "IT",
+            code: (data.country_code || "it").toLowerCase(),
+            ip: data.ip || "N/D",
+            isp: (data.connection && data.connection.isp) ? data.connection.isp : "Provider Sconosciuto"
+          };
+        }
+      } catch (e) {
+        // Tentativo 2 (Fallback): ipapi.co
+        try {
+          const res2 = await fetch("https://ipapi.co/json/");
+          const data2 = await res2.json();
+          if (data2 && data2.ip) {
+            loc = {
+              city: data2.city || "Sconosciuta",
+              country: data2.country_name || "IT",
+              code: (data2.country_code || "it").toLowerCase(),
+              ip: data2.ip,
+              isp: data2.org || "Provider Sconosciuto"
+            };
+          }
+        } catch (err) {}
+      }
+
+      const now = Date.now();
+
+      // Salva tra gli utenti attualmente online
+      const liveRef = db.collection('visitantes').doc(mySessionId);
+      await liveRef.set({ ...loc, t: now }, { merge: true });
+
+      // Salva nello STORICO PERMANENTE (raggruppa per città + IP e conta le visite)
+      const safeCity = loc.city.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const safeIp = loc.ip.replace(/[^a-z0-9]/gi, '_');
+      const historyKey = `${safeCity}_${safeIp}`;
+      const historyRef = db.collection("storico-citta-mondo").doc(historyKey);
+
+      await historyRef.set({
+        ...loc,
+        lastVisit: now,
+        visits: firebase.firestore.FieldValue.increment(1)
+      }, { merge: true });
+
+      // Battito cardiaco ogni 25 secondi per segnalare che l'utente è ancora in stanza
+      setInterval(() => {
+        liveRef.set({ t: Date.now() }, { merge: true }).catch(() => {});
+      }, 25000);
+    }
+
+    // 2. LETTURA IN TEMPO REALE DAL CLOUD (mostra tutto ciò che è successo a PC spento)
+    let unsubscribeHistory = null;
+    let unsubscribeLive = null;
+
+    function startCloudSync() {
+      const logOutput = document.getElementById("log-output");
+      const statusDisplay = document.getElementById("status-display");
+      const pctDisplay = document.getElementById("pct-display");
+      const fillTrack = document.getElementById("fill-track");
+
+      // Reset grafico
+      fillTrack.style.background = "#00ff66";
+      fillTrack.style.width = "100%";
+      pctDisplay.style.color = "#00ff66";
+
+      // Ascolta in diretta gli utenti ONLINE negli ultimi 60 secondi
+      if (unsubscribeLive) unsubscribeLive();
+      unsubscribeLive = db.collection("visitantes").onSnapshot((snap) => {
+        const limit = Date.now() - 65000;
+        let activeCount = 0;
+        snap.forEach(doc => {
+          const d = doc.data();
+          if (d.t && d.t > limit) activeCount++;
+        });
+        document.getElementById("live-counter").innerText = `ONLINE: ${Math.max(1, activeCount)}`;
+      });
+
+      // Ascolta in diretta lo STORICO COMPLETO ordinato dal più recente
+      if (unsubscribeHistory) unsubscribeHistory();
+      unsubscribeHistory = db.collection("storico-citta-mondo")
+        .orderBy("lastVisit", "desc")
+        .limit(100)
+        .onSnapshot((snapshot) => {
+          logOutput.innerHTML = "";
+
+          if (snapshot.empty) {
+            logOutput.innerHTML = '<div style="color: #ffaa00;">[CLOUD] NESSUN VISITATORE REGISTRATO AL MOMENTO.</div>';
+            pctDisplay.innerText = "0 NODI";
+            return;
+          }
+
+          let index = 1;
+          snapshot.forEach((doc) => {
+            const v = doc.data();
+            let orarioReale = "DATA N/D";
+            if (v.lastVisit) {
+              const d = new Date(v.lastVisit);
+              const ora = d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+              const data = d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+              orarioReale = `${data} ${ora}`;
+            }
+
+            const count = v.visits || 1;
+            const div = document.createElement("div");
+            div.className = "log-line";
+            div.innerHTML = `
+              <span style="color: #8b8b9e; font-size: 0.68rem;">[${orarioReale}]</span>
+              <img src="https://flagcdn.com/w20/${(v.code || 'it').toLowerCase()}.png" alt="flag">
+              <span>#${index}</span>
+              <strong>${(v.city || 'SCONOSCIUTA').toUpperCase()}</strong>
+              <span style="color:#fff;">[${v.ip || 'N/D'}]</span>
+              <span class="isp-info">:: ${v.isp || 'UNKNOWN'}</span>
+              <span class="visits-badge">x${count}</span>
+            `;
+            logOutput.appendChild(div);
+            index++;
+          });
+
+          pctDisplay.innerText = `${snapshot.size} NODI SALVATI`;
+          statusDisplay.innerText = "LIVE SYNC 24/7";
+          statusDisplay.style.color = "#00ff66";
+        }, (err) => {
+          logOutput.innerHTML = `<div style="color: #ff3344;">[ERRORE FIRESTORE] ${err.message}</div>`;
+          statusDisplay.innerText = "ERRORE RETE";
+          statusDisplay.style.color = "#ff3344";
+        });
+    }
+
+    function refreshRealtimeLogs() {
+      const statusDisplay = document.getElementById("status-display");
+      statusDisplay.innerText = "AGGIORNAMENTO...";
+      startCloudSync();
+    }
+
+    // Pulisce i vecchi record temporanei "visitantes" più vecchi di 2 minuti (non tocca lo storico)
+    async function clearOldOfflineNodes() {
+      const statusDisplay = document.getElementById("status-display");
+      const limit = Date.now() - 120000;
+      try {
+        const snap = await db.collection("visitantes").where("t", "<", limit).get();
+        const batch = db.batch();
+        snap.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+        statusDisplay.innerText = `PULITI ${snap.size} OFFLINE`;
+      } catch (e) {
+        statusDisplay.innerText = "PULIZIA OK";
+      }
+    }
+
+    // Avvio automatico al caricamento della pagina
+    window.addEventListener('load', () => {
+      registerVisitorNode();
+      startCloudSync();
+    });
+  </script>
+</body>
+</html>
